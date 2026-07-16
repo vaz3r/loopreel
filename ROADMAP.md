@@ -12,10 +12,10 @@ Loopreel is a B2B SaaS white-label repurposing engine for agencies. This roadmap
 > **Rendering Engine: Playwright Browser Pool — DECIDED ✅** — Full CSS fidelity is a hard requirement to support advanced visual templates, gradients, custom fonts, layered effects, and third-party component libraries. Playwright with a persistent, pre-warmed browser pool is the chosen approach. **Satori is ruled out** (constrained layout engine, no arbitrary CSS). **html2canvas is ruled out** (DOM approximation, not a real layout engine). See the dedicated Rendering Architecture section in Phase 1 for the pool design.
 
 > [!IMPORTANT]
-> **Hosting / Infra Provider** — Playwright pool requires a long-running server process (not serverless). Use Railway or Fly.io for the Python API service. The pool must stay alive between requests — serverless cold starts would defeat the entire purpose of the pre-warmed design.
+> **Hosting / Infra Provider — DECIDED ✅** — Oracle Cloud VPS (Docker containers) as the public-facing node. Home server as a private heavy-processing worker node, connected via Tailscale. See the dedicated Infrastructure Architecture section below.
 
 > [!WARNING]
-> **LLM + Transcription Cost Validation** — The Hobbyist Pack ($19 / 15 credits) is only viable as an acquisition/cost-offset tier if the per-generation cost (Whisper + LLM call + render) stays well below ~$1.27/credit. Benchmark real costs using representative content before launch. If costs are marginal, tighten the model usage (cached prompts, cheaper models for structure extraction, etc.).
+> **LLM Cost Validation** — Transcription cost is now near-zero (local Whisper on home server). The remaining per-generation cost is the LLM call. Benchmark GPT-4o-mini vs Claude Haiku vs a locally-hosted Mistral/Llama3 on the home server before committing to an API-based LLM. If local LLM quality is sufficient, per-credit cost drops to essentially compute-only.
 
 > [!NOTE]
 > **Scheduler API Access** — Buffer, Publer, and Later all have public APIs but with different OAuth flows and rate limits. Confirm which scheduler(s) to support in V1 (recommend Buffer-only first) and complete OAuth app registration early, as approval can take days.
@@ -24,19 +24,26 @@ Loopreel is a B2B SaaS white-label repurposing engine for agencies. This roadmap
 
 ## Phase 0 — Foundation & Infra Skeleton (Week 1–2)
 
-**Goal:** Stand up the skeleton infra and validate cost assumptions. Rendering engine is already decided (Playwright pool). Nothing customer-facing ships here.
+**Goal:** Stand up both nodes (Oracle VPS + home server), validate the job routing path, and benchmark the Playwright pool. Nothing customer-facing ships here.
 
 ### Playwright Pool Prototype (2 days)
-- Stand up a minimal Python asyncio pool with 3 instances.
-- Benchmark: p50 and p99 latency per slide render, memory footprint per instance.
-- Confirm Docker + Playwright system deps install cleanly in the CI environment.
-- **Output:** Confirmed pool size and server RAM requirement for Railway/Fly.io provisioning.
+- Stand up a minimal Python asyncio pool with 3 instances on the Oracle VPS.
+- Benchmark: p50 and p99 latency per slide render, memory footprint per Chromium instance.
+- Confirm Docker + Playwright system deps install cleanly (`playwright install --with-deps chromium` in Dockerfile).
+- **Output:** Confirmed pool size and VPS RAM requirement.
+
+### Home Server Worker Setup (1 day)
+- Install Tailscale on both Oracle VPS and home server → join same tailnet.
+- Verify private connectivity: `ping home-server.tailnet` from VPS.
+- Deploy the `worker` Docker container on the home server: Whisper model loaded, Celery (or ARQ) worker running.
+- Submit a test transcription job from the VPS → routed via Redis → processed on home server → result returned.
+- **Output:** Round-trip job completion confirmed over Tailscale.
 
 ### Repo & Infra Skeleton
-- Monorepo structure: `/apps/web` (Next.js), `/apps/api` (Python FastAPI), `/packages/templates` (shared React components).
-- Docker Compose for local dev: `api`, `web`, `postgres`, and optionally `redis` (job queue).
-- GitHub Actions CI: lint + typecheck on PR, no tests yet (premature at this stage).
-- Provision: PostgreSQL (Supabase or Railway), object storage (S3 or Cloudflare R2 for generated assets), Stripe account in test mode.
+- Monorepo structure: `/apps/web` (Next.js), `/apps/api` (Python FastAPI), `/apps/worker` (Python Celery/ARQ heavy worker), `/packages/templates` (shared React components).
+- Docker Compose files: `docker-compose.dev.yml` (local dev, all services), `docker-compose.vps.yml` (Oracle VPS services), `docker-compose.worker.yml` (home server worker).
+- GitHub Actions CI: lint + typecheck on PR, Docker build check.
+- Provision: PostgreSQL on VPS (Dockerized, local volume), Cloudflare R2 for generated asset storage, Stripe account in test mode.
 
 ### Database Schema (V1)
 ```sql
@@ -53,6 +60,172 @@ credit_ledger (id, user_id, delta, reason, stripe_event_id, created_at)
 
 ---
 
+## Infrastructure Architecture
+
+Two-node setup connected by a private Tailscale mesh. The Oracle VPS is the public face of the product; the home server is a private, cost-free heavy compute worker.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Oracle Cloud VPS                          │
+│                  (Docker, public-facing)                     │
+│                                                             │
+│  ┌──────────┐  ┌──────────┐  ┌────────────┐  ┌─────────┐  │
+│  │ nginx    │  │  web     │  │  api       │  │  redis  │  │
+│  │ (proxy)  │→ │ Next.js  │  │  FastAPI   │  │  (queue)│  │
+│  └──────────┘  └──────────┘  └─────┬──────┘  └────┬────┘  │
+│                                     │               │       │
+│  ┌──────────────────────────────────▼───────────────▼────┐  │
+│  │            Playwright Browser Pool (5 instances)      │  │
+│  │            Internal render route: localhost:3001      │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌──────────┐                                              │
+│  │ postgres │  (Dockerized, persistent volume)             │
+│  └──────────┘                                              │
+└─────────────────────────────┬───────────────────────────────┘
+                              │ Tailscale (private mesh VPN)
+                              │ 100.x.x.x ↔ 100.x.x.x
+┌─────────────────────────────▼───────────────────────────────┐
+│                    Home Server                               │
+│              (Docker, private — not publicly routable)       │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │               Celery / ARQ Worker                     │  │
+│  │                                                       │  │
+│  │  • Whisper (local model, GPU/CPU)  → transcription    │  │
+│  │  • yt-dlp                          → audio download   │  │
+│  │  • Playwright (blog scraping)      → text extraction  │  │
+│  │  • LLM (local, optional)           → structuring      │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Job Routing Logic
+
+The FastAPI `api` service on the VPS acts as the orchestrator. It **never** does heavy processing itself — it enqueues jobs and Playwright-renders only.
+
+```
+User submits URL
+        │
+        ▼
+  api: debit credit, create generation_job row, enqueue to Redis
+        │
+        ▼
+  Redis queue: "heavy" queue (consumed by home server worker)
+        │
+        ▼
+  Home server worker:
+    1. yt-dlp → download audio (YouTube) or scrape text (blog)
+    2. Whisper → transcribe (local model, GPU-accelerated)
+    3. LLM API call (or local LLM) → structured JSON
+    4. Push result back to Redis "render" queue
+        │
+        ▼
+  api: picks up render job, routes to Playwright pool
+    5. Playwright renders each slide → PNG
+    6. Upload PNGs to Cloudflare R2
+    7. Update generation_job status → "complete"
+        │
+        ▼
+  User sees completed carousel in dashboard
+```
+
+### Resilience: Home Server Offline Fallback
+
+The home server is a cost-saving node, not a guaranteed-uptime SLA. When it's offline:
+- Jobs sit in the Redis queue (up to configurable TTL, e.g. 30 minutes).
+- API returns `status: queued` to the frontend — the job page polls every 10s.
+- If TTL expires without processing: mark job as `failed`, refund credit, notify user.
+- **Optional cloud fallback:** If a job has waited >5 minutes, re-enqueue to a secondary Redis queue consumed by a lightweight cloud worker (small EC2/Hetzner spot instance) — only activated when home server is confirmed offline via heartbeat check.
+- For V1: simple TTL + refund is sufficient. Cloud fallback is a Phase 6 concern.
+
+### Docker Compose: Oracle VPS (`docker-compose.vps.yml`)
+
+```yaml
+services:
+  nginx:
+    image: nginx:alpine
+    ports: ["80:80", "443:443"]
+    volumes: [./nginx.conf:/etc/nginx/nginx.conf, letsencrypt:/etc/letsencrypt]
+
+  web:
+    build: ./apps/web
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.loopreel.io
+    expose: ["3000"]
+
+  api:
+    build: ./apps/api
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - R2_BUCKET=...
+      - PLAYWRIGHT_POOL_SIZE=5
+      - RENDER_BASE_URL=http://web:3000
+    expose: ["8000"]
+    depends_on: [postgres, redis]
+
+  postgres:
+    image: postgres:16-alpine
+    volumes: [pgdata:/var/lib/postgresql/data]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis:7-alpine
+    expose: ["6379"]
+
+volumes:
+  pgdata:
+  letsencrypt:
+```
+
+### Docker Compose: Home Server (`docker-compose.worker.yml`)
+
+```yaml
+services:
+  worker:
+    build: ./apps/worker
+    environment:
+      - REDIS_URL=redis://100.x.x.x:6379   # VPS Tailscale IP
+      - WHISPER_MODEL=large-v3              # or medium for speed/quality tradeoff
+      - LLM_PROVIDER=openai                 # or 'local' for Ollama
+      - OLLAMA_HOST=http://localhost:11434  # if using local LLM
+    volumes:
+      - whisper_models:/root/.cache/whisper
+      - /dev/dri:/dev/dri                   # GPU passthrough (if available)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]            # optional, if home server has GPU
+
+volumes:
+  whisper_models:
+```
+
+### Networking & Security
+- **Tailscale** connects the two nodes on a private mesh — no public port exposure on the home server.
+- Redis on the VPS binds to `0.0.0.0` but is firewalled to only accept connections from the Tailscale IP range (`100.64.0.0/10`) via Oracle Cloud Security List / `ufw`.
+- The Playwright render route (`/render/[jobId]`) is protected by Next.js middleware: reject any request not originating from `127.0.0.1`.
+- PostgreSQL is not exposed outside the Docker network at all.
+- TLS via Let's Encrypt (Certbot), auto-renewed in the nginx container.
+
+### Cost Estimate (Monthly)
+| Resource | Cost |
+|---|---|
+| Oracle Cloud VPS (4 OCPU / 24GB RAM ARM — Always Free) | **$0** |
+| Cloudflare R2 storage (first 10GB) | **$0** |
+| Tailscale (personal/starter plan) | **$0** |
+| Home server electricity (rough estimate) | ~$10–20 |
+| LLM API calls (GPT-4o-mini, ~$0.15/1M tokens) | ~$5–15 depending on volume |
+| Stripe fees | 2.9% + $0.30 per transaction |
+| **Total infra cost at early scale** | **~$15–35/month** |
+
+This is an extremely low-cost baseline. Even with 40 Agency Pro accounts the infra cost stays well under $100/month until volume demands VPS scaling.
+
+---
+
 ## Phase 1 — The Core Pipeline, No Auth (Week 3–5)
 
 **Goal:** A working, end-to-end generation pipeline for a single hardcoded brand. Prove the intelligence layer produces usable output before building any UX around it.
@@ -61,8 +234,8 @@ credit_ledger (id, user_id, delta, reason, stripe_event_id, created_at)
 
 **`/ingest` endpoint (FastAPI)**
 - Accept a URL → detect source type (YouTube via URL pattern, else blog/article).
-- **YouTube path:** `yt-dlp` to pull audio, Whisper (local `whisper.cpp` or OpenAI Whisper API) for transcription. Start with OpenAI API to move fast; swap to local later if margin demands it.
-- **Blog/article path:** BeautifulSoup first (simple, no cost); fall back to Playwright for JS-rendered pages.
+- **YouTube path:** `yt-dlp` to pull audio → enqueue to Redis `heavy` queue → home server worker runs **local Whisper** (large-v3 or medium) → transcript returned.
+- **Blog/article path:** Home server worker handles this too — BeautifulSoup first, Playwright fallback for JS-rendered pages. Running on home server keeps scraping IP off Oracle's shared infrastructure.
 - Return raw text/transcript, stored in `generation_jobs`.
 
 **`/structure` endpoint**
@@ -342,7 +515,9 @@ These items are intentionally deferred. Do not build them early.
 | `yt-dlp` breaks on YouTube anti-scraping updates | High | High | Monitor for breakage, pin yt-dlp version, fallback to YouTube Data API v3 for transcript retrieval |
 | Stripe webhook delivery failures | Low | High | Idempotent webhook handler, webhook retry handling, reconciliation job |
 | Buffer API changes breaking export | Low | Medium | Version-pin Buffer API calls, abstract behind an `ExportAdapter` interface |
-| Per-credit cost too high for Hobbyist margin | Medium | Medium | Validate before launch; switch to cheaper model or local Whisper if needed |
+| Per-credit cost too high for Hobbyist margin | Low | Medium | Local Whisper eliminates transcription cost; LLM call is now the only variable cost — switch to local Ollama model if API cost is marginal |
+| Home server goes offline mid-job | Medium | Medium | Job TTL in Redis queue + credit refund on expiry; cloud fallback worker in Phase 6 |
+| Home server IP changes / Tailscale drops | Low | High | Tailscale stable IPs (100.x.x.x) don't change; add Tailscale heartbeat check in worker health monitor |
 
 ---
 
@@ -350,7 +525,7 @@ These items are intentionally deferred. Do not build them early.
 
 | Phase | Duration | Key Deliverable | Revenue Gate |
 |---|---|---|---|
-| 0 — Foundation & Spike | 2 weeks | Rendering decision, schema, infra | ❌ |
+| 0 — Foundation & Infra | 2 weeks | VPS + home server live, Playwright pool, job routing | ❌ |
 | 1 — Core Pipeline | 3 weeks | End-to-end generation, no auth | ❌ |
 | 2 — Auth & Workspaces | 4 weeks | Multi-tenant, branded workspaces | ✅ First agency beta |
 | 3 — Billing & Credits | 3 weeks | Stripe, credit enforcement | ✅ First paid customer |
@@ -365,9 +540,11 @@ These items are intentionally deferred. Do not build them early.
 
 ## Immediate Next Actions (This Week)
 
-1. **Run the rendering spike.** 3 days, one template, three methods. Make the decision.
-2. **Register Stripe account** (takes 1–2 days for full activation).
-3. **Register Buffer OAuth app** (approval takes up to 5 business days — start now).
-4. **Benchmark LLM + Whisper cost per generation** on 3 representative YouTube videos.
-5. **Set up monorepo** (Next.js + FastAPI + Docker Compose), push to GitHub.
-6. **Write the LLM system prompt** for structured JSON extraction — this is the core intelligence asset. Spend real time on it.
+1. **Install Tailscale on Oracle VPS and home server** — confirm private connectivity between the two nodes. This is the prerequisite for everything else.
+2. **Scaffold the monorepo** (Next.js + FastAPI + worker + Docker Compose files for both nodes), push to the `loopreel` repo.
+3. **Deploy Whisper on the home server** — pull `large-v3` model, test a transcription job end-to-end. Confirm GPU passthrough in Docker if the home server has a GPU.
+4. **Prototype the Playwright pool** — 3 instances, asyncio.Queue, benchmark p50/p99 render latency on the VPS.
+5. **Register Stripe account** (takes 1–2 days for full activation).
+6. **Register Buffer OAuth app** (approval takes up to 5 business days — start now).
+7. **Write the LLM system prompt** for structured JSON extraction — this is the core intelligence asset, spend real time on it. Test against 5 diverse real YouTube videos before treating it as done.
+8. **Decide: local LLM or API LLM?** — Run `ollama run llama3.1:8b` on the home server, test JSON structuring quality vs GPT-4o-mini. If quality is within 10–15% and latency is acceptable, local wins on cost.
