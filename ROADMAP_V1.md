@@ -25,19 +25,22 @@
 ```
 loopreel/
 ├── apps/
-│   ├── web/              # Vite + React + TypeScript — internal test UI
-│   ├── api/              # Fastify + TypeScript — orchestrator, HTTP, Playwright pool
-│   └── worker/           # TypeScript — BullMQ worker, runs anywhere
+│   ├── web/                   # Vite + React + TypeScript — internal test UI
+│   ├── api/                   # Fastify + TypeScript — orchestrator, HTTP, Playwright pool
+│   ├── worker-ingest/         # Consumes: ingest queue. Does: yt-dlp, web scraping
+│   ├── worker-transcribe/     # Consumes: transcribe queue. Does: Whisper transcription
+│   ├── worker-structure/      # Consumes: structure queue. Does: LLM → structured JSON
+│   └── worker-render/         # Consumes: render queue. Does: Playwright → PNG slides
 ├── packages/
-│   ├── templates/        # React components — carousel slide templates
-│   ├── llm/              # LLM provider abstraction (DeepSeek, OpenAI, Groq, etc.)
-│   ├── queue/            # BullMQ queue definitions + job type contracts (shared)
-│   ├── transcription/    # Whisper abstraction (local API or OpenAI Whisper API)
-│   └── types/            # Shared TypeScript types across all apps
-├── docker-compose.dev.yml     # Local dev: all services
-├── docker-compose.vps.yml     # Oracle VPS: api, web, redis, postgres, nginx
-├── docker-compose.worker.yml  # Home server / any worker node
-└── turbo.json                 # Turborepo build orchestration
+│   ├── templates/             # React components — carousel slide templates
+│   ├── llm/                   # LLM provider abstraction (DeepSeek, OpenAI, Groq, etc.)
+│   ├── queue/                 # BullMQ queue definitions + job type contracts (shared)
+│   ├── transcription/         # Whisper client abstraction
+│   └── types/                 # Shared TypeScript types across all apps
+├── docker-compose.dev.yml          # Local dev: all services
+├── docker-compose.vps.yml          # Oracle VPS services
+├── docker-compose.homeserver.yml   # Home server workers
+└── turbo.json                      # Turborepo build orchestration
 ```
 
 ---
@@ -48,38 +51,73 @@ BullMQ is the spine of the entire system. Every heavy operation is a job. The AP
 
 ### Queue Topology
 
+4 queues, 4 dedicated worker types. Each worker type only knows about its own queue and carries only the dependencies it needs.
+
 ```
-                    ┌─────────────────────────┐
-                    │     Redis (shared)       │
-                    │                         │
-                    │  ┌───────────────────┐  │
-                    │  │  ingest queue     │  │  priority: HIGH / NORMAL / LOW
-                    │  │  (scrape/download)│  │
-                    │  └───────┬───────────┘  │
-                    │          │               │
-                    │  ┌───────▼───────────┐  │
-                    │  │  transcribe queue │  │  priority: HIGH / NORMAL / LOW
-                    │  │  (Whisper)        │  │
-                    │  └───────┬───────────┘  │
-                    │          │               │
-                    │  ┌───────▼───────────┐  │
-                    │  │  structure queue  │  │  priority: HIGH / NORMAL / LOW
-                    │  │  (LLM to JSON)    │  │
-                    │  └───────┬───────────┘  │
-                    │          │               │
-                    │  ┌───────▼───────────┐  │
-                    │  │  render queue     │  │  always HIGH (fast, local)
-                    │  │  (Playwright)     │  │
-                    │  └───────────────────┘  │
-                    └─────────────────────────┘
-                               ▲  ▲  ▲
-              ┌────────────────┘  │  └─────────────────┐
-              │                   │                     │
-    ┌─────────┴──────┐  ┌─────────┴──────┐  ┌──────────┴──────┐
-    │  Home Server   │  │  Mac (dev)     │  │  Any VPS/Cloud  │
-    │  Worker Node   │  │  Worker Node   │  │  Worker Node    │
-    │  (Whisper GPU) │  │  (dev/testing) │  │  (burst scale)  │
-    └────────────────┘  └────────────────┘  └─────────────────┘
+  API (Fastify)
+  Receives HTTP request → debit credit → create job row
+       │
+       ▼
+  ┌──────────────────────────────────────────────────┐
+  │                  Redis                            │
+  │                                                  │
+  │   ingest      transcribe    structure    render   │
+  │   queue       queue         queue        queue    │
+  │   [P:1-10]    [P:1-10]      [P:1-10]     [P:1]   │
+  └───┬───────────────┬─────────────┬────────────┬───┘
+      │               │             │            │
+      ▼               ▼             ▼            ▼
+  worker-ingest  worker-       worker-      worker-render
+                 transcribe    structure
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ worker-ingest                                               │
+  │ • yt-dlp (child process) → download audio                  │
+  │ • Cheerio → scrape blog HTML                               │
+  │ • Puppeteer → JS-rendered pages (fallback)                 │
+  │ • On finish: enqueues TranscribeJob or StructureJob        │
+  │                                                            │
+  │ Deps: yt-dlp binary, cheerio, puppeteer                    │
+  │ Best deployed: Home server (keeps scraping IP private)     │
+  │ Scale: run 2-3 for parallel ingestion                      │
+  └─────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ worker-transcribe                                           │
+  │ • Calls faster-whisper HTTP API with audio file path       │
+  │ • Handles audio download from R2 if needed                 │
+  │ • On finish: enqueues StructureJob                         │
+  │                                                            │
+  │ Deps: HTTP client (axios/fetch), @aws-sdk/client-s3 (R2)   │
+  │ Best deployed: Home server (co-located with Whisper)       │
+  │ Scale: 1 usually sufficient; GPU-bound by Whisper itself   │
+  └─────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ worker-structure                                            │
+  │ • Calls LLM via packages/llm abstraction                   │
+  │ • Zod validates structured JSON output                     │
+  │ • Retries once on schema validation failure                │
+  │ • On finish: enqueues RenderJob                            │
+  │                                                            │
+  │ Deps: packages/llm, zod, openai (SDK)                      │
+  │ Best deployed: Anywhere with internet — no GPU needed      │
+  │ Scale: run 5-10 easily (I/O-bound, not CPU-bound)          │
+  └─────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ worker-render                                               │
+  │ • Consumes render queue                                    │
+  │ • Acquires a page from the Playwright pool (in-process)    │
+  │ • Navigates to internal Vite render route                  │
+  │ • Screenshots each slide → PNG                             │
+  │ • Uploads to Cloudflare R2                                 │
+  │ • Updates job status → complete                            │
+  │                                                            │
+  │ Deps: playwright, @aws-sdk/client-s3                        │
+  │ Best deployed: Oracle VPS (co-located with web for render) │
+  │ Scale: bounded by Playwright pool size (default 5 pages)   │
+  └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Priority Levels
@@ -93,7 +131,7 @@ export const Priority = {
 } as const
 ```
 
-### Job Type Contracts (Shared Types)
+### Job Type Contracts (Shared via packages/queue)
 
 ```typescript
 // packages/queue/src/jobs.ts
@@ -107,15 +145,14 @@ export interface IngestJob {
 
 export interface TranscribeJob {
   jobId: string
-  audioPath: string        // local path or R2 URL
-  sourceType: 'youtube' | 'blog' | 'article'
-  rawText?: string         // pre-filled for blog/article (skip Whisper)
+  audioR2Key: string   // R2 object key for the downloaded audio file
+  priority: number
 }
 
 export interface StructureJob {
   jobId: string
   rawText: string
-  llmProvider?: LLMProvider  // optional override; default from env
+  priority: number
 }
 
 export interface RenderJob {
@@ -124,6 +161,7 @@ export interface RenderJob {
   brandKit: BrandKit
   templateId: string
   slideCount: number
+  priority: number
 }
 
 export interface StructuredContent {
@@ -140,27 +178,47 @@ export interface StructuredContent {
 }
 ```
 
-### Worker: Connect From Anywhere
+### Each Worker: One Responsibility, Connect From Anywhere
 
-A worker is just a Node.js process that connects to Redis and starts consuming queues. To spin up a new worker node:
+Each worker is a standalone Node.js process. Point it at Redis and it starts consuming its specific queue. You can run multiple instances of any type independently.
 
 ```bash
-# On any machine (Mac, home server, VPS, cloud VM)
-REDIS_URL=redis://100.x.x.x:6379 \
-WHISPER_ENDPOINT=http://localhost:8000 \
-LLM_PROVIDER=deepseek \
-DEEPSEEK_API_KEY=sk-... \
-node apps/worker/dist/index.js
+# worker-ingest — on home server
+docker run -e REDIS_URL=redis://100.x.x.x:6379 \
+           -e R2_BUCKET=... -e R2_ACCESS_KEY=... \
+           loopreel/worker-ingest:latest
 
-# Or via Docker
-docker run --rm \
-  -e REDIS_URL=redis://100.x.x.x:6379 \
-  -e LLM_PROVIDER=deepseek \
-  -e DEEPSEEK_API_KEY=sk-... \
-  loopreel/worker:latest
+# worker-transcribe — on home server (next to Whisper)
+docker run -e REDIS_URL=redis://100.x.x.x:6379 \
+           -e WHISPER_ENDPOINT=http://whisper:8000 \
+           -e R2_BUCKET=... \
+           loopreel/worker-transcribe:latest
+
+# worker-structure — on Mac during dev, or VPS in prod
+docker run -e REDIS_URL=redis://100.x.x.x:6379 \
+           -e LLM_PROVIDER=deepseek \
+           -e DEEPSEEK_API_KEY=sk-... \
+           loopreel/worker-structure:latest
+
+# worker-render — on Oracle VPS (co-located with web)
+docker run -e REDIS_URL=redis://redis:6379 \
+           -e RENDER_BASE_URL=http://web:5173 \
+           -e R2_BUCKET=... \
+           loopreel/worker-render:latest
+
+# Scale structure workers horizontally without touching any other worker:
+docker run ... loopreel/worker-structure:latest  # instance 2
+docker run ... loopreel/worker-structure:latest  # instance 3
 ```
 
-Workers self-register on startup — no config changes needed on the API side. Add or remove workers freely without restarting anything.
+**Independent scaling per worker type:**
+
+| Worker | Bottleneck | How to scale |
+|---|---|---|
+| worker-ingest | Network I/O, yt-dlp speed | Run 2–3 instances |
+| worker-transcribe | GPU/CPU on Whisper | 1 instance usually fine; add GPU |
+| worker-structure | LLM API rate limit / latency | Run 5–10 instances easily |
+| worker-render | Playwright pool size | Increase `PLAYWRIGHT_POOL_SIZE` |
 
 ---
 
@@ -411,9 +469,13 @@ worker_heartbeats (
 
 ## Docker Compose: Local Dev
 
+4 separate worker services — each only carries what it needs.
+
 ```yaml
 # docker-compose.dev.yml
 services:
+
+  # ── Infrastructure ──────────────────────────────────────────
   redis:
     image: redis:7-alpine
     ports: ["6379:6379"]
@@ -427,105 +489,162 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile.dev
-    ports: ["3000:3000"]
-    environment:
-      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
-      REDIS_URL: redis://redis:6379
-      PLAYWRIGHT_POOL_SIZE: "3"
-      RENDER_BASE_URL: http://web:5173
-    depends_on: [postgres, redis]
-    volumes:
-      - ./apps/api/src:/app/src
-      - ./packages:/packages
-
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile.dev
-    ports: ["5173:5173"]
-    environment:
-      VITE_API_URL: http://localhost:3000
-    volumes:
-      - ./apps/web/src:/app/src
-      - ./packages:/packages
-
-  worker:
-    build:
-      context: .
-      dockerfile: apps/worker/Dockerfile.dev
-    environment:
-      REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
-      LLM_PROVIDER: deepseek
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
-      LLM_MODEL: deepseek-v4-flash
-      WHISPER_ENDPOINT: http://whisper:8000
-    depends_on: [redis, postgres, whisper]
-    volumes:
-      - ./apps/worker/src:/app/src
-      - ./packages:/packages
-
   whisper:
-    image: fedirz/faster-whisper-server:latest-cpu
+    image: fedirz/faster-whisper-server:latest-cpu  # :latest-cuda on home server
     ports: ["8000:8000"]
     environment:
       WHISPER__MODEL: large-v3
     volumes:
       - whisper_cache:/root/.cache/huggingface
 
+  # ── App Services ─────────────────────────────────────────────
+  api:
+    build: { context: ., dockerfile: apps/api/Dockerfile.dev }
+    ports: ["3000:3000"]
+    environment:
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+    depends_on: [postgres, redis]
+    volumes: [./apps/api/src:/app/src, ./packages:/packages]
+
+  web:
+    build: { context: ., dockerfile: apps/web/Dockerfile.dev }
+    ports: ["5173:5173"]
+    environment:
+      VITE_API_URL: http://localhost:3000
+    volumes: [./apps/web/src:/app/src, ./packages:/packages]
+
+  # ── Workers (each isolated, each independently scalable) ─────
+
+  worker-ingest:
+    build: { context: ., dockerfile: apps/worker-ingest/Dockerfile.dev }
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_ACCESS_KEY: ${R2_ACCESS_KEY}
+      R2_SECRET_KEY: ${R2_SECRET_KEY}
+      R2_BUCKET: ${R2_BUCKET}
+    depends_on: [redis, postgres]
+    volumes: [./apps/worker-ingest/src:/app/src, ./packages:/packages]
+    # Has: yt-dlp binary, cheerio, puppeteer
+    # Does NOT have: Whisper client, LLM SDK, Playwright
+
+  worker-transcribe:
+    build: { context: ., dockerfile: apps/worker-transcribe/Dockerfile.dev }
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
+      WHISPER_ENDPOINT: http://whisper:8000
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_ACCESS_KEY: ${R2_ACCESS_KEY}
+      R2_SECRET_KEY: ${R2_SECRET_KEY}
+      R2_BUCKET: ${R2_BUCKET}
+    depends_on: [redis, postgres, whisper]
+    volumes: [./apps/worker-transcribe/src:/app/src, ./packages:/packages]
+    # Has: packages/transcription HTTP client, R2 client
+    # Does NOT have: yt-dlp, LLM SDK, Playwright
+
+  worker-structure:
+    build: { context: ., dockerfile: apps/worker-structure/Dockerfile.dev }
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
+      LLM_PROVIDER: deepseek
+      LLM_MODEL: deepseek-v4-flash
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+    depends_on: [redis, postgres]
+    volumes: [./apps/worker-structure/src:/app/src, ./packages:/packages]
+    # Has: packages/llm, zod, openai SDK
+    # Does NOT have: yt-dlp, Whisper client, Playwright
+
+  worker-render:
+    build: { context: ., dockerfile: apps/worker-render/Dockerfile.dev }
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/loopreel
+      RENDER_BASE_URL: http://web:5173
+      PLAYWRIGHT_POOL_SIZE: "3"
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_ACCESS_KEY: ${R2_ACCESS_KEY}
+      R2_SECRET_KEY: ${R2_SECRET_KEY}
+      R2_BUCKET: ${R2_BUCKET}
+    depends_on: [redis, postgres, web]
+    volumes: [./apps/worker-render/src:/app/src, ./packages:/packages]
+    # Has: playwright (with chromium), packages/templates, R2 client
+    # Does NOT have: yt-dlp, Whisper client, LLM SDK
+
 volumes:
   pgdata:
   whisper_cache:
 ```
 
-> `faster-whisper-server` exposes an OpenAI-compatible Whisper API locally. Use `:latest-cuda` on the home server if GPU is available.
+> Scale any worker type by duplicating its service block with a `_2` suffix, or with `docker compose up --scale worker-structure=3`. Each instance connects to the same Redis queue and self-balances via BullMQ's built-in distributed processing.
 
 ---
 
 ## V1 Phase Plan
 
 ### Phase 0 — Scaffold (Week 1)
-- [ ] Turborepo monorepo, TypeScript configured across all apps + packages
-- [ ] Docker Compose dev stack: all services start cleanly with `docker compose up`
-- [ ] BullMQ queue definitions in `packages/queue`, types shared via imports
-- [ ] LLM provider abstraction (`packages/llm`): DeepSeek + OpenAI adapters, Zod validation
-- [ ] Whisper client abstraction (`packages/transcription`)
-- [ ] Playwright pool prototype: 3 instances, acquire/release, latency benchmarked
+- [ ] Turborepo monorepo, TypeScript configured across all 6 apps + packages
+- [ ] `packages/queue`: BullMQ queue definitions, all 4 job type contracts as shared types
+- [ ] `packages/llm`: DeepSeek + OpenAI adapters, Zod validation, factory function
+- [ ] `packages/transcription`: Whisper HTTP client abstraction
+- [ ] `packages/types`: shared TypeScript interfaces (BrandKit, StructuredContent, etc.)
+- [ ] Docker Compose dev stack: all 9 services start cleanly with `docker compose up`
+- [ ] Playwright pool prototype in `worker-render`: 3 instances, acquire/release, latency benchmarked
 
-### Phase 1 — Pipeline (Week 2–3)
-- [ ] Ingest worker: yt-dlp (child process) for YouTube, Cheerio + Puppeteer for blog
-- [ ] Transcribe worker: Whisper for audio, pass-through for blog text
-- [ ] Structure worker: LLM call → Zod-validated JSON → chained to render queue
-- [ ] Render pipeline: Playwright pool screenshots slides from internal Vite route
-- [ ] Cloudflare R2 upload on render complete
-- [ ] Full job status lifecycle tracked in postgres
+### Phase 1 — Pipeline: 4 Workers (Week 2–3)
+
+**worker-ingest**
+- [ ] Detect source type from URL (YouTube regex vs. blog)
+- [ ] YouTube path: spawn `yt-dlp` as child process → upload audio to R2 → enqueue `TranscribeJob`
+- [ ] Blog path: Cheerio fast-path → Puppeteer fallback for JS-rendered pages → enqueue `StructureJob` directly (bypass transcription)
+- [ ] Update job status to `ingesting` → `awaiting_transcription` or `awaiting_structure`
+
+**worker-transcribe**
+- [ ] Download audio from R2 to local temp file
+- [ ] POST to faster-whisper HTTP API
+- [ ] Receive transcript text → enqueue `StructureJob`
+- [ ] Update job status to `transcribing` → `awaiting_structure`
+
+**worker-structure**
+- [ ] Receive raw text → call LLM via `packages/llm`
+- [ ] Zod validate response against `StructuredContentSchema`
+- [ ] Auto-retry once on schema validation failure
+- [ ] Write `structured_json` to postgres → enqueue `RenderJob`
+- [ ] Update job status to `structuring` → `awaiting_render`
+
+**worker-render**
+- [ ] Acquire a Playwright page from the pool
+- [ ] Navigate to internal Vite render route for each slide
+- [ ] Wait for `[data-render-complete="true"]` selector
+- [ ] Screenshot → PNG → upload to R2
+- [ ] Write asset URLs to `generated_assets` table
+- [ ] Update job status to `complete`
 
 ### Phase 2 — Templates (Week 4)
 - [ ] Template `modern-dark`: dark bg, accent from brand color, bold sans-serif
 - [ ] Template `clean-light`: white bg, brand primary accents, editorial feel
-- [ ] Slide variants: hook slide, value slide (x4-6), CTA slide
-- [ ] Brand kit applied: primary color, secondary color, font family (Google Fonts)
+- [ ] Slide variants: hook slide, value slide (×4–6), CTA slide
+- [ ] Brand kit applied via URL params: primary color, secondary color, font family
 - [ ] Internal `/render/:jobId/:slideIndex` route pixel-accurate for both templates
 
 ### Phase 3 — Test UI (Week 5)
 - [ ] URL input form, template selector, inline color pickers
-- [ ] Job status page: polling every 3s, stage progress, error display
-- [ ] Slide preview: rendered PNGs in carousel viewer
-- [ ] LinkedIn post + thread as formatted text
+- [ ] Job status page: polls every 3s, shows current stage with progress bar
+- [ ] Slide preview: rendered PNGs in inline carousel viewer
+- [ ] LinkedIn post + thread displayed as formatted text
 - [ ] ZIP download button
-- [ ] `/queue` page: queue depths, active workers list, throughput counter
+- [ ] `/queue` page: depth per queue, live worker list (type + hostname + jobs processed)
 
 ### Phase 4 — Hardening (Week 6)
-- [ ] Retry: auto-retry once on failure, mark failed on second attempt
-- [ ] Worker heartbeat: `/api/workers` shows live workers, last seen, jobs processed
-- [ ] Job TTL: jobs stuck >30min in queue marked failed automatically
-- [ ] Playwright pool: per-instance health check, isolated restart on crash
-- [ ] Rate limiting: max 5 concurrent submitted jobs in dev mode
-- [ ] Structured logging (pino) across api + worker for debugging
+- [ ] Per-worker retry: auto-retry once, mark failed on second attempt, refund credit signal
+- [ ] Worker heartbeat table: each worker type reports `worker_type`, `hostname`, `last_seen`
+- [ ] Job TTL: jobs stuck >30min in any queue marked `failed` automatically
+- [ ] `worker-render` Playwright pool: per-instance health check, isolated restart on crash
+- [ ] Structured logging (pino) with `worker_type` field on every log line
+- [ ] `/api/workers` endpoint: live breakdown by worker type, not just a flat list
 
 ---
 
@@ -536,11 +655,14 @@ Before moving to V1.1, all must be true:
 - [ ] YouTube URL: full pipeline completes in **< 5 minutes** wall clock
 - [ ] Blog URL: full pipeline completes in **< 2 minutes** wall clock
 - [ ] LLM JSON output coherent and usable on **> 90%** of runs across 10 diverse sources
-- [ ] Rendered slides are pixel-accurate on both templates
+- [ ] Rendered slides pixel-accurate on both templates
 - [ ] 5 concurrent jobs handled without queue degradation
-- [ ] New worker node connected by setting 3 env vars + one command (Mac included)
-- [ ] LLM provider swappable by changing 2 env vars, zero code changes
+- [ ] Each worker type can be scaled independently (run 3× `worker-structure` alongside 1× others)
+- [ ] A `worker-structure` container started on a Mac with 2 env vars begins processing jobs immediately
+- [ ] Removing any single worker type causes jobs to queue (not crash) — graceful degradation
+- [ ] LLM provider swappable by changing 2 env vars on `worker-structure` only, zero code changes
 - [ ] Per-job LLM cost confirmed **< $0.05** on DeepSeek V4 Flash
+- [ ] `/api/workers` shows each worker's type, hostname, queue, and last heartbeat separately
 
 ---
 
