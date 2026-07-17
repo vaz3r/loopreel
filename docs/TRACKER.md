@@ -31,15 +31,15 @@
 
 ### Epics
 
-- **E04: Worker Relay**
-  - [ ] Implement outbox polling loop (500ms, `FOR UPDATE SKIP LOCKED`)
-  - [ ] Implement BullMQ publishing per queue
-  - [ ] Add error handling and retry logic
-- **E05: API Routes**
-  - [ ] `POST /api/jobs` — validate input, create job + outbox in transaction
-  - [ ] `GET /api/jobs/:id` — fetch job status + assets
-  - [ ] `GET /api/health` — DB/Redis/worker health checks
-  - [ ] `GET /render/:jobId/:slideIndex` — internal route (127.0.0.1 guard)
+- **E04: Worker Relay** — [x] Done
+  - [x] Implement outbox polling loop (500ms, `FOR UPDATE SKIP LOCKED`)
+  - [x] Implement BullMQ publishing per queue
+  - [x] Add error handling, logging (pino), and concurrency guard
+- **E05: API Routes** — [x] Done
+  - [x] `POST /api/jobs` — validate input, create job + outbox in transaction
+  - [x] `GET /api/jobs/:id` — fetch job status + assets
+  - [x] `GET /api/health` — DB + worker health checks
+  - [x] `GET /render/:jobId/:slideIndex` — internal route (127.0.0.1 guard)
 - **E06: Worker Ingest**
   - [ ] YouTube: `yt-dlp` download → R2 upload → outbox for transcribe
   - [ ] Blog/Article: Cheerio scrape → Puppeteer fallback → outbox for structure
@@ -68,3 +68,4 @@
 
 - **2026-07-17:** Converted docs to a strict V1 AI-agent format. Extracted Outbox Relay into a standalone `worker-relay` microservice. Mandated Playwright TTLs and Idempotency checks. Locked in Turborepo for monorepo orchestration.
 - **2026-07-17:** Phase 0 scaffolding complete. pnpm@11.13.1, Node 24.18.0, TypeScript strict mode. All 11 packages build and typecheck clean. Docker Compose defines full stack with `full` profile for app services.
+- **2026-07-17:** E04 worker-relay complete. Outbox polling with `FOR UPDATE SKIP LOCKED`, BullMQ dispatch per queue, pino logging, concurrency guard. E05 API routes complete. POST /api/jobs with Zod validation + transactional outbox, GET /api/jobs/:id with assets, GET /api/health with DB + worker checks, GET /render/:jobId/:slideIndex with 127.0.0.1 guard.

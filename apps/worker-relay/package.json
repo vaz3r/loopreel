@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@loopreel/db": "workspace:*",
-    "@loopreel/queue": "workspace:*"
+    "@loopreel/queue": "workspace:*",
+    "pino": "^9.6.0"
   },
   "devDependencies": {
     "tsx": "^4.19.0",

@@ -17,6 +17,7 @@
     "migrate": "node dist/migrate.js"
   },
   "dependencies": {
+    "@loopreel/schemas": "workspace:*",
     "pg": "^8.13.0"
   },
   "devDependencies": {
