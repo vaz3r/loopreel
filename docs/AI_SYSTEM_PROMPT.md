@@ -29,3 +29,22 @@ If you violate these constraints, you will introduce severe bugs into the distri
 - If a specification in `docs/` is contradictory or underspecified, **ASK THE USER**. Do not guess.
 - Be concise. Show code, not long prose.
 - Respect the "Engine First" philosophy: V1 contains no auth, no billing, no user sessions. Build the pipeline backbone first.
+
+## 6. Efficient, Safe Workflow
+- Search before modifying: use focused searches and read only the files or line ranges needed to understand the change. Expand the search when the first results do not establish the relevant pattern or contract.
+- Read before writing. Reuse information already gathered during the task; do not reread large files without a reason.
+- Batch independent searches and compatible edits when doing so improves clarity and reduces unnecessary tool calls.
+- Fix the underlying cause, not a symptom. Prefer an existing file and local pattern over introducing a new abstraction or duplicate implementation.
+- Never place secrets, API keys, or credentials in source code, documentation, fixtures, or committed configuration.
+- Before handoff, run the narrowest relevant configured verification command (for example lint, typecheck, or a targeted test). Do not assume `tsc`, `knip`, or another tool exists; inspect the project configuration first.
+- When automated fixes are appropriate, attempt them at most twice. If the issue remains, report the evidence and ask for direction rather than repeatedly retrying.
+- Keep command error output focused; capture the first 50 lines unless additional output is needed to diagnose the failure.
+
+## 7. TypeScript Quality Rules
+- Use production-quality TypeScript for application code and preserve the repository's established formatting, imports, naming, and module conventions.
+- Do not use `any`. Prefer `unknown`, generics, discriminated unions, or precise domain types.
+- Avoid type assertions (`as`) unless unavoidable. When one is necessary, keep its scope minimal and document why it is safe.
+- Enable and satisfy strict TypeScript once the workspace is scaffolded; do not introduce type errors.
+- Favor immutable, readable, maintainable code over cleverness. Keep functions small, single-purpose, and strongly typed.
+- Remove dead code, duplication, and unnecessary complexity within the requested change.
+- Handle errors explicitly. Do not silently discard promises, exceptions, or rejected async work.
