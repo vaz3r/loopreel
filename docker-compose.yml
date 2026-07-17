@@ -1,0 +1,177 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: loopreel
+      POSTGRES_PASSWORD: loopreel
+      POSTGRES_DB: loopreel
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loopreel -d loopreel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  faster-whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    ports:
+      - "8000:8000"
+    environment:
+      ASR_MODEL: base
+      ASR_ENGINE: openai_whisper
+    profiles:
+      - full
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      LLM_API_KEY: ${LLM_API_KEY}
+      LLM_BASE_URL: ${LLM_BASE_URL}
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      API_URL: http://api:3000
+    depends_on:
+      - api
+    profiles:
+      - full
+
+  worker-relay:
+    build:
+      context: .
+      dockerfile: apps/worker-relay/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full
+
+  worker-ingest:
+    build:
+      context: .
+      dockerfile: apps/worker-ingest/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full
+
+  worker-transcribe:
+    build:
+      context: .
+      dockerfile: apps/worker-transcribe/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      WHISPER_URL: http://faster-whisper:8000
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      faster-whisper:
+        condition: service_started
+    profiles:
+      - full
+
+  worker-structure:
+    build:
+      context: .
+      dockerfile: apps/worker-structure/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      LLM_API_KEY: ${LLM_API_KEY}
+      LLM_BASE_URL: ${LLM_BASE_URL}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full
+
+  worker-render:
+    build:
+      context: .
+      dockerfile: apps/worker-render/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
+      REDIS_URL: redis://redis:6379
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      RENDER_URL: http://web:5173
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full
+
+volumes:
+  postgres_data:
+  redis_data:

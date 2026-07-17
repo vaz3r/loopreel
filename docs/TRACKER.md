@@ -4,36 +4,62 @@
 
 ## Milestones
 
-- **Phase 0: Scaffolding (CURRENT)** — Setup monorepo, Turborepo, Postgres schema, Redis, and basic package boundaries.
-- **Phase 1: Pipelines** — Build `worker-ingest`, `worker-transcribe`, `worker-structure`, `worker-render`, and the `worker-relay`. Connect them via `api`.
+- **Phase 0: Scaffolding (COMPLETE)** — Setup monorepo, Turborepo, Postgres schema, Redis, and basic package boundaries.
+- **Phase 1: Pipelines (CURRENT)** — Build `worker-ingest`, `worker-transcribe`, `worker-structure`, `worker-render`, and the `worker-relay`. Connect them via `api`.
 - **Phase 2: Polish** — Add Observability (Pino), Error Handling (heartbeats, TTL sweeps), and write Testcontainers integration tests.
 
 ---
 
-## Active Sprint: Phase 0 (Scaffolding)
+## Active Sprint: Phase 1 (Pipelines)
+
+### Completed: Phase 0 (Scaffolding)
+
+- **E01: Monorepo Foundation** — [x] Done
+  - [x] Initialize `pnpm` workspace (pnpm@11.13.1, Node 24 LTS)
+  - [x] Initialize Turborepo (`turbo.json` with build/dev/lint/typecheck tasks)
+  - [x] Scaffold directory structure (`apps/`, `packages/`)
+  - [x] Configure `tsconfig.base.json` (strict, Node16 module resolution) and ESLint
+- **E02: Infrastructure Layer** — [x] Done
+  - [x] Create `docker-compose.yml` (Postgres 16, Redis 7, faster-whisper, all app services behind `full` profile)
+  - [x] Setup `@loopreel/db` package (pg pool, migration runner)
+  - [x] Write initial SQL migrations (`001_initial_schema.sql` — all 4 tables + enums + indexes)
+  - [x] Setup `@loopreel/queue` package (bullmq + ioredis, typed producer/consumer wrappers)
+- **E03: Types & Contracts** — [x] Done
+  - [x] Setup `@loopreel/schemas` package (zod)
+  - [x] Implement all schemas: `JobCreateSchema`, `StructuredContentSchema`, payload schemas
+  - [x] Setup `@loopreel/types` package (re-exports inferred types)
 
 ### Epics
-- **E01: Monorepo Foundation**
-  - [ ] Initialize `pnpm` workspace in root
-  - [ ] Initialize Turborepo (`npx create-turbo@latest`)
-  - [ ] Scaffold empty directories for `apps/` and `packages/`
-  - [ ] Configure `tsconfig.base.json` and ESLint
-- **E02: Infrastructure Layer**
-  - [ ] Create `docker-compose.yml` for Postgres 16 and Redis 7
-  - [ ] Setup `@loopreel/db` package (install `pg`, configure connection pool)
-  - [ ] Write initial SQL migrations based on `DATABASE.md`
-  - [ ] Setup `@loopreel/queue` package (install `bullmq`, configure Redis client)
-- **E03: Types & Contracts**
-  - [ ] Setup `@loopreel/schemas` package (install `zod`)
-  - [ ] Implement `StructuredContentSchema` and Payload schemas from `SCHEMAS.md`
 
-## Backlog (Phase 1)
-- [ ] Build `api` Fastify server boilerplate
-- [ ] Build `worker-relay` polling microservice
-- [ ] Implement `worker-ingest` (`yt-dlp` / `cheerio`)
-- [ ] Implement `worker-transcribe` (Whisper HTTP client)
-- [ ] Implement `worker-structure` (DeepSeek JSON API)
-- [ ] Implement `worker-render` (Playwright Pool)
+- **E04: Worker Relay**
+  - [ ] Implement outbox polling loop (500ms, `FOR UPDATE SKIP LOCKED`)
+  - [ ] Implement BullMQ publishing per queue
+  - [ ] Add error handling and retry logic
+- **E05: API Routes**
+  - [ ] `POST /api/jobs` — validate input, create job + outbox in transaction
+  - [ ] `GET /api/jobs/:id` — fetch job status + assets
+  - [ ] `GET /api/health` — DB/Redis/worker health checks
+  - [ ] `GET /render/:jobId/:slideIndex` — internal route (127.0.0.1 guard)
+- **E06: Worker Ingest**
+  - [ ] YouTube: `yt-dlp` download → R2 upload → outbox for transcribe
+  - [ ] Blog/Article: Cheerio scrape → Puppeteer fallback → outbox for structure
+  - [ ] Idempotency check on entry
+- **E07: Worker Transcribe**
+  - [ ] Download audio from R2 → Whisper HTTP → cleanup
+  - [ ] Outbox for structure queue
+- **E08: Worker Structure**
+  - [ ] LLM call with system prompt → Zod validate → compute slide_count
+  - [ ] Outbox for render queue
+- **E09: Worker Render**
+  - [ ] Playwright pool (5 pages, max-uses TTL)
+  - [ ] Screenshot slides → R2 upload → insert `generated_assets` → mark complete
+
+## Backlog (Phase 2)
+- [ ] Add Pino structured logging across all packages
+- [ ] Worker heartbeat interval (10s upsert to `worker_instances`)
+- [ ] TTL sweeper (30-min stuck jobs → force fail)
+- [ ] Testcontainers integration tests (Vitest)
+- [ ] Playwright E2E tests
 
 ---
 
@@ -41,3 +67,4 @@
 *When making significant architectural choices during coding, log them here for the next agent to read.*
 
 - **2026-07-17:** Converted docs to a strict V1 AI-agent format. Extracted Outbox Relay into a standalone `worker-relay` microservice. Mandated Playwright TTLs and Idempotency checks. Locked in Turborepo for monorepo orchestration.
+- **2026-07-17:** Phase 0 scaffolding complete. pnpm@11.13.1, Node 24.18.0, TypeScript strict mode. All 11 packages build and typecheck clean. Docker Compose defines full stack with `full` profile for app services.
