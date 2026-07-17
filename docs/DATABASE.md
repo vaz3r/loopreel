@@ -61,7 +61,7 @@ CREATE INDEX idx_jobs_updated_at ON generation_jobs(updated_at DESC);
 - `priority` — BullMQ priority, inherited through pipeline
 - `brand_kit` — JSONB for flexibility (colors, fonts, logo URL)
 - `audio_r2_key` — Persisted for cleanup on job failure
-- `structured_json` — Full LLM output, reused by render worker
+- `structured_json` — Full LLM output. *(V1: Stored in DB. V1.1: Will migrate to R2 to prevent table bloat).*
 - `slide_count` — Computed once, used by render worker for parallelism
 - `retry_count` — Track attempts (for observability)
 - `updated_at` — Used by TTL sweep to find stuck jobs

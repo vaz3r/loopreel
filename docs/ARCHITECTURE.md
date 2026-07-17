@@ -116,20 +116,31 @@ The system is designed for **scale-out workers**: any machine can run any worker
 
 **Runs:**
 - Fastify HTTP server (port 3000)
-- Outbox relay (background service)
 - Playwright pool (for rendering)
 - Health check aggregator
 
 **Does NOT:**
 - Heavy processing (yt-dlp, Whisper, LLM calls, scraping)
+- Run the outbox relay (extracted to dedicated worker)
 - Store state in memory (all state in DB)
 
 **Key files:**
 - `src/server.ts` — Fastify bootstrap, routes
-- `src/services/outbox-relay.ts` — Poll + publish loop
 - `src/services/render.ts` — Playwright pool management
 - `src/routes/jobs.ts` — POST /api/jobs, GET /api/jobs/:id
 - `src/routes/health.ts` — GET /api/health
+
+### worker-relay (apps/worker-relay)
+
+**Responsibility:** Guarantees exactly-once dispatch from Postgres outbox to BullMQ.
+
+**Runs:**
+- Singleton polling loop (every 500ms)
+
+**Key operations:**
+- Query `outbox_events` with `FOR UPDATE SKIP LOCKED`.
+- Publish to BullMQ.
+- Mark row as published.
 
 ### worker-ingest (apps/worker-ingest)
 
@@ -372,6 +383,7 @@ worker_instances        -- Worker fleet monitoring
 
 - **Size:** 5 pages (tunable via env)
 - **Reuse:** Pages reused across render requests (navigate → screenshot → navigate)
+- **Max-Uses TTL:** To prevent Chromium memory leaks, pages are gracefully closed and replaced after 100 renders.
 - **Crash handling:** Individual page crashes trigger replacement, not full browser restart
 - **Waiter queue:** Max 20 waiters before rejecting with 503
 
@@ -399,7 +411,7 @@ Oracle Cloud VPS (public)           Home Server (private, Tailscale)
 ├── Playwright pool (5x)            └── (optional: worker-structure)
 ├── PostgreSQL                      
 ├── Redis                           
-└── Outbox relay (in API)           
+└── worker-relay (standalone)
 
 Connected by: Tailscale mesh VPN (encrypted)
 Communication: Redis queue + PostgreSQL replication (optional)
@@ -425,11 +437,11 @@ See WORKERS.md and STATE-MACHINES.md for detailed error trees.
 
 ## Checklist for Implementation
 
-- [ ] Monorepo structure: apps/{api, web, worker-ingest, worker-transcribe, worker-structure, worker-render}, packages/{db, queue, llm, types, templates}
+- [ ] Monorepo structure: Managed by **Turborepo** (`npx create-turbo@latest`). apps/{api, web, worker-relay, worker-ingest, worker-transcribe, worker-structure, worker-render}, packages/{db, queue, llm, types, templates}
 - [ ] PostgreSQL schema (all tables + indexes + migrations)
 - [ ] Redis setup (BullMQ queues, connection pooling)
-- [ ] API bootstrap (DB, Redis, Playwright pool, outbox relay)
-- [ ] Outbox relay (500ms poll loop, idempotent publishing)
+- [ ] API bootstrap (DB, Redis, Playwright pool)
+- [ ] worker-relay (500ms poll loop, idempotent publishing)
 - [ ] Playwright pool (5 pages, crash detection, metrics sidecar)
 - [ ] Each worker setup (BullMQ consumer, error handling, heartbeat)
 - [ ] Docker Compose (dev + prod configs)
