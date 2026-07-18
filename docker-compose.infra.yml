@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: loopreel
+      POSTGRES_PASSWORD: loopreel
+      POSTGRES_DB: loopreel
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loopreel -d loopreel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  faster-whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    ports:
+      - "8000:8000"
+    environment:
+      ASR_MODEL: base
+      ASR_ENGINE: openai_whisper
+
+volumes:
+  postgres_data:
+  redis_data:

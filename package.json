@@ -6,7 +6,12 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "pm2 start ecosystem.config.cjs && pm2 logs --nostream --lines 0",
+    "dev:stop": "pm2 stop ecosystem.config.cjs && pm2 delete ecosystem.config.cjs",
+    "dev:logs": "pm2 logs --nostream --lines 50",
+    "dev:logs:follow": "pm2 logs",
+    "dev:status": "pm2 status",
+    "dev:restart": "pm2 restart ecosystem.config.cjs",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
@@ -14,6 +19,7 @@
     "db:generate": "pnpm --filter @loopreel/db run generate"
   },
   "devDependencies": {
+    "pm2": "^7.0.3",
     "turbo": "^2.10.5"
   },
   "dependencies": {

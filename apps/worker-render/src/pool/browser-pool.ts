@@ -146,7 +146,12 @@ let pool: BrowserPool | null = null;
 export async function getPool(): Promise<BrowserPool> {
   if (!pool) {
     pool = new BrowserPool();
-    await pool.init();
+    try {
+      await pool.init();
+    } catch (err) {
+      pool = null;
+      throw err;
+    }
   }
   return pool;
 }

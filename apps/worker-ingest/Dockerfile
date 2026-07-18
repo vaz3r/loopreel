@@ -1,4 +1,5 @@
 FROM node:24-slim AS base
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip yt-dlp ffmpeg \
@@ -30,12 +31,13 @@ RUN pnpm --filter @loopreel/errors build
 RUN pnpm --filter @loopreel/worker-ingest build
 
 FROM node:24-slim AS runner
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip yt-dlp ffmpeg \
     && rm -rf /var/lib/apt/lists/*
-RUN npx puppeteer browsers install chrome
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/packages/db/dist ./packages/db/dist
 COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 COPY --from=builder /app/packages/db/package.json ./packages/db/
@@ -51,6 +53,7 @@ COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/errors/package.json ./packages/errors/
 COPY --from=builder /app/apps/worker-ingest/dist ./apps/worker-ingest/dist
 COPY --from=builder /app/apps/worker-ingest/package.json ./apps/worker-ingest/
+COPY --from=builder /app/apps/*/node_modules ./apps/*/node_modules/
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-workspace.yaml ./

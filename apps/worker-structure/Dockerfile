@@ -1,4 +1,5 @@
 FROM node:24-slim AS base
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 WORKDIR /app
 
@@ -30,6 +31,7 @@ RUN pnpm --filter @loopreel/worker-structure build
 
 FROM node:24-slim AS runner
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/packages/db/dist ./packages/db/dist
 COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 COPY --from=builder /app/packages/db/package.json ./packages/db/
@@ -48,6 +50,7 @@ COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/errors/package.json ./packages/errors/
 COPY --from=builder /app/apps/worker-structure/dist ./apps/worker-structure/dist
 COPY --from=builder /app/apps/worker-structure/package.json ./apps/worker-structure/
+COPY --from=builder /app/apps/*/node_modules ./apps/*/node_modules/
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-workspace.yaml ./

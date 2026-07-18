@@ -25,9 +25,16 @@ let jobsProcessed = 0n;
 const heartbeat = setInterval(() => {
   void WorkerRepository.upsertHeartbeat(INSTANCE_ID, 'render', HOSTNAME, 'render', jobsProcessed);
 }, 10_000);
+let pool: Awaited<ReturnType<typeof getPool>> | null = null;
 
-const pool = await getPool();
-startMetricsServer(pool);
+async function ensurePool() {
+  if (!pool) {
+    pool = await getPool();
+  }
+  return pool;
+}
+
+startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
@@ -51,6 +58,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
   jobLogger.info({ slideCount: existing.slide_count }, 'Starting render');
 
   try {
+    const currentPool = await ensurePool();
     const assets: Array<{
       jobId: string;
       formatType: FormatType;
@@ -60,7 +68,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     }> = [];
 
     for (let i = 0; i < existing.slide_count; i++) {
-      const page = await pool.acquire();
+      const page = await currentPool.acquire();
       try {
         await page.goto(`${RENDER_URL}/render/${jobId}/${i}`, {
           waitUntil: 'networkidle',
@@ -81,7 +89,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
           storageUrl: r2Key,
         });
       } finally {
-        pool.release(page);
+        currentPool.release(page);
       }
     }
 
@@ -133,7 +141,7 @@ worker.on('failed', (job, err) => {
 
 process.on('SIGTERM', () => {
   clearInterval(heartbeat);
-  void pool.close();
+  void pool?.close();
 });
 
 logger.info({ instanceId: INSTANCE_ID }, 'worker-render started');

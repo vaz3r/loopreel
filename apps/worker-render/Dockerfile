@@ -1,4 +1,5 @@
 FROM node:24-slim AS base
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 RUN npx playwright install --with-deps chromium
 WORKDIR /app
@@ -27,9 +28,9 @@ RUN pnpm --filter @loopreel/queue build
 RUN pnpm --filter @loopreel/errors build
 RUN pnpm --filter @loopreel/worker-render build
 
-FROM node:24-slim AS runner
-RUN npx playwright install --with-deps chromium
+FROM base AS runner
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/packages/db/dist ./packages/db/dist
 COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 COPY --from=builder /app/packages/db/package.json ./packages/db/
@@ -45,6 +46,7 @@ COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/errors/package.json ./packages/errors/
 COPY --from=builder /app/apps/worker-render/dist ./apps/worker-render/dist
 COPY --from=builder /app/apps/worker-render/package.json ./apps/worker-render/
+COPY --from=builder /app/apps/*/node_modules ./apps/*/node_modules/
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-workspace.yaml ./

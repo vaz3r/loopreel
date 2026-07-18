@@ -1,4 +1,5 @@
 FROM node:24-slim AS base
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 WORKDIR /app
 
@@ -31,8 +32,8 @@ RUN pnpm --filter @loopreel/errors build
 RUN pnpm --filter @loopreel/api build
 
 FROM node:24-slim AS runner
-RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/packages/db/dist ./packages/db/dist
 COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 COPY --from=builder /app/packages/db/package.json ./packages/db/

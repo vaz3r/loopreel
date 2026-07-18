@@ -1,4 +1,5 @@
 FROM node:24-slim AS base
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
 WORKDIR /app
 
@@ -15,8 +16,10 @@ RUN pnpm --filter @loopreel/web build
 
 FROM base AS runner
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/apps/web/dist ./apps/web/dist
 COPY --from=builder /app/apps/web/package.json ./apps/web/
+COPY --from=builder /app/apps/*/node_modules ./apps/*/node_modules/
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-workspace.yaml ./
