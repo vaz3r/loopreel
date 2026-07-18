@@ -1,9 +1,12 @@
 import { Queue, Worker, type QueueOptions, type WorkerOptions } from 'bullmq';
 import { Redis } from 'ioredis';
 
-const connection = new Redis(process.env['REDIS_URL'] ?? 'redis://localhost:6379', {
+const REDIS_URL = process.env['REDIS_URL'] ?? 'redis://localhost:6379';
+
+const connection = new Redis(REDIS_URL, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
+  family: 4,
 });
 
 export { connection };

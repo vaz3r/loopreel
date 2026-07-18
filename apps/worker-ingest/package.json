@@ -4,19 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --import tsx src/index.ts",
+    "dev": "node --import tsx src/bootstrap.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@loopreel/db": "workspace:*",
+    "@loopreel/errors": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
     "@loopreel/storage": "workspace:*",
-    "@loopreel/errors": "workspace:*",
     "cheerio": "^1.0.0",
-    "puppeteer": "^24.0.0",
-    "pino": "^9.6.0"
+    "dotenv": "^17.4.2",
+    "pino": "^9.6.0",
+    "puppeteer": "^24.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

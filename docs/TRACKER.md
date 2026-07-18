@@ -132,11 +132,23 @@ All E01-E09 complete. Full pipeline verified end-to-end.
   - [x] Added OpenRouter config (LLM_BASE_URL, LLM_MODEL, LLM_TIMEOUT, LLM_MAX_RETRIES)
   - [x] Added WHISPER_URL, RENDER_URL, PLAYWRIGHT_POOL_SIZE, METRICS_PORT
 
+- **P15: TTL Sweeper** — [x] Done
+  - [x] Background job in API server (5-min interval)
+  - [x] Force-fails jobs stuck > 30 minutes
+  - [x] Logs `ttl_timeout` event for each force-failed job
+
+- **P16: Swagger/OpenAPI** — [x] Done
+  - [x] `@fastify/swagger` + `@fastify/swagger-ui`
+  - [x] Available at `/docs`
+
+- **P17: Bootstrap + dotenv** — [x] Done
+  - [x] Bootstrap entry files for all apps
+  - [x] dotenv loads `.env` before module imports
+  - [x] Works for both local dev and Docker
+
 ## Backlog (Phase 2)
-- [ ] TTL sweeper (30-min stuck jobs → force fail)
 - [ ] Testcontainers integration tests (Vitest)
 - [ ] Playwright E2E tests
-- [ ] Add @fastify/swagger for API docs
 
 ---
 
@@ -147,3 +159,4 @@ All E01-E09 complete. Full pipeline verified end-to-end.
 - **2026-07-17:** Phase 0 scaffolding complete. pnpm@11.13.1, Node 24.18.0, TypeScript strict mode. All 11 packages build and typecheck clean. Docker Compose defines full stack with `full` profile for app services.
 - **2026-07-17:** E04 worker-relay complete. Outbox polling with `FOR UPDATE SKIP LOCKED`, BullMQ dispatch per queue, pino logging, concurrency guard. E05 API routes complete. POST /api/jobs with Zod validation + transactional outbox, GET /api/jobs/:id with assets, GET /api/health with DB + worker checks, GET /render/:jobId/:slideIndex with 127.0.0.1 guard.
 - **2026-07-17:** E06-E09 workers complete. worker-ingest (cheerio blog scrape), worker-transcribe (Whisper HTTP), worker-structure (DeepSeek LLM + Zod validation), worker-render (Playwright pool + R2 upload). All workers have idempotency checks, error classification, and pino logging. End-to-end test passed: API creates job → relay dispatches ingest → ingest scrapes blog → relay dispatches structure → structure calls LLM (401 without API key, correctly marked failed). Full pipeline plumbing verified.
+- **2026-07-18:** Phase 2 gap fixes complete. Created 3 new packages: `@loopreel/llm` (OpenRouter + retry), `@loopreel/templates` (v1 prompts + versioning), `@loopreel/errors` (shared classification). Fixed browser pool inUse tracking, worker-structure concurrency (1→10), health route (Redis check), relay (FOR UPDATE inside TX), all workers (heartbeats, SIGTERM cleanup). Added Puppeteer fallback for blogs, download endpoint, metrics sidecar, TTL sweeper, Swagger docs. All 7 Dockerfiles created. Full end-to-end test: blog → cheerio scrape → OpenRouter LLM → 9 slides generated → job reached "rendering" state.

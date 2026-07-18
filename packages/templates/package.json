@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/prompts dist/prompts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

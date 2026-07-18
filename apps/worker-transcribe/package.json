@@ -4,16 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --import tsx src/index.ts",
+    "dev": "node --import tsx src/bootstrap.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@loopreel/db": "workspace:*",
+    "@loopreel/errors": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
     "@loopreel/storage": "workspace:*",
-    "@loopreel/errors": "workspace:*",
+    "dotenv": "^17.4.2",
     "pino": "^9.6.0"
   },
   "devDependencies": {
