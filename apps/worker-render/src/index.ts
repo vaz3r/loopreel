@@ -1,16 +1,139 @@
+import { JobRepository, AssetRepository, WorkerRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { RenderPayload } from '@loopreel/schemas';
+import type { FormatType } from '@loopreel/schemas';
+import { uploadSlide } from '@loopreel/storage';
+import { classifyError } from '@loopreel/errors';
+import pino from 'pino';
+import { randomUUID } from 'node:crypto';
+import { hostname } from 'node:os';
+import { getPool } from './pool/browser-pool.js';
+import { startMetricsServer } from './sidecar.js';
+
+const logger = pino({
+  level: process.env['LOG_LEVEL'] ?? 'info',
+  formatters: {
+    level: (label) => ({ level: label.toUpperCase() }),
+  },
+});
+
+const RENDER_URL = process.env['RENDER_URL'] ?? 'http://localhost:5173';
+const INSTANCE_ID = randomUUID();
+const HOSTNAME = hostname();
+let jobsProcessed = 0n;
+
+const heartbeat = setInterval(() => {
+  void WorkerRepository.upsertHeartbeat(INSTANCE_ID, 'render', HOSTNAME, 'render', jobsProcessed);
+}, 10_000);
+
+const pool = await getPool();
+startMetricsServer(pool);
 
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
-  console.log(`worker-render: processing job ${jobId}`);
+  const jobLogger = logger.child({ jobId, workerType: 'render' });
 
-  // TODO: Fetch job from DB, use Playwright pool to screenshot slides
-  // TODO: Upload PNGs to R2, insert generated_assets rows, mark job complete
+  const existing = await JobRepository.findById(jobId);
+  if (!existing) {
+    jobLogger.error('Job not found, skipping');
+    return;
+  }
+  if (existing.status !== 'rendering') {
+    jobLogger.info({ currentStatus: existing.status }, 'Job already advanced, skipping');
+    return;
+  }
+
+  if (!existing.structured_json || !existing.slide_count) {
+    await JobRepository.markFailed(jobId, 'Missing structured_json or slide_count');
+    return;
+  }
+
+  jobLogger.info({ slideCount: existing.slide_count }, 'Starting render');
+
+  try {
+    const assets: Array<{
+      jobId: string;
+      formatType: FormatType;
+      slideIndex?: number;
+      storageUrl?: string;
+      contentText?: string;
+    }> = [];
+
+    for (let i = 0; i < existing.slide_count; i++) {
+      const page = await pool.acquire();
+      try {
+        await page.goto(`${RENDER_URL}/render/${jobId}/${i}`, {
+          waitUntil: 'networkidle',
+          timeout: 30_000,
+        });
+
+        await page.waitForSelector('[data-render-complete="true"]', { timeout: 10_000 });
+
+        const screenshot = await page.screenshot({ type: 'png' });
+        const r2Key = await uploadSlide(jobId, i, screenshot);
+
+        jobLogger.info({ slideIndex: i, r2Key }, 'Slide rendered');
+
+        assets.push({
+          jobId,
+          formatType: 'carousel_slide',
+          slideIndex: i,
+          storageUrl: r2Key,
+        });
+      } finally {
+        pool.release(page);
+      }
+    }
+
+    const structured = existing.structured_json as {
+      hook: { title: string };
+      valuePoints: Array<{ heading: string; body: string }>;
+      callToAction: { message: string };
+    };
+
+    const linkedinText = [
+      structured.hook.title,
+      '',
+      ...structured.valuePoints.map((vp) => `📌 ${vp.heading}\n${vp.body}`),
+      '',
+      structured.callToAction.message,
+    ].join('\n');
+
+    const twitterThread = [
+      structured.hook.title,
+      '',
+      ...structured.valuePoints.map((vp, i) => `${i + 1}/${structured.valuePoints.length} ${vp.heading}\n${vp.body}`),
+      '',
+      structured.callToAction.message,
+    ].join('\n\n');
+
+    assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
+    assets.push({ jobId, formatType: 'twitter_thread', contentText: twitterThread });
+
+    await AssetRepository.insertBatch(assets);
+    await JobRepository.updateStatus(jobId, 'complete');
+
+    jobsProcessed++;
+    jobLogger.info({ assetCount: assets.length }, 'Job complete');
+  } catch (err) {
+    const classified = classifyError(err);
+    jobLogger.error({ err, errorType: classified.type }, 'Render failed');
+
+    if (classified.type === 'transient' && job.attemptsMade < 1) {
+      throw classified;
+    }
+
+    await JobRepository.markFailed(jobId, classified.message);
+  }
 });
 
 worker.on('failed', (job, err) => {
-  console.error(`worker-render: job ${job?.id} failed`, err);
+  logger.error({ jobId: job?.id, err }, 'Worker failed');
 });
 
-console.log('worker-render started');
+process.on('SIGTERM', () => {
+  clearInterval(heartbeat);
+  void pool.close();
+});
+
+logger.info({ instanceId: INSTANCE_ID }, 'worker-render started');

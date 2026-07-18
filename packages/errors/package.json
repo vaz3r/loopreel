@@ -1,23 +1,25 @@
 {
-  "name": "@loopreel/api",
+  "name": "@loopreel/errors",
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "dev": "node --import tsx src/server.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@loopreel/db": "workspace:*",
-    "@loopreel/queue": "workspace:*",
-    "@loopreel/schemas": "workspace:*",
-    "@loopreel/storage": "workspace:*",
-    "fastify": "^5.2.0",
     "pino": "^9.6.0"
   },
   "devDependencies": {
-    "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }
 }

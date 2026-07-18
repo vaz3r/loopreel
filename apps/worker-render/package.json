@@ -11,7 +11,11 @@
   "dependencies": {
     "@loopreel/db": "workspace:*",
     "@loopreel/queue": "workspace:*",
-    "@loopreel/schemas": "workspace:*"
+    "@loopreel/schemas": "workspace:*",
+    "@loopreel/storage": "workspace:*",
+    "@loopreel/errors": "workspace:*",
+    "playwright": "^1.49.0",
+    "pino": "^9.6.0"
   },
   "devDependencies": {
     "tsx": "^4.19.0",

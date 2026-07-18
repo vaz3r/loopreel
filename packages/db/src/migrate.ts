@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pool } from './pool.js';
@@ -31,7 +31,7 @@ async function runMigrations(): Promise<void> {
         continue;
       }
 
-      const { default: sql } = await import(join(MIGRATIONS_DIR, file), { with: { type: 'text/plain' } });
+      const sql = await readFile(join(MIGRATIONS_DIR, file), 'utf-8');
 
       await client.query('BEGIN');
       try {

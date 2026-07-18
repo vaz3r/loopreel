@@ -1,5 +1,5 @@
-import { OutboxRepository, pool } from '@loopreel/db';
-import { createQueue } from '@loopreel/queue';
+import { pool } from '@loopreel/db';
+import { createQueue, QUEUE_RETRY_CONFIG } from '@loopreel/queue';
 import pino from 'pino';
 
 const logger = pino({
@@ -22,7 +22,20 @@ async function pollOutbox(): Promise<void> {
   try {
     await client.query('BEGIN');
 
-    const events = await OutboxRepository.findUnpublished(50);
+    const { rows: events } = await client.query<{
+      id: string;
+      queue_name: string;
+      job_payload: unknown;
+      bullmq_opts: { priority?: number };
+    }>(
+      `SELECT id, queue_name, job_payload, bullmq_opts
+       FROM outbox_events
+       WHERE published = false
+       ORDER BY created_at ASC
+       LIMIT 50
+       FOR UPDATE SKIP LOCKED`,
+    );
+
     if (events.length === 0) {
       await client.query('ROLLBACK');
       return;
@@ -42,9 +55,13 @@ async function pollOutbox(): Promise<void> {
       const jobId = payload['jobId'] as string;
       const jobName = `job-${jobId}`;
 
+      const retryConfig = QUEUE_RETRY_CONFIG[queueName] ?? { attempts: 1, backoff: { type: 'fixed' as const, delay: 5000 } };
+
       try {
         await queue.add(jobName, payload, {
-          priority: event.bullmq_opts.priority,
+          priority: event.bullmq_opts?.priority,
+          attempts: retryConfig.attempts,
+          backoff: retryConfig.backoff,
         });
         publishedIds.push(event.id);
         logger.info({ jobId, queue: event.queue_name }, 'Dispatched to BullMQ');
@@ -54,7 +71,10 @@ async function pollOutbox(): Promise<void> {
     }
 
     if (publishedIds.length > 0) {
-      await OutboxRepository.markPublished(publishedIds);
+      await client.query(
+        `UPDATE outbox_events SET published = true WHERE id = ANY($1)`,
+        [publishedIds],
+      );
     }
 
     await client.query('COMMIT');

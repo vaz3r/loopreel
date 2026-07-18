@@ -12,5 +12,8 @@
     "typecheck": "turbo run typecheck",
     "db:migrate": "pnpm --filter @loopreel/db run migrate",
     "db:generate": "pnpm --filter @loopreel/db run generate"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.5"
   }
 }

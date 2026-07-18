@@ -27,8 +27,27 @@ export function createQueue(name: string, opts?: Partial<QueueOptions>): Queue {
 
 export function createWorker<T = unknown>(
   name: string,
-  handler: (job: { data: T }) => Promise<void>,
+  handler: (job: { data: T; attemptsMade: number }) => Promise<void>,
   opts?: Partial<WorkerOptions>,
 ): Worker<T> {
   return new Worker<T>(name, handler as (job: { data: T }) => Promise<void>, { ...WORKER_DEFAULTS, ...opts });
 }
+
+export const QUEUE_RETRY_CONFIG: Record<string, { attempts: number; backoff: { type: 'fixed' | 'exponential'; delay: number } }> = {
+  ingest: {
+    attempts: 2,
+    backoff: { type: 'fixed', delay: 5000 },
+  },
+  transcribe: {
+    attempts: 2,
+    backoff: { type: 'fixed', delay: 10000 },
+  },
+  structure: {
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 5000 },
+  },
+  render: {
+    attempts: 1,
+    backoff: { type: 'fixed', delay: 5000 },
+  },
+};

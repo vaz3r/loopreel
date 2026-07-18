@@ -1,5 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { pool, WorkerRepository } from '@loopreel/db';
+import { connection } from '@loopreel/queue';
 
 export const healthRoute: FastifyPluginAsync = async (app) => {
   app.get('/api/health', async (_request, reply) => {
@@ -12,11 +13,21 @@ export const healthRoute: FastifyPluginAsync = async (app) => {
       checks['db'] = 'disconnected';
     }
 
+    try {
+      await connection.ping();
+      checks['redis'] = 'connected';
+    } catch {
+      checks['redis'] = 'disconnected';
+    }
+
     const activeWorkers = await WorkerRepository.findActiveByType();
 
+    const allHealthy = checks['db'] === 'connected' && checks['redis'] === 'connected';
+
     return reply.send({
-      status: checks['db'] === 'connected' ? 'ok' : 'degraded',
+      status: allHealthy ? 'ok' : 'degraded',
       db: checks['db'],
+      redis: checks['redis'],
       activeWorkers,
     });
   });
