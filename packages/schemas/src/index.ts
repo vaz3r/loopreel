@@ -212,8 +212,18 @@ export function buildSlidesWithDesign(
 ): SlideData[] {
   const slides = buildSlides(content);
 
+  // Create a default slide design for slides that don't have one
+  const defaultSlideDesign = {
+    layout: 'center-focus' as const,
+    backgroundType: 'gradient' as const,
+    gradientType: 'linear',
+    textAlignment: 'center' as const,
+    emphasis: 'medium' as const,
+    shapes: [],
+  };
+
   return slides.map((slide, i) => ({
     ...slide,
-    design: design.slides[i],
+    design: design.slides[i] ?? { ...defaultSlideDesign, index: i },
   }));
 }

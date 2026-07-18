@@ -102,6 +102,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
     return reply.send({
       id: job.id,
       status: job.status,
+      templateId: job.template_id,
       errorMessage: job.error_message,
       structuredJson: job.structured_json,
       slideCount: job.slide_count,

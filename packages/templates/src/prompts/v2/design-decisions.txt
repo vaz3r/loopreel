@@ -12,6 +12,8 @@ Available templates:
 - corporate-sharp: Clean lines, blue/navy, structured grid (best for: finance, B2B)
 - creative-pop: Asymmetric, vibrant colors, playful (best for: marketing, media)
 - premium-dark: Dark + glow effects, glassmorphism (best for: premium brands)
+- glassmorphism: Vibrant mesh gradients with frosted glass cards, glow effects, geometric font (best for: tier-1 agencies, tech)
+- editorial: Elegant serif layouts, asymmetrical designs, high contrast print style (best for: high-fashion, tier-1 agencies)
 
 Available layouts per slide type:
 Hook layouts: hero-center, hero-left, minimal-center, minimal-left, luxury-center, luxury-framed, tech-hero, tech-split, organic-center, corporate-hero, corporate-center, pop-hero, pop-diagonal, premium-hero, premium-split

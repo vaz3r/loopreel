@@ -15,7 +15,6 @@ const parser = new XMLParser({
 });
 
 export function parseXml<T>(xml: string): T {
-  // Clean up any markdown code fences that might be present
   let cleaned = xml.trim();
   if (cleaned.startsWith('```xml')) {
     cleaned = cleaned.slice(6);
@@ -27,13 +26,14 @@ export function parseXml<T>(xml: string): T {
   }
   cleaned = cleaned.trim();
 
-  // Remove stray HTML tags that free models inject
+  // Strip only EXACT HTML tags — not XML elements like <body>, <bullet>, <brand>, <brandProfile>
   cleaned = cleaned.replace(/<\/?h[1-6][^>]*>/gi, '');
   cleaned = cleaned.replace(/<\/?p[^>]*>/gi, '');
   cleaned = cleaned.replace(/<\/?strong[^>]*>/gi, '');
   cleaned = cleaned.replace(/<\/?em[^>]*>/gi, '');
-  cleaned = cleaned.replace(/<\/?b[^>]*>/gi, '');
-  cleaned = cleaned.replace(/<\/?i[^>]*>/gi, '');
+  // <b> and </b> only (no attributes after b, no "ody" etc.)
+  cleaned = cleaned.replace(/<(\/?)b>/gi, '');
+  cleaned = cleaned.replace(/<(\/?)i>/gi, '');
 
   return parser.parse(cleaned) as T;
 }

@@ -11,6 +11,7 @@ import { SlideRenderer } from '../components/SlideTemplate.js';
 interface JobData {
   id: string;
   status: string;
+  templateId?: string;
   structuredJson: StructuredContent & { design?: DesignOutput; brandKit?: BrandKit } | null;
   slideCount: number | null;
   brandKit?: BrandKit;
@@ -104,18 +105,24 @@ export function RenderPage() {
   // Extract content and design from the structured JSON
   const { design, brandKit: embeddedBrandKit, ...content } = job.structuredJson;
   const finalBrandKit = embeddedBrandKit ?? job.brandKit;
+  const templateId = job.templateId ?? design?.template ?? 'modern-bold';
 
-  const slides = buildSlidesWithDesign(content, design ?? {
-    template: 'modern-bold',
-    colorScheme: {
-      primary: '#FF6B6B',
-      secondary: '#4ECDC4',
-      accent: '#45B7D1',
-      background: '#1A1A2E',
-      text: '#FFFFFF',
-    },
-    slides: [],
-  });
+  // Force the templateId into the design object so that SlideRenderer and buildSlidesWithDesign use the requested template.
+  const mergedDesign: DesignOutput = design 
+    ? { ...design, template: templateId } 
+    : {
+        template: templateId,
+        colorScheme: {
+          primary: '#FF6B6B',
+          secondary: '#4ECDC4',
+          accent: '#45B7D1',
+          background: '#1A1A2E',
+          text: '#FFFFFF',
+        },
+        slides: [],
+      };
+
+  const slides = buildSlidesWithDesign(content, mergedDesign);
   const slide = slides[index];
 
   if (!slide) {
@@ -131,7 +138,7 @@ export function RenderPage() {
       slide={slide}
       slideCount={job.slideCount}
       brandKit={finalBrandKit}
-      design={design}
+      design={mergedDesign}
     />
   );
 }

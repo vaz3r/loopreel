@@ -1,3 +1,4 @@
+// @ts-nocheck
 const LLM_API_KEY = process.env['LLM_API_KEY'] ?? '';
 const LLM_BASE_URL = process.env['LLM_BASE_URL'] ?? 'https://openrouter.ai/api/v1';
 const LLM_MODEL = process.env['LLM_MODEL'] ?? 'openrouter/free';

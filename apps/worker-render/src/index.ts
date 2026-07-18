@@ -111,15 +111,26 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
 
     // Generate text-based assets (LinkedIn, Twitter)
     const structured = existing.structured_json as {
-      hook: { title: string };
-      valuePoints: Array<{ heading: string; body: string }>;
+      hook: { title: string; subtitle?: string };
+      valuePoints: Array<{ heading: string; body: string; bulletPoints?: string[] }>;
       callToAction: { message: string };
+    };
+
+    const formatValuePoint = (vp: { heading: string; body: string; bulletPoints?: string[] }) => {
+      const lines = [`📌 ${vp.heading}`, vp.body];
+      if (vp.bulletPoints?.length) {
+        for (const bp of vp.bulletPoints) {
+          lines.push(`  • ${bp}`);
+        }
+      }
+      return lines.join('\n');
     };
 
     const linkedinText = [
       structured.hook.title,
+      structured.hook.subtitle ? `\n${structured.hook.subtitle}` : '',
       '',
-      ...structured.valuePoints.map((vp) => `📌 ${vp.heading}\n${vp.body}`),
+      ...structured.valuePoints.map(formatValuePoint),
       '',
       structured.callToAction.message,
     ].join('\n');

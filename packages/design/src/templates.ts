@@ -422,6 +422,52 @@ export const templates: Record<string, Template> = {
   'corporate-sharp': corporateSharp,
   'creative-pop': creativePop,
   'premium-dark': premiumDark,
+  'glassmorphism': {
+    id: 'glassmorphism',
+    name: 'Glassmorphism',
+    description: 'Vibrant mesh gradients with frosted glass cards',
+    colorPalette: {
+      primary: '#9D4EDD',
+      secondary: '#FF9E00',
+      accent: '#FFFFFF',
+      background: '#0A0914',
+      surface: 'rgba(255, 255, 255, 0.05)',
+      text: '#FFFFFF',
+      muted: 'rgba(255, 255, 255, 0.4)',
+    },
+    typography: { headingFont: 'Outfit', bodyFont: 'Outfit', headingWeight: 800, bodyWeight: 300, scale: 1.0 },
+    layout: { padding: '80px', maxWidth: '940px', alignment: 'center' },
+    background: { type: 'gradient', allowedTypes: ['gradient'] },
+    effects: { shadows: true, borders: true, overlays: false, shapes: false, glass: true },
+    slideLayouts: {
+      hook: [{ id: 'glass-center', name: 'Glass Center', alignment: 'center', shapes: [], emphasis: 'large' }],
+      value: [{ id: 'glass-left', name: 'Glass Left', alignment: 'left', shapes: [], emphasis: 'medium' }],
+      cta: [{ id: 'glass-cta', name: 'Glass CTA', alignment: 'center', shapes: [], emphasis: 'large' }]
+    }
+  },
+  'editorial': {
+    id: 'editorial',
+    name: 'Editorial',
+    description: 'Elegant serif layouts, asymmetrical designs, high contrast',
+    colorPalette: {
+      primary: '#D23226',
+      secondary: '#111111',
+      accent: '#D23226',
+      background: '#FAF9F6',
+      surface: '#FFFFFF',
+      text: '#111111',
+      muted: '#666666',
+    },
+    typography: { headingFont: 'Playfair Display', bodyFont: 'Inter', headingWeight: 600, bodyWeight: 400, scale: 1.0 },
+    layout: { padding: '80px', maxWidth: '940px', alignment: 'left' },
+    background: { type: 'solid', allowedTypes: ['solid'] },
+    effects: { shadows: false, borders: true, overlays: false, shapes: false, glass: false },
+    slideLayouts: {
+      hook: [{ id: 'editorial-center', name: 'Editorial Center', alignment: 'center', shapes: [], emphasis: 'large' }],
+      value: [{ id: 'editorial-split', name: 'Editorial Split', alignment: 'left', shapes: [], emphasis: 'medium' }],
+      cta: [{ id: 'editorial-cta', name: 'Editorial CTA', alignment: 'center', shapes: [], emphasis: 'large' }]
+    }
+  }
 };
 
 // Get template by ID

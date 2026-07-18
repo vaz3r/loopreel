@@ -129,19 +129,35 @@ function normalizeContent(content: Record<string, unknown>) {
           ? raw['point'] as Record<string, unknown>
           : raw;
         const bulletPointsContainer = p['bulletPoints'] ?? p['bullet_points'];
-        const bulletPointsRaw = Array.isArray(bulletPointsContainer) ? bulletPointsContainer
-          : (typeof bulletPointsContainer === 'object' && bulletPointsContainer !== null && 'bullet' in bulletPointsContainer)
-            ? (bulletPointsContainer as Record<string, unknown>)['bullet']
-            : [];
+        let bulletPointsRaw: unknown[] = [];
+        if (Array.isArray(bulletPointsContainer)) {
+          bulletPointsRaw = bulletPointsContainer;
+        } else if (typeof bulletPointsContainer === 'object' && bulletPointsContainer !== null && 'bullet' in bulletPointsContainer) {
+          const b = (bulletPointsContainer as Record<string, unknown>)['bullet'];
+          bulletPointsRaw = Array.isArray(b) ? b : [b];
+        }
+        // Extract text from bullet items - may be strings or {bullet: "text"} objects
+        const bulletTexts = bulletPointsRaw.map((item) => {
+          if (typeof item === 'string') return item;
+          if (typeof item === 'object' && item !== null) {
+            const obj = item as Record<string, unknown>;
+            return String(obj['bullet'] ?? obj['text'] ?? '');
+          }
+          return String(item);
+        }).filter((t) => t.length > 0);
         return {
           heading: String(p['heading'] ?? ''),
           body: String(p['body'] ?? ''),
-          bulletPoints: Array.isArray(bulletPointsRaw) && bulletPointsRaw.length > 0
-            ? bulletPointsRaw.map(String)
-            : undefined,
+          bulletPoints: bulletTexts.length > 0 ? bulletTexts : undefined,
         };
       })
+      // Filter out empty value points (LLM sometimes adds trailing empty entries)
+      .filter((vp) => vp.heading.length > 0 || vp.body.length > 0)
     : [];
+
+  // Fallback CTA if LLM returned empty
+  const ctaMessage = String(cta['message'] ?? '') || 'Learn more';
+  const ctaUrl = String(cta['url'] ?? '') || undefined;
 
   return {
     hook: {
@@ -150,8 +166,8 @@ function normalizeContent(content: Record<string, unknown>) {
     },
     valuePoints: points,
     callToAction: {
-      message: String(cta['message'] ?? ''),
-      url: String(cta['url'] ?? '') || undefined,
+      message: ctaMessage,
+      url: ctaUrl,
     },
   };
 }
