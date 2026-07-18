@@ -157,6 +157,9 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@loopreel/design':
+        specifier: workspace:*
+        version: link:../../packages/design
       '@loopreel/errors':
         specifier: workspace:*
         version: link:../../packages/errors
@@ -191,6 +194,9 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@loopreel/design':
+        specifier: workspace:*
+        version: link:../../packages/design
       '@loopreel/errors':
         specifier: workspace:*
         version: link:../../packages/errors
@@ -254,6 +260,15 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
+  packages/backgrounds:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.20.1
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
   packages/db:
     dependencies:
       '@loopreel/schemas':
@@ -266,6 +281,12 @@ importers:
       '@types/pg':
         specifier: ^8.11.0
         version: 8.20.0
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/design:
+    devDependencies:
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -332,6 +353,10 @@ importers:
         version: 5.9.3
 
   packages/templates:
+    dependencies:
+      fast-xml-parser:
+        specifier: ^4.5.0
+        version: 4.5.7
     devDependencies:
       '@types/node':
         specifier: ^22.0.0
@@ -1579,6 +1604,10 @@ packages:
   fast-uri@4.1.0:
     resolution: {integrity: sha512-ZodJ2cRiLVWGi9IgPb3mbgSqM4CD3LexCHkuv0FfBXHJI1ADfucTD06m6clO2Cy5RZYsw/SiCVl/dyrFI/SYWA==}
 
+  fast-xml-parser@4.5.7:
+    resolution: {integrity: sha512-a6Qh1RMCNbSrU1+sAyAAZH3rTe+OaWJbNZIq0S+ifZciUUOQtlVxBJwoTUE2bYhysmG/RYyI5WJFIKdBahJdrQ==}
+    hasBin: true
+
   fastify-plugin@5.1.0:
     resolution: {integrity: sha512-FAIDA8eovSt5qcDgcBvDuX/v0Cjz0ohGhENZ/wpc3y+oZCY2afZ9Baqql3g/lC+OHRnciQol4ww7tuthOb9idw==}
 
@@ -2162,6 +2191,9 @@ packages:
   strip-ansi@6.0.1:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
     engines: {node: '>=8'}
+
+  strnum@1.1.2:
+    resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
 
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -3101,10 +3133,11 @@ snapshots:
   '@types/node@26.1.1':
     dependencies:
       undici-types: 8.3.0
+    optional: true
 
   '@types/pg@8.20.0':
     dependencies:
-      '@types/node': 26.1.1
+      '@types/node': 22.20.1
       pg-protocol: 1.15.0
       pg-types: 2.2.0
 
@@ -3559,6 +3592,10 @@ snapshots:
   fast-uri@3.1.3: {}
 
   fast-uri@4.1.0: {}
+
+  fast-xml-parser@4.5.7:
+    dependencies:
+      strnum: 1.1.2
 
   fastify-plugin@5.1.0: {}
 
@@ -4204,6 +4241,8 @@ snapshots:
     dependencies:
       ansi-regex: 5.0.1
 
+  strnum@1.1.2: {}
+
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -4290,7 +4329,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@8.3.0: {}
+  undici-types@8.3.0:
+    optional: true
 
   undici@7.28.0: {}
 

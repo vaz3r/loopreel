@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { JobRepository, AssetRepository } from '@loopreel/db';
-import { JobCreateSchema } from '@loopreel/schemas';
+import { JobCreateSchema, type BrandKit } from '@loopreel/schemas';
+import { getPresignedUrl } from '@loopreel/storage';
 
 function determineSourceType(sourceUrl: string): 'youtube' | 'blog' | 'article' {
   const url = sourceUrl.toLowerCase();
@@ -13,6 +14,33 @@ function determineSourceType(sourceUrl: string): 'youtube' | 'blog' | 'article' 
   return 'blog';
 }
 
+// Convert partial brand kit input to a basic BrandKit for storage
+function toBrandKit(brandKit?: { name?: string; primaryColor?: string; secondaryColor?: string }): BrandKit {
+  const name = brandKit?.name ?? 'Default Brand';
+  const primaryColor = brandKit?.primaryColor ?? '#e94560';
+  const secondaryColor = brandKit?.secondaryColor ?? '#4ECDC4';
+
+  return {
+    name,
+    colors: {
+      primary: primaryColor,
+      secondary: secondaryColor,
+      accent: '#45B7D1',
+      background: '#1A1A2E',
+      surface: '#232340',
+      text: '#FFFFFF',
+      muted: '#8888AA',
+    },
+    fonts: {
+      heading: 'Inter',
+      body: 'Inter',
+      headingWeight: 800,
+      bodyWeight: 400,
+    },
+    styleDirection: 'modern',
+  };
+}
+
 export const jobsRoute: FastifyPluginAsync = async (app) => {
   app.post('/api/jobs', {
     schema: {
@@ -22,8 +50,9 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
           priority: { type: 'number', enum: [1, 5, 10], default: 5 },
+          platform: { type: 'string', enum: ['instagram-feed', 'instagram-stories', 'linkedin', 'facebook'], default: 'instagram-feed' },
           brandKit: { type: 'object' },
-          templateId: { type: 'string', default: 'modern-dark' },
+          templateId: { type: 'string' },
         },
       },
     },
@@ -33,18 +62,20 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, priority, brandKit, templateId } = parse.data;
+    const { sourceUrl, priority, platform, brandKit, templateId } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
+
+    const fullBrandKit = toBrandKit(brandKit);
 
     const jobId = await JobRepository.create({
       sourceUrl,
       sourceType,
       priority,
-      brandKit,
-      templateId,
+      brandKit: fullBrandKit,
+      templateId: templateId ?? 'modern-bold',
     });
 
-    app.log.info({ jobId, sourceType }, 'Job created');
+    app.log.info({ jobId, sourceType, platform }, 'Job created');
     return reply.status(201).send({ jobId, status: 'queued' });
   });
 
@@ -93,9 +124,16 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
           id: { type: 'string', format: 'uuid' },
         },
       },
+      querystring: {
+        type: 'object',
+        properties: {
+          format: { type: 'string', enum: ['slides', 'linkedin', 'twitter', 'all'], default: 'all' },
+        },
+      },
     },
   }, async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { format } = request.query as { format?: string };
 
     const job = await JobRepository.findById(id);
     if (!job) {
@@ -113,14 +151,36 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(404).send({ error: 'No slides found' });
     }
 
-    return reply.send({
+    // Generate presigned URLs for slide images
+    const slidesWithUrls = await Promise.all(
+      slideAssets
+        .filter((a) => a.storage_url)
+        .map(async (a) => ({
+          index: a.slide_index,
+          url: await getPresignedUrl(a.storage_url!),
+          storageKey: a.storage_url,
+        }))
+    );
+
+    const response: Record<string, unknown> = {
       jobId: id,
-      slides: slideAssets.map((a) => ({
-        index: a.slide_index,
-        url: a.storage_url,
-      })),
-      linkedin: assets.find((a) => a.format_type === 'linkedin_post')?.content_text,
-      twitter: assets.find((a) => a.format_type === 'twitter_thread')?.content_text,
-    });
+      status: job.status,
+      platform: (job as unknown as { platform?: string }).platform ?? 'instagram-feed',
+      slideCount: slideAssets.length,
+    };
+
+    if (format === 'all' || format === 'slides') {
+      response.slides = slidesWithUrls;
+    }
+
+    if (format === 'all' || format === 'linkedin') {
+      response.linkedin = assets.find((a) => a.format_type === 'linkedin_post')?.content_text;
+    }
+
+    if (format === 'all' || format === 'twitter') {
+      response.twitter = assets.find((a) => a.format_type === 'twitter_thread')?.content_text;
+    }
+
+    return reply.send(response);
   });
 };

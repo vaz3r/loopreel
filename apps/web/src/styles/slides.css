@@ -1,150 +1,173 @@
+/* ============================================
+   LOOPREEL DESIGN SYSTEM CSS
+   Premium slide rendering for social media
+   ============================================ */
+
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ============================================
+   BASE SLIDE CONTAINER
+   ============================================ */
 .slide-container {
-  width: 1080px;
-  height: 1080px;
+  width: var(--slide-width, 1080px);
+  height: var(--slide-height, 1080px);
   overflow: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   position: relative;
   display: flex;
   flex-direction: column;
-}
 
-/* Hook Slide */
-.slide-hook {
-  background: var(--slide-bg, #1a1a2e);
+  /* Typography defaults */
+  font-family: var(--slide-body-font, 'Inter'), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--slide-text, #ffffff);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 80px 100px;
+  background: var(--slide-bg, #1a1a2e);
+
+  /* Smooth transitions for any dynamic elements */
+  transition: all 0.3s ease;
 }
 
-.slide-hook .slide-number {
-  position: absolute;
-  top: 40px;
-  right: 50px;
-  font-size: 24px;
-  opacity: 0.4;
-  font-weight: 500;
-}
-
-.slide-hook h1 {
-  font-size: 64px;
-  font-weight: 800;
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.slide-heading {
+  font-family: var(--slide-heading-font, 'Inter'), sans-serif;
+  font-weight: var(--slide-heading-weight, 800);
   line-height: 1.15;
   letter-spacing: -0.02em;
-  max-width: 880px;
+  color: var(--slide-text, #ffffff);
 }
 
-.slide-hook .subtitle {
-  font-size: 28px;
+.slide-subtitle {
   font-weight: 400;
-  opacity: 0.75;
-  margin-top: 24px;
-  max-width: 700px;
+  opacity: 0.85;
   line-height: 1.4;
 }
 
-/* Value Slide */
-.slide-value {
-  background: var(--slide-bg, #1a1a2e);
-  color: var(--slide-text, #ffffff);
-  padding: 70px 80px;
-  justify-content: flex-start;
-}
-
-.slide-value .slide-number {
-  position: absolute;
-  top: 40px;
-  right: 50px;
-  font-size: 24px;
-  opacity: 0.4;
-  font-weight: 500;
-}
-
-.slide-value h2 {
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  margin-bottom: 32px;
-  color: var(--slide-accent, #e94560);
-}
-
-.slide-value .body {
-  font-size: 26px;
-  font-weight: 400;
+.slide-body {
+  font-weight: var(--slide-body-weight, 400);
   line-height: 1.5;
-  opacity: 0.85;
-  margin-bottom: 40px;
-  max-width: 800px;
+  opacity: 0.9;
 }
 
-.slide-value .bullets {
+/* Emphasis levels */
+.emphasis-large .slide-heading { font-size: 72px; }
+.emphasis-large .slide-subtitle { font-size: 28px; margin-top: 24px; }
+.emphasis-large .slide-body { font-size: 26px; }
+
+.emphasis-medium .slide-heading { font-size: 52px; }
+.emphasis-medium .slide-subtitle { font-size: 24px; margin-top: 20px; }
+.emphasis-medium .slide-body { font-size: 24px; }
+
+.emphasis-small .slide-heading { font-size: 42px; }
+.emphasis-small .slide-subtitle { font-size: 20px; margin-top: 16px; }
+.emphasis-small .slide-body { font-size: 22px; }
+
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* ============================================
+   SLIDE CONTENT AREA
+   ============================================ */
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 80px 90px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Layout-specific content positioning */
+.layout-hero-center .slide-content { justify-content: center; align-items: center; }
+.layout-hero-left .slide-content { justify-content: center; align-items: flex-start; }
+.layout-center-focus .slide-content { justify-content: center; align-items: center; }
+.layout-split-left .slide-content { justify-content: center; align-items: flex-start; }
+.layout-split-right .slide-content { justify-content: center; align-items: flex-end; }
+.layout-minimal-center .slide-content { justify-content: center; align-items: center; }
+.layout-minimal-left .slide-content { justify-content: center; align-items: flex-start; }
+
+/* ============================================
+   BULLET POINTS
+   ============================================ */
+.slide-bullets {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  margin-top: 32px;
 }
 
-.slide-value .bullets li {
-  font-size: 24px;
+.slide-bullets li {
+  font-size: 22px;
   line-height: 1.4;
   padding-left: 32px;
   position: relative;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
-.slide-value .bullets li::before {
+.slide-bullets li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 10px;
-  width: 12px;
-  height: 12px;
+  top: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--slide-accent, #e94560);
 }
 
-/* CTA Slide */
-.slide-cta {
-  background: var(--slide-bg, #1a1a2e);
-  color: var(--slide-text, #ffffff);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 80px 100px;
+/* ============================================
+   CTA ELEMENTS
+   ============================================ */
+.slide-cta-url {
+  font-size: 20px;
+  opacity: 0.6;
+  font-weight: 400;
+  margin-top: 24px;
 }
 
-.slide-cta .slide-number {
+/* ============================================
+   SLIDE NUMBER
+   ============================================ */
+.slide-number {
   position: absolute;
   top: 40px;
   right: 50px;
-  font-size: 24px;
+  font-size: 20px;
   opacity: 0.4;
   font-weight: 500;
+  z-index: 3;
 }
 
-.slide-cta h2 {
-  font-size: 52px;
-  font-weight: 700;
-  line-height: 1.2;
-  max-width: 800px;
-  margin-bottom: 32px;
+/* ============================================
+   BRAND MARK
+   ============================================ */
+.slide-brand-mark {
+  position: absolute;
+  bottom: 40px;
+  left: 50px;
+  z-index: 3;
 }
 
-.slide-cta .cta-url {
-  font-size: 22px;
-  opacity: 0.6;
-  font-weight: 400;
+.brand-name {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-/* Accent bar at bottom */
+/* ============================================
+   ACCENT BAR
+   ============================================ */
 .slide-accent-bar {
   position: absolute;
   bottom: 0;
@@ -152,4 +175,193 @@
   right: 0;
   height: 6px;
   background: var(--slide-accent, #e94560);
+  z-index: 3;
 }
+
+/* ============================================
+   DECORATIVE SHAPES
+   ============================================ */
+.slide-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Shape positions */
+.position-top-right { top: -50px; right: -50px; }
+.position-top-left { top: -50px; left: -50px; }
+.position-bottom-right { bottom: -50px; right: -50px; }
+.position-bottom-left { bottom: -50px; left: -50px; }
+.position-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* Shape types */
+.shape-circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--slide-accent);
+  opacity: 0.15;
+}
+
+.shape-rectangle {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  background: var(--slide-accent);
+  opacity: 0.1;
+}
+
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+  border-bottom: 260px solid var(--slide-accent);
+  opacity: 0.1;
+  background: transparent;
+}
+
+.shape-line {
+  width: 400px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--slide-accent);
+  opacity: 0.3;
+}
+
+/* ============================================
+   TEMPLATE-SPECIFIC OVERRIDES
+   ============================================ */
+
+/* Modern Bold */
+.template-modern-bold .slide-heading {
+  letter-spacing: -0.03em;
+}
+
+/* Minimal Clean */
+.template-minimal-clean {
+  background: var(--slide-bg, #ffffff);
+  color: var(--slide-text, #2D3436);
+}
+
+.template-minimal-clean .slide-accent-bar {
+  height: 3px;
+}
+
+/* Elegant Luxury */
+.template-elegant-luxury .slide-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+}
+
+.template-elegant-luxury .slide-accent-bar {
+  background: linear-gradient(90deg, #C9A96E, #D4AF37, #C9A96E);
+  height: 4px;
+}
+
+/* Tech Gradient */
+.template-tech-gradient {
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+/* Organic Natural */
+.template-organic-natural {
+  background: var(--slide-bg, #F0F7F4);
+  color: var(--slide-text, #1B4332);
+}
+
+.template-organic-natural .slide-bullets li::before {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+/* Corporate Sharp */
+.template-corporate-sharp .slide-accent-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #003366, #0066CC);
+}
+
+/* Creative Pop */
+.template-creative-pop .slide-heading {
+  font-weight: 900;
+}
+
+.template-creative-pop .slide-bullets li::before {
+  background: var(--slide-secondary, #FB5607);
+  width: 12px;
+  height: 12px;
+}
+
+/* Premium Dark */
+.template-premium-dark {
+  background: var(--slide-bg, #09090B);
+}
+
+.template-premium-dark .slide-accent-bar {
+  background: linear-gradient(90deg, #A855F7, #6366F1, #EC4899);
+  height: 3px;
+}
+
+/* ============================================
+   BACKGROUND TYPES
+   ============================================ */
+/* Gradient backgrounds are applied inline */
+/* Image backgrounds with overlay */
+.slide-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  z-index: 0;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS (for different platforms)
+   ============================================ */
+/* Instagram Stories (1080x1920) */
+.slide-container.stories {
+  --slide-width: 1080px;
+  --slide-height: 1920px;
+}
+
+.slide-container.stories .slide-content {
+  padding: 120px 80px;
+}
+
+/* LinkedIn (1200x627) */
+.slide-container.linkedin {
+  --slide-width: 1200px;
+  --slide-height: 627px;
+}
+
+.slide-container.linkedin .slide-content {
+  padding: 50px 70px;
+}
+
+.slide-container.linkedin .emphasis-large .slide-heading { font-size: 56px; }
+.slide-container.linkedin .emphasis-medium .slide-heading { font-size: 42px; }
+
+/* Facebook (1200x630) */
+.slide-container.facebook {
+  --slide-width: 1200px;
+  --slide-height: 630px;
+}
+
+.slide-container.facebook .slide-content {
+  padding: 50px 70px;
+}
+
+.slide-container.facebook .emphasis-large .slide-heading { font-size: 56px; }
+.slide-container.facebook .emphasis-medium .slide-heading { font-size: 42px; }

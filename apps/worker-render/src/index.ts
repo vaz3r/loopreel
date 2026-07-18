@@ -1,9 +1,10 @@
 import { JobRepository, AssetRepository, WorkerRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { RenderPayload } from '@loopreel/schemas';
-import type { FormatType } from '@loopreel/schemas';
+import type { FormatType, Platform } from '@loopreel/schemas';
 import { uploadSlide } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
+import { getPlatform } from '@loopreel/design';
 import pino from 'pino';
 import { randomUUID } from 'node:crypto';
 import { hostname } from 'node:os';
@@ -55,7 +56,11 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     return;
   }
 
-  jobLogger.info({ slideCount: existing.slide_count }, 'Starting render');
+  // Get platform from job metadata (default to instagram-feed)
+  const platform = (existing as unknown as { platform?: Platform }).platform ?? 'instagram-feed';
+  const platformConfig = getPlatform(platform);
+
+  jobLogger.info({ slideCount: existing.slide_count, platform }, 'Starting render');
 
   try {
     const currentPool = await ensurePool();
@@ -67,20 +72,31 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       contentText?: string;
     }> = [];
 
+    // Render slides for the specified platform
     for (let i = 0; i < existing.slide_count; i++) {
       const page = await currentPool.acquire();
       try {
-        await page.goto(`${RENDER_URL}/render/${jobId}/${i}`, {
+        // Add platform class to URL for responsive rendering
+        const platformParam = platform !== 'instagram-feed' ? `?platform=${platform}` : '';
+        await page.goto(`${RENDER_URL}/render/${jobId}/${i}${platformParam}`, {
           waitUntil: 'networkidle',
           timeout: 30_000,
         });
 
         await page.waitForSelector('[data-render-complete="true"]', { timeout: 20_000 });
 
+        // Set viewport size based on platform
+        if (platformConfig) {
+          await page.setViewportSize({
+            width: platformConfig.width,
+            height: platformConfig.height,
+          });
+        }
+
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
 
-        jobLogger.info({ slideIndex: i, r2Key }, 'Slide rendered');
+        jobLogger.info({ slideIndex: i, r2Key, platform }, 'Slide rendered');
 
         assets.push({
           jobId,
@@ -93,6 +109,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       }
     }
 
+    // Generate text-based assets (LinkedIn, Twitter)
     const structured = existing.structured_json as {
       hook: { title: string };
       valuePoints: Array<{ heading: string; body: string }>;
@@ -122,7 +139,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     await JobRepository.updateStatus(jobId, 'complete');
 
     jobsProcessed++;
-    jobLogger.info({ assetCount: assets.length }, 'Job complete');
+    jobLogger.info({ assetCount: assets.length, platform }, 'Job complete');
   } catch (err) {
     const classified = classifyError(err);
     jobLogger.error({ err, errorType: classified.type }, 'Render failed');

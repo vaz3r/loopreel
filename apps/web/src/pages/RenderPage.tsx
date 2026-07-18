@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { buildSlides, type StructuredContent, type BrandKit } from '@loopreel/schemas';
-import { SlideTemplate } from '../components/SlideTemplate.js';
+import {
+  buildSlidesWithDesign,
+  type StructuredContent,
+  type BrandKit,
+  type DesignOutput,
+} from '@loopreel/schemas';
+import { SlideRenderer } from '../components/SlideTemplate.js';
 
 interface JobData {
   id: string;
   status: string;
-  structuredJson: StructuredContent | null;
+  structuredJson: StructuredContent & { design?: DesignOutput; brandKit?: BrandKit } | null;
   slideCount: number | null;
   brandKit?: BrandKit;
 }
@@ -37,13 +42,7 @@ export function RenderPage() {
           setError(`Failed to fetch job: ${res.status}`);
           return;
         }
-        const data = await res.json() as {
-          id: string;
-          status: string;
-          structuredJson: StructuredContent | null;
-          slideCount: number | null;
-          brandKit?: BrandKit;
-        };
+        const data = await res.json() as JobData;
         setJob(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -102,7 +101,21 @@ export function RenderPage() {
     );
   }
 
-  const slides = buildSlides(job.structuredJson);
+  // Extract content and design from the structured JSON
+  const { design, brandKit: embeddedBrandKit, ...content } = job.structuredJson;
+  const finalBrandKit = embeddedBrandKit ?? job.brandKit;
+
+  const slides = buildSlidesWithDesign(content, design ?? {
+    template: 'modern-bold',
+    colorScheme: {
+      primary: '#FF6B6B',
+      secondary: '#4ECDC4',
+      accent: '#45B7D1',
+      background: '#1A1A2E',
+      text: '#FFFFFF',
+    },
+    slides: [],
+  });
   const slide = slides[index];
 
   if (!slide) {
@@ -114,10 +127,11 @@ export function RenderPage() {
   }
 
   return (
-    <SlideTemplate
+    <SlideRenderer
       slide={slide}
       slideCount={job.slideCount}
-      brandKit={job.brandKit}
+      brandKit={finalBrandKit}
+      design={design}
     />
   );
 }

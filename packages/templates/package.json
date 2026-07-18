@@ -12,8 +12,11 @@
     }
   },
   "scripts": {
-    "build": "tsc && cp -r src/prompts dist/prompts",
+    "build": "tsc && mkdir -p dist/prompts && cp -r src/prompts/v1 dist/prompts/v1 && cp -r src/prompts/v2 dist/prompts/v2",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
