@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.slide-container {
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hook Slide */
+.slide-hook {
+  background: var(--slide-bg, #1a1a2e);
+  color: var(--slide-text, #ffffff);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 100px;
+}
+
+.slide-hook .slide-number {
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  font-size: 24px;
+  opacity: 0.4;
+  font-weight: 500;
+}
+
+.slide-hook h1 {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 880px;
+}
+
+.slide-hook .subtitle {
+  font-size: 28px;
+  font-weight: 400;
+  opacity: 0.75;
+  margin-top: 24px;
+  max-width: 700px;
+  line-height: 1.4;
+}
+
+/* Value Slide */
+.slide-value {
+  background: var(--slide-bg, #1a1a2e);
+  color: var(--slide-text, #ffffff);
+  padding: 70px 80px;
+  justify-content: flex-start;
+}
+
+.slide-value .slide-number {
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  font-size: 24px;
+  opacity: 0.4;
+  font-weight: 500;
+}
+
+.slide-value h2 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+  color: var(--slide-accent, #e94560);
+}
+
+.slide-value .body {
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0.85;
+  margin-bottom: 40px;
+  max-width: 800px;
+}
+
+.slide-value .bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.slide-value .bullets li {
+  font-size: 24px;
+  line-height: 1.4;
+  padding-left: 32px;
+  position: relative;
+  opacity: 0.8;
+}
+
+.slide-value .bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--slide-accent, #e94560);
+}
+
+/* CTA Slide */
+.slide-cta {
+  background: var(--slide-bg, #1a1a2e);
+  color: var(--slide-text, #ffffff);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 100px;
+}
+
+.slide-cta .slide-number {
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  font-size: 24px;
+  opacity: 0.4;
+  font-weight: 500;
+}
+
+.slide-cta h2 {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.2;
+  max-width: 800px;
+  margin-bottom: 32px;
+}
+
+.slide-cta .cta-url {
+  font-size: 22px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+/* Accent bar at bottom */
+.slide-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--slide-accent, #e94560);
+}

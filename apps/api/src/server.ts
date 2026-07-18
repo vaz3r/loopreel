@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { jobsRoute } from './routes/jobs.js';
@@ -15,6 +16,7 @@ const app = Fastify({
   },
 });
 
+await app.register(cors);
 await app.register(swagger, {
   openapi: {
     info: {

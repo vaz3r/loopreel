@@ -75,7 +75,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
           timeout: 30_000,
         });
 
-        await page.waitForSelector('[data-render-complete="true"]', { timeout: 10_000 });
+        await page.waitForSelector('[data-render-complete="true"]', { timeout: 20_000 });
 
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);

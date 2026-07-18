@@ -54,7 +54,7 @@ export const StructuredContentSchema = z.object({
   valuePoints: z.array(SlideContentSchema).min(1).max(10),
   callToAction: z.object({
     message: z.string().max(150),
-    url: z.string().url().optional(),
+    url: z.string().optional(),
   }),
 });
 export type StructuredContent = z.infer<typeof StructuredContentSchema>;
@@ -83,3 +83,44 @@ export const RenderPayloadSchema = z.object({
   jobId: z.string().uuid(),
 });
 export type RenderPayload = z.infer<typeof RenderPayloadSchema>;
+
+// Slide Data (used by render pipeline)
+export interface SlideData {
+  type: 'hook' | 'value' | 'cta';
+  index: number;
+  heading: string;
+  body?: string;
+  bulletPoints?: string[];
+  subtitle?: string;
+  ctaUrl?: string;
+}
+
+export function buildSlides(content: StructuredContent): SlideData[] {
+  const slides: SlideData[] = [];
+
+  slides.push({
+    type: 'hook',
+    index: 0,
+    heading: content.hook.title,
+    subtitle: content.hook.subtitle,
+  });
+
+  content.valuePoints.forEach((vp, i) => {
+    slides.push({
+      type: 'value',
+      index: i + 1,
+      heading: vp.heading,
+      body: vp.body,
+      bulletPoints: vp.bulletPoints,
+    });
+  });
+
+  slides.push({
+    type: 'cta',
+    index: content.valuePoints.length + 1,
+    heading: content.callToAction.message,
+    ctaUrl: content.callToAction.url,
+  });
+
+  return slides;
+}
