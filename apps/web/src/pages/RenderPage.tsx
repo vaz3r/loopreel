@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import {
   buildSlidesWithDesign,
   type StructuredContent,
@@ -25,6 +25,7 @@ function signalComplete() {
 
 export function RenderPage() {
   const { jobId, slideIndex } = useParams<{ jobId: string; slideIndex: string }>();
+  const [searchParams] = useSearchParams();
   const [job, setJob] = useState<JobData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -105,7 +106,9 @@ export function RenderPage() {
   // Extract content and design from the structured JSON
   const { design, brandKit: embeddedBrandKit, ...content } = job.structuredJson;
   const finalBrandKit = embeddedBrandKit ?? job.brandKit;
-  const templateId = job.templateId ?? design?.template ?? 'modern-bold';
+  
+  const queryTemplate = searchParams.get('template');
+  const templateId = queryTemplate ?? job.templateId ?? design?.template ?? 'modern-bold';
 
   // Force the templateId into the design object so that SlideRenderer and buildSlidesWithDesign use the requested template.
   const mergedDesign: DesignOutput = design 
