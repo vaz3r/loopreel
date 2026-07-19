@@ -1,0 +1,31 @@
+You are generating content for an "Archive" brutalist carousel template.
+
+Available slide types:
+1. cover — Title slide with two-line heading and ticker. Fields: titleTop (max 15 chars), titleBottom (max 15 chars), ticker (max 120 chars)
+2. context — Paragraph slide with title and body text. Fields: title (max 20 chars), text (max 200 chars)
+3. list — Numbered list of items with labels and descriptions. Fields: title (max 20 chars), items (3-4 items, each with num max 4 chars, label max 30 chars, desc max 60 chars)
+4. matrix — 2x2 quadrant grid with title. Fields: title (max 20 chars), quadrants (exactly 4, each with title max 20 chars, text max 40 chars)
+5. insight — Right-aligned quote-style insight with title and body. Fields: title (max 20 chars), text (max 200 chars)
+6. quote — Large centered quote with attribution. Fields: quote (max 200 chars), author (max 40 chars)
+7. evidence — Stats grid with large numbers and labels. Fields: title (max 20 chars), stats (2-4 items, each with value max 10 chars, label max 60 chars)
+8. cta — Call to action with button. Fields: title (max 30 chars), buttonText (max 20 chars)
+
+All slides also require:
+- headerLeft (max 20 chars) — displayed in top-left
+- headerRight (max 20 chars) — displayed in top-right
+- footerLeft (max 20 chars) — displayed in bottom-left
+- footerRight (max 20 chars) — displayed in bottom-right
+
+Available themes: void, bone, steel
+
+Rules:
+- Generate 4-8 slides
+- Start with cover
+- End with cta
+- Use variety of middle types (context, list, matrix, insight, quote, evidence)
+- Each slide can use any theme (void, bone, or steel)
+- All text must be short (titles max 15-20 chars, descriptions max 40-60 chars)
+- Do NOT use markdown or formatting
+- Header/footer fields should be short labels (e.g., "Context", "02 / 08", "Observation", "Sector 01")
+
+Output JSON array of slides.

@@ -3,11 +3,15 @@ import { Redis } from 'ioredis';
 
 const REDIS_URL = process.env['REDIS_URL'] ?? 'redis://localhost:6379';
 
-const connection = new Redis(REDIS_URL, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-  family: 4,
-});
+function createConnection() {
+  return new Redis(REDIS_URL, {
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+    family: 4,
+  });
+}
+
+const connection = createConnection();
 
 export { connection };
 
@@ -19,11 +23,6 @@ const QUEUE_DEFAULTS: QueueOptions = {
   },
 };
 
-const WORKER_DEFAULTS: WorkerOptions = {
-  connection,
-  concurrency: 1,
-};
-
 export function createQueue(name: string, opts?: Partial<QueueOptions>): Queue {
   return new Queue(name, { ...QUEUE_DEFAULTS, ...opts });
 }
@@ -33,6 +32,11 @@ export function createWorker<T = unknown>(
   handler: (job: { data: T; attemptsMade: number }) => Promise<void>,
   opts?: Partial<WorkerOptions>,
 ): Worker<T> {
+  const workerConnection = createConnection();
+  const WORKER_DEFAULTS: WorkerOptions = {
+    connection: workerConnection,
+    concurrency: 1,
+  };
   return new Worker<T>(name, handler as (job: { data: T }) => Promise<void>, { ...WORKER_DEFAULTS, ...opts });
 }
 

@@ -20,9 +20,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/*/node_modules ./packages/*/node_modules/
 COPY --from=deps /app/apps/*/node_modules ./apps/*/node_modules/
 COPY . .
-RUN pnpm --filter @loopreel/db build
 RUN pnpm --filter @loopreel/schemas build
 RUN pnpm --filter @loopreel/types build
+RUN pnpm --filter @loopreel/db build
 RUN pnpm --filter @loopreel/queue build
 RUN pnpm --filter @loopreel/llm build
 RUN pnpm --filter @loopreel/templates build
@@ -44,7 +44,7 @@ COPY --from=builder /app/packages/queue/package.json ./packages/queue/
 COPY --from=builder /app/packages/llm/dist ./packages/llm/dist
 COPY --from=builder /app/packages/llm/package.json ./packages/llm/
 COPY --from=builder /app/packages/templates/dist ./packages/templates/dist
-COPY --from=builder /app/packages/templates/src/prompts ./packages/templates/src/prompts
+COPY --from=builder /app/packages/templates/src/editorial-runway/prompt.txt ./packages/templates/dist/editorial-runway/prompt.txt
 COPY --from=builder /app/packages/templates/package.json ./packages/templates/
 COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/errors/package.json ./packages/errors/

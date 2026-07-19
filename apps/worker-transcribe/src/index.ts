@@ -1,10 +1,8 @@
-import { JobRepository, WorkerRepository } from '@loopreel/db';
-import { createWorker } from '@loopreel/queue';
+import { JobRepository } from '@loopreel/db';
+import { createWorker, createQueue } from '@loopreel/queue';
 import type { TranscribePayload } from '@loopreel/schemas';
 import { classifyError } from '@loopreel/errors';
 import pino from 'pino';
-import { randomUUID } from 'node:crypto';
-import { hostname } from 'node:os';
 import { transcribeAudio } from './services/whisper.js';
 
 const logger = pino({
@@ -14,13 +12,7 @@ const logger = pino({
   },
 });
 
-const INSTANCE_ID = randomUUID();
-const HOSTNAME = hostname();
-let jobsProcessed = 0n;
-
-const heartbeat = setInterval(() => {
-  void WorkerRepository.upsertHeartbeat(INSTANCE_ID, 'transcribe', HOSTNAME, 'transcribe', jobsProcessed);
-}, 10_000);
+const structureQueue = createQueue('structure');
 
 const worker = createWorker<TranscribePayload>('transcribe', async (job) => {
   const { jobId, audioR2Key } = job.data;
@@ -41,14 +33,13 @@ const worker = createWorker<TranscribePayload>('transcribe', async (job) => {
   try {
     const transcript = await transcribeAudio(jobId, audioR2Key, jobLogger);
 
-    await JobRepository.updateStatusAndOutbox(
-      jobId,
-      'structuring',
-      'structure',
-      { jobId, rawText: transcript },
-    );
+    await JobRepository.updateStatus(jobId, 'structuring');
 
-    jobsProcessed++;
+    await structureQueue.add(`job-${jobId}`, {
+      jobId,
+      rawText: transcript,
+    });
+
     jobLogger.info('Dispatched to structure queue');
   } catch (err) {
     const classified = classifyError(err);
@@ -58,7 +49,11 @@ const worker = createWorker<TranscribePayload>('transcribe', async (job) => {
       throw classified;
     }
 
-    await JobRepository.markFailed(jobId, classified.message);
+    await JobRepository.markFailed(jobId, {
+      stage: 'transcribing',
+      reason: classified.type,
+      details: classified.message,
+    });
   }
 });
 
@@ -66,8 +61,4 @@ worker.on('failed', (job, err) => {
   logger.error({ jobId: job?.id, err }, 'Worker failed');
 });
 
-process.on('SIGTERM', () => {
-  clearInterval(heartbeat);
-});
-
-logger.info({ instanceId: INSTANCE_ID }, 'worker-transcribe started');
+logger.info('worker-transcribe started');

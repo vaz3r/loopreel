@@ -1,13 +1,11 @@
-import { JobRepository, AssetRepository, WorkerRepository } from '@loopreel/db';
+import { JobRepository, AssetRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { RenderPayload } from '@loopreel/schemas';
-import type { FormatType, Platform } from '@loopreel/schemas';
+import type { FormatType } from '@loopreel/schemas';
 import { uploadSlide } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
 import { getPlatform } from '@loopreel/design';
 import pino from 'pino';
-import { randomUUID } from 'node:crypto';
-import { hostname } from 'node:os';
 import { getPool } from './pool/browser-pool.js';
 import { startMetricsServer } from './sidecar.js';
 
@@ -18,14 +16,7 @@ const logger = pino({
   },
 });
 
-const RENDER_URL = process.env['RENDER_URL'] ?? 'http://localhost:5173';
-const INSTANCE_ID = randomUUID();
-const HOSTNAME = hostname();
-let jobsProcessed = 0n;
-
-const heartbeat = setInterval(() => {
-  void WorkerRepository.upsertHeartbeat(INSTANCE_ID, 'render', HOSTNAME, 'render', jobsProcessed);
-}, 10_000);
+const API_URL = process.env['API_URL'] ?? 'http://localhost:3000';
 let pool: Awaited<ReturnType<typeof getPool>> | null = null;
 
 async function ensurePool() {
@@ -51,14 +42,19 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     return;
   }
 
-  if (!existing.structured_json || !existing.slide_count) {
-    await JobRepository.markFailed(jobId, 'Missing structured_json or slide_count');
+  if (!existing.content_payload || !existing.slide_count) {
+    await JobRepository.markFailed(jobId, {
+      stage: 'rendering',
+      reason: 'missing_payload',
+      details: 'Missing content_payload or slide_count',
+    });
     return;
   }
 
-  // Get platform from job metadata (default to instagram-feed)
-  const platform = (existing as unknown as { platform?: Platform }).platform ?? 'instagram-feed';
+  const platform = existing.platform ?? 'instagram-feed';
   const platformConfig = getPlatform(platform);
+  const width = platformConfig?.width ?? 1080;
+  const height = platformConfig?.height ?? 1080;
 
   jobLogger.info({ slideCount: existing.slide_count, platform }, 'Starting render');
 
@@ -72,26 +68,19 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       contentText?: string;
     }> = [];
 
-    // Render slides for the specified platform
     for (let i = 0; i < existing.slide_count; i++) {
       const page = await currentPool.acquire();
       try {
-        // Add platform class to URL for responsive rendering
-        const platformParam = platform !== 'instagram-feed' ? `?platform=${platform}` : '';
-        await page.goto(`${RENDER_URL}/render/${jobId}/${i}${platformParam}`, {
-          waitUntil: 'networkidle',
-          timeout: 30_000,
-        });
+        await page.setViewportSize({ width, height });
 
-        await page.waitForSelector('[data-render-complete="true"]', { timeout: 20_000 });
-
-        // Set viewport size based on platform
-        if (platformConfig) {
-          await page.setViewportSize({
-            width: platformConfig.width,
-            height: platformConfig.height,
-          });
+        const response = await fetch(`${API_URL}/internal/render/${jobId}/${i}`);
+        if (!response.ok) {
+          throw new Error(`Render endpoint returned ${response.status}`);
         }
+        const html = await response.text();
+
+        await page.setContent(html, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts.ready);
 
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
@@ -109,42 +98,41 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       }
     }
 
-    // Generate text-based assets (LinkedIn, Twitter)
-    const structured = existing.structured_json as {
-      hook: { title: string; kicker?: string; subtitle?: string };
+    const payload = existing.content_payload as {
+      meta: { seriesName?: string; authorName?: string; handle?: string };
       slides: Array<{ type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }>;
-      callToAction: { message: string; label?: string };
     };
 
     const formatSlide = (s: { type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }) => {
       if (s.type === 'list' && s.items?.length) {
-        return [`📌 ${s.heading ?? 'Key points'}`, ...s.items.map(item => `  • ${item}`)].join('\n');
+        return [`Key points: ${s.heading ?? ''}`, ...s.items.map((item) => `  - ${item}`)].join('\n');
       }
       if (s.type === 'quote') return `"${s.quote}"`;
-      if (s.type === 'stat') return `📊 ${s.value}${s.label ? ` ${s.label}` : ''}`;
-      return [`📌 ${s.heading ?? ''}`, s.body].filter(Boolean).join('\n');
+      if (s.type === 'stat') return `${s.value}${s.label ? ` ${s.label}` : ''}`;
+      return [s.heading ?? '', s.body].filter(Boolean).join('\n');
     };
 
-    const slideTexts = structured.slides.map(formatSlide);
+    const slideTexts = payload.slides.map(formatSlide);
+    const firstSlide = payload.slides[0];
+    const lastSlide = payload.slides[payload.slides.length - 1];
 
     const linkedinText = [
-      structured.hook.title,
-      structured.hook.subtitle ? `\n${structured.hook.subtitle}` : '',
+      firstSlide?.heading ?? '',
       '',
       ...slideTexts,
       '',
-      structured.callToAction.message,
+      lastSlide?.heading ?? '',
     ].join('\n');
 
     const twitterThread = [
-      structured.hook.title,
+      firstSlide?.heading ?? '',
       '',
-      ...structured.slides.map((s, i) => {
+      ...payload.slides.map((s, i) => {
         const text = formatSlide(s);
-        return `${i + 1}/${structured.slides.length} ${text}`;
+        return `${i + 1}/${payload.slides.length} ${text}`;
       }),
       '',
-      structured.callToAction.message,
+      lastSlide?.heading ?? '',
     ].join('\n\n');
 
     assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
@@ -153,7 +141,6 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     await AssetRepository.insertBatch(assets);
     await JobRepository.updateStatus(jobId, 'complete');
 
-    jobsProcessed++;
     jobLogger.info({ assetCount: assets.length, platform }, 'Job complete');
   } catch (err) {
     const classified = classifyError(err);
@@ -163,7 +150,11 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       throw classified;
     }
 
-    await JobRepository.markFailed(jobId, classified.message);
+    await JobRepository.markFailed(jobId, {
+      stage: 'rendering',
+      reason: classified.type,
+      details: classified.message,
+    });
   }
 });
 
@@ -172,8 +163,7 @@ worker.on('failed', (job, err) => {
 });
 
 process.on('SIGTERM', () => {
-  clearInterval(heartbeat);
   void pool?.close();
 });
 
-logger.info({ instanceId: INSTANCE_ID }, 'worker-render started');
+logger.info('worker-render started');

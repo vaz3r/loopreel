@@ -45,7 +45,11 @@ export async function handleError(
 
   if (classified.type === 'fatal') {
     logger.error({ err, jobId }, 'Fatal error, marking job failed');
-    await JobRepository.markFailed(jobId, classified.message);
+    await JobRepository.markFailed(jobId, {
+      stage: 'ingesting',
+      reason: classified.type,
+      details: classified.message,
+    });
   } else {
     logger.warn({ err, jobId }, 'Transient error, will retry');
     throw classified;

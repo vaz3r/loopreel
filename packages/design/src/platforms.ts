@@ -4,7 +4,7 @@ export const instagramFeed: PlatformFormat = {
   id: 'instagram-feed',
   name: 'Instagram Feed',
   width: 1080,
-  height: 1080,
+  height: 1350,
   maxSlides: 10,
   safeZones: { top: 40, right: 40, bottom: 40, left: 40 },
   typographyScale: 1.0,

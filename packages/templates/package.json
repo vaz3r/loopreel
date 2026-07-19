@@ -12,14 +12,21 @@
     }
   },
   "scripts": {
-    "build": "tsc && mkdir -p dist/prompts && cp -r src/prompts/v1 dist/prompts/v1 && cp -r src/prompts/v2 dist/prompts/v2",
+    "build": "tsc && mkdir -p dist/editorial-runway dist/protocol-001 dist/archive && cp src/editorial-runway/prompt.txt dist/editorial-runway/prompt.txt && cp src/protocol-001/prompt.txt dist/protocol-001/prompt.txt && cp src/archive/prompt.txt dist/archive/prompt.txt",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "fast-xml-parser": "^4.5.0"
+    "@loopreel/design": "workspace:*",
+    "zod": "^3.24.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "typescript": "^5.7.0"
   }
 }

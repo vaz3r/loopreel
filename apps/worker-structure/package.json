@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@loopreel/db": "workspace:*",
-    "@loopreel/design": "workspace:*",
     "@loopreel/errors": "workspace:*",
     "@loopreel/llm": "workspace:*",
     "@loopreel/queue": "workspace:*",

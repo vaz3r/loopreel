@@ -16,7 +16,7 @@ async function sweepStuckJobs(): Promise<void> {
     const { rows } = await pool.query<{ id: string }>(
       `UPDATE generation_jobs
        SET status = 'failed',
-           error_message = 'Job TTL expired: stuck for over 30 minutes',
+           error_payload = '{"stage":"unknown","reason":"ttl_expired","details":"Job stuck for over 30 minutes"}',
            updated_at = NOW()
        WHERE status NOT IN ('complete', 'failed')
          AND updated_at < NOW() - INTERVAL '30 minutes'

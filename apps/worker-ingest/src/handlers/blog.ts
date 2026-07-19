@@ -1,8 +1,10 @@
 import * as cheerio from 'cheerio';
 import { JobRepository } from '@loopreel/db';
+import { createQueue } from '@loopreel/queue';
 import type pino from 'pino';
 
 const MAX_TEXT_LENGTH = 100_000;
+const structureQueue = createQueue('structure');
 
 async function scrapeWithCheerioHtml(html: string): Promise<string> {
   const $ = cheerio.load(html);
@@ -131,12 +133,12 @@ export async function handleBlog(
 
   logger.info({ textLength: rawText.length }, 'Content scraped');
 
-  await JobRepository.updateStatusAndOutbox(
+  await JobRepository.updateStatus(jobId, 'structuring');
+
+  await structureQueue.add(`job-${jobId}`, {
     jobId,
-    'structuring',
-    'structure',
-    { jobId, rawText },
-  );
+    rawText,
+  });
 
   logger.info('Dispatched to structure queue');
 }

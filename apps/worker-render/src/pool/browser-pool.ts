@@ -31,11 +31,14 @@ export class BrowserPool {
   async init(): Promise<void> {
     this.browser = await chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--force-device-scale-factor=2'],
     });
 
     for (let i = 0; i < POOL_SIZE; i++) {
-      const page = await this.browser.newPage();
+      const context = await this.browser.newContext({
+        deviceScaleFactor: 2,
+      });
+      const page = await context.newPage();
       this.pages.push({ page, uses: 0, index: i, inUse: false });
     }
 
@@ -111,7 +114,10 @@ export class BrowserPool {
     if (!old) return;
 
     await old.page.close().catch(() => {});
-    const newPage = await this.browser.newPage();
+    const context = await this.browser.newContext({
+      deviceScaleFactor: 2,
+    });
+    const newPage = await context.newPage();
     this.pages[index] = { page: newPage, uses: 0, index, inUse: false };
     logger.debug({ index }, 'Page replaced');
   }

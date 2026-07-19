@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { JobRepository, AssetRepository } from '@loopreel/db';
-import { JobCreateSchema, type BrandKit } from '@loopreel/schemas';
+import { JobCreateSchema } from '@loopreel/schemas';
+import { createQueue } from '@loopreel/queue';
 import { getPresignedUrl } from '@loopreel/storage';
 
 function determineSourceType(sourceUrl: string): 'youtube' | 'blog' | 'article' {
@@ -14,32 +15,7 @@ function determineSourceType(sourceUrl: string): 'youtube' | 'blog' | 'article' 
   return 'blog';
 }
 
-// Convert partial brand kit input to a basic BrandKit for storage
-function toBrandKit(brandKit?: { name?: string; primaryColor?: string; secondaryColor?: string }): BrandKit {
-  const name = brandKit?.name ?? 'Default Brand';
-  const primaryColor = brandKit?.primaryColor ?? '#e94560';
-  const secondaryColor = brandKit?.secondaryColor ?? '#4ECDC4';
-
-  return {
-    name,
-    colors: {
-      primary: primaryColor,
-      secondary: secondaryColor,
-      accent: '#45B7D1',
-      background: '#1A1A2E',
-      surface: '#232340',
-      text: '#FFFFFF',
-      muted: '#8888AA',
-    },
-    fonts: {
-      heading: 'Inter',
-      body: 'Inter',
-      headingWeight: 800,
-      bodyWeight: 400,
-    },
-    styleDirection: 'modern',
-  };
-}
+const ingestQueue = createQueue('ingest');
 
 export const jobsRoute: FastifyPluginAsync = async (app) => {
   app.post('/api/jobs', {
@@ -49,10 +25,8 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         required: ['sourceUrl'],
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
-          priority: { type: 'number', enum: [1, 5, 10], default: 5 },
           platform: { type: 'string', enum: ['instagram-feed', 'instagram-stories', 'linkedin', 'facebook'], default: 'instagram-feed' },
-          brandKit: { type: 'object' },
-          templateId: { type: 'string' },
+          templateId: { type: 'string', default: 'editorial-runway' },
         },
       },
     },
@@ -62,17 +36,20 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, priority, platform, brandKit, templateId } = parse.data;
+    const { sourceUrl, platform, templateId } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
-
-    const fullBrandKit = toBrandKit(brandKit);
 
     const jobId = await JobRepository.create({
       sourceUrl,
       sourceType,
-      priority,
-      brandKit: fullBrandKit,
-      templateId: templateId ?? 'modern-bold',
+      templateId: templateId ?? 'editorial-runway',
+      platform: platform ?? 'instagram-feed',
+    });
+
+    await ingestQueue.add(`job-${jobId}`, {
+      jobId,
+      sourceUrl,
+      sourceType,
     });
 
     app.log.info({ jobId, sourceType, platform }, 'Job created');
@@ -103,8 +80,9 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       id: job.id,
       status: job.status,
       templateId: job.template_id,
-      errorMessage: job.error_message,
-      structuredJson: job.structured_json,
+      platform: job.platform,
+      errorPayload: job.error_payload,
+      contentPayload: job.content_payload,
       slideCount: job.slide_count,
       assets: assets.map((a) => ({
         id: a.id,
@@ -152,7 +130,6 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(404).send({ error: 'No slides found' });
     }
 
-    // Generate presigned URLs for slide images
     const slidesWithUrls = await Promise.all(
       slideAssets
         .filter((a) => a.storage_url)
@@ -166,7 +143,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
     const response: Record<string, unknown> = {
       jobId: id,
       status: job.status,
-      platform: (job as unknown as { platform?: string }).platform ?? 'instagram-feed',
+      platform: job.platform,
       slideCount: slideAssets.length,
     };
 

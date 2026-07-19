@@ -1,10 +1,8 @@
-import { JobRepository, WorkerRepository } from '@loopreel/db';
+import { JobRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { IngestPayload } from '@loopreel/schemas';
 import { handleError } from '@loopreel/errors';
 import pino from 'pino';
-import { randomUUID } from 'node:crypto';
-import { hostname } from 'node:os';
 import { handleYouTube } from './handlers/youtube.js';
 import { handleBlog } from './handlers/blog.js';
 
@@ -14,14 +12,6 @@ const logger = pino({
     level: (label) => ({ level: label.toUpperCase() }),
   },
 });
-
-const INSTANCE_ID = randomUUID();
-const HOSTNAME = hostname();
-let jobsProcessed = 0n;
-
-const heartbeat = setInterval(() => {
-  void WorkerRepository.upsertHeartbeat(INSTANCE_ID, 'ingest', HOSTNAME, 'ingest', jobsProcessed);
-}, 10_000);
 
 const worker = createWorker<IngestPayload>('ingest', async (job) => {
   const { jobId, sourceUrl, sourceType } = job.data;
@@ -46,7 +36,6 @@ const worker = createWorker<IngestPayload>('ingest', async (job) => {
     } else {
       await handleBlog(jobId, sourceUrl, jobLogger);
     }
-    jobsProcessed++;
   } catch (err) {
     await handleError(jobId, err, jobLogger);
   }
@@ -56,12 +45,4 @@ worker.on('failed', (job, err) => {
   logger.error({ jobId: job?.id, err }, 'Worker failed');
 });
 
-worker.on('completed', (job) => {
-  logger.info({ jobId: job.id }, 'Job completed');
-});
-
-process.on('SIGTERM', () => {
-  clearInterval(heartbeat);
-});
-
-logger.info({ instanceId: INSTANCE_ID }, 'worker-ingest started');
+logger.info('worker-ingest started');

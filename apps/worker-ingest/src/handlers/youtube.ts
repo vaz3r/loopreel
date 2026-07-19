@@ -2,10 +2,12 @@ import { execFile } from 'node:child_process';
 import { readFile, unlink } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { JobRepository } from '@loopreel/db';
+import { createQueue } from '@loopreel/queue';
 import { uploadAudio, deleteAudio } from '@loopreel/storage';
 import type pino from 'pino';
 
 const execFileAsync = promisify(execFile);
+const transcribeQueue = createQueue('transcribe');
 
 export async function handleYouTube(
   jobId: string,
@@ -15,7 +17,6 @@ export async function handleYouTube(
   const tmpPath = `/tmp/${jobId}.mp3`;
 
   try {
-    // Download audio via yt-dlp
     logger.info({ sourceUrl }, 'Downloading YouTube audio');
     await execFileAsync('yt-dlp', [
       '-x', '--audio-format', 'mp3',
@@ -26,28 +27,23 @@ export async function handleYouTube(
       sourceUrl,
     ], { timeout: 300_000 });
 
-    // Read the downloaded file
     const audioBuffer = await readFile(tmpPath);
     logger.info({ size: audioBuffer.length }, 'Audio downloaded');
 
-    // Upload to R2
     const r2Key = await uploadAudio(jobId, audioBuffer);
     logger.info({ r2Key }, 'Audio uploaded to R2');
 
-    // Cleanup local file
     await unlink(tmpPath).catch(() => {});
 
-    // Update job status and dispatch to transcribe queue
-    await JobRepository.updateStatusAndOutbox(
+    await JobRepository.updateStatus(jobId, 'transcribing');
+
+    await transcribeQueue.add(`job-${jobId}`, {
       jobId,
-      'transcribing',
-      'transcribe',
-      { jobId, audioR2Key: r2Key },
-    );
+      audioR2Key: r2Key,
+    });
 
     logger.info({ r2Key }, 'Dispatched to transcribe queue');
   } catch (err) {
-    // Cleanup on failure
     await unlink(tmpPath).catch(() => {});
     throw err;
   }
