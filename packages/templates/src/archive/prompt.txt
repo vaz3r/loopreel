@@ -1,31 +1,119 @@
 You are generating content for an "Archive" brutalist carousel template.
 
-Available slide types:
-1. cover — Title slide with two-line heading and ticker. Fields: titleTop (max 15 chars), titleBottom (max 15 chars), ticker (max 120 chars)
-2. context — Paragraph slide with title and body text. Fields: title (max 20 chars), text (max 200 chars)
-3. list — Numbered list of items with labels and descriptions. Fields: title (max 20 chars), items (3-4 items, each with num max 4 chars, label max 30 chars, desc max 60 chars)
-4. matrix — 2x2 quadrant grid with title. Fields: title (max 20 chars), quadrants (exactly 4, each with title max 20 chars, text max 40 chars)
-5. insight — Right-aligned quote-style insight with title and body. Fields: title (max 20 chars), text (max 200 chars)
-6. quote — Large centered quote with attribution. Fields: quote (max 200 chars), author (max 40 chars)
-7. evidence — Stats grid with large numbers and labels. Fields: title (max 20 chars), stats (2-4 items, each with value max 10 chars, label max 60 chars)
-8. cta — Call to action with button. Fields: title (max 30 chars), buttonText (max 20 chars)
+Output a JSON object with "meta" and "slides" keys.
 
-All slides also require:
-- headerLeft (max 20 chars) — displayed in top-left
-- headerRight (max 20 chars) — displayed in top-right
-- footerLeft (max 20 chars) — displayed in bottom-left
-- footerRight (max 20 chars) — displayed in bottom-right
+Available slide types — each slide MUST have "type" and "theme" fields:
 
-Available themes: void, bone, steel
+1. cover
+   - type: "cover"
+   - theme: "void" | "bone" | "steel"
+   - titleTop: string (max 15 chars)
+   - titleBottom: string (max 15 chars)
+   - ticker: string (max 120 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+2. context
+   - type: "context"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 20 chars)
+   - text: string (max 200 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+3. list
+   - type: "list"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 20 chars)
+   - items: array of exactly 3 objects:
+     - num: string (e.g. "01", "02", "03")
+     - label: string (max 30 chars)
+     - desc: string (max 60 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+4. matrix
+   - type: "matrix"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 20 chars)
+   - quadrants: array of exactly 4 objects:
+     - title: string (max 20 chars)
+     - text: string (max 40 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+5. insight
+   - type: "insight"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 20 chars)
+   - text: string (max 200 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+6. quote
+   - type: "quote"
+   - theme: "void" | "bone" | "steel"
+   - quote: string (max 200 chars)
+   - author: string (max 40 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+7. evidence
+   - type: "evidence"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 20 chars)
+   - stats: array of 2-4 objects:
+     - value: string (max 10 chars, e.g. "400%", "12K", "Zero")
+     - label: string (max 60 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+8. cta
+   - type: "cta"
+   - theme: "void" | "bone" | "steel"
+   - title: string (max 30 chars, HTML line breaks allowed via <br/>)
+   - buttonText: string (max 20 chars)
+   - headerLeft: string (max 20 chars)
+   - headerRight: string (max 20 chars)
+   - footerLeft: string (max 20 chars)
+   - footerRight: string (max 20 chars)
+
+Available themes: void (dark bg), bone (light bg), steel (gray bg)
 
 Rules:
 - Generate 4-8 slides
-- Start with cover
-- End with cta
-- Use variety of middle types (context, list, matrix, insight, quote, evidence)
-- Each slide can use any theme (void, bone, or steel)
-- All text must be short (titles max 15-20 chars, descriptions max 40-60 chars)
-- Do NOT use markdown or formatting
+- First slide must be type "cover"
+- Last slide must be type "cta"
+- Use variety of middle types
+- Each slide can use any theme
+- All text must be SHORT — titles max 15-20 chars, descriptions max 40-60 chars
+- Do NOT use markdown or formatting in text fields
 - Header/footer fields should be short labels (e.g., "Context", "02 / 08", "Observation", "Sector 01")
 
-Output JSON array of slides.
+Output JSON:
+{
+  "meta": {
+    "seriesName": "...",
+    "authorName": "...",
+    "handle": "...",
+    "category": "..."
+  },
+  "slides": [
+    { "type": "cover", "theme": "void", "titleTop": "...", "titleBottom": "...", "ticker": "...", "headerLeft": "...", "headerRight": "...", "footerLeft": "...", "footerRight": "..." },
+    ...
+  ]
+}
