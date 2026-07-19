@@ -376,14 +376,15 @@ function normalizeDesign(design: Record<string, unknown>) {
       })
     : [];
 
+  const isEditorial = String(design['template'] ?? design['selectedTemplate'] ?? design['selected_template'] ?? 'editorial-runway') === 'editorial-runway';
   return {
-    template: String(design['template'] ?? design['selectedTemplate'] ?? design['selected_template'] ?? 'editorial-runway'),
+    template: 'editorial-runway',
     colorScheme: {
-      primary: String(colorScheme['primary'] ?? '#FF6B6B'),
-      secondary: String(colorScheme['secondary'] ?? '#4ECDC4'),
-      accent: String(colorScheme['accent'] ?? '#45B7D1'),
-      background: String(colorScheme['background'] ?? '#1A1A2E'),
-      text: String(colorScheme['text'] ?? '#FFFFFF'),
+      primary: String(colorScheme['primary'] ?? (isEditorial ? '#B31E23' : '#FF6B6B')),
+      secondary: String(colorScheme['secondary'] ?? (isEditorial ? '#E7E4D9' : '#4ECDC4')),
+      accent: String(colorScheme['accent'] ?? (isEditorial ? '#B31E23' : '#45B7D1')),
+      background: String(colorScheme['background'] ?? (isEditorial ? '#E7E4D9' : '#1A1A2E')),
+      text: String(colorScheme['text'] ?? (isEditorial ? '#15130F' : '#FFFFFF')),
     },
     slides,
   };

@@ -46,15 +46,15 @@ export function EditorialTemplate({ slide, slideCount, brandKit, design, meta, f
   const colorScheme = design?.colorScheme;
   const inkColor = colorScheme?.text ?? brandKit?.colors.text ?? '#15130F';
   const paperColor = colorScheme?.background ?? brandKit?.colors.background ?? '#E7E4D9';
-  const accentColor = brandKit?.colors.primary ?? colorScheme?.primary ?? '#B31E23';
+  const accentColor = '#B31E23';
 
   const isDark = slide.type === 'hook' || slide.type === 'cta';
   const bg = isDark ? inkColor : paperColor;
   const fg = isDark ? paperColor : inkColor;
   const mutedFg = hexToRgba(fg, isDark ? 0.55 : 0.5);
 
-  const kicker = slide.type === 'hook' ? (slide.kicker ?? slide.subtitle ?? meta?.category) : meta?.category;
-  const seriesLabel = meta?.seriesName ?? brandKit?.name ?? 'ISSUE';
+  const kicker = slide.type === 'hook' ? (slide.kicker ?? meta?.category) : undefined;
+  const seriesLabel = meta?.seriesName ?? 'ISSUE';
   const pageMark = `${String(slide.index + 1).padStart(2, '0')} / ${String(slideCount).padStart(2, '0')}`;
 
   const headingLength = slide.type === 'hook' || slide.type === 'content' || slide.type === 'list' ? (slide.heading?.length ?? 0) : 0;
@@ -100,7 +100,7 @@ export function EditorialTemplate({ slide, slideCount, brandKit, design, meta, f
         }}
       >
         <RunningHead
-          left={slide.type === 'hook' || slide.type === 'cta' ? seriesLabel : kicker}
+          left={slide.type === 'hook' || slide.type === 'cta' ? seriesLabel : (meta?.category ?? seriesLabel)}
           leftColor={slide.type === 'hook' || slide.type === 'cta' ? mutedFg : accentColor}
           right={slide.type === 'hook' ? `VOL. ${new Date().getFullYear()}` : pageMark}
           color={mutedFg}
