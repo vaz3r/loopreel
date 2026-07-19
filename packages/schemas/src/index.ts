@@ -117,23 +117,59 @@ export const JobCreateSchema = z.object({
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;
 
-// Structured Content Schema (LLM Output - Call 1)
-export const SlideContentSchema = z.object({
-  heading: z.string().max(100),
-  body: z.string().max(500),
-  bulletPoints: z.array(z.string().max(100)).max(5).optional(),
-});
-export type SlideContent = z.infer<typeof SlideContentSchema>;
+// ---------------------------------------------------------------------------
+// Content slide types — discriminated union, LLM decides which one
+// ---------------------------------------------------------------------------
 
-export const StructuredContentSchema = z.object({
-  hook: z.object({
-    title: z.string().max(100),
-    subtitle: z.string().max(200).optional(),
+export const ContentSlideSchema = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('content'),
+    heading: z.string(),
+    body: z.string().optional(),
   }),
-  valuePoints: z.array(SlideContentSchema).min(1).max(10),
+  z.object({
+    type: z.literal('list'),
+    heading: z.string().optional(),
+    items: z.array(z.string()),
+  }),
+  z.object({
+    type: z.literal('quote'),
+    quote: z.string(),
+    attribution: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal('stat'),
+    value: z.string(),
+    label: z.string().optional(),
+    body: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal('image'),
+    imageUrl: z.string(),
+    imageCaption: z.string().optional(),
+  }),
+]);
+export type ContentSlide = z.infer<typeof ContentSlideSchema>;
+
+// Structured Content Schema (new LLM output — Call 1)
+export const StructuredContentSchema = z.object({
+  meta: z.object({
+    seriesName: z.string().optional(),
+    authorName: z.string().optional(),
+    handle: z.string().optional(),
+    readTime: z.string().optional(),
+    category: z.string().optional(),
+  }).optional(),
+  hook: z.object({
+    title: z.string(),
+    kicker: z.string().optional(),
+    subtitle: z.string().optional(),
+  }),
+  slides: z.array(ContentSlideSchema).min(1).max(8),
   callToAction: z.object({
-    message: z.string().max(150),
+    message: z.string(),
     url: z.string().optional(),
+    label: z.string().optional(),
   }),
 });
 export type StructuredContent = z.infer<typeof StructuredContentSchema>;
@@ -163,56 +199,108 @@ export const RenderPayloadSchema = z.object({
 });
 export type RenderPayload = z.infer<typeof RenderPayloadSchema>;
 
-// Slide Data (used by render pipeline)
-export interface SlideData {
-  type: 'hook' | 'value' | 'cta';
+// ---------------------------------------------------------------------------
+// SlideData — derived from the discriminated union, enriched at runtime
+// ---------------------------------------------------------------------------
+
+export interface HookSlide {
+  type: 'hook';
   index: number;
   heading: string;
-  body?: string;
-  bulletPoints?: string[];
+  kicker?: string;
   subtitle?: string;
-  ctaUrl?: string;
-  design?: SlideDesign;
 }
 
-export function buildSlides(content: StructuredContent): SlideData[] {
+export interface CtaSlide {
+  type: 'cta';
+  index: number;
+  heading: string;
+  ctaUrl?: string;
+  ctaLabel?: string;
+}
+
+export type SlideBody = HookSlide | ContentSlide | CtaSlide;
+
+export interface PostMeta {
+  seriesName?: string;
+  authorName?: string;
+  handle?: string;
+  avatarUrl?: string;
+  avatarInitials?: string;
+  date?: string;
+  readTime?: string;
+  category?: string;
+}
+
+export type SlideData = (HookSlide | (ContentSlide & { index: number }) | CtaSlide) & {
+  design?: SlideDesign;
+};
+
+// ---------------------------------------------------------------------------
+// Build slides — returns { slides, meta } pair
+// ---------------------------------------------------------------------------
+
+export interface BuildSlidesResult {
+  slides: SlideData[];
+  meta: PostMeta;
+}
+
+export function buildSlides(content: StructuredContent): BuildSlidesResult {
   const slides: SlideData[] = [];
 
   slides.push({
     type: 'hook',
     index: 0,
     heading: content.hook.title,
+    kicker: content.hook.kicker,
     subtitle: content.hook.subtitle,
   });
 
-  content.valuePoints.forEach((vp, i) => {
-    slides.push({
-      type: 'value',
-      index: i + 1,
-      heading: vp.heading,
-      body: vp.body,
-      bulletPoints: vp.bulletPoints,
-    });
+  content.slides.forEach((s, i) => {
+    // Spread the discriminated union and add index
+    const base = { index: i + 1 };
+    if (s.type === 'content') {
+      slides.push({ ...base, ...s });
+    } else if (s.type === 'list') {
+      slides.push({ ...base, ...s });
+    } else if (s.type === 'quote') {
+      slides.push({ ...base, ...s });
+    } else if (s.type === 'stat') {
+      slides.push({ ...base, ...s });
+    } else if (s.type === 'image') {
+      slides.push({ ...base, ...s });
+    }
   });
 
   slides.push({
     type: 'cta',
-    index: content.valuePoints.length + 1,
+    index: content.slides.length + 1,
     heading: content.callToAction.message,
     ctaUrl: content.callToAction.url,
+    ctaLabel: content.callToAction.label,
   });
 
-  return slides;
+  const meta: PostMeta = {
+    seriesName: content.meta?.seriesName,
+    authorName: content.meta?.authorName,
+    handle: content.meta?.handle,
+    readTime: content.meta?.readTime,
+    category: content.meta?.category,
+  };
+
+  return { slides, meta };
 }
 
+// ---------------------------------------------------------------------------
 // Build slides with design metadata
+// ---------------------------------------------------------------------------
+
 export function buildSlidesWithDesign(
   content: StructuredContent,
   design: DesignOutput
-): SlideData[] {
-  const slides = buildSlides(content);
+): BuildSlidesResult {
+  const { slides, meta } = buildSlides(content);
 
-  // Create a default slide design for slides that don't have one
   const defaultSlideDesign = {
     layout: 'center-focus' as const,
     backgroundType: 'gradient' as const,
@@ -222,8 +310,11 @@ export function buildSlidesWithDesign(
     shapes: [],
   };
 
-  return slides.map((slide, i) => ({
-    ...slide,
-    design: design.slides[i] ?? { ...defaultSlideDesign, index: i },
-  }));
+  return {
+    slides: slides.map((slide, i) => ({
+      ...slide,
+      design: design.slides[i] ?? { ...defaultSlideDesign, index: i },
+    })),
+    meta,
+  };
 }

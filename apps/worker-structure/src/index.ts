@@ -113,63 +113,182 @@ function parseContentResponse(raw: string, jobLogger: pino.Logger) {
 
 function normalizeContent(content: Record<string, unknown>) {
   const hook = (content['hook'] ?? {}) as Record<string, unknown>;
-  const valuePointsContainer = content['valuePoints'] ?? content['value_points'] ?? [];
-  // XML parser wraps arrays: <valuePoints><point>...</point></valuePoints> → {point: [...]}
-  const valuePointsRaw = Array.isArray(valuePointsContainer) ? valuePointsContainer
-    : (typeof valuePointsContainer === 'object' && valuePointsContainer !== null && 'point' in valuePointsContainer)
-      ? (valuePointsContainer as Record<string, unknown>)['point']
-      : [];
+  const meta = (content['meta'] ?? {}) as Record<string, unknown>;
   const cta = (content['callToAction'] ?? content['call_to_action'] ?? {}) as Record<string, unknown>;
 
-  const points = Array.isArray(valuePointsRaw)
-    ? valuePointsRaw.map((vp) => {
-        // LLM may return {point: {heading, body}} or just {heading, body}
-        const raw = typeof vp === 'object' && vp !== null ? vp as Record<string, unknown> : {};
-        const p = ('point' in raw && typeof raw['point'] === 'object' && raw['point'] !== null)
-          ? raw['point'] as Record<string, unknown>
-          : raw;
-        const bulletPointsContainer = p['bulletPoints'] ?? p['bullet_points'];
-        let bulletPointsRaw: unknown[] = [];
-        if (Array.isArray(bulletPointsContainer)) {
-          bulletPointsRaw = bulletPointsContainer;
-        } else if (typeof bulletPointsContainer === 'object' && bulletPointsContainer !== null && 'bullet' in bulletPointsContainer) {
-          const b = (bulletPointsContainer as Record<string, unknown>)['bullet'];
-          bulletPointsRaw = Array.isArray(b) ? b : [b];
-        }
-        // Extract text from bullet items - may be strings or {bullet: "text"} objects
-        const bulletTexts = bulletPointsRaw.map((item) => {
-          if (typeof item === 'string') return item;
-          if (typeof item === 'object' && item !== null) {
-            const obj = item as Record<string, unknown>;
-            return String(obj['bullet'] ?? obj['text'] ?? '');
+  interface NormalizedSlide {
+    type: string;
+    heading?: string;
+    body?: string;
+    items?: string[];
+    quote?: string;
+    attribution?: string;
+    value?: string;
+    label?: string;
+    imageUrl?: string;
+    imageCaption?: string;
+  }
+
+  // Check for new format first: { slides: [...] }
+  const hasNewFormat = 'slides' in content && Array.isArray(content['slides']);
+
+  let slides: NormalizedSlide[] = [];
+
+  if (hasNewFormat) {
+    // New format: <slides><slide type="content">...</slide></slides>
+    const slidesContainer = content['slides'] ?? [];
+    const slidesRaw = Array.isArray(slidesContainer) ? slidesContainer
+      : (typeof slidesContainer === 'object' && slidesContainer !== null && 'slide' in slidesContainer)
+        ? (slidesContainer as Record<string, unknown>)['slide']
+        : [];
+
+    slides = Array.isArray(slidesRaw)
+      ? slidesRaw.map((sl) => {
+          const raw = typeof sl === 'object' && sl !== null ? sl as Record<string, unknown> : {};
+          const slideType = String(raw['@_type'] ?? raw['type'] ?? 'content');
+
+          const heading = extractSlideText(raw, 'heading');
+          const body = extractSlideText(raw, 'body');
+
+          if (slideType === 'list') {
+            const itemsContainer = raw['items'];
+            const itemsRaw = Array.isArray(itemsContainer) ? itemsContainer
+              : (typeof itemsContainer === 'object' && itemsContainer !== null && 'item' in itemsContainer)
+                ? (itemsContainer as Record<string, unknown>)['item']
+                : [];
+            const items = normalizeStringArray(itemsRaw);
+            return { type: 'list', heading: heading || undefined, items };
           }
-          return String(item);
-        }).filter((t) => t.length > 0);
-        return {
-          heading: String(p['heading'] ?? ''),
-          body: String(p['body'] ?? ''),
-          bulletPoints: bulletTexts.length > 0 ? bulletTexts : undefined,
-        };
-      })
-      // Filter out empty value points (LLM sometimes adds trailing empty entries)
-      .filter((vp) => vp.heading.length > 0 || vp.body.length > 0)
-    : [];
+
+          if (slideType === 'quote') {
+            return {
+              type: 'quote',
+              quote: extractSlideText(raw, 'quote') || heading,
+              attribution: extractSlideText(raw, 'attribution') || undefined,
+            };
+          }
+
+          if (slideType === 'stat') {
+            return {
+              type: 'stat',
+              value: extractSlideText(raw, 'value'),
+              label: extractSlideText(raw, 'label') || undefined,
+              body: body || undefined,
+            };
+          }
+
+          return { type: 'content', heading, body: body || undefined };
+        })
+        .filter((s) => {
+          if (s.type === 'list') return (s.items ?? []).length > 0;
+          if (s.type === 'quote') return (s.quote ?? '').length > 0;
+          if (s.type === 'stat') return (s.value ?? '').length > 0;
+          if (s.type === 'content') return (s.heading ?? '').length > 0;
+          return true;
+        })
+      : [];
+  } else {
+    // Legacy format: { valuePoints: [...] } — convert to new slide types
+    const valuePointsContainer = content['valuePoints'] ?? content['value_points'] ?? [];
+    const valuePointsRaw = Array.isArray(valuePointsContainer) ? valuePointsContainer
+      : (typeof valuePointsContainer === 'object' && valuePointsContainer !== null && 'point' in valuePointsContainer)
+        ? (valuePointsContainer as Record<string, unknown>)['point']
+        : [];
+
+    slides = Array.isArray(valuePointsRaw)
+      ? valuePointsRaw.map((vp) => {
+          const raw = typeof vp === 'object' && vp !== null ? vp as Record<string, unknown> : {};
+          const p = ('point' in raw && typeof raw['point'] === 'object' && raw['point'] !== null)
+            ? raw['point'] as Record<string, unknown>
+            : raw;
+          const heading = String(p['heading'] ?? '');
+          const body = String(p['body'] ?? '');
+
+          // Convert bulletPoints to list if present
+          const bulletPointsContainer = p['bulletPoints'] ?? p['bullet_points'];
+          let bulletTexts: string[] = [];
+          if (Array.isArray(bulletPointsContainer)) {
+            bulletTexts = bulletPointsContainer.map((item) => {
+              if (typeof item === 'string') return item;
+              if (typeof item === 'object' && item !== null) {
+                const obj = item as Record<string, unknown>;
+                return String(obj['bullet'] ?? obj['text'] ?? '');
+              }
+              return String(item);
+            }).filter((t) => t.length > 0);
+          } else if (typeof bulletPointsContainer === 'object' && bulletPointsContainer !== null && 'bullet' in bulletPointsContainer) {
+            const b = (bulletPointsContainer as Record<string, unknown>)['bullet'];
+            bulletTexts = (Array.isArray(b) ? b : [b]).map((item) => {
+              if (typeof item === 'string') return item;
+              if (typeof item === 'object' && item !== null) {
+                const obj = item as Record<string, unknown>;
+                return String(obj['bullet'] ?? obj['text'] ?? '');
+              }
+              return String(item);
+            }).filter((t) => t.length > 0);
+          }
+
+          if (bulletTexts.length > 0) {
+            return { type: 'list', heading: heading || undefined, items: bulletTexts };
+          }
+
+          return { type: 'content', heading, body: body || undefined };
+        })
+        .filter((s) => {
+          if (s.type === 'list') return (s.items ?? []).length > 0;
+          if (s.type === 'content') return (s.heading ?? '').length > 0;
+          return true;
+        })
+      : [];
+  }
 
   // Fallback CTA if LLM returned empty
   const ctaMessage = String(cta['message'] ?? '') || 'Learn more';
   const ctaUrl = String(cta['url'] ?? '') || undefined;
+  const ctaLabel = String(cta['label'] ?? '') || undefined;
 
   return {
+    meta: {
+      seriesName: String(meta['seriesName'] ?? '') || undefined,
+      authorName: String(meta['authorName'] ?? '') || undefined,
+      handle: String(meta['handle'] ?? '') || undefined,
+      readTime: String(meta['readTime'] ?? '') || undefined,
+      category: String(meta['category'] ?? '') || undefined,
+    },
     hook: {
       title: String(hook['title'] ?? ''),
+      kicker: String(hook['kicker'] ?? '') || undefined,
       subtitle: String(hook['subtitle'] ?? '') || undefined,
     },
-    valuePoints: points,
+    slides,
     callToAction: {
       message: ctaMessage,
       url: ctaUrl,
+      label: ctaLabel,
     },
   };
+}
+
+function extractSlideText(obj: Record<string, unknown>, key: string): string {
+  const value = obj[key];
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'object' && value !== null && '#text' in value) {
+    return String((value as Record<string, unknown>)['#text']);
+  }
+  return '';
+}
+
+function normalizeStringArray(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((item) => {
+    if (typeof item === 'string') return item;
+    if (typeof item === 'object' && item !== null) {
+      const obj = item as Record<string, unknown>;
+      return String(obj['item'] ?? obj['#text'] ?? obj['text'] ?? '');
+    }
+    return String(item);
+  }).filter((t) => t.length > 0);
 }
 
 function normalizeBrand(brand: Record<string, unknown>) {
@@ -258,7 +377,7 @@ function normalizeDesign(design: Record<string, unknown>) {
     : [];
 
   return {
-    template: String(design['template'] ?? design['selectedTemplate'] ?? design['selected_template'] ?? 'modern-bold'),
+    template: String(design['template'] ?? design['selectedTemplate'] ?? design['selected_template'] ?? 'editorial-runway'),
     colorScheme: {
       primary: String(colorScheme['primary'] ?? '#FF6B6B'),
       secondary: String(colorScheme['secondary'] ?? '#4ECDC4'),
@@ -324,11 +443,11 @@ function getDefaultDesign(templateId: string, pointCount: number) {
   return {
     template: templateId,
     colorScheme: {
-      primary: '#e94560',
-      secondary: '#4ECDC4',
-      accent: '#45B7D1',
-      background: '#1A1A2E',
-      text: '#FFFFFF',
+      primary: '#B31E23',
+      secondary: '#E7E4D9',
+      accent: '#B31E23',
+      background: '#E7E4D9',
+      text: '#15130F',
     },
     slides,
   };
@@ -392,15 +511,23 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
     // Call 3: Design decisions
     jobLogger.info('Call 3: Design decisions');
-    const templateId = existing.template_id ?? 'modern-bold';
+    const templateId = existing.template_id ?? 'editorial-runway';
+
+    const slideHeadings = contentResult.data.slides.map(s => {
+      if (s.type === 'list') return s.heading ?? 'List';
+      if (s.type === 'quote') return s.quote;
+      if (s.type === 'stat') return s.value;
+      if (s.type === 'image') return s.imageCaption ?? 'Image';
+      return s.heading;
+    }).join(', ');
 
     const designUserMessage = `Content hook: ${contentResult.data.hook.title}
-Content value points: ${contentResult.data.valuePoints.map(vp => vp.heading).join(', ')}
+Content slides: ${slideHeadings}
 Brand style: ${finalBrandKit.styleDirection}
 Brand colors: primary=${finalBrandKit.colors.primary}, secondary=${finalBrandKit.colors.secondary}
 Template preference: ${templateId}
 Platform: instagram-feed
-Available templates: modern-bold, minimal-clean, elegant-luxury, tech-gradient, organic-natural, corporate-sharp, creative-pop, premium-dark`;
+Available templates: editorial-runway`;
 
     const designResponse = await generateStructuredContent([
       { role: 'system', content: designPrompt },
@@ -417,17 +544,20 @@ Available templates: modern-bold, minimal-clean, elegant-luxury, tech-gradient, 
 
       if (!designResult.success) {
         jobLogger.warn({ errors: designResult.error.issues }, 'Design validation failed, using defaults');
-        designOutput = getDefaultDesign(templateId, contentResult.data.valuePoints.length);
+        designOutput = getDefaultDesign(templateId, contentResult.data.slides.length);
       } else {
         designOutput = designResult.data;
       }
     } catch (e) {
       jobLogger.warn({ error: (e as Error).message }, 'Design LLM failed, using defaults');
-      designOutput = getDefaultDesign(templateId, contentResult.data.valuePoints.length);
+      designOutput = getDefaultDesign(templateId, contentResult.data.slides.length);
     }
 
+    // Force template to editorial-runway regardless of what the LLM returned
+    designOutput.template = 'editorial-runway';
+
     // Combine all results
-    const slideCount = contentResult.data.valuePoints.length + 2;
+    const slideCount = contentResult.data.slides.length + 2;
 
     await JobRepository.updateStatusAndOutbox(
       jobId,

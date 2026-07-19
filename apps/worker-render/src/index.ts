@@ -111,26 +111,27 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
 
     // Generate text-based assets (LinkedIn, Twitter)
     const structured = existing.structured_json as {
-      hook: { title: string; subtitle?: string };
-      valuePoints: Array<{ heading: string; body: string; bulletPoints?: string[] }>;
-      callToAction: { message: string };
+      hook: { title: string; kicker?: string; subtitle?: string };
+      slides: Array<{ type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }>;
+      callToAction: { message: string; label?: string };
     };
 
-    const formatValuePoint = (vp: { heading: string; body: string; bulletPoints?: string[] }) => {
-      const lines = [`📌 ${vp.heading}`, vp.body];
-      if (vp.bulletPoints?.length) {
-        for (const bp of vp.bulletPoints) {
-          lines.push(`  • ${bp}`);
-        }
+    const formatSlide = (s: { type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }) => {
+      if (s.type === 'list' && s.items?.length) {
+        return [`📌 ${s.heading ?? 'Key points'}`, ...s.items.map(item => `  • ${item}`)].join('\n');
       }
-      return lines.join('\n');
+      if (s.type === 'quote') return `"${s.quote}"`;
+      if (s.type === 'stat') return `📊 ${s.value}${s.label ? ` ${s.label}` : ''}`;
+      return [`📌 ${s.heading ?? ''}`, s.body].filter(Boolean).join('\n');
     };
+
+    const slideTexts = structured.slides.map(formatSlide);
 
     const linkedinText = [
       structured.hook.title,
       structured.hook.subtitle ? `\n${structured.hook.subtitle}` : '',
       '',
-      ...structured.valuePoints.map(formatValuePoint),
+      ...slideTexts,
       '',
       structured.callToAction.message,
     ].join('\n');
@@ -138,7 +139,10 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     const twitterThread = [
       structured.hook.title,
       '',
-      ...structured.valuePoints.map((vp, i) => `${i + 1}/${structured.valuePoints.length} ${vp.heading}\n${vp.body}`),
+      ...structured.slides.map((s, i) => {
+        const text = formatSlide(s);
+        return `${i + 1}/${structured.slides.length} ${text}`;
+      }),
       '',
       structured.callToAction.message,
     ].join('\n\n');

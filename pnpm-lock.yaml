@@ -61,6 +61,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@loopreel/design':
+        specifier: workspace:*
+        version: link:../../packages/design
       '@loopreel/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas

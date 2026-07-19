@@ -33,3 +33,13 @@ export {
 } from './backgrounds.js';
 
 export type { GradientDef, PatternDef } from './backgrounds.js';
+
+export {
+  hexToRgba,
+  spacing,
+  clampFontSize,
+  getCanvasPadding,
+  meshGradient,
+  noiseTexture,
+  patterns as templatePatterns,
+} from './template-utils.js';

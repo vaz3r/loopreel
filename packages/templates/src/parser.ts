@@ -8,6 +8,7 @@ const parser = new XMLParser({
     'point',
     'bullet',
     'slide',
+    'item',
     'color',
     'shape',
   ].includes(name),
