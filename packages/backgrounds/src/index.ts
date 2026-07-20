@@ -3,6 +3,7 @@ export {
   getRandomPhoto,
   getPhotoUrl,
   isConfigured,
+  getPlaceholderUrl,
 } from './unsplash.js';
 
 export type { UnsplashPhoto, UnsplashSearchResult } from './unsplash.js';

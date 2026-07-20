@@ -1,0 +1,1091 @@
+import React from 'react';
+import type { Slide } from './schema.js';
+import { getHeadlineStyle, getBodyStyle, getThemeColors, type BrandKit } from './engine.js';
+
+interface CustomBrandProps {
+  slides: Slide[];
+  platform?: string;
+  brandKit?: BrandKit;
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+/* ─── Structural Components ─── */
+
+const RegMarks: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ theme }) => {
+  const markStyle = (pos: React.CSSProperties): React.CSSProperties => ({
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    ...pos,
+  });
+  const border = `2px solid ${theme.border}`;
+
+  return (
+    <div style={{ position: 'absolute', inset: 60, pointerEvents: 'none', zIndex: 10 }}>
+      <div style={markStyle({ top: 0, left: 0, borderTop: border, borderLeft: border })} />
+      <div style={markStyle({ top: 0, right: 0, borderTop: border, borderRight: border })} />
+      <div style={markStyle({ bottom: 0, left: 0, borderBottom: border, borderLeft: border })} />
+      <div style={markStyle({ bottom: 0, right: 0, borderBottom: border, borderRight: border })} />
+    </div>
+  );
+};
+
+const Crosshairs: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ theme }) => (
+  <>
+    <div
+      style={{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: '50%',
+        width: 1,
+        background: theme.gridBorder,
+        zIndex: 0,
+      }}
+    />
+    <div
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: '50%',
+        height: 1,
+        background: theme.gridBorder,
+        zIndex: 0,
+      }}
+    />
+  </>
+);
+
+const SafeArea: React.FC<{
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+}> = ({ children, style }) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 160,
+      bottom: 160,
+      left: 80,
+      right: 80,
+      display: 'flex',
+      flexDirection: 'column',
+      zIndex: 10,
+      overflow: 'hidden',
+      ...style,
+    }}
+  >
+    {children}
+  </div>
+);
+
+const MicroHeader: React.FC<{
+  tag: string;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ tag, theme }) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 70,
+      left: 80,
+      right: 80,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14,
+      zIndex: 10,
+    }}
+  >
+    <div
+      style={{
+        width: 32,
+        height: 2,
+        background: theme.accent,
+        borderRadius: 1,
+      }}
+    />
+    <span
+      style={{
+        fontFamily: theme.fontSans,
+        fontSize: 18,
+        fontWeight: 600,
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: hexToRgba(theme.text, 0.5),
+      }}
+    >
+      {tag}
+    </span>
+  </div>
+);
+
+const MicroFooter: React.FC<{
+  footerLeft: string;
+  footerRight: string;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ footerLeft, footerRight, theme }) => (
+  <div
+    style={{
+      position: 'absolute',
+      bottom: 70,
+      left: 80,
+      right: 80,
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      zIndex: 10,
+    }}
+  >
+    <span
+      style={{
+        fontFamily: theme.fontSans,
+        fontSize: 16,
+        fontWeight: 500,
+        letterSpacing: '0.05em',
+        textTransform: 'uppercase',
+        color: hexToRgba(theme.text, 0.4),
+      }}
+    >
+      {footerLeft}
+    </span>
+    <span
+      style={{
+        fontFamily: theme.fontSans,
+        fontSize: 16,
+        fontWeight: 500,
+        letterSpacing: '0.05em',
+        textTransform: 'uppercase',
+        color: hexToRgba(theme.text, 0.4),
+      }}
+    >
+      {footerRight}
+    </span>
+  </div>
+);
+
+/* ─── Slide Layouts (11 types) ─── */
+
+const CoverLayout: React.FC<{
+  data: Extract<Slide, { type: 'cover' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea style={{ justifyContent: 'center' }}>
+      <h1
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          textTransform: headlineStyle.textTransform as React.CSSProperties['textTransform'],
+          lineHeight: 0.9,
+          letterSpacing: '-0.02em',
+          margin: 0,
+          color: theme.text,
+        }}
+      >
+        {data.headline}
+      </h1>
+      {data.subheadline && (
+        <p
+          style={{
+            fontFamily: theme.fontSans,
+            fontSize: '32px',
+            fontWeight: '300',
+            lineHeight: 1.4,
+            marginTop: 40,
+            color: hexToRgba(theme.text, 0.7),
+            maxWidth: 700,
+          }}
+        >
+          {data.subheadline}
+        </p>
+      )}
+      {data.metadata && (
+        <div
+          style={{
+            marginTop: 60,
+            paddingTop: 24,
+            borderTop: `1px solid ${theme.border}`,
+            fontFamily: theme.fontSans,
+            fontSize: 18,
+            fontWeight: 500,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: hexToRgba(theme.text, 0.5),
+          }}
+        >
+          {data.metadata}
+        </div>
+      )}
+    </SafeArea>
+  );
+};
+
+const DefinitionLayout: React.FC<{
+  data: Extract<Slide, { type: 'definition' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => (
+  <SafeArea style={{ justifyContent: 'center' }}>
+    <div
+      style={{
+        fontFamily: theme.fontSans,
+        fontSize: 16,
+        fontWeight: 600,
+        letterSpacing: '0.2em',
+        textTransform: 'uppercase',
+        color: theme.accent,
+        marginBottom: 20,
+      }}
+    >
+      Definition
+    </div>
+    <h2
+      style={{
+        fontFamily: theme.fontSerif,
+        fontSize: '72px',
+        fontWeight: '300',
+        fontStyle: 'italic',
+        lineHeight: 1,
+        margin: '0 0 8px 0',
+        color: theme.text,
+      }}
+    >
+      {data.term}
+    </h2>
+    {data.phonetic && (
+      <div
+        style={{
+          fontFamily: theme.fontMono,
+          fontSize: '22px',
+          fontWeight: '400',
+          color: hexToRgba(theme.text, 0.5),
+          marginBottom: 40,
+        }}
+      >
+        {data.phonetic}
+      </div>
+    )}
+    <div
+      style={{
+        width: 40,
+        height: 2,
+        background: theme.accent,
+        marginBottom: 40,
+      }}
+    />
+    <p
+      style={{
+        fontFamily: theme.fontSans,
+        ...getBodyStyle(data.definition),
+        lineHeight: 1.5,
+        margin: 0,
+        color: hexToRgba(theme.text, 0.85),
+        maxWidth: 700,
+      }}
+    >
+      {data.definition}
+    </p>
+    {data.example && (
+      <div
+        style={{
+          marginTop: 40,
+          padding: '20px 24px',
+          borderLeft: `3px solid ${theme.accent}`,
+          fontFamily: theme.fontSerif,
+          fontSize: '24px',
+          fontWeight: '300',
+          fontStyle: 'italic',
+          lineHeight: 1.4,
+          color: hexToRgba(theme.text, 0.6),
+          maxWidth: 650,
+        }}
+      >
+        {data.example}
+      </div>
+    )}
+  </SafeArea>
+);
+
+const DichotomyLayout: React.FC<{
+  data: Extract<Slide, { type: 'dichotomy' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea style={{ justifyContent: 'space-between' }}>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: 0,
+          color: theme.text,
+        }}
+      >
+        {data.headline}
+      </h2>
+      <div
+        style={{
+          display: 'flex',
+          gap: 40,
+          flex: 1,
+          alignItems: 'center',
+        }}
+      >
+        {(['left', 'right'] as const).map((side) => (
+          <div
+            key={side}
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                height: 2,
+                background: side === 'left' ? theme.accent : hexToRgba(theme.text, 0.15),
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: theme.fontSans,
+                fontSize: '24px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                margin: 0,
+                color: theme.text,
+              }}
+            >
+              {data[side].title}
+            </h3>
+            <p
+              style={{
+                fontFamily: theme.fontSans,
+                ...getBodyStyle(data[side].desc),
+                lineHeight: 1.4,
+                margin: 0,
+                color: hexToRgba(theme.text, 0.7),
+              }}
+            >
+              {data[side].desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </SafeArea>
+  );
+};
+
+const TimelineLayout: React.FC<{
+  data: Extract<Slide, { type: 'timeline' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: '0 0 40px 0',
+          color: theme.text,
+          flexShrink: 0,
+        }}
+      >
+        {data.headline}
+      </h2>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        {data.events.map((event, idx) => (
+          <div
+            key={idx}
+            style={{
+              display: 'flex',
+              gap: 24,
+              flex: 1,
+              minHeight: 0,
+              alignItems: 'flex-start',
+              borderTop: idx === 0 ? `1px solid ${theme.border}` : 'none',
+              borderBottom: `1px solid ${theme.border}`,
+              padding: '12px 0',
+              overflow: 'hidden',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: theme.fontMono,
+                fontSize: '18px',
+                fontWeight: '400',
+                color: theme.accent,
+                minWidth: 120,
+                flexShrink: 0,
+                paddingTop: 4,
+              }}
+            >
+              {event.date}
+            </span>
+            <div style={{ flex: 1 }}>
+              <h4
+                style={{
+                  fontFamily: theme.fontSans,
+                  fontSize: '22px',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  color: theme.text,
+                }}
+              >
+                {event.title}
+              </h4>
+              <p
+                style={{
+                  fontFamily: theme.fontSans,
+                  fontSize: '18px',
+                  fontWeight: '300',
+                  lineHeight: 1.3,
+                  margin: 0,
+                  color: hexToRgba(theme.text, 0.65),
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {event.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SafeArea>
+  );
+};
+
+const QuoteLayout: React.FC<{
+  data: Extract<Slide, { type: 'quote' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => (
+  <SafeArea style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div
+        style={{
+          width: 2,
+          height: 100,
+          background: theme.accent,
+          margin: '0 auto 48px',
+        }}
+      />
+      <blockquote
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: '60px',
+          fontWeight: '300',
+          fontStyle: 'italic',
+          lineHeight: 1.15,
+          letterSpacing: '-0.01em',
+          margin: '0 0 48px 0',
+          color: theme.text,
+        }}
+      >
+        &ldquo;{data.quote}&rdquo;
+      </blockquote>
+      <div
+        style={{
+          fontFamily: theme.fontSans,
+          fontSize: '18px',
+          fontWeight: '600',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: hexToRgba(theme.text, 0.6),
+        }}
+      >
+        {data.author}
+        {data.role && (
+          <span
+            style={{
+              fontWeight: '400',
+              letterSpacing: '0.05em',
+              color: hexToRgba(theme.text, 0.4),
+            }}
+          >
+            {' '}&middot; {data.role}
+          </span>
+        )}
+      </div>
+    </div>
+  </SafeArea>
+);
+
+const SequenceLayout: React.FC<{
+  data: Extract<Slide, { type: 'sequence' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: '0 0 40px 0',
+          color: theme.text,
+          flexShrink: 0,
+        }}
+      >
+        {data.headline}
+      </h2>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        {data.items.map((item, idx) => (
+          <div
+            key={idx}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 24,
+              flex: 1,
+              minHeight: 0,
+              borderTop: idx === 0 ? `1px solid ${theme.border}` : 'none',
+              borderBottom: `1px solid ${theme.border}`,
+              padding: '12px 0',
+              overflow: 'hidden',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: theme.fontMono,
+                fontSize: '28px',
+                fontWeight: '400',
+                color: theme.accent,
+                minWidth: 50,
+                flexShrink: 0,
+              }}
+            >
+              {String(item.num).padStart(2, '0')}
+            </span>
+            <div style={{ flex: 1 }}>
+              <h4
+                style={{
+                  fontFamily: theme.fontSans,
+                  fontSize: '22px',
+                  fontWeight: '700',
+                  margin: '0 0 4px 0',
+                  color: theme.text,
+                }}
+              >
+                {item.title}
+              </h4>
+              <p
+                style={{
+                  fontFamily: theme.fontSans,
+                  fontSize: '18px',
+                  fontWeight: '300',
+                  lineHeight: 1.3,
+                  margin: 0,
+                  color: hexToRgba(theme.text, 0.65),
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SafeArea>
+  );
+};
+
+const TelemetryLayout: React.FC<{
+  data: Extract<Slide, { type: 'telemetry' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea style={{ justifyContent: 'space-between' }}>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: 0,
+          color: theme.text,
+          flexShrink: 0,
+        }}
+      >
+        {data.headline}
+      </h2>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: data.stats.length <= 4 ? '1fr 1fr' : '1fr 1fr 1fr',
+          gap: 40,
+          flex: 1,
+          alignItems: 'center',
+        }}
+      >
+        {data.stats.map((stat, idx) => (
+          <div key={idx} style={{ display: 'flex', flexDirection: 'column' }}>
+            <span
+              style={{
+                fontFamily: theme.fontSans,
+                fontSize: '80px',
+                fontWeight: '700',
+                lineHeight: 0.85,
+                letterSpacing: '-0.03em',
+                color: theme.text,
+              }}
+            >
+              {stat.value}
+            </span>
+            <span
+              style={{
+                fontFamily: theme.fontSans,
+                fontSize: '18px',
+                fontWeight: '500',
+                letterSpacing: '0.05em',
+                marginTop: 12,
+                color: hexToRgba(theme.text, 0.55),
+              }}
+            >
+              {stat.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </SafeArea>
+  );
+};
+
+const TableLayout: React.FC<{
+  data: Extract<Slide, { type: 'table' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: '0 0 40px 0',
+          color: theme.text,
+          flexShrink: 0,
+        }}
+      >
+        {data.headline}
+      </h2>
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${data.headers.length}, 1fr)`,
+            borderBottom: `2px solid ${theme.text}`,
+            paddingBottom: 12,
+            marginBottom: 8,
+          }}
+        >
+          {data.headers.map((h, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: theme.fontSans,
+                fontSize: '16px',
+                fontWeight: '700',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: theme.text,
+              }}
+            >
+              {h}
+            </span>
+          ))}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+          {data.rows.map((row, rowIdx) => (
+            <div
+              key={rowIdx}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${data.headers.length}, 1fr)`,
+                borderBottom: `1px solid ${theme.gridBorder}`,
+                padding: '14px 0',
+                flex: 1,
+                minHeight: 0,
+                alignItems: 'center',
+              }}
+            >
+              {row.map((cell, cellIdx) => (
+                <span
+                  key={cellIdx}
+                  style={{
+                    fontFamily: theme.fontSans,
+                    fontSize: '18px',
+                    fontWeight: cellIdx === 0 ? '600' : '400',
+                    color: theme.text,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {cell}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </SafeArea>
+  );
+};
+
+const ImageSplitLayout: React.FC<{
+  data: Extract<Slide, { type: 'image-split' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea>
+      <div style={{ display: 'flex', gap: 40, flex: 1, alignItems: 'center' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <h2
+            style={{
+              fontFamily: theme.fontSerif,
+              fontSize: headlineStyle.fontSize,
+              fontWeight: headlineStyle.fontWeight,
+              fontStyle: headlineStyle.fontStyle,
+              lineHeight: 0.95,
+              letterSpacing: '-0.02em',
+              margin: '0 0 24px 0',
+              color: theme.text,
+            }}
+          >
+            {data.headline}
+          </h2>
+          <p
+            style={{
+              fontFamily: theme.fontSans,
+              ...getBodyStyle(data.bodyText),
+              lineHeight: 1.5,
+              margin: 0,
+              color: hexToRgba(theme.text, 0.75),
+            }}
+          >
+            {data.bodyText}
+          </p>
+        </div>
+        <div
+          style={{
+            flex: 1,
+            aspectRatio: '4/5',
+            borderRadius: 12,
+            background: hexToRgba(theme.text, 0.06),
+            border: `1px solid ${theme.gridBorder}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          {data.imageUrl ? (
+            <img
+              src={data.imageUrl}
+              alt={data.imageKeywords ?? ''}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <span
+              style={{
+                fontFamily: theme.fontSans,
+                fontSize: 16,
+                color: hexToRgba(theme.text, 0.3),
+                textAlign: 'center',
+                padding: 20,
+              }}
+            >
+              {data.imageKeywords ?? 'Image'}
+            </span>
+          )}
+        </div>
+      </div>
+    </SafeArea>
+  );
+};
+
+const ImageCoverLayout: React.FC<{
+  data: Extract<Slide, { type: 'image-cover' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <div style={{ position: 'absolute', inset: 0 }}>
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: hexToRgba(theme.text, 0.06),
+        }}
+      >
+        {data.imageUrl ? (
+          <img
+            src={data.imageUrl}
+            alt={data.imageKeywords ?? ''}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: theme.fontSans,
+              fontSize: 16,
+              color: hexToRgba(theme.text, 0.2),
+            }}
+          >
+            {data.imageKeywords ?? 'Image'}
+          </div>
+        )}
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(to top, ${theme.bg} 0%, ${hexToRgba(theme.bg, 0.8)} 40%, transparent 100%)`,
+        }}
+      />
+      <SafeArea style={{ justifyContent: 'flex-end' }}>
+        <h2
+          style={{
+            fontFamily: theme.fontSerif,
+            fontSize: headlineStyle.fontSize,
+            fontWeight: headlineStyle.fontWeight,
+            fontStyle: headlineStyle.fontStyle,
+            lineHeight: 0.95,
+            letterSpacing: '-0.02em',
+            margin: '0 0 16px 0',
+            color: theme.text,
+          }}
+        >
+          {data.headline}
+        </h2>
+        <p
+          style={{
+            fontFamily: theme.fontSans,
+            ...getBodyStyle(data.subtext),
+            lineHeight: 1.4,
+            margin: 0,
+            color: hexToRgba(theme.text, 0.75),
+            maxWidth: 600,
+          }}
+        >
+          {data.subtext}
+        </p>
+      </SafeArea>
+    </div>
+  );
+};
+
+const CtaLayout: React.FC<{
+  data: Extract<Slide, { type: 'cta' }>;
+  theme: ReturnType<typeof getThemeColors>;
+}> = ({ data, theme }) => {
+  const headlineStyle = getHeadlineStyle(data.headline);
+  return (
+    <SafeArea style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+      <h2
+        style={{
+          fontFamily: theme.fontSerif,
+          fontSize: headlineStyle.fontSize,
+          fontWeight: headlineStyle.fontWeight,
+          fontStyle: headlineStyle.fontStyle,
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          margin: '0 0 24px 0',
+          color: theme.text,
+        }}
+      >
+        {data.headline}
+      </h2>
+      {data.subtext && (
+        <p
+          style={{
+            fontFamily: theme.fontSans,
+            fontSize: '24px',
+            fontWeight: '300',
+            lineHeight: 1.4,
+            margin: '0 0 48px 0',
+            color: hexToRgba(theme.text, 0.6),
+            maxWidth: 500,
+          }}
+        >
+          {data.subtext}
+        </p>
+      )}
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 12,
+          padding: '20px 48px',
+          borderRadius: 200,
+          background: theme.accent,
+          color: '#FFFFFF',
+          fontFamily: theme.fontSans,
+          fontSize: '20px',
+          fontWeight: '700',
+          letterSpacing: '0.04em',
+        }}
+      >
+        {data.actionLabel}
+        <span style={{ fontSize: 24, lineHeight: 1 }}>&rarr;</span>
+      </div>
+      {data.socialHandle && (
+        <div
+          style={{
+            marginTop: 32,
+            fontFamily: theme.fontSans,
+            fontSize: '18px',
+            fontWeight: '500',
+            color: hexToRgba(theme.text, 0.4),
+          }}
+        >
+          {data.socialHandle}
+        </div>
+      )}
+    </SafeArea>
+  );
+};
+
+/* ─── Slide Registry ─── */
+
+const SLIDE_LAYOUTS: Record<string, React.FC<{ data: any; theme: ReturnType<typeof getThemeColors> }>> = {
+  cover: CoverLayout,
+  definition: DefinitionLayout,
+  dichotomy: DichotomyLayout,
+  timeline: TimelineLayout,
+  quote: QuoteLayout,
+  sequence: SequenceLayout,
+  telemetry: TelemetryLayout,
+  table: TableLayout,
+  'image-split': ImageSplitLayout,
+  'image-cover': ImageCoverLayout,
+  cta: CtaLayout,
+};
+
+/* ─── Main Component ─── */
+
+function CustomBrandTemplate({ slides, brandKit }: CustomBrandProps) {
+  const theme = getThemeColors(brandKit);
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: 1080,
+        height: 1350,
+        overflow: 'hidden',
+        background: theme.bg,
+        color: theme.text,
+        fontFamily: theme.fontSans,
+      }}
+    >
+      {slides.map((slide, idx) => {
+        const Layout = (SLIDE_LAYOUTS[slide.type] ?? CoverLayout) as React.FC<{ data: Slide; theme: ReturnType<typeof getThemeColors> }>;
+        return (
+          <div
+            key={idx}
+            style={{
+              position: 'relative',
+              width: 1080,
+              height: 1350,
+              overflow: 'hidden',
+              background: theme.bg,
+              pageBreakAfter: 'always',
+            }}
+          >
+            <Crosshairs theme={theme} />
+            <RegMarks theme={theme} />
+            <MicroHeader tag={slide.tag} theme={theme} />
+            <Layout data={slide} theme={theme} />
+            <MicroFooter
+              footerLeft={slide.footerLeft}
+              footerRight={slide.footerRight}
+              theme={theme}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function CustomBrandSingle({
+  slide,
+  brandKit,
+}: {
+  slide: Slide;
+  brandKit?: BrandKit;
+}) {
+  const theme = getThemeColors(brandKit);
+  const Layout = (SLIDE_LAYOUTS[slide.type] ?? CoverLayout) as React.FC<{ data: Slide; theme: ReturnType<typeof getThemeColors> }>;
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: 1080,
+        height: 1350,
+        overflow: 'hidden',
+        background: theme.bg,
+        color: theme.text,
+        fontFamily: theme.fontSans,
+      }}
+    >
+      <Crosshairs theme={theme} />
+      <RegMarks theme={theme} />
+      <MicroHeader tag={slide.tag} theme={theme} />
+      <Layout data={slide} theme={theme} />
+      <MicroFooter
+        footerLeft={slide.footerLeft}
+        footerRight={slide.footerRight}
+        theme={theme}
+      />
+    </div>
+  );
+}
+
+export default CustomBrandTemplate;

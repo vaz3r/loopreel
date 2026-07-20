@@ -34,7 +34,7 @@ const contextSchema = z.object({
 const listItemSchema = z.object({
   num: z.string().max(4),
   label: z.string().max(30),
-  desc: z.string().max(60),
+  desc: z.string().max(100),
 });
 
 const listSchema = z.object({
@@ -51,7 +51,7 @@ const listSchema = z.object({
 // 4. Matrix
 const quadrantSchema = z.object({
   title: z.string().max(20),
-  text: z.string().max(40),
+  text: z.string().max(60),
 });
 
 const matrixSchema = z.object({
@@ -132,7 +132,7 @@ export const ArchiveSlideSchema = z.discriminatedUnion('type', [
 
 // ── Contract Schema ──
 export const ArchiveContractSchema = z.object({
-  templateId: z.literal('archive'),
+  templateId: z.literal('archive').optional(),
   slides: z.array(ArchiveSlideSchema).min(1).max(12),
 });
 

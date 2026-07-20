@@ -153,6 +153,9 @@ importers:
 
   apps/worker-structure:
     dependencies:
+      '@loopreel/backgrounds':
+        specifier: workspace:*
+        version: link:../../packages/backgrounds
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -168,6 +171,9 @@ importers:
       '@loopreel/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
+      '@loopreel/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       '@loopreel/templates':
         specifier: workspace:*
         version: link:../../packages/templates

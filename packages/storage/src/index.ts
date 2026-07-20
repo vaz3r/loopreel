@@ -68,3 +68,23 @@ export async function getPresignedUrl(key: string, expiresIn = 3600): Promise<st
   });
   return getSignedUrl(client, command, { expiresIn });
 }
+
+export async function downloadImage(url: string): Promise<Buffer> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download image: ${response.status} ${response.statusText}`);
+  }
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer);
+}
+
+export async function uploadImage(jobId: string, slideIndex: number, data: Buffer, contentType = 'image/jpeg'): Promise<string> {
+  const key = `images/${jobId}/${slideIndex}.jpg`;
+  await client.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: data,
+    ContentType: contentType,
+  }));
+  return key;
+}

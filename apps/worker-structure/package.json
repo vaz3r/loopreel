@@ -9,11 +9,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@loopreel/backgrounds": "workspace:*",
     "@loopreel/db": "workspace:*",
     "@loopreel/errors": "workspace:*",
     "@loopreel/llm": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
+    "@loopreel/storage": "workspace:*",
     "@loopreel/templates": "workspace:*",
     "dotenv": "^17.4.2",
     "pino": "^9.6.0"

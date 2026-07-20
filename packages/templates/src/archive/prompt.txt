@@ -1,119 +1,66 @@
 You are generating content for an "Archive" brutalist carousel template.
 
-Output a JSON object with "meta" and "slides" keys.
+Output XML wrapped in <presentation> tag.
 
-Available slide types — each slide MUST have "type" and "theme" fields:
+Available slide types — each slide must have type and theme attributes:
 
-1. cover
-   - type: "cover"
-   - theme: "void" | "bone" | "steel"
-   - titleTop: string (max 15 chars)
-   - titleBottom: string (max 15 chars)
-   - ticker: string (max 120 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+1. <cover type="cover" theme="void|bone|steel" titleTop="..." titleBottom="..." ticker="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="..." />
 
-2. context
-   - type: "context"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 20 chars)
-   - text: string (max 200 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+2. <context type="context" theme="void|bone|steel" title="..." text="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="..." />
 
-3. list
-   - type: "list"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 20 chars)
-   - items: array of exactly 3 objects:
-     - num: string (e.g. "01", "02", "03")
-     - label: string (max 30 chars)
-     - desc: string (max 60 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+3. <list type="list" theme="void|bone|steel" title="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="...">
+   <items>
+     <item num="01" label="..." desc="..." />
+     <item num="02" label="..." desc="..." />
+     <item num="03" label="..." desc="..." />
+   </items>
+   </list>
 
-4. matrix
-   - type: "matrix"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 20 chars)
-   - quadrants: array of exactly 4 objects:
-     - title: string (max 20 chars)
-     - text: string (max 40 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+4. <matrix type="matrix" theme="void|bone|steel" title="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="...">
+   <quadrants>
+     <quadrant title="..." text="..." />
+     <quadrant title="..." text="..." />
+     <quadrant title="..." text="..." />
+     <quadrant title="..." text="..." />
+   </quadrants>
+   </matrix>
 
-5. insight
-   - type: "insight"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 20 chars)
-   - text: string (max 200 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+5. <insight type="insight" theme="void|bone|steel" title="..." text="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="..." />
 
-6. quote
-   - type: "quote"
-   - theme: "void" | "bone" | "steel"
-   - quote: string (max 200 chars)
-   - author: string (max 40 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+6. <quote type="quote" theme="void|bone|steel" quote="..." author="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="..." />
 
-7. evidence
-   - type: "evidence"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 20 chars)
-   - stats: array of 2-4 objects:
-     - value: string (max 10 chars, e.g. "400%", "12K", "Zero")
-     - label: string (max 60 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+7. <evidence type="evidence" theme="void|bone|steel" title="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="...">
+   <stats>
+     <stat value="400%" label="..." />
+     <stat value="Zero" label="..." />
+   </stats>
+   </evidence>
 
-8. cta
-   - type: "cta"
-   - theme: "void" | "bone" | "steel"
-   - title: string (max 30 chars, HTML line breaks allowed via <br/>)
-   - buttonText: string (max 20 chars)
-   - headerLeft: string (max 20 chars)
-   - headerRight: string (max 20 chars)
-   - footerLeft: string (max 20 chars)
-   - footerRight: string (max 20 chars)
+8. <cta type="cta" theme="void|bone|steel" title="..." buttonText="..." headerLeft="..." headerRight="..." footerLeft="..." footerRight="..." />
+
+Character limits:
+- titleTop, titleBottom: max 15 chars
+- title, quote, text: max 200 chars
+- desc, label: max 60 chars
+- num, value: max 10 chars
+- headerLeft, headerRight, footerLeft, footerRight: max 20 chars
+- buttonText: max 20 chars
+- ticker: max 120 chars
 
 Available themes: void (dark bg), bone (light bg), steel (gray bg)
 
 Rules:
 - Generate 4-8 slides
-- First slide must be type "cover"
-- Last slide must be type "cta"
+- First slide must be cover
+- Last slide must be cta
 - Use variety of middle types
-- Each slide can use any theme
-- All text must be SHORT — titles max 15-20 chars, descriptions max 40-60 chars
-- Do NOT use markdown or formatting in text fields
-- Header/footer fields should be short labels (e.g., "Context", "02 / 08", "Observation", "Sector 01")
+- All text must be SHORT
+- Do NOT use markdown or formatting
 
-Output JSON:
-{
-  "meta": {
-    "seriesName": "...",
-    "authorName": "...",
-    "handle": "...",
-    "category": "..."
-  },
-  "slides": [
-    { "type": "cover", "theme": "void", "titleTop": "...", "titleBottom": "...", "ticker": "...", "headerLeft": "...", "headerRight": "...", "footerLeft": "...", "footerRight": "..." },
-    ...
-  ]
-}
+Output XML:
+<presentation>
+  <meta seriesName="..." authorName="..." handle="..." category="..." />
+  <cover type="cover" theme="void" titleTop="SYSTEM" titleBottom="ARCHITECTURE" ticker="THE ARCHITECTURE OF VALUE" headerLeft="Sys. 02" headerRight="Archive" footerLeft="Vol. II" footerRight="Social Export" />
+  <context type="context" theme="bone" title="The Baseline." text="Most systems fail..." headerLeft="Context" headerRight="02 / 08" footerLeft="Observation" footerRight="Sector 01" />
+  ...
+</presentation>

@@ -23,6 +23,13 @@ export interface UnsplashSearchResult {
   results: UnsplashPhoto[];
 }
 
+function getHeaders(): Record<string, string> {
+  if (UNSPLASH_ACCESS_KEY) {
+    return { Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}` };
+  }
+  return {};
+}
+
 export async function searchPhotos(
   query: string,
   options: {
@@ -31,10 +38,6 @@ export async function searchPhotos(
     orientation?: 'landscape' | 'portrait' | 'squarish';
   } = {}
 ): Promise<UnsplashSearchResult> {
-  if (!UNSPLASH_ACCESS_KEY) {
-    throw new Error('UNSPLASH_ACCESS_KEY not configured');
-  }
-
   const { perPage = 10, page = 1, orientation } = options;
 
   const params = new URLSearchParams({
@@ -48,9 +51,7 @@ export async function searchPhotos(
   }
 
   const response = await fetch(`${UNSPLASH_BASE_URL}/search/photos?${params}`, {
-    headers: {
-      Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
-    },
+    headers: getHeaders(),
   });
 
   if (!response.ok) {
@@ -66,10 +67,6 @@ export async function getRandomPhoto(
     orientation?: 'landscape' | 'portrait' | 'squarish';
   } = {}
 ): Promise<UnsplashPhoto> {
-  if (!UNSPLASH_ACCESS_KEY) {
-    throw new Error('UNSPLASH_ACCESS_KEY not configured');
-  }
-
   const params = new URLSearchParams({ query });
 
   if (options.orientation) {
@@ -77,9 +74,7 @@ export async function getRandomPhoto(
   }
 
   const response = await fetch(`${UNSPLASH_BASE_URL}/photos/random?${params}`, {
-    headers: {
-      Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
-    },
+    headers: getHeaders(),
   });
 
   if (!response.ok) {
@@ -105,4 +100,9 @@ export function getPhotoUrl(
 
 export function isConfigured(): boolean {
   return UNSPLASH_ACCESS_KEY.length > 0;
+}
+
+export function getPlaceholderUrl(keywords: string, width = 1080, height = 1350): string {
+  const safeQuery = encodeURIComponent(keywords.split(' ').slice(0, 3).join(' '));
+  return `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=${width}&h=${height}&fit=crop&q=80&utm_source=loopreel&utm_medium=referral`;
 }
