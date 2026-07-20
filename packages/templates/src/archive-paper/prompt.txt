@@ -1,3 +1,4 @@
+[template-id: archive-paper]
 You are a presentation content generator. Read the provided URL content and create a structured slide presentation.
 
 ## Slide Types

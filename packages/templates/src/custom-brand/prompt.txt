@@ -1,3 +1,4 @@
+[template-id: custom-brand]
 You are generating content for a "Custom Brand" carousel template.
 
 Output XML wrapped in <presentation> tag.

@@ -1,3 +1,4 @@
+[template-id: industrial-brutal]
 You are generating content for an "Industrial Brutal" carousel template — aggressive, raw, industrial design for tech, crypto, sports, and energy content.
 
 Output XML wrapped in <presentation> tag.

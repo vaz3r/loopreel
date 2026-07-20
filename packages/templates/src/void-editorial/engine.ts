@@ -1,13 +1,27 @@
+import {
+  getHeadlineFontSize as _getHeadlineFontSize,
+  getBodyFontSize as _getBodyFontSize,
+  getHeadlineLineHeight,
+  getOverflowStyles,
+  getImageFilter,
+  getImageCoverStyles,
+  getImageSplitStyles,
+  CANVAS,
+  getContentArea,
+} from '../engine/index.js';
+
 export interface HeadlineStyle {
-  fontSize: string;
+  fontSize: number;
   fontWeight: number;
   fontStyle: string;
   textTransform: string;
+  lineHeight: number;
 }
 
 export interface BodyStyle {
-  fontSize: string;
+  fontSize: number;
   fontWeight: number;
+  lineHeight?: number;
 }
 
 export interface ThemeColors {
@@ -22,31 +36,22 @@ export interface ThemeColors {
 }
 
 export function getHeadlineStyle(text: string): HeadlineStyle {
-  const len = text.length;
-  if (len < 18) {
-    return { fontSize: '130px', fontWeight: 300, fontStyle: 'italic', textTransform: 'none' };
-  }
-  if (len <= 34) {
-    return { fontSize: '95px', fontWeight: 300, fontStyle: 'italic', textTransform: 'none' };
-  }
-  if (len <= 64) {
-    return { fontSize: '72px', fontWeight: 300, fontStyle: 'italic', textTransform: 'none' };
-  }
-  return { fontSize: '54px', fontWeight: 300, fontStyle: 'italic', textTransform: 'none' };
+  const fontSize = _getHeadlineFontSize(text, {
+    fontWeight: 300,
+    fontStyle: 'italic',
+  });
+  return {
+    fontSize,
+    fontWeight: 300,
+    fontStyle: 'italic',
+    textTransform: 'none',
+    lineHeight: getHeadlineLineHeight(fontSize),
+  };
 }
 
 export function getBodyStyle(text: string): BodyStyle {
-  const len = text.length;
-  if (len < 120) {
-    return { fontSize: '38px', fontWeight: 300 };
-  }
-  if (len < 250) {
-    return { fontSize: '30px', fontWeight: 300 };
-  }
-  if (len < 400) {
-    return { fontSize: '24px', fontWeight: 400 };
-  }
-  return { fontSize: '20px', fontWeight: 400 };
+  const { fontSize, lineHeight } = _getBodyFontSize(text);
+  return { fontSize, fontWeight: 300, lineHeight };
 }
 
 export function getThemeColors(): ThemeColors {
@@ -64,3 +69,4 @@ export function getThemeColors(): ThemeColors {
 
 export const REG_MARK_OPACITY = 0.15;
 export const GRID_BORDER_OPACITY = 0.08;
+export { CANVAS, getContentArea, getHeadlineLineHeight, getOverflowStyles, getImageFilter, getImageCoverStyles, getImageSplitStyles };

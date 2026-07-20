@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Slide } from './schema.js';
-import { getHeadlineStyle, getBodyStyle, getThemeColors } from './engine.js';
+import { getHeadlineStyle, getBodyStyle, getThemeColors, getOverflowStyles, getImageCoverStyles, getImageSplitStyles } from './engine.js';
 
 const T = getThemeColors();
 const SANS = T.fontSans;
@@ -25,19 +25,9 @@ function RegMarks() {
   );
 }
 
-function Crosshairs() {
-  return (
-    <>
-      <div style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', width: 1, background: T.gridBorder, zIndex: 0 }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', height: 1, background: T.gridBorder, zIndex: 0 }} />
-    </>
-  );
-}
-
-function SafeArea({ children, className = '', style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+function SafeArea({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div
-      className={className}
       style={{
         position: 'absolute',
         top: 160,
@@ -75,7 +65,7 @@ function MicroHeader({ tag }: { tag: string }) {
           top: 16,
           left: 80,
           fontFamily: MONO,
-          fontSize: 18,
+          fontSize: 22,
           fontWeight: 700,
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
@@ -102,10 +92,10 @@ function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRi
         zIndex: 5,
       }}
     >
-      <span style={{ fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
+      <span style={{ fontFamily: MONO, fontSize: 22, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
         {footerLeft}
       </span>
-      <span style={{ fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
+      <span style={{ fontFamily: MONO, fontSize: 22, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
         {footerRight}
       </span>
     </div>
@@ -118,15 +108,11 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   const bs = getBodyStyle(slide.subheadline, true);
   return (
-    <SafeArea className="justify-center">
+    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center' }}>
       <h1
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.9,
           letterSpacing: '-0.02em',
           color: T.text,
           marginBottom: 40,
@@ -171,7 +157,7 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
 
 function DefinitionLayout({ slide }: { slide: Extract<Slide, { type: 'definition' }> }) {
   return (
-    <SafeArea className="justify-center">
+    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center' }}>
       <div
         style={{
           fontFamily: MONO,
@@ -233,12 +219,8 @@ function DichotomyLayout({ slide }: { slide: Extract<Slide, { type: 'dichotomy' 
     <SafeArea>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 60,
           color: T.text,
@@ -294,12 +276,8 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
     <SafeArea>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 50,
           color: T.text,
@@ -359,7 +337,7 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
 
 function QuoteLayout({ slide }: { slide: Extract<Slide, { type: 'quote' }> }) {
   return (
-    <SafeArea className="justify-center items-center text-center">
+    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
       <div style={{ width: 4, height: 80, background: T.accent, marginBottom: 50 }} />
       <blockquote
         style={{
@@ -412,12 +390,8 @@ function SequenceLayout({ slide }: { slide: Extract<Slide, { type: 'sequence' }>
     <SafeArea>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 50,
           color: T.text,
@@ -484,12 +458,8 @@ function TelemetryLayout({ slide }: { slide: Extract<Slide, { type: 'telemetry' 
     <SafeArea>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 50,
           color: T.text,
@@ -555,12 +525,8 @@ function TableLayout({ slide }: { slide: Extract<Slide, { type: 'table' }> }) {
     <SafeArea>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 40,
           color: T.text,
@@ -623,18 +589,15 @@ function TableLayout({ slide }: { slide: Extract<Slide, { type: 'table' }> }) {
 function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-split' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   const bs = getBodyStyle(slide.bodyText);
+  const { image: imgStyles } = getImageSplitStyles('dramatic');
   return (
     <SafeArea>
       <div style={{ display: 'flex', gap: 40, flex: 1 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2
             style={{
+              ...hs, ...getOverflowStyles(),
               fontFamily: SANS,
-              fontSize: hs.fontSize,
-              fontWeight: hs.fontWeight,
-              fontStyle: hs.fontStyle,
-              textTransform: hs.textTransform,
-              lineHeight: 0.95,
               letterSpacing: '-0.02em',
               marginBottom: 30,
               color: T.text,
@@ -645,9 +608,8 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
           <p
             style={{
               fontFamily: SANS,
-              fontSize: bs.fontSize,
-              fontWeight: bs.fontWeight,
-              lineHeight: 1.4,
+              ...bs,
+              ...getOverflowStyles({ maxLines: 6 }),
               color: 'rgba(224,224,224,0.7)',
             }}
           >
@@ -666,7 +628,7 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
           }}
         >
           {slide.imageUrl ? (
-            <img src={slide.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={slide.imageUrl} alt="" style={imgStyles} />
           ) : (
             <span style={{ fontFamily: MONO, fontSize: 18, color: 'rgba(224,224,224,0.3)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
               {slide.imageKeywords || 'IMAGE'}
@@ -680,29 +642,20 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
 
 function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cover' }> }) {
   const hs = getHeadlineStyle(slide.headline);
+  const coverStyles = getImageCoverStyles('dramatic');
   return (
     <>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(26,26,26,0.7)',
-          zIndex: 1,
-        }}
-      >
+      <div style={coverStyles.imageContainer}>
         {slide.imageUrl && (
-          <img src={slide.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={slide.imageUrl} alt="" style={coverStyles.image} />
         )}
       </div>
-      <SafeArea className="justify-end" style={{ zIndex: 5 }}>
+      <div style={coverStyles.overlay} />
+      <SafeArea style={{ zIndex: 5, justifyContent: 'flex-end' }}>
         <h2
           style={{
+            ...hs, ...getOverflowStyles(),
             fontFamily: SANS,
-            fontSize: hs.fontSize,
-            fontWeight: hs.fontWeight,
-            fontStyle: hs.fontStyle,
-            textTransform: hs.textTransform,
-            lineHeight: 0.95,
             letterSpacing: '-0.02em',
             marginBottom: 24,
             color: '#FFFFFF',
@@ -717,6 +670,7 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
               fontFamily: SANS,
               ...getBodyStyle(slide.subtext),
               lineHeight: 1.4,
+              ...getOverflowStyles({ maxLines: 4 }),
               color: 'rgba(255,255,255,0.8)',
               textShadow: '0 1px 10px rgba(0,0,0,0.6)',
             }}
@@ -732,15 +686,11 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
 function CtaLayout({ slide }: { slide: Extract<Slide, { type: 'cta' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   return (
-    <SafeArea className="justify-center items-center text-center">
+    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
       <h2
         style={{
+          ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
-          fontSize: hs.fontSize,
-          fontWeight: hs.fontWeight,
-          fontStyle: hs.fontStyle,
-          textTransform: hs.textTransform,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           marginBottom: 30,
           color: T.text,
@@ -839,7 +789,6 @@ function IndustrialBrutalTemplate({ slides }: IndustrialBrutalProps) {
     >
       {slides.map((slide, i) => (
         <div key={i} style={{ position: 'relative', width: 1080, height: 1350, overflow: 'hidden' }}>
-          <Crosshairs />
           <RegMarks />
           <MicroHeader tag={slide.tag} />
           <IndustrialBrutalSlide slide={slide} />
@@ -866,7 +815,6 @@ export function IndustrialBrutalSingle({ slide }: { slide: Slide }) {
         fontFamily: SANS,
       }}
     >
-      <Crosshairs />
       <RegMarks />
       <MicroHeader tag={slide.tag} />
       <IndustrialBrutalSlide slide={slide} />

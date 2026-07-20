@@ -17,3 +17,18 @@ export { ArchivePaperContractSchema, SlideSchema as ArchivePaperSlideSchema } fr
 export type { ArchivePaperContract, Slide as ArchivePaperSlide } from './archive-paper/schema.js';
 export { IndustrialBrutalContractSchema, SlideSchema as IndustrialBrutalSlideSchema } from './industrial-brutal/schema.js';
 export type { IndustrialBrutalContract, Slide as IndustrialBrutalSlide } from './industrial-brutal/schema.js';
+
+export {
+  CANVAS,
+  getContentArea,
+  getSafeAreaStyle,
+  getHeadlineFontSize,
+  getBodyFontSize,
+  getHeadlineLineHeight,
+  getOverflowStyles,
+  getImageFilter,
+  getImageSplitStyles,
+  getImageCoverStyles,
+} from './engine/index.js';
+
+export type { ImageMood, ImageFilterConfig, SafeAreaConfig } from './engine/index.js';

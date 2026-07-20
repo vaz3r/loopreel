@@ -4,6 +4,9 @@ import {
   getHeadlineStyle,
   getBodyStyle,
   getThemeColors,
+  getOverflowStyles,
+  getImageCoverStyles,
+  getImageSplitStyles,
 } from "./engine.js";
 
 const theme = getThemeColors();
@@ -61,54 +64,17 @@ function RegMarks() {
   );
 }
 
-// ─── Crosshairs ──────────────────────────────────────────────
-
-function Crosshairs() {
-  const lineH = (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: 60,
-        right: 60,
-        height: 1,
-        backgroundColor: "rgba(17,17,17,0.12)",
-        transform: "translateY(-50%)",
-      }}
-    />
-  );
-  const lineV = (
-    <div
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: 60,
-        bottom: 60,
-        width: 1,
-        backgroundColor: "rgba(17,17,17,0.12)",
-        transform: "translateX(-50%)",
-      }}
-    />
-  );
-  return (
-    <>
-      {lineH}
-      {lineV}
-    </>
-  );
-}
-
 // ─── SafeArea ────────────────────────────────────────────────
 
-function SafeArea({ children }: { children: React.ReactNode }) {
+function SafeArea({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
   return (
     <div
       style={{
         position: "absolute",
-        top: 80,
+        top: compact ? 60 : 80,
         left: 80,
         right: 80,
-        bottom: 80,
+        bottom: compact ? 60 : 80,
         display: "flex",
         flexDirection: "column",
       }}
@@ -125,7 +91,7 @@ function MicroHeader({ tag }: { tag: string }) {
     <div
       style={{
         fontFamily: theme.fontSans,
-        fontSize: 14,
+        fontSize: 20,
         fontWeight: 600,
         letterSpacing: "0.15em",
         textTransform: "uppercase",
@@ -152,13 +118,13 @@ function MicroFooter({
     <div
       style={{
         position: "absolute",
-        bottom: 36,
+        bottom: 50,
         left: 80,
         right: 80,
         display: "flex",
         justifyContent: "space-between",
         fontFamily: theme.fontSans,
-        fontSize: 13,
+        fontSize: 20,
         color: theme.text,
         opacity: 0.5,
       }}
@@ -185,8 +151,7 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
       }}
     >
       <RegMarks />
-      <Crosshairs />
-      <SafeArea>
+      <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
           style={{
@@ -199,11 +164,8 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
         >
           <div
             style={{
+              ...hs, ...getOverflowStyles(),
               fontFamily: theme.fontSerif,
-              fontSize: Number(hs.fontSize),
-              fontWeight: hs.fontWeight,
-              fontStyle: hs.fontStyle,
-              lineHeight: 1.05,
             }}
           >
             {slide.headline}
@@ -261,7 +223,6 @@ function DefinitionSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -359,7 +320,6 @@ function DichotomySlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -468,7 +428,6 @@ function TimelineSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -589,7 +548,6 @@ function QuoteSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -678,7 +636,6 @@ function SequenceSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -774,7 +731,6 @@ function TelemetrySlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -861,7 +817,6 @@ function TableSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -949,7 +904,9 @@ function ImageSplitSlide({
 }: {
   slide: Extract<Slide, { type: "image-split" }>;
 }) {
+  const hs = getHeadlineStyle(slide.headline);
   const bs = getBodyStyle(slide.bodyText);
+  const { image: imgStyles } = getImageSplitStyles('light');
   return (
     <div
       style={{
@@ -962,7 +919,6 @@ function ImageSplitSlide({
       }}
     >
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -976,21 +932,17 @@ function ImageSplitSlide({
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
             <div
               style={{
+                ...hs, ...getOverflowStyles(),
                 fontFamily: theme.fontSerif,
-                fontSize: 48,
-                fontWeight: 300,
-                fontStyle: "italic",
-                lineHeight: 1.1,
               }}
             >
               {slide.headline}
             </div>
             <div
               style={{
+                ...bs,
                 fontFamily: theme.fontSans,
-                fontSize: Number(bs.fontSize),
-                fontWeight: bs.fontWeight === "300" ? 300 : 400,
-                lineHeight: 1.6,
+                ...getOverflowStyles({ maxLines: 6 }),
                 color: theme.text,
                 opacity: 0.8,
               }}
@@ -1017,7 +969,7 @@ function ImageSplitSlide({
               <img
                 src={slide.imageUrl}
                 alt={slide.headline}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={imgStyles}
               />
             ) : (
               <span>{slide.imageKeywords || "image"}</span>
@@ -1038,6 +990,7 @@ function ImageCoverSlide({
 }: {
   slide: Extract<Slide, { type: "image-cover" }>;
 }) {
+  const coverStyles = getImageCoverStyles('light');
   return (
     <div
       style={{
@@ -1050,29 +1003,23 @@ function ImageCoverSlide({
       }}
     >
       {slide.imageUrl && (
-        <img
-          src={slide.imageUrl}
-          alt={slide.headline}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
+        <div style={coverStyles.imageContainer}>
+          <img
+            src={slide.imageUrl}
+            alt={slide.headline}
+            style={coverStyles.image}
+          />
+        </div>
       )}
       <div
         style={{
-          position: "absolute",
-          inset: 0,
-          backgroundColor: slide.imageUrl
+          ...coverStyles.overlay,
+          background: slide.imageUrl
             ? "rgba(235,234,229,0.75)"
             : "rgba(17,17,17,0.04)",
         }}
       />
       <RegMarks />
-      <Crosshairs />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -1090,6 +1037,7 @@ function ImageCoverSlide({
               fontSize: 64,
               fontWeight: 300,
               fontStyle: "italic",
+              ...getOverflowStyles(),
               lineHeight: 1.1,
             }}
           >
@@ -1130,8 +1078,7 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
       }}
     >
       <RegMarks />
-      <Crosshairs />
-      <SafeArea>
+      <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
           style={{

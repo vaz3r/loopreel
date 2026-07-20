@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Slide } from './schema.js';
-import { getHeadlineStyle, getBodyStyle, getThemeColors, type BrandKit } from './engine.js';
+import { getHeadlineStyle, getBodyStyle, getThemeColors, getOverflowStyles, getImageCoverStyles, getImageSplitStyles, type BrandKit } from './engine.js';
 
 interface CustomBrandProps {
   slides: Slide[];
@@ -36,42 +36,16 @@ const RegMarks: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ them
   );
 };
 
-const Crosshairs: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ theme }) => (
-  <>
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: '50%',
-        width: 1,
-        background: theme.gridBorder,
-        zIndex: 0,
-      }}
-    />
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: '50%',
-        height: 1,
-        background: theme.gridBorder,
-        zIndex: 0,
-      }}
-    />
-  </>
-);
-
 const SafeArea: React.FC<{
   children: React.ReactNode;
   style?: React.CSSProperties;
-}> = ({ children, style }) => (
+  compact?: boolean;
+}> = ({ children, style, compact }) => (
   <div
     style={{
       position: 'absolute',
-      top: 160,
-      bottom: 160,
+      top: compact ? 60 : 160,
+      bottom: compact ? 60 : 160,
       left: 80,
       right: 80,
       display: 'flex',
@@ -112,7 +86,7 @@ const MicroHeader: React.FC<{
     <span
       style={{
         fontFamily: theme.fontSans,
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 600,
         letterSpacing: '0.18em',
         textTransform: 'uppercase',
@@ -132,7 +106,7 @@ const MicroFooter: React.FC<{
   <div
     style={{
       position: 'absolute',
-      bottom: 70,
+      bottom: 60,
       left: 80,
       right: 80,
       display: 'flex',
@@ -144,7 +118,7 @@ const MicroFooter: React.FC<{
     <span
       style={{
         fontFamily: theme.fontSans,
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 500,
         letterSpacing: '0.05em',
         textTransform: 'uppercase',
@@ -156,7 +130,7 @@ const MicroFooter: React.FC<{
     <span
       style={{
         fontFamily: theme.fontSans,
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 500,
         letterSpacing: '0.05em',
         textTransform: 'uppercase',
@@ -176,15 +150,11 @@ const CoverLayout: React.FC<{
 }> = ({ data, theme }) => {
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
-    <SafeArea style={{ justifyContent: 'center' }}>
+    <SafeArea compact style={{ justifyContent: 'center' }}>
       <h1
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          textTransform: headlineStyle.textTransform as React.CSSProperties['textTransform'],
-          lineHeight: 0.9,
           letterSpacing: '-0.02em',
           margin: 0,
           color: theme.text,
@@ -322,11 +292,8 @@ const DichotomyLayout: React.FC<{
     <SafeArea style={{ justifyContent: 'space-between' }}>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: 0,
           color: theme.text,
@@ -399,11 +366,8 @@ const TimelineLayout: React.FC<{
     <SafeArea>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -542,11 +506,8 @@ const SequenceLayout: React.FC<{
     <SafeArea>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -629,11 +590,8 @@ const TelemetryLayout: React.FC<{
     <SafeArea style={{ justifyContent: 'space-between' }}>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: 0,
           color: theme.text,
@@ -693,11 +651,8 @@ const TableLayout: React.FC<{
     <SafeArea>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -781,11 +736,8 @@ const ImageSplitLayout: React.FC<{
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <h2
             style={{
+              ...headlineStyle, ...getOverflowStyles(),
               fontFamily: theme.fontSerif,
-              fontSize: headlineStyle.fontSize,
-              fontWeight: headlineStyle.fontWeight,
-              fontStyle: headlineStyle.fontStyle,
-              lineHeight: 0.95,
               letterSpacing: '-0.02em',
               margin: '0 0 24px 0',
               color: theme.text,
@@ -797,7 +749,7 @@ const ImageSplitLayout: React.FC<{
             style={{
               fontFamily: theme.fontSans,
               ...getBodyStyle(data.bodyText),
-              lineHeight: 1.5,
+              ...getOverflowStyles({ maxLines: 6 }),
               margin: 0,
               color: hexToRgba(theme.text, 0.75),
             }}
@@ -822,7 +774,7 @@ const ImageSplitLayout: React.FC<{
             <img
               src={data.imageUrl}
               alt={data.imageKeywords ?? ''}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={getImageSplitStyles('dark').image}
             />
           ) : (
             <span
@@ -861,7 +813,7 @@ const ImageCoverLayout: React.FC<{
           <img
             src={data.imageUrl}
             alt={data.imageKeywords ?? ''}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: getImageCoverStyles('dark').image.filter }}
           />
         ) : (
           <div
@@ -890,11 +842,8 @@ const ImageCoverLayout: React.FC<{
       <SafeArea style={{ justifyContent: 'flex-end' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: theme.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 0.95,
             letterSpacing: '-0.02em',
             margin: '0 0 16px 0',
             color: theme.text,
@@ -925,14 +874,11 @@ const CtaLayout: React.FC<{
 }> = ({ data, theme }) => {
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
-    <SafeArea style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+    <SafeArea compact style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
       <h2
         style={{
+          ...headlineStyle, ...getOverflowStyles(),
           fontFamily: theme.fontSerif,
-          fontSize: headlineStyle.fontSize,
-          fontWeight: headlineStyle.fontWeight,
-          fontStyle: headlineStyle.fontStyle,
-          lineHeight: 0.95,
           letterSpacing: '-0.02em',
           margin: '0 0 24px 0',
           color: theme.text,
@@ -1037,7 +983,6 @@ function CustomBrandTemplate({ slides, brandKit }: CustomBrandProps) {
               pageBreakAfter: 'always',
             }}
           >
-            <Crosshairs theme={theme} />
             <RegMarks theme={theme} />
             <MicroHeader tag={slide.tag} theme={theme} />
             <Layout data={slide} theme={theme} />
@@ -1075,7 +1020,6 @@ export function CustomBrandSingle({
         fontFamily: theme.fontSans,
       }}
     >
-      <Crosshairs theme={theme} />
       <RegMarks theme={theme} />
       <MicroHeader tag={slide.tag} theme={theme} />
       <Layout data={slide} theme={theme} />

@@ -3,6 +3,9 @@ import {
   getHeadlineStyle,
   getBodyStyle,
   getThemeColors,
+  getImageCoverStyles,
+  getImageSplitStyles,
+  getOverflowStyles,
 } from './engine.js';
 
 const T = getThemeColors();
@@ -30,42 +33,13 @@ function RegMarks() {
   );
 }
 
-function Crosshairs() {
-  return (
-    <>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: '50%',
-          height: '1px',
-          background: T.gridBorder,
-          zIndex: 1,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: '50%',
-          width: '1px',
-          background: T.gridBorder,
-          zIndex: 1,
-        }}
-      />
-    </>
-  );
-}
-
-function SafeArea({ children }: { children: React.ReactNode }) {
+function SafeArea({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
   return (
     <div
       style={{
         position: 'absolute',
-        top: 140,
-        bottom: 140,
+        top: compact ? 100 : 160,
+        bottom: compact ? 100 : 140,
         left: 80,
         right: 80,
         display: 'flex',
@@ -104,7 +78,7 @@ function MicroHeader({ tag }: { tag: string }) {
         <span
           style={{
             fontFamily: T.fontSans,
-            fontSize: 13,
+            fontSize: 20,
             fontWeight: 600,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
@@ -123,7 +97,7 @@ function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRi
     <div
       style={{
         position: 'absolute',
-        bottom: 70,
+        bottom: 60,
         left: 80,
         right: 80,
         display: 'flex',
@@ -135,7 +109,7 @@ function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRi
       <span
         style={{
           fontFamily: T.fontSans,
-          fontSize: 12,
+          fontSize: 20,
           fontWeight: 600,
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
@@ -147,7 +121,7 @@ function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRi
       <span
         style={{
           fontFamily: T.fontSans,
-          fontSize: 12,
+          fontSize: 20,
           fontWeight: 600,
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
@@ -165,16 +139,12 @@ function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRi
 function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> }) {
   const headlineStyle = getHeadlineStyle(slide.headline);
   return (
-    <SafeArea>
+    <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h1
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            textTransform: headlineStyle.textTransform as React.CSSProperties['textTransform'],
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             color: T.text,
@@ -220,7 +190,7 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
 
 function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definition' }> }) {
   return (
-    <SafeArea>
+    <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ marginBottom: 48 }}>
           <h2
@@ -229,7 +199,8 @@ function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definit
               fontSize: 90,
               fontWeight: 300,
               fontStyle: 'italic',
-              lineHeight: 1.0,
+              ...getOverflowStyles(),
+              lineHeight: 1.1,
               letterSpacing: '-0.02em',
               margin: 0,
               color: T.text,
@@ -293,11 +264,8 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: 64,
@@ -377,11 +345,8 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: 48,
@@ -530,11 +495,8 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: 48,
@@ -610,11 +572,8 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: 56,
@@ -672,11 +631,8 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: 40,
@@ -753,17 +709,15 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
   const imgUrl = slide.imageUrl || (slide.imageKeywords
     ? `https://source.unsplash.com/800x1000/?${encodeURIComponent(slide.imageKeywords)}`
     : undefined);
+  const { image: imgStyles } = getImageSplitStyles('dark');
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 48 }}>
         <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2
             style={{
+              ...headlineStyle, ...getOverflowStyles(),
               fontFamily: T.fontSerif,
-              fontSize: headlineStyle.fontSize,
-              fontWeight: headlineStyle.fontWeight,
-              fontStyle: headlineStyle.fontStyle,
-              lineHeight: 1.0,
               letterSpacing: '-0.02em',
               margin: 0,
               marginBottom: 24,
@@ -774,10 +728,9 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
           </h2>
           <p
             style={{
+              ...bodyStyle,
               fontFamily: T.fontSans,
-              fontSize: bodyStyle.fontSize,
-              fontWeight: bodyStyle.fontWeight,
-              lineHeight: 1.5,
+              ...getOverflowStyles({ maxLines: 6 }),
               color: 'rgba(244,244,240,0.6)',
               margin: 0,
               maxWidth: 500,
@@ -798,12 +751,7 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
             <img
               src={imgUrl}
               alt=""
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'grayscale(30%) contrast(1.1)',
-              }}
+              style={imgStyles}
             />
           </div>
         )}
@@ -817,45 +765,21 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
   const imgUrl = slide.imageUrl || (slide.imageKeywords
     ? `https://source.unsplash.com/1080x1350/?${encodeURIComponent(slide.imageKeywords)}`
     : undefined);
+  const coverStyles = getImageCoverStyles('dark');
   return (
     <>
       {imgUrl && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0,
-          }}
-        >
-          <img
-            src={imgUrl}
-            alt=""
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              filter: 'grayscale(40%) contrast(1.1) brightness(0.6)',
-            }}
-          />
+        <div style={coverStyles.imageContainer}>
+          <img src={imgUrl} alt="" style={coverStyles.image} />
         </div>
       )}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to top, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.2) 100%)',
-          zIndex: 2,
-        }}
-      />
+      <div style={coverStyles.overlay} />
       <SafeArea>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           <h2
             style={{
+              ...headlineStyle, ...getOverflowStyles(),
               fontFamily: T.fontSerif,
-              fontSize: headlineStyle.fontSize,
-              fontWeight: headlineStyle.fontWeight,
-              fontStyle: headlineStyle.fontStyle,
-              lineHeight: 1.0,
               letterSpacing: '-0.02em',
               margin: 0,
               marginBottom: 20,
@@ -871,6 +795,7 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
                 fontSize: 20,
                 fontWeight: 300,
                 lineHeight: 1.5,
+                ...getOverflowStyles({ maxLines: 4 }),
                 color: 'rgba(244,244,240,0.6)',
                 margin: 0,
                 maxWidth: 650,
@@ -888,15 +813,12 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
 function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
   const headlineStyle = getHeadlineStyle(slide.headline);
   return (
-    <SafeArea>
+    <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
         <h2
           style={{
+            ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
-            fontSize: headlineStyle.fontSize,
-            fontWeight: headlineStyle.fontWeight,
-            fontStyle: headlineStyle.fontStyle,
-            lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: 0,
             marginBottom: slide.subtext ? 24 : 48,
@@ -998,7 +920,6 @@ export function VoidEditorialComponent({
         fontFamily: T.fontSans,
       }}
     >
-      <Crosshairs />
       <RegMarks />
       <MicroHeader tag={slide.tag} />
       <Layout slide={slide} />

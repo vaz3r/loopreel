@@ -1,13 +1,27 @@
+import {
+  getHeadlineFontSize as _getHeadlineFontSize,
+  getBodyFontSize as _getBodyFontSize,
+  getHeadlineLineHeight,
+  getOverflowStyles,
+  getImageFilter,
+  getImageCoverStyles,
+  getImageSplitStyles,
+  CANVAS,
+  getContentArea,
+} from '../engine/index.js';
+
 interface HeadlineStyle {
-  fontSize: string;
-  fontWeight: string;
+  fontSize: number;
+  fontWeight: number;
   fontStyle: string;
   textTransform: string;
+  lineHeight: number;
 }
 
 interface BodyStyle {
-  fontSize: string;
-  fontWeight: string;
+  fontSize: number;
+  fontWeight: number;
+  lineHeight?: number;
 }
 
 interface ThemeColors {
@@ -31,53 +45,22 @@ export interface BrandKit {
 }
 
 export function getHeadlineStyle(text: string): HeadlineStyle {
-  const len = text.length;
-  if (len < 18) {
-    return {
-      fontSize: '130px',
-      fontWeight: '300',
-      fontStyle: 'italic',
-      textTransform: 'none',
-    };
-  }
-  if (len <= 34) {
-    return {
-      fontSize: '95px',
-      fontWeight: '300',
-      fontStyle: 'italic',
-      textTransform: 'none',
-    };
-  }
-  if (len <= 64) {
-    return {
-      fontSize: '72px',
-      fontWeight: '300',
-      fontStyle: 'italic',
-      textTransform: 'none',
-    };
-  }
+  const fontSize = _getHeadlineFontSize(text, {
+    fontWeight: 300,
+    fontStyle: 'italic',
+  });
   return {
-    fontSize: '54px',
-    fontWeight: '300',
+    fontSize,
+    fontWeight: 300,
     fontStyle: 'italic',
     textTransform: 'none',
+    lineHeight: getHeadlineLineHeight(fontSize),
   };
 }
 
-export function getBodyStyle(
-  text: string,
-): BodyStyle {
-  const len = text.length;
-  if (len < 120) {
-    return { fontSize: '38px', fontWeight: '300' };
-  }
-  if (len < 250) {
-    return { fontSize: '30px', fontWeight: '300' };
-  }
-  if (len < 400) {
-    return { fontSize: '24px', fontWeight: '400' };
-  }
-  return { fontSize: '20px', fontWeight: '400' };
+export function getBodyStyle(text: string): BodyStyle {
+  const { fontSize, lineHeight } = _getBodyFontSize(text);
+  return { fontSize, fontWeight: 300, lineHeight };
 }
 
 export function getThemeColors(brandKit?: BrandKit): ThemeColors {
@@ -118,3 +101,5 @@ function hexToRgba(hex: string, alpha: number): string {
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+export { CANVAS, getContentArea, getHeadlineLineHeight, getOverflowStyles, getImageFilter, getImageCoverStyles, getImageSplitStyles };
