@@ -7,132 +7,14 @@ import {
   getImageSplitStyles,
   getOverflowStyles,
 } from './engine.js';
+import {
+  RegMarks,
+  MicroHeader,
+  MicroFooter,
+  SafeArea,
+} from '../engine/components.js';
 
 const T = getThemeColors();
-
-/* ─── Structural Components ─── */
-
-function RegMarks() {
-  const size = 30;
-  const border = `2px solid ${T.border}`;
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 60,
-        pointerEvents: 'none',
-        zIndex: 10,
-        opacity: 0.15,
-      }}
-    >
-      <div style={{ position: 'absolute', width: size, height: size, top: 0, left: 0, borderTop: border, borderLeft: border }} />
-      <div style={{ position: 'absolute', width: size, height: size, top: 0, right: 0, borderTop: border, borderRight: border }} />
-      <div style={{ position: 'absolute', width: size, height: size, bottom: 0, left: 0, borderBottom: border, borderLeft: border }} />
-      <div style={{ position: 'absolute', width: size, height: size, bottom: 0, right: 0, borderBottom: border, borderRight: border }} />
-    </div>
-  );
-}
-
-function SafeArea({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: compact ? 100 : 160,
-        bottom: compact ? 100 : 140,
-        left: 80,
-        right: 80,
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 5,
-        overflow: 'hidden',
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function MicroHeader({ tag }: { tag: string }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 70,
-        left: 80,
-        right: 80,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        zIndex: 10,
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div
-          style={{
-            width: 28,
-            height: 2,
-            background: T.accent,
-          }}
-        />
-        <span
-          style={{
-            fontFamily: T.fontSans,
-            fontSize: 20,
-            fontWeight: 600,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'rgba(244,244,240,0.5)',
-          }}
-        >
-          {tag}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRight: string }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        bottom: 60,
-        left: 80,
-        right: 80,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        zIndex: 10,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: T.fontSans,
-          fontSize: 20,
-          fontWeight: 600,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'rgba(244,244,240,0.35)',
-        }}
-      >
-        {footerLeft}
-      </span>
-      <span
-        style={{
-          fontFamily: T.fontSans,
-          fontSize: 20,
-          fontWeight: 600,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: 'rgba(244,244,240,0.35)',
-        }}
-      >
-        {footerRight}
-      </span>
-    </div>
-  );
-}
 
 /* ─── Slide Layouts ─── */
 
@@ -920,10 +802,22 @@ export function VoidEditorialComponent({
         fontFamily: T.fontSans,
       }}
     >
-      <RegMarks />
-      <MicroHeader tag={slide.tag} />
+      <RegMarks color={T.border} opacity={0.15} />
+      <MicroHeader
+        tag={slide.tag}
+        color="rgba(244,244,240,0.5)"
+        accentColor={T.accent}
+        fontFamily={T.fontSans}
+      />
       <Layout slide={slide} />
-      <MicroFooter footerLeft={slide.footerLeft} footerRight={slide.footerRight} />
+      <MicroFooter
+        footerLeft={slide.footerLeft}
+        footerRight={slide.footerRight}
+        color="rgba(244,244,240,0.35)"
+        fontFamily={T.fontSans}
+        fontWeight={600}
+        letterSpacing="0.12em"
+      />
     </div>
   );
 }

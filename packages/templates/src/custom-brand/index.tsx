@@ -1,6 +1,11 @@
-import React from 'react';
 import type { Slide } from './schema.js';
 import { getHeadlineStyle, getBodyStyle, getThemeColors, getOverflowStyles, getImageCoverStyles, getImageSplitStyles, type BrandKit } from './engine.js';
+import {
+  RegMarks as EngineRegMarks,
+  MicroHeader as EngineMicroHeader,
+  MicroFooter as EngineMicroFooter,
+  SafeArea as EngineSafeArea,
+} from '../engine/components.js';
 
 interface CustomBrandProps {
   slides: Slide[];
@@ -15,87 +20,40 @@ function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-/* ─── Structural Components ─── */
+/* ─── Theme-aware wrapper components ─── */
 
-const RegMarks: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ theme }) => {
-  const markStyle = (pos: React.CSSProperties): React.CSSProperties => ({
-    position: 'absolute',
-    width: 30,
-    height: 30,
-    ...pos,
-  });
-  const border = `2px solid ${theme.border}`;
-
-  return (
-    <div style={{ position: 'absolute', inset: 60, pointerEvents: 'none', zIndex: 10 }}>
-      <div style={markStyle({ top: 0, left: 0, borderTop: border, borderLeft: border })} />
-      <div style={markStyle({ top: 0, right: 0, borderTop: border, borderRight: border })} />
-      <div style={markStyle({ bottom: 0, left: 0, borderBottom: border, borderLeft: border })} />
-      <div style={markStyle({ bottom: 0, right: 0, borderBottom: border, borderRight: border })} />
-    </div>
-  );
-};
+const RegMarks: React.FC<{ theme: ReturnType<typeof getThemeColors> }> = ({ theme }) => (
+  <EngineRegMarks color={theme.border} />
+);
 
 const SafeArea: React.FC<{
   children: React.ReactNode;
   style?: React.CSSProperties;
   compact?: boolean;
 }> = ({ children, style, compact }) => (
-  <div
-    style={{
-      position: 'absolute',
-      top: compact ? 60 : 160,
-      bottom: compact ? 60 : 160,
-      left: 80,
-      right: 80,
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 10,
-      overflow: 'hidden',
-      ...style,
-    }}
+  <EngineSafeArea
+    compact={compact}
+    top={compact ? 60 : undefined}
+    bottom={compact ? 60 : 160}
+    zIndex={10}
+    style={style}
   >
     {children}
-  </div>
+  </EngineSafeArea>
 );
 
 const MicroHeader: React.FC<{
   tag: string;
   theme: ReturnType<typeof getThemeColors>;
 }> = ({ tag, theme }) => (
-  <div
-    style={{
-      position: 'absolute',
-      top: 70,
-      left: 80,
-      right: 80,
-      display: 'flex',
-      alignItems: 'center',
-      gap: 14,
-      zIndex: 10,
-    }}
-  >
-    <div
-      style={{
-        width: 32,
-        height: 2,
-        background: theme.accent,
-        borderRadius: 1,
-      }}
-    />
-    <span
-      style={{
-        fontFamily: theme.fontSans,
-        fontSize: 22,
-        fontWeight: 600,
-        letterSpacing: '0.18em',
-        textTransform: 'uppercase',
-        color: hexToRgba(theme.text, 0.5),
-      }}
-    >
-      {tag}
-    </span>
-  </div>
+  <EngineMicroHeader
+    tag={tag}
+    color={hexToRgba(theme.text, 0.5)}
+    accentColor={theme.accent}
+    fontFamily={theme.fontSans}
+    fontSize={22}
+    gap={14}
+  />
 );
 
 const MicroFooter: React.FC<{
@@ -103,43 +61,15 @@ const MicroFooter: React.FC<{
   footerRight: string;
   theme: ReturnType<typeof getThemeColors>;
 }> = ({ footerLeft, footerRight, theme }) => (
-  <div
-    style={{
-      position: 'absolute',
-      bottom: 60,
-      left: 80,
-      right: 80,
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      zIndex: 10,
-    }}
-  >
-    <span
-      style={{
-        fontFamily: theme.fontSans,
-        fontSize: 20,
-        fontWeight: 500,
-        letterSpacing: '0.05em',
-        textTransform: 'uppercase',
-        color: hexToRgba(theme.text, 0.4),
-      }}
-    >
-      {footerLeft}
-    </span>
-    <span
-      style={{
-        fontFamily: theme.fontSans,
-        fontSize: 20,
-        fontWeight: 500,
-        letterSpacing: '0.05em',
-        textTransform: 'uppercase',
-        color: hexToRgba(theme.text, 0.4),
-      }}
-    >
-      {footerRight}
-    </span>
-  </div>
+  <EngineMicroFooter
+    footerLeft={footerLeft}
+    footerRight={footerRight}
+    color={hexToRgba(theme.text, 0.4)}
+    fontFamily={theme.fontSans}
+    fontSize={20}
+    fontWeight={500}
+    letterSpacing="0.05em"
+  />
 );
 
 /* ─── Slide Layouts (11 types) ─── */

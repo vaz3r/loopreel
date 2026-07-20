@@ -1,4 +1,3 @@
-import React from "react";
 import type { Slide } from "./schema.js";
 import {
   getHeadlineStyle,
@@ -8,83 +7,18 @@ import {
   getImageCoverStyles,
   getImageSplitStyles,
 } from "./engine.js";
+import {
+  RegMarks,
+  MicroFooter,
+  SafeArea,
+} from "../engine/components.js";
 
 const theme = getThemeColors();
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
 
-// ─── RegMarks ────────────────────────────────────────────────
-
-function RegMarks() {
-  const mark = (
-    <div
-      style={{
-        position: "absolute",
-        width: 30,
-        height: 30,
-        border: `2px solid rgba(17,17,17,0.20)`,
-      }}
-    />
-  );
-  return (
-    <>
-      <div style={{ position: "absolute", top: 20, left: 20 }}>{mark}</div>
-      <div
-        style={{
-          position: "absolute",
-          top: 20,
-          right: 20,
-          transform: "scaleX(-1)",
-        }}
-      >
-        {mark}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: 20,
-          left: 20,
-          transform: "scaleY(-1)",
-        }}
-      >
-        {mark}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-          transform: "scale(-1,-1)",
-        }}
-      >
-        {mark}
-      </div>
-    </>
-  );
-}
-
-// ─── SafeArea ────────────────────────────────────────────────
-
-function SafeArea({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: compact ? 60 : 80,
-        left: 80,
-        right: 80,
-        bottom: compact ? 60 : 80,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-// ─── MicroHeader ─────────────────────────────────────────────
+// ─── Custom MicroHeader (flow element inside SafeArea) ──────
 
 function MicroHeader({ tag }: { tag: string }) {
   return (
@@ -105,36 +39,6 @@ function MicroHeader({ tag }: { tag: string }) {
   );
 }
 
-// ─── MicroFooter ─────────────────────────────────────────────
-
-function MicroFooter({
-  footerLeft,
-  footerRight,
-}: {
-  footerLeft: string;
-  footerRight: string;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        bottom: 50,
-        left: 80,
-        right: 80,
-        display: "flex",
-        justifyContent: "space-between",
-        fontFamily: theme.fontSans,
-        fontSize: 20,
-        color: theme.text,
-        opacity: 0.5,
-      }}
-    >
-      <span>{footerLeft}</span>
-      <span>{footerRight}</span>
-    </div>
-  );
-}
-
 // ─── Slide Layouts ───────────────────────────────────────────
 
 function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
@@ -150,7 +54,7 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
@@ -201,6 +105,10 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -222,7 +130,7 @@ function DefinitionSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -298,6 +206,10 @@ function DefinitionSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -319,7 +231,7 @@ function DichotomySlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -406,6 +318,10 @@ function DichotomySlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -427,7 +343,7 @@ function TimelineSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -526,6 +442,10 @@ function TimelineSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -547,7 +467,7 @@ function QuoteSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -614,6 +534,10 @@ function QuoteSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -635,7 +559,7 @@ function SequenceSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -708,6 +632,10 @@ function SequenceSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -730,7 +658,7 @@ function TelemetrySlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -795,6 +723,10 @@ function TelemetrySlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -816,7 +748,7 @@ function TableSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -894,6 +826,10 @@ function TableSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -918,7 +854,7 @@ function ImageSplitSlide({
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -980,6 +916,10 @@ function ImageSplitSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -1019,7 +959,7 @@ function ImageCoverSlide({
             : "rgba(17,17,17,0.04)",
         }}
       />
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
@@ -1060,6 +1000,10 @@ function ImageCoverSlide({
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );
@@ -1077,7 +1021,7 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
         color: theme.text,
       }}
     >
-      <RegMarks />
+      <RegMarks variant="full" color="rgba(17,17,17,0.20)" />
       <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
@@ -1147,6 +1091,10 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
       <MicroFooter
         footerLeft={slide.footerLeft}
         footerRight={slide.footerRight}
+        bottom={80}
+        color={theme.text}
+        fontFamily={theme.fontSans}
+        opacity={0.5}
       />
     </div>
   );

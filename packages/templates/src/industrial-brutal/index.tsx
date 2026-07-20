@@ -1,6 +1,11 @@
 import React from 'react';
 import type { Slide } from './schema.js';
 import { getHeadlineStyle, getBodyStyle, getThemeColors, getOverflowStyles, getImageCoverStyles, getImageSplitStyles } from './engine.js';
+import {
+  RegMarks,
+  MicroFooter,
+  SafeArea,
+} from '../engine/components.js';
 
 const T = getThemeColors();
 const SANS = T.fontSans;
@@ -11,40 +16,7 @@ interface IndustrialBrutalProps {
   platform?: string;
 }
 
-/* ─── Structural Elements ─── */
-
-function RegMarks() {
-  const b = `2px solid rgba(224,224,224,0.25)`;
-  return (
-    <div style={{ position: 'absolute', inset: 60, pointerEvents: 'none', zIndex: 10 }}>
-      <div style={{ position: 'absolute', width: 24, height: 24, top: 0, left: 0, borderTop: b, borderLeft: b }} />
-      <div style={{ position: 'absolute', width: 24, height: 24, top: 0, right: 0, borderTop: b, borderRight: b }} />
-      <div style={{ position: 'absolute', width: 24, height: 24, bottom: 0, left: 0, borderBottom: b, borderLeft: b }} />
-      <div style={{ position: 'absolute', width: 24, height: 24, bottom: 0, right: 0, borderBottom: b, borderRight: b }} />
-    </div>
-  );
-}
-
-function SafeArea({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 160,
-        bottom: 140,
-        left: 80,
-        right: 80,
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 3,
-        overflow: 'hidden',
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+/* ─── Custom MicroHeader (4px bar design) ─── */
 
 function MicroHeader({ tag }: { tag: string }) {
   return (
@@ -78,37 +50,13 @@ function MicroHeader({ tag }: { tag: string }) {
   );
 }
 
-function MicroFooter({ footerLeft, footerRight }: { footerLeft: string; footerRight: string }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        bottom: 50,
-        left: 80,
-        right: 80,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        zIndex: 5,
-      }}
-    >
-      <span style={{ fontFamily: MONO, fontSize: 22, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
-        {footerLeft}
-      </span>
-      <span style={{ fontFamily: MONO, fontSize: 22, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(224,224,224,0.4)' }}>
-        {footerRight}
-      </span>
-    </div>
-  );
-}
-
 /* ─── Slide Layouts ─── */
 
 function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   const bs = getBodyStyle(slide.subheadline, true);
   return (
-    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }}>
       <h1
         style={{
           ...hs, ...getOverflowStyles(),
@@ -157,7 +105,7 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
 
 function DefinitionLayout({ slide }: { slide: Extract<Slide, { type: 'definition' }> }) {
   return (
-    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }}>
       <div
         style={{
           fontFamily: MONO,
@@ -337,7 +285,7 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
 
 function QuoteLayout({ slide }: { slide: Extract<Slide, { type: 'quote' }> }) {
   return (
-    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
       <div style={{ width: 4, height: 80, background: T.accent, marginBottom: 50 }} />
       <blockquote
         style={{
@@ -651,7 +599,7 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
         )}
       </div>
       <div style={coverStyles.overlay} />
-      <SafeArea style={{ zIndex: 5, justifyContent: 'flex-end' }}>
+      <SafeArea zIndex={5} style={{ justifyContent: 'flex-end' }}>
         <h2
           style={{
             ...hs, ...getOverflowStyles(),
@@ -686,7 +634,7 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
 function CtaLayout({ slide }: { slide: Extract<Slide, { type: 'cta' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   return (
-    <SafeArea style={{ top: 100, bottom: 100, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
       <h2
         style={{
           ...hs, ...getOverflowStyles(),
@@ -789,10 +737,20 @@ function IndustrialBrutalTemplate({ slides }: IndustrialBrutalProps) {
     >
       {slides.map((slide, i) => (
         <div key={i} style={{ position: 'relative', width: 1080, height: 1350, overflow: 'hidden' }}>
-          <RegMarks />
+          <RegMarks color="rgba(224,224,224,0.25)" size={24} />
           <MicroHeader tag={slide.tag} />
           <IndustrialBrutalSlide slide={slide} />
-          <MicroFooter footerLeft={slide.footerLeft} footerRight={slide.footerRight} />
+          <MicroFooter
+            footerLeft={slide.footerLeft}
+            footerRight={slide.footerRight}
+            bottom={80}
+            color="rgba(224,224,224,0.4)"
+            fontFamily={MONO}
+            fontSize={22}
+            fontWeight={500}
+            letterSpacing="0.1em"
+            zIndex={5}
+          />
         </div>
       ))}
     </div>
@@ -815,10 +773,20 @@ export function IndustrialBrutalSingle({ slide }: { slide: Slide }) {
         fontFamily: SANS,
       }}
     >
-      <RegMarks />
+      <RegMarks color="rgba(224,224,224,0.25)" size={24} />
       <MicroHeader tag={slide.tag} />
       <IndustrialBrutalSlide slide={slide} />
-      <MicroFooter footerLeft={slide.footerLeft} footerRight={slide.footerRight} />
+      <MicroFooter
+        footerLeft={slide.footerLeft}
+        footerRight={slide.footerRight}
+        bottom={50}
+        color="rgba(224,224,224,0.4)"
+        fontFamily={MONO}
+        fontSize={22}
+        fontWeight={500}
+        letterSpacing="0.1em"
+        zIndex={5}
+      />
     </div>
   );
 }

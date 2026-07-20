@@ -7,15 +7,58 @@ export interface SafeAreaConfig {
   right: number;
 }
 
-export const SAFE_AREAS: Record<string, SafeAreaConfig> = {
-  default: { top: 160, bottom: 140, left: 80, right: 80 },
-  compact: { top: 120, bottom: 100, left: 60, right: 60 },
+export interface RegMarksConfig {
+  inset: number;
+  bracketSize: number;
+}
+
+export interface ZoneConfig {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+  height?: number;
+  width?: number;
+}
+
+export const REGMARKS: RegMarksConfig = {
+  inset: 20,
+  bracketSize: 30,
 };
 
-export const HEADER_ZONE = { top: 0, height: 120 } as const;
-export const FOOTER_ZONE = { bottom: 0, height: 100 } as const;
+// Regmark zone extends from inset to inset + bracketSize
+// Content must stay INSIDE this zone with clearance
+const REGMARK_BOTTOM = REGMARKS.inset + REGMARKS.bracketSize; // 50
+const CLEARANCE = 30; // min px between regmark and content
 
-const DEFAULT_SAFE_AREA: SafeAreaConfig = { top: 160, bottom: 140, left: 80, right: 80 };
+export const SAFE_AREAS = {
+  default: {
+    top: REGMARK_BOTTOM + CLEARANCE + 30,  // 110
+    bottom: REGMARK_BOTTOM + CLEARANCE + 30, // 110
+    left: 80,
+    right: 80,
+  } as SafeAreaConfig,
+  compact: {
+    top: REGMARK_BOTTOM + CLEARANCE,  // 80
+    bottom: REGMARK_BOTTOM + CLEARANCE, // 80
+    left: 80,
+    right: 80,
+  } as SafeAreaConfig,
+};
+
+// Header sits between regmark zone and content zone
+export const HEADER_ZONE: ZoneConfig = {
+  top: REGMARK_BOTTOM + CLEARANCE, // 80
+  height: 40,
+};
+
+// Footer sits between content zone and regmark zone
+export const FOOTER_ZONE: ZoneConfig = {
+  bottom: REGMARK_BOTTOM + CLEARANCE, // 80
+  height: 40,
+};
+
+const DEFAULT_SAFE_AREA: SafeAreaConfig = SAFE_AREAS.default;
 
 export function getContentArea(safeArea?: Partial<SafeAreaConfig>) {
   const sa = { ...DEFAULT_SAFE_AREA, ...safeArea };
@@ -44,12 +87,13 @@ export function getSafeAreaStyle(safeArea?: Partial<SafeAreaConfig>): React.CSSP
 }
 
 export function getCompactSafeAreaStyle(): React.CSSProperties {
+  const sa = SAFE_AREAS.compact as SafeAreaConfig;
   return {
     position: 'absolute',
-    top: 100,
-    bottom: 100,
-    left: 80,
-    right: 80,
+    top: sa.top,
+    bottom: sa.bottom,
+    left: sa.left,
+    right: sa.right,
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
@@ -63,7 +107,7 @@ export function getMicroHeaderStyle(opts?: {
 }): React.CSSProperties {
   return {
     position: 'absolute',
-    top: opts?.top ?? 70,
+    top: opts?.top ?? HEADER_ZONE.top!,
     left: opts?.left ?? 80,
     right: opts?.right ?? 80,
     display: 'flex',
@@ -80,7 +124,7 @@ export function getMicroFooterStyle(opts?: {
 }): React.CSSProperties {
   return {
     position: 'absolute',
-    bottom: opts?.bottom ?? 60,
+    bottom: opts?.bottom ?? FOOTER_ZONE.bottom!,
     left: opts?.left ?? 80,
     right: opts?.right ?? 80,
     display: 'flex',
