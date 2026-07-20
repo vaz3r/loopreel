@@ -1,10 +1,21 @@
 import React from 'react';
 import type { FastifyPluginAsync } from 'fastify';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { writeFileSync, mkdirSync, readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { JobRepository } from '@loopreel/db';
 import { TEMPLATES } from '@loopreel/templates';
+
+import { existsSync } from 'fs';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const _smartFitCandidates = [
+  join(__dirname, '../../../../packages/templates/src/engine/smart-fit.js'),
+  join(__dirname, '../../../packages/templates/src/engine/smart-fit.js'),
+];
+const _smartFitPath = _smartFitCandidates.find(p => existsSync(p)) ?? _smartFitCandidates[0];
+const SMART_FIT_SCRIPT = readFileSync(_smartFitPath, 'utf-8');
 
 export const renderRoute: FastifyPluginAsync = async (app) => {
   app.get('/internal/render/:jobId/:slideIndex', {
@@ -73,6 +84,7 @@ export const renderRoute: FastifyPluginAsync = async (app) => {
     <style>body { margin: 0; padding: 0; }</style>
   </head>
   <body>${html}</body>
+  <script>${SMART_FIT_SCRIPT}</script>
 </html>`;
 
     try {

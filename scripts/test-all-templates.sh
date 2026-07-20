@@ -72,11 +72,10 @@ for TEMPLATE in "${TEMPLATES[@]}"; do
     PNG_FILE="$OUTPUT_DIR/$TEMPLATE-slide-$((i + 1)).png"
     echo "$HTML" > "$HTML_FILE"
 
-    (cd "$RENDER_PKG" && npx playwright screenshot \
-      --viewport-size="1080,1350" \
-      --wait-for-timeout=3000 \
-      "file://$HTML_FILE" \
-      "$PNG_FILE" 2>/dev/null)
+    (cd "$ROOT_DIR" && node scripts/smart-screenshot.mjs \
+      "$HTML_FILE" \
+      "$PNG_FILE" \
+      "1080,1350" 2>/dev/null)
 
     if [[ -f "$PNG_FILE" ]]; then
       SIZE=$(stat -c%s "$PNG_FILE" 2>/dev/null || echo "?")

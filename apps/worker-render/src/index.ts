@@ -82,6 +82,9 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
         await page.setContent(html, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
 
+        // Wait for smart-fit script to complete auto-sizing
+        await page.waitForFunction(() => (window as any).__smartFitDone === true, { timeout: 5000 });
+
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
 

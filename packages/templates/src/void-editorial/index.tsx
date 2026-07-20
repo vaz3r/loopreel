@@ -24,6 +24,10 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
     <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h1
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -36,6 +40,10 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
         </h1>
         {slide.subheadline && (
           <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="32"
             style={{
               fontFamily: T.fontSans,
               fontSize: 22,
@@ -56,7 +64,7 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
               paddingTop: 24,
               borderTop: `1px solid ${T.border}`,
               fontFamily: T.fontMono,
-              fontSize: 13,
+              fontSize: 20,
               fontWeight: 400,
               color: 'rgba(244,244,240,0.35)',
               letterSpacing: '0.05em',
@@ -73,9 +81,13 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
 function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definition' }> }) {
   return (
     <SafeArea compact>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div data-smart-center="data-smart-center" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ marginBottom: 48 }}>
           <h2
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="40"
+            data-smart-fit-max="120"
             style={{
               fontFamily: T.fontSerif,
               fontSize: 90,
@@ -94,7 +106,7 @@ function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definit
             <span
               style={{
                 fontFamily: T.fontMono,
-                fontSize: 16,
+                fontSize: 20,
                 color: 'rgba(244,244,240,0.4)',
                 marginTop: 12,
                 display: 'block',
@@ -106,6 +118,10 @@ function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definit
         </div>
         <div style={{ width: 40, height: 2, background: T.accent, marginBottom: 32 }} />
         <p
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="box"
+          data-smart-fit-min="18"
+          data-smart-fit-max="36"
           style={{
             fontFamily: T.fontSans,
             fontSize: 28,
@@ -122,7 +138,7 @@ function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definit
           <p
             style={{
               fontFamily: T.fontSans,
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: 400,
               fontStyle: 'italic',
               lineHeight: 1.5,
@@ -145,6 +161,10 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -159,9 +179,13 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
         <div style={{ display: 'flex', gap: 48 }}>
           <div style={{ flex: 1 }}>
             <h3
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="width"
+              data-smart-fit-min="16"
+              data-smart-fit-max="32"
               style={{
                 fontFamily: T.fontSans,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
@@ -173,6 +197,10 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
               {slide.left.title}
             </h3>
             <p
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="box"
+              data-smart-fit-min="16"
+              data-smart-fit-max="28"
               style={{
                 fontFamily: T.fontSans,
                 fontSize: 22,
@@ -188,9 +216,13 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
           <div style={{ width: 1, background: T.border, alignSelf: 'stretch' }} />
           <div style={{ flex: 1 }}>
             <h3
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="width"
+              data-smart-fit-min="16"
+              data-smart-fit-max="32"
               style={{
                 fontFamily: T.fontSans,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
@@ -202,6 +234,10 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
               {slide.right.title}
             </h3>
             <p
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="box"
+              data-smart-fit-min="16"
+              data-smart-fit-max="28"
               style={{
                 fontFamily: T.fontSans,
                 fontSize: 22,
@@ -226,6 +262,10 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -237,10 +277,11 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
         >
           {slide.headline}
         </h2>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <div data-smart-timeline="data-smart-timeline" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
           {slide.events.map((event, i) => (
             <div
               key={i}
+              data-smart-timeline-item="data-smart-timeline-item"
               style={{
                 display: 'flex',
                 gap: 32,
@@ -253,7 +294,7 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
               <span
                 style={{
                   fontFamily: T.fontMono,
-                  fontSize: 14,
+                  fontSize: 20,
                   color: 'rgba(244,244,240,0.35)',
                   minWidth: 100,
                   paddingTop: 4,
@@ -275,9 +316,14 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
                   {event.title}
                 </h4>
                 <p
+                  data-smart-fit="data-smart-fit"
+                  data-smart-fit-mode="box"
+                  data-smart-fit-min="16"
+                  data-smart-fit-max="24"
+                  data-smart-fit-max-lines="3"
                   style={{
                     fontFamily: T.fontSans,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: 300,
                     lineHeight: 1.4,
                     color: 'rgba(244,244,240,0.5)',
@@ -299,7 +345,7 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
   const bodyStyle = getBodyStyle(slide.quote);
   return (
     <SafeArea>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+      <div data-smart-center="data-smart-center" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
         <div
           style={{
             fontFamily: T.fontSerif,
@@ -313,6 +359,11 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
           &ldquo;
         </div>
         <p
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="box"
+          data-smart-fit-min="20"
+          data-smart-fit-max="48"
+          data-smart-fit-max-lines="8"
           style={{
             fontFamily: T.fontSerif,
             fontSize: bodyStyle.fontSize,
@@ -341,7 +392,7 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
             <span
               style={{
                 fontFamily: T.fontSans,
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
@@ -354,7 +405,7 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
               <span
                 style={{
                   fontFamily: T.fontSans,
-                  fontSize: 13,
+                  fontSize: 20,
                   fontWeight: 400,
                   color: 'rgba(244,244,240,0.35)',
                 }}
@@ -376,6 +427,10 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -387,10 +442,11 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
         >
           {slide.headline}
         </h2>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <div data-smart-timeline="data-smart-timeline" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
           {slide.items.map((item, i) => (
             <div
               key={i}
+              data-smart-timeline-item="data-smart-timeline-item"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -427,9 +483,14 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
                   {item.title}
                 </h4>
                 <p
+                  data-smart-fit="data-smart-fit"
+                  data-smart-fit-mode="box"
+                  data-smart-fit-min="16"
+                  data-smart-fit-max="24"
+                  data-smart-fit-max-lines="3"
                   style={{
                     fontFamily: T.fontSans,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: 300,
                     lineHeight: 1.4,
                     color: 'rgba(244,244,240,0.5)',
@@ -453,6 +514,10 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -465,6 +530,9 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
           {slide.headline}
         </h2>
         <div
+          data-smart-grid="data-smart-grid"
+          data-smart-grid-cols={slide.stats.length <= 4 ? '2' : '3'}
+          data-smart-grid-gap="40"
           style={{
             display: 'grid',
             gridTemplateColumns: slide.stats.length <= 4 ? '1fr 1fr' : '1fr 1fr 1fr',
@@ -474,6 +542,9 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
           {slide.stats.map((stat, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
               <span
+                data-smart-stat="data-smart-stat"
+                data-smart-stat-min="32"
+                data-smart-stat-max="80"
                 style={{
                   fontFamily: T.fontSerif,
                   fontSize: 64,
@@ -489,7 +560,7 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
               <span
                 style={{
                   fontFamily: T.fontSans,
-                  fontSize: 14,
+                  fontSize: 20,
                   fontWeight: 600,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
@@ -512,6 +583,10 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -523,7 +598,7 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
         >
           {slide.headline}
         </h2>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div data-smart-table-container="data-smart-table-container" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
               display: 'grid',
@@ -539,7 +614,7 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
                 key={i}
                 style={{
                   fontFamily: T.fontSans,
-                  fontSize: 13,
+                  fontSize: 20,
                   fontWeight: 700,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
@@ -550,7 +625,7 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
               </span>
             ))}
           </div>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div data-smart-table="data-smart-table" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             {slide.rows.map((row, ri) => (
               <div
                 key={ri}
@@ -566,9 +641,13 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
                 {row.map((cell, ci) => (
                   <span
                     key={ci}
+                    data-smart-fit="data-smart-fit"
+                    data-smart-fit-mode="box"
+                    data-smart-fit-min="16"
+                    data-smart-fit-max="24"
                     style={{
                       fontFamily: T.fontSans,
-                      fontSize: 16,
+                      fontSize: 20,
                       fontWeight: 400,
                       color: 'rgba(244,244,240,0.7)',
                     }}
@@ -594,9 +673,13 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
   const { image: imgStyles } = getImageSplitStyles('dark');
   return (
     <SafeArea>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 48 }}>
-        <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div data-smart-image-split="data-smart-image-split" data-smart-image-split-direction="column" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 48 }}>
+        <div data-smart-image-split-text="data-smart-image-split-text" style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               ...headlineStyle, ...getOverflowStyles(),
               fontFamily: T.fontSerif,
@@ -609,6 +692,11 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
             {slide.headline}
           </h2>
           <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="32"
+            data-smart-fit-max-lines="6"
             style={{
               ...bodyStyle,
               fontFamily: T.fontSans,
@@ -623,6 +711,7 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
         </div>
         {imgUrl && (
           <div
+            data-smart-image-split-image="data-smart-image-split-image"
             style={{
               flex: '1 1 50%',
               borderRadius: 4,
@@ -659,6 +748,10 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
       <SafeArea>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
           <h2
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               ...headlineStyle, ...getOverflowStyles(),
               fontFamily: T.fontSerif,
@@ -672,6 +765,11 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
           </h2>
           {slide.subtext && (
             <p
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="box"
+              data-smart-fit-min="18"
+              data-smart-fit-max="28"
+              data-smart-fit-max-lines="4"
               style={{
                 fontFamily: T.fontSans,
                 fontSize: 20,
@@ -698,6 +796,10 @@ function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
     <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...headlineStyle, ...getOverflowStyles(),
             fontFamily: T.fontSerif,
@@ -712,13 +814,18 @@ function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
         </h2>
         {slide.subtext && (
           <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="28"
+            data-smart-fit-max-lines="3"
             style={{
-              fontFamily: T.fontSans,
-              fontSize: 20,
-              fontWeight: 300,
-              lineHeight: 1.5,
-              color: 'rgba(244,244,240,0.5)',
-              margin: 0,
+                    fontFamily: T.fontSans,
+                    fontSize: 20,
+                    fontWeight: 300,
+                    lineHeight: 1.4,
+                    color: 'rgba(244,244,240,0.5)',
+                    margin: 0,
               marginBottom: 48,
               maxWidth: 500,
             }}
@@ -735,7 +842,7 @@ function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
             border: `1.5px solid ${T.accent}`,
             borderRadius: 0,
             fontFamily: T.fontSans,
-            fontSize: 16,
+            fontSize: 22,
             fontWeight: 700,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
@@ -743,13 +850,13 @@ function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
           }}
         >
           {slide.actionLabel}
-          <span style={{ fontSize: 18, lineHeight: 1 }}>&rarr;</span>
+          <span style={{ fontSize: 20, lineHeight: 1 }}>&rarr;</span>
         </div>
         {slide.socialHandle && (
           <span
             style={{
               fontFamily: T.fontMono,
-              fontSize: 13,
+              fontSize: 20,
               color: 'rgba(244,244,240,0.3)',
               marginTop: 32,
             }}

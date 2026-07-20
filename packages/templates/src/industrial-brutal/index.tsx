@@ -56,8 +56,12 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   const bs = getBodyStyle(slide.subheadline, true);
   return (
-    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }} data-smart-center="data-smart-center">
       <h1
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -70,6 +74,11 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
       </h1>
       {slide.subheadline && (
         <p
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="box"
+          data-smart-fit-min="18"
+          data-smart-fit-max="36"
+          data-smart-fit-max-lines="8"
           style={{
             fontFamily: SANS,
             fontSize: bs.fontSize,
@@ -105,7 +114,7 @@ function CoverLayout({ slide }: { slide: Extract<Slide, { type: 'cover' }> }) {
 
 function DefinitionLayout({ slide }: { slide: Extract<Slide, { type: 'definition' }> }) {
   return (
-    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center' }} data-smart-center="data-smart-center">
       <div
         style={{
           fontFamily: MONO,
@@ -120,6 +129,10 @@ function DefinitionLayout({ slide }: { slide: Extract<Slide, { type: 'definition
         {slide.phonetic}
       </div>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           fontFamily: SANS,
           ...getHeadlineStyle(slide.term),
@@ -132,6 +145,11 @@ function DefinitionLayout({ slide }: { slide: Extract<Slide, { type: 'definition
       </h2>
       <div style={{ width: 60, height: 3, background: T.accent, marginBottom: 32 }} />
       <p
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="box"
+        data-smart-fit-min="18"
+        data-smart-fit-max="36"
+        data-smart-fit-max-lines="8"
         style={{
           fontFamily: SANS,
           ...getBodyStyle(slide.definition),
@@ -166,6 +184,10 @@ function DichotomyLayout({ slide }: { slide: Extract<Slide, { type: 'dichotomy' 
   return (
     <SafeArea>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -191,7 +213,14 @@ function DichotomyLayout({ slide }: { slide: Extract<Slide, { type: 'dichotomy' 
           >
             {slide.left.title}
           </h3>
-          <p style={{ fontFamily: SANS, ...getBodyStyle(slide.left.desc), lineHeight: 1.4, color: 'rgba(224,224,224,0.7)' }}>
+          <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
+            style={{ fontFamily: SANS, ...getBodyStyle(slide.left.desc), lineHeight: 1.4, color: 'rgba(224,224,224,0.7)' }}
+          >
             {slide.left.desc}
           </p>
         </div>
@@ -209,7 +238,14 @@ function DichotomyLayout({ slide }: { slide: Extract<Slide, { type: 'dichotomy' 
           >
             {slide.right.title}
           </h3>
-          <p style={{ fontFamily: SANS, ...getBodyStyle(slide.right.desc), lineHeight: 1.4, color: 'rgba(224,224,224,0.7)' }}>
+          <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
+            style={{ fontFamily: SANS, ...getBodyStyle(slide.right.desc), lineHeight: 1.4, color: 'rgba(224,224,224,0.7)' }}
+          >
             {slide.right.desc}
           </p>
         </div>
@@ -223,6 +259,10 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
   return (
     <SafeArea>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -233,10 +273,11 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
       >
         {slide.headline}
       </h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflow: 'hidden' }}>
+      <div data-smart-timeline="data-smart-timeline" style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflow: 'hidden' }}>
         {slide.events.map((ev, i) => (
           <div
             key={i}
+            data-smart-timeline-item="data-smart-timeline-item"
             style={{
               display: 'flex',
               alignItems: 'flex-start',
@@ -272,7 +313,14 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
               >
                 {ev.title}
               </h4>
-              <p style={{ fontFamily: SANS, fontSize: 22, fontWeight: 300, lineHeight: 1.3, color: 'rgba(224,224,224,0.6)' }}>
+              <p
+                data-smart-fit="data-smart-fit"
+                data-smart-fit-mode="box"
+                data-smart-fit-min="18"
+                data-smart-fit-max="36"
+                data-smart-fit-max-lines="8"
+                style={{ fontFamily: SANS, fontSize: 22, fontWeight: 300, lineHeight: 1.3, color: 'rgba(224,224,224,0.6)' }}
+              >
                 {ev.desc}
               </p>
             </div>
@@ -285,9 +333,14 @@ function TimelineLayout({ slide }: { slide: Extract<Slide, { type: 'timeline' }>
 
 function QuoteLayout({ slide }: { slide: Extract<Slide, { type: 'quote' }> }) {
   return (
-    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }} data-smart-center="data-smart-center">
       <div style={{ width: 4, height: 80, background: T.accent, marginBottom: 50 }} />
       <blockquote
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="box"
+        data-smart-fit-min="20"
+        data-smart-fit-max="48"
+        data-smart-fit-max-lines="8"
         style={{
           fontFamily: SANS,
           ...getBodyStyle(slide.quote, true),
@@ -337,6 +390,10 @@ function SequenceLayout({ slide }: { slide: Extract<Slide, { type: 'sequence' }>
   return (
     <SafeArea>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -347,10 +404,11 @@ function SequenceLayout({ slide }: { slide: Extract<Slide, { type: 'sequence' }>
       >
         {slide.headline}
       </h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflow: 'hidden' }}>
+      <div data-smart-timeline="data-smart-timeline" style={{ display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflow: 'hidden' }}>
         {slide.items.map((item, i) => (
           <div
             key={i}
+            data-smart-timeline-item="data-smart-timeline-item"
             style={{
               display: 'flex',
               alignItems: 'flex-start',
@@ -387,7 +445,14 @@ function SequenceLayout({ slide }: { slide: Extract<Slide, { type: 'sequence' }>
               >
                 {item.title}
               </h4>
-              <p style={{ fontFamily: SANS, fontSize: 22, fontWeight: 300, lineHeight: 1.3, color: 'rgba(224,224,224,0.6)' }}>
+              <p
+                data-smart-fit="data-smart-fit"
+                data-smart-fit-mode="box"
+                data-smart-fit-min="18"
+                data-smart-fit-max="36"
+                data-smart-fit-max-lines="8"
+                style={{ fontFamily: SANS, fontSize: 22, fontWeight: 300, lineHeight: 1.3, color: 'rgba(224,224,224,0.6)' }}
+              >
                 {item.desc}
               </p>
             </div>
@@ -405,6 +470,10 @@ function TelemetryLayout({ slide }: { slide: Extract<Slide, { type: 'telemetry' 
   return (
     <SafeArea>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -416,6 +485,8 @@ function TelemetryLayout({ slide }: { slide: Extract<Slide, { type: 'telemetry' 
         {slide.headline}
       </h2>
       <div
+        data-smart-grid="data-smart-grid"
+        data-smart-grid-cols={cols}
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
@@ -437,6 +508,9 @@ function TelemetryLayout({ slide }: { slide: Extract<Slide, { type: 'telemetry' 
             }}
           >
             <span
+              data-smart-stat="data-smart-stat"
+              data-smart-stat-min="32"
+              data-smart-stat-max="80"
               style={{
                 fontFamily: MONO,
                 fontSize: 52,
@@ -472,6 +546,10 @@ function TableLayout({ slide }: { slide: Extract<Slide, { type: 'table' }> }) {
   return (
     <SafeArea>
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -482,7 +560,7 @@ function TableLayout({ slide }: { slide: Extract<Slide, { type: 'table' }> }) {
       >
         {slide.headline}
       </h2>
-      <div style={{ flex: 1, overflow: 'hidden', border: `2px solid ${T.border}` }}>
+      <div data-smart-table-container="data-smart-table-container" style={{ flex: 1, overflow: 'hidden', border: `2px solid ${T.border}` }}>
         <div style={{ display: 'flex', borderBottom: `2px solid ${T.border}` }}>
           {slide.headers.map((h, i) => (
             <div
@@ -514,6 +592,10 @@ function TableLayout({ slide }: { slide: Extract<Slide, { type: 'table' }> }) {
             {row.map((cell, ci) => (
               <div
                 key={ci}
+                data-smart-fit="data-smart-fit"
+                data-smart-fit-mode="box"
+                data-smart-fit-min="16"
+                data-smart-fit-max="24"
                 style={{
                   flex: 1,
                   padding: '14px 20px',
@@ -540,9 +622,13 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
   const { image: imgStyles } = getImageSplitStyles('dramatic');
   return (
     <SafeArea>
-      <div style={{ display: 'flex', gap: 40, flex: 1 }}>
+      <div data-smart-image-split="data-smart-image-split" data-smart-image-split-direction="row" style={{ display: 'flex', gap: 40, flex: 1 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               ...hs, ...getOverflowStyles(),
               fontFamily: SANS,
@@ -554,6 +640,11 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
             {slide.headline}
           </h2>
           <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: SANS,
               ...bs,
@@ -578,7 +669,7 @@ function ImageSplitLayout({ slide }: { slide: Extract<Slide, { type: 'image-spli
           {slide.imageUrl ? (
             <img src={slide.imageUrl} alt="" style={imgStyles} />
           ) : (
-            <span style={{ fontFamily: MONO, fontSize: 18, color: 'rgba(224,224,224,0.3)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+            <span style={{ fontFamily: MONO, fontSize: 20, color: 'rgba(224,224,224,0.3)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
               {slide.imageKeywords || 'IMAGE'}
             </span>
           )}
@@ -601,6 +692,10 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
       <div style={coverStyles.overlay} />
       <SafeArea zIndex={5} style={{ justifyContent: 'flex-end' }}>
         <h2
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="width"
+          data-smart-fit-min="48"
+          data-smart-fit-max="130"
           style={{
             ...hs, ...getOverflowStyles(),
             fontFamily: SANS,
@@ -614,6 +709,11 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
         </h2>
         {slide.subtext && (
           <p
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: SANS,
               ...getBodyStyle(slide.subtext),
@@ -634,8 +734,12 @@ function ImageCoverLayout({ slide }: { slide: Extract<Slide, { type: 'image-cove
 function CtaLayout({ slide }: { slide: Extract<Slide, { type: 'cta' }> }) {
   const hs = getHeadlineStyle(slide.headline);
   return (
-    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+    <SafeArea top={100} bottom={100} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }} data-smart-center="data-smart-center">
       <h2
+        data-smart-fit="data-smart-fit"
+        data-smart-fit-mode="width"
+        data-smart-fit-min="48"
+        data-smart-fit-max="130"
         style={{
           ...hs, ...getOverflowStyles(),
           fontFamily: SANS,
@@ -648,6 +752,11 @@ function CtaLayout({ slide }: { slide: Extract<Slide, { type: 'cta' }> }) {
       </h2>
       {slide.subtext && (
         <p
+          data-smart-fit="data-smart-fit"
+          data-smart-fit-mode="box"
+          data-smart-fit-min="18"
+          data-smart-fit-max="36"
+          data-smart-fit-max-lines="8"
           style={{
             fontFamily: SANS,
             ...getBodyStyle(slide.subtext),

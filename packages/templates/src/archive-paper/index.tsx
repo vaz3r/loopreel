@@ -58,6 +58,7 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
       <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -67,6 +68,10 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               ...hs, ...getOverflowStyles(),
               fontFamily: theme.fontSerif,
@@ -75,6 +80,11 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
             {slide.headline}
           </div>
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: theme.fontSans,
               fontSize: 28,
@@ -91,7 +101,7 @@ function CoverSlide({ slide }: { slide: Extract<Slide, { type: "cover" }> }) {
             <div
               style={{
                 fontFamily: theme.fontMono,
-                fontSize: 14,
+                fontSize: 20,
                 color: theme.accent,
                 marginTop: 16,
                 letterSpacing: "0.05em",
@@ -134,6 +144,7 @@ function DefinitionSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -143,6 +154,10 @@ function DefinitionSlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 72,
@@ -174,6 +189,11 @@ function DefinitionSlide({
             }}
           />
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: theme.fontSans,
               fontSize: 28,
@@ -235,6 +255,7 @@ function DichotomySlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -244,6 +265,10 @@ function DichotomySlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 54,
@@ -259,7 +284,7 @@ function DichotomySlide({
               <div
                 style={{
                   fontFamily: theme.fontSans,
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: 600,
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
@@ -270,6 +295,11 @@ function DichotomySlide({
                 {slide.left.title}
               </div>
               <div
+                data-smart-fit="data-smart-fit"
+                data-smart-fit-mode="box"
+                data-smart-fit-min="18"
+                data-smart-fit-max="36"
+                data-smart-fit-max-lines="8"
                 style={{
                   fontFamily: theme.fontSans,
                   fontSize: 22,
@@ -291,7 +321,7 @@ function DichotomySlide({
               <div
                 style={{
                   fontFamily: theme.fontSans,
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: 600,
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
@@ -302,6 +332,11 @@ function DichotomySlide({
                 {slide.right.title}
               </div>
               <div
+                data-smart-fit="data-smart-fit"
+                data-smart-fit-mode="box"
+                data-smart-fit-min="18"
+                data-smart-fit-max="36"
+                data-smart-fit-max-lines="8"
                 style={{
                   fontFamily: theme.fontSans,
                   fontSize: 22,
@@ -347,6 +382,7 @@ function TimelineSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -356,6 +392,10 @@ function TimelineSlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 54,
@@ -367,6 +407,7 @@ function TimelineSlide({
             {slide.headline}
           </div>
           <div
+            data-smart-timeline="data-smart-timeline"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -387,7 +428,7 @@ function TimelineSlide({
               }}
             />
             {slide.events.map((ev: { date: string; title: string; desc: string }, i: number) => (
-              <div key={i} style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+              <div key={i} data-smart-timeline-item="data-smart-timeline-item" style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
                 <div
                   style={{
                     position: "absolute",
@@ -403,7 +444,7 @@ function TimelineSlide({
                   <div
                     style={{
                       fontFamily: theme.fontMono,
-                      fontSize: 14,
+                      fontSize: 20,
                       color: theme.accent,
                       opacity: 0.8,
                     }}
@@ -413,6 +454,10 @@ function TimelineSlide({
                 </div>
                 <div>
                   <div
+                    data-smart-fit="data-smart-fit"
+                    data-smart-fit-mode="width"
+                    data-smart-fit-min="48"
+                    data-smart-fit-max="130"
                     style={{
                       fontFamily: theme.fontSerif,
                       fontSize: 24,
@@ -423,9 +468,14 @@ function TimelineSlide({
                     {ev.title}
                   </div>
                   <div
+                    data-smart-fit="data-smart-fit"
+                    data-smart-fit-mode="box"
+                    data-smart-fit-min="18"
+                    data-smart-fit-max="36"
+                    data-smart-fit-max-lines="8"
                     style={{
                       fontFamily: theme.fontSans,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: 300,
                       color: theme.text,
                       opacity: 0.7,
@@ -471,6 +521,7 @@ function QuoteSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -492,6 +543,11 @@ function QuoteSlide({
             &#8220;
           </div>
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="20"
+            data-smart-fit-max="48"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 36,
@@ -518,7 +574,7 @@ function QuoteSlide({
               <div
                 style={{
                   fontFamily: theme.fontSans,
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: 300,
                   color: theme.text,
                   opacity: 0.6,
@@ -563,6 +619,7 @@ function SequenceSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -572,6 +629,10 @@ function SequenceSlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 54,
@@ -582,10 +643,11 @@ function SequenceSlide({
           >
             {slide.headline}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div data-smart-timeline="data-smart-timeline" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {slide.items.map((item: { num: number; title: string; desc: string }, i: number) => (
               <div
                 key={i}
+                data-smart-timeline-item="data-smart-timeline-item"
                 style={{ display: "flex", gap: 20, alignItems: "flex-start" }}
               >
                 <div
@@ -603,6 +665,10 @@ function SequenceSlide({
                 </div>
                 <div>
                   <div
+                    data-smart-fit="data-smart-fit"
+                    data-smart-fit-mode="width"
+                    data-smart-fit-min="48"
+                    data-smart-fit-max="130"
                     style={{
                       fontFamily: theme.fontSerif,
                       fontSize: 26,
@@ -613,9 +679,14 @@ function SequenceSlide({
                     {item.title}
                   </div>
                   <div
+                    data-smart-fit="data-smart-fit"
+                    data-smart-fit-mode="box"
+                    data-smart-fit-min="18"
+                    data-smart-fit-max="36"
+                    data-smart-fit-max-lines="8"
                     style={{
                       fontFamily: theme.fontSans,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: 300,
                       color: theme.text,
                       opacity: 0.7,
@@ -662,6 +733,7 @@ function TelemetrySlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -671,6 +743,10 @@ function TelemetrySlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 54,
@@ -682,6 +758,8 @@ function TelemetrySlide({
             {slide.headline}
           </div>
           <div
+            data-smart-grid="data-smart-grid"
+            data-smart-grid-cols={cols}
             style={{
               display: "grid",
               gridTemplateColumns: `repeat(${cols}, 1fr)`,
@@ -691,6 +769,9 @@ function TelemetrySlide({
             {slide.stats.map((stat: { value: string; label: string }, i: number) => (
               <div key={i}>
                 <div
+                  data-smart-stat="data-smart-stat"
+                  data-smart-stat-min="32"
+                  data-smart-stat-max="80"
                   style={{
                     fontFamily: theme.fontSerif,
                     fontSize: 56,
@@ -704,7 +785,7 @@ function TelemetrySlide({
                 <div
                   style={{
                     fontFamily: theme.fontSans,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: 400,
                     color: theme.text,
                     opacity: 0.6,
@@ -752,6 +833,7 @@ function TableSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -761,6 +843,10 @@ function TableSlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 48,
@@ -771,13 +857,14 @@ function TableSlide({
           >
             {slide.headline}
           </div>
-          <div style={{ overflow: "hidden" }}>
+          <div data-smart-table-container="data-smart-table-container" style={{ overflow: "hidden" }}>
             <table
+              data-smart-table="data-smart-table"
               style={{
                 width: "100%",
                 borderCollapse: "collapse",
                 fontFamily: theme.fontSans,
-                fontSize: 18,
+                fontSize: 20,
               }}
             >
               <thead>
@@ -790,7 +877,7 @@ function TableSlide({
                         padding: "12px 16px",
                         borderBottom: `2px solid ${theme.accent}`,
                         fontWeight: 600,
-                        fontSize: 14,
+                        fontSize: 20,
                         textTransform: "uppercase",
                         letterSpacing: "0.1em",
                         color: theme.accent,
@@ -813,7 +900,14 @@ function TableSlide({
                           fontWeight: 300,
                         }}
                       >
-                        {cell}
+                        <span
+                          data-smart-fit="data-smart-fit"
+                          data-smart-fit-mode="box"
+                          data-smart-fit-min="16"
+                          data-smart-fit-max="24"
+                        >
+                          {cell}
+                        </span>
                       </td>
                     ))}
                   </tr>
@@ -858,6 +952,8 @@ function ImageSplitSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-image-split="data-smart-image-split"
+          data-smart-image-split-direction="row"
           style={{
             flex: 1,
             display: "flex",
@@ -867,6 +963,10 @@ function ImageSplitSlide({
         >
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
             <div
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="width"
+              data-smart-fit-min="48"
+              data-smart-fit-max="130"
               style={{
                 ...hs, ...getOverflowStyles(),
                 fontFamily: theme.fontSerif,
@@ -875,6 +975,11 @@ function ImageSplitSlide({
               {slide.headline}
             </div>
             <div
+              data-smart-fit="data-smart-fit"
+              data-smart-fit-mode="box"
+              data-smart-fit-min="18"
+              data-smart-fit-max="36"
+              data-smart-fit-max-lines="8"
               style={{
                 ...bs,
                 fontFamily: theme.fontSans,
@@ -895,7 +1000,7 @@ function ImageSplitSlide({
               alignItems: "center",
               justifyContent: "center",
               fontFamily: theme.fontSans,
-              fontSize: 14,
+              fontSize: 20,
               color: theme.text,
               opacity: 0.4,
               overflow: "hidden",
@@ -963,6 +1068,7 @@ function ImageCoverSlide({
       <SafeArea>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -972,6 +1078,10 @@ function ImageCoverSlide({
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 64,
@@ -984,6 +1094,11 @@ function ImageCoverSlide({
             {slide.headline}
           </div>
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: theme.fontSans,
               fontSize: 24,
@@ -1025,6 +1140,7 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
       <SafeArea compact>
         <MicroHeader tag={slide.tag} />
         <div
+          data-smart-center="data-smart-center"
           style={{
             flex: 1,
             display: "flex",
@@ -1036,6 +1152,10 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
           }}
         >
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="width"
+            data-smart-fit-min="48"
+            data-smart-fit-max="130"
             style={{
               fontFamily: theme.fontSerif,
               fontSize: 64,
@@ -1047,6 +1167,11 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
             {slide.headline}
           </div>
           <div
+            data-smart-fit="data-smart-fit"
+            data-smart-fit-mode="box"
+            data-smart-fit-min="18"
+            data-smart-fit-max="36"
+            data-smart-fit-max-lines="8"
             style={{
               fontFamily: theme.fontSans,
               fontSize: 24,
@@ -1077,7 +1202,7 @@ function CtaSlide({ slide }: { slide: Extract<Slide, { type: "cta" }> }) {
             <div
               style={{
                 fontFamily: theme.fontMono,
-                fontSize: 16,
+                fontSize: 20,
                 color: theme.accent,
                 opacity: 0.6,
                 marginTop: 8,
