@@ -41,3 +41,19 @@ export type {
   MicroFooterProps,
   SafeAreaProps,
 } from './components.js';
+
+export {
+  SmartHeadline,
+  SmartSubheadline,
+  SmartBody,
+  SmartLabel,
+  SmartStat,
+  SmartEventTitle,
+  SmartEventDesc,
+  SmartTimeline,
+  SmartTimelineItem,
+  SmartGrid,
+  SmartTable,
+  SmartTableBody,
+  SmartTableCell,
+} from './smart-components.js';

@@ -1,0 +1,36 @@
+TEMPLATE CONTRACT: editorial-runway
+
+This carousel uses a fixed spine-tab magazine layout. Every field below is
+load-bearing — an omitted or empty field renders as visible empty space in
+the final image, not a graceful fallback. Follow these rules exactly.
+
+hook (required):
+- heading: the cover headline. Max 80 characters, ideally under 40.
+- kicker: REQUIRED. A short category label in caps that classifies the
+  whole post — e.g. "PRODUCT REVIEW", "PRICING STRATEGY", "GUIDE", "ESSAY".
+  This is shown on the cover AND reused as the running head on every
+  following slide. Never omit it. Never leave it generic ("CONTENT") —
+  classify the actual subject.
+
+slides (produce 2-6, choose type per point — do not default everything to "content"):
+- type "content": heading + body paragraph. Use for a single explanatory point.
+- type "list": heading + items. MINIMUM 3 items, maximum 5. Never produce a
+  list with 1-2 items — if you only have one or two things to say, use
+  "content" instead. A short list renders as visibly empty space.
+- type "quote": quote + attribution. Attribution is REQUIRED — a named
+  person. If the source material has no directly quotable, attributable
+  line, do not produce a quote slide; use "content" or "stat" instead.
+- type "stat": value (a short number or percentage, e.g. "96%", "3.2x") +
+  label (required context for the number) + optional body for extra detail.
+
+cta (required):
+- heading: the closing line.
+- ctaLabel: REQUIRED, short action text, e.g. "Link in bio", "Read the full
+  guide". Max 24 characters.
+
+meta:
+- readTime: optional, e.g. "4 min read" — only include if you can estimate
+  it reasonably from content length.
+
+Do NOT invent: author name, handle, avatar, or series name. Those come from
+the user's account settings, not from you.

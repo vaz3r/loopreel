@@ -13,6 +13,12 @@ import {
   MicroFooter,
   SafeArea,
 } from '../engine/components.js';
+import {
+  SmartHeadline, SmartBody, SmartStat,
+  SmartEventDesc,
+  SmartTimeline, SmartTimelineItem,
+  SmartGrid, SmartTable, SmartTableBody, SmartTableCell,
+} from '../engine/smart-components.js';
 
 const T = getThemeColors();
 
@@ -23,29 +29,21 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
   return (
     <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h1
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h1"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h1>
+        </SmartHeadline>
         {slide.subheadline && (
-          <p
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="box"
-            data-smart-fit-min="18"
-            data-smart-fit-max="32"
+          <SmartBody
+            fontFamily={T.fontSans}
             style={{
-              fontFamily: T.fontSans,
               fontSize: 22,
               fontWeight: 300,
               lineHeight: 1.5,
@@ -55,7 +53,7 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
             }}
           >
             {slide.subheadline}
-          </p>
+          </SmartBody>
         )}
         {slide.metadata && (
           <div
@@ -81,27 +79,23 @@ function CoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cover' }> })
 function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definition' }> }) {
   return (
     <SafeArea compact>
-      <div data-smart-center="data-smart-center" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ marginBottom: 48 }}>
-          <h2
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="width"
-            data-smart-fit-min="40"
-            data-smart-fit-max="120"
+          <SmartHeadline
+            tag="h2"
+            fontFamily={T.fontSerif}
             style={{
-              fontFamily: T.fontSerif,
               fontSize: 90,
               fontWeight: 300,
               fontStyle: 'italic',
               ...getOverflowStyles(),
               lineHeight: 1.1,
               letterSpacing: '-0.02em',
-              margin: 0,
               color: T.text,
             }}
           >
             {slide.term}
-          </h2>
+          </SmartHeadline>
           {slide.phonetic && (
             <span
               style={{
@@ -117,23 +111,18 @@ function DefinitionSlide({ slide }: { slide: Extract<VoidSlide, { type: 'definit
           )}
         </div>
         <div style={{ width: 40, height: 2, background: T.accent, marginBottom: 32 }} />
-        <p
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="box"
-          data-smart-fit-min="18"
-          data-smart-fit-max="36"
+        <SmartBody
+          fontFamily={T.fontSans}
           style={{
-            fontFamily: T.fontSans,
             fontSize: 28,
             fontWeight: 300,
             lineHeight: 1.6,
             color: 'rgba(244,244,240,0.8)',
-            margin: 0,
             maxWidth: 750,
           }}
         >
           {slide.definition}
-        </p>
+        </SmartBody>
         {slide.example && (
           <p
             style={{
@@ -160,95 +149,73 @@ function DichotomySlide({ slide }: { slide: Extract<VoidSlide, { type: 'dichotom
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: 64,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h2>
+        </SmartHeadline>
         <div style={{ display: 'flex', gap: 48 }}>
           <div style={{ flex: 1 }}>
-            <h3
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="width"
-              data-smart-fit-min="16"
-              data-smart-fit-max="32"
+            <SmartHeadline
+              tag="h3"
+              fontFamily={T.fontSans}
               style={{
-                fontFamily: T.fontSans,
                 fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 color: T.accent,
-                margin: 0,
                 marginBottom: 16,
               }}
             >
               {slide.left.title}
-            </h3>
-            <p
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="box"
-              data-smart-fit-min="16"
-              data-smart-fit-max="28"
+            </SmartHeadline>
+            <SmartBody
+              fontFamily={T.fontSans}
               style={{
-                fontFamily: T.fontSans,
                 fontSize: 22,
                 fontWeight: 300,
                 lineHeight: 1.5,
                 color: 'rgba(244,244,240,0.65)',
-                margin: 0,
               }}
             >
               {slide.left.desc}
-            </p>
+            </SmartBody>
           </div>
           <div style={{ width: 1, background: T.border, alignSelf: 'stretch' }} />
           <div style={{ flex: 1 }}>
-            <h3
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="width"
-              data-smart-fit-min="16"
-              data-smart-fit-max="32"
+            <SmartHeadline
+              tag="h3"
+              fontFamily={T.fontSans}
               style={{
-                fontFamily: T.fontSans,
                 fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 color: T.accent,
-                margin: 0,
                 marginBottom: 16,
               }}
             >
               {slide.right.title}
-            </h3>
-            <p
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="box"
-              data-smart-fit-min="16"
-              data-smart-fit-max="28"
+            </SmartHeadline>
+            <SmartBody
+              fontFamily={T.fontSans}
               style={{
-                fontFamily: T.fontSans,
                 fontSize: 22,
                 fontWeight: 300,
                 lineHeight: 1.5,
                 color: 'rgba(244,244,240,0.65)',
-                margin: 0,
               }}
             >
               {slide.right.desc}
-            </p>
+            </SmartBody>
           </div>
         </div>
       </div>
@@ -261,27 +228,22 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: 48,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h2>
-        <div data-smart-timeline="data-smart-timeline" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
+        </SmartHeadline>
+        <SmartTimeline style={{ flex: 1, gap: 0 }}>
           {slide.events.map((event, i) => (
-            <div
+            <SmartTimelineItem
               key={i}
-              data-smart-timeline-item="data-smart-timeline-item"
               style={{
                 display: 'flex',
                 gap: 32,
@@ -315,27 +277,21 @@ function TimelineSlide({ slide }: { slide: Extract<VoidSlide, { type: 'timeline'
                 >
                   {event.title}
                 </h4>
-                <p
-                  data-smart-fit="data-smart-fit"
-                  data-smart-fit-mode="box"
-                  data-smart-fit-min="16"
-                  data-smart-fit-max="24"
-                  data-smart-fit-max-lines="3"
+                <SmartEventDesc
+                  fontFamily={T.fontSans}
                   style={{
-                    fontFamily: T.fontSans,
                     fontSize: 20,
                     fontWeight: 300,
                     lineHeight: 1.4,
                     color: 'rgba(244,244,240,0.5)',
-                    margin: 0,
                   }}
                 >
                   {event.desc}
-                </p>
+                </SmartEventDesc>
               </div>
-            </div>
+            </SmartTimelineItem>
           ))}
-        </div>
+        </SmartTimeline>
       </div>
     </SafeArea>
   );
@@ -345,7 +301,7 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
   const bodyStyle = getBodyStyle(slide.quote);
   return (
     <SafeArea>
-      <div data-smart-center="data-smart-center" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
         <div
           style={{
             fontFamily: T.fontSerif,
@@ -358,14 +314,9 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
         >
           &ldquo;
         </div>
-        <p
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="box"
-          data-smart-fit-min="20"
-          data-smart-fit-max="48"
-          data-smart-fit-max-lines="8"
+        <SmartBody
+          fontFamily={T.fontSerif}
           style={{
-            fontFamily: T.fontSerif,
             fontSize: bodyStyle.fontSize,
             fontWeight: bodyStyle.fontWeight,
             fontStyle: 'italic',
@@ -378,7 +329,7 @@ function QuoteSlide({ slide }: { slide: Extract<VoidSlide, { type: 'quote' }> })
           }}
         >
           {slide.quote}
-        </p>
+        </SmartBody>
         <div
           style={{
             display: 'flex',
@@ -426,27 +377,22 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: 48,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h2>
-        <div data-smart-timeline="data-smart-timeline" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0 }}>
+        </SmartHeadline>
+        <SmartTimeline style={{ flex: 1, gap: 0 }}>
           {slide.items.map((item, i) => (
-            <div
+            <SmartTimelineItem
               key={i}
-              data-smart-timeline-item="data-smart-timeline-item"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -482,27 +428,21 @@ function SequenceSlide({ slide }: { slide: Extract<VoidSlide, { type: 'sequence'
                 >
                   {item.title}
                 </h4>
-                <p
-                  data-smart-fit="data-smart-fit"
-                  data-smart-fit-mode="box"
-                  data-smart-fit-min="16"
-                  data-smart-fit-max="24"
-                  data-smart-fit-max-lines="3"
+                <SmartEventDesc
+                  fontFamily={T.fontSans}
                   style={{
-                    fontFamily: T.fontSans,
                     fontSize: 20,
                     fontWeight: 300,
                     lineHeight: 1.4,
                     color: 'rgba(244,244,240,0.5)',
-                    margin: 0,
                   }}
                 >
                   {item.desc}
-                </p>
+                </SmartEventDesc>
               </div>
-            </div>
+            </SmartTimelineItem>
           ))}
-        </div>
+        </SmartTimeline>
       </div>
     </SafeArea>
   );
@@ -513,40 +453,31 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: 56,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h2>
-        <div
-          data-smart-grid="data-smart-grid"
-          data-smart-grid-cols={slide.stats.length <= 4 ? '2' : '3'}
-          data-smart-grid-gap="40"
+        </SmartHeadline>
+        <SmartGrid
+          columns={slide.stats.length <= 4 ? 2 : 3}
+          gap={40}
           style={{
-            display: 'grid',
             gridTemplateColumns: slide.stats.length <= 4 ? '1fr 1fr' : '1fr 1fr 1fr',
             gap: '40px 48px',
           }}
         >
           {slide.stats.map((stat, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-              <span
-                data-smart-stat="data-smart-stat"
-                data-smart-stat-min="32"
-                data-smart-stat-max="80"
+              <SmartStat
+                fontFamily={T.fontSerif}
                 style={{
-                  fontFamily: T.fontSerif,
                   fontSize: 64,
                   fontWeight: 300,
                   fontStyle: 'italic',
@@ -556,7 +487,7 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
                 }}
               >
                 {stat.value}
-              </span>
+              </SmartStat>
               <span
                 style={{
                   fontFamily: T.fontSans,
@@ -571,7 +502,7 @@ function TelemetrySlide({ slide }: { slide: Extract<VoidSlide, { type: 'telemetr
               </span>
             </div>
           ))}
-        </div>
+        </SmartGrid>
       </div>
     </SafeArea>
   );
@@ -582,23 +513,19 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
   return (
     <SafeArea>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: 40,
             color: T.text,
           }}
         >
           {slide.headline}
-        </h2>
-        <div data-smart-table-container="data-smart-table-container" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        </SmartHeadline>
+        <SmartTable style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
               display: 'grid',
@@ -625,7 +552,7 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
               </span>
             ))}
           </div>
-          <div data-smart-table="data-smart-table" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <SmartTableBody style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             {slide.rows.map((row, ri) => (
               <div
                 key={ri}
@@ -639,26 +566,22 @@ function TableSlide({ slide }: { slide: Extract<VoidSlide, { type: 'table' }> })
                 }}
               >
                 {row.map((cell, ci) => (
-                  <span
+                  <SmartTableCell
                     key={ci}
-                    data-smart-fit="data-smart-fit"
-                    data-smart-fit-mode="box"
-                    data-smart-fit-min="16"
-                    data-smart-fit-max="24"
+                    fontFamily={T.fontSans}
                     style={{
-                      fontFamily: T.fontSans,
                       fontSize: 20,
                       fontWeight: 400,
                       color: 'rgba(244,244,240,0.7)',
                     }}
                   >
                     {cell}
-                  </span>
+                  </SmartTableCell>
                 ))}
               </div>
             ))}
-          </div>
-        </div>
+          </SmartTableBody>
+        </SmartTable>
       </div>
     </SafeArea>
   );
@@ -673,45 +596,34 @@ function ImageSplitSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-s
   const { image: imgStyles } = getImageSplitStyles('dark');
   return (
     <SafeArea>
-      <div data-smart-image-split="data-smart-image-split" data-smart-image-split-direction="column" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 48 }}>
-        <div data-smart-image-split-text="data-smart-image-split-text" style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h2
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="width"
-            data-smart-fit-min="48"
-            data-smart-fit-max="130"
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 48 }}>
+        <div style={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <SmartHeadline
+            tag="h2"
+            fontFamily={T.fontSerif}
             style={{
               ...headlineStyle, ...getOverflowStyles(),
-              fontFamily: T.fontSerif,
               letterSpacing: '-0.02em',
-              margin: 0,
               marginBottom: 24,
               color: T.text,
             }}
           >
             {slide.headline}
-          </h2>
-          <p
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="box"
-            data-smart-fit-min="18"
-            data-smart-fit-max="32"
-            data-smart-fit-max-lines="6"
+          </SmartHeadline>
+          <SmartBody
+            fontFamily={T.fontSans}
             style={{
               ...bodyStyle,
-              fontFamily: T.fontSans,
               ...getOverflowStyles({ maxLines: 6 }),
               color: 'rgba(244,244,240,0.6)',
-              margin: 0,
               maxWidth: 500,
             }}
           >
             {slide.bodyText}
-          </p>
+          </SmartBody>
         </div>
         {imgUrl && (
           <div
-            data-smart-image-split-image="data-smart-image-split-image"
             style={{
               flex: '1 1 50%',
               borderRadius: 4,
@@ -747,42 +659,32 @@ function ImageCoverSlide({ slide }: { slide: Extract<VoidSlide, { type: 'image-c
       <div style={coverStyles.overlay} />
       <SafeArea>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <h2
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="width"
-            data-smart-fit-min="48"
-            data-smart-fit-max="130"
+          <SmartHeadline
+            tag="h2"
+            fontFamily={T.fontSerif}
             style={{
               ...headlineStyle, ...getOverflowStyles(),
-              fontFamily: T.fontSerif,
               letterSpacing: '-0.02em',
-              margin: 0,
               marginBottom: 20,
               color: T.text,
             }}
           >
             {slide.headline}
-          </h2>
+          </SmartHeadline>
           {slide.subtext && (
-            <p
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="box"
-              data-smart-fit-min="18"
-              data-smart-fit-max="28"
-              data-smart-fit-max-lines="4"
+            <SmartBody
+              fontFamily={T.fontSans}
               style={{
-                fontFamily: T.fontSans,
                 fontSize: 20,
                 fontWeight: 300,
                 lineHeight: 1.5,
                 ...getOverflowStyles({ maxLines: 4 }),
                 color: 'rgba(244,244,240,0.6)',
-                margin: 0,
                 maxWidth: 650,
               }}
             >
               {slide.subtext}
-            </p>
+            </SmartBody>
           )}
         </div>
       </SafeArea>
@@ -795,43 +697,33 @@ function CtaSlide({ slide }: { slide: Extract<VoidSlide, { type: 'cta' }> }) {
   return (
     <SafeArea compact>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={T.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: T.fontSerif,
             letterSpacing: '-0.02em',
-            margin: 0,
             marginBottom: slide.subtext ? 24 : 48,
             color: T.text,
             maxWidth: 800,
           }}
         >
           {slide.headline}
-        </h2>
+        </SmartHeadline>
         {slide.subtext && (
-          <p
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="box"
-            data-smart-fit-min="18"
-            data-smart-fit-max="28"
-            data-smart-fit-max-lines="3"
+          <SmartBody
+            fontFamily={T.fontSans}
             style={{
-                    fontFamily: T.fontSans,
-                    fontSize: 20,
-                    fontWeight: 300,
-                    lineHeight: 1.4,
-                    color: 'rgba(244,244,240,0.5)',
-                    margin: 0,
+              fontSize: 20,
+              fontWeight: 300,
+              lineHeight: 1.4,
+              color: 'rgba(244,244,240,0.5)',
               marginBottom: 48,
               maxWidth: 500,
             }}
           >
             {slide.subtext}
-          </p>
+          </SmartBody>
         )}
         <div
           style={{

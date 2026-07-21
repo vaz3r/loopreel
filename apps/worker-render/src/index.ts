@@ -28,6 +28,26 @@ async function ensurePool() {
 
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
+/**
+ * Fit all [data-smart-fit] elements to their containers (§5 of spec).
+ * Uses real DOM measurement in Playwright, not character-count heuristics.
+ */
+async function fitTextToContainers(page: import('playwright').Page) {
+  await page.evaluate(() => {
+    const elements = document.querySelectorAll('[data-smart-fit]');
+    elements.forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      const parent = htmlEl.parentElement;
+      if (!parent) return;
+      let size = parseFloat(getComputedStyle(htmlEl).fontSize);
+      while (htmlEl.scrollHeight > parent.clientHeight && size > 14) {
+        size -= 1;
+        htmlEl.style.fontSize = `${size}px`;
+      }
+    });
+  });
+}
+
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
   const jobLogger = logger.child({ jobId, workerType: 'render' });
@@ -68,7 +88,11 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       contentText?: string;
     }> = [];
 
-    for (let i = 0; i < existing.slide_count; i++) {
+    // Slide count = hook + content slides + CTA
+    const payload = existing.content_payload as any;
+    const totalSlides = 2 + (payload.slides?.length ?? 0);
+
+    for (let i = 0; i < totalSlides; i++) {
       const page = await currentPool.acquire();
       try {
         await page.setViewportSize({ width, height });
@@ -79,11 +103,19 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
         }
         const html = await response.text();
 
-        await page.setContent(html, { waitUntil: 'networkidle' });
+        await page.setContent(html, { waitUntil: 'domcontentloaded' });
+
+        // §4 of spec: wait for fonts to load
         await page.evaluate(() => document.fonts.ready);
 
-        // Wait for smart-fit script to complete auto-sizing
-        await page.waitForFunction(() => (window as any).__smartFitDone === true, { timeout: 5000 });
+        // §5 of spec: measure-and-shrink for all variable-length text
+        await fitTextToContainers(page);
+
+        // §4 of spec: wait for render-complete signal
+        await page.waitForFunction(
+          () => document.body.getAttribute('data-render-complete') === 'true',
+          { timeout: 5000 },
+        );
 
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
@@ -101,23 +133,17 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       }
     }
 
-    const payload = existing.content_payload as {
-      meta: { seriesName?: string; authorName?: string; handle?: string };
-      slides: Array<{ type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }>;
-    };
-
-    const formatSlide = (s: { type: string; heading?: string; body?: string; items?: string[]; quote?: string; value?: string; label?: string }) => {
+    const slideTexts = payload.slides.map((s: any) => {
       if (s.type === 'list' && s.items?.length) {
-        return [`Key points: ${s.heading ?? ''}`, ...s.items.map((item) => `  - ${item}`)].join('\n');
+        return [`Key points: ${s.heading ?? ''}`, ...s.items.map((item: string) => `  - ${item}`)].join('\n');
       }
       if (s.type === 'quote') return `"${s.quote}"`;
       if (s.type === 'stat') return `${s.value}${s.label ? ` ${s.label}` : ''}`;
       return [s.heading ?? '', s.body].filter(Boolean).join('\n');
-    };
+    });
 
-    const slideTexts = payload.slides.map(formatSlide);
-    const firstSlide = payload.slides[0];
-    const lastSlide = payload.slides[payload.slides.length - 1];
+    const firstSlide = payload.hook;
+    const lastSlide = payload.cta;
 
     const linkedinText = [
       firstSlide?.heading ?? '',
@@ -130,8 +156,8 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     const twitterThread = [
       firstSlide?.heading ?? '',
       '',
-      ...payload.slides.map((s, i) => {
-        const text = formatSlide(s);
+      ...payload.slides.map((s: any, i: number) => {
+        const text = [s.heading ?? s.value ?? '', s.body ?? s.label ?? ''].filter(Boolean).join(' — ');
         return `${i + 1}/${payload.slides.length} ${text}`;
       }),
       '',

@@ -6,6 +6,12 @@ import {
   MicroFooter as EngineMicroFooter,
   SafeArea as EngineSafeArea,
 } from '../engine/components.js';
+import {
+  SmartHeadline, SmartBody, SmartStat,
+  SmartEventDesc,
+  SmartTimeline, SmartTimelineItem,
+  SmartGrid, SmartTable, SmartTableBody, SmartTableCell,
+} from '../engine/smart-components.js';
 
 interface CustomBrandProps {
   slides: Slide[];
@@ -85,31 +91,22 @@ const CoverLayout: React.FC<{
 }> = ({ data, theme }) => {
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
-    <SafeArea compact dataSmartCenter style={{ justifyContent: 'center' }}>
-      <h1
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+    <SafeArea compact style={{ justifyContent: 'center' }}>
+      <SmartHeadline
+        tag="h1"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
-          margin: 0,
           color: theme.text,
         }}
       >
         {data.headline}
-      </h1>
+      </SmartHeadline>
       {data.subheadline && (
-        <p
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="box"
-          data-smart-fit-min="18"
-          data-smart-fit-max="36"
-          data-smart-fit-max-lines="8"
+        <SmartBody
+          fontFamily={theme.fontSans}
           style={{
-            fontFamily: theme.fontSans,
             fontSize: '32px',
             fontWeight: '300',
             lineHeight: 1.4,
@@ -119,7 +116,7 @@ const CoverLayout: React.FC<{
           }}
         >
           {data.subheadline}
-        </p>
+        </SmartBody>
       )}
       {data.metadata && (
         <div
@@ -146,7 +143,7 @@ const DefinitionLayout: React.FC<{
   data: Extract<Slide, { type: 'definition' }>;
   theme: ReturnType<typeof getThemeColors>;
 }> = ({ data, theme }) => (
-  <SafeArea dataSmartCenter style={{ justifyContent: 'center' }}>
+  <SafeArea style={{ justifyContent: 'center' }}>
     <div
       style={{
         fontFamily: theme.fontSans,
@@ -160,13 +157,10 @@ const DefinitionLayout: React.FC<{
     >
       Definition
     </div>
-    <h2
-      data-smart-fit="data-smart-fit"
-      data-smart-fit-mode="width"
-      data-smart-fit-min="48"
-      data-smart-fit-max="130"
+    <SmartHeadline
+      tag="h2"
+      fontFamily={theme.fontSerif}
       style={{
-        fontFamily: theme.fontSerif,
         fontSize: '72px',
         fontWeight: '300',
         fontStyle: 'italic',
@@ -176,7 +170,7 @@ const DefinitionLayout: React.FC<{
       }}
     >
       {data.term}
-    </h2>
+    </SmartHeadline>
     {data.phonetic && (
       <div
         style={{
@@ -198,14 +192,9 @@ const DefinitionLayout: React.FC<{
         marginBottom: 40,
       }}
     />
-    <p
-      data-smart-fit="data-smart-fit"
-      data-smart-fit-mode="box"
-      data-smart-fit-min="18"
-      data-smart-fit-max="36"
-      data-smart-fit-max-lines="8"
+    <SmartBody
+      fontFamily={theme.fontSans}
       style={{
-        fontFamily: theme.fontSans,
         ...getBodyStyle(data.definition),
         lineHeight: 1.5,
         margin: 0,
@@ -214,19 +203,15 @@ const DefinitionLayout: React.FC<{
       }}
     >
       {data.definition}
-    </p>
+    </SmartBody>
     {data.example && (
-      <div
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="box"
-        data-smart-fit-min="20"
-        data-smart-fit-max="48"
-        data-smart-fit-max-lines="8"
+      <SmartBody
+        tag="div"
+        fontFamily={theme.fontSerif}
         style={{
           marginTop: 40,
           padding: '20px 24px',
           borderLeft: `3px solid ${theme.accent}`,
-          fontFamily: theme.fontSerif,
           fontSize: '24px',
           fontWeight: '300',
           fontStyle: 'italic',
@@ -236,7 +221,7 @@ const DefinitionLayout: React.FC<{
         }}
       >
         {data.example}
-      </div>
+      </SmartBody>
     )}
   </SafeArea>
 );
@@ -248,21 +233,18 @@ const DichotomyLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea style={{ justifyContent: 'space-between' }}>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
           margin: 0,
           color: theme.text,
         }}
       >
         {data.headline}
-      </h2>
+      </SmartHeadline>
       <div
         style={{
           display: 'flex',
@@ -301,14 +283,9 @@ const DichotomyLayout: React.FC<{
             >
               {data[side].title}
             </h3>
-            <p
-              data-smart-fit="data-smart-fit"
-              data-smart-fit-mode="box"
-              data-smart-fit-min="18"
-              data-smart-fit-max="36"
-              data-smart-fit-max-lines="8"
+            <SmartBody
+              fontFamily={theme.fontSans}
               style={{
-                fontFamily: theme.fontSans,
                 ...getBodyStyle(data[side].desc),
                 lineHeight: 1.4,
                 margin: 0,
@@ -316,7 +293,7 @@ const DichotomyLayout: React.FC<{
               }}
             >
               {data[side].desc}
-            </p>
+            </SmartBody>
           </div>
         ))}
       </div>
@@ -331,14 +308,11 @@ const TimelineLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -346,12 +320,11 @@ const TimelineLayout: React.FC<{
         }}
       >
         {data.headline}
-      </h2>
-      <div data-smart-timeline="data-smart-timeline" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+      </SmartHeadline>
+      <SmartTimeline style={{ flex: 1, overflow: 'hidden' }}>
         {data.events.map((event, idx) => (
-          <div
+          <SmartTimelineItem
             key={idx}
-            data-smart-timeline-item="data-smart-timeline-item"
             style={{
               display: 'flex',
               gap: 24,
@@ -389,18 +362,12 @@ const TimelineLayout: React.FC<{
               >
                 {event.title}
               </h4>
-              <p
-                data-smart-fit="data-smart-fit"
-                data-smart-fit-mode="box"
-                data-smart-fit-min="18"
-                data-smart-fit-max="36"
-                data-smart-fit-max-lines="8"
+              <SmartEventDesc
+                fontFamily={theme.fontSans}
                 style={{
-                  fontFamily: theme.fontSans,
                   fontSize: '20px',
                   fontWeight: '300',
                   lineHeight: 1.3,
-                  margin: 0,
                   color: hexToRgba(theme.text, 0.65),
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -410,11 +377,11 @@ const TimelineLayout: React.FC<{
                 }}
               >
                 {event.desc}
-              </p>
+              </SmartEventDesc>
             </div>
-          </div>
+          </SmartTimelineItem>
         ))}
-      </div>
+      </SmartTimeline>
     </SafeArea>
   );
 };
@@ -423,7 +390,7 @@ const QuoteLayout: React.FC<{
   data: Extract<Slide, { type: 'quote' }>;
   theme: ReturnType<typeof getThemeColors>;
 }> = ({ data, theme }) => (
-  <SafeArea dataSmartCenter style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+  <SafeArea style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
     <div style={{ position: 'relative', width: '100%' }}>
       <div
         style={{
@@ -433,14 +400,10 @@ const QuoteLayout: React.FC<{
           margin: '0 auto 48px',
         }}
       />
-      <blockquote
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="box"
-        data-smart-fit-min="20"
-        data-smart-fit-max="48"
-        data-smart-fit-max-lines="8"
+      <SmartBody
+        tag="blockquote"
+        fontFamily={theme.fontSerif}
         style={{
-          fontFamily: theme.fontSerif,
           fontSize: '60px',
           fontWeight: '300',
           fontStyle: 'italic',
@@ -451,7 +414,7 @@ const QuoteLayout: React.FC<{
         }}
       >
         &ldquo;{data.quote}&rdquo;
-      </blockquote>
+      </SmartBody>
       <div
         style={{
           fontFamily: theme.fontSans,
@@ -486,14 +449,11 @@ const SequenceLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -501,12 +461,11 @@ const SequenceLayout: React.FC<{
         }}
       >
         {data.headline}
-      </h2>
-      <div data-smart-timeline="data-smart-timeline" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+      </SmartHeadline>
+      <SmartTimeline style={{ flex: 1, overflow: 'hidden' }}>
         {data.items.map((item, idx) => (
-          <div
+          <SmartTimelineItem
             key={idx}
-            data-smart-timeline-item="data-smart-timeline-item"
             style={{
               display: 'flex',
               alignItems: 'flex-start',
@@ -543,18 +502,12 @@ const SequenceLayout: React.FC<{
               >
                 {item.title}
               </h4>
-              <p
-                data-smart-fit="data-smart-fit"
-                data-smart-fit-mode="box"
-                data-smart-fit-min="18"
-                data-smart-fit-max="36"
-                data-smart-fit-max-lines="8"
+              <SmartEventDesc
+                fontFamily={theme.fontSans}
                 style={{
-                  fontFamily: theme.fontSans,
                   fontSize: '20px',
                   fontWeight: '300',
                   lineHeight: 1.3,
-                  margin: 0,
                   color: hexToRgba(theme.text, 0.65),
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -564,11 +517,11 @@ const SequenceLayout: React.FC<{
                 }}
               >
                 {item.desc}
-              </p>
+              </SmartEventDesc>
             </div>
-          </div>
+          </SmartTimelineItem>
         ))}
-      </div>
+      </SmartTimeline>
     </SafeArea>
   );
 };
@@ -580,41 +533,25 @@ const TelemetryLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea style={{ justifyContent: 'space-between' }}>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
-          margin: 0,
+          margin: '0 0 40px 0',
           color: theme.text,
           flexShrink: 0,
         }}
       >
         {data.headline}
-      </h2>
-      <div
-        data-smart-grid="data-smart-grid"
-        data-smart-grid-cols={data.stats.length <= 4 ? '2' : '3'}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: data.stats.length <= 4 ? '1fr 1fr' : '1fr 1fr 1fr',
-          gap: 40,
-          flex: 1,
-          alignItems: 'center',
-        }}
-      >
+      </SmartHeadline>
+      <SmartGrid columns={data.stats.length <= 4 ? 2 : 3} gap={40} style={{ flex: 1, alignItems: 'center' }}>
         {data.stats.map((stat, idx) => (
           <div key={idx} style={{ display: 'flex', flexDirection: 'column' }}>
-            <span
-              data-smart-stat="data-smart-stat"
-              data-smart-stat-min="32"
-              data-smart-stat-max="80"
+            <SmartStat
+              fontFamily={theme.fontSans}
               style={{
-                fontFamily: theme.fontSans,
                 fontSize: '80px',
                 fontWeight: '700',
                 lineHeight: 0.85,
@@ -623,7 +560,7 @@ const TelemetryLayout: React.FC<{
               }}
             >
               {stat.value}
-            </span>
+            </SmartStat>
             <span
               style={{
                 fontFamily: theme.fontSans,
@@ -638,7 +575,7 @@ const TelemetryLayout: React.FC<{
             </span>
           </div>
         ))}
-      </div>
+      </SmartGrid>
     </SafeArea>
   );
 };
@@ -650,14 +587,11 @@ const TableLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
           margin: '0 0 40px 0',
           color: theme.text,
@@ -665,8 +599,8 @@ const TableLayout: React.FC<{
         }}
       >
         {data.headline}
-      </h2>
-      <div data-smart-table-container="data-smart-table-container" style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      </SmartHeadline>
+      <SmartTable style={{ overflow: 'hidden' }}>
         <div
           style={{
             display: 'grid',
@@ -692,7 +626,7 @@ const TableLayout: React.FC<{
             </span>
           ))}
         </div>
-        <div data-smart-table="data-smart-table" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+        <SmartTableBody style={{ overflow: 'hidden' }}>
           {data.rows.map((row, rowIdx) => (
             <div
               key={rowIdx}
@@ -707,29 +641,25 @@ const TableLayout: React.FC<{
               }}
             >
               {row.map((cell, cellIdx) => (
-                <span
+                <SmartTableCell
                   key={cellIdx}
-                  data-smart-fit="data-smart-fit"
-                  data-smart-fit-mode="box"
-                  data-smart-fit-min="16"
-                  data-smart-fit-max="24"
+                  fontFamily={theme.fontSans}
+                  fontWeight={cellIdx === 0 ? 600 : 400}
+                  color={theme.text}
                   style={{
-                    fontFamily: theme.fontSans,
                     fontSize: '20px',
-                    fontWeight: cellIdx === 0 ? '600' : '400',
-                    color: theme.text,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                   }}
                 >
                   {cell}
-                </span>
+                </SmartTableCell>
               ))}
             </div>
           ))}
-        </div>
-      </div>
+        </SmartTableBody>
+      </SmartTable>
     </SafeArea>
   );
 };
@@ -741,31 +671,23 @@ const ImageSplitLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea>
-      <div data-smart-image-split="data-smart-image-split" data-smart-image-split-direction="row" style={{ display: 'flex', gap: 40, flex: 1, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 40, flex: 1, alignItems: 'center' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <h2
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="width"
-            data-smart-fit-min="48"
-            data-smart-fit-max="130"
+          <SmartHeadline
+            tag="h2"
+            fontFamily={theme.fontSerif}
             style={{
               ...headlineStyle, ...getOverflowStyles(),
-              fontFamily: theme.fontSerif,
               letterSpacing: '-0.02em',
               margin: '0 0 24px 0',
               color: theme.text,
             }}
           >
             {data.headline}
-          </h2>
-          <p
-            data-smart-fit="data-smart-fit"
-            data-smart-fit-mode="box"
-            data-smart-fit-min="18"
-            data-smart-fit-max="36"
-            data-smart-fit-max-lines="8"
+          </SmartHeadline>
+          <SmartBody
+            fontFamily={theme.fontSans}
             style={{
-              fontFamily: theme.fontSans,
               ...getBodyStyle(data.bodyText),
               ...getOverflowStyles({ maxLines: 6 }),
               margin: 0,
@@ -773,7 +695,7 @@ const ImageSplitLayout: React.FC<{
             }}
           >
             {data.bodyText}
-          </p>
+          </SmartBody>
         </div>
         <div
           style={{
@@ -858,29 +780,21 @@ const ImageCoverLayout: React.FC<{
         }}
       />
       <SafeArea style={{ justifyContent: 'flex-end' }}>
-        <h2
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="width"
-          data-smart-fit-min="48"
-          data-smart-fit-max="130"
+        <SmartHeadline
+          tag="h2"
+          fontFamily={theme.fontSerif}
           style={{
             ...headlineStyle, ...getOverflowStyles(),
-            fontFamily: theme.fontSerif,
             letterSpacing: '-0.02em',
             margin: '0 0 16px 0',
             color: theme.text,
           }}
         >
           {data.headline}
-        </h2>
-        <p
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="box"
-          data-smart-fit-min="18"
-          data-smart-fit-max="36"
-          data-smart-fit-max-lines="8"
+        </SmartHeadline>
+        <SmartBody
+          fontFamily={theme.fontSans}
           style={{
-            fontFamily: theme.fontSans,
             ...getBodyStyle(data.subtext),
             lineHeight: 1.4,
             margin: 0,
@@ -889,7 +803,7 @@ const ImageCoverLayout: React.FC<{
           }}
         >
           {data.subtext}
-        </p>
+        </SmartBody>
       </SafeArea>
     </div>
   );
@@ -902,30 +816,22 @@ const CtaLayout: React.FC<{
   const headlineStyle = getHeadlineStyle(data.headline);
   return (
     <SafeArea compact dataSmartCenter style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-      <h2
-        data-smart-fit="data-smart-fit"
-        data-smart-fit-mode="width"
-        data-smart-fit-min="48"
-        data-smart-fit-max="130"
+      <SmartHeadline
+        tag="h2"
+        fontFamily={theme.fontSerif}
         style={{
           ...headlineStyle, ...getOverflowStyles(),
-          fontFamily: theme.fontSerif,
           letterSpacing: '-0.02em',
           margin: '0 0 24px 0',
           color: theme.text,
         }}
       >
         {data.headline}
-      </h2>
+      </SmartHeadline>
       {data.subtext && (
-        <p
-          data-smart-fit="data-smart-fit"
-          data-smart-fit-mode="box"
-          data-smart-fit-min="18"
-          data-smart-fit-max="36"
-          data-smart-fit-max-lines="8"
+        <SmartBody
+          fontFamily={theme.fontSans}
           style={{
-            fontFamily: theme.fontSans,
             fontSize: '24px',
             fontWeight: '300',
             lineHeight: 1.4,
@@ -935,7 +841,7 @@ const CtaLayout: React.FC<{
           }}
         >
           {data.subtext}
-        </p>
+        </SmartBody>
       )}
       <div
         style={{

@@ -1,21 +1,10 @@
-import React from 'react';
 import type { FastifyPluginAsync } from 'fastify';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { writeFileSync, mkdirSync, readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync, mkdirSync } from 'fs';
+import { join } from 'path';
+import React from 'react';
 import { JobRepository } from '@loopreel/db';
-import { TEMPLATES } from '@loopreel/templates';
-
-import { existsSync } from 'fs';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const _smartFitCandidates = [
-  join(__dirname, '../../../../packages/templates/src/engine/smart-fit.js'),
-  join(__dirname, '../../../packages/templates/src/engine/smart-fit.js'),
-];
-const _smartFitPath = _smartFitCandidates.find(p => existsSync(p)) ?? _smartFitCandidates[0];
-const SMART_FIT_SCRIPT = readFileSync(_smartFitPath, 'utf-8');
+import { getTemplate } from '@loopreel/templates';
 
 export const renderRoute: FastifyPluginAsync = async (app) => {
   app.get('/internal/render/:jobId/:slideIndex', {
@@ -53,38 +42,48 @@ export const renderRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: 'Job has no content payload' });
     }
 
-    const template = TEMPLATES[job.template_id as keyof typeof TEMPLATES];
-    if (!template) {
-      return reply.status(400).send({ error: `Unknown template: ${job.template_id}` });
-    }
+    const template = getTemplate(job.template_id);
 
-    const payload = job.content_payload as { meta: Record<string, unknown>; slides: Array<Record<string, unknown>> };
+    const payload = job.content_payload as any;
 
-    if (index >= payload.slides.length) {
+    if (index >= payload.slides.length + 2) {
       return reply.status(400).send({ error: 'Slide index out of range' });
     }
 
-    const slide = payload.slides[index];
-    const meta = payload.meta;
+    const platform = job.platform ?? 'instagram-feed';
+    const formatMap: Record<string, string> = {
+      'instagram-feed': 'portrait',
+      'instagram-stories': 'story',
+      'linkedin': 'landscape',
+      'facebook': 'landscape',
+    };
+    const format = formatMap[platform] ?? 'portrait';
 
     const html = renderToStaticMarkup(
-      React.createElement(template.Component as React.ComponentType<any>, {
-        slide: slide as any,
-        meta: meta as any,
+      React.createElement(template.Component, {
+        content: payload,
         slideIndex: index,
-        slideCount: job.slide_count ?? payload.slides.length,
+        format,
       })
     );
+
+    const renderGateScript = `
+<script>
+  (function() {
+    document.fonts.ready.then(function() {
+      document.body.setAttribute('data-render-complete', 'true');
+    });
+  })();
+</script>`;
 
     const fullHtml = `<!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Manrope:wght@200;300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Archivo:wght@400;500;600;700&display=swap">
     <style>body { margin: 0; padding: 0; }</style>
   </head>
   <body>${html}</body>
-  <script>${SMART_FIT_SCRIPT}</script>
+  ${renderGateScript}
 </html>`;
 
     try {
