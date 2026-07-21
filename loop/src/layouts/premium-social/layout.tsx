@@ -12,10 +12,10 @@ import ImageCover from './image-cover';
 import Cta from './cta';
 
 export const templateMeta = {
-  id: 'archive-paper',
-  name: 'Archive Paper',
-  schemeId: 'archive_paper',
-  visualDescription: 'Warm, vintage, classical aesthetic. Serif throughout, paper-like background, classic double-rules. Best for educational content, historical analysis, and long-form explainers.',
+  id: 'premium-social',
+  name: 'Premium Social',
+  schemeId: 'premium_social',
+  visualDescription: 'Dark, bold, high-impact social media aesthetic. Gold accent, heavy sans-serif uppercase headlines. Best for viral-style content, opinion pieces, and high-engagement carousels.',
 };
 
 export { default as frame } from './frame';

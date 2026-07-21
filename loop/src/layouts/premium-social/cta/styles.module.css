@@ -1,0 +1,5 @@
+.wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; flex: 1; }
+.headline { color: var(--text); }
+.subtext { font-size: 18px; line-height: 1.6; font-weight: 300; max-width: 65%; color: var(--text); opacity: 0.6; }
+.button { display: inline-block; padding: 16px 48px; background-color: var(--accent); color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 0; }
+.social { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-top: 8px; font-weight: 600; }

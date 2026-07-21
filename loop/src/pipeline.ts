@@ -2,12 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer } from 'vite';
-import { VoidContractSchema, type VoidContract } from './schema';
+import { VoidContractSchema, type VoidContract } from '../schema';
 import { exportCarouselToImages } from './exporter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DECKS_DIR = path.join(__dirname, 'decks');
-const OUTPUT_DIR = path.join(__dirname, 'output');
+const DECKS_DIR = path.join(__dirname, '../decks');
+const OUTPUT_DIR = path.join(__dirname, '../output');
 
 interface DeckManifest {
   templateId: string;
@@ -72,7 +72,6 @@ function validateContract(contract: VoidContract, deckName: string): void {
 async function main() {
   console.log('=== LOOP ENGINE PIPELINE ===\n');
 
-  // 1. Discover decks
   console.log('Discovering decks...');
   const decks = await discoverDecks();
   console.log(`Found ${decks.length} decks: ${decks.map(d => d.manifest.name).join(', ')}\n`);
@@ -82,7 +81,6 @@ async function main() {
     process.exit(1);
   }
 
-  // 2. Validate all contracts
   console.log('Validating slide contracts...');
   for (const deck of decks) {
     validateContract(deck.contract, deck.folderName);
@@ -90,10 +88,9 @@ async function main() {
   }
   console.log('');
 
-  // 3. Start Vite dev server
   console.log('Starting Vite dev server...');
   const viteServer = await createServer({
-    configFile: path.join(__dirname, 'vite.config.ts'),
+    configFile: path.join(__dirname, '../vite.config.ts'),
     server: { port: 5173, strictPort: true },
   });
   await viteServer.listen();
@@ -101,7 +98,6 @@ async function main() {
   console.log(`Vite server running at ${baseUrl}\n`);
 
   try {
-    // 4. Export each deck
     console.log('Exporting slides to PNG...');
     let totalExports = 0;
 
@@ -118,7 +114,6 @@ async function main() {
       totalExports += exportedPaths.length;
     }
 
-    // 5. Summary
     console.log('\n=== PIPELINE COMPLETE ===');
     console.log(`Total decks: ${decks.length}`);
     console.log(`Total PNGs exported: ${totalExports}`);

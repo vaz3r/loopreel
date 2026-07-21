@@ -1,0 +1,7 @@
+.tag { font-family: var(--fontMono), monospace; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.headline { margin-bottom: 20px; color: var(--text); }
+.wrapper { flex: 1; overflow: auto; min-height: 0; }
+.table { width: 100%; border-collapse: collapse; }
+.headerCell { padding: 14px 18px; text-align: left; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background-color: var(--accent); color: #fff; }
+.cell { padding: 12px 18px; font-size: 16px; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 400; }
+.evenRow { opacity: 0.6; }

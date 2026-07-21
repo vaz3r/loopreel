@@ -10,17 +10,30 @@ import Table from './table';
 import ImageSplit from './image-split';
 import ImageCover from './image-cover';
 import Cta from './cta';
-import type { LayoutProps } from '../shared/types';
-import type React from 'react';
 
-const layouts: Record<string, React.ComponentType<LayoutProps>> = {
-  cover: Cover, definition: Definition, dichotomy: Dichotomy,
-  timeline: Timeline, quote: Quote, sequence: Sequence,
-  telemetry: Telemetry, table: Table, 'image-split': ImageSplit,
-  'image-cover': ImageCover, cta: Cta,
+export const templateMeta = {
+  id: 'modern-clean',
+  name: 'Modern Clean',
+  schemeId: 'custom_brand',
+  visualDescription: 'Clean, modern tech aesthetic. White/light backgrounds with indigo accent. Sans-serif minimal design. Best for tech content, startup topics, and modern design-focused content.',
 };
 
-export { Frame };
-export function getLayout(type: string): React.ComponentType<LayoutProps> {
-  return layouts[type] ?? layouts.cover;
+export { default as frame } from './frame';
+
+export const slides: Record<string, any> = {
+  cover: Cover,
+  definition: Definition,
+  dichotomy: Dichotomy,
+  timeline: Timeline,
+  quote: Quote,
+  sequence: Sequence,
+  telemetry: Telemetry,
+  table: Table,
+  'image-split': ImageSplit,
+  'image-cover': ImageCover,
+  cta: Cta,
+};
+
+export function getLayout(type: string) {
+  return slides[type] ?? slides.cover;
 }

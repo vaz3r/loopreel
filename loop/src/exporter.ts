@@ -1,7 +1,7 @@
 import { chromium, type Browser } from 'playwright';
 import fs from 'fs';
 import path from 'path';
-import type { VoidContract } from './schema';
+import type { VoidContract } from '../schema';
 
 export interface ExportOptions {
   baseUrl?: string;

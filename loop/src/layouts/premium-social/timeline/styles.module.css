@@ -1,0 +1,11 @@
+.tag { font-family: var(--fontMono), monospace; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.headline { margin-bottom: 28px; color: var(--text); }
+.list { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0; min-height: 0; overflow-y: auto; }
+.event { display: flex; gap: 24px; min-height: 0; }
+.dotCol { display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background-color: var(--accent); flex-shrink: 0; margin-top: 6px; }
+.line { width: 3px; flex: 1; background-color: var(--accent); opacity: 0.3; }
+.body { flex: 1; padding-bottom: 24px; }
+.date { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.eventTitle { font-size: 22px; font-weight: 800; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; }
+.eventDesc { font-size: 16px; line-height: 1.5; font-weight: 300; color: var(--text); opacity: 0.6; margin-top: 4px; }

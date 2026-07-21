@@ -22,6 +22,12 @@ export const SCHEMES = {
     bg: '#0F172A', text: '#F8FAFC', accent: '#38BDF8',
     border: 'rgba(248, 250, 252, 0.2)', gridBorder: 'rgba(248, 250, 252, 0.1)',
     fontSerif: 'Playfair Display', fontSans: 'Inter', fontMono: 'Space Mono'
+  },
+  premium_social: {
+    id: 'premium_social', name: 'Premium Social',
+    bg: '#0A0A0A', text: '#FFFFFF', accent: '#F59E0B',
+    border: 'rgba(255, 255, 255, 0.15)', gridBorder: 'rgba(255, 255, 255, 0.08)',
+    fontSerif: 'Manrope', fontSans: 'Manrope', fontMono: 'Space Mono'
   }
 };
 

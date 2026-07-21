@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "pipeline": "tsx pipeline.ts",
-    "export": "tsx pipeline.ts"
+    "pipeline": "tsx src/pipeline.ts",
+    "export": "tsx src/pipeline.ts",
+    "generate": "tsx src/generate-demo.ts"
   },
   "dependencies": {
     "react": "^18.3.1",

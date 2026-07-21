@@ -10,17 +10,30 @@ import Table from './table';
 import ImageSplit from './image-split';
 import ImageCover from './image-cover';
 import Cta from './cta';
-import type { LayoutProps } from '../shared/types';
-import type React from 'react';
 
-const layouts: Record<string, React.ComponentType<LayoutProps>> = {
-  cover: Cover, definition: Definition, dichotomy: Dichotomy,
-  timeline: Timeline, quote: Quote, sequence: Sequence,
-  telemetry: Telemetry, table: Table, 'image-split': ImageSplit,
-  'image-cover': ImageCover, cta: Cta,
+export const templateMeta = {
+  id: 'industrial-brutal',
+  name: 'Industrial Brutal',
+  schemeId: 'industrial_brutal',
+  visualDescription: 'Bold, heavy, high-contrast brutalist aesthetic. Sans-serif uppercase headlines, thick borders, geometric elements. Best for disruptive topics, opinion pieces, and bold statements.',
 };
 
-export { Frame };
-export function getLayout(type: string): React.ComponentType<LayoutProps> {
-  return layouts[type] ?? layouts.cover;
+export { default as frame } from './frame';
+
+export const slides: Record<string, any> = {
+  cover: Cover,
+  definition: Definition,
+  dichotomy: Dichotomy,
+  timeline: Timeline,
+  quote: Quote,
+  sequence: Sequence,
+  telemetry: Telemetry,
+  table: Table,
+  'image-split': ImageSplit,
+  'image-cover': ImageCover,
+  cta: Cta,
+};
+
+export function getLayout(type: string) {
+  return slides[type] ?? slides.cover;
 }

@@ -1,0 +1,6 @@
+.tag { font-family: var(--fontMono), monospace; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.termRow { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.term { font-size: 72px; font-weight: 900; line-height: 1; letter-spacing: -0.02em; color: var(--text); }
+.colon { font-size: 72px; font-weight: 900; color: var(--accent); line-height: 1; }
+.definition { font-size: 28px; line-height: 1.5; font-weight: 300; padding-left: 24px; border-left: 4px solid var(--accent); color: var(--text); opacity: 0.85; max-width: 90%; }
+.example { font-size: 20px; line-height: 1.5; font-style: italic; opacity: 0.45; margin-top: 20px; padding-left: 24px; color: var(--text); }

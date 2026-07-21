@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Engine from '../Engine';
+import Engine from './editor';
 import RenderSlide from './RenderSlide';
 
 function App() {
