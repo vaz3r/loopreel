@@ -16,8 +16,12 @@ const FooterFields = {
   footerRight: z.string().max(40),
 };
 
-export const CoverSlideSchema = z.object({
+const BaseFields = {
   id: z.string(),
+};
+
+export const CoverSlideSchema = z.object({
+  ...BaseFields,
   type: z.literal('cover'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -27,7 +31,7 @@ export const CoverSlideSchema = z.object({
 });
 
 export const DefinitionSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('definition'),
   tag: z.string().max(MAX.tag),
   term: z.string().max(MAX.term),
@@ -38,7 +42,7 @@ export const DefinitionSlideSchema = z.object({
 });
 
 export const DichotomySlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('dichotomy'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -60,7 +64,7 @@ export const TimelineEventSchema = z.object({
 });
 
 export const TimelineSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('timeline'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -69,7 +73,7 @@ export const TimelineSlideSchema = z.object({
 });
 
 export const QuoteSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('quote'),
   tag: z.string().max(MAX.tag),
   quote: z.string().max(MAX.quote),
@@ -85,7 +89,7 @@ export const SequenceItemSchema = z.object({
 });
 
 export const SequenceSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('sequence'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -99,7 +103,7 @@ export const StatSchema = z.object({
 });
 
 export const TelemetrySlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('telemetry'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -108,7 +112,7 @@ export const TelemetrySlideSchema = z.object({
 });
 
 export const TableSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('table'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -118,7 +122,7 @@ export const TableSlideSchema = z.object({
 });
 
 export const ImageSplitSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('image-split'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -128,7 +132,7 @@ export const ImageSplitSlideSchema = z.object({
 });
 
 export const ImageCoverSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('image-cover'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),
@@ -138,7 +142,7 @@ export const ImageCoverSlideSchema = z.object({
 });
 
 export const CtaSlideSchema = z.object({
-  id: z.string(),
+  ...BaseFields,
   type: z.literal('cta'),
   tag: z.string().max(MAX.tag),
   headline: z.string().max(MAX.headline),

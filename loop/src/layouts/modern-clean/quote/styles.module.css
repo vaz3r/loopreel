@@ -1,0 +1,43 @@
+.block {
+  padding-left: 24px;
+  border-left: 4px solid;
+  border-color: var(--accent);
+}
+.quoteMark {
+  font-size: 56px;
+  line-height: 0.8;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.25;
+  margin-bottom: -4px;
+}
+.quote {
+  font-size: 30px;
+  line-height: 1.4;
+  font-weight: 400;
+  max-width: 90%;
+  color: var(--text);
+}
+.authorRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.bar {
+  width: 32px;
+  height: 2px;
+  background-color: var(--accent);
+}
+.author {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+.role {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.45;
+  color: var(--text);
+  margin-top: 2px;
+}

@@ -7,20 +7,14 @@ declare global {
   interface Window {
     __SLIDE_DATA?: Slide;
     __SLIDE_SCHEME_ID?: string;
+    __SLIDE_TEMPLATE_ID?: string;
   }
 }
 
 export default function RenderSlide() {
-  const params = new URLSearchParams(window.location.search);
-
-  const slide: Slide | undefined = window.__SLIDE_DATA || (() => {
-    const raw = params.get('slide');
-    if (!raw) return undefined;
-    try { return JSON.parse(decodeURIComponent(raw)); }
-    catch { return undefined; }
-  })();
-
-  const schemeId = window.__SLIDE_SCHEME_ID || params.get('schemeId') || 'void_editorial';
+  const slide: Slide | undefined = window.__SLIDE_DATA;
+  const schemeId = window.__SLIDE_SCHEME_ID || 'void_editorial';
+  const templateId = window.__SLIDE_TEMPLATE_ID || 'void-editorial';
   const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.void_editorial) as Scheme;
 
   useEffect(() => {
@@ -33,7 +27,7 @@ export default function RenderSlide() {
 
   return (
     <main style={{ margin: 0, padding: 0, background: '#000', width: 1080, height: 1350, overflow: 'hidden' }}>
-      <SlideRenderer slide={slide} scheme={scheme} />
+      <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} />
     </main>
   );
 }

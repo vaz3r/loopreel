@@ -546,6 +546,7 @@ export default function App() {
           <SlideRenderer
             slide={activeData as any}
             scheme={currentScheme}
+            templateId={activeSchemeId.replace(/_/g, '-')}
             brandKit={activeSchemeId === 'custom_brand' ? brandKit : undefined}
           />
         </div>

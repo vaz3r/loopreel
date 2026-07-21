@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  height: 100%;
+}
+.headline {
+  color: var(--text);
+}
+.subtext {
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 300;
+  max-width: 65%;
+  color: var(--text);
+  opacity: 0.65;
+}
+.button {
+  display: inline-block;
+  padding: 14px 40px;
+  background-color: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 50px;
+  letter-spacing: 0.02em;
+}
+.social {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.35;
+  margin-top: 8px;
+}

@@ -9,6 +9,7 @@ export interface ExportOptions {
   deviceScaleFactor?: number;
   width?: number;
   height?: number;
+  templateId?: string;
 }
 
 export async function exportCarouselToImages(
@@ -23,6 +24,7 @@ export async function exportCarouselToImages(
     deviceScaleFactor = 2,
     width = 1080,
     height = 1350,
+    templateId = 'void-editorial',
   } = options;
 
   const fullOutputDir = path.join(outputDir, outputSubdir);
@@ -44,19 +46,17 @@ export async function exportCarouselToImages(
 
     page = await context.newPage();
 
-    // Inject slide data directly into the page via init script
-    // This avoids URL encoding issues with special characters
     await page.addInitScript({
       content: `
         window.__SLIDE_DATA = ${JSON.stringify(slide)};
         window.__SLIDE_SCHEME_ID = ${JSON.stringify(schemeId)};
+        window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
       `,
     });
 
     await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
-    // Verify the page loaded correctly
     const errorText = await page.evaluate(() => {
       const el = document.querySelector('[style*="color: red"]');
       return el ? el.textContent : null;

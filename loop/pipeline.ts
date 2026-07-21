@@ -6,10 +6,11 @@ import { VoidContractSchema, type VoidContract } from './schema';
 import { exportCarouselToImages } from './exporter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const THEMES_DIR = path.join(__dirname, 'themes');
+const DECKS_DIR = path.join(__dirname, 'decks');
 const OUTPUT_DIR = path.join(__dirname, 'output');
 
-interface ThemeManifest {
+interface DeckManifest {
+  templateId: string;
   schemeId: string;
   name: string;
   description: string;
@@ -23,70 +24,69 @@ interface ThemeManifest {
   };
 }
 
-interface ThemeData {
+interface DeckData {
   folderName: string;
-  manifest: ThemeManifest;
+  manifest: DeckManifest;
   contract: VoidContract;
 }
 
-async function discoverThemes(): Promise<ThemeData[]> {
-  const themes: ThemeData[] = [];
-  const entries = fs.readdirSync(THEMES_DIR, { withFileTypes: true });
+async function discoverDecks(): Promise<DeckData[]> {
+  const decks: DeckData[] = [];
+  const entries = fs.readdirSync(DECKS_DIR, { withFileTypes: true });
 
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
 
-    const themeDir = path.join(THEMES_DIR, entry.name);
-    const manifestPath = path.join(themeDir, 'manifest.json');
-    const slidesPath = path.join(themeDir, 'slides.ts');
+    const deckDir = path.join(DECKS_DIR, entry.name);
+    const manifestPath = path.join(deckDir, 'manifest.json');
+    const slidesPath = path.join(deckDir, 'slides.ts');
 
     if (!fs.existsSync(manifestPath) || !fs.existsSync(slidesPath)) {
       console.warn(`Skipping ${entry.name}: missing manifest.json or slides.ts`);
       continue;
     }
 
-    const manifest: ThemeManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+    const manifest: DeckManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-    // Import the slides module dynamically
-    const slidesModule = await import(path.join(themeDir, 'slides.ts'));
+    const slidesModule = await import(path.join(deckDir, 'slides.ts'));
     const contract: VoidContract = slidesModule.default;
 
-    themes.push({
+    decks.push({
       folderName: entry.name,
       manifest,
       contract,
     });
   }
 
-  return themes;
+  return decks;
 }
 
-function validateContract(contract: VoidContract, themeName: string): void {
+function validateContract(contract: VoidContract, deckName: string): void {
   const result = VoidContractSchema.safeParse(contract);
   if (!result.success) {
     const errors = result.error.issues.map(i => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
-    throw new Error(`Validation failed for theme "${themeName}":\n${errors}`);
+    throw new Error(`Validation failed for deck "${deckName}":\n${errors}`);
   }
 }
 
 async function main() {
   console.log('=== LOOP ENGINE PIPELINE ===\n');
 
-  // 1. Discover themes
-  console.log('Discovering themes...');
-  const themes = await discoverThemes();
-  console.log(`Found ${themes.length} themes: ${themes.map(t => t.manifest.name).join(', ')}\n`);
+  // 1. Discover decks
+  console.log('Discovering decks...');
+  const decks = await discoverDecks();
+  console.log(`Found ${decks.length} decks: ${decks.map(d => d.manifest.name).join(', ')}\n`);
 
-  if (themes.length === 0) {
-    console.error('No themes found. Exiting.');
+  if (decks.length === 0) {
+    console.error('No decks found. Exiting.');
     process.exit(1);
   }
 
   // 2. Validate all contracts
   console.log('Validating slide contracts...');
-  for (const theme of themes) {
-    validateContract(theme.contract, theme.folderName);
-    console.log(`  ${theme.manifest.name}: ${theme.contract.slides.length} slides - VALID`);
+  for (const deck of decks) {
+    validateContract(deck.contract, deck.folderName);
+    console.log(`  ${deck.manifest.name}: ${deck.contract.slides.length} slides - VALID`);
   }
   console.log('');
 
@@ -101,18 +101,18 @@ async function main() {
   console.log(`Vite server running at ${baseUrl}\n`);
 
   try {
-    // 4. Export each theme
+    // 4. Export each deck
     console.log('Exporting slides to PNG...');
     let totalExports = 0;
 
-    for (const theme of themes) {
-      console.log(`\n[${theme.manifest.name}] (${theme.contract.slides.length} slides)`);
+    for (const deck of decks) {
+      console.log(`\n[${deck.manifest.name}] (${deck.contract.slides.length} slides)`);
 
       const exportedPaths = await exportCarouselToImages(
-        theme.contract,
-        theme.manifest.schemeId,
-        theme.folderName,
-        { baseUrl, outputDir: OUTPUT_DIR }
+        deck.contract,
+        deck.manifest.schemeId,
+        deck.folderName,
+        { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.manifest.templateId }
       );
 
       totalExports += exportedPaths.length;
@@ -120,7 +120,7 @@ async function main() {
 
     // 5. Summary
     console.log('\n=== PIPELINE COMPLETE ===');
-    console.log(`Total themes: ${themes.length}`);
+    console.log(`Total decks: ${decks.length}`);
     console.log(`Total PNGs exported: ${totalExports}`);
     console.log(`Output directory: ${OUTPUT_DIR}`);
   } finally {
