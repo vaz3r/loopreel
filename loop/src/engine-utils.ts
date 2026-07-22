@@ -23,6 +23,12 @@ export const SCHEMES = {
     border: '#2A2A2A', gridBorder: '#2A2A2A33',
     fontSerif: 'Inter', fontSans: 'JetBrains Mono', fontMono: 'JetBrains Mono'
   },
+  curator_gallery: {
+    id: 'curator_gallery', name: 'The Curator',
+    bg: '#FFFFFF', text: '#000000', accent: '#000000',
+    border: '#E5E5E5', gridBorder: '#E5E5E5',
+    fontSerif: 'Cormorant Garamond', fontSans: 'Inter', fontMono: 'Inter'
+  },
 };
 
 export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];

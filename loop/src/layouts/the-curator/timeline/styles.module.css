@@ -1,0 +1,13 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid #E5E5E5; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.track { flex: 1; display: flex; flex-direction: column; margin-left: 140px; padding-left: 48px; border-left: 1px solid #E5E5E5; }
+.event { position: relative; padding-bottom: 56px; }
+.event:last-child { padding-bottom: 0; }
+.dateLabel { position: absolute; left: -192px; top: 4px; font-family: 'Inter', sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.3em; color: #4A4A4A; width: 128px; text-align: right; font-weight: 500; }
+.dot { position: absolute; left: -53px; top: 8px; width: 9px; height: 9px; background: #4A4A4A; }
+.dotHighlight { background: #000; width: 11px; height: 11px; left: -54px; top: 7px; }
+.eventTitle { font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #000; margin-bottom: 12px; line-height: 1; }
+.eventTitleItalic { font-style: italic; }
+.eventDesc { font-family: 'Inter', sans-serif; font-size: 20px; color: #4A4A4A; font-weight: 300; }
+.eventDescHighlight { color: #000; font-weight: 500; }

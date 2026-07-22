@@ -1,0 +1,10 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 64px; text-align: center; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.panel { flex: 1; display: flex; flex-direction: column; border: 1px solid #E5E5E5; }
+.mythSection { flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center; text-align: center; border-bottom: 1px solid #E5E5E5; position: relative; }
+.label { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); font-family: 'Inter', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3em; color: #4A4A4A; font-weight: 500; }
+.mythText { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: #4A4A4A; line-height: 1.4; text-decoration: line-through; text-decoration-color: #E5E5E5; font-weight: 300; margin-top: 32px; }
+.factSection { flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center; text-align: center; background: #F4F4F4; position: relative; }
+.labelDark { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); font-family: 'Inter', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3em; color: #000; font-weight: 700; }
+.factText { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: #000; line-height: 1.4; font-weight: 400; margin-top: 32px; }

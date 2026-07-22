@@ -48,10 +48,25 @@ const THE_TERMINAL_SLIDES = [
   { id: 'tt-cta-1', type: 'cta', tag: 'AUTH_REQ', headline: 'Terminal Access Granted.', subtext: 'Receive unfiltered macro-economic data feeds weekly.', actionLabel: '> INITIALIZE_SUB', socialHandle: 'CONNECT: @THETERMINAL_HQ', footerLeft: 'SUBSCRIPTION', footerRight: 'PAGE 12' },
 ];
 
+const THE_CURATOR_SLIDES = [
+  { id: 'tc-cover-1', type: 'cover', tag: 'EXHIBITION 01', headline: 'The Space Between.', subheadline: 'An architectural study of negative space, invisible constraints, and the immense power of omitting the unnecessary.', pullQuote: 'True luxury is never loud. It is the quiet confidence of knowing exactly what to leave out.', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 01' },
+  { id: 'tc-seq-1', type: 'sequence', tag: 'THE CATALOG', headline: 'The Principles.', items: [{ num: 'I.', title: 'Omission as Design', desc: 'The removal of non-essential elements until only the structural truth of the object remains.' }, { num: 'II.', title: 'Material Integrity', desc: 'Refusing to disguise the underlying materials. Concrete must look like concrete; wood must breathe.' }, { num: 'III.', title: 'Asymmetric Balance', desc: 'Creating visual tension by placing heavy elements off-center, balanced entirely by vast negative space.' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 02' },
+  { id: 'tc-img-1', type: 'image-split', tag: 'THE GALLERY', headline: 'Form & Function.', bodyText: 'The Bauhaus movement taught us that utility should dictate shape. When applied to digital strategy, this means stripping away decorative marketing.', imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1080&auto=format&fit=crop', credit: 'FIG. 01 — ARCHITECTURE', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 03' },
+  { id: 'tc-telem-1', type: 'telemetry', tag: 'METRICS', headline: 'The Metrics.', stats: [{ value: '68', unit: '%', label: 'Cognitive Load Reduction' }, { value: '3.2', unit: 'x', label: 'Premium Price Multiplier' }, { value: '-45', unit: '%', label: 'Decision Fatigue' }, { value: '90', unit: '%', label: 'Information Retention' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 04' },
+  { id: 'tc-hero-1', type: 'hero-metric', tag: 'HERO METRIC', value: '99', unit: '%', headline: 'The Signal to Noise Ratio', bodyText: 'Most modern communication is entirely disposable. True luxury is found in the one percent that shifts perspective.', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 05' },
+  { id: 'tc-method-1', type: 'methodology', tag: 'METHODOLOGY', headline: 'The Methodology.', steps: [{ num: '01', title: 'Isolation', desc: 'Remove the subject from all contextual noise.' }, { num: '02', title: 'Proportion', desc: 'Scale the essential elements to absolute maximum visibility.' }, { num: '03', title: 'Execution', desc: 'Publish with uncompromising discipline.', highlighted: true }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 06' },
+  { id: 'tc-juxta-1', type: 'juxtaposition', tag: 'AESTHETICS', headline: 'Aesthetic Code.', donts: ['Drop shadows and gradients.', 'Centering all text alignment.', 'Filling every pixel of space.'], dos: ['Absolute stark contrast.', 'Asymmetrical tension.', 'Aggressive negative space.'], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 07' },
+  { id: 'tc-check-1', type: 'checklist', tag: 'INVENTORY', headline: 'The Inventory.', items: [{ text: 'Is the typographic hierarchy immediately obvious?', checked: true }, { text: 'Have all decorative elements been removed?' }, { text: 'Does the negative space actively support the central object?' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 08' },
+  { id: 'tc-break-1', type: 'breakdown', tag: 'ANATOMY', headline: 'Anatomy of Form.', centerLabel: 'The Object', items: [{ num: '01', title: 'Structure', desc: 'The underlying grid.' }, { num: '02', title: 'Negative Space', desc: 'The intentional void.' }, { num: '03', title: 'Typography', desc: 'The voice of the object.' }, { num: '04', title: 'Material', desc: 'The unvarnished truth.' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 09' },
+  { id: 'tc-quote-1', type: 'quote', tag: 'STATEMENT', quote: 'Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.', author: 'Antoine de St. Exupéry', role: 'Aviator & Writer', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 10' },
+  { id: 'tc-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Enter the Gallery.', subtext: 'A private collection of architectural strategy.', actionLabel: 'Acquire Access', socialHandle: 'EXHIBITION: @CURATOR.STUDIO', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 11' },
+];
+
 const TEMPLATE_MAP: Record<string, { schemeId: string; slides: any[] }> = {
   'paper-of-record': { schemeId: 'archive_paper', slides: PAPER_OF_RECORD_SLIDES },
   'the-globalist': { schemeId: 'globalist_editorial', slides: THE_GLOBALIST_SLIDES },
   'the-terminal': { schemeId: 'terminal_dark', slides: THE_TERMINAL_SLIDES },
+  'the-curator': { schemeId: 'curator_gallery', slides: THE_CURATOR_SLIDES },
 };
 
 export default function App() {
@@ -177,11 +192,11 @@ export default function App() {
             {/* Template Selector */}
             <div>
               <label className="block text-[10px] font-mono tracking-widest uppercase text-neutral-500 mb-2">Template</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {Object.keys(TEMPLATE_MAP).map(tid => (
                   <button key={tid} onClick={() => switchTemplate(tid)}
                     className={`py-2 px-1 border text-[10px] font-mono uppercase transition-all ${activeTemplate === tid ? 'border-blue-500 bg-blue-500/10 text-blue-400 font-bold' : 'border-[#333] text-neutral-500 hover:border-[#555]'}`}>
-                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : 'The Terminal'}
+                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : tid === 'the-terminal' ? 'The Terminal' : 'The Curator'}
                   </button>
                 ))}
               </div>

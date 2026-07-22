@@ -1,0 +1,7 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid #E5E5E5; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.cell { display: flex; flex-direction: column; }
+.num { font-family: 'Inter', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3em; color: #000; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid #000; padding-bottom: 8px; width: fit-content; }
+.cellDesc { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #4A4A4A; line-height: 1.5; font-weight: 300; }

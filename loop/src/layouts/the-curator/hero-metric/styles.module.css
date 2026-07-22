@@ -1,0 +1,8 @@
+.wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 48px; position: relative; }
+.cornerTL { position: absolute; top: 40px; left: 40px; width: 32px; height: 32px; border-top: 1px solid #000; border-left: 1px solid #000; }
+.cornerBR { position: absolute; bottom: 40px; right: 40px; width: 32px; height: 32px; border-bottom: 1px solid #000; border-right: 1px solid #000; }
+.value { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 260px; line-height: 1; color: #000; letter-spacing: -0.03em; display: flex; align-items: flex-start; }
+.unit { font-size: 110px; margin-top: 40px; margin-left: 8px; }
+.divider { width: 96px; height: 1px; background: #000; margin: 48px 0; }
+.headline { font-family: 'Inter', sans-serif; font-size: 20px; text-transform: uppercase; letter-spacing: 0.3em; color: #000; font-weight: 700; margin-bottom: 32px; }
+.body { font-family: 'Cormorant Garamond', serif; font-size: 32px; line-height: 1.4; color: #4A4A4A; max-width: 85%; font-weight: 300; }

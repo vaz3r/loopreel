@@ -1,0 +1,11 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid #E5E5E5; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.content { flex: 1; display: flex; flex-direction: column; gap: 24px; justify-content: center; padding: 0 32px; position: relative; }
+.trackLine { position: absolute; left: 85px; top: 40px; bottom: 40px; width: 1px; background: #E5E5E5; z-index: 0; }
+.step { display: flex; gap: 48px; align-items: flex-start; position: relative; z-index: 1; background: #FFF; padding: 16px 0; }
+.stepNum { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500; color: #FFF; background: #000; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 50%; letter-spacing: 0.1em; margin-top: 4px; }
+.stepTitle { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: #000; margin-bottom: 12px; line-height: 1; }
+.stepTitleItalic { font-style: italic; }
+.stepDesc { font-family: 'Inter', sans-serif; font-size: 22px; color: #4A4A4A; font-weight: 300; }
+.stepDescHighlight { color: #000; font-weight: 500; }

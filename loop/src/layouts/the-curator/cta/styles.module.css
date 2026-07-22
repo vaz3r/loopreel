@@ -1,0 +1,6 @@
+.wrap { flex: 1; display: flex; justify-content: center; align-items: center; border: 1px solid #E5E5E5; background: #F4F4F4; }
+.inner { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px; width: 100%; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 82px; line-height: 1; letter-spacing: -0.02em; color: #000; margin-bottom: 24px; }
+.subtext { font-family: 'Inter', sans-serif; font-size: 22px; color: #4A4A4A; margin-bottom: 64px; max-width: 70%; font-weight: 300; }
+.ctaBtn { background: #000; color: #FFF; padding: 20px 48px; font-family: 'Inter', sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.3em; font-weight: 500; margin-bottom: 64px; }
+.handle { font-family: 'Inter', sans-serif; font-size: 13px; color: #4A4A4A; text-transform: uppercase; letter-spacing: 0.3em; padding-top: 32px; width: 50%; border-top: 1px solid #E5E5E5; text-align: center; }

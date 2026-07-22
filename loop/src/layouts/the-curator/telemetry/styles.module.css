@@ -1,0 +1,9 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: auto; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px 80px; margin-top: 64px; align-items: center; }
+.cell { border-left: 1px solid #000; padding-left: 32px; }
+.value { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 108px; line-height: 1; color: #000; margin-bottom: 16px; }
+.unit { font-size: 56px; }
+.label { font-family: 'Inter', sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.3em; color: #4A4A4A; margin-bottom: 12px; font-weight: 500; }
+.note { font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.3; color: #4A4A4A; font-style: italic; }

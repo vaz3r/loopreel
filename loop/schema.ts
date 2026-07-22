@@ -29,3 +29,5 @@ export {
 export { PaperOfRecordContract, type PaperOfRecordContract as PaperOfRecordContractType } from './src/layouts/paper-of-record/schema';
 
 export { TheTerminalContract, type TheTerminalContract as TheTerminalContractType } from './src/layouts/the-terminal/schema';
+
+export { TheCuratorContract, type TheCuratorContract as TheCuratorContractType } from './src/layouts/the-curator/schema';

@@ -2,6 +2,7 @@ import path from 'path';
 import { PaperOfRecordContract } from './layouts/paper-of-record/schema';
 import { TheGlobalistContract } from './layouts/the-globalist/schema';
 import { TheTerminalContract } from './layouts/the-terminal/schema';
+import { TheCuratorContract } from './layouts/the-curator/schema';
 import { exportCarouselToImages } from './exporter';
 import { SCHEMES } from './engine-utils';
 import { startViteServer } from './vite-server';
@@ -34,9 +35,19 @@ const MOCKS: Record<string, { templateId: string; schemeId: string; contract: an
     templateId: 'the-terminal', schemeId: 'terminal_dark', contract: TheTerminalContract,
     data: {
       slides: [
-        { id: 'gen-cover-1', type: 'cover', tag: 'MARKET_DATA', reportId: '994-A', headline: 'The Liquidity Vacuum.', subheadline: 'Quantitative tightening analysis.', authorName: 'J. Stevens', authorRole: 'Macro Strategy', footerLeft: 'MARKET_DATA', footerRight: 'PAGE 01' },
+        { id: 'gen-cover-1', type: 'cover', tag: 'AUTH_REQ', headline: 'Terminal Access Granted.', subheadline: 'Quantitative tightening analysis.', authorName: 'J. Stevens', authorRole: 'Macro Strategy', footerLeft: 'MARKET_DATA', footerRight: 'PAGE 01' },
         { id: 'gen-telem-1', type: 'telemetry', tag: 'DATA_SET', headline: 'Real-Time Telemetry', stats: [{ value: '4.8', unit: '%', label: 'U.S. Core CPI.', color: 'green' }, { value: '124', unit: '', label: 'Corp Defaults.', color: 'red' }], footerLeft: 'TELEMETRY', footerRight: 'PAGE 02' },
         { id: 'gen-cta-1', type: 'cta', tag: 'AUTH_REQ', headline: 'Terminal Access Granted.', subtext: 'Macro-economic data feeds.', actionLabel: '> INITIALIZE_SUB', footerLeft: 'SUBSCRIPTION', footerRight: 'PAGE 03' },
+      ],
+    },
+  },
+  'the-curator': {
+    templateId: 'the-curator', schemeId: 'curator_gallery', contract: TheCuratorContract,
+    data: {
+      slides: [
+        { id: 'gen-cover-1', type: 'cover', tag: 'EXHIBITION', headline: 'The Space Between.', subheadline: 'An architectural study of negative space.', pullQuote: 'True luxury is never loud.', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 01' },
+        { id: 'gen-telem-1', type: 'telemetry', tag: 'METRICS', headline: 'The Metrics.', stats: [{ value: '68', unit: '%', label: 'Cognitive Load Reduction' }, { value: '3.2', unit: 'x', label: 'Premium Price Multiplier' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 02' },
+        { id: 'gen-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Enter the Gallery.', subtext: 'A private collection of architectural strategy.', actionLabel: 'Acquire Access', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 03' },
       ],
     },
   },

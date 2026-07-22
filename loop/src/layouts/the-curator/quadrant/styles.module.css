@@ -1,0 +1,14 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; text-align: center; }
+.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
+.matrix { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; border: 1px solid #E5E5E5; position: relative; }
+.hLine { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #E5E5E5; transform: translateY(-50%); z-index: 1; }
+.vLine { position: absolute; left: 50%; top: 0; height: 100%; width: 1px; background: #E5E5E5; transform: translateX(-50%); z-index: 1; }
+.cell { padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
+.cellBg { background: #F4F4F4; }
+.cellLabel { font-family: 'Inter', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3em; color: #4A4A4A; margin-bottom: 32px; font-weight: 500; }
+.cellContentLeft { text-align: left; }
+.cellContentRight { text-align: right; }
+.cellTitle { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 36px; color: #000; margin-bottom: 12px; }
+.cellTitleHighlight { font-style: italic; }
+.cellDesc { font-family: 'Inter', sans-serif; font-size: 18px; color: #4A4A4A; line-height: 1.5; font-weight: 300; }
