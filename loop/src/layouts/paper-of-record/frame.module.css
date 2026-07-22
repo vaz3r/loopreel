@@ -1,0 +1,128 @@
+.frame {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.masthead {
+  position: absolute;
+  top: 60px;
+  left: 80px;
+  right: 80px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+}
+
+.mastheadTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--steel);
+}
+
+.mastheadTag {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+}
+
+.mastheadName {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--charcoal);
+}
+
+.mastheadSub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.mastheadVolume {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #999999;
+}
+
+.mastheadDate {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+
+.content {
+  position: absolute;
+  top: 180px;
+  bottom: 140px;
+  left: 80px;
+  right: 80px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.footer {
+  position: absolute;
+  bottom: 60px;
+  left: 80px;
+  right: 80px;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-top: 1px solid var(--steel);
+  padding-top: 16px;
+}
+
+.footerHandle {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.footerDots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--charcoal);
+}
+
+.dotInactive {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--steel);
+}
+
+.footerReadTime {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--charcoal);
+}

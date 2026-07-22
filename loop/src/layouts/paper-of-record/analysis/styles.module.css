@@ -1,0 +1,45 @@
+.analysis {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.header {
+  border-bottom: 4px solid var(--ink);
+  padding-bottom: 24px;
+  margin-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.headline {
+  font-family: var(--font-headline);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.body {
+  flex: 1;
+  text-align: justify;
+}
+
+.bodyText {
+  font-family: var(--font-body);
+  font-size: 27px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.dropCap::first-letter {
+  float: left;
+  font-size: 5.5em;
+  line-height: 0.8;
+  padding-right: 0.1em;
+  padding-top: 0.05em;
+  font-family: var(--font-headline);
+  font-weight: 900;
+  color: var(--ink);
+}

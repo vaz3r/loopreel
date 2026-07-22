@@ -1,0 +1,56 @@
+.definition {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin-bottom: 16px;
+}
+
+.term {
+  font-family: var(--font-headline);
+  font-size: 120px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.phonetic {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  color: #999999;
+  letter-spacing: 0.08em;
+  margin-bottom: 64px;
+}
+
+.definitionBody {
+  border-left: 1px solid var(--steel);
+  padding-left: 40px;
+  margin-left: 8px;
+  padding-y: 8px;
+}
+
+.definitionText {
+  font-family: var(--font-body);
+  font-size: 34px;
+  line-height: 1.4;
+  color: var(--charcoal);
+  margin-bottom: 32px;
+}
+
+.example {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-style: italic;
+  color: #999999;
+}

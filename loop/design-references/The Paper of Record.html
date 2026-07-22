@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Paper of Record - Editorial Carousel</title>
+    
+    <!-- Google Fonts: Playfair Display (Headlines), Source Serif 4 (Body), Inter (UI/Metadata) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#f7f7f5',      // NYT Off-white newsprint
+                        ink: '#121212',        // Deep black
+                        charcoal: '#333333',   // Softer text
+                        steel: '#dfdfdf',      // Hairline borders
+                        crimson: '#cc0000',    // Breaking news red
+                    },
+                    fontFamily: {
+                        headline: ['"Playfair Display"', 'serif'],
+                        body: ['"Source Serif 4"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #e5e5e5; color: #121212; overflow-x: hidden; }
+        
+        /* The 1080x1350 Canvas */
+        .canvas-container {
+            width: 1080px; height: 1350px;
+            background-color: #f7f7f5;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        /* Print Design Utilities */
+        .hairline-t { border-top: 1px solid #dfdfdf; }
+        .hairline-b { border-bottom: 1px solid #dfdfdf; }
+        .hairline-l { border-left: 1px solid #dfdfdf; }
+        .hairline-r { border-right: 1px solid #dfdfdf; }
+        .thick-t { border-top: 4px solid #121212; }
+        .thick-b { border-bottom: 4px solid #121212; }
+
+        /* Typography controls */
+        .balance-text { text-wrap: balance; }
+        .pretty-text { text-wrap: pretty; }
+        .drop-cap::first-letter {
+            float: left;
+            font-size: 5.5em;
+            line-height: 0.8;
+            padding-right: 0.1em;
+            padding-top: 0.05em;
+            font-family: "Playfair Display", serif;
+            font-weight: 900;
+        }
+
+        /* Clamping */
+        .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-8 { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-12 { display: -webkit-box; -webkit-line-clamp: 12; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Scaling Modes */
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; 
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+
+        /* Slide Visibility */
+        .slide-layer { display: none; width: 100%; height: 100%; position: absolute; inset: 0; }
+        .slide-layer.active { display: flex; flex-direction: column; }
+    </style>
+</head>
+<body class="mode-preview font-body antialiased selection:bg-crimson selection:text-white">
+
+    <!-- Control Panel -->
+    <div class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-steel p-4 z-[100] flex justify-between items-center shadow-sm">
+        <div>
+            <h1 class="font-headline font-bold text-xl tracking-tight text-ink">THE PAPER OF RECORD</h1>
+            <p class="font-sans text-xs text-gray-500 uppercase tracking-widest mt-1">Editorial Carousel (1080x1350)</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <select id="slideSelector" class="bg-paper text-ink font-sans text-sm px-4 py-2 rounded focus:outline-none border border-steel cursor-pointer">
+                <option value="1">01. Front Page (Cover)</option>
+                <option value="2">02. The Lead (Quote)</option>
+                <option value="3">03. Context (Definition)</option>
+                <option value="4">04. The Briefing (List)</option>
+                <option value="5">05. Perspectives (Versus)</option>
+                <option value="6">06. By The Numbers (Stats)</option>
+                <option value="7">07. Chronology (Timeline)</option>
+                <option value="8">08. Photojournalism (Image)</option>
+                <option value="9">09. Data Desk (Table)</option>
+                <option value="10">10. Analysis (Drop Cap)</option>
+                <option value="11">11. Profile (Focus)</option>
+                <option value="12">12. Subscription (CTA)</option>
+            </select>
+            <button id="modeToggle" class="bg-ink text-white font-sans font-bold text-sm px-6 py-2 rounded hover:bg-charcoal transition-colors">
+                Export Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="pt-[140px] pb-[100px] flex justify-center w-full min-h-screen">
+        
+        <!-- THE CANVAS: 1080x1350 -->
+        <div id="export-canvas" class="canvas-container text-ink">
+            
+            <!-- Structural Elements (Persistent across all slides) -->
+            <!-- Top Masthead Header -->
+            <div class="absolute top-[60px] left-[80px] right-[80px] z-40 flex flex-col">
+                <div class="flex justify-between items-end pb-4 hairline-b">
+                    <span class="font-sans text-sm font-bold tracking-widest uppercase text-charcoal" id="global-tag">TECHNOLOGY</span>
+                    <span class="font-headline italic text-lg text-charcoal">The Daily Investigation</span>
+                </div>
+                <div class="flex justify-between items-center pt-3">
+                    <span class="font-sans text-xs uppercase tracking-widest text-gray-500">Vol. CLXXII .... No. 59,842</span>
+                    <span class="font-sans text-xs font-semibold uppercase tracking-widest text-ink">Wednesday, July 22, 2026</span>
+                </div>
+            </div>
+
+            <!-- Bottom Pagination Footer -->
+            <div class="absolute bottom-[60px] left-[80px] right-[80px] flex justify-between items-start z-40 hairline-t pt-4">
+                <span class="font-sans text-xs uppercase tracking-widest text-ink font-semibold">@editorialdesk</span>
+                <div class="flex gap-2">
+                    <span class="w-2 h-2 bg-charcoal rounded-full"></span>
+                    <span class="w-2 h-2 bg-steel rounded-full"></span>
+                    <span class="w-2 h-2 bg-steel rounded-full"></span>
+                </div>
+                <span class="font-sans text-xs uppercase tracking-widest text-charcoal">Read Time: 4 Min</span>
+            </div>
+
+            <!-- SAFE AREA FOR CONTENT -->
+            <div class="absolute top-[180px] bottom-[140px] left-[80px] right-[80px] z-30">
+                
+                <!-- 01. FRONT PAGE (COVER) -->
+                <div id="slide-1" class="slide-layer active">
+                    <div class="flex-1 flex flex-col justify-center min-h-0">
+                        <h1 class="font-headline font-black text-[105px] leading-[0.95] tracking-tight balance-text text-ink mb-10 clamp-4">
+                            The Silent Collapse of the Global Attention Economy.
+                        </h1>
+                        <h2 class="font-body text-[36px] leading-[1.3] text-charcoal pretty-text clamp-3 mb-10 italic">
+                            How algorithms engineered to maximize engagement have inadvertently destroyed the human capacity for deep work.
+                        </h2>
+                        
+                        <div class="flex gap-8 items-center thick-t pt-6 mt-4 shrink-0">
+                            <div class="font-sans text-sm font-bold uppercase tracking-widest">
+                                By <span class="text-crimson">Sarah K. Kingsley</span>
+                            </div>
+                            <div class="font-sans text-sm text-gray-500 uppercase tracking-widest hairline-l pl-8">
+                                Reporting from San Francisco
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 02. THE LEAD (QUOTE) -->
+                <div id="slide-2" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center text-center px-10 relative">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-ink"></div>
+                        <div class="text-steel font-headline text-[240px] leading-[0.3] mb-8 mt-16 text-center">“</div>
+                        <h2 class="font-headline font-bold text-[64px] leading-[1.15] balance-text clamp-6 mb-16 italic">
+                            We didn't build a product. We built a slot machine that operates on human psychological vulnerabilities.
+                        </h2>
+                        <div class="flex flex-col items-center gap-2 m-auto">
+                            <span class="font-sans font-bold text-[18px] uppercase tracking-widest text-ink">Dr. Arthur Vance</span>
+                            <span class="font-sans text-[14px] text-gray-500 tracking-widest uppercase">Former Director of Behavioral Engineering</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 03. CONTEXT (DEFINITION) -->
+                <div id="slide-3" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <span class="font-sans text-sm font-bold tracking-widest uppercase text-crimson">Background</span>
+                        </div>
+                        <h2 class="font-headline font-black text-[120px] leading-none mb-6">Algorithmic<br>Decay.</h2>
+                        <div class="font-sans text-[22px] text-gray-500 tracking-widest mb-16">[al-gə-ˈriTH-mik di-ˈkā]</div>
+                        
+                        <div class="hairline-l pl-10 ml-2 py-2">
+                            <p class="font-body text-[34px] leading-[1.4] text-charcoal clamp-5 mb-8">
+                                The gradual degradation of platform utility caused by optimization models prioritizing short-term outrage over long-term informational value.
+                            </p>
+                            <p class="font-body text-[22px] text-gray-500 clamp-2 italic">
+                                Note: First identified by researchers at MIT in late 2023.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 04. THE BRIEFING (LIST) -->
+                <div id="slide-4" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-12 shrink-0">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                What You Need to Know
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-0">
+                            <!-- Item 1 -->
+                            <div class="flex gap-8 items-start py-8 hairline-b shrink-0">
+                                <div class="font-headline italic text-[48px] leading-none text-charcoal w-12 pt-1">1.</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[28px] uppercase tracking-tight mb-3 clamp-1">The Dopamine Deficit</h3>
+                                    <p class="font-body text-[24px] text-charcoal leading-snug clamp-3">Users are experiencing measurable chemical exhaustion after 45 minutes of continuous short-form video consumption.</p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex gap-8 items-start py-8 hairline-b shrink-0">
+                                <div class="font-headline italic text-[48px] leading-none text-charcoal w-12 pt-1">2.</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[28px] uppercase tracking-tight mb-3 clamp-1">The Pivot to Private</h3>
+                                    <p class="font-body text-[24px] text-charcoal leading-snug clamp-3">High-net-worth individuals are increasingly abandoning public social squares in favor of encrypted, invite-only micro-communities.</p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex gap-8 items-start py-8 shrink-0">
+                                <div class="font-headline italic text-[48px] leading-none text-charcoal w-12 pt-1">3.</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[28px] uppercase tracking-tight mb-3 clamp-1">Regulatory Looming</h3>
+                                    <p class="font-body text-[24px] text-charcoal leading-snug clamp-3">The EU is drafting legislation to classify algorithmic feeds as "addictive substances" requiring strict age gating.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 05. PERSPECTIVES (VERSUS) -->
+                <div id="slide-5" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-12 shrink-0 text-center">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                The Great Divide
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex border border-steel relative">
+                            <!-- Divider -->
+                            <div class="absolute top-0 bottom-0 left-1/2 w-[1px] bg-steel"></div>
+                            
+                            <!-- Left -->
+                            <div class="flex-1 p-12 flex flex-col">
+                                <span class="font-sans text-[14px] font-bold text-gray-500 uppercase tracking-widest mb-6">THE PLATFORMS</span>
+                                <h3 class="font-headline font-bold italic text-[42px] mb-8">"Connecting the World"</h3>
+                                <p class="font-body text-[26px] text-charcoal leading-[1.5] clamp-8">
+                                    Executives argue that their models merely reflect human nature, serving people exactly what they engage with most. They point to billions connected globally as proof of unmitigated success.
+                                </p>
+                            </div>
+                            <!-- Right -->
+                            <div class="flex-1 p-12 flex flex-col bg-gray-50">
+                                <span class="font-sans text-[14px] font-bold text-crimson uppercase tracking-widest mb-6">THE RESEARCHERS</span>
+                                <h3 class="font-headline font-bold italic text-[42px] mb-8">"Exploiting the Mind"</h3>
+                                <p class="font-body text-[26px] text-ink leading-[1.5] clamp-8">
+                                    Academics counter that the systems bypass rational thought, targeting the brain stem. It is not connection, they argue, but a sophisticated extraction of human time and sanity for ad revenue.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 06. BY THE NUMBERS (STATS) -->
+                <div id="slide-6" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-12 shrink-0">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                By the Numbers
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-x-12 gap-y-16 mt-8">
+                            <div class="flex flex-col">
+                                <div class="font-headline font-black text-[110px] text-ink leading-none mb-2">4.2<span class="text-[60px]">B</span></div>
+                                <div class="w-12 h-1 bg-crimson mb-4"></div>
+                                <div class="font-body text-[24px] text-charcoal leading-snug">Hours lost daily to algorithmic scrolling by the average adult in the US.</div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-headline font-black text-[110px] text-ink leading-none mb-2">78<span class="text-[60px]">%</span></div>
+                                <div class="w-12 h-1 bg-crimson mb-4"></div>
+                                <div class="font-body text-[24px] text-charcoal leading-snug">Increase in teen anxiety disorders directly linked to platform usage since 2012.</div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-headline font-black text-[110px] text-ink leading-none mb-2">$11<span class="text-[60px]">T</span></div>
+                                <div class="w-12 h-1 bg-crimson mb-4"></div>
+                                <div class="font-body text-[24px] text-charcoal leading-snug">Estimated global economic impact of lost productivity annually.</div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-headline font-black text-[110px] text-ink leading-none mb-2">12<span class="text-[60px]">sec</span></div>
+                                <div class="w-12 h-1 bg-crimson mb-4"></div>
+                                <div class="font-body text-[24px] text-charcoal leading-snug">The current average attention span of Gen-Z consumers, down from 30 seconds.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 07. CHRONOLOGY (TIMELINE) -->
+                <div id="slide-7" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-12 shrink-0">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                How We Got Here
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col relative hairline-l ml-[120px]">
+                            <!-- Node 1 -->
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-162px] top-1 font-sans font-bold text-[20px] text-gray-500">2009</div>
+                                <div class="absolute left-[-6px] top-3 w-3 h-3 rounded-full bg-ink"></div>
+                                <h3 class="font-headline font-bold italic text-[36px] mb-3">The "Like" Button</h3>
+                                <p class="font-body text-[24px] text-charcoal clamp-3">Introduced as a tool for positivity, it creates the first quantifiable metric of social approval, gamifying human interaction.</p>
+                            </div>
+                            <!-- Node 2 -->
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-162px] top-1 font-sans font-bold text-[20px] text-gray-500">2016</div>
+                                <div class="absolute left-[-6px] top-3 w-3 h-3 rounded-full bg-ink"></div>
+                                <h3 class="font-headline font-bold italic text-[36px] mb-3">The Algorithmic Feed</h3>
+                                <p class="font-body text-[24px] text-charcoal clamp-3">Chronological feeds are abandoned. Machine learning dictates what users see, optimizing purely for time-on-screen.</p>
+                            </div>
+                            <!-- Node 3 -->
+                            <div class="relative pl-12">
+                                <div class="absolute left-[-162px] top-1 font-sans font-bold text-[20px] text-crimson">2026</div>
+                                <div class="absolute left-[-7px] top-3 w-[14px] h-[14px] rounded-full bg-crimson"></div>
+                                <h3 class="font-headline font-bold italic text-[36px] mb-3">The Saturation Point</h3>
+                                <p class="font-body text-[24px] text-charcoal clamp-3">AI-generated content floods the feeds, rendering the platforms unusable for organic human connection.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 08. PHOTOJOURNALISM (IMAGE SPLIT) -->
+                <div id="slide-8" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="flex-1 flex flex-col min-h-0">
+                            <!-- Image -->
+                            <div class="flex-1 bg-steel relative mb-6">
+                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1080&auto=format&fit=crop" 
+                                     alt="Microchips" 
+                                     class="absolute inset-0 w-full h-full object-cover grayscale contrast-125">
+                            </div>
+                            <!-- Caption -->
+                            <div class="shrink-0 pt-4 hairline-t">
+                                <h3 class="font-headline font-bold text-[36px] mb-3">The Hardware Inside</h3>
+                                <p class="font-body text-[22px] leading-[1.5] text-charcoal clamp-4">
+                                    Server farms in Northern Virginia process petabytes of behavioral data daily. The physical infrastructure required to sustain the attention economy consumes more energy than several small nations combined.
+                                </p>
+                                <p class="font-sans text-[12px] uppercase tracking-widest text-gray-500 mt-4">Photograph by Unsplash / NYT</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 09. DATA DESK (TABLE) -->
+                <div id="slide-9" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-12 shrink-0">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                Platform Toxicity Index
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <!-- Header -->
+                            <div class="grid grid-cols-4 hairline-b pb-4 mb-4">
+                                <div class="col-span-1 font-sans font-bold text-[16px] text-ink uppercase tracking-widest">Platform</div>
+                                <div class="col-span-1 font-sans font-bold text-[16px] text-ink uppercase tracking-widest">Daily Min</div>
+                                <div class="col-span-1 font-sans font-bold text-[16px] text-ink uppercase tracking-widest">Stress Spike</div>
+                                <div class="col-span-1 font-sans font-bold text-[16px] text-ink uppercase tracking-widest">Verdict</div>
+                            </div>
+                            <!-- Rows -->
+                            <div class="grid grid-cols-4 hairline-b py-6 items-center">
+                                <div class="col-span-1 font-headline italic font-bold text-[28px]">VideoFeed</div>
+                                <div class="col-span-1 font-body text-[24px] text-charcoal">112m</div>
+                                <div class="col-span-1 font-body text-[24px] text-crimson font-semibold">+45%</div>
+                                <div class="col-span-1 font-sans text-[18px] text-charcoal uppercase">Severe</div>
+                            </div>
+                            <div class="grid grid-cols-4 hairline-b py-6 items-center">
+                                <div class="col-span-1 font-headline italic font-bold text-[28px]">TextSquare</div>
+                                <div class="col-span-1 font-body text-[24px] text-charcoal">45m</div>
+                                <div class="col-span-1 font-body text-[24px] text-crimson font-semibold">+68%</div>
+                                <div class="col-span-1 font-sans text-[18px] text-charcoal uppercase">Critical</div>
+                            </div>
+                            <div class="grid grid-cols-4 hairline-b py-6 items-center">
+                                <div class="col-span-1 font-headline italic font-bold text-[28px]">PhotoGrid</div>
+                                <div class="col-span-1 font-body text-[24px] text-charcoal">58m</div>
+                                <div class="col-span-1 font-body text-[24px] text-charcoal">+22%</div>
+                                <div class="col-span-1 font-sans text-[18px] text-charcoal uppercase">Moderate</div>
+                            </div>
+                            <div class="grid grid-cols-4 py-6 items-center bg-gray-100 -mx-6 px-6">
+                                <div class="col-span-1 font-headline italic font-bold text-[28px]">ReadingApp</div>
+                                <div class="col-span-1 font-body text-[24px] text-charcoal">25m</div>
+                                <div class="col-span-1 font-body text-[24px] text-green-700 font-semibold">-12%</div>
+                                <div class="col-span-1 font-sans text-[18px] text-charcoal uppercase">Healthy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. ANALYSIS (DROP CAP) -->
+                <div id="slide-10" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="thick-b pb-6 mb-10 shrink-0">
+                            <h2 class="font-headline font-bold text-[64px] leading-[1] tracking-tight">
+                                Analysis: The Opt-Out
+                            </h2>
+                        </div>
+                        <div class="flex-1 text-justify">
+                            <p class="font-body text-[27px] leading-[1.65] text-ink drop-cap clamp-12">
+                                There is a growing movement among the technological elite to entirely disconnect their children from the very systems they built. In Silicon Valley, nanny contracts now routinely include strict "no-screen" clauses. This creates a fascinating paradox: the architects of the attention economy treat their own product like a hazardous material. As this awareness trickles down to the middle class, we are seeing the first widespread adoption of "dumb phones" and timed router lockouts. The future of luxury may no longer be defined by what you have access to, but by what you have the privilege to ignore.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. PROFILE (FOCUS) -->
+                <div id="slide-11" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="flex items-center gap-6 mb-12 shrink-0 thick-b pb-6">
+                            <span class="font-sans text-[16px] font-bold tracking-widest uppercase text-crimson">Case Study</span>
+                            <h2 class="font-headline font-bold text-[56px] leading-[1] tracking-tight">
+                                The Digital Hermit
+                            </h2>
+                        </div>
+                        
+                        <div class="flex-1 flex gap-12 mt-4">
+                            <!-- Circular Portrait Placeholder -->
+                            <div class="w-64 h-64 shrink-0 rounded-full border-4 border-white shadow-lg overflow-hidden bg-steel relative">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" 
+                                     alt="Profile" 
+                                     class="absolute inset-0 w-full h-full object-cover grayscale">
+                            </div>
+                            
+                            <div class="flex-1 flex flex-col justify-center">
+                                <h3 class="font-headline font-bold italic text-[48px] mb-2">Marcus Vance, 42</h3>
+                                <div class="font-sans text-[16px] uppercase tracking-widest text-gray-500 mb-8 hairline-b pb-4">Former Tech Executive</div>
+                                
+                                <p class="font-body text-[24px] leading-[1.6] text-charcoal clamp-5">
+                                    "I spent ten years optimizing notifications to ensure users checked their phones 150 times a day. When I realized my own daughter couldn't read a book for ten minutes without twitching, I resigned. Now I consult on digital detox architecture."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. SUBSCRIPTION (CTA) -->
+                <div id="slide-12" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-10">
+                        <div class="mb-12">
+                            <svg class="w-16 h-16 mx-auto text-ink mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        
+                        <h2 class="font-headline font-bold text-[85px] leading-[1] tracking-tight balance-text mb-8">
+                            Understand the forces shaping our world.
+                        </h2>
+                        <p class="font-body text-[32px] text-charcoal mb-16 clamp-2 italic">
+                            Read the full investigative report.
+                        </p>
+                        
+                        <!-- CTA Button -->
+                        <div class="bg-ink text-white px-16 py-6 font-sans font-bold text-[24px] uppercase tracking-widest flex items-center gap-4 hover:bg-charcoal transition-colors cursor-pointer shadow-xl">
+                            Subscribe for Access
+                        </div>
+                        
+                        <div class="mt-12 font-sans text-sm text-gray-500 uppercase tracking-widest hairline-t pt-8 w-1/2 mx-auto">
+                            Link in Bio
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideSelector = document.getElementById('slideSelector');
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const slides = document.querySelectorAll('.slide-layer');
+            const globalTag = document.getElementById('global-tag');
+
+            // Slide section mapping
+            const tags = {
+                1: 'INVESTIGATION', 2: 'OPINION', 3: 'GLOSSARY', 4: 'THE BRIEFING', 
+                5: 'PERSPECTIVES', 6: 'STATISTICS', 7: 'TIMELINE', 8: 'PHOTO ESSAY', 
+                9: 'DATA DESK', 10: 'ANALYSIS', 11: 'PROFILE', 12: 'THE DAILY'
+            };
+
+            // Switch Slides
+            slideSelector.addEventListener('change', (e) => {
+                const targetId = `slide-${e.target.value}`;
+                
+                // Hide all
+                slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Show target
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Tag
+                globalTag.textContent = tags[e.target.value];
+            });
+
+            // Toggle Preview/Export Mode
+            modeToggle.addEventListener('click', () => {
+                if (body.classList.contains('mode-preview')) {
+                    body.classList.remove('mode-preview');
+                    body.classList.add('mode-export');
+                    modeToggle.textContent = 'Preview Mode';
+                    modeToggle.classList.replace('bg-ink', 'bg-steel');
+                    modeToggle.classList.replace('text-white', 'text-ink');
+                } else {
+                    body.classList.remove('mode-export');
+                    body.classList.add('mode-preview');
+                    modeToggle.textContent = 'Export Mode';
+                    modeToggle.classList.replace('bg-steel', 'bg-ink');
+                    modeToggle.classList.replace('text-ink', 'text-white');
+                }
+                // Scroll to top for better UX when switching modes
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

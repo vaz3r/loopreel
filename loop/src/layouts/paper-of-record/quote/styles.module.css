@@ -1,0 +1,63 @@
+.quote {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 0 40px;
+  position: relative;
+}
+
+.topBar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 4px;
+  background-color: var(--ink);
+}
+
+.mark {
+  font-family: var(--font-headline);
+  font-size: 240px;
+  line-height: 0.3;
+  color: var(--steel);
+  margin-bottom: 32px;
+  margin-top: 64px;
+}
+
+.quoteText {
+  font-family: var(--font-headline);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.15;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 64px;
+}
+
+.attribution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: auto;
+}
+
+.author {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+.role {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: #999999;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

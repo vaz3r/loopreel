@@ -89,6 +89,7 @@ async function main() {
     'modern-clean': 'custom_brand',
     'premium-social': 'premium_social',
     'avant-garde-editorial': 'avant_garde_editorial',
+    'paper-of-record': 'archive_paper',
   };
 
   const templateArg = process.argv.findIndex(a => a === '--template');
