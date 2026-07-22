@@ -17,7 +17,7 @@ const SequenceSlideSchema = z.object({
   headline: z.string().max(60),
   items: z.array(z.object({
     num: z.string(), title: z.string().max(50), desc: z.string().max(200),
-  })).min(1).max(5),
+  })).min(1).max(20),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
 

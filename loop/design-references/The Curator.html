@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Curator - Editorial Carousel</title>
+    
+    <!-- Google Fonts: Cormorant Garamond (Elegant Serif), Inter (Utilitarian Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        galleryWhite: '#FFFFFF', // Pure, blinding white
+                        inkBlack: '#000000',     // Absolute black
+                        graphite: '#4A4A4A',     // Softened black for secondary reading
+                        placardGrey: '#F4F4F4',  // Very subtle grey for contrast zones
+                        hairline: '#E5E5E5',     // Structural borders
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #111111; color: #000000; overflow-x: hidden; }
+        
+        /* The 1080x1350 Canvas */
+        .canvas-container {
+            width: 1080px; height: 1350px;
+            background-color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        /* Strict Clamping for Playwright */
+        .clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-8 { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .balance-text { text-wrap: balance; }
+        .pretty-text { text-wrap: pretty; }
+
+        /* UI Scaling Modes */
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; 
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+
+        /* Slide Visibility */
+        .slide-layer { display: none; width: 100%; height: 100%; position: absolute; inset: 0; }
+        .slide-layer.active { display: flex; flex-direction: column; }
+        
+        /* Avant-Garde Typographic Utilities */
+        .tracking-mega { letter-spacing: 0.3em; }
+    </style>
+</head>
+<body class="mode-preview font-sans antialiased selection:bg-inkBlack selection:text-galleryWhite">
+
+    <!-- Web UI Control Panel -->
+    <div class="fixed top-0 left-0 w-full bg-[#111] border-b border-[#333] p-4 z-[100] flex justify-between items-center shadow-lg font-sans">
+        <div>
+            <h1 class="font-light text-xl tracking-mega text-white uppercase">The Curator</h1>
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Avant-Garde Architecture (1080x1350)</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <select id="slideSelector" class="bg-galleryWhite text-inkBlack font-sans text-xs px-4 py-2 border border-gray-300 cursor-pointer uppercase tracking-widest focus:outline-none transition-colors">
+                <option value="1">01. Exhibition Cover (Intro)</option>
+                <option value="2">02. The Catalog (List)</option>
+                <option value="3">03. The Gallery (Image Split)</option>
+                <option value="4">04. Statistics (Telemetry)</option>
+                <option value="5">05. The Dialogue (Q&A)</option>
+                <option value="6">06. The Framework (Quadrant)</option>
+                <option value="7">07. Provenance (Case Study)</option>
+                <option value="8">08. Illusion vs Reality (Debunk)</option>
+                <option value="9">09. The Collection (Grid)</option>
+                <option value="10">10. Chronology (Timeline)</option>
+                <option value="11">11. The Monolith (Quote)</option>
+                <option value="12">12. Acquisition (CTA)</option>
+                <option value="13">13. Focal Point (Hero Metric)</option>
+                <option value="14">14. Methodology (Step-by-Step)</option>
+                <option value="15">15. Juxtaposition (Do's & Don'ts)</option>
+                <option value="16">16. The Inventory (Checklist)</option>
+                <option value="17">17. The Anatomy (Breakdown)</option>
+            </select>
+            <button id="modeToggle" class="bg-white text-black font-semibold tracking-mega uppercase text-[10px] px-6 py-3 hover:bg-gray-200 transition-colors">
+                Export Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="pt-[140px] pb-[100px] flex justify-center w-full min-h-screen">
+        
+        <div id="export-canvas" class="canvas-container text-inkBlack">
+            
+            <!-- GLOBAL GALLERY PLACARD (HEADER) -->
+            <div class="absolute top-[50px] left-[60px] right-[60px] z-50 flex justify-between items-start font-sans text-[16px] uppercase tracking-mega text-inkBlack font-medium">
+                <div>
+                    <span id="global-tag">EXHIBITION 01</span>
+                    <div class="w-6 h-[1px] bg-inkBlack mt-3"></div>
+                </div>
+                <div class="text-right">
+                    <span>2026.07.22</span>
+                </div>
+            </div>
+
+            <!-- GLOBAL GALLERY PLACARD (FOOTER) -->
+            <div class="absolute bottom-[50px] left-[60px] right-[60px] z-50 flex justify-between items-end font-sans text-[16px] uppercase tracking-mega text-inkBlack font-medium">
+                <div>
+                    <span>ARCHIVE REF: <span class="font-light text-graphite">CURATOR.STUDIO</span></span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <span class="text-graphite">FOLIO</span>
+                    <span id="page-num" class="text-inkBlack text-[20px]">01</span>
+                </div>
+            </div>
+
+            <!-- SAFE AREA FOR CONTENT -->
+            <div class="absolute top-[140px] bottom-[140px] left-[80px] right-[80px] z-30 flex flex-col justify-center">
+                
+                <!-- 01. COVER -->
+                <div id="slide-1" class="slide-layer active">
+                    <div class="flex-1 flex flex-col justify-center min-h-0">
+                        <div class="mb-auto mt-12">
+                            <h1 class="font-serif text-[150px] leading-[0.85] tracking-tighter text-inkBlack font-light clamp-4 balance-text">
+                                The Space <br>Between.
+                            </h1>
+                        </div>
+                        
+                        <div class="flex gap-16 items-end shrink-0 w-full mb-8">
+                            <div class="w-[35%]">
+                                <div class="w-full h-[1px] bg-inkBlack mb-6"></div>
+                                <p class="font-sans text-[18px] uppercase tracking-widest leading-[1.8] text-graphite clamp-4">
+                                    An architectural study of negative space, invisible constraints, and the immense power of omitting the unnecessary.
+                                </p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-serif text-[42px] leading-[1.3] text-inkBlack font-light pretty-text clamp-3">
+                                    True luxury is never loud. It is the quiet confidence of knowing exactly what to leave out.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 02. THE CATALOG (LIST) -->
+                <div id="slide-2" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Principles.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-0 border-t border-hairline">
+                            <!-- Item 1 -->
+                            <div class="flex gap-12 items-start py-10 border-b border-hairline shrink-0">
+                                <div class="font-serif font-light text-[60px] leading-none text-graphite w-16 pt-1 italic">I.</div>
+                                <div>
+                                    <h3 class="font-sans font-medium text-[22px] uppercase tracking-mega text-inkBlack mb-4 clamp-1">Omission as Design</h3>
+                                    <p class="font-serif text-[32px] text-graphite leading-[1.3] font-light clamp-3">The removal of non-essential elements until only the structural truth of the object remains.</p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex gap-12 items-start py-10 border-b border-hairline shrink-0">
+                                <div class="font-serif font-light text-[60px] leading-none text-graphite w-16 pt-1 italic">II.</div>
+                                <div>
+                                    <h3 class="font-sans font-medium text-[22px] uppercase tracking-mega text-inkBlack mb-4 clamp-1">Material Integrity</h3>
+                                    <p class="font-serif text-[32px] text-graphite leading-[1.3] font-light clamp-3">Refusing to disguise the underlying materials. Concrete must look like concrete; wood must breathe.</p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex gap-12 items-start py-10 shrink-0">
+                                <div class="font-serif font-light text-[60px] leading-none text-graphite w-16 pt-1 italic">III.</div>
+                                <div>
+                                    <h3 class="font-sans font-medium text-[22px] uppercase tracking-mega text-inkBlack mb-4 clamp-1">Asymmetric Balance</h3>
+                                    <p class="font-serif text-[32px] text-graphite leading-[1.3] font-light clamp-3">Creating visual tension by placing heavy elements off-center, balanced entirely by vast negative space.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 03. THE GALLERY (IMAGE SPLIT) -->
+                <div id="slide-3" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="flex-1 flex gap-12 min-h-0">
+                            <!-- Image -->
+                            <div class="flex-1 bg-placardGrey relative overflow-hidden h-full">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1080&auto=format&fit=crop" 
+                                     alt="Minimalist Architecture" 
+                                     class="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125">
+                            </div>
+                            <!-- Copy -->
+                            <div class="w-[45%] flex flex-col justify-center">
+                                <h3 class="font-serif font-light text-[65px] text-inkBlack leading-[1] mb-8 tracking-tight">Form & <br>Function.</h3>
+                                <div class="w-8 h-[1px] bg-inkBlack mb-8"></div>
+                                <p class="font-sans text-[24px] leading-[1.6] tracking-wide text-graphite clamp-8 font-light">
+                                    The Bauhaus movement taught us that utility should dictate shape. When applied to digital strategy, this means stripping away decorative marketing and presenting the user with absolute, unvarnished value.
+                                </p>
+                                <span class="font-sans text-[14px] uppercase tracking-mega text-graphite mt-12 block border border-hairline w-fit px-4 py-2">FIG. 01 — ARCHITECTURE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 04. STATISTICS (TELEMETRY) -->
+                <div id="slide-4" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-auto">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Metrics.
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-x-20 gap-y-16 mt-16 items-center">
+                            <div class="flex flex-col border-l border-inkBlack pl-8">
+                                <div class="font-serif font-light text-[110px] text-inkBlack leading-none mb-4">68<span class="text-[60px]">%</span></div>
+                                <div class="font-sans text-[16px] uppercase tracking-mega text-graphite mb-3 font-medium">Cognitive Load Reduction</div>
+                                <div class="font-serif text-[24px] leading-[1.3] text-graphite clamp-2 italic">When decorative elements are removed from user interfaces.</div>
+                            </div>
+                            <div class="flex flex-col border-l border-inkBlack pl-8">
+                                <div class="font-serif font-light text-[110px] text-inkBlack leading-none mb-4">3.2<span class="text-[60px]">x</span></div>
+                                <div class="font-sans text-[16px] uppercase tracking-mega text-graphite mb-3 font-medium">Premium Price Multiplier</div>
+                                <div class="font-serif text-[24px] leading-[1.3] text-graphite clamp-2 italic">The aesthetic-usability effect applied to luxury commodities.</div>
+                            </div>
+                            <div class="flex flex-col border-l border-inkBlack pl-8">
+                                <div class="font-serif font-light text-[110px] text-inkBlack leading-none mb-4">-45<span class="text-[60px]">%</span></div>
+                                <div class="font-sans text-[16px] uppercase tracking-mega text-graphite mb-3 font-medium">Decision Fatigue</div>
+                                <div class="font-serif text-[24px] leading-[1.3] text-graphite clamp-2 italic">Limiting choices paradoxically increases conversion rates.</div>
+                            </div>
+                            <div class="flex flex-col border-l border-inkBlack pl-8">
+                                <div class="font-serif font-light text-[110px] text-inkBlack leading-none mb-4">90<span class="text-[60px]">%</span></div>
+                                <div class="font-sans text-[16px] uppercase tracking-mega text-graphite mb-3 font-medium">Information Retention</div>
+                                <div class="font-serif text-[24px] leading-[1.3] text-graphite clamp-2 italic">Achieved through high-contrast, macro-typography pacing.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 05. THE DIALOGUE (Q&A) -->
+                <div id="slide-5" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Dialogue.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center gap-16 px-8">
+                            <!-- Question -->
+                            <div class="flex gap-12">
+                                <div class="font-serif font-light text-[60px] text-inkBlack w-12 italic">Q.</div>
+                                <div class="pt-3">
+                                    <p class="font-serif font-light text-[42px] text-inkBlack leading-[1.2] clamp-4">
+                                        Does minimalism risk alienating consumers who equate complexity with value?
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Answer -->
+                            <div class="flex gap-12 pl-24">
+                                <div class="font-serif font-light text-[60px] text-graphite w-12 italic">A.</div>
+                                <div class="pt-4 border-t border-hairline">
+                                    <p class="font-sans text-[24px] text-graphite leading-[1.6] tracking-wide clamp-6 mb-8 font-light">
+                                        "Only in commodity markets. In the luxury sector, complexity is viewed as an apology for a lack of substance. When you sell at the highest tier, you are selling confidence. Empty space is the ultimate projection of confidence because it says: 'This object is so vital, it requires no decoration to justify its existence.'"
+                                    </p>
+                                    <div class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-medium">
+                                        Dieter Rams — Architect
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 06. THE FRAMEWORK (QUADRANT) -->
+                <div id="slide-6" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 text-center">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Design Topology.
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border border-hairline">
+                            <!-- Structural Crosshairs -->
+                            <div class="absolute top-1/2 left-0 w-full h-[1px] bg-hairline -translate-y-1/2"></div>
+                            <div class="absolute left-1/2 top-0 h-full w-[1px] bg-hairline -translate-x-1/2"></div>
+                            
+                            <!-- Q1 -->
+                            <div class="p-12 flex flex-col justify-between">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite mb-8 font-medium">MAXIMALIST / FUNCTIONAL</div>
+                                <div>
+                                    <h3 class="font-serif font-light text-[38px] text-inkBlack mb-3">The Dashboard</h3>
+                                    <p class="font-sans text-[20px] text-graphite leading-[1.5] clamp-3 font-light">High data density for expert users. E.g., Financial terminals, airplane cockpits.</p>
+                                </div>
+                            </div>
+                            <!-- Q2 -->
+                            <div class="p-12 flex flex-col justify-between bg-placardGrey">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite mb-8 text-right font-medium">MAXIMALIST / ORNAMENTAL</div>
+                                <div class="text-right">
+                                    <h3 class="font-serif font-light text-[38px] text-inkBlack mb-3">The Baroque</h3>
+                                    <p class="font-sans text-[20px] text-graphite leading-[1.5] clamp-3 font-light">Decoration for the sake of status. E.g., Versailles, fast-fashion websites.</p>
+                                </div>
+                            </div>
+                            <!-- Q3 -->
+                            <div class="p-12 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="font-serif font-light text-[38px] text-inkBlack mb-3">The Brutalist</h3>
+                                    <p class="font-sans text-[20px] text-graphite leading-[1.5] clamp-3 font-light">Raw materials exposed. Usability sacrificed for artistic tension.</p>
+                                </div>
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite mt-8 font-medium">MINIMALIST / ORNAMENTAL</div>
+                            </div>
+                            <!-- Q4 (Target) -->
+                            <div class="p-12 flex flex-col justify-between">
+                                <div class="text-right">
+                                    <h3 class="font-serif font-light text-[38px] text-inkBlack mb-3 italic">The Curator</h3>
+                                    <p class="font-sans text-[20px] text-graphite leading-[1.5] clamp-3 font-light">Premium positioning. High friction. Asymmetric tension and massive ROI.</p>
+                                </div>
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite mt-8 text-right font-medium">MINIMALIST / FUNCTIONAL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 07. PROVENANCE (CASE STUDY) -->
+                <div id="slide-7" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Provenance.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-12">
+                            <div class="flex gap-12 items-start">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite w-32 shrink-0 pt-2 font-medium">CONTEXT</div>
+                                <div>
+                                    <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none">The Cluttered Gallery</h3>
+                                    <p class="font-sans text-[22px] text-graphite clamp-2 font-light">A heritage brand struggling with brand dilution due to excessive product lines and loud marketing.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-12 items-start">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-graphite w-32 shrink-0 pt-2 font-medium">ACTION</div>
+                                <div>
+                                    <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none">The Purge</h3>
+                                    <p class="font-sans text-[22px] text-graphite clamp-2 font-light">Eliminated 80% of SKUs. Removed all logos from exterior packaging. Tripled the price.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-12 items-start bg-placardGrey p-8 -mx-8">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-inkBlack w-32 shrink-0 pt-2 font-bold">RESULT</div>
+                                <div>
+                                    <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none italic">Scarcity Premium</h3>
+                                    <p class="font-sans text-[22px] text-inkBlack clamp-2 font-medium">Revenue dropped 10%, but net profit expanded by 400%. The brand became a status symbol.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 08. ILLUSION VS REALITY (DEBUNK) -->
+                <div id="slide-8" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 text-center">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Optical Illusions.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col border border-hairline">
+                            <div class="flex-1 p-12 flex flex-col justify-center text-center border-b border-hairline relative">
+                                <span class="absolute top-8 left-1/2 -translate-x-1/2 font-sans text-[14px] font-medium text-graphite uppercase tracking-mega">THE ILLUSION</span>
+                                <p class="font-serif text-[36px] text-graphite leading-[1.4] clamp-4 line-through decoration-hairline font-light">
+                                    Adding more features justifies a higher price point.
+                                </p>
+                            </div>
+                            <div class="flex-1 p-12 flex flex-col justify-center text-center relative bg-placardGrey">
+                                <span class="absolute top-8 left-1/2 -translate-x-1/2 font-sans text-[14px] font-bold text-inkBlack uppercase tracking-mega">THE REALITY</span>
+                                <p class="font-serif text-[36px] text-inkBlack leading-[1.4] clamp-4 font-normal">
+                                    Removing the unnecessary creates the void required for luxury pricing.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 09. THE COLLECTION (GRID) -->
+                <div id="slide-9" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Collection.
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-12">
+                            <div class="flex flex-col">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-inkBlack font-bold mb-4 border-b border-inkBlack pb-2 inline-block w-fit">01. Typography</div>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.5] clamp-3 font-light">Cormorant Garamond. An elegant, razor-thin serif that demands high-resolution displays.</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-inkBlack font-bold mb-4 border-b border-inkBlack pb-2 inline-block w-fit">02. Negative Space</div>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.5] clamp-3 font-light">The most expensive asset in design. Treat empty pixels as physical marble.</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-inkBlack font-bold mb-4 border-b border-inkBlack pb-2 inline-block w-fit">03. Palette</div>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.5] clamp-3 font-light">Absolute monochrome. Color is only used when structurally necessary for comprehension.</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="font-sans text-[14px] uppercase tracking-mega text-inkBlack font-bold mb-4 border-b border-inkBlack pb-2 inline-block w-fit">04. Restraint</div>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.5] clamp-3 font-light">The discipline to stop designing when the core message is achieved.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. CHRONOLOGY (TIMELINE) -->
+                <div id="slide-10" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Evolution of Form.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col relative border-l border-hairline ml-[140px]">
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-160px] top-1 font-sans text-[16px] uppercase tracking-mega text-graphite font-medium">PHASE I</div>
+                                <div class="absolute left-[-5px] top-2 w-[9px] h-[9px] bg-graphite"></div>
+                                <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none">The Bauhaus</h3>
+                                <p class="font-sans text-[22px] text-graphite clamp-3 font-light">Form follows function. The stripping of ornamentation in favor of industrial utility.</p>
+                            </div>
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-160px] top-1 font-sans text-[16px] uppercase tracking-mega text-graphite font-medium">PHASE II</div>
+                                <div class="absolute left-[-5px] top-2 w-[9px] h-[9px] bg-graphite"></div>
+                                <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none">Swiss Style</h3>
+                                <p class="font-sans text-[22px] text-graphite clamp-3 font-light">The introduction of the strict mathematical grid and objective photography.</p>
+                            </div>
+                            <div class="relative pl-12">
+                                <div class="absolute left-[-160px] top-1 font-sans text-[16px] uppercase tracking-mega text-inkBlack font-bold">PHASE III</div>
+                                <div class="absolute left-[-6px] top-2 w-[11px] h-[11px] bg-inkBlack"></div>
+                                <h3 class="font-serif text-[38px] text-inkBlack mb-3 leading-none italic">Neo-Minimalism</h3>
+                                <p class="font-sans text-[22px] text-inkBlack clamp-3 font-medium">Digital luxury. Vast negative space used specifically to elevate perceived value.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. THE MONOLITH (QUOTE) -->
+                <div id="slide-11" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center px-12 relative text-center">
+                        <h2 class="font-serif text-[52px] leading-[1.3] balance-text clamp-6 mb-16 text-inkBlack font-light">
+                            Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
+                        </h2>
+                        <div class="flex flex-col items-center gap-2 m-auto border-t border-inkBlack pt-8 w-1/2">
+                            <span class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-medium">Antoine de St. Exupéry</span>
+                            <span class="font-serif text-[18px] text-graphite italic">Aviator & Writer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. ACQUISITION (CTA) -->
+                <div id="slide-12" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-12 relative border border-hairline bg-placardGrey">
+                        <h2 class="font-serif text-[85px] leading-[1] tracking-tight balance-text text-inkBlack mb-6 font-light">
+                            Enter the Gallery.
+                        </h2>
+                        <p class="font-sans text-[24px] text-graphite mb-16 clamp-2 font-light max-w-[70%]">
+                            A private collection of architectural strategy, delivered to your inbox.
+                        </p>
+                        
+                        <div class="bg-inkBlack text-galleryWhite px-12 py-5 font-sans text-[16px] uppercase tracking-mega hover:bg-graphite transition-colors cursor-pointer font-medium">
+                            Acquire Access
+                        </div>
+                        
+                        <div class="mt-16 font-sans text-[14px] text-graphite uppercase tracking-mega pt-8 w-1/2 mx-auto border-t border-hairline">
+                            EXHIBITION: @CURATOR.STUDIO
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13. FOCAL POINT (HERO METRIC) -->
+                <div id="slide-13" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-12 relative">
+                        <!-- Abstract framing -->
+                        <div class="absolute top-10 left-10 w-8 h-8 border-t border-l border-inkBlack"></div>
+                        <div class="absolute bottom-10 right-10 w-8 h-8 border-b border-r border-inkBlack"></div>
+                        
+                        <div class="font-serif text-[280px] leading-none text-inkBlack tracking-tighter font-light flex items-start">
+                            99<span class="text-[120px] mt-10 ml-2">%</span>
+                        </div>
+                        <div class="w-24 h-[1px] bg-inkBlack my-12"></div>
+                        <h3 class="font-sans text-[22px] uppercase tracking-mega text-inkBlack font-bold mb-8">The Signal to Noise Ratio</h3>
+                        <p class="font-serif text-[34px] leading-[1.4] text-graphite clamp-4 max-w-[85%] font-light">
+                            Most modern communication is entirely disposable. True luxury is found in the one percent of information that actually shifts perspective.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 14. METHODOLOGY (STEP-BY-STEP) -->
+                <div id="slide-14" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Methodology.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-6 justify-center px-8 relative">
+                            <!-- Vertical tracking line -->
+                            <div class="absolute left-[85px] top-[40px] bottom-[40px] w-[1px] bg-hairline z-0"></div>
+                            
+                            <!-- Step 1 -->
+                            <div class="flex gap-12 items-start relative z-10 bg-white py-4">
+                                <div class="font-sans text-[20px] font-medium text-galleryWhite bg-inkBlack w-16 h-16 flex items-center justify-center shrink-0 rounded-full tracking-wider mt-1">01</div>
+                                <div>
+                                    <h3 class="font-serif text-[42px] text-inkBlack mb-3 leading-none">Isolation</h3>
+                                    <p class="font-sans text-[24px] text-graphite clamp-2 font-light">Remove the subject from all contextual noise and decorative elements.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2 -->
+                            <div class="flex gap-12 items-start relative z-10 bg-white py-4">
+                                <div class="font-sans text-[20px] font-medium text-galleryWhite bg-inkBlack w-16 h-16 flex items-center justify-center shrink-0 rounded-full tracking-wider mt-1">02</div>
+                                <div>
+                                    <h3 class="font-serif text-[42px] text-inkBlack mb-3 leading-none">Proportion</h3>
+                                    <p class="font-sans text-[24px] text-graphite clamp-2 font-light">Scale the essential elements to absolute maximum visibility. Create tension.</p>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="flex gap-12 items-start relative z-10 bg-white py-4">
+                                <div class="font-sans text-[20px] font-medium text-galleryWhite bg-inkBlack w-16 h-16 flex items-center justify-center shrink-0 rounded-full tracking-wider mt-1">03</div>
+                                <div>
+                                    <h3 class="font-serif text-[42px] text-inkBlack mb-3 leading-none italic">Execution</h3>
+                                    <p class="font-sans text-[24px] text-inkBlack clamp-2 font-medium">Publish with uncompromising discipline. Reject client requests for "pop."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 15. JUXTAPOSITION (DO'S & DON'TS) -->
+                <div id="slide-15" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 text-center">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Aesthetic Code.
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex gap-16 px-4">
+                            <!-- Don't -->
+                            <div class="flex-1 flex flex-col gap-8 border-t border-hairline pt-6">
+                                <span class="font-sans text-[18px] uppercase tracking-mega text-graphite font-medium">OMISSION (AVOID)</span>
+                                <ul class="space-y-10 mt-4">
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-graphite leading-[1.2] line-through decoration-hairline">
+                                        <span class="text-graphite font-sans font-medium no-underline">✕</span> 
+                                        Drop shadows and gradients.
+                                    </li>
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-graphite leading-[1.2] line-through decoration-hairline">
+                                        <span class="text-graphite font-sans font-medium no-underline">✕</span> 
+                                        Centering all text alignment.
+                                    </li>
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-graphite leading-[1.2] line-through decoration-hairline">
+                                        <span class="text-graphite font-sans font-medium no-underline">✕</span> 
+                                        Filling every pixel of space.
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Do -->
+                            <div class="flex-1 flex flex-col gap-8 border-t-2 border-inkBlack pt-6 bg-placardGrey -m-8 p-8 h-fit">
+                                <span class="font-sans text-[18px] uppercase tracking-mega text-inkBlack font-bold">INCLUSION (ADOPT)</span>
+                                <ul class="space-y-10 mt-4">
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-inkBlack leading-[1.2]">
+                                        <span class="text-inkBlack font-sans font-bold">✓</span> 
+                                        Absolute stark contrast.
+                                    </li>
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-inkBlack leading-[1.2]">
+                                        <span class="text-inkBlack font-sans font-bold">✓</span> 
+                                        Asymmetrical tension.
+                                    </li>
+                                    <li class="flex gap-6 items-start font-serif text-[32px] text-inkBlack leading-[1.2] italic">
+                                        <span class="text-inkBlack font-sans font-bold">✓</span> 
+                                        Aggressive negative space.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16. THE INVENTORY (CHECKLIST) -->
+                <div id="slide-16" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 flex justify-between items-end border-b border-hairline pb-8">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                The Inventory.
+                            </h2>
+                            <span class="font-sans text-[18px] uppercase tracking-mega text-graphite font-medium">PRE-FLIGHT AUDIT</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-6">
+                            <div class="flex items-center gap-8 p-6 border border-inkBlack bg-inkBlack text-galleryWhite transition-all">
+                                <div class="w-10 h-10 border-2 border-galleryWhite shrink-0 flex items-center justify-center font-sans text-[20px]">✓</div>
+                                <p class="font-serif text-[32px] clamp-2 leading-[1.2]">Is the typographic hierarchy immediately obvious?</p>
+                            </div>
+                            <div class="flex items-center gap-8 p-6 border border-hairline bg-galleryWhite hover:bg-placardGrey transition-colors">
+                                <div class="w-10 h-10 border-2 border-graphite shrink-0"></div>
+                                <p class="font-serif text-[32px] text-graphite clamp-2 leading-[1.2] font-light">Have all decorative or non-functional elements been removed?</p>
+                            </div>
+                            <div class="flex items-center gap-8 p-6 border border-hairline bg-galleryWhite hover:bg-placardGrey transition-colors">
+                                <div class="w-10 h-10 border-2 border-graphite shrink-0"></div>
+                                <p class="font-serif text-[32px] text-graphite clamp-2 leading-[1.2] font-light">Does the negative space actively support the central object?</p>
+                            </div>
+                            <div class="flex items-center gap-8 p-6 border border-hairline bg-galleryWhite hover:bg-placardGrey transition-colors">
+                                <div class="w-10 h-10 border-2 border-graphite shrink-0"></div>
+                                <p class="font-serif text-[32px] text-graphite clamp-2 leading-[1.2] font-light">Is the contrast ratio sufficient for immediate legibility?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 17. THE ANATOMY (BREAKDOWN) -->
+                <div id="slide-17" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-16 text-center">
+                            <h2 class="font-serif text-[75px] leading-[1] tracking-tight text-inkBlack font-light">
+                                Anatomy of Form.
+                            </h2>
+                        </div>
+                        <div class="flex-1 relative flex items-center justify-center mt-12 border border-hairline bg-placardGrey">
+                            <!-- Connecting Lines -->
+                            <div class="absolute inset-x-20 top-1/2 h-[1px] bg-inkBlack -translate-y-1/2"></div>
+                            <div class="absolute inset-y-20 left-1/2 w-[1px] bg-inkBlack -translate-x-1/2"></div>
+                            
+                            <!-- Central Core -->
+                            <div class="bg-inkBlack text-galleryWhite px-12 py-6 font-serif text-[48px] italic relative z-10 tracking-tight">
+                                The Object
+                            </div>
+
+                            <!-- Quadrant Data -->
+                            <div class="absolute top-12 left-12 w-[350px] bg-galleryWhite p-6 border border-hairline shadow-sm">
+                                <h3 class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-bold mb-3 border-b border-hairline pb-2">01. Structure</h3>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.4]">The underlying grid that governs all spatial decisions.</p>
+                            </div>
+                            
+                            <div class="absolute top-12 right-12 w-[350px] bg-galleryWhite p-6 border border-hairline shadow-sm">
+                                <h3 class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-bold mb-3 border-b border-hairline pb-2 text-right">02. Negative Space</h3>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.4] text-right">The intentional void that gives the object permission to breathe.</p>
+                            </div>
+
+                            <div class="absolute bottom-12 left-12 w-[350px] bg-galleryWhite p-6 border border-hairline shadow-sm">
+                                <h3 class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-bold mb-3 border-b border-hairline pb-2">03. Typography</h3>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.4]">The voice of the object, delivered with extreme contrast.</p>
+                            </div>
+
+                            <div class="absolute bottom-12 right-12 w-[350px] bg-galleryWhite p-6 border border-hairline shadow-sm">
+                                <h3 class="font-sans text-[16px] uppercase tracking-mega text-inkBlack font-bold mb-3 border-b border-hairline pb-2 text-right">04. Material</h3>
+                                <p class="font-serif text-[24px] text-graphite leading-[1.4] text-right">The unvarnished truth of the medium, exposed and honest.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideSelector = document.getElementById('slideSelector');
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const slides = document.querySelectorAll('.slide-layer');
+            const globalTag = document.getElementById('global-tag');
+            const pageNum = document.getElementById('page-num');
+
+            // Slide section mapping (Gallery Labels)
+            const tags = {
+                1: 'EXHIBITION 01', 2: 'THE CATALOG', 3: 'THE GALLERY', 4: 'METRICS', 
+                5: 'DIALOGUE', 6: 'TOPOLOGY', 7: 'PROVENANCE', 8: 'ACTUALITY', 
+                9: 'COLLECTION', 10: 'EVOLUTION', 11: 'STATEMENT', 12: 'ACQUISITION',
+                13: 'HERO METRIC', 14: 'METHODOLOGY', 15: 'AESTHETICS', 16: 'INVENTORY', 17: 'ANATOMY'
+            };
+
+            // Switch Slides
+            slideSelector.addEventListener('change', (e) => {
+                const targetId = `slide-${e.target.value}`;
+                
+                // Hide all
+                slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Show target
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Header Tag
+                globalTag.textContent = tags[e.target.value];
+                
+                // Update Footer Page Number (01, 02, etc.)
+                pageNum.textContent = e.target.value.padStart(2, '0');
+            });
+
+            // Toggle Preview/Export Mode
+            modeToggle.addEventListener('click', () => {
+                if (body.classList.contains('mode-preview')) {
+                    body.classList.remove('mode-preview');
+                    body.classList.add('mode-export');
+                    modeToggle.textContent = 'Preview Mode';
+                    modeToggle.classList.replace('bg-white', 'bg-graphite');
+                    modeToggle.classList.replace('text-black', 'text-galleryWhite');
+                } else {
+                    body.classList.remove('mode-export');
+                    body.classList.add('mode-preview');
+                    modeToggle.textContent = 'Export Mode';
+                    modeToggle.classList.replace('bg-graphite', 'bg-white');
+                    modeToggle.classList.replace('text-galleryWhite', 'text-black');
+                }
+                // Scroll to top for better UX
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

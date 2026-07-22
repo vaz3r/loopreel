@@ -3,6 +3,7 @@ import { exportCarouselToImages } from './exporter';
 import { startViteServer } from './vite-server';
 import { getAllDecks } from './layouts/registry';
 import { PLATFORMS, type PlatformId } from './platforms';
+import { paginateContract } from './engine-utils';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
@@ -61,8 +62,11 @@ async function main() {
     for (const deck of decks) {
       console.log(`\n[${deck.name}] (${deck.sampleSlides.slides.length} slides)`);
 
+      const paginated = paginateContract(deck.sampleSlides);
+      console.log(`  After pagination: ${paginated.slides.length} slides`);
+
       const exportedPaths = await exportCarouselToImages(
-        deck.sampleSlides,
+        paginated,
         deck.schemeId,
         deck.id,
         { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.templateId, width: platformDef.width, height: platformDef.height }

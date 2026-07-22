@@ -83,3 +83,39 @@ export const chunkArray = <T>(arr: T[], size: number): T[][] => {
   }
   return chunks;
 };
+
+const PAGINATION_LIMITS: Record<string, { field: string; chunkSize: number }> = {
+  sequence: { field: 'items', chunkSize: 4 },
+  telemetry: { field: 'stats', chunkSize: 4 },
+  timeline: { field: 'events', chunkSize: 4 },
+};
+
+export function paginateContract(contract: { slides: Record<string, any>[] }): { slides: Record<string, any>[] } {
+  const result: Record<string, any>[] = [];
+
+  for (const slide of contract.slides) {
+    const rule = PAGINATION_LIMITS[slide.type];
+    if (!rule || !slide[rule.field] || slide[rule.field].length <= rule.chunkSize) {
+      result.push(slide);
+      continue;
+    }
+
+    const chunks = chunkArray(slide[rule.field], rule.chunkSize);
+    chunks.forEach((chunk, idx) => {
+      const paginated = {
+        ...slide,
+        [rule.field]: chunk,
+        _virtualId: `${slide.id}-part-${idx + 1}`,
+        tag: chunks.length > 1 ? `${slide.tag || slide.type.toUpperCase()} [${idx + 1}/${chunks.length}]` : slide.tag,
+        footerRight: slide.footerRight
+          ? chunks.length > 1
+            ? `${slide.footerRight} (${idx + 1}/${chunks.length})`
+            : slide.footerRight
+          : undefined,
+      };
+      result.push(paginated);
+    });
+  }
+
+  return { slides: result };
+}
