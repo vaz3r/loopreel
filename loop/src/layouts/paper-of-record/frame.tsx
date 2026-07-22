@@ -2,19 +2,40 @@ import React from 'react';
 import type { FrameProps } from '../shared/types';
 import styles from './frame.module.css';
 
-export default function PaperOfRecordFrame({ slide, scheme, children, size }: FrameProps) {
+export default function PaperOfRecordFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'TECHNOLOGY';
+
+  const colors = brandKit ? {
+    '--paper': brandKit.bg || '#f7f7f5',
+    '--ink': brandKit.text || '#121212',
+    '--charcoal': brandKit.text || '#333333',
+    '--steel': `${brandKit.text}33` || '#dfdfdf',
+    '--crimson': brandKit.accent || '#cc0000',
+  } : {
+    '--paper': '#f7f7f5',
+    '--ink': '#121212',
+    '--charcoal': '#333333',
+    '--steel': '#dfdfdf',
+    '--crimson': '#cc0000',
+  };
+
+  const fonts = brandKit ? {
+    '--font-headline': `'${brandKit.fontSerif || 'Playfair Display'}', serif`,
+    '--font-body': `'Source Serif 4', serif`,
+    '--font-sans': `'${brandKit.fontSans || 'Inter'}', sans-serif`,
+  } : {
+    '--font-headline': "'Playfair Display', serif",
+    '--font-body': "'Source Serif 4', serif",
+    '--font-sans': "'Inter', sans-serif",
+  };
 
   return (
     <div className={styles.frame}
       style={{
         width: size?.width ?? 1080, height: size?.height ?? 1350,
-        '--paper': '#f7f7f5', '--ink': '#121212', '--charcoal': '#333333',
-        '--steel': '#dfdfdf', '--crimson': '#cc0000',
-        '--font-headline': "'Playfair Display', serif",
-        '--font-body': "'Source Serif 4', serif",
-        '--font-sans': "'Inter', sans-serif",
+        ...colors,
+        ...fonts,
       } as React.CSSProperties}>
 
       <div className={styles.masthead}>

@@ -9,7 +9,6 @@ const DEFAULT_SLIDES = [
     tag: "PROTOCOL 01 // OVERTURE",
     headline: "THE ARCHITECTURE OF SCARCITY",
     subheadline: "How high-end brands weaponize friction to filter out low-value volume, command premium pricing, and scale net margins effortlessly.",
-    metadata: "VOL. 04 — STRATEGY",
     footerLeft: "MAYARUNS.CO", footerRight: "PAGE 01"
   },
   {
@@ -93,16 +92,8 @@ const DEFAULT_SLIDES = [
     tag: "VISUAL SCHEMATIC",
     headline: "Form follows friction.",
     bodyText: "Structural boundaries are not just for text. Incorporating photographic assets requires strict compartmentalization to prevent the image from competing with the typographical hierarchy.",
-    imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop", 
+    imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop",
     footerLeft: "ASSET ENGINE", footerRight: "PAGE 06"
-  },
-  {
-    id: "slide-new-2", type: "image-cover",
-    tag: "ENVIRONMENT",
-    headline: "Aesthetic Control.",
-    subtext: "Total control over the environment yields total control over the perception of value.",
-    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1080&auto=format&fit=crop", 
-    footerLeft: "ENVIRONMENTAL DESIGN", footerRight: "PAGE 07"
   },
   {
     id: "slide-8", type: "cta",
@@ -117,7 +108,7 @@ const DEFAULT_SLIDES = [
 export default function App() {
   const [baseSlides, setBaseSlides] = useState(DEFAULT_SLIDES);
   const [activePaginatedIndex, setActivePaginatedIndex] = useState(0);
-  const [activeSchemeId, setActiveSchemeId] = useState('void_editorial');
+  const [activeSchemeId, setActiveSchemeId] = useState('archive_paper');
   const [activePlatformId, setActivePlatformId] = useState<PlatformId>('instagram-feed' as PlatformId);
   const [exportMode, setExportMode] = useState(false);
 
@@ -125,20 +116,17 @@ export default function App() {
   const [brandKit, setBrandKit] = useState({
     bg: '#0F172A', text: '#F8FAFC', accent: '#38BDF8',
     fontSerif: 'Playfair Display', fontSans: 'Inter',
-    logoUrl: '' 
+    logoUrl: ''
   });
 
-  // This dynamically converts a slide with 7 items into 2 virtual slides for perfect rendering
   const paginatedSlides = useMemo(() => {
     let virtualSlides = [];
     baseSlides.forEach((slide, originalIndex) => {
-      
-      // Auto-Spill for Sequences
+
       if (slide.type === 'sequence' && slide.items && slide.items.length > 4) {
-        // Tag items with their absolute index so the UI can edit them properly
         const taggedItems = slide.items.map((item, idx) => ({ ...item, _absoluteIndex: idx }));
         const chunks = chunkArray(taggedItems, 4);
-        
+
         chunks.forEach((chunk, chunkIdx) => {
           virtualSlides.push({
             ...slide,
@@ -149,12 +137,11 @@ export default function App() {
             footerRight: `${slide.footerRight} (${chunkIdx + 1}/${chunks.length})`
           });
         });
-      } 
-      // Auto-Spill for Telemetry
+      }
       else if (slide.type === 'telemetry' && slide.stats && slide.stats.length > 4) {
         const taggedStats = slide.stats.map((stat, idx) => ({ ...stat, _absoluteIndex: idx }));
         const chunks = chunkArray(taggedStats, 4);
-        
+
         chunks.forEach((chunk, chunkIdx) => {
           virtualSlides.push({
             ...slide,
@@ -165,11 +152,10 @@ export default function App() {
           });
         });
       }
-      // NEW: Auto-Spill for Tables (Max 5 Rows)
       else if (slide.type === 'table' && slide.rows && slide.rows.length > 5) {
         const taggedRows = slide.rows.map((row, idx) => ({ data: row, _absoluteIndex: idx }));
         const chunks = chunkArray(taggedRows, 5);
-        
+
         chunks.forEach((chunk, chunkIdx) => {
           virtualSlides.push({
             ...slide,
@@ -183,7 +169,7 @@ export default function App() {
       else if (slide.type === 'timeline' && slide.events && slide.events.length > 4) {
         const taggedEvents = slide.events.map((event, idx) => ({ ...event, _absoluteIndex: idx }));
         const chunks = chunkArray(taggedEvents, 4);
-        
+
         chunks.forEach((chunk, chunkIdx) => {
           virtualSlides.push({
             ...slide,
@@ -194,9 +180,7 @@ export default function App() {
           });
         });
       }
-      // Standard Slide
       else {
-        // Still tag items for consistency in editor
         let processedSlide = { ...slide, _virtualId: slide.id, _originalIndex: originalIndex };
         if (processedSlide.items) {
           processedSlide.items = processedSlide.items.map((item, idx) => ({ ...item, _absoluteIndex: idx }));
@@ -207,7 +191,6 @@ export default function App() {
     return virtualSlides;
   }, [baseSlides]);
 
-  // Ensure active index is within bounds if pagination shrinks
   useEffect(() => {
     if (activePaginatedIndex >= paginatedSlides.length) {
       setActivePaginatedIndex(Math.max(0, paginatedSlides.length - 1));
@@ -225,9 +208,8 @@ export default function App() {
         accent: brandKit.accent,
         fontSerif: brandKit.fontSerif,
         fontSans: brandKit.fontSans,
-        // Calculate semi-transparent borders dynamically from the text color
-        border: `${brandKit.text}33`, // ~20% opacity hex
-        gridBorder: `${brandKit.text}1A` // ~10% opacity hex
+        border: `${brandKit.text}33`,
+        gridBorder: `${brandKit.text}1A`
       };
     }
     return SCHEMES[activeSchemeId];
@@ -237,7 +219,7 @@ export default function App() {
     if (activeSchemeId === 'custom_brand') {
       injectFonts([brandKit.fontSerif, brandKit.fontSans]);
     } else {
-      injectFonts(); // Just default fonts
+      injectFonts();
     }
   }, [activeSchemeId, brandKit.fontSerif, brandKit.fontSans]);
 
@@ -268,7 +250,7 @@ export default function App() {
     const updated = [...baseSlides];
     const originalIndex = activeData._originalIndex;
     if (!updated[originalIndex][arrayName]) updated[originalIndex][arrayName] = [];
-    
+
     if (arrayName === 'items') {
       updated[originalIndex][arrayName].push({ num: "XX", title: "New Item", desc: "Description here." });
     } else if (arrayName === 'stats') {
@@ -282,7 +264,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#E5E5E5] font-sans flex flex-col lg:flex-row overflow-x-hidden">
-      
+
       {/* CONTROL PANEL (LEFT) */}
       <div className="w-full lg:w-[480px] shrink-0 border-r border-[#222] bg-[#121212] p-6 overflow-y-auto flex flex-col justify-between max-h-screen shadow-2xl z-20 relative">
         <div>
@@ -316,7 +298,7 @@ export default function App() {
             {activeSchemeId === 'custom_brand' && (
               <div className="bg-[#1A1A1A] p-4 rounded border border-[#333] space-y-4">
                 <h4 className="font-mono text-[10px] text-amber-500 uppercase tracking-widest">Brand Kit Injection</h4>
-                
+
                 <div className="grid grid-cols-3 gap-3">
                   <div>
                     <label className="block text-[9px] font-mono uppercase text-neutral-500 mb-1">Background</label>
@@ -556,9 +538,9 @@ export default function App() {
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
         {/* Scaler Wrapper */}
-        <div 
+        <div
           className="relative transition-all duration-300 flex-shrink-0"
-          style={exportMode 
+          style={exportMode
             ? { width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height }
             : { width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height, transform: `scale(${Math.min(0.55, 600 / Math.max(PLATFORMS[activePlatformId].width, PLATFORMS[activePlatformId].height))})`, transformOrigin: 'center center', margin: '-300px 0' }
           }
@@ -567,7 +549,7 @@ export default function App() {
           <SlideRenderer
             slide={activeData as any}
             scheme={currentScheme}
-            templateId={activeSchemeId.replace(/_/g, '-')}
+            templateId={activeSchemeId === 'custom_brand' ? 'paper-of-record' : 'paper-of-record'}
             brandKit={activeSchemeId === 'custom_brand' ? brandKit : undefined}
             size={{ width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height }}
           />

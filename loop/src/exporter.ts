@@ -1,7 +1,7 @@
 import { chromium, type Browser } from 'playwright';
 import fs from 'fs';
 import path from 'path';
-import type { VoidContract } from '../schema';
+import type { PaperOfRecordContract } from './layouts/paper-of-record/schema';
 
 export interface ExportOptions {
   baseUrl?: string;
@@ -13,7 +13,7 @@ export interface ExportOptions {
 }
 
 export async function exportCarouselToImages(
-  contract: VoidContract,
+  contract: PaperOfRecordContract,
   schemeId: string,
   outputSubdir: string,
   options: ExportOptions = {}
@@ -24,7 +24,7 @@ export async function exportCarouselToImages(
     deviceScaleFactor = 2,
     width = 1080,
     height = 1350,
-    templateId = 'void-editorial',
+    templateId = 'paper-of-record',
   } = options;
 
   const fullOutputDir = path.join(outputDir, outputSubdir);

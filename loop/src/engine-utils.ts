@@ -1,21 +1,9 @@
 export const SCHEMES = {
-  void_editorial: {
-    id: 'void_editorial', name: 'Void Editorial',
-    bg: '#050505', text: '#F4F4F0', accent: '#E63946',
-    border: 'rgba(244, 244, 240, 0.15)', gridBorder: 'rgba(244, 244, 240, 0.08)',
-    fontSerif: 'Cormorant Garamond', fontSans: 'Manrope', fontMono: 'Space Mono'
-  },
   archive_paper: {
     id: 'archive_paper', name: 'Archive Paper',
     bg: '#EBEAE5', text: '#111111', accent: '#003049',
     border: 'rgba(17, 17, 17, 0.2)', gridBorder: 'rgba(17, 17, 17, 0.1)',
     fontSerif: 'Playfair Display', fontSans: 'Manrope', fontMono: 'Space Mono'
-  },
-  industrial_brutal: {
-    id: 'industrial_brutal', name: 'Industrial Brutal',
-    bg: '#1A1A1A', text: '#E0E0E0', accent: '#F77F00',
-    border: 'rgba(224, 224, 224, 0.25)', gridBorder: 'rgba(224, 224, 224, 0.12)',
-    fontSerif: 'Manrope', fontSans: 'Manrope', fontMono: 'Space Mono'
   },
   custom_brand: {
     id: 'custom_brand', name: 'Custom Brand Kit',
@@ -23,19 +11,6 @@ export const SCHEMES = {
     border: 'rgba(248, 250, 252, 0.2)', gridBorder: 'rgba(248, 250, 252, 0.1)',
     fontSerif: 'Playfair Display', fontSans: 'Inter', fontMono: 'Space Mono'
   },
-  premium_social: {
-    id: 'premium_social', name: 'Premium Social',
-    bg: '#1A1A1A', text: '#FFFFFF', accent: '#22C55E',
-    border: 'rgba(255, 255, 255, 0.08)', gridBorder: 'rgba(255, 255, 255, 0.05)',
-    fontSerif: 'Inter', fontSans: 'Inter', fontMono: 'Space Mono',
-    purple: '#A855F7', amber: '#F59E0B', green: '#22C55E', muted: '#A1A1AA', cardBg: '#222222',
-  },
-  avant_garde_editorial: {
-    id: 'avant_garde_editorial', name: 'Avant-garde Editorial',
-    bg: '#F5F4F0', text: '#111111', accent: '#C8102E',
-    border: '#D1CFCA', gridBorder: '#E8E6E1',
-    fontSerif: 'Playfair Display', fontSans: 'Oswald', fontMono: 'Oswald',
-  }
 };
 
 export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];
@@ -68,8 +43,7 @@ export const injectFonts = (customFonts: string[] = []) => {
 export const Engine = {
   getHeadlineStyle: (text = '', themeId?: string) => {
     const len = text.length;
-    const isBrutal = themeId === 'industrial_brutal';
-    const weight = isBrutal ? 'font-black tracking-tight uppercase' : 'font-light italic tracking-tight';
+    const weight = 'font-light italic tracking-tight';
     const align = 'text-wrap-balance break-words';
     if (len < 18) return `text-[130px] leading-[0.88] line-clamp-2 ${weight} ${align}`;
     if (len < 35) return `text-[95px] leading-[0.92] line-clamp-3 ${weight} ${align}`;
@@ -97,5 +71,3 @@ export const chunkArray = <T>(arr: T[], size: number): T[][] => {
   }
   return chunks;
 };
-
-

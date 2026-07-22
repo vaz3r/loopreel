@@ -20,7 +20,7 @@ interface SlideRendererProps {
   size?: { width: number; height: number };
 }
 
-export function SlideRenderer({ slide, scheme, templateId = 'void-editorial', brandKit, size }: SlideRendererProps) {
+export function SlideRenderer({ slide, scheme, templateId = 'paper-of-record', brandKit, size }: SlideRendererProps) {
   const Frame = getFrame(templateId);
   const Layout = getLayout(templateId, slide.type);
 
@@ -33,10 +33,10 @@ export function SlideRenderer({ slide, scheme, templateId = 'void-editorial', br
 
 export default function ExportRenderer() {
   const slide = window.__SLIDE_DATA;
-  const schemeId = window.__SLIDE_SCHEME_ID || 'void_editorial';
-  const templateId = window.__SLIDE_TEMPLATE_ID || 'void-editorial';
+  const schemeId = window.__SLIDE_SCHEME_ID || 'archive_paper';
+  const templateId = window.__SLIDE_TEMPLATE_ID || 'paper-of-record';
   const size = window.__SLIDE_SIZE || { width: 1080, height: 1350 };
-  const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.void_editorial) as Scheme;
+  const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.archive_paper) as Scheme;
 
   useEffect(() => {
     injectFonts(schemeId === 'custom_brand' ? [scheme.fontSerif, scheme.fontSans] : []);
