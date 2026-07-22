@@ -1,0 +1,13 @@
+.wrap { display: flex; flex-direction: column; height: 100%; }
+.header { padding-bottom: 24px; margin-bottom: 64px; border-bottom: 4px solid #111111; flex-shrink: 0; }
+.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
+.body { flex: 1; display: flex; flex-direction: column; gap: 48px; }
+.qRow { display: flex; gap: 32px; }
+.qLabel { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 42px; color: #E3120B; width: 40px; }
+.qText { padding-top: 8px; }
+.qText p { font-family: 'Crimson Pro', serif; font-weight: 700; font-size: 34px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.aLabel { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 42px; color: #3A4249; width: 40px; }
+.aBody { padding-top: 8px; border-left: 1px solid #D1D1CD; padding-left: 32px; margin-left: -8px; }
+.aBody p { font-family: 'Crimson Pro', serif; font-size: 28px; color: #3A4249; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 24px; }
+.respondent { font-family: 'Oswald', sans-serif; font-size: 16px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
+.pipe { color: #3A4249; font-weight: 400; margin: 0 8px; }

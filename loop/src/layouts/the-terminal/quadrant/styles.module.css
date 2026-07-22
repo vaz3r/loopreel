@@ -1,0 +1,18 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+.header { padding-bottom: 24px; margin-bottom: 40px; border-bottom: 2px solid #2A2A2A; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
+.headline { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; color: #E2E8F0; }
+.plotLabel { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.15em; color: #FFB000; }
+.matrixWrap { flex: 1; position: relative; display: flex; flex-direction: column; }
+.axisTop { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #00FF41; z-index: 2; }
+.axisBottom { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #FF003C; z-index: 2; }
+.axisLeft { position: absolute; top: 50%; left: -56px; transform: translateY(-50%) rotate(-90deg); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #FF003C; white-space: nowrap; z-index: 2; }
+.axisRight { position: absolute; top: 50%; right: -60px; transform: translateY(-50%) rotate(90deg); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #00FF41; white-space: nowrap; z-index: 2; }
+.matrix { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; border: 2px solid #2A2A2A; position: relative; background: #080808; }
+.hLine { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #2A2A2A; transform: translateY(-50%); z-index: 1; }
+.vLine { position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background: #2A2A2A; transform: translateX(-50%); z-index: 1; }
+.cell { padding: 32px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.cellHighlight { background: rgba(255, 176, 0, 0.1); border: 1px solid rgba(255, 176, 0, 0.3); }
+.pulse { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: #FFB000; }
+.cellTitle { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 26px; text-transform: uppercase; color: #E2E8F0; margin-bottom: 12px; }
+.cellTitleAccent { color: #FFB000; }
+.cellDesc { font-family: 'Inter', sans-serif; font-size: 16px; color: #64748B; line-height: 1.5; }

@@ -2,9 +2,13 @@ import React from 'react';
 import type { FrameProps, LayoutProps } from './shared/types';
 
 import * as PaperOfRecord from './paper-of-record/layout';
+import * as TheGlobalist from './the-globalist/layout';
+import * as TheTerminal from './the-terminal/layout';
 
 const templateIndex: Record<string, typeof PaperOfRecord> = {
   'paper-of-record': PaperOfRecord,
+  'the-globalist': TheGlobalist,
+  'the-terminal': TheTerminal,
 };
 
 export type { FrameProps, LayoutProps };

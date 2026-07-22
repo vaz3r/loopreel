@@ -1,0 +1,12 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+.header { padding-bottom: 24px; margin-bottom: 40px; border-bottom: 2px solid #2A2A2A; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
+.headline { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; color: #E2E8F0; }
+.logId { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.15em; color: #FFB000; }
+.stages { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+.stage { flex: 1; border: 1px solid #2A2A2A; background: #121212; padding: 32px; display: flex; gap: 32px; align-items: flex-start; position: relative; overflow: hidden; }
+.stageAlert { border-color: #FF003C44; background: #FF003C08; }
+.stageBar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.stageLabel { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.15em; width: 110px; flex-shrink: 0; padding-top: 6px; }
+.stageTitle { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 26px; text-transform: uppercase; color: #E2E8F0; margin-bottom: 8px; }
+.stageTitleAlert { color: #FF003C; }
+.stageDesc { font-family: 'Inter', sans-serif; font-size: 18px; line-height: 1.5; color: #64748B; }

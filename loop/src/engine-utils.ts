@@ -5,11 +5,23 @@ export const SCHEMES = {
     border: 'rgba(17, 17, 17, 0.2)', gridBorder: 'rgba(17, 17, 17, 0.1)',
     fontSerif: 'Playfair Display', fontSans: 'Manrope', fontMono: 'Space Mono'
   },
+  globalist_editorial: {
+    id: 'globalist_editorial', name: 'The Globalist',
+    bg: '#F5F5F1', text: '#111111', accent: '#E3120B',
+    border: 'rgba(17, 17, 17, 0.2)', gridBorder: 'rgba(17, 17, 17, 0.1)',
+    fontSerif: 'Crimson Pro', fontSans: 'Oswald', fontMono: 'Inter'
+  },
   custom_brand: {
     id: 'custom_brand', name: 'Custom Brand Kit',
     bg: '#0F172A', text: '#F8FAFC', accent: '#38BDF8',
     border: 'rgba(248, 250, 252, 0.2)', gridBorder: 'rgba(248, 250, 252, 0.1)',
     fontSerif: 'Playfair Display', fontSans: 'Inter', fontMono: 'Space Mono'
+  },
+  terminal_dark: {
+    id: 'terminal_dark', name: 'The Terminal',
+    bg: '#080808', text: '#E2E8F0', accent: '#FFB000',
+    border: '#2A2A2A', gridBorder: '#2A2A2A33',
+    fontSerif: 'Inter', fontSans: 'JetBrains Mono', fontMono: 'JetBrains Mono'
   },
 };
 
@@ -17,7 +29,7 @@ export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];
 
 export const injectFonts = (customFonts: string[] = []) => {
   if (typeof document === 'undefined') return;
-  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@300;400;500;600;700;800;900';
+  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@300;400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800';
 
   const customQuery = customFonts
     .filter(Boolean)

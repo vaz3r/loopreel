@@ -1,0 +1,9 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+.panel { flex: 1; display: flex; flex-direction: column; border: 1px solid #2A2A2A; background: #121212; overflow: hidden; }
+.imageArea { flex: 1; background: #080808; position: relative; border-bottom: 1px solid #2A2A2A; overflow: hidden; }
+.img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.25) opacity(0.4); mix-blend-mode: screen; }
+.imgOverlay { position: absolute; inset: 0; background: rgba(0, 255, 65, 0.1); mix-blend-mode: color; }
+.imgLabel { position: absolute; bottom: 16px; left: 16px; background: rgba(8, 8, 8, 0.9); border: 1px solid #2A2A2A; padding: 8px 16px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase; color: #00FF41; }
+.copy { padding: 48px; flex-shrink: 0; }
+.title { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 38px; color: #E2E8F0; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; }
+.body { font-family: 'Inter', sans-serif; font-size: 22px; line-height: 1.6; color: #64748B; }

@@ -1,0 +1,6 @@
+.wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 40px; }
+.quoteMark { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 140px; line-height: 0.3; color: #FFB000; margin-bottom: 32px; }
+.quoteText { font-family: 'Inter', sans-serif; font-size: 40px; line-height: 1.4; color: #E2E8F0; font-weight: 500; border-left: 4px solid #2A2A2A; padding-left: 32px; margin-bottom: 48px; }
+.attribution { display: flex; flex-direction: column; gap: 8px; margin-left: 36px; }
+.author { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 17px; text-transform: uppercase; letter-spacing: 0.15em; color: #E2E8F0; }
+.role { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #64748B; letter-spacing: 0.15em; text-transform: uppercase; margin-left: 16px; }

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Terminal - Editorial Carousel</title>
+    
+    <!-- Google Fonts: JetBrains Mono (Headers/Data), Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sysBg: '#080808',      // Deep pitch black
+                        sysPanel: '#121212',   // Slightly lighter for nested panels
+                        sysText: '#E2E8F0',    // Clean slate white for readability
+                        sysMuted: '#64748B',   // Muted slate for secondary info
+                        sysBorder: '#2A2A2A',  // Structural grid lines
+                        
+                        // Semantic Neon Accents
+                        neonGreen: '#00FF41',  // Positive yields, TRUE states
+                        neonRed: '#FF003C',    // Drawdowns, FALSE states
+                        neonAmber: '#FFB000',  // System alerts, primary accent
+                        neonBlue: '#00E5FF',   // Secondary data accent
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #1a1a1a; color: #E2E8F0; overflow-x: hidden; }
+        
+        /* The 1080x1350 Canvas */
+        .canvas-container {
+            width: 1080px; height: 1350px;
+            background-color: #080808;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+            border: 1px solid #2A2A2A;
+        }
+
+        /* Strict Clamping for Playwright */
+        .clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-8 { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .balance-text { text-wrap: balance; }
+        .pretty-text { text-wrap: pretty; }
+
+        /* UI Scaling Modes */
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; 
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+
+        /* Slide Visibility */
+        .slide-layer { display: none; width: 100%; height: 100%; position: absolute; inset: 0; }
+        .slide-layer.active { display: flex; flex-direction: column; }
+
+        /* Terminal Specific Styles */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(42, 42, 42, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42, 42, 42, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .ticker-band {
+            white-space: nowrap;
+            overflow: hidden;
+            border-top: 1px solid #2A2A2A;
+            border-bottom: 1px solid #2A2A2A;
+            background: #121212;
+        }
+    </style>
+</head>
+<body class="mode-preview font-sans antialiased selection:bg-neonAmber selection:text-sysBg">
+
+    <!-- Web UI Control Panel -->
+    <div class="fixed top-0 left-0 w-full bg-[#111] border-b border-sysBorder p-4 z-[100] flex justify-between items-center shadow-lg font-mono">
+        <div>
+            <h1 class="font-bold text-xl tracking-tight text-neonAmber uppercase">The Terminal</h1>
+            <p class="text-xs text-sysMuted uppercase tracking-widest mt-1">Quantitative Data Export (1080x1350)</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <select id="slideSelector" class="bg-sysBg text-sysText font-mono text-sm px-4 py-2 border border-sysBorder cursor-pointer uppercase tracking-wider focus:outline-none focus:border-neonAmber transition-colors">
+                <option value="1">01. Front Cover (Intro)</option>
+                <option value="2">02. Executive Briefing (List)</option>
+                <option value="3">03. Global Dispatch (Split)</option>
+                <option value="4">04. Macro Data (Telemetry)</option>
+                <option value="5">05. The Interview (Q&A)</option>
+                <option value="6">06. The Matrix (Quadrant)</option>
+                <option value="7">07. Case Study (3-Part)</option>
+                <option value="8">08. Myth vs. Fact (Debunk)</option>
+                <option value="9">09. Resource Stack (Grid)</option>
+                <option value="10">10. Chronology (Timeline)</option>
+                <option value="11">11. The Quote (Insight)</option>
+                <option value="12">12. Subscription (CTA)</option>
+            </select>
+            <button id="modeToggle" class="bg-neonAmber text-sysBg font-bold tracking-widest uppercase text-sm px-6 py-2 hover:bg-white transition-colors">
+                Export Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="pt-[140px] pb-[100px] flex justify-center w-full min-h-screen">
+        
+        <div id="export-canvas" class="canvas-container text-sysText grid-bg">
+            
+            <!-- GLOBAL TERMINAL HEADER -->
+            <div class="absolute top-0 left-0 right-0 z-50 bg-sysBg">
+                <div class="flex justify-between items-center px-10 py-6 border-b border-sysBorder font-mono">
+                    <div class="flex items-center gap-4">
+                        <div class="w-3 h-3 bg-neonAmber animate-pulse"></div>
+                        <span class="text-xl font-bold tracking-widest text-sysText uppercase">SYS.OP / V4.2</span>
+                    </div>
+                    <div class="flex gap-8 text-sm tracking-widest text-sysMuted uppercase">
+                        <span>2026-07-22 14:11:39 UTC</span>
+                        <span id="global-tag" class="text-neonAmber">MARKET_DATA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GLOBAL TICKER FOOTER -->
+            <div class="absolute bottom-0 left-0 right-0 z-50">
+                <div class="ticker-band px-10 py-4 font-mono text-[13px] tracking-widest text-sysMuted flex justify-between items-center">
+                    <div class="flex gap-8">
+                        <span>SOURCE: <span class="text-sysText">@THETERMINAL_HQ</span></span>
+                        <span>HOST: <span class="text-sysText">TERMINAL.APP</span></span>
+                    </div>
+                    <div class="flex gap-8 items-center">
+                        <span class="flex items-center gap-2"><span class="w-2 h-2 bg-neonGreen rounded-full animate-pulse"></span> SYS_ONLINE</span>
+                        <span>PG: <span id="page-num" class="text-sysText font-bold">01</span>/12</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAFE AREA FOR CONTENT -->
+            <div class="absolute top-[100px] bottom-[70px] left-[80px] right-[80px] z-30">
+                
+                <!-- 01. COVER -->
+                <div id="slide-1" class="slide-layer active">
+                    <div class="flex-1 flex flex-col justify-center min-h-0 relative">
+                        <div class="font-mono text-sm tracking-[0.3em] uppercase text-neonAmber border border-neonAmber/30 px-4 py-2 w-fit mb-10 bg-neonAmber/5">
+                            [ REPORT_ID: 994-A ]
+                        </div>
+                        
+                        <h1 class="font-mono font-bold text-[95px] leading-[1.05] tracking-tight balance-text text-sysText mb-10 clamp-4 uppercase">
+                            The Liquidity <br>Vacuum.
+                        </h1>
+                        <p class="font-sans text-[28px] leading-[1.5] text-sysMuted pretty-text clamp-4 mb-16 border-l-4 border-neonAmber pl-6">
+                            An empirical analysis of quantitative tightening, shrinking balance sheets, and the impending institutional scramble for tier-one collateral.
+                        </p>
+                        
+                        <div class="flex items-center gap-8 pt-8 border-t border-sysBorder shrink-0 w-full font-mono text-sm tracking-widest uppercase">
+                            <div class="flex gap-2">
+                                <span class="text-sysMuted">AUTHOR:</span>
+                                <span class="text-sysText">J. STEVENS</span>
+                            </div>
+                            <div class="flex gap-2 border-l border-sysBorder pl-8">
+                                <span class="text-sysMuted">DESK:</span>
+                                <span class="text-sysText">MACRO STRATEGY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 02. LIST (EXEC BRIEF) -->
+                <div id="slide-2" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-10 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Execution Parameters
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">CMD: EXEC_BRIEF</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-0">
+                            <!-- Item 1 -->
+                            <div class="flex gap-10 items-start py-8 border-b border-sysBorder shrink-0">
+                                <div class="font-mono font-bold text-[24px] text-sysBg bg-neonAmber px-4 py-1 mt-1">01</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] uppercase tracking-tight text-sysText mb-3 clamp-1">Shadow Banking Stress</h3>
+                                    <p class="font-sans text-[22px] text-sysMuted leading-[1.5] clamp-3">Private credit markets are masking insolvencies. Non-bank lenders are extending durations to avoid realizing catastrophic mark-to-market losses.</p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex gap-10 items-start py-8 border-b border-sysBorder shrink-0">
+                                <div class="font-mono font-bold text-[24px] text-sysBg bg-neonAmber px-4 py-1 mt-1">02</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] uppercase tracking-tight text-sysText mb-3 clamp-1">Treasury Volatility</h3>
+                                    <p class="font-sans text-[22px] text-sysMuted leading-[1.5] clamp-3">The ultimate safe haven is acting like a risk asset. Swings in the 10-year yield are actively breaking highly leveraged algorithmic parity models.</p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex gap-10 items-start py-8 shrink-0">
+                                <div class="font-mono font-bold text-[24px] text-sysBg bg-neonAmber px-4 py-1 mt-1">03</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] uppercase tracking-tight text-sysText mb-3 clamp-1">The Dollar Wrecking Ball</h3>
+                                    <p class="font-sans text-[22px] text-sysMuted leading-[1.5] clamp-3">Relentless USD strength is forcing emerging markets to burn through foreign exchange reserves at the fastest pace since 2008.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 03. IMAGE SPLIT -->
+                <div id="slide-3" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="flex-1 flex flex-col min-h-0 border border-sysBorder bg-sysPanel">
+                            <!-- Image (Terminal Styled) -->
+                            <div class="flex-1 bg-sysBg relative border-b border-sysBorder overflow-hidden group">
+                                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1080&auto=format&fit=crop" 
+                                     alt="Data Center" 
+                                     class="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 opacity-40 mix-blend-screen">
+                                <!-- Green Phosphor Overlay -->
+                                <div class="absolute inset-0 bg-neonGreen/10 mix-blend-color"></div>
+                                <div class="absolute bottom-4 left-4 bg-sysBg/90 border border-sysBorder px-4 py-2 font-mono font-bold text-[14px] tracking-widest uppercase text-neonGreen">
+                                    [ VISUAL_DATA: HK_EXCHANGE ]
+                                </div>
+                            </div>
+                            <!-- Copy -->
+                            <div class="shrink-0 p-12">
+                                <h3 class="font-mono font-bold text-[40px] text-sysText leading-[1.1] mb-6 uppercase">Asian Markets Diverge</h3>
+                                <p class="font-sans text-[24px] leading-[1.6] text-sysMuted clamp-4">
+                                    While western central banks aggressively tighten, the PBOC is injecting record liquidity in a desperate bid to stabilize the property sector. This policy divergence is creating generational arbitrage opportunities for macro hedge funds.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 04. TELEMETRY (DATA) -->
+                <div id="slide-4" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-12 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Real-Time Telemetry
+                            </h2>
+                            <span class="font-mono text-neonBlue text-sm tracking-widest">DATA_SET: ALPHA</span>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-6">
+                            <div class="flex flex-col border border-sysBorder bg-sysPanel p-8 justify-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-neonGreen"></div>
+                                <div class="font-mono text-sm text-sysMuted uppercase tracking-widest mb-4">U.S. Core CPI (YoY)</div>
+                                <div class="font-mono font-bold text-[85px] text-sysText leading-none mb-2">4.8<span class="text-[40px] text-neonGreen">▲</span></div>
+                                <div class="font-sans text-[18px] text-sysMuted">Consensus: 4.6% (Miss)</div>
+                            </div>
+                            <div class="flex flex-col border border-sysBorder bg-sysPanel p-8 justify-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-neonRed"></div>
+                                <div class="font-mono text-sm text-sysMuted uppercase tracking-widest mb-4">Corp Defaults (Q3)</div>
+                                <div class="font-mono font-bold text-[85px] text-sysText leading-none mb-2">124<span class="text-[40px] text-neonRed">▼</span></div>
+                                <div class="font-sans text-[18px] text-sysMuted">Highest since pandemic onset.</div>
+                            </div>
+                            <div class="flex flex-col border border-sysBorder bg-sysPanel p-8 justify-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-neonAmber"></div>
+                                <div class="font-mono text-sm text-sysMuted uppercase tracking-widest mb-4">Fed Balance Sheet</div>
+                                <div class="font-mono font-bold text-[85px] text-sysText leading-none mb-2">7.4<span class="text-[40px] text-neonAmber">T</span></div>
+                                <div class="font-sans text-[18px] text-sysMuted">- $1.5T reduction from peak.</div>
+                            </div>
+                            <div class="flex flex-col border border-sysBorder bg-sysPanel p-8 justify-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-neonBlue"></div>
+                                <div class="font-mono text-sm text-sysMuted uppercase tracking-widest mb-4">Venture Funding</div>
+                                <div class="font-mono font-bold text-[85px] text-sysText leading-none mb-2">-42<span class="text-[40px] text-neonBlue">%</span></div>
+                                <div class="font-sans text-[18px] text-sysMuted">YoY decline in Series B+ rounds.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 05. Q&A (INTERVIEW) -->
+                <div id="slide-5" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-12 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Interrogation Log
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">SUBJECT: CEO_04</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-12 justify-center">
+                            <!-- Question -->
+                            <div class="flex gap-8 border border-sysBorder bg-sysPanel p-8">
+                                <div class="font-mono font-bold text-[32px] text-sysMuted w-12">Q></div>
+                                <div>
+                                    <p class="font-mono font-bold text-[28px] text-sysText leading-[1.4] clamp-4 uppercase">
+                                        Is the commercial real estate collapse fully priced into regional bank equities?
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Answer -->
+                            <div class="flex gap-8 border border-neonGreen/30 bg-neonGreen/5 p-8 ml-12 relative">
+                                <div class="absolute -left-12 top-1/2 w-12 h-[1px] bg-sysBorder"></div>
+                                <div class="absolute -left-12 top-0 h-1/2 w-[1px] bg-sysBorder"></div>
+                                
+                                <div class="font-mono font-bold text-[32px] text-neonGreen w-12">A></div>
+                                <div>
+                                    <p class="font-sans text-[24px] text-sysText leading-[1.6] clamp-6 mb-6">
+                                        "Not even close. The banks are engaging in 'extend and pretend'—refinancing toxic office debt to avoid realizing the losses. When the maturity wall hits in 2026, we will see a wave of forced liquidations that the market modelers are currently ignoring."
+                                    </p>
+                                    <div class="font-mono text-[14px] uppercase tracking-widest text-sysMuted">
+                                        <span class="text-neonGreen">ID:</span> Marcus Vane, Head of Risk
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 06. QUADRANT (MATRIX) -->
+                <div id="slide-6" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-10 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Risk Matrix
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">PLOT: ASSET_CLASS</span>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 grid-rows-2 border-2 border-sysBorder relative bg-sysBg">
+                            <!-- Axis Labels -->
+                            <div class="absolute top-1/2 left-0 w-full h-[2px] bg-sysBorder -translate-y-1/2"></div>
+                            <div class="absolute left-1/2 top-0 h-full w-[2px] bg-sysBorder -translate-x-1/2"></div>
+                            
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-[12px] uppercase tracking-widest text-neonGreen">High Yield</div>
+                            <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-mono text-[12px] uppercase tracking-widest text-neonRed">Low Yield</div>
+                            <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 font-mono text-[12px] uppercase tracking-widest text-neonRed whitespace-nowrap">Low Volatility</div>
+                            <div class="absolute top-1/2 -right-16 -translate-y-1/2 90 font-mono text-[12px] uppercase tracking-widest text-neonGreen whitespace-nowrap rotate-90">High Volatility</div>
+
+                            <!-- Q1 -->
+                            <div class="p-8 flex flex-col justify-center bg-sysPanel/50">
+                                <h3 class="font-mono font-bold text-[28px] text-sysText mb-3 uppercase">Private Equity</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">High expected returns, but illiquid and currently facing severe exit bottlenecks.</p>
+                            </div>
+                            <!-- Q2 (Target) -->
+                            <div class="p-8 flex flex-col justify-center bg-neonAmber/10 border border-neonAmber/30 relative">
+                                <div class="absolute top-2 right-2 w-2 h-2 bg-neonAmber animate-pulse"></div>
+                                <h3 class="font-mono font-bold text-[28px] text-neonAmber mb-3 uppercase">Tech Equities</h3>
+                                <p class="font-sans text-[18px] text-sysText leading-[1.5] clamp-3">Supreme volatility. AI-driven mega-caps offer the only true liquidity pool.</p>
+                            </div>
+                            <!-- Q3 -->
+                            <div class="p-8 flex flex-col justify-center">
+                                <h3 class="font-mono font-bold text-[28px] text-sysText mb-3 uppercase">Treasuries</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">Risk-free return base, currently inverted. Defensive positioning only.</p>
+                            </div>
+                            <!-- Q4 -->
+                            <div class="p-8 flex flex-col justify-center bg-sysPanel/50">
+                                <h3 class="font-mono font-bold text-[28px] text-sysText mb-3 uppercase">Corp Bonds</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">Low yield for the underlying default risk. The worst risk-adjusted quadrant.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 07. CASE STUDY -->
+                <div id="slide-7" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-10 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                System Log
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">ID: FTX_COLLAPSE</span>
+                        </div>
+                        
+                        <div class="flex-1 flex flex-col gap-6">
+                            <div class="flex-1 border border-sysBorder bg-sysPanel p-8 flex gap-8 items-start relative">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-sysMuted"></div>
+                                <div class="font-mono font-bold text-[16px] uppercase text-sysMuted tracking-widest w-24 shrink-0 pt-2">ERR_01</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] text-sysText mb-2 uppercase">Commingled Funds</h3>
+                                    <p class="font-sans text-[20px] leading-[1.5] text-sysMuted clamp-2">Customer deposits were illegally transferred to Alameda Research to cover massive speculative trading losses.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 border border-sysBorder bg-sysPanel p-8 flex gap-8 items-start relative">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-neonAmber"></div>
+                                <div class="font-mono font-bold text-[16px] uppercase text-neonAmber tracking-widest w-24 shrink-0 pt-2">ACT_02</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] text-sysText mb-2 uppercase">The Bank Run</h3>
+                                    <p class="font-sans text-[20px] leading-[1.5] text-sysMuted clamp-2">A rival CEO tweeted intentions to liquidate FTT tokens, triggering a $6 billion withdrawal request in 72 hours.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 border border-neonRed/30 bg-neonRed/5 p-8 flex gap-8 items-start relative">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-neonRed"></div>
+                                <div class="font-mono font-bold text-[16px] uppercase text-neonRed tracking-widest w-24 shrink-0 pt-2">RES_03</div>
+                                <div>
+                                    <h3 class="font-mono font-bold text-[28px] text-neonRed mb-2 uppercase">Insolvency</h3>
+                                    <p class="font-sans text-[20px] leading-[1.5] text-sysText clamp-2">Complete structural collapse. $8 billion shortfall revealed, leading to Chapter 11 bankruptcy and criminal indictments.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 08. MYTH VS FACT -->
+                <div id="slide-8" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-12 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Data Validation
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">FUNC: DEBUG</span>
+                        </div>
+                        <div class="flex-1 flex flex-col border border-sysBorder">
+                            <!-- Myth -->
+                            <div class="flex-1 p-12 flex flex-col justify-center border-b border-sysBorder bg-sysPanel relative overflow-hidden">
+                                <div class="absolute right-0 top-0 bg-neonRed text-sysBg font-mono text-sm px-4 py-1 font-bold">FALSE</div>
+                                <span class="font-mono text-[14px] font-bold text-neonRed uppercase tracking-widest mb-4">INPUT_ERR // MYTH</span>
+                                <p class="font-sans text-[32px] text-sysMuted leading-[1.4] clamp-4 line-through decoration-neonRed decoration-4">
+                                    Cryptocurrency serves as a decentralized hedge against traditional market inflation.
+                                </p>
+                            </div>
+                            <!-- Fact -->
+                            <div class="flex-1 p-12 flex flex-col justify-center bg-sysBg relative overflow-hidden">
+                                <div class="absolute right-0 top-0 bg-neonGreen text-sysBg font-mono text-sm px-4 py-1 font-bold">TRUE</div>
+                                <span class="font-mono text-[14px] font-bold text-neonGreen uppercase tracking-widest mb-4">SYS_VALID // FACT</span>
+                                <p class="font-sans text-[32px] text-sysText leading-[1.4] clamp-4 font-medium">
+                                    Crypto assets currently trade as high-beta tech equities. They are hyper-correlated to NASDAQ liquidity cycles, not inflation metrics.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 09. RESOURCE STACK -->
+                <div id="slide-9" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-10 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Analysis Tools
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">DIR: /BIN/TOOLS</span>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-6">
+                            <!-- Tool 1 -->
+                            <div class="border border-sysBorder bg-sysPanel p-8 flex flex-col hover:border-neonAmber transition-colors">
+                                <div class="font-mono text-[16px] text-neonBlue mb-4">[PKG_01]</div>
+                                <h3 class="font-mono font-bold text-[26px] uppercase text-sysText mb-2 clamp-1">Bloomberg Terminal</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">The undisputed heavyweight for real-time macroeconomic data and financial instruments.</p>
+                            </div>
+                            <!-- Tool 2 -->
+                            <div class="border border-sysBorder bg-sysPanel p-8 flex flex-col hover:border-neonAmber transition-colors">
+                                <div class="font-mono text-[16px] text-neonBlue mb-4">[PKG_02]</div>
+                                <h3 class="font-mono font-bold text-[26px] uppercase text-sysText mb-2 clamp-1">Glassnode</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">Essential for deep on-chain analytics, tracking exchange flows, and wallet cohort behavior.</p>
+                            </div>
+                            <!-- Tool 3 -->
+                            <div class="border border-sysBorder bg-sysPanel p-8 flex flex-col hover:border-neonAmber transition-colors">
+                                <div class="font-mono text-[16px] text-neonBlue mb-4">[PKG_03]</div>
+                                <h3 class="font-mono font-bold text-[26px] uppercase text-sysText mb-2 clamp-1">TradingView</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">Cloud-based charting platform standard for technical analysis and custom Pine Script indicators.</p>
+                            </div>
+                            <!-- Tool 4 -->
+                            <div class="border border-sysBorder bg-sysPanel p-8 flex flex-col hover:border-neonAmber transition-colors">
+                                <div class="font-mono text-[16px] text-neonBlue mb-4">[PKG_04]</div>
+                                <h3 class="font-mono font-bold text-[26px] uppercase text-sysText mb-2 clamp-1">Fred (St. Louis)</h3>
+                                <p class="font-sans text-[18px] text-sysMuted leading-[1.5] clamp-3">The ultimate open-source database for U.S. economic time-series data and monetary policy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. CHRONOLOGY (TIMELINE) -->
+                <div id="slide-10" class="slide-layer">
+                    <div class="flex flex-col h-full py-10">
+                        <div class="pb-6 mb-12 shrink-0 border-b-2 border-sysBorder flex justify-between items-end">
+                            <h2 class="font-mono font-bold text-[48px] leading-[1] tracking-tight text-sysText uppercase">
+                                Event Sequence
+                            </h2>
+                            <span class="font-mono text-neonAmber text-sm tracking-widest">LOG: TIMELINE</span>
+                        </div>
+                        <div class="flex-1 flex flex-col relative border-l border-sysBorder ml-8">
+                            <!-- Node 1 -->
+                            <div class="relative pl-12 pb-12">
+                                <div class="absolute left-[-5px] top-1 w-[9px] h-[9px] bg-sysMuted"></div>
+                                <div class="font-mono text-[14px] text-sysMuted mb-2">[ 2022-03-16 ]</div>
+                                <h3 class="font-mono font-bold text-[28px] uppercase text-sysText mb-2">The Pivot</h3>
+                                <p class="font-sans text-[20px] text-sysMuted clamp-3">Fed enacts first rate hike, ending the zero-interest-rate era. Markets assume a brief tightening cycle.</p>
+                            </div>
+                            <!-- Node 2 -->
+                            <div class="relative pl-12 pb-12">
+                                <div class="absolute left-[-5px] top-1 w-[9px] h-[9px] bg-sysMuted"></div>
+                                <div class="font-mono text-[14px] text-sysMuted mb-2">[ 2023-05-03 ]</div>
+                                <h3 class="font-mono font-bold text-[28px] uppercase text-sysText mb-2">The Acceleration</h3>
+                                <p class="font-sans text-[20px] text-sysMuted clamp-3">Rates hit 5.25%. Long-duration assets collapse. SVB and Signature Bank fail due to bond portfolio losses.</p>
+                            </div>
+                            <!-- Node 3 -->
+                            <div class="relative pl-12">
+                                <div class="absolute left-[-6px] top-1 w-[11px] h-[11px] bg-neonAmber shadow-[0_0_10px_#FFB000]"></div>
+                                <div class="font-mono text-[14px] text-neonAmber mb-2">[ 2026-07-22 ]</div>
+                                <h3 class="font-mono font-bold text-[28px] uppercase text-sysText mb-2">The Plateau</h3>
+                                <p class="font-sans text-[20px] text-sysText clamp-3">Rates hold at elevated levels. Commercial real estate refinancings trigger widespread tier-2 bank insolvency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. THE QUOTE -->
+                <div id="slide-11" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center px-10 relative">
+                        <div class="text-neonAmber font-mono font-bold text-[140px] leading-[0.3] mb-8">"</div>
+                        <h2 class="font-sans text-[42px] leading-[1.4] balance-text clamp-6 mb-12 text-sysText font-medium border-l-4 border-sysBorder pl-8">
+                            Liquidity is a coward. It disappears at the exact moment you need it most. Models assume continuous trading; markets deliver discontinuous gaps.
+                        </h2>
+                        <div class="flex flex-col gap-1 ml-8">
+                            <span class="font-mono font-bold text-[18px] uppercase tracking-widest text-sysText">> Nassim Taleb</span>
+                            <span class="font-mono text-[14px] text-sysMuted tracking-widest uppercase ml-4">Quantitative Analyst / Author</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. SUBSCRIPTION (CTA) -->
+                <div id="slide-12" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-10 relative">
+                        <!-- Background Grid Graphic -->
+                        <div class="absolute inset-0 grid-bg opacity-50 z-0"></div>
+                        
+                        <div class="z-10 w-full flex flex-col items-center">
+                            <div class="mb-10 w-16 h-16 border-2 border-neonAmber flex items-center justify-center animate-pulse">
+                                <div class="w-8 h-8 bg-neonAmber"></div>
+                            </div>
+                            
+                            <h2 class="font-mono font-bold text-[64px] leading-[1.1] tracking-tight balance-text text-sysText uppercase mb-6">
+                                Terminal Access <br>Granted.
+                            </h2>
+                            <p class="font-sans text-[24px] text-sysMuted mb-12 clamp-2 max-w-[80%]">
+                                Receive unfiltered macro-economic data feeds and algorithmic trade analyses weekly.
+                            </p>
+                            
+                            <!-- CTA Button -->
+                            <div class="bg-neonAmber text-sysBg px-12 py-5 font-mono font-bold text-[20px] uppercase tracking-widest hover:bg-white transition-colors cursor-pointer border-2 border-transparent hover:border-sysBg">
+                                > INITIALIZE_SUB
+                            </div>
+                            
+                            <div class="mt-16 font-mono text-[12px] text-sysMuted uppercase tracking-widest border border-sysBorder px-6 py-2 bg-sysPanel">
+                                CONNECT: @THETERMINAL_HQ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideSelector = document.getElementById('slideSelector');
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const slides = document.querySelectorAll('.slide-layer');
+            const globalTag = document.getElementById('global-tag');
+            const pageNum = document.getElementById('page-num');
+
+            // Slide section mapping
+            const tags = {
+                1: 'MARKET_DATA', 2: 'EXEC_BRIEF', 3: 'DISPATCH', 4: 'TELEMETRY', 
+                5: 'INTERVIEW', 6: 'MATRIX', 7: 'SYS_LOG', 8: 'DEBUG', 
+                9: 'TOOLS', 10: 'TIMELINE', 11: 'INSIGHT', 12: 'AUTH_REQ'
+            };
+
+            // Switch Slides
+            slideSelector.addEventListener('change', (e) => {
+                const targetId = `slide-${e.target.value}`;
+                
+                // Hide all
+                slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Show target
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Header Tag
+                globalTag.textContent = tags[e.target.value];
+                
+                // Update Footer Page Number
+                pageNum.textContent = e.target.value.padStart(2, '0');
+            });
+
+            // Toggle Preview/Export Mode
+            modeToggle.addEventListener('click', () => {
+                if (body.classList.contains('mode-preview')) {
+                    body.classList.remove('mode-preview');
+                    body.classList.add('mode-export');
+                    modeToggle.textContent = 'Preview Mode';
+                    modeToggle.classList.replace('bg-neonAmber', 'bg-sysText');
+                    modeToggle.classList.replace('text-sysBg', 'text-sysBg');
+                } else {
+                    body.classList.remove('mode-export');
+                    body.classList.add('mode-preview');
+                    modeToggle.textContent = 'Export Mode';
+                    modeToggle.classList.replace('bg-sysText', 'bg-neonAmber');
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

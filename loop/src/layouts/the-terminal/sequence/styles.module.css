@@ -1,0 +1,10 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+.header { padding-bottom: 24px; margin-bottom: 40px; border-bottom: 2px solid #2A2A2A; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
+.headline { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; color: #E2E8F0; }
+.cmd { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.15em; color: #FFB000; }
+.list { flex: 1; display: flex; flex-direction: column; gap: 0; }
+.item { display: flex; gap: 40px; align-items: flex-start; padding: 32px 0; border-bottom: 1px solid #2A2A2A; }
+.item:last-child { border-bottom: none; }
+.num { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 22px; color: #080808; background: #FFB000; padding: 4px 16px; margin-top: 4px; flex-shrink: 0; }
+.itemTitle { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 26px; text-transform: uppercase; letter-spacing: -0.01em; color: #E2E8F0; margin-bottom: 10px; }
+.itemDesc { font-family: 'Inter', sans-serif; font-size: 20px; color: #64748B; line-height: 1.5; }

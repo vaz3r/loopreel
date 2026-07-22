@@ -1,0 +1,7 @@
+.wrap { display: flex; flex-direction: column; height: 100%; }
+.header { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 4px solid #111111; flex-shrink: 0; }
+.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
+.grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.card { border: 1px solid #D1D1CD; padding: 40px; display: flex; flex-direction: column; background: white; }
+.cardTitle { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; color: #111111; margin-bottom: 4px; padding-bottom: 8px; border-bottom: 2px solid #E3120B; display: inline-block; width: fit-content; }
+.cardDesc { font-family: 'Crimson Pro', serif; font-size: 22px; line-height: 1.5; color: #3A4249; margin-top: 16px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }

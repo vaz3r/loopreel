@@ -1,0 +1,13 @@
+.wrap { display: flex; flex-direction: column; height: 100%; }
+.header { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 4px solid #111111; text-align: center; flex-shrink: 0; }
+.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
+.container { flex: 1; display: flex; flex-direction: column; border: 1px solid #D1D1CD; background: white; }
+.half { flex: 1; padding: 64px; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; }
+.mythHalf { border-bottom: 1px solid #D1D1CD; }
+.halfLabel { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+.labelMyth { color: #3A4249; }
+.labelFact { color: #E3120B; }
+.mythText { font-family: 'Crimson Pro', serif; font-size: 38px; line-height: 1.4; color: #3A4249; text-decoration: line-through; text-decoration-color: #3A4249; text-decoration-thickness: 2px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.factHalf { background: #F9FAFB; }
+.factBar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #E3120B; }
+.factText { font-family: 'Crimson Pro', serif; font-weight: 700; font-size: 38px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }

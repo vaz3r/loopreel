@@ -1,0 +1,17 @@
+.wrap { display: flex; flex-direction: column; height: 100%; }
+.header { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 4px solid #111111; display: flex; align-items: flex-end; justify-content: space-between; flex-shrink: 0; }
+.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
+.tag { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #E3120B; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
+.stages { flex: 1; display: flex; flex-direction: column; border: 1px solid #D1D1CD; }
+.stage { flex: 1; padding: 32px; display: flex; gap: 40px; align-items: center; position: relative; }
+.stageBorder { border-bottom: 1px solid #D1D1CD; }
+.stageBg { background: #F3F4F6; }
+.highlightBar { position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: #E3120B; }
+.stageLabel { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px; text-transform: uppercase; letter-spacing: 0.15em; width: 96px; flex-shrink: 0; text-align: right; }
+.labelNormal { color: #3A4249; }
+.labelAccent { color: #E3120B; }
+.divider { width: 1px; height: 100%; background: #D1D1CD; flex-shrink: 0; }
+.stageTitle { font-family: 'Crimson Pro', serif; font-weight: 700; font-size: 32px; margin-bottom: 8px; color: #111111; }
+.stageDesc { font-family: 'Crimson Pro', serif; font-size: 24px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.descNormal { color: #3A4249; }
+.descDark { color: #111111; }

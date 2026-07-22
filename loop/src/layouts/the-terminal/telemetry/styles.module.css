@@ -1,0 +1,10 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+.header { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 2px solid #2A2A2A; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
+.headline { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; color: #E2E8F0; }
+.label { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.15em; color: #00E5FF; }
+.grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.card { display: flex; flex-direction: column; border: 1px solid #2A2A2A; background: #121212; padding: 32px; justify-content: center; position: relative; overflow: hidden; }
+.cardBar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+.cardLabel { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #64748B; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; }
+.cardValue { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 80px; color: #E2E8F0; line-height: 1; margin-bottom: 8px; }
+.cardUnit { font-size: 38px; }

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Globalist - Editorial Magazine Carousel</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Crimson Pro (Body/Headers), Oswald (Kickers/UI), Inter (Small UI) -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F5F5F1',      // Authentic newsprint off-white
+                        ink: '#111111',        // True black text
+                        slate: '#3A4249',      // Secondary text / soft borders
+                        editorialRed: '#E3120B', // The signature journalistic accent
+                        hairline: '#D1D1CD',   // 1px structural borders
+                    },
+                    fontFamily: {
+                        serif: ['"Crimson Pro"', 'serif'],
+                        condensed: ['"Oswald"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #222; color: #111111; overflow-x: hidden; }
+        
+        /* The 1080x1350 Canvas */
+        .canvas-container {
+            width: 1080px; height: 1350px;
+            background-color: #F5F5F1;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        /* Print Design Utilities */
+        .rule-top { border-top: 8px solid #E3120B; }
+        .rule-bottom { border-bottom: 2px solid #111111; }
+        .rule-hairline { border-top: 1px solid #D1D1CD; }
+        .rule-hairline-b { border-bottom: 1px solid #D1D1CD; }
+        .rule-hairline-l { border-left: 1px solid #D1D1CD; }
+        
+        .balance-text { text-wrap: balance; }
+        .pretty-text { text-wrap: pretty; }
+
+        /* Strict Clamping */
+        .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-8 { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-10 { display: -webkit-box; -webkit-line-clamp: 10; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; 
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+
+        /* Slide Visibility */
+        .slide-layer { display: none; width: 100%; height: 100%; position: absolute; inset: 0; }
+        .slide-layer.active { display: flex; flex-direction: column; }
+    </style>
+</head>
+<body class="mode-preview font-serif antialiased selection:bg-editorialRed selection:text-white">
+
+    <div class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-300 p-4 z-[100] flex justify-between items-center shadow-sm font-sans">
+        <div>
+            <h1 class="font-condensed font-bold text-xl tracking-wide text-ink uppercase">The Globalist</h1>
+            <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">Editorial Engine (1080x1350)</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <select id="slideSelector" class="bg-paper text-ink font-sans font-medium text-sm px-4 py-2 border border-gray-300 cursor-pointer uppercase tracking-wider focus:outline-none">
+                <option value="1">01. Front Cover (Intro)</option>
+                <option value="2">02. Executive Briefing (List)</option>
+                <option value="3">03. Global Dispatch (Split)</option>
+                <option value="4">04. Macro Data (Telemetry)</option>
+                <option value="5">05. The Interview (Q&A)</option>
+                <option value="6">06. The Matrix (Quadrant)</option>
+                <option value="7">07. Case Study (3-Part)</option>
+                <option value="8">08. Myth vs. Fact (Debunk)</option>
+                <option value="9">09. Resource Stack (Grid)</option>
+                <option value="10">10. Chronology (Timeline)</option>
+                <option value="11">11. The Quote (Insight)</option>
+                <option value="12">12. Subscription (CTA)</option>
+            </select>
+            <button id="modeToggle" class="bg-editorialRed text-white font-condensed font-semibold tracking-widest uppercase text-sm px-6 py-2 hover:bg-ink transition-colors">
+                Export Mode
+            </button>
+        </div>
+    </div>
+
+    <div class="pt-[140px] pb-[100px] flex justify-center w-full min-h-screen">
+        
+        <div id="export-canvas" class="canvas-container text-ink">
+            
+            <!-- Global Magazine Header (Persistent) -->
+            <div class="absolute top-0 left-0 right-0 z-50">
+                <div class="rule-top w-full"></div>
+                <div class="px-[80px] pt-8 flex justify-between items-end pb-4 border-b border-hairline">
+                    <span class="font-condensed text-[42px] leading-none font-bold tracking-tight uppercase text-ink">The Globalist</span>
+                    <div class="flex flex-col text-right font-sans text-[12px] uppercase tracking-widest text-slate font-semibold">
+                        <span>Vol. 42 — No. 8</span>
+                        <span class="text-editorialRed" id="global-tag">MACRO-ECONOMICS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-[60px] left-[80px] right-[80px] flex justify-between items-start z-40 rule-hairline pt-4">
+                <span class="font-condensed text-[16px] uppercase tracking-widest text-ink font-bold">@theglobalist</span>
+                <span class="font-condensed text-[16px] uppercase tracking-widest text-slate font-medium">Page <span id="page-num">01</span></span>
+            </div>
+
+            <!-- SAFE AREA FOR CONTENT -->
+            <div class="absolute top-[160px] bottom-[140px] left-[80px] right-[80px] z-30">
+                
+                <div id="slide-1" class="slide-layer active">
+                    <div class="flex-1 flex flex-col justify-center min-h-0 relative">
+                        <div class="w-12 h-[2px] bg-editorialRed mb-8"></div>
+                        <span class="font-condensed text-[18px] font-bold tracking-widest uppercase text-editorialRed mb-4 block">Special Report</span>
+                        
+                        <h1 class="font-serif font-bold text-[115px] leading-[0.95] tracking-tight balance-text text-ink mb-10 clamp-4">
+                            The End of Cheap Capital.
+                        </h1>
+                        <h2 class="font-serif text-[36px] leading-[1.3] text-slate pretty-text clamp-4 mb-16">
+                            How the sudden shift to high-interest regimes is forcing legacy conglomerates to restructure, liquidate, or perish entirely.
+                        </h2>
+                        
+                        <div class="flex items-center gap-6 pt-8 border-t border-hairline shrink-0 w-2/3">
+                            <div>
+                                <div class="font-condensed text-[18px] font-bold uppercase tracking-wider text-ink">By Julian Sterling</div>
+                                <div class="font-sans text-[13px] text-slate uppercase tracking-widest mt-1">Reporting from Frankfurt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-2" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-10 shrink-0 border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                The Executive Briefing
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-0">
+                            <!-- Item 1 -->
+                            <div class="flex gap-10 items-start py-8 rule-hairline-b shrink-0">
+                                <div class="font-condensed font-bold text-[48px] leading-none text-editorialRed w-12 pt-1">1</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[36px] leading-tight text-ink mb-3 clamp-1">Zombie Companies Collapse</h3>
+                                    <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Enterprises kept alive purely by refinancing debt at near-zero rates are facing immediate insolvency as terms rigidly reset.</p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex gap-10 items-start py-8 rule-hairline-b shrink-0">
+                                <div class="font-condensed font-bold text-[48px] leading-none text-editorialRed w-12 pt-1">2</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[36px] leading-tight text-ink mb-3 clamp-1">M&A Activity Freezes</h3>
+                                    <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Without cheap leverage, mega-mergers have completely stalled. Private equity is pivoting strictly toward operational turnarounds.</p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex gap-10 items-start py-8 shrink-0">
+                                <div class="font-condensed font-bold text-[48px] leading-none text-editorialRed w-12 pt-1">3</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[36px] leading-tight text-ink mb-3 clamp-1">The Profitability Mandate</h3>
+                                    <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Venture capital has abandoned the "growth at all costs" mantra. Startups are now graded strictly on cash flow and runway.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-3" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="flex-1 flex flex-col min-h-0 border border-hairline bg-white">
+                            <!-- Image -->
+                            <div class="flex-1 bg-gray-200 relative border-b border-hairline overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1080&auto=format&fit=crop" 
+                                     alt="Architecture" 
+                                     class="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125">
+                                <div class="absolute bottom-4 left-4 bg-editorialRed text-white px-4 py-1 font-condensed font-bold text-[14px] tracking-widest uppercase">
+                                    Fig. 01 — Frankfurt
+                                </div>
+                            </div>
+                            <!-- Copy -->
+                            <div class="shrink-0 p-12">
+                                <h3 class="font-serif font-bold text-[46px] text-ink leading-[1.1] mb-6">The ECB Holds Firm</h3>
+                                <p class="font-serif text-[28px] leading-[1.5] text-slate clamp-5">
+                                    Despite immense pressure from southern European economies, the central bank refuses to blink. Inflation targets remain the singular, uncompromising mandate, even if it triggers a mild continental recession.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-4" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-12 shrink-0 border-b-4 border-ink flex justify-between items-end">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                Global Telemetry
+                            </h2>
+                            <span class="font-sans text-[14px] font-bold text-editorialRed uppercase tracking-widest mb-2">Q3 Data Set</span>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-x-16 gap-y-16">
+                            <div class="flex flex-col border-t-2 border-editorialRed pt-6">
+                                <div class="font-condensed font-bold text-[110px] text-ink leading-none mb-2">5.25<span class="text-[50px] text-editorialRed">%</span></div>
+                                <div class="font-serif text-[26px] leading-[1.4] text-slate clamp-3">Current baseline interest rate, marking a 22-year high for western markets.</div>
+                            </div>
+                            <div class="flex flex-col border-t-2 border-editorialRed pt-6">
+                                <div class="font-condensed font-bold text-[110px] text-ink leading-none mb-2">1.4<span class="text-[50px] text-editorialRed">T</span></div>
+                                <div class="font-serif text-[26px] leading-[1.4] text-slate clamp-3">Estimated volume of corporate debt maturing globally within the next 18 months.</div>
+                            </div>
+                            <div class="flex flex-col border-t-2 border-editorialRed pt-6">
+                                <div class="font-condensed font-bold text-[110px] text-ink leading-none mb-2">-18<span class="text-[50px] text-editorialRed">%</span></div>
+                                <div class="font-serif text-[26px] leading-[1.4] text-slate clamp-3">Decline in commercial real estate valuations in major metropolitan financial hubs.</div>
+                            </div>
+                            <div class="flex flex-col border-t-2 border-editorialRed pt-6">
+                                <div class="font-condensed font-bold text-[110px] text-ink leading-none mb-2">600<span class="text-[50px] text-editorialRed">k</span></div>
+                                <div class="font-serif text-[26px] leading-[1.4] text-slate clamp-3">White-collar tech and finance roles eliminated globally since the tightening cycle began.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-5" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-16 shrink-0 border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                The Interview
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-12">
+                            <!-- Question -->
+                            <div class="flex gap-8">
+                                <div class="font-condensed font-bold text-[42px] text-editorialRed w-10">Q.</div>
+                                <div class="pt-2">
+                                    <p class="font-serif font-bold text-[34px] text-ink leading-[1.3] clamp-4">
+                                        Is the era of hyper-growth permanently dead, or is this merely a cyclical pause before rates drop?
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Answer -->
+                            <div class="flex gap-8">
+                                <div class="font-condensed font-bold text-[42px] text-slate w-10">A.</div>
+                                <div class="pt-2 rule-hairline-l pl-8 ml-[-2px]">
+                                    <p class="font-serif text-[28px] text-slate leading-[1.5] clamp-8 mb-6">
+                                        "It is structurally dead. The last ten years were a historical anomaly fueled by massive quantitative easing. We are returning to historical norms where capital actually costs money. Companies must now prove they can generate a profit today, not in 2030."
+                                    </p>
+                                    <div class="font-condensed text-[16px] uppercase tracking-widest text-ink font-bold">
+                                        Dr. Elena Rostova <span class="text-slate font-normal mx-2">|</span> Chief Economist
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-6" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-12 shrink-0 text-center border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                Strategic Positioning
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 grid-rows-2 border-2 border-ink relative bg-paper">
+                            <!-- Axis Labels -->
+                            <div class="absolute top-1/2 left-0 w-full h-[1px] bg-ink -translate-y-1/2"></div>
+                            <div class="absolute left-1/2 top-0 h-full w-[1px] bg-ink -translate-x-1/2"></div>
+                            
+                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-condensed text-[14px] font-bold uppercase tracking-widest text-editorialRed">High Margin</div>
+                            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-condensed text-[14px] font-bold uppercase tracking-widest text-slate">Low Margin</div>
+                            <div class="absolute top-1/2 -left-12 -translate-y-1/2 -rotate-90 bg-paper px-4 font-condensed text-[14px] font-bold uppercase tracking-widest text-slate whitespace-nowrap">Low Moat</div>
+                            <div class="absolute top-1/2 -right-12 -translate-y-1/2 90 bg-paper px-4 font-condensed text-[14px] font-bold uppercase tracking-widest text-editorialRed whitespace-nowrap rotate-90">High Moat</div>
+
+                            <!-- Q1 -->
+                            <div class="p-10 flex flex-col justify-center text-center">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Vulnerable</h3>
+                                <p class="font-serif text-[22px] text-slate leading-[1.4] clamp-3">Commodity services charging a premium. First to be cut in a recession.</p>
+                            </div>
+                            <!-- Q2 (Target) -->
+                            <div class="p-10 flex flex-col justify-center text-center bg-ink text-paper relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-editorialRed"></div>
+                                <h3 class="font-serif font-bold text-[32px] text-white mb-3">The Monopolist</h3>
+                                <p class="font-serif text-[22px] text-gray-400 leading-[1.4] clamp-3">Irreplaceable IP combined with supreme pricing power. The ideal state.</p>
+                            </div>
+                            <!-- Q3 -->
+                            <div class="p-10 flex flex-col justify-center text-center">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Grinder</h3>
+                                <p class="font-serif text-[22px] text-slate leading-[1.4] clamp-3">Competing purely on volume and price. A stressful race to the bottom.</p>
+                            </div>
+                            <!-- Q4 -->
+                            <div class="p-10 flex flex-col justify-center text-center">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Utility</h3>
+                                <p class="font-serif text-[22px] text-slate leading-[1.4] clamp-3">Necessary infrastructure but unable to extract premium profits from clients.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-7" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-12 shrink-0 border-b-4 border-ink flex items-end justify-between">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                TechCorp's Pivot
+                            </h2>
+                            <span class="font-sans text-[14px] font-bold text-editorialRed uppercase tracking-widest mb-2">Case Study</span>
+                        </div>
+                        
+                        <div class="flex-1 flex flex-col gap-0 border border-hairline">
+                            <div class="flex-1 p-8 flex gap-10 items-center rule-hairline-b bg-white">
+                                <div class="font-condensed font-bold text-[22px] uppercase text-slate tracking-widest w-24 shrink-0 text-right">Context</div>
+                                <div class="w-[1px] h-full bg-hairline shrink-0"></div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[32px] text-ink mb-2">Bloated Infrastructure</h3>
+                                    <p class="font-serif text-[24px] leading-[1.5] text-slate clamp-2">In 2024, headcount had expanded 40% while core revenue remained flat. Engineering velocity had entirely stalled.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 p-8 flex gap-10 items-center rule-hairline-b bg-white">
+                                <div class="font-condensed font-bold text-[22px] uppercase text-ink tracking-widest w-24 shrink-0 text-right">Action</div>
+                                <div class="w-[1px] h-full bg-hairline shrink-0"></div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[32px] text-ink mb-2">The Flattening</h3>
+                                    <p class="font-serif text-[24px] leading-[1.5] text-slate clamp-2">Eliminated middle management entirely. Shifted to small, autonomous teams and aggressively cut non-core product lines.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 p-8 flex gap-10 items-center bg-gray-100 relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-editorialRed"></div>
+                                <div class="font-condensed font-bold text-[22px] uppercase text-editorialRed tracking-widest w-24 shrink-0 text-right ml-2">Result</div>
+                                <div class="w-[1px] h-full bg-hairline shrink-0"></div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[32px] text-ink mb-2">Margin Expansion</h3>
+                                    <p class="font-serif text-[24px] leading-[1.5] text-ink clamp-2">Net profit margin surged from 12% to 28%. Shipping speed doubled, resulting in an immediate stock re-rating.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-8" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-12 shrink-0 text-center border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                Correcting the Record
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col border border-hairline bg-white">
+                            <!-- Myth -->
+                            <div class="flex-1 p-16 flex flex-col justify-center text-center rule-hairline-b relative">
+                                <span class="absolute top-8 left-1/2 -translate-x-1/2 font-condensed text-[16px] font-bold text-slate uppercase tracking-widest">The Prevailing Myth</span>
+                                <p class="font-serif text-[38px] text-slate leading-[1.4] clamp-4 line-through decoration-slate decoration-2">
+                                    Companies must always choose between aggressive growth and sustainable profitability.
+                                </p>
+                            </div>
+                            <!-- Fact -->
+                            <div class="flex-1 p-16 flex flex-col justify-center text-center relative bg-gray-50">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-editorialRed"></div>
+                                <span class="absolute top-8 left-1/2 -translate-x-1/2 font-condensed text-[16px] font-bold text-editorialRed uppercase tracking-widest">The Economic Reality</span>
+                                <p class="font-serif font-bold text-[38px] text-ink leading-[1.4] clamp-4">
+                                    True operational leverage allows for compounding growth while expanding margins. Efficiency is a catalyst.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-9" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-12 shrink-0 border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                The Strategist's Toolkit
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-8">
+                            <!-- Tool 1 -->
+                            <div class="border border-hairline p-10 flex flex-col bg-white">
+                                <div class="font-condensed font-bold text-[24px] uppercase text-ink mb-1 clamp-1 border-b-2 border-editorialRed pb-2 inline-block w-fit">Bloomberg Terminal</div>
+                                <p class="font-serif text-[22px] text-slate leading-[1.5] mt-4 clamp-4">The undisputed heavyweight for real-time macroeconomic data, news, and complex financial instruments.</p>
+                            </div>
+                            <!-- Tool 2 -->
+                            <div class="border border-hairline p-10 flex flex-col bg-white">
+                                <div class="font-condensed font-bold text-[24px] uppercase text-ink mb-1 clamp-1 border-b-2 border-editorialRed pb-2 inline-block w-fit">Capital IQ</div>
+                                <p class="font-serif text-[22px] text-slate leading-[1.5] mt-4 clamp-4">Essential for deep fundamental analysis, M&A tracking, and untangling complex global corporate structures.</p>
+                            </div>
+                            <!-- Tool 3 -->
+                            <div class="border border-hairline p-10 flex flex-col bg-white">
+                                <div class="font-condensed font-bold text-[24px] uppercase text-ink mb-1 clamp-1 border-b-2 border-editorialRed pb-2 inline-block w-fit">The Economist</div>
+                                <p class="font-serif text-[22px] text-slate leading-[1.5] mt-4 clamp-4">Weekly synthesis of global affairs providing the critical qualitative context required beyond the raw data.</p>
+                            </div>
+                            <!-- Tool 4 -->
+                            <div class="border border-hairline p-10 flex flex-col bg-white">
+                                <div class="font-condensed font-bold text-[24px] uppercase text-ink mb-1 clamp-1 border-b-2 border-editorialRed pb-2 inline-block w-fit">Stratfor</div>
+                                <p class="font-serif text-[22px] text-slate leading-[1.5] mt-4 clamp-4">Geopolitical intelligence platform used by executives to anticipate regulatory and major supply chain shifts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-10" class="slide-layer">
+                    <div class="flex flex-col h-full">
+                        <div class="pb-6 mb-16 shrink-0 border-b-4 border-ink">
+                            <h2 class="font-condensed font-bold text-[64px] leading-[1] tracking-tight text-ink uppercase">
+                                Historical Precedent
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col relative border-l border-ink ml-[160px]">
+                            <!-- Node 1 -->
+                            <div class="relative pl-14 pb-16">
+                                <div class="absolute left-[-180px] top-1 font-condensed font-bold text-[28px] text-slate w-32 text-right">1970s</div>
+                                <div class="absolute left-[-6px] top-4 w-3 h-3 rounded-full bg-slate"></div>
+                                <h3 class="font-serif font-bold text-[36px] text-ink mb-2 leading-tight">The Inflation Shock</h3>
+                                <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Oil embargoes trigger stagflation, forcing central banks into aggressive, painful monetary tightening.</p>
+                            </div>
+                            <!-- Node 2 -->
+                            <div class="relative pl-14 pb-16">
+                                <div class="absolute left-[-180px] top-1 font-condensed font-bold text-[28px] text-slate w-32 text-right">1981</div>
+                                <div class="absolute left-[-6px] top-4 w-3 h-3 rounded-full bg-slate"></div>
+                                <h3 class="font-serif font-bold text-[36px] text-ink mb-2 leading-tight">The Volcker Shock</h3>
+                                <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Interest rates pushed to 20% to break the back of inflation, inducing a severe but historically necessary recession.</p>
+                            </div>
+                            <!-- Node 3 -->
+                            <div class="relative pl-14">
+                                <div class="absolute left-[-180px] top-1 font-condensed font-bold text-[28px] text-editorialRed w-32 text-right">2026</div>
+                                <div class="absolute left-[-7px] top-4 w-[14px] h-[14px] rounded-full bg-editorialRed"></div>
+                                <h3 class="font-serif font-bold text-[36px] text-ink mb-2 leading-tight">The Modern Echo</h3>
+                                <p class="font-serif text-[26px] text-slate leading-[1.4] clamp-3">Policy makers study the 70s, attempting to tightly engineer a soft landing while maintaining restrictive rates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-11" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center px-12 relative text-center">
+                        <div class="text-editorialRed font-serif font-bold text-[200px] leading-[0.3] mb-12 text-center italic">“</div>
+                        <h2 class="font-serif text-[56px] leading-[1.3] balance-text clamp-6 mb-16 text-ink">
+                            In a low-rate environment, anyone can look like a genius. High rates reveal who actually has a sustainable business model.
+                        </h2>
+                        <div class="flex flex-col items-center gap-2 m-auto border-t-2 border-editorialRed pt-8 w-1/2">
+                            <span class="font-condensed font-bold text-[22px] uppercase tracking-widest text-ink">Warren Buffett</span>
+                            <span class="font-sans text-[14px] text-slate tracking-widest uppercase">Chairman, Berkshire Hathaway</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="slide-12" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-12 border-8 border-ink">
+                        <h2 class="font-serif font-bold text-[85px] leading-[1.1] tracking-tight balance-text text-ink mb-8">
+                            Master the Global Economy.
+                        </h2>
+                        <p class="font-serif text-[36px] text-slate mb-16 clamp-2">
+                            Macro-economic analysis delivered to executives weekly.
+                        </p>
+                        
+                        <!-- CTA Button -->
+                        <div class="bg-editorialRed text-white px-16 py-6 font-condensed font-bold text-[28px] uppercase tracking-widest flex items-center gap-4 hover:bg-ink transition-colors cursor-pointer">
+                            Subscribe Now
+                        </div>
+                        
+                        <div class="mt-16 font-sans text-[14px] text-slate uppercase tracking-widest pt-8 w-1/2 mx-auto border-t border-hairline">
+                            Read more at TheGlobalist.com
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideSelector = document.getElementById('slideSelector');
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const slides = document.querySelectorAll('.slide-layer');
+            const globalTag = document.getElementById('global-tag');
+            const pageNum = document.getElementById('page-num');
+
+            // Slide section mapping
+            const tags = {
+                1: 'MACRO-ECONOMICS', 2: 'THE BRIEFING', 3: 'DISPATCH', 4: 'TELEMETRY', 
+                5: 'INTERVIEW', 6: 'STRATEGY', 7: 'CASE STUDY', 8: 'ANALYSIS', 
+                9: 'TOOLKIT', 10: 'CHRONOLOGY', 11: 'PERSPECTIVE', 12: 'INTELLIGENCE'
+            };
+
+            // Switch Slides
+            slideSelector.addEventListener('change', (e) => {
+                const targetId = `slide-${e.target.value}`;
+                
+                // Hide all
+                slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Show target
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Header Tag
+                globalTag.textContent = tags[e.target.value];
+                
+                // Update Footer Page Number (01, 02, etc.)
+                pageNum.textContent = e.target.value.padStart(2, '0');
+            });
+
+            // Toggle Preview/Export Mode
+            modeToggle.addEventListener('click', () => {
+                if (body.classList.contains('mode-preview')) {
+                    body.classList.remove('mode-preview');
+                    body.classList.add('mode-export');
+                    modeToggle.textContent = 'Preview Mode';
+                    modeToggle.classList.replace('bg-editorialRed', 'bg-slate');
+                } else {
+                    body.classList.remove('mode-export');
+                    body.classList.add('mode-preview');
+                    modeToggle.textContent = 'Export Mode';
+                    modeToggle.classList.replace('bg-slate', 'bg-editorialRed');
+                }
+                // Scroll to top for better UX
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

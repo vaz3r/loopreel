@@ -1,0 +1,7 @@
+.wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.reportId { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: #FFB000; border: 1px solid #FFB00044; padding: 8px 16px; width: fit-content; margin-bottom: 40px; background: #FFB00008; }
+.headline { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 88px; line-height: 1.05; letter-spacing: -0.02em; text-transform: uppercase; color: #E2E8F0; margin-bottom: 40px; }
+.sub { font-family: 'Inter', sans-serif; font-size: 26px; line-height: 1.5; color: #64748B; border-left: 4px solid #FFB000; padding-left: 24px; margin-bottom: 64px; max-width: 90%; }
+.meta { display: flex; align-items: center; gap: 32px; padding-top: 32px; border-top: 1px solid #2A2A2A; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase; flex-shrink: 0; }
+.metaItem { display: flex; gap: 8; }
+.metaLabel { color: #64748B; }
