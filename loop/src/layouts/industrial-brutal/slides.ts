@@ -1,4 +1,4 @@
-import type { VoidContract } from '../../schema';
+import type { VoidContract } from '../../../schema';
 
 const contract: VoidContract = {
   slides: [

@@ -15,7 +15,7 @@ export const templateMeta = {
   id: 'premium-social',
   name: 'Premium Social',
   schemeId: 'premium_social',
-  visualDescription: 'Dark, bold, high-impact social media aesthetic. Gold accent, heavy sans-serif uppercase headlines. Best for viral-style content, opinion pieces, and high-engagement carousels.',
+  visualDescription: 'Modern dark-mode Instagram carousel. Charcoal card on matte dark canvas, rounded corners (24px), persistent footer with green profile badge and white CTA pill. Green/purple/amber accents on dark. Clean Inter sans-serif, bold headlines, muted grey body text. Card-within-card aesthetic for definitions and stats.',
 };
 
 export { default as frame } from './frame';

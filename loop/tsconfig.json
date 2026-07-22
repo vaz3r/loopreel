@@ -19,6 +19,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["src", "decks", "*.ts", "*.tsx"],
+  "include": ["src", "*.ts", "*.tsx"],
   "exclude": ["node_modules"]
 }

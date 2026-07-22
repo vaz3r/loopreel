@@ -1,11 +1,10 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { createServer } from 'vite';
 import { VoidContractSchema } from '../schema';
 import { exportCarouselToImages } from './exporter';
 import { SCHEMES } from './engine-utils';
+import { startViteServer } from './vite-server';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
 
 const mockValidResponse = {
@@ -78,22 +77,6 @@ function validateResponse(data: unknown) {
   return result.data;
 }
 
-async function startVite(basePort: number) {
-  for (let port = basePort; port < basePort + 10; port++) {
-    try {
-      const server = await createServer({
-        configFile: path.join(__dirname, '../vite.config.ts'),
-        server: { port, strictPort: true },
-      });
-      await server.listen();
-      return server;
-    } catch {
-      // port in use, try next
-    }
-  }
-  throw new Error(`Could not find a free port (tried ${basePort}-${basePort + 9})`);
-}
-
 async function main() {
   console.log('=== LLM MOCK GENERATION DEMO ===\n');
 
@@ -129,8 +112,7 @@ async function main() {
   const contract = validateResponse(mock);
 
   console.log('\nStarting Vite dev server...');
-  const viteServer = await startVite(5173);
-  const baseUrl = viteServer.resolvedUrls.local[0].replace(/\/$/, '');
+  const { server: viteServer, baseUrl } = await startViteServer(5173);
   console.log(`Vite server running at ${baseUrl}\n`);
 
   try {

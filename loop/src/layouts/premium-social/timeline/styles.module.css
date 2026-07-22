@@ -1,11 +1,91 @@
-.tag { font-family: var(--fontMono), monospace; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-.headline { margin-bottom: 28px; color: var(--text); }
-.list { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0; min-height: 0; overflow-y: auto; }
-.event { display: flex; gap: 24px; min-height: 0; }
-.dotCol { display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; }
-.dot { width: 14px; height: 14px; border-radius: 50%; background-color: var(--accent); flex-shrink: 0; margin-top: 6px; }
-.line { width: 3px; flex: 1; background-color: var(--accent); opacity: 0.3; }
-.body { flex: 1; padding-bottom: 24px; }
-.date { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
-.eventTitle { font-size: 22px; font-weight: 800; line-height: 1.25; color: var(--text); letter-spacing: -0.01em; }
-.eventDesc { font-size: 16px; line-height: 1.5; font-weight: 300; color: var(--text); opacity: 0.6; margin-top: 4px; }
+.timeline {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #A1A1AA;
+  margin-bottom: 16px;
+}
+
+.headline {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 28px;
+}
+
+.list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.event {
+  display: flex;
+  gap: 20px;
+}
+
+.dotCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #22C55E;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.line {
+  width: 2px;
+  flex: 1;
+  background-color: rgba(255,255,255,0.1);
+  margin-top: 4px;
+}
+
+.body {
+  flex: 1;
+  padding-bottom: 20px;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F59E0B;
+  margin-bottom: 4px;
+}
+
+.eventTitle {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #FFFFFF;
+}
+
+.eventDesc {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #A1A1AA;
+  margin-top: 4px;
+}

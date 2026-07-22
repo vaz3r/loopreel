@@ -25,9 +25,10 @@ export const SCHEMES = {
   },
   premium_social: {
     id: 'premium_social', name: 'Premium Social',
-    bg: '#0A0A0A', text: '#FFFFFF', accent: '#F59E0B',
-    border: 'rgba(255, 255, 255, 0.15)', gridBorder: 'rgba(255, 255, 255, 0.08)',
-    fontSerif: 'Manrope', fontSans: 'Manrope', fontMono: 'Space Mono'
+    bg: '#1A1A1A', text: '#FFFFFF', accent: '#22C55E',
+    border: 'rgba(255, 255, 255, 0.08)', gridBorder: 'rgba(255, 255, 255, 0.05)',
+    fontSerif: 'Inter', fontSans: 'Inter', fontMono: 'Space Mono',
+    purple: '#A855F7', amber: '#F59E0B', green: '#22C55E', muted: '#A1A1AA', cardBg: '#222222',
   }
 };
 
@@ -35,7 +36,7 @@ export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];
 
 export const injectFonts = (customFonts: string[] = []) => {
   if (typeof document === 'undefined') return;
-  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600';
+  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700;800;900';
 
   const customQuery = customFonts
     .filter(Boolean)

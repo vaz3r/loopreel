@@ -1,7 +1,61 @@
-.tag { font-family: var(--fontMono), monospace; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-.headline { margin-bottom: 20px; color: var(--text); }
-.wrapper { flex: 1; overflow: auto; min-height: 0; }
-.table { width: 100%; border-collapse: collapse; }
-.headerCell { padding: 14px 18px; text-align: left; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background-color: var(--accent); color: #fff; }
-.cell { padding: 12px 18px; font-size: 16px; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 400; }
-.evenRow { opacity: 0.6; }
+.table {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #A1A1AA;
+  margin-bottom: 16px;
+}
+
+.headline {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+
+.wrapper {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.tableEl {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerCell {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background-color: #22C55E;
+  color: #000000;
+}
+
+.cell {
+  padding: 12px 20px;
+  font-size: 15px;
+  color: #FFFFFF;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-weight: 400;
+}
+
+.tableEl tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.03);
+}

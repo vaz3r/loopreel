@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SCHEMES, injectFonts, Engine, chunkArray } from './engine-utils';
-import SlideRenderer from './SlideRenderer';
+import { SlideRenderer } from './SlideRenderer';
 
 const DEFAULT_SLIDES = [
   {

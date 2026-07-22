@@ -1,80 +1,25 @@
-import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { createServer } from 'vite';
-import { VoidContractSchema, type VoidContract } from '../schema';
+import { VoidContractSchema } from '../schema';
 import { exportCarouselToImages } from './exporter';
+import { startViteServer } from './vite-server';
+import { getAllDecks } from './layouts/registry';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DECKS_DIR = path.join(__dirname, '../decks');
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
 
-interface DeckManifest {
-  templateId: string;
-  schemeId: string;
-  name: string;
-  description: string;
-  brandKit?: {
-    bg: string;
-    text: string;
-    accent: string;
-    fontSerif: string;
-    fontSans: string;
-    logoUrl: string;
-  };
-}
-
-interface DeckData {
-  folderName: string;
-  manifest: DeckManifest;
-  contract: VoidContract;
-}
-
-async function discoverDecks(): Promise<DeckData[]> {
-  const decks: DeckData[] = [];
-  const entries = fs.readdirSync(DECKS_DIR, { withFileTypes: true });
-
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-
-    const deckDir = path.join(DECKS_DIR, entry.name);
-    const manifestPath = path.join(deckDir, 'manifest.json');
-    const slidesPath = path.join(deckDir, 'slides.ts');
-
-    if (!fs.existsSync(manifestPath) || !fs.existsSync(slidesPath)) {
-      console.warn(`Skipping ${entry.name}: missing manifest.json or slides.ts`);
-      continue;
-    }
-
-    const manifest: DeckManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-
-    const slidesModule = await import(path.join(deckDir, 'slides.ts'));
-    const contract: VoidContract = slidesModule.default;
-
-    decks.push({
-      folderName: entry.name,
-      manifest,
-      contract,
-    });
-  }
-
-  return decks;
-}
-
-function validateContract(contract: VoidContract, deckName: string): void {
+function validateContract(contract: unknown, name: string): void {
   const result = VoidContractSchema.safeParse(contract);
   if (!result.success) {
     const errors = result.error.issues.map(i => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
-    throw new Error(`Validation failed for deck "${deckName}":\n${errors}`);
+    throw new Error(`Validation failed for "${name}":\n${errors}`);
   }
 }
 
 async function main() {
   console.log('=== LOOP ENGINE PIPELINE ===\n');
 
-  console.log('Discovering decks...');
-  const decks = await discoverDecks();
-  console.log(`Found ${decks.length} decks: ${decks.map(d => d.manifest.name).join(', ')}\n`);
+  const decks = getAllDecks();
+  console.log(`Found ${decks.length} decks: ${decks.map(d => d.name).join(', ')}\n`);
 
   if (decks.length === 0) {
     console.error('No decks found. Exiting.');
@@ -83,18 +28,13 @@ async function main() {
 
   console.log('Validating slide contracts...');
   for (const deck of decks) {
-    validateContract(deck.contract, deck.folderName);
-    console.log(`  ${deck.manifest.name}: ${deck.contract.slides.length} slides - VALID`);
+    validateContract(deck.sampleSlides, deck.name);
+    console.log(`  ${deck.name}: ${deck.sampleSlides.slides.length} slides - VALID`);
   }
   console.log('');
 
   console.log('Starting Vite dev server...');
-  const viteServer = await createServer({
-    configFile: path.join(__dirname, '../vite.config.ts'),
-    server: { port: 5173, strictPort: true },
-  });
-  await viteServer.listen();
-  const baseUrl = viteServer.resolvedUrls.local[0].replace(/\/$/, '');
+  const { server: viteServer, baseUrl } = await startViteServer(5173);
   console.log(`Vite server running at ${baseUrl}\n`);
 
   try {
@@ -102,13 +42,13 @@ async function main() {
     let totalExports = 0;
 
     for (const deck of decks) {
-      console.log(`\n[${deck.manifest.name}] (${deck.contract.slides.length} slides)`);
+      console.log(`\n[${deck.name}] (${deck.sampleSlides.slides.length} slides)`);
 
       const exportedPaths = await exportCarouselToImages(
-        deck.contract,
-        deck.manifest.schemeId,
-        deck.folderName,
-        { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.manifest.templateId }
+        deck.sampleSlides,
+        deck.schemeId,
+        deck.id,
+        { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.templateId }
       );
 
       totalExports += exportedPaths.length;
