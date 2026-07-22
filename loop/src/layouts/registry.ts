@@ -1,5 +1,4 @@
 import type { z } from 'zod';
-import type { VoidContract } from '../../schema';
 
 import voidEditorialSlides from './void-editorial/slides';
 import archivePaperSlides from './archive-paper/slides';
@@ -7,6 +6,7 @@ import industrialBrutalSlides from './industrial-brutal/slides';
 import customBrandSlides from './custom-brand/slides';
 import modernCleanSlides from './modern-clean/slides';
 import premiumSocialSlides from './premium-social/slides';
+import avantGardeEditorialSlides from './avant-garde-editorial/slides';
 
 import { VoidEditorialContract } from './void-editorial/schema';
 import { ArchivePaperContract } from './archive-paper/schema';
@@ -14,6 +14,7 @@ import { IndustrialBrutalContract } from './industrial-brutal/schema';
 import { CustomBrandContract } from './custom-brand/schema';
 import { ModernCleanContract } from './modern-clean/schema';
 import { PremiumSocialContract } from './premium-social/schema';
+import { AvantGardeEditorialContract } from './avant-garde-editorial/schema';
 
 export interface DeckEntry {
   id: string;
@@ -21,7 +22,7 @@ export interface DeckEntry {
   schemeId: string;
   templateId: string;
   description: string;
-  sampleSlides: VoidContract;
+  sampleSlides: { slides?: Record<string, unknown>[]; [k: string]: unknown };
   schema: z.ZodTypeAny;
 }
 
@@ -32,6 +33,7 @@ const DECKS: DeckEntry[] = [
   { id: 'custom-brand', name: 'Custom Brand', schemeId: 'custom_brand', templateId: 'custom-brand', description: 'Customizable brand kit', sampleSlides: customBrandSlides, schema: CustomBrandContract },
   { id: 'modern-clean', name: 'Modern Clean', schemeId: 'custom_brand', templateId: 'modern-clean', description: 'Minimal modern design', sampleSlides: modernCleanSlides, schema: ModernCleanContract },
   { id: 'premium-social', name: 'Premium Social', schemeId: 'premium_social', templateId: 'premium-social', description: 'Instagram carousel style', sampleSlides: premiumSocialSlides, schema: PremiumSocialContract },
+  { id: 'avant-garde-editorial', name: 'Avant-garde Editorial', schemeId: 'avant_garde_editorial', templateId: 'avant-garde-editorial', description: 'High-fashion magazine print design', sampleSlides: avantGardeEditorialSlides, schema: AvantGardeEditorialContract },
 ];
 
 export function getAllDecks(): DeckEntry[] {

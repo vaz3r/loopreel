@@ -1,6 +1,4 @@
 .frame {
-  width: 1080px;
-  height: 1350px;
   position: relative;
   overflow: hidden;
   display: flex;

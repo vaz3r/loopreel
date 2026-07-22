@@ -29,6 +29,12 @@ export const SCHEMES = {
     border: 'rgba(255, 255, 255, 0.08)', gridBorder: 'rgba(255, 255, 255, 0.05)',
     fontSerif: 'Inter', fontSans: 'Inter', fontMono: 'Space Mono',
     purple: '#A855F7', amber: '#F59E0B', green: '#22C55E', muted: '#A1A1AA', cardBg: '#222222',
+  },
+  avant_garde_editorial: {
+    id: 'avant_garde_editorial', name: 'Avant-garde Editorial',
+    bg: '#F5F4F0', text: '#111111', accent: '#C8102E',
+    border: '#D1CFCA', gridBorder: '#E8E6E1',
+    fontSerif: 'Playfair Display', fontSans: 'Oswald', fontMono: 'Oswald',
   }
 };
 

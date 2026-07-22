@@ -7,6 +7,7 @@ import * as IndustrialBrutal from './industrial-brutal/layout';
 import * as CustomBrand from './custom-brand/layout';
 import * as ModernClean from './modern-clean/layout';
 import * as PremiumSocial from './premium-social/layout';
+import * as AvantGardeEditorial from './avant-garde-editorial/layout';
 
 const templateIndex: Record<string, typeof VoidEditorial> = {
   'void-editorial': VoidEditorial,
@@ -15,6 +16,7 @@ const templateIndex: Record<string, typeof VoidEditorial> = {
   'custom-brand': CustomBrand,
   'modern-clean': ModernClean,
   'premium-social': PremiumSocial,
+  'avant-garde-editorial': AvantGardeEditorial,
 };
 
 export type { FrameProps, LayoutProps };

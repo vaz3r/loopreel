@@ -8,6 +8,7 @@ declare global {
     __SLIDE_DATA?: Slide;
     __SLIDE_SCHEME_ID?: string;
     __SLIDE_TEMPLATE_ID?: string;
+    __SLIDE_SIZE?: { width: number; height: number };
   }
 }
 
@@ -16,14 +17,15 @@ interface SlideRendererProps {
   scheme: Scheme;
   templateId?: string;
   brandKit?: Record<string, string>;
+  size?: { width: number; height: number };
 }
 
-export function SlideRenderer({ slide, scheme, templateId = 'void-editorial', brandKit }: SlideRendererProps) {
+export function SlideRenderer({ slide, scheme, templateId = 'void-editorial', brandKit, size }: SlideRendererProps) {
   const Frame = getFrame(templateId);
   const Layout = getLayout(templateId, slide.type);
 
   return (
-    <Frame slide={slide} scheme={scheme} brandKit={brandKit}>
+    <Frame slide={slide} scheme={scheme} brandKit={brandKit} size={size}>
       <Layout slide={slide} scheme={scheme} />
     </Frame>
   );
@@ -33,6 +35,7 @@ export default function ExportRenderer() {
   const slide = window.__SLIDE_DATA;
   const schemeId = window.__SLIDE_SCHEME_ID || 'void_editorial';
   const templateId = window.__SLIDE_TEMPLATE_ID || 'void-editorial';
+  const size = window.__SLIDE_SIZE || { width: 1080, height: 1350 };
   const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.void_editorial) as Scheme;
 
   useEffect(() => {
@@ -44,8 +47,8 @@ export default function ExportRenderer() {
   }
 
   return (
-    <main style={{ margin: 0, padding: 0, background: '#000', width: 1080, height: 1350, overflow: 'hidden' }}>
-      <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} />
+    <main style={{ margin: 0, padding: 0, background: '#000', width: size.width, height: size.height, overflow: 'hidden' }}>
+      <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} size={size} />
     </main>
   );
 }

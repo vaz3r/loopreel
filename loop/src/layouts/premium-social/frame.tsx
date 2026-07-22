@@ -2,7 +2,7 @@ import React from 'react';
 import type { FrameProps } from '../shared/types';
 import styles from './frame.module.css';
 
-export default function PremiumSocialFrame({ slide, scheme, children }: FrameProps) {
+export default function PremiumSocialFrame({ slide, scheme, children, size }: FrameProps) {
   const s = slide as any;
   const stepLabel = s.tag ? s.tag.slice(0, 16) : '';
   const pageNum = s.footerRight || '';
@@ -10,6 +10,7 @@ export default function PremiumSocialFrame({ slide, scheme, children }: FramePro
   return (
     <div className={styles.frame}
       style={{
+        width: size?.width ?? 1080, height: size?.height ?? 1350,
         backgroundColor: '#1A1A1A', color: '#FFFFFF',
         fontFamily: `'Inter', sans-serif`,
         '--accent': '#22C55E', '--text': '#FFFFFF', '--bg': '#1A1A1A',

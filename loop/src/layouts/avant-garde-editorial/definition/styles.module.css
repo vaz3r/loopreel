@@ -1,0 +1,66 @@
+.definition {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.tag {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 16px;
+}
+
+.divider {
+  width: 40px;
+  height: 2px;
+  background-color: #C8102E;
+  margin-bottom: 24px;
+}
+
+.term {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: #111111;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.phonetic {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888888;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
+.defText {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #666666;
+  max-width: 90%;
+  border-left: 2px solid #C8102E;
+  padding-left: 20px;
+}
+
+.example {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: #888888;
+  margin-top: 20px;
+  padding-left: 20px;
+}

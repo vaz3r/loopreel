@@ -11,4 +11,5 @@ export interface FrameProps {
   scheme: Scheme;
   children: React.ReactNode;
   brandKit?: Record<string, string>;
+  size?: { width: number; height: number };
 }

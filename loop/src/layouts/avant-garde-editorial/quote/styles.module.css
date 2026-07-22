@@ -1,0 +1,76 @@
+.quote {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
+  text-align: center;
+  position: relative;
+}
+
+.stickerBadge {
+  margin-bottom: 32px;
+}
+
+.headlineBlock {
+  max-width: 90%;
+}
+
+.headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #111111;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.headlineAccent {
+  font-family: 'Oswald', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: #C8102E;
+  text-transform: uppercase;
+  margin: 8px 0 0;
+}
+
+.quoteText {
+  font-family: 'Playfair Display', serif;
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #111111;
+  max-width: 85%;
+  text-transform: uppercase;
+}
+
+.attribution {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.author {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.role {
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  font-weight: 400;
+  font-style: italic;
+  color: #888888;
+}

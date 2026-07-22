@@ -2,9 +2,23 @@ import path from 'path';
 import { exportCarouselToImages } from './exporter';
 import { startViteServer } from './vite-server';
 import { getAllDecks } from './layouts/registry';
+import { PLATFORMS, type PlatformId } from './platforms';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
+
+function parseArgs(): { platform: PlatformId } {
+  const args = process.argv.slice(2);
+  let platform: PlatformId = 'instagram-feed';
+  for (let i = 2; i < args.length; i++) {
+    if (args[i] === '--platform' && args[i + 1]) {
+      const val = args[i + 1] as PlatformId;
+      if (PLATFORMS[val]) platform = val;
+      i++;
+    }
+  }
+  return { platform };
+}
 
 function validateContract(contract: unknown, name: string, schema: unknown): void {
   const result = (schema as { safeParse: (d: unknown) => { success: boolean; error?: { issues: Array<{ path: { join: (s: string) => string }; message: string }> } } }).safeParse(contract);
@@ -15,7 +29,11 @@ function validateContract(contract: unknown, name: string, schema: unknown): voi
 }
 
 async function main() {
-  console.log('=== LOOP ENGINE PIPELINE ===\n');
+  const { platform } = parseArgs();
+  const platformDef = PLATFORMS[platform];
+
+  console.log('=== LOOP ENGINE PIPELINE ===');
+  console.log(`Platform: ${platformDef.label} (${platformDef.width}x${platformDef.height})\n`);
 
   const decks = getAllDecks();
   console.log(`Found ${decks.length} decks: ${decks.map(d => d.name).join(', ')}\n`);
@@ -47,7 +65,7 @@ async function main() {
         deck.sampleSlides,
         deck.schemeId,
         deck.id,
-        { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.templateId }
+        { baseUrl, outputDir: OUTPUT_DIR, templateId: deck.templateId, width: platformDef.width, height: platformDef.height }
       );
 
       totalExports += exportedPaths.length;

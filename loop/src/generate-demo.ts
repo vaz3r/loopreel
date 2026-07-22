@@ -3,6 +3,7 @@ import { VoidContractSchema } from '../schema';
 import { exportCarouselToImages } from './exporter';
 import { SCHEMES } from './engine-utils';
 import { startViteServer } from './vite-server';
+import { PLATFORMS, type PlatformId } from './platforms';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
@@ -87,12 +88,19 @@ async function main() {
     'custom-brand': 'custom_brand',
     'modern-clean': 'custom_brand',
     'premium-social': 'premium_social',
+    'avant-garde-editorial': 'avant_garde_editorial',
   };
 
   const templateArg = process.argv.findIndex(a => a === '--template');
   const templateId = templateArg !== -1 && process.argv[templateArg + 1]
     ? process.argv[templateArg + 1] : 'premium-social';
   const schemeId = TEMPLATE_MAP[templateId];
+
+  const platformArg = process.argv.findIndex(a => a === '--platform');
+  const platformId: PlatformId = platformArg !== -1 && process.argv[platformArg + 1]
+    && PLATFORMS[process.argv[platformArg + 1] as PlatformId]
+    ? process.argv[platformArg + 1] as PlatformId : 'instagram-feed';
+  const platformDef = PLATFORMS[platformId];
 
   if (!schemeId || !SCHEMES[schemeId as keyof typeof SCHEMES]) {
     console.error(`❌ Unknown template: "${templateId}"`);
@@ -106,7 +114,8 @@ async function main() {
   mock.schemeId = schemeId;
   console.log(`Using ${useValid ? 'VALID' : 'INVALID (expect failure)'} mock\n`);
   console.log(`  Template: ${mock.templateId}`);
-  console.log(`  Scheme:   ${mock.schemeId} (${SCHEMES[mock.schemeId as keyof typeof SCHEMES].name})\n`);
+  console.log(`  Scheme:   ${mock.schemeId} (${SCHEMES[mock.schemeId as keyof typeof SCHEMES].name})`);
+  console.log(`  Platform: ${platformDef.label} (${platformDef.width}x${platformDef.height})\n`);
 
   console.log('Validating against Zod schema...');
   const contract = validateResponse(mock);
@@ -120,6 +129,7 @@ async function main() {
     console.log('Exporting slides to PNG...');
     const exported = await exportCarouselToImages(contract, mock.schemeId, outputSubdir, {
       baseUrl, outputDir: OUTPUT_DIR, templateId: mock.templateId,
+      width: platformDef.width, height: platformDef.height,
     });
     console.log(`\n✅ Success! ${exported.length} PNGs exported to:`);
     console.log(`   ${path.join(OUTPUT_DIR, outputSubdir)}`);

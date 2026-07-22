@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SCHEMES, injectFonts, Engine, chunkArray } from './engine-utils';
 import { SlideRenderer } from './SlideRenderer';
+import { PLATFORMS, type PlatformId } from './platforms';
 
 const DEFAULT_SLIDES = [
   {
@@ -117,6 +118,7 @@ export default function App() {
   const [baseSlides, setBaseSlides] = useState(DEFAULT_SLIDES);
   const [activePaginatedIndex, setActivePaginatedIndex] = useState(0);
   const [activeSchemeId, setActiveSchemeId] = useState('void_editorial');
+  const [activePlatformId, setActivePlatformId] = useState<PlatformId>('instagram-feed' as PlatformId);
   const [exportMode, setExportMode] = useState(false);
 
   // The Brand Kit State
@@ -349,6 +351,22 @@ export default function App() {
             )}
 
             <div>
+              <label className="block text-[10px] font-mono tracking-widest uppercase text-neutral-500 mb-2">Platform</label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {Object.values(PLATFORMS).map(p => (
+                  <button
+                    key={p.id} onClick={() => setActivePlatformId(p.id)}
+                    className={`py-1.5 px-1 border text-[9px] font-mono transition-all ${
+                      activePlatformId === p.id ? 'border-white bg-white text-black font-bold' : 'border-[#333] text-neutral-500 hover:border-[#555]'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
               <label className="block text-[10px] font-mono tracking-widest uppercase text-neutral-500 mb-2">Viewport Mode</label>
               <div className="grid grid-cols-2 gap-2">
                 <button onClick={() => setExportMode(false)} className={`py-2 px-3 border text-xs font-mono uppercase transition-all ${!exportMode ? 'border-white bg-white text-black font-bold' : 'border-[#333] text-neutral-500'}`}>Fitted Preview</button>
@@ -540,7 +558,10 @@ export default function App() {
         {/* Scaler Wrapper */}
         <div 
           className="relative transition-all duration-300 flex-shrink-0"
-          style={exportMode ? { width: '1080px', height: '1350px' } : { width: '1080px', height: '1350px', transform: 'scale(0.55)', transformOrigin: 'center center', margin: '-300px 0' }}
+          style={exportMode 
+            ? { width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height }
+            : { width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height, transform: `scale(${Math.min(0.55, 600 / Math.max(PLATFORMS[activePlatformId].width, PLATFORMS[activePlatformId].height))})`, transformOrigin: 'center center', margin: '-300px 0' }
+          }
         >
           {/* THE ACTUAL DOM NODE FOR PLAYWRIGHT */}
           <SlideRenderer
@@ -548,6 +569,7 @@ export default function App() {
             scheme={currentScheme}
             templateId={activeSchemeId.replace(/_/g, '-')}
             brandKit={activeSchemeId === 'custom_brand' ? brandKit : undefined}
+            size={{ width: PLATFORMS[activePlatformId].width, height: PLATFORMS[activePlatformId].height }}
           />
         </div>
       </div>

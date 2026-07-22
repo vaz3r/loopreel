@@ -2,10 +2,11 @@ import React from 'react';
 import type { FrameProps } from '../shared/types';
 import styles from './frame.module.css';
 
-export default function ModernCleanFrame({ slide, scheme, children }: FrameProps) {
+export default function ModernCleanFrame({ slide, scheme, children, size }: FrameProps) {
   return (
     <div className={styles.frame}
       style={{
+        width: size?.width ?? 1080, height: size?.height ?? 1350,
         fontFamily: `'${scheme.fontSans}', sans-serif`,
         '--accent': scheme.accent, '--text': scheme.text, '--bg': scheme.bg,
         '--border': scheme.border, '--fontSans': scheme.fontSans,

@@ -1,10 +1,12 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
 
-export default function CustomBrandFrame({ slide, scheme, children, brandKit }: FrameProps) {
+export default function CustomBrandFrame({ slide, scheme, children, brandKit, size }: FrameProps) {
+  const w = size?.width ?? 1080;
+  const h = size?.height ?? 1350;
   return (
-    <div className="w-[1080px] h-[1350px] relative overflow-hidden flex flex-col"
-      style={{ backgroundColor: scheme.bg, color: scheme.text, fontFamily: `'${scheme.fontSans}', sans-serif` }}>
+    <div className="relative overflow-hidden flex flex-col"
+      style={{ width: w, height: h, backgroundColor: scheme.bg, color: scheme.text, fontFamily: `'${scheme.fontSans}', sans-serif` }}>
       <div className="absolute inset-0 opacity-[0.05]" style={{
         background: `linear-gradient(135deg, ${scheme.accent} 0%, transparent 50%, ${scheme.text} 100%)`,
         opacity: 0.08

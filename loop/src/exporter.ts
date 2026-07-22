@@ -51,6 +51,7 @@ export async function exportCarouselToImages(
         window.__SLIDE_DATA = ${JSON.stringify(slide)};
         window.__SLIDE_SCHEME_ID = ${JSON.stringify(schemeId)};
         window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
+        window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
       `,
     });
 

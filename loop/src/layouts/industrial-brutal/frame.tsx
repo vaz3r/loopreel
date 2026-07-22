@@ -1,10 +1,13 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
 
-export default function IndustrialBrutalFrame({ slide, scheme, children }: FrameProps) {
+export default function IndustrialBrutalFrame({ slide, scheme, children, size }: FrameProps) {
+  const w = size?.width ?? 1080;
+  const h = size?.height ?? 1350;
   return (
-    <div className="w-[1080px] h-[1350px] relative overflow-hidden flex flex-col"
+    <div className="relative overflow-hidden flex flex-col"
       style={{
+        width: w, height: h,
         backgroundColor: scheme.bg, color: scheme.text,
         fontFamily: `'${scheme.fontSans}', sans-serif`,
         '--accent': scheme.accent, '--text': scheme.text, '--bg': scheme.bg,
