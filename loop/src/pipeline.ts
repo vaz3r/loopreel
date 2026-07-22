@@ -1,5 +1,4 @@
 import path from 'path';
-import { VoidContractSchema } from '../schema';
 import { exportCarouselToImages } from './exporter';
 import { startViteServer } from './vite-server';
 import { getAllDecks } from './layouts/registry';
@@ -7,10 +6,10 @@ import { getAllDecks } from './layouts/registry';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const OUTPUT_DIR = path.join(__dirname, '../output');
 
-function validateContract(contract: unknown, name: string): void {
-  const result = VoidContractSchema.safeParse(contract);
+function validateContract(contract: unknown, name: string, schema: unknown): void {
+  const result = (schema as { safeParse: (d: unknown) => { success: boolean; error?: { issues: Array<{ path: { join: (s: string) => string }; message: string }> } } }).safeParse(contract);
   if (!result.success) {
-    const errors = result.error.issues.map(i => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
+    const errors = result.error!.issues.map(i => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
     throw new Error(`Validation failed for "${name}":\n${errors}`);
   }
 }
@@ -28,7 +27,7 @@ async function main() {
 
   console.log('Validating slide contracts...');
   for (const deck of decks) {
-    validateContract(deck.sampleSlides, deck.name);
+    validateContract(deck.sampleSlides, deck.name, deck.schema);
     console.log(`  ${deck.name}: ${deck.sampleSlides.slides.length} slides - VALID`);
   }
   console.log('');
