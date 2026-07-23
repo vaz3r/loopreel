@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
-import { TEMPLATES } from '@loopreel/templates';
+import { getTemplate, getPrompt } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
@@ -159,20 +159,12 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     return;
   }
 
-  jobLogger.info('Starting structuring with template-driven pipeline');
+  jobLogger.info('Starting structuring with loop-bridge pipeline');
 
   try {
-    const template = TEMPLATES[existing.template_id as keyof typeof TEMPLATES];
-    if (!template) {
-      await JobRepository.markFailed(jobId, {
-        stage: 'structuring',
-        reason: 'unknown_template',
-        details: `Template "${existing.template_id}" not found`,
-      });
-      return;
-    }
+    const template = getTemplate(existing.template_id);
 
-    const prompt = template.getPrompt(rawText);
+    const prompt = await getPrompt(existing.template_id, rawText);
     const rawResponse = await llm.generateJSON(prompt, rawText);
 
     jobLogger.info({ rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');
@@ -190,7 +182,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
     if (!result.success) {
       const errorMessages = result.error.issues
-        .map((i) => `${i.path.join('.')}: ${i.message}`)
+        .map((i: { path: (string | number)[]; message: string }) => `${i.path.join('.')}: ${i.message}`)
         .join(', ');
 
       jobLogger.error({ errors: result.error.issues }, 'Schema validation failed');

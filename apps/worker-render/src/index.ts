@@ -2,6 +2,7 @@ import { JobRepository, AssetRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { RenderPayload } from '@loopreel/schemas';
 import type { FormatType } from '@loopreel/schemas';
+import { getTemplate } from '@loopreel/loop-bridge';
 import { uploadSlide } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
 import { getPlatform } from '@loopreel/design';
@@ -16,7 +17,7 @@ const logger = pino({
   },
 });
 
-const API_URL = process.env['API_URL'] ?? 'http://localhost:3000';
+const VITE_SERVER_URL = process.env['VITE_SERVER_URL'] ?? 'http://localhost:5173';
 let pool: Awaited<ReturnType<typeof getPool>> | null = null;
 
 async function ensurePool() {
@@ -27,26 +28,6 @@ async function ensurePool() {
 }
 
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
-
-/**
- * Fit all [data-smart-fit] elements to their containers (§5 of spec).
- * Uses real DOM measurement in Playwright, not character-count heuristics.
- */
-async function fitTextToContainers(page: import('playwright').Page) {
-  await page.evaluate(() => {
-    const elements = document.querySelectorAll('[data-smart-fit]');
-    elements.forEach((el) => {
-      const htmlEl = el as HTMLElement;
-      const parent = htmlEl.parentElement;
-      if (!parent) return;
-      let size = parseFloat(getComputedStyle(htmlEl).fontSize);
-      while (htmlEl.scrollHeight > parent.clientHeight && size > 14) {
-        size -= 1;
-        htmlEl.style.fontSize = `${size}px`;
-      }
-    });
-  });
-}
 
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
@@ -72,11 +53,24 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
   }
 
   const platform = existing.platform ?? 'instagram-feed';
+  const templateId = existing.template_id;
   const platformConfig = getPlatform(platform);
   const width = platformConfig?.width ?? 1080;
   const height = platformConfig?.height ?? 1080;
 
-  jobLogger.info({ slideCount: existing.slide_count, platform }, 'Starting render');
+  let template;
+  try {
+    template = getTemplate(templateId);
+  } catch {
+    await JobRepository.markFailed(jobId, {
+      stage: 'rendering',
+      reason: 'unknown_template',
+      details: `Template "${templateId}" not found`,
+    });
+    return;
+  }
+
+  jobLogger.info({ slideCount: existing.slide_count, platform, template: templateId }, 'Starting render');
 
   try {
     const currentPool = await ensurePool();
@@ -88,34 +82,32 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       contentText?: string;
     }> = [];
 
-    // Slide count = hook + content slides + CTA
-    const payload = existing.content_payload as any;
-    const totalSlides = 2 + (payload.slides?.length ?? 0);
+    const payload = existing.content_payload as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
+    const totalSlides = payload.slides.length;
 
     for (let i = 0; i < totalSlides; i++) {
+      const slide = payload.slides[i];
       const page = await currentPool.acquire();
+
       try {
         await page.setViewportSize({ width, height });
 
-        const response = await fetch(`${API_URL}/internal/render/${jobId}/${i}`);
-        if (!response.ok) {
-          throw new Error(`Render endpoint returned ${response.status}`);
-        }
-        const html = await response.text();
+        // Inject slide data BEFORE page load (same as loop engine's exporter.ts)
+        await page.addInitScript({
+          content: `
+            window.__SLIDE_DATA = ${JSON.stringify(slide)};
+            window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
+            window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
+            window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
+            ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
+          `,
+        });
 
-        await page.setContent(html, { waitUntil: 'domcontentloaded' });
+        // Navigate to Vite server — React renders client-side
+        await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
 
-        // §4 of spec: wait for fonts to load
+        // Wait for fonts to load (critical for accurate text rendering)
         await page.evaluate(() => document.fonts.ready);
-
-        // §5 of spec: measure-and-shrink for all variable-length text
-        await fitTextToContainers(page);
-
-        // §4 of spec: wait for render-complete signal
-        await page.waitForFunction(
-          () => document.body.getAttribute('data-render-complete') === 'true',
-          { timeout: 5000 },
-        );
 
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
@@ -133,36 +125,41 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       }
     }
 
-    const slideTexts = payload.slides.map((s: any) => {
-      if (s.type === 'list' && s.items?.length) {
-        return [`Key points: ${s.heading ?? ''}`, ...s.items.map((item: string) => `  - ${item}`)].join('\n');
-      }
-      if (s.type === 'quote') return `"${s.quote}"`;
-      if (s.type === 'stat') return `${s.value}${s.label ? ` ${s.label}` : ''}`;
-      return [s.heading ?? '', s.body].filter(Boolean).join('\n');
-    });
+    // Generate LinkedIn post text
+    const linkedinText = payload.slides
+      .map((s: Record<string, unknown>) => {
+        const type = s['type'] as string;
+        if (type === 'cover') return `${s['headline']}\n${s['subheadline'] ?? ''}`;
+        if (type === 'quote') return `"${s['quote']}" — ${s['author'] ?? ''}`;
+        if (type === 'sequence') {
+          const items = (s['items'] as Array<Record<string, unknown>> ?? [])
+            .map((item) => `${item['num']} ${item['title']}: ${item['desc']}`)
+            .join('\n');
+          return `${s['headline']}\n${items}`;
+        }
+        if (type === 'telemetry') {
+          const stats = (s['stats'] as Array<Record<string, unknown>> ?? [])
+            .map((stat) => `${stat['value']}${stat['unit'] ?? ''} ${stat['label']}`)
+            .join('\n');
+          return `${s['headline']}\n${stats}`;
+        }
+        if (type === 'cta') return `${s['headline']}\n${s['subtext'] ?? ''}`;
+        return [s['headline'] ?? '', s['bodyText'] ?? ''].filter(Boolean).join('\n');
+      })
+      .join('\n\n');
 
-    const firstSlide = payload.hook;
-    const lastSlide = payload.cta;
-
-    const linkedinText = [
-      firstSlide?.heading ?? '',
-      '',
-      ...slideTexts,
-      '',
-      lastSlide?.heading ?? '',
-    ].join('\n');
-
-    const twitterThread = [
-      firstSlide?.heading ?? '',
-      '',
-      ...payload.slides.map((s: any, i: number) => {
-        const text = [s.heading ?? s.value ?? '', s.body ?? s.label ?? ''].filter(Boolean).join(' — ');
-        return `${i + 1}/${payload.slides.length} ${text}`;
-      }),
-      '',
-      lastSlide?.heading ?? '',
-    ].join('\n\n');
+    // Generate Twitter thread text
+    const twitterThread = payload.slides
+      .map((s: Record<string, unknown>, i: number) => {
+        const type = s['type'] as string;
+        let text = '';
+        if (type === 'cover') text = `${s['headline']}`;
+        else if (type === 'quote') text = `"${s['quote']}"`;
+        else if (type === 'cta') text = `${s['headline']}`;
+        else text = [s['headline'] ?? s['value'] ?? '', s['bodyText'] ?? s['label'] ?? ''].filter(Boolean).join(' — ');
+        return `${i + 1}/${totalSlides} ${text}`;
+      })
+      .join('\n\n');
 
     assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
     assets.push({ jobId, formatType: 'twitter_thread', contentText: twitterThread });
@@ -170,7 +167,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     await AssetRepository.insertBatch(assets);
     await JobRepository.updateStatus(jobId, 'complete');
 
-    jobLogger.info({ assetCount: assets.length, platform }, 'Job complete');
+    jobLogger.info({ assetCount: assets.length, platform, template: templateId }, 'Job complete');
   } catch (err) {
     const classified = classifyError(err);
     jobLogger.error({ err, errorType: classified.type }, 'Render failed');

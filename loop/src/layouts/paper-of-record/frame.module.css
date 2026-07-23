@@ -126,3 +126,47 @@
   letter-spacing: 0.12em;
   color: var(--charcoal);
 }
+
+/* Wide formats (16:9, 1.91:1) — compress vertical padding to maximize content */
+@media (min-aspect-ratio: 1/1) {
+  .masthead {
+    top: 30px;
+    left: 60px;
+    right: 60px;
+  }
+
+  .content {
+    top: 90px;
+    bottom: 70px;
+    left: 60px;
+    right: 60px;
+  }
+
+  .footer {
+    bottom: 30px;
+    left: 60px;
+    right: 60px;
+  }
+}
+
+/* Ultra-wide — minimal padding */
+@media (min-aspect-ratio: 2/1) {
+  .masthead {
+    top: 20px;
+    left: 40px;
+    right: 40px;
+  }
+
+  .content {
+    top: 60px;
+    bottom: 50px;
+    left: 40px;
+    right: 40px;
+  }
+
+  .footer {
+    bottom: 20px;
+    left: 40px;
+    right: 40px;
+  }
+}

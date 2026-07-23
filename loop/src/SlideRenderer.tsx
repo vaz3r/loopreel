@@ -9,6 +9,7 @@ declare global {
     __SLIDE_SCHEME_ID?: string;
     __SLIDE_TEMPLATE_ID?: string;
     __SLIDE_SIZE?: { width: number; height: number };
+    __BRAND_KIT?: { bg?: string; text?: string; accent?: string; fontSerif?: string; fontSans?: string; logoUrl?: string };
   }
 }
 
@@ -36,6 +37,7 @@ export default function ExportRenderer() {
   const schemeId = window.__SLIDE_SCHEME_ID || 'archive_paper';
   const templateId = window.__SLIDE_TEMPLATE_ID || 'paper-of-record';
   const size = window.__SLIDE_SIZE || { width: 1080, height: 1350 };
+  const brandKit = window.__BRAND_KIT;
   const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.archive_paper) as Scheme;
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function ExportRenderer() {
 
   return (
     <main style={{ margin: 0, padding: 0, background: '#000', width: size.width, height: size.height, overflow: 'hidden' }}>
-      <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} size={size} />
+      <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} brandKit={brandKit} size={size} />
     </main>
   );
 }

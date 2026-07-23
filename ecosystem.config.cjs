@@ -4,6 +4,19 @@ const LOG_DIR = resolve(__dirname, 'logs');
 module.exports = {
   apps: [
     {
+      name: 'loop-engine',
+      script: 'npx',
+      args: 'vite --host --port 5173',
+      cwd: resolve(__dirname, 'loop'),
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      error_file: resolve(LOG_DIR, 'loop-engine-error.log'),
+      out_file: resolve(LOG_DIR, 'loop-engine-out.log'),
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      env: { NODE_ENV: 'development' },
+    },
+    {
       name: 'api',
       script: 'node',
       args: '--import tsx src/bootstrap.ts',

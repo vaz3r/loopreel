@@ -12,6 +12,7 @@
     "@loopreel/db": "workspace:*",
     "@loopreel/design": "workspace:*",
     "@loopreel/errors": "workspace:*",
+    "@loopreel/loop-bridge": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
     "@loopreel/storage": "workspace:*",

@@ -8,6 +8,7 @@ export interface JobRow {
   status: JobStatus;
   template_id: string;
   platform: string;
+  brand_kit: Record<string, string> | null;
   audio_r2_key: string | null;
   content_payload: unknown;
   error_payload: unknown;
@@ -22,15 +23,16 @@ export interface CreateJobParams {
   sourceType: SourceType;
   templateId: string;
   platform: string;
+  brandKit?: Record<string, string>;
 }
 
 export class JobRepository {
   static async create(params: CreateJobParams): Promise<string> {
     const { rows } = await pool.query<{ id: string }>(
-      `INSERT INTO generation_jobs (source_url, source_type, template_id, platform)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO generation_jobs (source_url, source_type, template_id, platform, brand_kit)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING id`,
-      [params.sourceUrl, params.sourceType, params.templateId, params.platform],
+      [params.sourceUrl, params.sourceType, params.templateId, params.platform, JSON.stringify(params.brandKit ?? {})],
     );
     return rows[0]!.id;
   }

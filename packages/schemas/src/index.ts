@@ -27,17 +27,37 @@ export type FormatType = z.infer<typeof FormatTypeEnum>;
 // Platform enum
 export const PlatformEnum = z.enum([
   'instagram-feed',
+  'instagram-square',
   'instagram-stories',
   'linkedin',
+  'x',
   'facebook',
 ]);
 export type Platform = z.infer<typeof PlatformEnum>;
+
+// BrandKit schema
+export const BrandKitSchema = z.object({
+  bg: z.string().optional(),
+  text: z.string().optional(),
+  accent: z.string().optional(),
+  fontSerif: z.string().optional(),
+  fontSans: z.string().optional(),
+  logoUrl: z.string().optional(),
+});
+export type BrandKit = z.infer<typeof BrandKitSchema>;
 
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
   platform: PlatformEnum.default('instagram-feed'),
-  templateId: z.string().default('editorial-runway'),
+  templateId: z.enum([
+    'paper-of-record',
+    'the-globalist',
+    'the-terminal',
+    'the-curator',
+    'the-academic',
+  ]).default('paper-of-record'),
+  brandKit: BrandKitSchema.optional(),
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;
 

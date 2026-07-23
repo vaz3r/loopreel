@@ -36,30 +36,18 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/design-system':
+      '@loopreel/design':
         specifier: workspace:*
-        version: link:../../packages/design-system
-      '@loopreel/layout-engine':
-        specifier: workspace:*
-        version: link:../../packages/layout-engine
+        version: link:../../packages/design
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
-      '@loopreel/renderer':
-        specifier: workspace:*
-        version: link:../../packages/renderer
       '@loopreel/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
-      '@loopreel/slide-types':
-        specifier: workspace:*
-        version: link:../../packages/slide-types
       '@loopreel/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@loopreel/templates':
-        specifier: workspace:*
-        version: link:../../packages/templates
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -69,19 +57,7 @@ importers:
       pino:
         specifier: ^9.6.0
         version: 9.14.0
-      react:
-        specifier: ^19.0.0
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.7(react@19.2.7)
     devDependencies:
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.2.3(@types/react@19.2.17)
       tsx:
         specifier: ^4.19.0
         version: 4.23.1
@@ -140,6 +116,9 @@ importers:
       '@loopreel/errors':
         specifier: workspace:*
         version: link:../../packages/errors
+      '@loopreel/loop-bridge':
+        specifier: workspace:*
+        version: link:../../packages/loop-bridge
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -180,6 +159,9 @@ importers:
       '@loopreel/llm':
         specifier: workspace:*
         version: link:../../packages/llm
+      '@loopreel/loop-bridge':
+        specifier: workspace:*
+        version: link:../../packages/loop-bridge
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -189,9 +171,6 @@ importers:
       '@loopreel/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@loopreel/templates':
-        specifier: workspace:*
-        version: link:../../packages/templates
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -271,12 +250,6 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
-  packages/design-system:
-    devDependencies:
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
   packages/errors:
     dependencies:
       '@loopreel/db':
@@ -290,16 +263,6 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
-  packages/layout-engine:
-    dependencies:
-      '@loopreel/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-    devDependencies:
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
   packages/llm:
     devDependencies:
       '@types/node':
@@ -307,6 +270,16 @@ importers:
         version: 22.20.1
       typescript:
         specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/loop-bridge:
+    dependencies:
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      typescript:
+        specifier: ^5.5.3
         version: 5.9.3
 
   packages/queue:
@@ -322,49 +295,11 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
-  packages/renderer:
-    dependencies:
-      '@loopreel/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-      '@loopreel/layout-engine':
-        specifier: workspace:*
-        version: link:../layout-engine
-      '@loopreel/slide-types':
-        specifier: workspace:*
-        version: link:../slide-types
-    devDependencies:
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.17
-      react:
-        specifier: ^19.0.0
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.7(react@19.2.7)
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
   packages/schemas:
     dependencies:
       zod:
         specifier: ^3.24.0
         version: 3.25.76
-    devDependencies:
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
-  packages/slide-types:
-    dependencies:
-      '@loopreel/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-      '@loopreel/layout-engine':
-        specifier: workspace:*
-        version: link:../layout-engine
     devDependencies:
       typescript:
         specifier: ^5.7.0
@@ -382,37 +317,6 @@ importers:
       '@types/node':
         specifier: ^22.0.0
         version: 22.20.1
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
-  packages/templates:
-    dependencies:
-      '@loopreel/design':
-        specifier: workspace:*
-        version: link:../design
-      '@loopreel/design-system':
-        specifier: workspace:*
-        version: link:../design-system
-      react:
-        specifier: ^19.0.0
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.7(react@19.2.7)
-      zod:
-        specifier: ^3.24.0
-        version: 3.25.76
-    devDependencies:
-      '@types/node':
-        specifier: ^22.0.0
-        version: 22.20.1
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.2.3(@types/react@19.2.17)
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -825,14 +729,6 @@ packages:
   '@types/pg@8.20.0':
     resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
 
-  '@types/react-dom@19.2.3':
-    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
-    peerDependencies:
-      '@types/react': ^19.2.0
-
-  '@types/react@19.2.17':
-    resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
-
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
 
@@ -1055,9 +951,6 @@ packages:
   css-what@6.2.2:
     resolution: {integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==}
     engines: {node: '>= 6'}
-
-  csstype@3.2.3:
-    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
   data-uri-to-buffer@6.0.2:
     resolution: {integrity: sha512-7hvf7/GW8e86rW0ptuwS3OcBGDjIi6SZva7hCyWC0yYry2cOPmLIjXAUHI6DK2HsnwJd9ifmt57i8eV2n4YNpw==}
@@ -1599,15 +1492,6 @@ packages:
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
-  react-dom@19.2.7:
-    resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
-    peerDependencies:
-      react: ^19.2.7
-
-  react@19.2.7:
-    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
-    engines: {node: '>=0.10.0'}
-
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
@@ -1663,9 +1547,6 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
   secure-json-parse@4.1.0:
     resolution: {integrity: sha512-l4KnYfEyqYJxDwlNVyRfO2E4NTHfMKAWdUuA8J0yve2Dz/E/PdBepY03RvyJpssIpRFwJoCD55wA+mEDs6ByWA==}
@@ -2311,14 +2192,6 @@ snapshots:
       pg-protocol: 1.15.0
       pg-types: 2.2.0
 
-  '@types/react-dom@19.2.3(@types/react@19.2.17)':
-    dependencies:
-      '@types/react': 19.2.17
-
-  '@types/react@19.2.17':
-    dependencies:
-      csstype: 3.2.3
-
   '@types/yauzl@2.10.3':
     dependencies:
       '@types/node': 22.20.1
@@ -2535,8 +2408,6 @@ snapshots:
       nth-check: 2.1.1
 
   css-what@6.2.2: {}
-
-  csstype@3.2.3: {}
 
   data-uri-to-buffer@6.0.2: {}
 
@@ -3171,13 +3042,6 @@ snapshots:
 
   quick-format-unescaped@4.0.4: {}
 
-  react-dom@19.2.7(react@19.2.7):
-    dependencies:
-      react: 19.2.7
-      scheduler: 0.27.0
-
-  react@19.2.7: {}
-
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.2
@@ -3213,8 +3077,6 @@ snapshots:
   safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
-
-  scheduler@0.27.0: {}
 
   secure-json-parse@4.1.0: {}
 

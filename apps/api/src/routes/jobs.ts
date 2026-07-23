@@ -25,8 +25,19 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         required: ['sourceUrl'],
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
-          platform: { type: 'string', enum: ['instagram-feed', 'instagram-stories', 'linkedin', 'facebook'], default: 'instagram-feed' },
-          templateId: { type: 'string', default: 'editorial-runway' },
+          platform: { type: 'string', enum: ['instagram-feed', 'instagram-square', 'instagram-stories', 'linkedin', 'x', 'facebook'], default: 'instagram-feed' },
+          templateId: { type: 'string', enum: ['paper-of-record', 'the-globalist', 'the-terminal', 'the-curator', 'the-academic'], default: 'paper-of-record' },
+          brandKit: {
+            type: 'object',
+            properties: {
+              bg: { type: 'string' },
+              text: { type: 'string' },
+              accent: { type: 'string' },
+              fontSerif: { type: 'string' },
+              fontSans: { type: 'string' },
+              logoUrl: { type: 'string' },
+            },
+          },
         },
       },
     },
@@ -36,14 +47,15 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, platform, templateId } = parse.data;
+    const { sourceUrl, platform, templateId, brandKit } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
 
     const jobId = await JobRepository.create({
       sourceUrl,
       sourceType,
-      templateId: templateId ?? 'editorial-runway',
+      templateId: templateId ?? 'paper-of-record',
       platform: platform ?? 'instagram-feed',
+      brandKit: brandKit ?? {},
     });
 
     await ingestQueue.add(`job-${jobId}`, {

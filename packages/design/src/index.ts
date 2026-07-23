@@ -1,22 +1,4 @@
-export type {
-  ColorPalette,
-  TypographyConfig,
-  LayoutConfig,
-  BackgroundConfig,
-  EffectsConfig,
-  LayoutVariant,
-  Template,
-  PlatformFormat,
-  SlideDesign,
-  DesignOutput,
-} from './types.js';
-
-export {
-  templates,
-  getTemplate,
-  getTemplateIds,
-  getTemplatesByStyle,
-} from './templates.js';
+export type { PlatformFormat } from './platforms.js';
 
 export {
   platforms,
