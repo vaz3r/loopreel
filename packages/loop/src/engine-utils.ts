@@ -40,7 +40,8 @@ export const SCHEMES = {
 export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];
 
 export const injectFonts = (customFonts: string[] = []) => {
-  if (typeof document === 'undefined') return;
+  if (typeof (globalThis as any).document === 'undefined') return;
+  const d = (globalThis as any).document;
   const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@300;400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400';
 
   const customQuery = customFonts
@@ -51,12 +52,12 @@ export const injectFonts = (customFonts: string[] = []) => {
   const finalQuery = customQuery ? `${baseFonts}&${customQuery}` : baseFonts;
   const href = `https://fonts.googleapis.com/css2?${finalQuery}&display=swap`;
 
-  let link = document.getElementById('editorial-fonts-v3') as HTMLLinkElement | null;
+  let link = d.getElementById('editorial-fonts-v3');
   if (!link) {
-    link = document.createElement('link');
+    link = d.createElement('link');
     link.id = 'editorial-fonts-v3';
     link.rel = 'stylesheet';
-    document.head.appendChild(link);
+    d.head.appendChild(link);
   }
 
   if (link.getAttribute('href') !== href) {
@@ -65,7 +66,7 @@ export const injectFonts = (customFonts: string[] = []) => {
 };
 
 export const Engine = {
-  getHeadlineStyle: (text = '', themeId?: string) => {
+  getHeadlineStyle: (text = '') => {
     const len = text.length;
     const weight = 'font-light italic tracking-tight';
     const align = 'text-wrap-balance break-words';
@@ -102,10 +103,11 @@ const PAGINATION_LIMITS: Record<string, { field: string; chunkSize: number }> = 
   timeline: { field: 'events', chunkSize: 4 },
 };
 
-export function paginateContract(contract: { slides: Record<string, any>[] }): { slides: Record<string, any>[] } {
+export function paginateContract(contract: { slides?: Record<string, any>[] }): { slides: Record<string, any>[] } {
+  const slides = contract.slides ?? [];
   const result: Record<string, any>[] = [];
 
-  for (const slide of contract.slides) {
+  for (const slide of slides) {
     const rule = PAGINATION_LIMITS[slide.type];
     if (!rule || !slide[rule.field] || slide[rule.field].length <= rule.chunkSize) {
       result.push(slide);

@@ -24,12 +24,12 @@ export {
   type ImageSplitSlide,
   type ImageCoverSlide,
   type CtaSlide,
-} from './src/schemas/base';
+} from './src/schemas/base.js';
 
-export { PaperOfRecordContract, type PaperOfRecordContract as PaperOfRecordContractType } from './src/layouts/paper-of-record/schema';
+export { PaperOfRecordContract, type PaperOfRecordContract as PaperOfRecordContractType } from './src/layouts/paper-of-record/schema.js';
 
-export { TheTerminalContract, type TheTerminalContract as TheTerminalContractType } from './src/layouts/the-terminal/schema';
+export { TheTerminalContract, type TheTerminalContract as TheTerminalContractType } from './src/layouts/the-terminal/schema.js';
 
-export { TheCuratorContract, type TheCuratorContract as TheCuratorContractType } from './src/layouts/the-curator/schema';
+export { TheCuratorContract, type TheCuratorContract as TheCuratorContractType } from './src/layouts/the-curator/schema.js';
 
-export { TheAcademicContract, type TheAcademicContract as TheAcademicContractType } from './src/layouts/the-academic/schema';
+export { TheAcademicContract, type TheAcademicContract as TheAcademicContractType } from './src/layouts/the-academic/schema.js';
