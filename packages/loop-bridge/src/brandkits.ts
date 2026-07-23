@@ -2,23 +2,23 @@ import { z } from 'zod';
 import {
   PaperOfRecordBrandKit as POR,
   PAPER_OF_RECORD_BRANDKIT_DESCRIPTION,
-} from '../../loop/src/layouts/paper-of-record/brandkit.js';
+} from '@loopreel/loop/brandkits';
 import {
   TheGlobalistBrandKit as TG,
   THE_GLOBALIST_BRANDKIT_DESCRIPTION,
-} from '../../loop/src/layouts/the-globalist/brandkit.js';
+} from '@loopreel/loop/brandkits';
 import {
   TheTerminalBrandKit as TT,
   THE_TERMINAL_BRANDKIT_DESCRIPTION,
-} from '../../loop/src/layouts/the-terminal/brandkit.js';
+} from '@loopreel/loop/brandkits';
 import {
   TheCuratorBrandKit as TC,
   THE_CURATOR_BRANDKIT_DESCRIPTION,
-} from '../../loop/src/layouts/the-curator/brandkit.js';
+} from '@loopreel/loop/brandkits';
 import {
   TheAcademicBrandKit as TA,
   THE_ACADEMIC_BRANDKIT_DESCRIPTION,
-} from '../../loop/src/layouts/the-academic/brandkit.js';
+} from '@loopreel/loop/brandkits';
 
 export type PaperOfRecordBrandKit = z.infer<typeof POR>;
 export type TheGlobalistBrandKit = z.infer<typeof TG>;

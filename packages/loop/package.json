@@ -2,6 +2,10 @@
   "name": "@loopreel/loop",
   "version": "1.0.0",
   "type": "module",
+  "exports": {
+    "./contracts": "./src/contracts.ts",
+    "./brandkits": "./src/brandkits.ts"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
