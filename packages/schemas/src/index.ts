@@ -46,17 +46,20 @@ export const BrandKitSchema = z.object({
 });
 export type BrandKit = z.infer<typeof BrandKitSchema>;
 
+export const TEMPLATE_KEYS = [
+  'paper-of-record',
+  'the-globalist',
+  'the-terminal',
+  'the-curator',
+  'the-academic',
+] as const;
+export type TemplateId = (typeof TEMPLATE_KEYS)[number];
+
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
   platform: PlatformEnum.default('instagram-feed'),
-  templateId: z.enum([
-    'paper-of-record',
-    'the-globalist',
-    'the-terminal',
-    'the-curator',
-    'the-academic',
-  ]).default('paper-of-record'),
+  templateId: z.enum(TEMPLATE_KEYS).default('paper-of-record'),
   brandKit: BrandKitSchema.optional(),
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;

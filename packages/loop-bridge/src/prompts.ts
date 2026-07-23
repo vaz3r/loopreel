@@ -1,8 +1,9 @@
+import { TEMPLATE_KEYS } from '@loopreel/schemas';
 import { getTemplate } from './registry.js';
 import { getBrandKitDescription } from './brandkits.js';
 import { introspectSchema } from './schema-introspect.js';
 
-const TEMPLATE_IDS = ['paper-of-record', 'the-globalist', 'the-terminal', 'the-curator', 'the-academic'] as const;
+const TEMPLATE_IDS = TEMPLATE_KEYS;
 
 function getTemplateStyle(templateId: string): string {
   switch (templateId) {

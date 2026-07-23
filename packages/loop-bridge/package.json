@@ -6,6 +6,7 @@
   "types": "src/index.ts",
   "dependencies": {
     "@loopreel/loop": "workspace:*",
+    "@loopreel/schemas": "workspace:*",
     "zod": "^3.23.8"
   },
   "devDependencies": {

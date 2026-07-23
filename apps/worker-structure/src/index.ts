@@ -114,35 +114,32 @@ async function fetchImagesForSlides(
   slides: Record<string, unknown>[],
   jobId: string,
 ): Promise<Record<string, unknown>[]> {
-  const results: Record<string, unknown>[] = [];
-
-  for (const slide of slides) {
-    const type = slide['type'] as string;
-    if ((type === 'image-split' || type === 'image-cover') && slide['imageKeywords'] && !slide['imageUrl']) {
-      try {
-        const keywords = slide['imageKeywords'] as string;
-        let imageUrl: string;
-
+  return Promise.all(
+    slides.map(async (slide, idx) => {
+      const type = slide['type'] as string;
+      if ((type === 'image-split' || type === 'image-cover') && slide['imageKeywords'] && !slide['imageUrl']) {
         try {
-          const photo = await getRandomPhoto(keywords, { orientation: 'portrait' });
-          const url = getPhotoUrl(photo, 'raw', 1080);
-          const buffer = await downloadImage(url);
-          const r2Key = await uploadImage(jobId, results.length, buffer);
-          imageUrl = await getPresignedUrl(r2Key);
+          const keywords = slide['imageKeywords'] as string;
+          let imageUrl: string;
+
+          try {
+            const photo = await getRandomPhoto(keywords, { orientation: 'portrait' });
+            const url = getPhotoUrl(photo, 'raw', 1080);
+            const buffer = await downloadImage(url);
+            const r2Key = await uploadImage(jobId, idx, buffer);
+            imageUrl = await getPresignedUrl(r2Key);
+          } catch {
+            imageUrl = getPlaceholderUrl(keywords);
+          }
+
+          return { ...slide, imageUrl };
         } catch {
-          imageUrl = getPlaceholderUrl(keywords);
+          return slide;
         }
-
-        results.push({ ...slide, imageUrl });
-      } catch {
-        results.push(slide);
       }
-    } else {
-      results.push(slide);
-    }
-  }
-
-  return results;
+      return slide;
+    }),
+  );
 }
 
 const worker = createWorker<StructurePayload>('structure', async (job) => {

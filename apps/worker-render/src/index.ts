@@ -29,6 +29,8 @@ async function ensurePool() {
 
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
+const RENDER_CONCURRENCY = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
+
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
   const jobLogger = logger.child({ jobId, workerType: 'render' });
@@ -85,30 +87,35 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     const payload = existing.content_payload as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
     const totalSlides = payload.slides.length;
 
-    for (let i = 0; i < totalSlides; i++) {
-      const slide = payload.slides[i];
-      const page = await currentPool.acquire();
+    const page = await currentPool.acquire();
 
-      try {
-        await page.setViewportSize({ width, height });
+    try {
+      await page.setViewportSize({ width, height });
+      await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
 
-        // Inject slide data BEFORE page load (same as loop engine's exporter.ts)
-        await page.addInitScript({
-          content: `
-            window.__SLIDE_DATA = ${JSON.stringify(slide)};
-            window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
-            window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
-            window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
-            ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
-          `,
-        });
+      for (let i = 0; i < totalSlides; i++) {
+        const slide = payload.slides[i];
 
-        // Navigate to Vite server — React renders client-side
-        await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
+        await page.evaluate(
+          ({ slideData, schemeId, templateIdVal, renderSize, brandKitVal }) => {
+            const w = window as any;
+            w.__SLIDE_DATA = slideData;
+            w.__SLIDE_SCHEME_ID = schemeId;
+            w.__SLIDE_TEMPLATE_ID = templateIdVal;
+            w.__SLIDE_SIZE = renderSize;
+            if (brandKitVal) w.__BRAND_KIT = brandKitVal;
+            w.dispatchEvent(new Event('slide-update'));
+          },
+          {
+            slideData: slide,
+            schemeId: template.schemeId,
+            templateIdVal: templateId,
+            renderSize: { width, height },
+            brandKitVal: payload.meta?.brandKit as Record<string, string | undefined> | undefined,
+          },
+        );
 
-        // Wait for fonts to load (critical for accurate text rendering)
         await page.evaluate(() => document.fonts.ready);
-
         const screenshot = await page.screenshot({ type: 'png' });
         const r2Key = await uploadSlide(jobId, i, screenshot);
 
@@ -120,9 +127,9 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
           slideIndex: i,
           storageUrl: r2Key,
         });
-      } finally {
-        currentPool.release(page);
       }
+    } finally {
+      currentPool.release(page);
     }
 
     // Generate LinkedIn post text
@@ -182,7 +189,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       details: classified.message,
     });
   }
-});
+}, { concurrency: RENDER_CONCURRENCY });
 
 worker.on('failed', (job, err) => {
   logger.error({ jobId: job?.id, err }, 'Worker failed');

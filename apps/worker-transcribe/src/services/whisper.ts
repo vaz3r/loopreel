@@ -1,4 +1,3 @@
-import { writeFile, unlink } from 'node:fs/promises';
 import { downloadAudio, deleteAudio } from '@loopreel/storage';
 import type pino from 'pino';
 
@@ -9,16 +8,13 @@ export async function transcribeAudio(
   audioR2Key: string,
   logger: pino.Logger,
 ): Promise<string> {
-  const tmpPath = `/tmp/${jobId}.mp3`;
-
   try {
-    // Download audio from R2
+    // Download audio from R2 directly into memory buffer
     logger.info({ audioR2Key }, 'Downloading audio from R2');
     const audioBuffer = await downloadAudio(audioR2Key);
-    await writeFile(tmpPath, audioBuffer);
     logger.info({ size: audioBuffer.length }, 'Audio downloaded');
 
-    // Upload to Whisper
+    // Upload to Whisper directly via FormData
     logger.info({ whisperUrl: WHISPER_URL }, 'Sending to Whisper');
     const formData = new FormData();
     formData.append('audio_file', new Blob([audioBuffer], { type: 'audio/mpeg' }), `${jobId}.mp3`);
@@ -40,8 +36,7 @@ export async function transcribeAudio(
 
     return transcript;
   } finally {
-    // Always cleanup
-    await unlink(tmpPath).catch(() => {});
+    // Always cleanup audio from storage
     await deleteAudio(audioR2Key).catch(() => {});
   }
 }

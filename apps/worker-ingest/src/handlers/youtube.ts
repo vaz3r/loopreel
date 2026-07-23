@@ -33,8 +33,6 @@ export async function handleYouTube(
     const r2Key = await uploadAudio(jobId, audioBuffer);
     logger.info({ r2Key }, 'Audio uploaded to R2');
 
-    await unlink(tmpPath).catch(() => {});
-
     await JobRepository.updateStatus(jobId, 'transcribing');
 
     await transcribeQueue.add(`job-${jobId}`, {
@@ -43,9 +41,8 @@ export async function handleYouTube(
     });
 
     logger.info({ r2Key }, 'Dispatched to transcribe queue');
-  } catch (err) {
+  } finally {
     await unlink(tmpPath).catch(() => {});
-    throw err;
   }
 }
 

@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { JobRepository, AssetRepository } from '@loopreel/db';
+import { JobRepository, AssetRepository, OutboxRepository } from '@loopreel/db';
 import { JobCreateSchema } from '@loopreel/schemas';
 import { createQueue } from '@loopreel/queue';
 import { getPresignedUrl } from '@loopreel/storage';
@@ -58,11 +58,14 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       brandKit: brandKit ?? {},
     });
 
-    await ingestQueue.add(`job-${jobId}`, {
-      jobId,
-      sourceUrl,
-      sourceType,
+    const jobPayload = { jobId, sourceUrl, sourceType };
+
+    await OutboxRepository.create({
+      queueName: 'ingest',
+      jobPayload,
     });
+
+    await ingestQueue.add(`job-${jobId}`, jobPayload);
 
     app.log.info({ jobId, sourceType, platform }, 'Job created');
     return reply.status(201).send({ jobId, status: 'queued' });

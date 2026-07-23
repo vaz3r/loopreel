@@ -33,16 +33,35 @@ export function SlideRenderer({ slide, scheme, templateId = 'paper-of-record', b
 }
 
 export default function ExportRenderer() {
-  const slide = window.__SLIDE_DATA;
-  const schemeId = window.__SLIDE_SCHEME_ID || 'archive_paper';
-  const templateId = window.__SLIDE_TEMPLATE_ID || 'paper-of-record';
-  const size = window.__SLIDE_SIZE || { width: 1080, height: 1350 };
-  const brandKit = window.__BRAND_KIT;
+  const [renderState, setRenderState] = React.useState(() => ({
+    slide: window.__SLIDE_DATA,
+    schemeId: window.__SLIDE_SCHEME_ID || 'archive_paper',
+    templateId: window.__SLIDE_TEMPLATE_ID || 'paper-of-record',
+    size: window.__SLIDE_SIZE || { width: 1080, height: 1350 },
+    brandKit: window.__BRAND_KIT,
+  }));
+
+  useEffect(() => {
+    const handleSlideUpdate = () => {
+      setRenderState({
+        slide: window.__SLIDE_DATA,
+        schemeId: window.__SLIDE_SCHEME_ID || 'archive_paper',
+        templateId: window.__SLIDE_TEMPLATE_ID || 'paper-of-record',
+        size: window.__SLIDE_SIZE || { width: 1080, height: 1350 },
+        brandKit: window.__BRAND_KIT,
+      });
+    };
+
+    window.addEventListener('slide-update', handleSlideUpdate);
+    return () => window.removeEventListener('slide-update', handleSlideUpdate);
+  }, []);
+
+  const { slide, schemeId, templateId, size, brandKit } = renderState;
   const scheme = (SCHEMES[schemeId as keyof typeof SCHEMES] || SCHEMES.archive_paper) as Scheme;
 
   useEffect(() => {
     injectFonts(schemeId === 'custom_brand' ? [scheme.fontSerif, scheme.fontSans] : []);
-  }, [schemeId]);
+  }, [schemeId, scheme]);
 
   if (!slide) {
     return <div style={{ color: 'red', padding: 40, fontFamily: 'monospace' }}>No slide data provided.</div>;

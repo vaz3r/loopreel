@@ -39,23 +39,28 @@ export async function exportCarouselToImages(
   });
 
   const exportedPaths: string[] = [];
-  let page;
+  const page = await context.newPage();
+  await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
 
   for (let i = 0; i < contract.slides.length; i++) {
     const slide = contract.slides[i];
 
-    page = await context.newPage();
+    await page.evaluate(
+      ({ slideData, schemeIdVal, templateIdVal, renderSize }) => {
+        window.__SLIDE_DATA = slideData as any;
+        window.__SLIDE_SCHEME_ID = schemeIdVal;
+        window.__SLIDE_TEMPLATE_ID = templateIdVal;
+        window.__SLIDE_SIZE = renderSize;
+        window.dispatchEvent(new Event('slide-update'));
+      },
+      {
+        slideData: slide,
+        schemeIdVal: schemeId,
+        templateIdVal: templateId,
+        renderSize: { width, height },
+      },
+    );
 
-    await page.addInitScript({
-      content: `
-        window.__SLIDE_DATA = ${JSON.stringify(slide)};
-        window.__SLIDE_SCHEME_ID = ${JSON.stringify(schemeId)};
-        window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
-        window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
-      `,
-    });
-
-    await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
 
     const errorText = await page.evaluate(() => {
@@ -78,10 +83,9 @@ export async function exportCarouselToImages(
 
     exportedPaths.push(outputPath);
     console.log(`  Exported: ${outputPath}`);
-
-    await page.close();
   }
 
+  await page.close();
   await browser.close();
   return exportedPaths;
 }

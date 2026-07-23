@@ -21,8 +21,32 @@ export function getFrame(templateId: string): React.ComponentType<FrameProps> {
   return templateIndex[templateId]?.frame ?? templateIndex['paper-of-record'].frame;
 }
 
+function createThemeFallback(Component: React.ComponentType<LayoutProps>): React.ComponentType<LayoutProps> {
+  return function FallbackWrapper(props: LayoutProps) {
+    const { scheme } = props;
+    return React.createElement(
+      'div',
+      {
+        style: {
+          width: '100%',
+          height: '100%',
+          color: scheme.text,
+          fontFamily: scheme.fontSans,
+          backgroundColor: scheme.bg,
+        },
+      },
+      React.createElement(Component, props),
+    );
+  };
+}
+
 export function getLayout(templateId: string, slideType: string): React.ComponentType<LayoutProps> {
-  return templateIndex[templateId]?.slides[slideType] ?? getLayout('paper-of-record', slideType);
+  const targetLayout = templateIndex[templateId]?.slides[slideType];
+  if (targetLayout) {
+    return targetLayout;
+  }
+  const fallbackLayout = templateIndex['paper-of-record'].slides[slideType] ?? templateIndex['paper-of-record'].slides.cover;
+  return createThemeFallback(fallbackLayout);
 }
 
 export function getTemplateMeta(templateId: string) {
