@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { booleanFromString } from '../shared/types.js';
 
 const CoverSlideSchema = z.object({
   id: z.string(), type: z.literal('cover'),
@@ -59,7 +60,7 @@ const QuadrantSlideSchema = z.object({
   topLeft: z.object({ label: z.string().optional(), title: z.string().max(40), desc: z.string().max(150) }),
   topRight: z.object({ label: z.string().optional(), title: z.string().max(40), desc: z.string().max(150) }),
   bottomLeft: z.object({ label: z.string().optional(), title: z.string().max(40), desc: z.string().max(150) }),
-  bottomRight: z.object({ label: z.string().optional(), title: z.string().max(40), desc: z.string().max(150), highlighted: z.boolean().optional() }),
+  bottomRight: z.object({ label: z.string().optional(), title: z.string().max(40), desc: z.string().max(150), highlighted: booleanFromString }),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
 
@@ -69,7 +70,7 @@ const CaseStudySlideSchema = z.object({
   headline: z.string().max(60),
   stages: z.array(z.object({
     label: z.string(), title: z.string().max(50), desc: z.string().max(250),
-    highlighted: z.boolean().optional(),
+    highlighted: booleanFromString,
   })).min(1).max(5),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
@@ -99,7 +100,7 @@ const TimelineSlideSchema = z.object({
   headline: z.string().max(60),
   events: z.array(z.object({
     date: z.string(), title: z.string().max(50), desc: z.string().max(200),
-    highlight: z.boolean().optional(),
+    highlight: booleanFromString,
   })).min(1).max(20),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
@@ -139,7 +140,7 @@ const MethodologySlideSchema = z.object({
   headline: z.string().max(60),
   steps: z.array(z.object({
     num: z.string(), title: z.string().max(40), desc: z.string().max(200),
-    highlighted: z.boolean().optional(),
+    highlighted: booleanFromString,
   })).min(1).max(5),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
@@ -158,7 +159,7 @@ const ChecklistSlideSchema = z.object({
   tag: z.string().optional(),
   headline: z.string().max(60),
   items: z.array(z.object({
-    text: z.string().max(150), checked: z.boolean().optional(),
+    text: z.string().max(150), checked: booleanFromString,
   })).min(1).max(6),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });

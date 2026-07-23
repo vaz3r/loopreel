@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { booleanFromString } from '../shared/types.js';
 
 const CoverSlideSchema = z.object({
   id: z.string(), type: z.literal('cover'),
@@ -74,7 +75,7 @@ const CaseStudySlideSchema = z.object({
   headline: z.string().max(60),
   stages: z.array(z.object({
     label: z.string(), title: z.string().max(50), desc: z.string().max(250),
-    highlighted: z.boolean().optional(),
+    highlighted: booleanFromString,
   })).min(1).max(5),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });
@@ -104,7 +105,7 @@ const TimelineSlideSchema = z.object({
   headline: z.string().max(60),
   events: z.array(z.object({
     date: z.string(), title: z.string().max(50), desc: z.string().max(200),
-    highlight: z.boolean().optional(),
+    highlight: booleanFromString,
   })).min(1).max(5),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),
 });

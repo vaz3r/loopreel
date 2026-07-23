@@ -1,5 +1,12 @@
-import type { Scheme } from '../../engine-utils';
-import type { Slide } from '../../../schema';
+import { z } from 'zod';
+import type { Scheme } from '../../engine-utils.js';
+import type { Slide } from '../../../schema.js';
+import type { ReactNode } from 'react';
+
+export const booleanFromString = z
+  .union([z.boolean(), z.string()])
+  .transform((v) => v === true || v === 'true')
+  .optional();
 
 export interface LayoutProps<T extends Slide = Slide> {
   slide: T;
@@ -9,7 +16,7 @@ export interface LayoutProps<T extends Slide = Slide> {
 export interface FrameProps {
   slide: Slide;
   scheme: Scheme;
-  children: React.ReactNode;
+  children: ReactNode;
   brandKit?: Record<string, string | undefined>;
   size?: { width: number; height: number };
 }

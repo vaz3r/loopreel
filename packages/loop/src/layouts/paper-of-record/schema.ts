@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { booleanFromString } from '../shared/types.js';
 
 const FooterFields = {
   footerLeft: z.string().max(40).default(''),
@@ -84,7 +85,7 @@ const TimelineSlide = z.object({
     date: z.string().max(20),
     title: z.string().max(60),
     desc: z.string().max(200),
-    highlight: z.boolean().optional(),
+    highlight: booleanFromString,
   })).min(1).max(5),
   ...FooterFields,
 });
