@@ -7,7 +7,7 @@ module.exports = {
       name: 'loop-engine',
       script: 'npx',
       args: 'vite --host --port 5173',
-      cwd: resolve(__dirname, 'loop'),
+      cwd: resolve(__dirname, 'packages/loop'),
       watch: false,
       autorestart: true,
       max_restarts: 10,

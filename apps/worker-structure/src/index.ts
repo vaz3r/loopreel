@@ -172,11 +172,17 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
     const cleaned = stripMarkdownFences(rawResponse);
     let parsed: unknown;
+
+    // Try XML first (primary format), then JSON (fallback)
     try {
       const result = parseLlmXmlOutput(cleaned);
       parsed = result;
     } catch {
-      throw new Error('Could not parse LLM response as XML');
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        throw new Error('Could not parse LLM response as XML or JSON');
+      }
     }
 
     const result = template.schema.safeParse(parsed);

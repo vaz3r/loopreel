@@ -27,7 +27,6 @@ class OpenRouterClient implements LLMClient {
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userText },
             ],
-            response_format: { type: 'json_object' },
           }),
         });
 
@@ -64,365 +63,134 @@ class OpenRouterClient implements LLMClient {
 
 class MockLLMClient implements LLMClient {
   async generateJSON(_systemPrompt: string, _userText: string): Promise<string> {
-    const isProtocol = _systemPrompt.includes('protocol-001') || _systemPrompt.includes('Protocol');
-    const isArchive = _systemPrompt.includes('archive') || _systemPrompt.includes('Archive');
-    const isVoidEditorial = _systemPrompt.includes('void-editorial') || (_systemPrompt.includes('Void') && !isArchive);
-    const isArchivePaper = _systemPrompt.includes('archive-paper') || (_systemPrompt.includes('ArchivePaper') || _systemPrompt.includes('Archive Paper'));
-    const isIndustrialBrutal = _systemPrompt.includes('industrial-brutal') || _systemPrompt.includes('IndustrialBrutal');
-    const isCustomBrand = _systemPrompt.includes('custom-brand') || _systemPrompt.includes('CustomBrand');
-
-    if (isArchivePaper) {
+    if (_systemPrompt.includes('"The Paper of Record"')) {
       return `<presentation>
-  <meta>
-    <title>The Printing Press</title>
-    <description>How movable type changed the world</description>
-  </meta>
-  <slide type="cover">
-    <tag>HISTORY</tag>
-    <headline>The Printing Press</headline>
-    <subheadline>How Gutenberg's invention changed the world</subheadline>
-    <metadata>1440 — Mainz, Germany</metadata>
-    <footerLeft>Vol. III</footerLeft>
-    <footerRight>Education Series</footerRight>
-  </slide>
-  <slide type="definition">
-    <tag>DEFINITION</tag>
-    <term>Movable Type</term>
-    <phonetic>/ˈmuːvəbəl taɪp/</phonetic>
-    <definition>A system of printing that uses movable metal pieces with raised letters, arranged to form pages.</definition>
-    <example>Gutenberg's press could produce 3,600 pages per day</example>
-    <footerLeft>Technology</footerLeft>
-    <footerRight>02 / 06</footerRight>
-  </slide>
-  <slide type="timeline">
-    <tag>TIMELINE</tag>
-    <headline>Evolution of the Press</headline>
-    <footerLeft>Innovation</footerLeft>
-    <footerRight>03 / 06</footerRight>
-    <events>
-      <event date="1040" title="Woodblock" desc="First movable type using ceramic materials in China" />
-      <event date="1450" title="Gutenberg" desc="Mechanical printing press with metal type in Europe" />
-      <event date="1814" title="Steam Press" desc="Friedrich Koenig develops steam-powered rotary press" />
-      <event date="1845" title="Rotary" desc="Richard Hoe invents the rotary printing press" />
-    </events>
-  </slide>
-  <slide type="quote">
-    <tag>QUOTE</tag>
-    <quote>Typography is the craft of endowing human language with a durable visual form.</quote>
-    <author>Robert Bringhurst</author>
-    <role>The Elements of Typographic Style</role>
-    <footerLeft>Reference</footerLeft>
-    <footerRight>04 / 06</footerRight>
-  </slide>
-  <slide type="dichotomy">
-    <tag>COMPARISON</tag>
-    <headline>Before vs After</headline>
-    <footerLeft>Analysis</footerLeft>
-    <footerRight>05 / 06</footerRight>
-    <left>
-      <title>Before 1440</title>
-      <desc>Hand-copied manuscripts cost a fortune and took months. Only churches and wealthy nobles could afford books.</desc>
-    </left>
-    <right>
-      <title>After 1450</title>
-      <desc>Mass-produced books cost 1/500th of hand-copied. Literacy exploded across Europe within decades.</desc>
-    </right>
-  </slide>
-  <slide type="cta">
-    <tag>CONCLUSION</tag>
-    <headline>Ready to make history?</headline>
-    <subtext>Every revolution starts with a single innovation. What will yours be?</subtext>
-    <actionLabel>Learn More</actionLabel>
-    <socialHandle>@historybuff</socialHandle>
-    <footerLeft>End</footerLeft>
-    <footerRight>06 / 06</footerRight>
-  </slide>
-</presentation>`;
-    }
-
-    if (isIndustrialBrutal) {
-      return `<presentation>
-  <meta>
-    <title>Quantum Computing</title>
-    <description>Why qubits matter for the future</description>
-  </meta>
-  <slide type="cover">
-    <tag>TECH</tag>
-    <headline>QUANTUM COMPUTING</headline>
-    <subheadline>THE NEXT COMPUTATIONAL PARADIGM</subheadline>
-    <metadata>2026 — INDUSTRY OVERVIEW</metadata>
-    <footerLeft>VOL. IV</footerLeft>
-    <footerRight>DEEP TECH</footerRight>
-  </slide>
-  <slide type="definition">
-    <tag>DEFINE</tag>
-    <term>QUBIT</term>
-    <phonetic>/ˈkjuːbɪt/</phonetic>
-    <definition>A quantum bit that exists in superposition of both 0 and 1 states simultaneously.</definition>
-    <example>256 qubits can represent more values than atoms in the universe</example>
-    <footerLeft>CORE CONCEPT</footerLeft>
-    <footerRight>02 / 07</footerRight>
-  </slide>
-  <slide type="telemetry">
-    <tag>METRICS</tag>
-    <headline>QUANTUM LANDSCAPE</headline>
-    <footerLeft>DATA</footerLeft>
-    <footerRight>03 / 07</footerRight>
-    <stats>
-      <stat value="$8B+" label="Market Size 2027" />
-      <stat value="1,121" label="Qubits (IBM)" />
-      <stat value="1,000x" label="Speedup Potential" />
-      <stat value="99.9%" label="Error Rate Target" />
-    </stats>
-  </slide>
-  <slide type="sequence">
-    <tag>ROADMAP</tag>
-    <headline>QUANTUM MATURITY</headline>
-    <footerLeft>PROGRESSION</footerLeft>
-    <footerRight>04 / 07</footerRight>
+  <slide type="cover" id="slide-01" tag="TECHNOLOGY" headline="The Future of Artificial Intelligence" subheadline="How machine learning is reshaping every industry from healthcare to finance" authorName="Jane Smith" authorRole="Technology Correspondent" footerLeft="AI SERIES" footerRight="PAGE 01" />
+  <slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Five Trends Shaping AI in 2026" footerLeft="ANALYSIS" footerRight="PAGE 02">
     <items>
-      <item num="1" title="NISQ Era" desc="Noisy intermediate-scale quantum processors with 50-100 qubits" />
-      <item num="2" title="Error Correction" desc="Logical qubits with error rates below physical threshold" />
-      <item num="3" title="Quantum Advantage" desc="Useful computation beyond classical reach" />
-      <item num="4" title="Universal Quantum" desc="Fault-tolerant general purpose quantum computers" />
+      <item num="1" title="Edge AI" desc="Processing moves to devices, reducing latency and cloud costs" />
+      <item num="2" title="Multimodal Models" desc="Systems that understand text, images, audio, and video simultaneously" />
+      <item num="3" title="AI Agents" desc="Autonomous systems that can plan, reason, and execute complex tasks" />
     </items>
   </slide>
-  <slide type="image-split">
-    <tag>HARDWARE</tag>
-    <headline>SUPERCONDUCTING QUBITS</headline>
-    <bodyText>IBM and Google use superconducting circuits operating at 15 millikelvin — colder than deep space.</bodyText>
-    <imageKeywords>quantum computer chip laboratory</imageKeywords>
-    <footerLeft>ARCHITECTURE</footerLeft>
-    <footerRight>05 / 07</footerRight>
-  </slide>
-  <slide type="image-cover">
-    <tag>FUTURE</tag>
-    <headline>THE QUANTUM FUTURE</headline>
-    <subtext>Drug discovery, cryptography, and climate modeling will be transformed by quantum computing in the next decade.</subtext>
-    <imageKeywords>futuristic technology quantum abstract</imageKeywords>
-    <footerLeft>OUTLOOK</footerLeft>
-    <footerRight>06 / 07</footerRight>
-  </slide>
-  <slide type="cta">
-    <tag>NEXT STEP</tag>
-    <headline>EXPLORE QUANTUM TODAY</headline>
-    <subtext>Start learning quantum computing with open-source frameworks</subtext>
-    <actionLabel>GET STARTED</actionLabel>
-    <socialHandle>@quantum_dev</socialHandle>
-    <footerLeft>END</footerLeft>
-    <footerRight>07 / 07</footerRight>
-  </slide>
-</presentation>`;
-    }
-
-    if (isVoidEditorial) {
-      return `<presentation>
-  <meta>
-    <title>The Art of Storytelling</title>
-    <description>Why narrative structure drives engagement</description>
-  </meta>
-  <slide type="cover">
-    <tag>STORY</tag>
-    <headline>The Art of Storytelling</headline>
-    <subheadline>Why narrative structure drives engagement</subheadline>
-    <metadata>Buffer — 2026</metadata>
-    <footerLeft>Vol. I</footerLeft>
-    <footerRight>Masterclass</footerRight>
-  </slide>
-  <slide type="definition">
-    <tag>DEFINE</tag>
-    <term>Narrative Arc</term>
-    <phonetic>/ˈnærətɪv ɑːrk/</phonetic>
-    <definition>The chronological construction of plot in a novel or story, from exposition to resolution.</definition>
-    <example>Freytag's Pyramid divides stories into five distinct phases</example>
-    <footerLeft>Fundamentals</footerLeft>
-    <footerRight>02 / 08</footerRight>
-  </slide>
-  <slide type="quote">
-    <tag>THESIS</tag>
-    <quote>After all, there are stories that are true and stories that are not true — but the best stories are the ones that make you feel something.</quote>
-    <author>Donald Miller</author>
-    <role>Building a StoryBrand</role>
-    <footerLeft>Reference</footerLeft>
-    <footerRight>03 / 08</footerRight>
-  </slide>
-  <slide type="sequence">
-    <tag>FRAMEWORK</tag>
-    <headline>StoryBrand Framework</headline>
-    <footerLeft>Method</footerLeft>
-    <footerRight>04 / 08</footerRight>
-    <items>
-      <item num="1" title="A Character" desc="The audience is the hero, not the brand" />
-      <item num="2" title="Has a Problem" desc="External, internal, and philosophical problems" />
-      <item num="3" title="And Meets a Guide" desc="The brand positions itself as the guide" />
-      <item num="4" title="Who Gives Them a Plan" desc="A clear path forward for the hero" />
-    </items>
-  </slide>
-  <slide type="dichotomy">
-    <tag>CONTRAST</tag>
-    <headline>Brand Hero vs Brand Guide</headline>
-    <footerLeft>Analysis</footerLeft>
-    <footerRight>05 / 08</footerRight>
-    <left>
-      <title>Brand as Hero</title>
-      <desc>Customer is secondary. Brand solves its own problems. Audience feels irrelevant.</desc>
-    </left>
-    <right>
-      <title>Brand as Guide</title>
-      <desc>Customer is the hero. Brand provides tools. Audience feels understood and empowered.</desc>
-    </right>
-  </slide>
-  <slide type="image-cover">
-    <tag>VISUAL</tag>
-    <headline>Stories Connect Us</headline>
-    <subtext>The human brain processes narrative 7x faster than data alone. Stories trigger oxytocin, building trust and emotional connection.</subtext>
-    <imageKeywords>storytelling connection books warm</imageKeywords>
-    <footerLeft>Science</footerLeft>
-    <footerRight>06 / 08</footerRight>
-  </slide>
-  <slide type="telemetry">
-    <tag>DATA</tag>
-    <headline>Why Stories Work</headline>
-    <footerLeft>Evidence</footerLeft>
-    <footerRight>07 / 08</footerRight>
+  <slide type="telemetry" id="slide-03" tag="DATA" headline="AI Market Growth" footerLeft="METRICS" footerRight="PAGE 03">
     <stats>
-      <stat value="7x" label="Faster Processing" />
-      <stat value="65%" label="Information Retention" />
-      <stat value="3x" label="More Likely to Buy" />
-      <stat value="22x" label="More Memorable" />
+      <stat value="42" unit="%" label="Year-over-year growth in enterprise AI adoption" />
+      <stat value="184" unit="B" label="Global AI market size projected for 2026" />
     </stats>
   </slide>
-  <slide type="cta">
-    <tag>NEXT</tag>
-    <headline>Start telling better stories</headline>
-    <subtext>Your audience is waiting for a narrative that resonates. Begin crafting yours today.</subtext>
-    <actionLabel>Get Started</actionLabel>
-    <socialHandle>@buffer</socialHandle>
-    <footerLeft>End</footerLeft>
-    <footerRight>08 / 08</footerRight>
-  </slide>
+  <slide type="quote" id="slide-04" tag="THESIS" quote="Artificial intelligence is the new electricity. It will transform every industry in the same way electricity did 100 years ago." author="Andrew Ng" role="Stanford Professor" footerLeft="REFERENCE" footerRight="PAGE 04" />
+  <slide type="cta" id="slide-05" tag="CONCLUSION" headline="Stay Ahead of the Curve" subtext="Subscribe for weekly AI intelligence briefings" actionLabel="Subscribe" socialHandle="@aibriefing" footerLeft="END" footerRight="PAGE 05" />
 </presentation>`;
     }
 
-    if (isCustomBrand) {
+    if (_systemPrompt.includes('"The Globalist"')) {
       return `<presentation>
-  <meta>
-    <title>Brand Identity Guide</title>
-    <description>Core visual identity and usage guidelines</description>
-  </meta>
-  <slide type="cover">
-    <tag>IDENTITY</tag>
-    <headline>Brand Identity Guide</headline>
-    <subheadline>Visual standards for consistent brand expression</subheadline>
-    <metadata>2026 Edition</metadata>
-    <footerLeft>Internal</footerLeft>
-    <footerRight>Brand Guide</footerRight>
-  </slide>
-  <slide type="definition">
-    <tag>CORE</tag>
-    <term>Brand Identity</term>
-    <phonetic>/brænd aɪˈdɛntɪti/</phonetic>
-    <definition>The visible elements of a brand, including color, design, and logo, that identify and distinguish the brand in consumers' minds.</definition>
-    <example>Consistent brand identity increases revenue by up to 33%</example>
-    <footerLeft>Fundamentals</footerLeft>
-    <footerRight>02 / 06</footerRight>
-  </slide>
-  <slide type="sequence">
-    <tag>PILLARS</tag>
-    <headline>Brand Pillars</headline>
-    <footerLeft>Framework</footerLeft>
-    <footerRight>03 / 06</footerRight>
-    <items>
-      <item num="1" title="Purpose" desc="Why the brand exists beyond profit" />
-      <item num="2" title="Position" desc="How the brand fits in the market" />
-      <item num="3" title="Personality" desc="The character and voice of the brand" />
-      <item num="4" title="Promises" desc="What customers can consistently expect" />
-    </items>
-  </slide>
-  <slide type="quote">
-    <tag>THESIS</tag>
-    <quote>A brand is no longer what we tell the consumer it is — it is what consumers tell each other it is.</quote>
-    <author>Scott Cook</author>
-    <role>Intuit Co-founder</role>
-    <footerLeft>Reference</footerLeft>
-    <footerRight>04 / 06</footerRight>
-  </slide>
-  <slide type="telemetry">
-    <tag>IMPACT</tag>
-    <headline>Brand Consistency ROI</headline>
-    <footerLeft>Data</footerLeft>
-    <footerRight>05 / 06</footerRight>
+  <slide type="cover" id="slide-01" tag="SPECIAL REPORT" headline="The End of Cheap Capital" subheadline="How rising rates are forcing a global restructuring of corporate debt" authorName="Maria Torres" authorRole="Financial Correspondent" footerLeft="MACRO-ECONOMICS" footerRight="PAGE 01" />
+  <slide type="telemetry" id="slide-02" tag="DATA SET" headline="Global Telemetry" footerLeft="TELEMETRY" footerRight="PAGE 02">
     <stats>
-      <stat value="33%" label="Revenue Increase" />
-      <stat value="3.5x" label="Brand Recall" />
-      <stat value="23%" label="Higher Revenue" />
-      <stat value="80%" label="Recognition from Color" />
+      <stat value="5.25" unit="%" label="Baseline interest rate across G7 economies" />
+      <stat value="1.4" unit="T" label="Corporate debt maturing within 18 months" />
     </stats>
   </slide>
-  <slide type="cta">
-    <tag>NEXT</tag>
-    <headline>Build your brand consistently</headline>
-    <subtext>Use these guidelines to maintain a cohesive brand experience across all touchpoints.</subtext>
-    <actionLabel>Download Kit</actionLabel>
-    <socialHandle>@brandguide</socialHandle>
-    <footerLeft>End</footerLeft>
-    <footerRight>06 / 06</footerRight>
+  <slide type="interview" id="slide-03" tag="EXPERT VOICE" headline="Central Bank Perspective" question="What does the current rate environment mean for emerging markets?" answer="We are seeing a structural shift. Countries with dollar-denominated debt face significant refinancing risk. The window for adjustment is narrowing." respondentName="Dr. Sarah Chen" respondentRole="IMF Chief Economist" footerLeft="INTERVIEW" footerRight="PAGE 03" />
+  <slide type="quadrant" id="slide-04" tag="ANALYSIS" headline="Risk Matrix" footerLeft="FRAMEWORK" footerRight="PAGE 04">
+    <topLeft title="High Yield" desc="Corporate bonds with elevated default risk" />
+    <topRight title="Investment Grade" desc="Stable returns with lower volatility" />
+    <bottomLeft title="Emerging Markets" desc="Currency and sovereign risk exposure" />
+    <bottomRight title="Private Credit" desc="Illiquid but higher yield potential" />
   </slide>
+  <slide type="cta" id="slide-05" tag="SUBSCRIPTION" headline="Intelligence Delivered Weekly" subtext="Join 50,000 professionals reading The Globalist" actionLabel="Subscribe Now" socialHandle="@theglobalist" footerLeft="SUBSCRIPTION" footerRight="PAGE 05" />
 </presentation>`;
     }
 
-    if (isArchive) {
+    if (_systemPrompt.includes('"The Terminal"')) {
       return `<presentation>
-  <meta seriesName="Sys. 02 — Archive" authorName="M. Reyes" handle="@mayaruns" category="System Architecture" />
-  <cover type="cover" theme="void" titleTop="SYSTEM" titleBottom="ARCHITECTURE" ticker="THE ARCHITECTURE OF VALUE  //  STRUCTURAL ALIGNMENT  //  VOLUME II" headerLeft="Sys. 02" headerRight="Archive" footerLeft="Vol. II" footerRight="Social Export" />
-  <context type="context" theme="bone" title="The Baseline." text="Most systems fail not because they lack execution, but because their underlying architecture is fundamentally misaligned with the intended output." headerLeft="Context" headerRight="02 / 08" footerLeft="Observation" footerRight="Sector 01" />
-  <list type="list" theme="bone" title="Structural Deficits." headerLeft="Data Set" headerRight="03 / 08" footerLeft="Diagnostics" footerRight="Vol. II">
-    <items>
-      <item num="01" label="Scope Erosion" desc="Operating without rigid boundaries converts premium strategy into commoditized execution." />
-      <item num="02" label="Misaligned Onboarding" desc="Accepting friction early guarantees massive structural failure during deployment." />
-      <item num="03" label="Undervalued IP" desc="Charging for hours deployed rather than the transformation delivered limits growth." />
-    </items>
-  </list>
-  <matrix type="matrix" theme="steel" title="The Tension Matrix" headerLeft="Framework" headerRight="04 / 08" footerLeft="Analysis" footerRight="Q3">
-    <quadrants>
-      <quadrant title="High Friction" text="Manual Intervention &amp; bespoke problem solving." />
-      <quadrant title="Low Friction" text="Automated Scaling &amp; systematic deployment." />
-      <quadrant title="Commodity" text="Time-Based Billing &amp; scope creep." />
-      <quadrant title="Premium" text="Value-Based IP &amp; structural leverage." />
-    </quadrants>
-  </matrix>
-  <insight type="insight" theme="void" title="Pivot Point." text="When you stop selling your hands and start selling your mind, the unit economics fundamentally shift." headerLeft="Insight" headerRight="05 / 08" footerLeft="Shift" footerRight="Mental Model" />
-  <quote type="quote" theme="steel" quote="The architecture of your pricing dictates the architecture of your respect in the marketplace." author="M. Reyes — Partner" headerLeft="Thesis" headerRight="06 / 08" footerLeft="Op. Cit." footerRight="2026" />
-  <evidence type="evidence" theme="bone" title="Proof of Work." headerLeft="Evidence" headerRight="07 / 08" footerLeft="Metrics" footerRight="Verified">
+  <slide type="cover" id="slide-01" tag="MARKET_DATA" headline="Terminal Access Granted" subheadline="Real-time quantitative analysis of global macro trends" authorName="J. Stevens" authorRole="Macro Strategy" footerLeft="SYSTEM" footerRight="PAGE 01" />
+  <slide type="telemetry" id="slide-02" tag="DATA_SET" headline="Real-Time Telemetry" footerLeft="TELEMETRY" footerRight="PAGE 02">
     <stats>
-      <stat value="400%" label="Increase in retained margin over 12 months" />
-      <stat value="Zero" label="Scope creep incidents post-deployment protocols" />
+      <stat value="4.8" unit="%" label="U.S. Core CPI year-over-year" color="green" />
+      <stat value="124" unit="" label="Corporate defaults YTD" color="red" />
+      <stat value="2.1" unit="T" label="Total repo market volume" color="amber" />
     </stats>
-  </evidence>
-  <cta type="cta" theme="void" title="Deploy the System." buttonText="Initialize Sequence" headerLeft="Terminal" headerRight="08 / 08" footerLeft="@mayaruns" footerRight="End Protocol" />
+  </slide>
+  <slide type="sequence" id="slide-03" tag="ALGORITHM" headline="Signal Processing Pipeline" footerLeft="PIPELINE" footerRight="PAGE 03">
+    <items>
+      <item num="1" title="Data Ingestion" desc="Real-time feeds from 47 global exchanges" />
+      <item num="2" title="Feature Engineering" desc="200+ derived indicators across 6 asset classes" />
+      <item num="3" title="Signal Generation" desc="Ensemble model with 73% directional accuracy" />
+    </items>
+  </slide>
+  <slide type="myth-fact" id="slide-04" tag="ANALYSIS" headline="Market Misconceptions" myth="Rising interest rates always hurt equities" fact="In 68% of rate hiking cycles since 1970, the S&amp;P 500 delivered positive returns within 12 months" footerLeft="RESEARCH" footerRight="PAGE 04" />
+  <slide type="cta" id="slide-05" tag="ACCESS" headline="Initialize Subscription" subtext="Full terminal access with real-time data feeds" actionLabel="&gt; INITIALIZE_SUB" socialHandle="@terminal_hq" footerLeft="SUBSCRIPTION" footerRight="PAGE 05" />
 </presentation>`;
     }
 
-    if (isProtocol) {
+    if (_systemPrompt.includes('"The Curator"')) {
       return `<presentation>
-  <meta seriesName="The Algorithm" authorName="Buffer Editorial" handle="@buffer" category="Social Strategy" />
-  <cover type="cover" theme="void" heading="When To Post" ticker="ENGAGEMENT // TIMING // GROWTH" headerLeft="Sys. 01" headerRight="Archive" footerLeft="Vol. I" footerRight="Insight" />
-  <data-list type="data-list" theme="bone" heading="When to Post." headerLeft="Data Set" headerRight="" footerLeft="" footerRight="">
-    <item title="Weekday Mornings" description="Mon–Fri, 7–9 AM." />
-    <item title="Lunch Window" description="Tue–Wed, 11 AM–1 PM." />
-    <item title="Evening Prime" description="Thu–Fri, 7–9 PM." />
-  </data-list>
-  <quote type="quote" theme="steel" quote="The best time to post is when your audience is most receptive." attribution="Buffer Research — 2026" headerLeft="Thesis" headerRight="" footerLeft="Op. Cit." footerRight="2026" />
-  <cta type="cta" theme="void" heading="Deploy the System" buttonLabel="Initialize" headerLeft="Terminal" headerRight="" footerLeft="" footerRight="End Protocol" />
+  <slide type="cover" id="slide-01" tag="EXHIBITION" headline="The Space Between" subheadline="An architectural study of negative space in modern design" pullQuote="True luxury is never loud." footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 01" />
+  <slide type="hero-metric" id="slide-02" tag="METRIC" value="68" unit="%" headline="Cognitive Load Reduction" bodyText="Minimal interfaces reduce decision fatigue by eliminating visual noise" footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 02" />
+  <slide type="juxtaposition" id="slide-03" tag="CONTRAST" headline="Design Approaches" footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 03">
+    <donts>
+      <item>Clutter every pixel with information</item>
+      <item>Use color as a crutch for hierarchy</item>
+      <item>Follow trends without understanding principles</item>
+    </donts>
+    <dos>
+      <item>Let whitespace breathe and guide the eye</item>
+      <item>Build hierarchy through typography alone</item>
+      <item>Design for the content, not the container</item>
+    </dos>
+  </slide>
+  <slide type="checklist" id="slide-04" tag="PROTOCOL" headline="Curatorial Checklist" footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 04">
+    <items>
+      <item text="Does every element earn its space?" />
+      <item text="Is the hierarchy clear without color?" />
+      <item text="Would this work in monochrome?" />
+      <item text="Does the negative space tell a story?" />
+    </items>
+  </slide>
+  <slide type="cta" id="slide-05" tag="ACQUISITION" headline="Enter the Gallery" subtext="A private collection of architectural strategy" actionLabel="Acquire Access" footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 05" />
 </presentation>`;
     }
 
+    if (_systemPrompt.includes('"The Academic"')) {
+      return `<presentation>
+  <slide type="cover" id="slide-01" tag="ABSTRACT" headline="The Organizational Friction Matrix" subheadline="This paper examines the counter-intuitive paradigm wherein intentionally introducing friction yields expansion in net margins" authorName="Dr. Arthur Vance" authorRole="Department of Behavioral Economics" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 01" />
+  <slide type="telemetry" id="slide-02" tag="EMPIRICAL DATA" headline="Empirical Findings" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 02">
+    <stats>
+      <stat value="42" unit="%" label="Increase in Lifetime Value" color="crimson" />
+      <stat value="3.5" unit="x" label="Premium Price Multiplier" color="ink" />
+    </stats>
+  </slide>
+  <slide type="sequence" id="slide-03" tag="METHOD" headline="Research Methodology" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 03">
+    <items>
+      <item num="1" title="Literature Review" desc="Meta-analysis of 247 peer-reviewed studies on friction and consumer behavior" />
+      <item num="2" title="Field Experiment" desc="A/B testing across 12 enterprises over 18 months with control groups" />
+      <item num="3" title="Regression Analysis" desc="Multivariate models controlling for industry, size, and market conditions" />
+    </items>
+  </slide>
+  <slide type="checklist" id="slide-04" tag="FINDINGS" headline="Key Findings Summary" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 04">
+    <items>
+      <item text="Onboarding friction correlates with 3.2x retention" />
+      <item text="Tiered pricing increases perceived value by 47%" />
+      <item text="Switching friction boosts LTV by 2.8x over 24 months" />
+    </items>
+  </slide>
+  <slide type="cta" id="slide-05" tag="ACQUISITION" headline="Review the Full Manuscript" subtext="Access the complete dataset and regression models" actionLabel="Download PDF [2.4MB]" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 05" />
+</presentation>`;
+    }
+
+    // Fallback: generic response
     return `<presentation>
-  <meta seriesName="Instagram Strategy" authorName="Buffer" handle="@buffer" category="Social Media" />
-  <hook type="hook" theme="void" heading="When to Post on Instagram" subtitle="Data-backed timing strategies for maximum engagement in 2026" headerLeft="Sys. 01" headerRight="Strategy" footerLeft="Vol. I" footerRight="Insight" />
-  <content type="content" theme="bone" heading="Morning Commute Window" body="Weekday mornings between 7-9 AM capture users checking their phones before the workday." headerLeft="Context" headerRight="02 / 05" footerLeft="Observation" footerRight="Sector 01" />
-  <stat type="stat" theme="steel" value="2x" label="higher engagement" body="Posts published Tuesday and Wednesday between 11 AM and 1 PM see double the engagement." headerLeft="Evidence" headerRight="03 / 05" footerLeft="Metrics" footerRight="Verified" />
-  <cta type="cta" theme="void" heading="Start scheduling with confidence" buttonLabel="Get Buffer" headerLeft="Terminal" headerRight="05 / 05" footerLeft="@buffer" footerRight="End Protocol" />
+  <slide type="cover" id="slide-01" tag="INSIGHT" headline="Key Insights from Your Content" subheadline="A structured analysis of the source material" footerLeft="ANALYSIS" footerRight="PAGE 01" />
+  <slide type="sequence" id="slide-02" tag="HIGHLIGHTS" headline="Main Takeaways" footerLeft="INSIGHTS" footerRight="PAGE 02">
+    <items>
+      <item num="1" title="First Point" desc="The primary insight from the source content" />
+      <item num="2" title="Second Point" desc="A supporting observation with data backing" />
+    </items>
+  </slide>
+  <slide type="cta" id="slide-03" tag="ACTION" headline="Take the Next Step" subtext="Apply these insights to your work" actionLabel="Learn More" footerLeft="END" footerRight="PAGE 03" />
 </presentation>`;
   }
 }

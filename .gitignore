@@ -12,3 +12,4 @@ slides-test/*
 slides-output/*
 loop/output/*
 loop/src/output/*
+packages/loop/output/*

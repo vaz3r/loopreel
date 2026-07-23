@@ -57,7 +57,41 @@ export async function getPrompt(
 ${style}
 
 ## Output Format
-Return a JSON object with a "slides" array. Each slide must have a "type" field matching one of the allowed types below, plus an "id" field (unique string like "slide-01", "slide-02"), and a "tag" field (short uppercase label like "ANALYSIS", "DATA SET", "PROFILE").
+Return an XML document with a <presentation> root element. Each slide is a <slide> element. Simple fields (strings, numbers, booleans) go as XML attributes on the <slide> tag. Complex fields (nested objects, arrays) go as child elements. Do NOT use markdown fences — return raw XML only.
+
+### Example (cover slide for paper-of-record):
+<presentation>
+  <slide type="cover" id="slide-01" tag="TECHNOLOGY" headline="The Future of Artificial Intelligence" subheadline="How machine learning is reshaping every industry from healthcare to finance" authorName="Jane Smith" authorRole="Technology Correspondent" footerLeft="AI SERIES" footerRight="PAGE 01" />
+</presentation>
+
+### Example (sequence slide with child elements):
+<presentation>
+  <slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Five Trends Shaping AI in 2026" footerLeft="ANALYSIS" footerRight="PAGE 02">
+    <items>
+      <item num="1" title="Edge AI" desc="Processing moves to devices, reducing latency and cloud costs" />
+      <item num="2" title="Multimodal Models" desc="Systems that understand text, images, audio, and video simultaneously" />
+      <item num="3" title="AI Agents" desc="Autonomous systems that can plan, reason, and execute complex tasks" />
+    </items>
+  </slide>
+</presentation>
+
+### Example (telemetry slide with array of objects):
+<presentation>
+  <slide type="telemetry" id="slide-03" tag="DATA" headline="AI Market Growth" footerLeft="METRICS" footerRight="PAGE 03">
+    <stats>
+      <stat value="42" unit="%" label="Year-over-year growth in enterprise AI adoption" />
+      <stat value="184" unit="B" label="Global AI market size projected for 2026" />
+    </stats>
+  </slide>
+</presentation>
+
+### Example (nested object — dichotomy/left-right):
+<presentation>
+  <slide type="dichotomy" id="slide-04" tag="ANALYSIS" headline="Before vs After" footerLeft="COMPARISON" footerRight="PAGE 04">
+    <left title="Before" desc="The old way of doing things was slow and expensive" />
+    <right title="After" desc="The new approach delivers 10x speed at 1/10th the cost" />
+  </slide>
+</presentation>
 
 ## Slide Type Constraints
 Each slide type has specific fields with character limits and array size limits. YOU MUST FOLLOW THESE EXACTLY.
@@ -73,7 +107,10 @@ ${schemaConstraints}
 7. Sequence items: use "1", "2", "3" for num (not "Step 1").
 8. Do NOT invent author names, handles, or series names — those come from user settings.
 9. footerLeft: short category label. footerRight: "PAGE 01", "PAGE 02", etc.
-10. Return ONLY the JSON object, no markdown fences, no explanation.
+10. Return ONLY the XML document, no markdown fences, no explanation.
+11. Use self-closing tags <slide ... /> for simple slides with no child elements.
+12. Use nested elements <slide ...><child>...</child></slide> for arrays and objects.
+13. Escape special XML characters in attribute values: &amp; for &, &lt; for <, &gt; for >, &quot; for ".
 
 ## Brand Kit
 The user may provide a brand kit to customize colors and fonts. For this template, the available brand kit fields are:
