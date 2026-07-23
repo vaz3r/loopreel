@@ -1,0 +1,12 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; color: #A31F34; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.stages { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+.stage { display: flex; gap: 32px; align-items: flex-start; border: 1px solid #CBD5E1; background: #F8FAFC; padding: 32px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.stageHighlight { background: #FFFFFF; border-color: #CBD5E1; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.stageBar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.stageLabel { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; width: 120px; flex-shrink: 0; padding-top: 8px; text-align: right; border-right: 1px solid #CBD5E1; padding-right: 24px; margin-right: 8px; }
+.stageTitle { font-family: 'Merriweather', serif; font-weight: 700; font-size: 28px; color: #0F172A; margin-bottom: 8px; }
+.stageTitleHighlight { color: #A31F34; }
+.stageDesc { font-family: 'Source Sans 3', sans-serif; font-size: 22px; color: #475569; line-height: 1.5; }

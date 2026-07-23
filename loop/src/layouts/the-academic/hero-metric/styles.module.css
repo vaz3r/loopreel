@@ -1,0 +1,7 @@
+.wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 48px; }
+.metaLabel { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 32px; }
+.value { font-family: 'Merriweather', serif; font-weight: 900; font-size: 260px; line-height: 1; color: #0F172A; letter-spacing: -0.03em; display: flex; align-items: flex-start; }
+.unit { font-size: 100px; color: #A31F34; margin-top: 32px; margin-left: 8px; }
+.divider { width: 128px; height: 4px; background: #A31F34; margin: 48px 0; }
+.headline { font-family: 'Source Sans 3', sans-serif; font-size: 32px; font-weight: 700; color: #0F172A; margin-bottom: 16px; }
+.body { font-family: 'Source Sans 3', sans-serif; font-size: 24px; line-height: 1.5; color: #475569; max-width: 85%; }

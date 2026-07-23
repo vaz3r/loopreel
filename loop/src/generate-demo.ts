@@ -3,6 +3,7 @@ import { PaperOfRecordContract } from './layouts/paper-of-record/schema';
 import { TheGlobalistContract } from './layouts/the-globalist/schema';
 import { TheTerminalContract } from './layouts/the-terminal/schema';
 import { TheCuratorContract } from './layouts/the-curator/schema';
+import { TheAcademicContract } from './layouts/the-academic/schema';
 import { exportCarouselToImages } from './exporter';
 import { SCHEMES } from './engine-utils';
 import { startViteServer } from './vite-server';
@@ -48,6 +49,16 @@ const MOCKS: Record<string, { templateId: string; schemeId: string; contract: an
         { id: 'gen-cover-1', type: 'cover', tag: 'EXHIBITION', headline: 'The Space Between.', subheadline: 'An architectural study of negative space.', pullQuote: 'True luxury is never loud.', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 01' },
         { id: 'gen-telem-1', type: 'telemetry', tag: 'METRICS', headline: 'The Metrics.', stats: [{ value: '68', unit: '%', label: 'Cognitive Load Reduction' }, { value: '3.2', unit: 'x', label: 'Premium Price Multiplier' }], footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 02' },
         { id: 'gen-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Enter the Gallery.', subtext: 'A private collection of architectural strategy.', actionLabel: 'Acquire Access', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 03' },
+      ],
+    },
+  },
+  'the-academic': {
+    templateId: 'the-academic', schemeId: 'academic_research', contract: TheAcademicContract,
+    data: {
+      slides: [
+        { id: 'gen-cover-1', type: 'cover', tag: 'ABSTRACT', headline: 'The Organizational Friction Matrix.', subheadline: 'This paper examines the counter-intuitive paradigm wherein intentionally introducing friction yields expansion in net margins.', authorName: 'Dr. Arthur Vance', authorRole: 'Department of Behavioral Economics', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 01' },
+        { id: 'gen-telem-1', type: 'telemetry', tag: 'EMPIRICAL DATA', headline: 'Empirical Findings', stats: [{ value: '42', unit: '%', label: 'Increase in Lifetime Value', color: 'crimson' }, { value: '3.5', unit: 'x', label: 'Premium Price Multiplier', color: 'ink' }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 02' },
+        { id: 'gen-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Review the Full Manuscript.', subtext: 'Access the complete dataset and regression models.', actionLabel: 'Download PDF [2.4MB]', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 03' },
       ],
     },
   },

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Academic - Editorial Carousel</title>
+    
+    <!-- Google Fonts: Merriweather (Headers), Source Sans 3 (Body), IBM Plex Mono (Data) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FFFFFF',       // Crisp white
+                        panel: '#F8FAFC',       // Slate 50 for subtle depth
+                        ink: '#0F172A',         // Slate 900 for stark contrast
+                        graphite: '#475569',    // Slate 600 for secondary text
+                        crimson: '#A31F34',     // Academic/Prestige Red
+                        hairline: '#CBD5E1',    // Slate 300 for borders
+                    },
+                    fontFamily: {
+                        serif: ['"Merriweather"', 'serif'],
+                        sans: ['"Source Sans 3"', 'sans-serif'],
+                        mono: ['"IBM Plex Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #1E293B; color: #0F172A; overflow-x: hidden; }
+        
+        /* The 1080x1350 Canvas */
+        .canvas-container {
+            width: 1080px; height: 1350px;
+            background-color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        /* Scientific Graph Paper Background */
+        .bg-graph {
+            background-image: linear-gradient(#f1f5f9 1px, transparent 1px), linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Strict Clamping for Playwright */
+        .clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .clamp-8 { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .balance-text { text-wrap: balance; }
+        .pretty-text { text-wrap: pretty; }
+
+        /* UI Scaling Modes */
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; 
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+
+        /* Slide Visibility */
+        .slide-layer { display: none; width: 100%; height: 100%; position: absolute; inset: 0; }
+        .slide-layer.active { display: flex; flex-direction: column; }
+        
+        .academic-border { border-top: 4px solid #A31F34; }
+    </style>
+</head>
+<body class="mode-preview font-sans antialiased selection:bg-crimson selection:text-paper">
+
+    <!-- Web UI Control Panel -->
+    <div class="fixed top-0 left-0 w-full bg-[#0F172A] border-b border-[#1E293B] p-4 z-[100] flex justify-between items-center shadow-lg font-sans">
+        <div>
+            <h1 class="font-serif font-bold text-xl tracking-tight text-white uppercase">The Academic</h1>
+            <p class="font-mono text-[10px] text-slate-400 uppercase tracking-widest mt-1">Research & Whitepapers (1080x1350)</p>
+        </div>
+        <div class="flex gap-4 items-center">
+            <select id="slideSelector" class="bg-panel text-ink font-sans font-semibold text-xs px-4 py-2 border border-slate-300 cursor-pointer uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-crimson transition-all">
+                <option value="1">01. Abstract (Cover)</option>
+                <option value="2">02. Exec Summary (List)</option>
+                <option value="3">03. Observation (Image Split)</option>
+                <option value="4">04. Empirical Data (Stats)</option>
+                <option value="5">05. Inquiry (Q&A)</option>
+                <option value="6">06. The Framework (2x2 Matrix)</option>
+                <option value="7">07. Clinical Study (3-Part)</option>
+                <option value="8">08. Hypothesis vs Finding (Debunk)</option>
+                <option value="9">09. Literature Review (Grid)</option>
+                <option value="10">10. Methodology (Timeline)</option>
+                <option value="11">11. Citation (Quote)</option>
+                <option value="12">12. Acquisition (CTA)</option>
+                <option value="13">13. Focal Metric (Hero Stat)</option>
+                <option value="14">14. Experimental Design (Step-by-Step)</option>
+                <option value="15">15. Comparative Paradigm (Do's/Don'ts)</option>
+                <option value="16">16. Evaluation Criteria (Checklist)</option>
+                <option value="17">17. System Architecture (Anatomy)</option>
+            </select>
+            <button id="modeToggle" class="bg-crimson text-white font-bold tracking-widest uppercase text-[11px] px-6 py-3 hover:bg-red-800 transition-colors">
+                Export Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="pt-[140px] pb-[100px] flex justify-center w-full min-h-screen">
+        
+        <div id="export-canvas" class="canvas-container text-ink bg-graph">
+            
+            <!-- GLOBAL ACADEMIC HEADER -->
+            <div class="absolute top-[60px] left-[80px] right-[80px] z-50 flex flex-col font-sans">
+                <div class="flex justify-between items-end border-b-2 border-ink pb-4">
+                    <div class="flex flex-col">
+                        <span class="font-serif font-black text-[28px] tracking-tight uppercase text-ink leading-none">Management Review</span>
+                        <span class="font-mono text-[14px] text-graphite mt-1 uppercase tracking-widest">Working Paper Series</span>
+                    </div>
+                    <div class="text-right">
+                        <span id="global-tag" class="font-bold text-[16px] uppercase tracking-widest text-crimson">STRATEGY</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GLOBAL ACADEMIC FOOTER -->
+            <div class="absolute bottom-[60px] left-[80px] right-[80px] z-50 flex justify-between items-start font-mono text-[14px] uppercase tracking-widest text-graphite border-t border-hairline pt-4">
+                <div class="flex gap-8">
+                    <span>DOI: 10.1016/J.BUSRES.2026</span>
+                    <span>VOL. 42, NO. 8</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <span class="font-bold text-ink">PAGE <span id="page-num">01</span></span>
+                </div>
+            </div>
+
+            <!-- SAFE AREA FOR CONTENT -->
+            <div class="absolute top-[160px] bottom-[120px] left-[80px] right-[80px] z-30 flex flex-col justify-center">
+                
+                <!-- 01. ABSTRACT (COVER) -->
+                <div id="slide-1" class="slide-layer active">
+                    <div class="flex-1 flex flex-col justify-center min-h-0 relative">
+                        <div class="mb-auto mt-8">
+                            <h1 class="font-serif text-[95px] leading-[1.1] tracking-tight text-ink font-black clamp-4 balance-text mb-8">
+                                The Organizational <br>Friction Matrix.
+                            </h1>
+                            <div class="academic-border w-24 mb-8"></div>
+                            <div class="bg-panel p-8 border border-hairline relative">
+                                <span class="absolute -top-3 left-6 bg-paper px-2 font-mono text-[12px] font-bold uppercase tracking-widest text-crimson">Abstract</span>
+                                <p class="font-sans text-[26px] leading-[1.6] text-graphite clamp-5 pretty-text">
+                                    This paper examines the counter-intuitive paradigm wherein intentionally introducing cognitive and procedural friction within client acquisition funnels yields a statistically significant expansion in net margins and lifetime value.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-end shrink-0 w-full mt-12 border-t border-hairline pt-6">
+                            <div class="flex flex-col">
+                                <span class="font-sans font-bold text-[20px] uppercase tracking-wider text-ink">Dr. Arthur Vance</span>
+                                <span class="font-sans text-[16px] text-graphite">Department of Behavioral Economics</span>
+                            </div>
+                            <div class="font-mono text-[14px] uppercase tracking-widest text-crimson font-bold">
+                                PEER REVIEWED
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 02. EXEC SUMMARY (LIST) -->
+                <div id="slide-2" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 flex justify-between items-end">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Executive Summary
+                            </h2>
+                            <span class="font-mono text-[14px] font-bold text-crimson uppercase tracking-widest mb-2">Key Postulates</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-0">
+                            <!-- Item 1 -->
+                            <div class="flex gap-10 items-start py-8 border-b border-hairline shrink-0">
+                                <div class="font-mono font-bold text-[32px] leading-none text-crimson w-12 pt-1">1.0</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-ink mb-3 clamp-1">The Scarcity Premium</h3>
+                                    <p class="font-sans text-[24px] text-graphite leading-[1.5] clamp-3">Restricting total active client volume strictly to 12 accounts generated a 3.5x multiplier on perceived baseline value.</p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex gap-10 items-start py-8 border-b border-hairline shrink-0">
+                                <div class="font-mono font-bold text-[32px] leading-none text-crimson w-12 pt-1">2.0</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-ink mb-3 clamp-1">Automated Disqualification</h3>
+                                    <p class="font-sans text-[24px] text-graphite leading-[1.5] clamp-3">Requiring extensive preliminary documentation reduced sales call volume by 80% while increasing close rates to 92%.</p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex gap-10 items-start py-8 shrink-0">
+                                <div class="font-mono font-bold text-[32px] leading-none text-crimson w-12 pt-1">3.0</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-ink mb-3 clamp-1">Margin Expansion</h3>
+                                    <p class="font-sans text-[24px] text-graphite leading-[1.5] clamp-3">The transition from deliverables-based billing to advisory retainers expanded net profit margins from 18% to 74%.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 03. OBSERVATION (IMAGE SPLIT) -->
+                <div id="slide-3" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="flex-1 flex gap-12 min-h-0 border border-hairline bg-panel p-6 shadow-sm">
+                            <!-- Image -->
+                            <div class="flex-1 bg-white relative border border-hairline overflow-hidden p-2">
+                                <img src="https://images.unsplash.com/photo-1507668077129-56e32842fceb?q=80&w=1080&auto=format&fit=crop" 
+                                     alt="Architectural Diagram" 
+                                     class="w-full h-full object-cover filter grayscale contrast-125">
+                                <div class="absolute bottom-4 left-4 bg-paper border border-hairline px-3 py-1 font-mono font-bold text-[12px] tracking-widest text-ink uppercase shadow-sm">
+                                    FIG. 01 — STRUCTURE
+                                </div>
+                            </div>
+                            <!-- Copy -->
+                            <div class="w-[45%] flex flex-col justify-center pr-6">
+                                <h3 class="font-serif font-bold text-[48px] text-ink leading-[1.1] mb-6">Structural Integrity</h3>
+                                <div class="academic-border w-16 mb-6"></div>
+                                <p class="font-sans text-[24px] leading-[1.6] text-graphite clamp-8">
+                                    In observed cohorts, agencies lacking rigid boundary constraints experienced rapid scope erosion. The architecture of the engagement must be defined mathematically before any tactical execution begins. Fluid boundaries correlate directly with burnout.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 04. EMPIRICAL DATA (STATS) -->
+                <div id="slide-4" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 flex justify-between items-end">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Empirical Findings
+                            </h2>
+                            <span class="font-mono text-[14px] font-bold text-crimson uppercase tracking-widest mb-2">Dataset Alpha</span>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-8">
+                            <div class="flex flex-col border border-hairline bg-panel p-8 justify-center shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-crimson"></div>
+                                <div class="font-mono text-[14px] text-graphite uppercase tracking-widest mb-4 font-bold">Variable A</div>
+                                <div class="font-serif font-black text-[80px] text-ink leading-none mb-2">42<span class="text-[50px] text-crimson">%</span></div>
+                                <div class="font-sans text-[22px] font-semibold text-graphite clamp-2">Increase in Lifetime Value</div>
+                            </div>
+                            <div class="flex flex-col border border-hairline bg-panel p-8 justify-center shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-ink"></div>
+                                <div class="font-mono text-[14px] text-graphite uppercase tracking-widest mb-4 font-bold">Variable B</div>
+                                <div class="font-serif font-black text-[80px] text-ink leading-none mb-2">3.5<span class="text-[50px] text-ink">x</span></div>
+                                <div class="font-sans text-[22px] font-semibold text-graphite clamp-2">Premium Price Multiplier</div>
+                            </div>
+                            <div class="flex flex-col border border-hairline bg-panel p-8 justify-center shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-graphite"></div>
+                                <div class="font-mono text-[14px] text-graphite uppercase tracking-widest mb-4 font-bold">Variable C</div>
+                                <div class="font-serif font-black text-[80px] text-ink leading-none mb-2">-80<span class="text-[50px] text-graphite">%</span></div>
+                                <div class="font-sans text-[22px] font-semibold text-graphite clamp-2">Reduction in Sales Calls</div>
+                            </div>
+                            <div class="flex flex-col border border-hairline bg-panel p-8 justify-center shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-crimson"></div>
+                                <div class="font-mono text-[14px] text-graphite uppercase tracking-widest mb-4 font-bold">Variable D</div>
+                                <div class="font-serif font-black text-[80px] text-ink leading-none mb-2">92<span class="text-[50px] text-crimson">%</span></div>
+                                <div class="font-sans text-[22px] font-semibold text-graphite clamp-2">Retention Rate (Y1)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 05. INQUIRY (Q&A) -->
+                <div id="slide-5" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Analytical Inquiry
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center gap-12 bg-panel border border-hairline p-12 shadow-sm relative">
+                            <!-- Question -->
+                            <div class="flex gap-8 relative z-10">
+                                <div class="font-serif font-black text-[42px] text-crimson w-10 italic">Q.</div>
+                                <div class="pt-2 border-b border-hairline pb-8 w-full">
+                                    <p class="font-sans font-bold text-[32px] text-ink leading-[1.3] clamp-4">
+                                        Does implementing extreme friction alienate the broader market and restrict aggregate revenue growth?
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Answer -->
+                            <div class="flex gap-8 relative z-10">
+                                <div class="font-serif font-black text-[42px] text-graphite w-10 italic">A.</div>
+                                <div class="pt-2">
+                                    <p class="font-sans text-[26px] text-graphite leading-[1.6] clamp-6 mb-6">
+                                        "Yes, and that is precisely the mathematical objective. Broad market alienation filters out low-margin, high-maintenance accounts. By restricting volume, the firm reallocates resources to high-net-worth cohorts, trading top-line vanity metrics for exponential net profit expansion."
+                                    </p>
+                                    <div class="font-mono text-[14px] font-bold uppercase tracking-widest text-ink">
+                                        Review Board Commentary
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 06. THE FRAMEWORK (QUADRANT) -->
+                <div id="slide-6" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 text-center">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                The Value Matrix
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper">
+                            <!-- Axes -->
+                            <div class="absolute top-1/2 left-0 w-full h-[2px] bg-ink -translate-y-1/2"></div>
+                            <div class="absolute left-1/2 top-0 h-full w-[2px] bg-ink -translate-x-1/2"></div>
+                            
+                            <!-- Labels -->
+                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-crimson">High Friction</div>
+                            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite">Low Friction</div>
+                            <div class="absolute top-1/2 -left-12 -translate-y-1/2 -rotate-90 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite whitespace-nowrap">Commodity</div>
+                            <div class="absolute top-1/2 -right-12 -translate-y-1/2 90 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-crimson whitespace-nowrap rotate-90">Specialized</div>
+
+                            <!-- Quadrants -->
+                            <div class="p-10 flex flex-col justify-center text-center bg-panel/50">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Grinder</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Competing purely on volume and price. A stressful race to the bottom.</p>
+                            </div>
+                            <div class="p-10 flex flex-col justify-center text-center bg-crimson text-paper relative">
+                                <div class="absolute inset-2 border border-white/20"></div>
+                                <h3 class="font-serif font-bold text-[32px] text-paper mb-3">The Authority</h3>
+                                <p class="font-sans text-[22px] text-paper/80 leading-[1.4] clamp-3">Premium positioning. High friction. Asymmetric leverage and massive ROI.</p>
+                            </div>
+                            <div class="p-10 flex flex-col justify-center text-center bg-panel/50">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Martyr</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Incredible talent, terrible boundaries. Over-delivers until burnout.</p>
+                            </div>
+                            <div class="p-10 flex flex-col justify-center text-center bg-panel/50">
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-3">The Extortionist</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Legacy agencies charging for bloated overhead with no measurable ROI.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 07. CLINICAL STUDY (CASE STUDY) -->
+                <div id="slide-7" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="pb-6 mb-12 shrink-0 border-b-2 border-ink flex justify-between items-end">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Clinical Observation
+                            </h2>
+                            <span class="font-mono text-[14px] font-bold text-crimson uppercase tracking-widest mb-2">Subject: Firm Alpha</span>
+                        </div>
+                        
+                        <div class="flex-1 flex flex-col gap-6">
+                            <div class="border border-hairline bg-panel p-8 flex gap-8 items-start relative shadow-sm">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-graphite"></div>
+                                <div class="font-mono font-bold text-[14px] uppercase text-graphite tracking-widest w-28 shrink-0 pt-2 text-right border-r border-hairline pr-6 mr-2">Hypothesis</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[28px] text-ink mb-2">Bloated Infrastructure</h3>
+                                    <p class="font-sans text-[22px] leading-[1.5] text-graphite clamp-2">Firm was stalled at $50k/mo with 30 active clients. Team reported severe burnout and churn rate reached 15% due to commoditized service delivery.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-hairline bg-panel p-8 flex gap-8 items-start relative shadow-sm">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-ink"></div>
+                                <div class="font-mono font-bold text-[14px] uppercase text-ink tracking-widest w-28 shrink-0 pt-2 text-right border-r border-hairline pr-6 mr-2">Intervention</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[28px] text-ink mb-2">The Flattening</h3>
+                                    <p class="font-sans text-[22px] leading-[1.5] text-graphite clamp-2">Eliminated bottom 20% of clients. Quadrupled base price. Instituted strict application-only onboarding model and artificial waitlist.</p>
+                                </div>
+                            </div>
+
+                            <div class="border border-hairline bg-white p-8 flex gap-8 items-start relative shadow-md">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-crimson"></div>
+                                <div class="font-mono font-bold text-[14px] uppercase text-crimson tracking-widest w-28 shrink-0 pt-2 text-right border-r border-hairline pr-6 mr-2">Outcome</div>
+                                <div>
+                                    <h3 class="font-serif font-bold text-[28px] text-crimson mb-2">Margin Expansion</h3>
+                                    <p class="font-sans text-[22px] leading-[1.5] text-ink font-semibold clamp-2">Firm scaled to $250k/mo with only 12 active clients. Net profit margin expanded from 18% to 68%. Statistical significance achieved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 08. DEBUNK (ILLUSION VS REALITY) -->
+                <div id="slide-8" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 text-center">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Theoretical Correction
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col border border-hairline bg-white shadow-sm">
+                            <!-- Null Hypothesis -->
+                            <div class="flex-1 p-16 flex flex-col justify-center text-center border-b border-hairline relative bg-panel">
+                                <span class="absolute top-6 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-graphite uppercase tracking-widest">Null Hypothesis (H0)</span>
+                                <p class="font-sans text-[34px] text-graphite leading-[1.4] clamp-4 line-through decoration-graphite decoration-2">
+                                    Agencies must inevitably choose between compounding revenue growth and sustainable profitability/margins.
+                                </p>
+                            </div>
+                            <!-- Alternative Hypothesis -->
+                            <div class="flex-1 p-16 flex flex-col justify-center text-center relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-crimson"></div>
+                                <span class="absolute top-6 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-crimson uppercase tracking-widest">Validated Finding (H1)</span>
+                                <p class="font-serif font-bold text-[34px] text-ink leading-[1.4] clamp-4">
+                                    True operational leverage allows for compounding growth while simultaneously expanding margins. Constraint is a catalyst, not a limiter.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 09. LITERATURE REVIEW (GRID) -->
+                <div id="slide-9" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Literature Review
+                            </h2>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-6">
+                            <div class="border border-hairline p-8 flex flex-col bg-panel shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-8 h-1 bg-crimson"></div>
+                                <h3 class="font-sans font-bold text-[28px] text-ink mb-2 clamp-1">Bloomberg Terminal</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.5] mt-2 clamp-3">The undisputed heavyweight for real-time macroeconomic data, news, and complex financial instruments.</p>
+                            </div>
+                            <div class="border border-hairline p-8 flex flex-col bg-panel shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-8 h-1 bg-ink"></div>
+                                <h3 class="font-sans font-bold text-[28px] text-ink mb-2 clamp-1">Capital IQ</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.5] mt-2 clamp-3">Essential for deep fundamental analysis, M&A tracking, and untangling complex global corporate structures.</p>
+                            </div>
+                            <div class="border border-hairline p-8 flex flex-col bg-panel shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-8 h-1 bg-ink"></div>
+                                <h3 class="font-sans font-bold text-[28px] text-ink mb-2 clamp-1">The Economist</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.5] mt-2 clamp-3">Weekly synthesis of global affairs providing the critical qualitative context required beyond the raw data.</p>
+                            </div>
+                            <div class="border border-hairline p-8 flex flex-col bg-panel shadow-sm relative">
+                                <div class="absolute top-0 left-0 w-8 h-1 bg-ink"></div>
+                                <h3 class="font-sans font-bold text-[28px] text-ink mb-2 clamp-1">Stratfor</h3>
+                                <p class="font-sans text-[22px] text-graphite leading-[1.5] mt-2 clamp-3">Geopolitical intelligence platform used by executives to anticipate regulatory and major supply chain shifts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. METHODOLOGY (TIMELINE) -->
+                <div id="slide-10" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Research Methodology
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col relative border-l-2 border-hairline ml-[160px]">
+                            <!-- Phase 1 -->
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-160px] top-1 font-mono font-bold text-[16px] text-graphite w-32 text-right">PHASE I</div>
+                                <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-panel border-2 border-graphite"></div>
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-2 leading-tight">Data Collection</h3>
+                                <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Quantitative metrics aggregated from 400 mid-market agencies over a 36-month longitudinal study.</p>
+                            </div>
+                            <!-- Phase 2 -->
+                            <div class="relative pl-12 pb-14">
+                                <div class="absolute left-[-160px] top-1 font-mono font-bold text-[16px] text-graphite w-32 text-right">PHASE II</div>
+                                <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-panel border-2 border-graphite"></div>
+                                <h3 class="font-serif font-bold text-[32px] text-ink mb-2 leading-tight">Variable Isolation</h3>
+                                <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Controlled for macroeconomic shifts, isolating 'onboarding friction' as the primary independent variable.</p>
+                            </div>
+                            <!-- Phase 3 -->
+                            <div class="relative pl-12">
+                                <div class="absolute left-[-160px] top-1 font-mono font-bold text-[16px] text-crimson w-32 text-right">PHASE III</div>
+                                <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-crimson border-2 border-crimson shadow-[0_0_10px_rgba(163,31,52,0.5)]"></div>
+                                <h3 class="font-serif font-bold text-[32px] text-crimson mb-2 leading-tight">Regression Analysis</h3>
+                                <p class="font-sans text-[24px] text-ink font-medium leading-[1.4] clamp-3">Proving statistically significant correlation (p < 0.01) between restricted access and margin expansion.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. CITATION (QUOTE) -->
+                <div id="slide-11" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center px-12 relative text-center">
+                        <div class="text-hairline font-serif font-black text-[220px] leading-[0.3] mb-8 text-center">“</div>
+                        <h2 class="font-serif text-[48px] leading-[1.4] balance-text clamp-6 mb-16 text-ink italic font-light">
+                            In an ecosystem defined by infinite commodity supply, the only remaining vector for premium pricing is the artificial curation of access.
+                        </h2>
+                        <div class="flex flex-col items-center gap-2 m-auto border-t-2 border-crimson pt-8 w-1/2">
+                            <span class="font-sans font-bold text-[22px] text-ink">Prof. E. Rostova</span>
+                            <span class="font-mono text-[14px] text-graphite tracking-widest uppercase">Journal of Behavioral Economics, 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. ACQUISITION (CTA) -->
+                <div id="slide-12" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-12 bg-panel border border-hairline shadow-md relative overflow-hidden">
+                        <!-- Abstract overlay lines -->
+                        <div class="absolute top-0 left-0 w-full h-2 bg-crimson"></div>
+                        <div class="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-hairline opacity-50"></div>
+                        <div class="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-hairline opacity-50"></div>
+
+                        <div class="bg-white p-4 border border-hairline mb-8 shadow-sm">
+                            <svg class="w-12 h-12 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        
+                        <h2 class="font-serif font-black text-[72px] leading-[1.1] tracking-tight balance-text text-ink mb-6">
+                            Review the Full Manuscript.
+                        </h2>
+                        <p class="font-sans text-[26px] text-graphite mb-12 clamp-2 max-w-[80%]">
+                            Access the complete dataset, regression models, and implementation protocols.
+                        </p>
+                        
+                        <div class="bg-crimson text-paper px-12 py-5 font-mono font-bold text-[18px] uppercase tracking-widest hover:bg-red-900 transition-colors shadow-lg cursor-pointer">
+                            Download PDF [2.4MB]
+                        </div>
+                        
+                        <div class="mt-12 font-mono text-[12px] text-graphite uppercase tracking-widest">
+                            Available via University Portal
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13. FOCAL METRIC (HERO STAT) -->
+                <div id="slide-13" class="slide-layer">
+                    <div class="flex-1 flex flex-col justify-center items-center text-center px-12 relative">
+                        <div class="font-mono text-[16px] text-graphite uppercase tracking-widest font-bold mb-8">Statistically Significant Finding</div>
+                        <div class="font-serif text-[260px] leading-none text-ink font-black flex items-start tracking-tighter">
+                            90<span class="text-[100px] text-crimson mt-8 ml-2">%</span>
+                        </div>
+                        <div class="w-32 h-1 bg-crimson my-12"></div>
+                        <h3 class="font-sans text-[32px] text-ink font-bold mb-4">Information Retention Decay</h3>
+                        <p class="font-sans text-[24px] leading-[1.5] text-graphite clamp-3 max-w-[85%]">
+                            Human subjects demonstrated a near-total inability to retain strategic data when presented without clear visual hierarchy and negative space.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 14. EXPERIMENTAL DESIGN (STEP-BY-STEP) -->
+                <div id="slide-14" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Experimental Design
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-8 justify-center">
+                            <div class="flex gap-10 items-start border-l-4 border-ink pl-8">
+                                <div class="font-mono text-[24px] font-bold text-graphite shrink-0 mt-1">Var. A</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-ink mb-2">Isolation of Variables</h3>
+                                    <p class="font-sans text-[24px] text-graphite clamp-2">Remove the subject from all contextual noise and decorative elements to establish a baseline.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-10 items-start border-l-4 border-ink pl-8">
+                                <div class="font-mono text-[24px] font-bold text-graphite shrink-0 mt-1">Var. B</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-ink mb-2">Proportional Scaling</h3>
+                                    <p class="font-sans text-[24px] text-graphite clamp-2">Scale the essential elements to absolute maximum visibility. Create psychological tension.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-10 items-start border-l-4 border-crimson pl-8 bg-panel py-4 -ml-4 pl-12 rounded-r shadow-sm">
+                                <div class="font-mono text-[24px] font-bold text-crimson shrink-0 mt-1">Var. C</div>
+                                <div>
+                                    <h3 class="font-sans font-bold text-[32px] text-crimson mb-2">Execution Protocol</h3>
+                                    <p class="font-sans text-[24px] text-ink font-medium clamp-2">Publish with uncompromising discipline. Reject qualitative requests for visual 'pop'.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 15. COMPARATIVE PARADIGM (DO'S & DON'TS) -->
+                <div id="slide-15" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 text-center">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Comparative Paradigms
+                            </h2>
+                        </div>
+                        <div class="flex-1 flex gap-10 border border-hairline shadow-sm overflow-hidden">
+                            <!-- Legacy -->
+                            <div class="flex-1 flex flex-col bg-panel p-10">
+                                <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-graphite border-b border-hairline pb-4 mb-8">Legacy Model (Avoid)</span>
+                                <ul class="space-y-8">
+                                    <li class="flex gap-4 items-start font-sans text-[24px] text-graphite leading-[1.4]">
+                                        <span class="font-mono text-graphite font-bold">✕</span> Volume-based client acquisition.
+                                    </li>
+                                    <li class="flex gap-4 items-start font-sans text-[24px] text-graphite leading-[1.4]">
+                                        <span class="font-mono text-graphite font-bold">✕</span> Hourly billing structures.
+                                    </li>
+                                    <li class="flex gap-4 items-start font-sans text-[24px] text-graphite leading-[1.4]">
+                                        <span class="font-mono text-graphite font-bold">✕</span> Automated, frictionless onboarding.
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Proposed -->
+                            <div class="flex-1 flex flex-col bg-white p-10 border-l border-hairline relative">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-crimson"></div>
+                                <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-crimson border-b border-hairline pb-4 mb-8">Proposed Model (Adopt)</span>
+                                <ul class="space-y-8">
+                                    <li class="flex gap-4 items-start font-sans font-medium text-[24px] text-ink leading-[1.4]">
+                                        <span class="font-mono text-crimson font-bold">✓</span> Strictly capped roster limits.
+                                    </li>
+                                    <li class="flex gap-4 items-start font-sans font-medium text-[24px] text-ink leading-[1.4]">
+                                        <span class="font-mono text-crimson font-bold">✓</span> Value-based retainer pricing.
+                                    </li>
+                                    <li class="flex gap-4 items-start font-sans font-medium text-[24px] text-ink leading-[1.4]">
+                                        <span class="font-mono text-crimson font-bold">✓</span> High-friction application gateways.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16. EVALUATION CRITERIA (CHECKLIST) -->
+                <div id="slide-16" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 flex justify-between items-end">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                Implementation Audit
+                            </h2>
+                            <span class="font-mono text-[14px] font-bold text-crimson uppercase tracking-widest mb-2">Criteria</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-6">
+                            <div class="flex items-start gap-6 p-6 border border-hairline bg-panel">
+                                <div class="w-8 h-8 border-2 border-graphite shrink-0 mt-1"></div>
+                                <p class="font-sans text-[26px] text-ink clamp-2 leading-[1.3] font-semibold">Has all commoditized service execution been eliminated from the core offer?</p>
+                            </div>
+                            <div class="flex items-start gap-6 p-6 border border-hairline bg-panel">
+                                <div class="w-8 h-8 border-2 border-graphite shrink-0 mt-1"></div>
+                                <p class="font-sans text-[26px] text-graphite clamp-2 leading-[1.3]">Is there a mandatory financial or cognitive hurdle before a sales interaction?</p>
+                            </div>
+                            <div class="flex items-start gap-6 p-6 border border-crimson bg-white shadow-sm relative">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-crimson"></div>
+                                <div class="w-8 h-8 border-2 border-crimson bg-crimson/10 shrink-0 mt-1 flex items-center justify-center font-mono font-bold text-crimson text-[20px]">✓</div>
+                                <p class="font-sans text-[26px] text-ink clamp-2 leading-[1.3] font-bold">Is the pricing architecture disconnected entirely from time and materials?</p>
+                            </div>
+                            <div class="flex items-start gap-6 p-6 border border-hairline bg-panel">
+                                <div class="w-8 h-8 border-2 border-graphite shrink-0 mt-1"></div>
+                                <p class="font-sans text-[26px] text-graphite clamp-2 leading-[1.3]">Are client capacity limits publicly visible and mathematically enforced?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 17. SYSTEM ARCHITECTURE (ANATOMY) -->
+                <div id="slide-17" class="slide-layer">
+                    <div class="flex flex-col h-full py-8">
+                        <div class="shrink-0 mb-12 border-b-2 border-ink pb-6 text-center">
+                            <h2 class="font-serif text-[65px] leading-[1] tracking-tight text-ink font-black">
+                                System Architecture
+                            </h2>
+                        </div>
+                        <div class="flex-1 relative flex items-center justify-center border border-hairline bg-panel shadow-inner">
+                            <!-- Connecting Axes -->
+                            <div class="absolute inset-x-12 top-1/2 h-[1px] border-t border-dashed border-graphite -translate-y-1/2"></div>
+                            <div class="absolute inset-y-12 left-1/2 w-[1px] border-l border-dashed border-graphite -translate-x-1/2"></div>
+                            
+                            <!-- Central Node -->
+                            <div class="bg-white border-2 border-ink px-10 py-6 font-serif font-bold text-[36px] text-ink relative z-10 shadow-md">
+                                Optimal Margin
+                            </div>
+
+                            <!-- Components -->
+                            <div class="absolute top-12 left-12 w-[340px] bg-white p-6 border border-hairline shadow-sm">
+                                <h3 class="font-mono text-[14px] font-bold uppercase tracking-widest text-ink mb-2">01. Scarcity Engine</h3>
+                                <p class="font-sans text-[20px] text-graphite leading-[1.4]">Hard-coded limits on concurrent engagements to drive demand.</p>
+                            </div>
+                            
+                            <div class="absolute top-12 right-12 w-[340px] bg-white p-6 border border-hairline shadow-sm">
+                                <h3 class="font-mono text-[14px] font-bold uppercase tracking-widest text-crimson mb-2 text-right">02. Friction Gate</h3>
+                                <p class="font-sans text-[20px] text-graphite leading-[1.4] text-right">Application models designed to repel low-intent prospects.</p>
+                            </div>
+
+                            <div class="absolute bottom-12 left-12 w-[340px] bg-white p-6 border border-hairline shadow-sm">
+                                <h3 class="font-mono text-[14px] font-bold uppercase tracking-widest text-ink mb-2">03. Asymmetric Value</h3>
+                                <p class="font-sans text-[20px] text-graphite leading-[1.4]">Delivering strategic insights rather than commoditized labor.</p>
+                            </div>
+
+                            <div class="absolute bottom-12 right-12 w-[340px] bg-white p-6 border border-hairline shadow-sm">
+                                <h3 class="font-mono text-[14px] font-bold uppercase tracking-widest text-ink mb-2 text-right">04. Price Inelasticity</h3>
+                                <p class="font-sans text-[20px] text-graphite leading-[1.4] text-right">Decoupling fees from hours to capture the true economic surplus.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideSelector = document.getElementById('slideSelector');
+            const modeToggle = document.getElementById('modeToggle');
+            const body = document.body;
+            const slides = document.querySelectorAll('.slide-layer');
+            const globalTag = document.getElementById('global-tag');
+            const pageNum = document.getElementById('page-num');
+
+            // Map standard slide indices to academic tags
+            const tags = {
+                1: 'ABSTRACT', 2: 'SUMMARY', 3: 'OBSERVATION', 4: 'EMPIRICAL DATA', 
+                5: 'PEER REVIEW', 6: 'FRAMEWORK', 7: 'LONGITUDINAL', 8: 'HYPOTHESIS', 
+                9: 'LIT REVIEW', 10: 'METHODOLOGY', 11: 'CITATION', 12: 'ACQUISITION',
+                13: 'SIGNIFICANCE', 14: 'DESIGN', 15: 'PARADIGM', 16: 'AUDIT', 17: 'ARCHITECTURE'
+            };
+
+            // Handle Slide Switching
+            slideSelector.addEventListener('change', (e) => {
+                const targetId = `slide-${e.target.value}`;
+                
+                // Hide all slides
+                slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Show selected slide
+                const targetSlide = document.getElementById(targetId);
+                if(targetSlide) {
+                    targetSlide.classList.add('active');
+                }
+
+                // Update UI elements
+                globalTag.textContent = tags[e.target.value];
+                pageNum.textContent = e.target.value.padStart(2, '0');
+            });
+
+            // Handle Preview/Export Toggle
+            modeToggle.addEventListener('click', () => {
+                if (body.classList.contains('mode-preview')) {
+                    body.classList.remove('mode-preview');
+                    body.classList.add('mode-export');
+                    modeToggle.textContent = 'Preview Mode';
+                    modeToggle.classList.replace('bg-crimson', 'bg-slate-700');
+                    modeToggle.classList.replace('hover:bg-red-800', 'hover:bg-slate-600');
+                } else {
+                    body.classList.remove('mode-export');
+                    body.classList.add('mode-preview');
+                    modeToggle.textContent = 'Export Mode';
+                    modeToggle.classList.replace('bg-slate-700', 'bg-crimson');
+                    modeToggle.classList.replace('hover:bg-slate-600', 'hover:bg-red-800');
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

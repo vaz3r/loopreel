@@ -29,13 +29,19 @@ export const SCHEMES = {
     border: '#E5E5E5', gridBorder: '#E5E5E5',
     fontSerif: 'Cormorant Garamond', fontSans: 'Inter', fontMono: 'Inter'
   },
+  academic_research: {
+    id: 'academic_research', name: 'The Academic',
+    bg: '#FFFFFF', text: '#0F172A', accent: '#A31F34',
+    border: '#CBD5E1', gridBorder: '#CBD5E1',
+    fontSerif: 'Merriweather', fontSans: 'Source Sans 3', fontMono: 'IBM Plex Mono'
+  },
 };
 
 export type Scheme = typeof SCHEMES[keyof typeof SCHEMES];
 
 export const injectFonts = (customFonts: string[] = []) => {
   if (typeof document === 'undefined') return;
-  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@300;400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800';
+  const baseFonts = 'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@300;400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400';
 
   const customQuery = customFonts
     .filter(Boolean)

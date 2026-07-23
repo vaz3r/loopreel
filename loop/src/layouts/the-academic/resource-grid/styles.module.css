@@ -1,0 +1,8 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.card { border: 1px solid #CBD5E1; padding: 32px; display: flex; flex-direction: column; background: #F8FAFC; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.topBar { position: absolute; top: 0; left: 0; width: 32px; height: 4px; }
+.cardTitle { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 28px; color: #0F172A; margin-bottom: 8px; }
+.cardDesc { font-family: 'Source Sans 3', sans-serif; font-size: 22px; color: #475569; line-height: 1.5; margin-top: 8px; }

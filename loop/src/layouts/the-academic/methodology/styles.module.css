@@ -1,0 +1,11 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.steps { flex: 1; display: flex; flex-direction: column; gap: 32px; justify-content: center; }
+.step { display: flex; gap: 40px; align-items: flex-start; padding-left: 32px; position: relative; }
+.stepBorder { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-left: 4px solid; }
+.stepHighlight { background: #F8FAFC; padding: 24px; margin: -24px; padding-left: 56px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.stepNum { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 700; width: 80px; flex-shrink: 0; padding-top: 4px; }
+.stepTitle { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 32px; color: #0F172A; margin-bottom: 8px; }
+.stepTitleHighlight { color: #A31F34; }
+.stepDesc { font-family: 'Source Sans 3', sans-serif; font-size: 24px; color: #475569; line-height: 1.4; }

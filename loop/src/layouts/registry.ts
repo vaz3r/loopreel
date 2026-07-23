@@ -12,6 +12,9 @@ import { TheTerminalContract } from './the-terminal/schema';
 import theCuratorSlides from './the-curator/slides';
 import { TheCuratorContract } from './the-curator/schema';
 
+import theAcademicSlides from './the-academic/slides';
+import { TheAcademicContract } from './the-academic/schema';
+
 export interface DeckEntry {
   id: string;
   name: string;
@@ -27,6 +30,7 @@ const DECKS: DeckEntry[] = [
   { id: 'the-globalist', name: 'The Globalist', schemeId: 'globalist_editorial', templateId: 'the-globalist', description: 'Newsprint editorial magazine', sampleSlides: theGlobalistSlides, schema: TheGlobalistContract },
   { id: 'the-terminal', name: 'The Terminal', schemeId: 'terminal_dark', templateId: 'the-terminal', description: 'Dark terminal data aesthetic', sampleSlides: theTerminalSlides, schema: TheTerminalContract },
   { id: 'the-curator', name: 'The Curator', schemeId: 'curator_gallery', templateId: 'the-curator', description: 'Avant-garde gallery editorial', sampleSlides: theCuratorSlides, schema: TheCuratorContract },
+  { id: 'the-academic', name: 'The Academic', schemeId: 'academic_research', templateId: 'the-academic', description: 'Research & whitepapers editorial', sampleSlides: theAcademicSlides, schema: TheAcademicContract },
 ];
 
 export function getAllDecks(): DeckEntry[] {

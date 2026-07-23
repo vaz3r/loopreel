@@ -1,0 +1,17 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; text-align: center; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.columns { flex: 1; display: flex; border: 1px solid #CBD5E1; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+.dontCol { flex: 1; display: flex; flex-direction: column; background: #F8FAFC; padding: 40px; }
+.doCol { flex: 1; display: flex; flex-direction: column; background: #FFFFFF; padding: 40px; border-left: 1px solid #CBD5E1; position: relative; }
+.doTopBar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #A31F34; }
+.dontLabel, .doLabel { font-family: 'IBM Plex Mono', monospace; font-size: 16px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; border-bottom: 1px solid #CBD5E1; padding-bottom: 16px; margin-bottom: 32px; }
+.dontLabel { color: #475569; }
+.doLabel { color: #A31F34; }
+.list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 32px; }
+.dontItem, .doItem { display: flex; gap: 16px; align-items: flex-start; font-family: 'Source Sans 3', sans-serif; font-size: 24px; line-height: 1.4; }
+.dontItem { color: #475569; }
+.doItem { color: #0F172A; font-weight: 500; }
+.cross, .check { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; flex-shrink: 0; margin-top: 4px; }
+.cross { color: #475569; }
+.check { color: #A31F34; }

@@ -1,0 +1,13 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.timeline { flex: 1; display: flex; flex-direction: column; border-left: 2px solid #CBD5E1; margin-left: 160px; }
+.event { position: relative; padding-left: 48px; padding-bottom: 56px; }
+.event:last-child { padding-bottom: 0; }
+.phaseLabel { position: absolute; left: -160px; top: 4px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 16px; width: 128px; text-align: right; }
+.dot { position: absolute; left: -9px; top: 8px; width: 16px; height: 16px; border-radius: 50%; background: #F8FAFC; border: 2px solid #475569; }
+.dotHighlight { background: #A31F34; border-color: #A31F34; box-shadow: 0 0 10px rgba(163, 31, 52, 0.5); }
+.eventTitle { font-family: 'Merriweather', serif; font-weight: 700; font-size: 32px; color: #0F172A; margin-bottom: 8px; line-height: 1.2; }
+.eventTitleHighlight { color: #A31F34; }
+.eventDesc { font-family: 'Source Sans 3', sans-serif; font-size: 24px; color: #475569; line-height: 1.4; }
+.eventDescHighlight { color: #0F172A; font-weight: 500; }

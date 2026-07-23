@@ -1,0 +1,17 @@
+.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
+.header { flex-shrink: 0; margin-bottom: 48px; border-bottom: 2px solid #0F172A; padding-bottom: 24px; text-align: center; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 65px; line-height: 1; letter-spacing: -0.02em; color: #0F172A; }
+.diagram { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; position: relative; border: 2px solid #0F172A; background: #FFFFFF; }
+.hLine { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #0F172A; transform: translateY(-50%); z-index: 5; }
+.vLine { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #0F172A; transform: translateX(-50%); z-index: 5; }
+.axisLabel { position: absolute; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; z-index: 10; background: #FFFFFF; padding: 0 16px; }
+.topAxis { top: -12px; left: 50%; transform: translateX(-50%); color: #A31F34; }
+.bottomAxis { bottom: -12px; left: 50%; transform: translateX(-50%); color: #475569; }
+.leftAxis { top: 50%; left: -48px; transform: translateY(-50%) rotate(-90deg); color: #475569; white-space: nowrap; }
+.rightAxis { top: 50%; right: -48px; transform: translateY(-50%) rotate(90deg); color: #A31F34; white-space: nowrap; }
+.quadrant { padding: 40px; display: flex; flex-direction: column; justify-content: center; text-align: center; background: #F8FAFC80; }
+.quadrantHighlight { background: #A31F34; }
+.qTitle { font-family: 'Merriweather', serif; font-weight: 700; font-size: 32px; color: #0F172A; margin-bottom: 12px; }
+.qTitleLight { color: #FFFFFF; }
+.qDesc { font-family: 'Source Sans 3', sans-serif; font-size: 22px; color: #475569; line-height: 1.4; }
+.qDescLight { color: #FFFFFFCC; }

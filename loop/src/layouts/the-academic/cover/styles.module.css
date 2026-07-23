@@ -1,0 +1,12 @@
+.wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.top { margin-bottom: auto; margin-top: 32px; }
+.headline { font-family: 'Merriweather', serif; font-weight: 900; font-size: 95px; line-height: 1.05; letter-spacing: -0.02em; color: #0F172A; margin-bottom: 32px; text-wrap: balance; }
+.academicBorder { width: 96px; height: 4px; background: #A31F34; margin-bottom: 32px; }
+.abstract { background: #F8FAFC; padding: 32px; border: 1px solid #CBD5E1; position: relative; }
+.abstractLabel { position: absolute; top: -12px; left: 24px; background: #FFFFFF; padding: 0 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #A31F34; }
+.abstractText { font-family: 'Source Sans 3', sans-serif; font-size: 26px; line-height: 1.6; color: #475569; }
+.byline { display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; margin-top: 48px; border-top: 1px solid #CBD5E1; padding-top: 24px; }
+.authorCol { display: flex; flex-direction: column; }
+.authorName { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 20px; text-transform: uppercase; letter-spacing: 0.1em; color: #0F172A; }
+.authorRole { font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #475569; margin-top: 4px; }
+.peerReviewed { font-family: 'IBM Plex Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: #A31F34; font-weight: 700; }

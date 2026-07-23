@@ -62,11 +62,27 @@ const THE_CURATOR_SLIDES = [
   { id: 'tc-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Enter the Gallery.', subtext: 'A private collection of architectural strategy.', actionLabel: 'Acquire Access', socialHandle: 'EXHIBITION: @CURATOR.STUDIO', footerLeft: 'ARCHIVE REF: CURATOR.STUDIO', footerRight: 'PAGE 11' },
 ];
 
+const THE_ACADEMIC_SLIDES = [
+  { id: 'ta-cover-1', type: 'cover', tag: 'ABSTRACT', headline: 'The Organizational Friction Matrix.', subheadline: 'This paper examines the counter-intuitive paradigm wherein intentionally introducing cognitive and procedural friction within client acquisition funnels yields a statistically significant expansion in net margins.', authorName: 'Dr. Arthur Vance', authorRole: 'Department of Behavioral Economics', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 01' },
+  { id: 'ta-seq-1', type: 'sequence', tag: 'SUMMARY', headline: 'Executive Summary', items: [{ num: '1.0', title: 'The Scarcity Premium', desc: 'Restricting total active client volume strictly to 12 accounts generated a 3.5x multiplier on perceived baseline value.' }, { num: '2.0', title: 'Automated Disqualification', desc: 'Requiring extensive preliminary documentation reduced sales call volume by 80% while increasing close rates to 92%.' }, { num: '3.0', title: 'Margin Expansion', desc: 'The transition from deliverables-based billing to advisory retainers expanded net profit margins from 18% to 74%.' }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 02' },
+  { id: 'ta-img-1', type: 'image-split', tag: 'OBSERVATION', headline: 'Structural Integrity', bodyText: 'In observed cohorts, agencies lacking rigid boundary constraints experienced rapid scope erosion. The architecture of the engagement must be defined mathematically.', imageUrl: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?q=80&w=1080&auto=format&fit=crop', credit: 'FIG. 01 — STRUCTURE', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 03' },
+  { id: 'ta-telem-1', type: 'telemetry', tag: 'EMPIRICAL DATA', headline: 'Empirical Findings', stats: [{ value: '42', unit: '%', label: 'Increase in Lifetime Value', color: 'crimson' }, { value: '3.5', unit: 'x', label: 'Premium Price Multiplier', color: 'ink' }, { value: '-80', unit: '%', label: 'Reduction in Sales Calls', color: 'graphite' }, { value: '92', unit: '%', label: 'Retention Rate (Y1)', color: 'crimson' }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 04' },
+  { id: 'ta-interview-1', type: 'interview', tag: 'PEER REVIEW', headline: 'Analytical Inquiry', question: 'Does implementing extreme friction alienate the broader market?', answer: 'Yes, and that is precisely the mathematical objective. Broad market alienation filters out low-margin, high-maintenance accounts.', respondentName: 'Review Board Commentary', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 05' },
+  { id: 'ta-quad-1', type: 'quadrant', tag: 'FRAMEWORK', headline: 'The Value Matrix', topLeft: { title: 'The Grinder', desc: 'Competing purely on volume and price.' }, topRight: { title: 'The Authority', desc: 'Premium positioning. High friction. Asymmetric leverage and massive ROI.', highlighted: true }, bottomLeft: { title: 'The Martyr', desc: 'Incredible talent, terrible boundaries.' }, bottomRight: { title: 'The Extortionist', desc: 'Legacy agencies charging for bloated overhead.' }, topLabel: 'High Friction', bottomLabel: 'Low Friction', leftLabel: 'Commodity', rightLabel: 'Specialized', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 06' },
+  { id: 'ta-cs-1', type: 'case-study', tag: 'LONGITUDINAL', headline: 'Clinical Observation', stages: [{ label: 'Hypothesis', title: 'Bloated Infrastructure', desc: 'Firm was stalled at $50k/mo with 30 active clients.' }, { label: 'Intervention', title: 'The Flattening', desc: 'Eliminated bottom 20% of clients. Quadrupled base price.' }, { label: 'Outcome', title: 'Margin Expansion', desc: 'Firm scaled to $250k/mo with only 12 active clients.', highlighted: true }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 07' },
+  { id: 'ta-myth-1', type: 'myth-fact', tag: 'HYPOTHESIS', headline: 'Theoretical Correction', myth: 'Agencies must inevitably choose between compounding revenue growth and sustainable profitability.', fact: 'True operational leverage allows for compounding growth while simultaneously expanding margins.', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 08' },
+  { id: 'ta-res-1', type: 'resource-grid', tag: 'LIT REVIEW', headline: 'Literature Review', items: [{ title: 'Bloomberg Terminal', desc: 'Real-time macroeconomic data, news, and complex financial instruments.', color: 'crimson' }, { title: 'Capital IQ', desc: 'Deep fundamental analysis, M&A tracking.', color: 'ink' }, { title: 'The Economist', desc: 'Weekly synthesis of global affairs.', color: 'ink' }, { title: 'Stratfor', desc: 'Geopolitical intelligence platform.', color: 'ink' }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 09' },
+  { id: 'ta-tl-1', type: 'timeline', tag: 'METHODOLOGY', headline: 'Research Methodology', events: [{ date: 'PHASE I', title: 'Data Collection', desc: 'Quantitative metrics aggregated from 400 mid-market agencies.' }, { date: 'PHASE II', title: 'Variable Isolation', desc: 'Controlled for macroeconomic shifts.' }, { date: 'PHASE III', title: 'Regression Analysis', desc: 'Proving statistically significant correlation (p < 0.01).', highlight: true }], footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 10' },
+  { id: 'ta-quote-1', type: 'quote', tag: 'CITATION', quote: 'In an ecosystem defined by infinite commodity supply, the only remaining vector for premium pricing is the artificial curation of access.', author: 'Prof. E. Rostova', role: 'Journal of Behavioral Economics, 2025', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 11' },
+  { id: 'ta-cta-1', type: 'cta', tag: 'ACQUISITION', headline: 'Review the Full Manuscript.', subtext: 'Access the complete dataset, regression models, and implementation protocols.', actionLabel: 'Download PDF [2.4MB]', socialHandle: 'Available via University Portal', footerLeft: 'DOI: 10.1016/J.BUSRES.2026', footerRight: 'PAGE 12' },
+];
+
 const TEMPLATE_MAP: Record<string, { schemeId: string; slides: any[] }> = {
   'paper-of-record': { schemeId: 'archive_paper', slides: PAPER_OF_RECORD_SLIDES },
   'the-globalist': { schemeId: 'globalist_editorial', slides: THE_GLOBALIST_SLIDES },
   'the-terminal': { schemeId: 'terminal_dark', slides: THE_TERMINAL_SLIDES },
   'the-curator': { schemeId: 'curator_gallery', slides: THE_CURATOR_SLIDES },
+  'the-academic': { schemeId: 'academic_research', slides: THE_ACADEMIC_SLIDES },
 };
 
 export default function App() {
@@ -192,11 +208,11 @@ export default function App() {
             {/* Template Selector */}
             <div>
               <label className="block text-[10px] font-mono tracking-widest uppercase text-neutral-500 mb-2">Template</label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {Object.keys(TEMPLATE_MAP).map(tid => (
                   <button key={tid} onClick={() => switchTemplate(tid)}
                     className={`py-2 px-1 border text-[10px] font-mono uppercase transition-all ${activeTemplate === tid ? 'border-blue-500 bg-blue-500/10 text-blue-400 font-bold' : 'border-[#333] text-neutral-500 hover:border-[#555]'}`}>
-                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : tid === 'the-terminal' ? 'The Terminal' : 'The Curator'}
+                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : tid === 'the-terminal' ? 'The Terminal' : tid === 'the-curator' ? 'The Curator' : 'The Academic'}
                   </button>
                 ))}
               </div>
