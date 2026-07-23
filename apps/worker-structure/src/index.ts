@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
-import { getTemplate, getPrompt } from '@loopreel/loop-bridge';
+import { getTemplate, getPrompt, autoSelectTemplate } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
@@ -159,10 +159,20 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
   jobLogger.info('Starting structuring with loop-bridge pipeline');
 
   try {
-    const template = getTemplate(existing.template_id);
+    let targetTemplateId = existing.template_id;
 
+    if (!targetTemplateId || targetTemplateId === 'auto') {
+      jobLogger.info('Auto-selecting optimal template via Dynamic LLM Classifier...');
+      const classification = await autoSelectTemplate(rawText);
+      targetTemplateId = classification.templateId;
+      jobLogger.info({ autoSelected: targetTemplateId, rationale: classification.rationale }, 'Template auto-selected');
+
+      await JobRepository.updateTemplate(jobId, targetTemplateId);
+    }
+
+    const template = getTemplate(targetTemplateId);
     const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
-    const prompt = await getPrompt(existing.template_id, rawText, brandKit);
+    const prompt = await getPrompt(targetTemplateId, rawText, brandKit);
     const rawResponse = await llm.generateJSON(prompt, rawText);
 
     jobLogger.info({ rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');

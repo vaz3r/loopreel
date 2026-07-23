@@ -3,6 +3,7 @@ export type { TemplateEntry } from './registry.js';
 export { getPrompt, TEMPLATE_IDS } from './prompts.js';
 export { adaptSlideForEngine } from './adapter.js';
 export { introspectSchema } from './schema-introspect.js';
+export { autoSelectTemplate, classifyByHeuristics } from './classifier.js';
 export {
   PaperOfRecordBrandKitSchema,
   TheGlobalistBrandKitSchema,

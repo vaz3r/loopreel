@@ -8,7 +8,7 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const options: Record<string, string> = {
     url: 'https://en.wikipedia.org/wiki/Artificial_intelligence',
-    template: 'paper-of-record',
+    template: 'auto',
     platform: 'instagram-feed',
     api: 'http://localhost:3000',
     outDir: '',
@@ -28,8 +28,8 @@ Usage: pnpm tsx scripts/submit-api-job.ts [options]
 Options:
   -u, --url <url>             URL of article, blog post, or YouTube video
                               (default: "https://en.wikipedia.org/wiki/Artificial_intelligence")
-  -t, --template <template>   Template ID: paper-of-record | the-globalist | the-terminal | the-curator | the-academic
-                              (default: "paper-of-record")
+  -t, --template <template>   Template ID: auto | paper-of-record | the-globalist | the-terminal | the-curator | the-academic
+                              (default: "auto" - Dynamic LLM Template Auto-Selection)
   -p, --platform <platform>   Platform: instagram-feed | instagram-square | instagram-stories | linkedin | x | facebook
                               (default: "instagram-feed")
   -o, --outDir <path>         Directory to save downloaded slide PNGs and text assets

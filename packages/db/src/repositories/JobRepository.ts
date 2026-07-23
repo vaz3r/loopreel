@@ -83,6 +83,13 @@ export class JobRepository {
     );
   }
 
+  static async updateTemplate(jobId: string, templateId: string): Promise<void> {
+    await pool.query(
+      `UPDATE generation_jobs SET template_id = $1, updated_at = NOW() WHERE id = $2`,
+      [templateId, jobId],
+    );
+  }
+
   static async markFailed(
     jobId: string,
     errorPayload: { stage: string; reason: string; details: string },

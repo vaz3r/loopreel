@@ -55,11 +55,14 @@ export const TEMPLATE_KEYS = [
 ] as const;
 export type TemplateId = (typeof TEMPLATE_KEYS)[number];
 
+export const ALL_TEMPLATE_KEYS = ['auto', ...TEMPLATE_KEYS] as const;
+export type TemplateInputId = (typeof ALL_TEMPLATE_KEYS)[number];
+
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
   platform: PlatformEnum.default('instagram-feed'),
-  templateId: z.enum(TEMPLATE_KEYS).default('paper-of-record'),
+  templateId: z.enum(ALL_TEMPLATE_KEYS).default('auto'),
   brandKit: BrandKitSchema.optional(),
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;

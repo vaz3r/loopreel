@@ -320,6 +320,9 @@ importers:
 
   packages/loop-bridge:
     dependencies:
+      '@loopreel/llm':
+        specifier: workspace:*
+        version: link:../llm
       '@loopreel/loop':
         specifier: workspace:*
         version: link:../loop
