@@ -1,17 +1,19 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import type { PaperOfRecordBrandKit } from './brandkit';
 import styles from './frame.module.css';
 
 export default function PaperOfRecordFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'TECHNOLOGY';
+  const bk = brandKit as PaperOfRecordBrandKit | undefined;
 
-  const colors = brandKit ? {
-    '--paper': brandKit.bg || '#f7f7f5',
-    '--ink': brandKit.text || '#121212',
-    '--charcoal': brandKit.text || '#333333',
-    '--steel': `${brandKit.text}33` || '#dfdfdf',
-    '--crimson': brandKit.accent || '#cc0000',
+  const colors = bk ? {
+    '--paper': bk.bg || '#f7f7f5',
+    '--ink': bk.text || '#121212',
+    '--charcoal': bk.text || '#333333',
+    '--steel': `${bk.text}33` || '#dfdfdf',
+    '--crimson': bk.accent || '#cc0000',
   } : {
     '--paper': '#f7f7f5',
     '--ink': '#121212',
@@ -20,10 +22,10 @@ export default function PaperOfRecordFrame({ slide, scheme, children, size, bran
     '--crimson': '#cc0000',
   };
 
-  const fonts = brandKit ? {
-    '--font-headline': `'${brandKit.fontSerif || 'Playfair Display'}', serif`,
+  const fonts = bk ? {
+    '--font-headline': `'${bk.fontSerif || 'Playfair Display'}', serif`,
     '--font-body': `'Source Serif 4', serif`,
-    '--font-sans': `'${brandKit.fontSans || 'Inter'}', sans-serif`,
+    '--font-sans': `'${bk.fontSans || 'Inter'}', sans-serif`,
   } : {
     '--font-headline': "'Playfair Display', serif",
     '--font-body': "'Source Serif 4', serif",

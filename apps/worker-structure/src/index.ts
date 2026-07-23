@@ -164,7 +164,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
   try {
     const template = getTemplate(existing.template_id);
 
-    const prompt = await getPrompt(existing.template_id, rawText);
+    const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
+    const prompt = await getPrompt(existing.template_id, rawText, brandKit);
     const rawResponse = await llm.generateJSON(prompt, rawText);
 
     jobLogger.info({ rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');

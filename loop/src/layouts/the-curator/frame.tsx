@@ -1,12 +1,14 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import type { TheCuratorBrandKit } from './brandkit';
 
 export default function TheCuratorFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'EXHIBITION 01';
+  const bk = brandKit as TheCuratorBrandKit | undefined;
 
-  const bg = brandKit?.bg || '#FFFFFF';
-  const ink = brandKit?.text || '#000000';
+  const bg = bk?.bg || '#FFFFFF';
+  const ink = bk?.text || '#000000';
   const graphite = '#4A4A4A';
   const hairline = '#E5E5E5';
 

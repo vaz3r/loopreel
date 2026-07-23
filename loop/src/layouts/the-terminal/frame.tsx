@@ -1,16 +1,18 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import type { TheTerminalBrandKit } from './brandkit';
 
 export default function TheTerminalFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'MARKET_DATA';
+  const bk = brandKit as TheTerminalBrandKit | undefined;
 
-  const bg = brandKit?.bg || '#080808';
+  const bg = bk?.bg || '#080808';
   const panel = '#121212';
-  const text = brandKit?.text || '#E2E8F0';
+  const text = bk?.text || '#E2E8F0';
   const muted = '#64748B';
   const border = '#2A2A2A';
-  const amber = brandKit?.accent || '#FFB000';
+  const amber = bk?.accent || '#FFB000';
 
   const w = size?.width ?? 1080;
   const h = size?.height ?? 1350;

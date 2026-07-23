@@ -10,6 +10,6 @@ export interface FrameProps {
   slide: Slide;
   scheme: Scheme;
   children: React.ReactNode;
-  brandKit?: Record<string, string>;
+  brandKit?: Record<string, string | undefined>;
   size?: { width: number; height: number };
 }

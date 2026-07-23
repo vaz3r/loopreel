@@ -1,17 +1,19 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import type { TheGlobalistBrandKit } from './brandkit';
 
 export default function TheGlobalistFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'MACRO-ECONOMICS';
+  const bk = brandKit as TheGlobalistBrandKit | undefined;
 
-  const paper = brandKit?.bg || '#F5F5F1';
-  const ink = brandKit?.text || '#111111';
-  const accent = brandKit?.accent || '#E3120B';
+  const paper = bk?.bg || '#F5F5F1';
+  const ink = bk?.text || '#111111';
+  const accent = bk?.accent || '#E3120B';
   const slate = '#3A4249';
   const hairline = '#D1D1CD';
-  const fontSerif = brandKit?.fontSerif || 'Crimson Pro';
-  const fontCondensed = brandKit?.fontSans || 'Oswald';
+  const fontSerif = bk?.fontSerif || 'Crimson Pro';
+  const fontCondensed = bk?.fontSans || 'Oswald';
 
   const w = size?.width ?? 1080;
   const h = size?.height ?? 1350;

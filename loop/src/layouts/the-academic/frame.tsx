@@ -1,13 +1,15 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import type { TheAcademicBrandKit } from './brandkit';
 
 export default function TheAcademicFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'STRATEGY';
   const pageNum = s.footerRight?.replace('PAGE ', '').padStart(2, '0') || '01';
+  const bk = brandKit as TheAcademicBrandKit | undefined;
 
-  const bg = brandKit?.bg || '#FFFFFF';
-  const ink = brandKit?.text || '#0F172A';
+  const bg = bk?.bg || '#FFFFFF';
+  const ink = bk?.text || '#0F172A';
   const crimson = '#A31F34';
   const graphite = '#475569';
   const hairline = '#CBD5E1';

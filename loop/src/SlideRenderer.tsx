@@ -9,7 +9,7 @@ declare global {
     __SLIDE_SCHEME_ID?: string;
     __SLIDE_TEMPLATE_ID?: string;
     __SLIDE_SIZE?: { width: number; height: number };
-    __BRAND_KIT?: { bg?: string; text?: string; accent?: string; fontSerif?: string; fontSans?: string; logoUrl?: string };
+    __BRAND_KIT?: Record<string, string | undefined>;
   }
 }
 
@@ -17,7 +17,7 @@ interface SlideRendererProps {
   slide: Slide;
   scheme: Scheme;
   templateId?: string;
-  brandKit?: Record<string, string>;
+  brandKit?: Record<string, string | undefined>;
   size?: { width: number; height: number };
 }
 
