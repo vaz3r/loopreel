@@ -5,7 +5,17 @@ import Engine from './editor';
 import ExportRenderer from './SlideRenderer';
 
 function App() {
-  if (typeof window.__SLIDE_DATA !== 'undefined') {
+  const [slideData, setSlideData] = React.useState(() => window.__SLIDE_DATA);
+
+  React.useEffect(() => {
+    const handleUpdate = () => {
+      setSlideData(window.__SLIDE_DATA);
+    };
+    window.addEventListener('slide-update', handleUpdate);
+    return () => window.removeEventListener('slide-update', handleUpdate);
+  }, []);
+
+  if (typeof slideData !== 'undefined') {
     return <ExportRenderer />;
   }
   return <Engine />;

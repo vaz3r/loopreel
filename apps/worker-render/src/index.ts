@@ -91,6 +91,19 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
 
     try {
       await page.setViewportSize({ width, height });
+
+      if (totalSlides > 0) {
+        await page.addInitScript({
+          content: `
+            window.__SLIDE_DATA = ${JSON.stringify(payload.slides[0])};
+            window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
+            window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
+            window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
+            ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
+          `,
+        });
+      }
+
       await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
 
       for (let i = 0; i < totalSlides; i++) {
@@ -113,6 +126,15 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
             renderSize: { width, height },
             brandKitVal: payload.meta?.brandKit as Record<string, string | undefined> | undefined,
           },
+        );
+
+        const slideId = (slide as any).id;
+        if (slideId) {
+          await page.waitForSelector(`[data-slide-id="${slideId}"]`, { timeout: 5000 }).catch(() => {});
+        }
+
+        await page.evaluate(
+          () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
         );
 
         await page.evaluate(() => document.fonts.ready);

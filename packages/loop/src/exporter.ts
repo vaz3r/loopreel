@@ -40,6 +40,26 @@ export async function exportCarouselToImages(
 
   const exportedPaths: string[] = [];
   const page = await context.newPage();
+
+  page.on('console', (msg) => console.log(`[BROWSER CONSOLE ${msg.type()}]:`, msg.text()));
+  page.on('pageerror', (err) => console.log('[BROWSER UNCAUGHT ERROR]:', err.message));
+  page.on('response', (res) => {
+    if (res.status() >= 400) {
+      console.log(`[HTTP ${res.status()}]: ${res.url()}`);
+    }
+  });
+
+  if (contract.slides.length > 0) {
+    await page.addInitScript({
+      content: `
+        window.__SLIDE_DATA = ${JSON.stringify(contract.slides[0])};
+        window.__SLIDE_SCHEME_ID = ${JSON.stringify(schemeId)};
+        window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
+        window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
+      `,
+    });
+  }
+
   await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 30000 });
 
   for (let i = 0; i < contract.slides.length; i++) {
@@ -59,6 +79,14 @@ export async function exportCarouselToImages(
         templateIdVal: templateId,
         renderSize: { width, height },
       },
+    );
+
+    if (slide.id) {
+      await page.waitForSelector(`[data-slide-id="${slide.id}"]`, { timeout: 5000 }).catch(() => {});
+    }
+
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
     );
 
     await page.evaluate(() => document.fonts.ready);

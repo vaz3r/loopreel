@@ -68,7 +68,7 @@ export default function ExportRenderer() {
   }
 
   return (
-    <main style={{ margin: 0, padding: 0, background: '#000', width: size.width, height: size.height, overflow: 'hidden' }}>
+    <main data-slide-id={slide.id} style={{ margin: 0, padding: 0, background: '#000', width: size.width, height: size.height, overflow: 'hidden' }}>
       <SlideRenderer slide={slide} scheme={scheme} templateId={templateId} brandKit={brandKit} size={size} />
     </main>
   );

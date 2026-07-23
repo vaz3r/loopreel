@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "exports": {
+    ".": "./src/main.tsx",
     "./contracts": "./src/contracts.ts",
-    "./brandkits": "./src/brandkits.ts"
+    "./brandkits": "./src/brandkits.ts",
+    "./exporter": "./src/exporter.ts",
+    "./vite-server": "./src/vite-server.ts",
+    "./layouts": "./src/layouts/index.ts",
+    "./SlideRenderer": "./src/SlideRenderer.tsx"
   },
   "scripts": {
     "dev": "vite",
