@@ -101,6 +101,7 @@ const PAGINATION_LIMITS: Record<string, { field: string; chunkSize: number }> = 
   sequence: { field: 'items', chunkSize: 4 },
   telemetry: { field: 'stats', chunkSize: 4 },
   timeline: { field: 'events', chunkSize: 4 },
+  table: { field: 'rows', chunkSize: 5 },
 };
 
 export function paginateContract(contract: { slides?: Record<string, any>[] }): { slides: Record<string, any>[] } {

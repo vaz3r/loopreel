@@ -251,13 +251,6 @@ importers:
         version: 5.9.3
 
   packages/errors:
-    dependencies:
-      '@loopreel/db':
-        specifier: workspace:*
-        version: link:../db
-      pino:
-        specifier: ^9.6.0
-        version: 9.14.0
     devDependencies:
       typescript:
         specifier: ^5.7.0

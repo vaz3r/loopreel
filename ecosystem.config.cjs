@@ -1,6 +1,13 @@
 const { resolve } = require('path');
 const LOG_DIR = resolve(__dirname, 'logs');
 
+const localEnv = {
+  DATABASE_URL: 'postgresql://loopreel:loopreel@localhost:5432/loopreel',
+  REDIS_URL: 'redis://localhost:6379',
+  LLM_PROVIDER: 'mock',
+  LOG_LEVEL: 'info',
+};
+
 module.exports = {
   apps: [
     {
@@ -14,7 +21,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'loop-engine-error.log'),
       out_file: resolve(LOG_DIR, 'loop-engine-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
     {
       name: 'api',
@@ -27,7 +34,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'api-error.log'),
       out_file: resolve(LOG_DIR, 'api-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
     {
       name: 'worker-ingest',
@@ -40,7 +47,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'worker-ingest-error.log'),
       out_file: resolve(LOG_DIR, 'worker-ingest-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
     {
       name: 'worker-transcribe',
@@ -53,7 +60,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'worker-transcribe-error.log'),
       out_file: resolve(LOG_DIR, 'worker-transcribe-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
     {
       name: 'worker-structure',
@@ -66,7 +73,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'worker-structure-error.log'),
       out_file: resolve(LOG_DIR, 'worker-structure-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
     {
       name: 'worker-render',
@@ -79,7 +86,7 @@ module.exports = {
       error_file: resolve(LOG_DIR, 'worker-render-error.log'),
       out_file: resolve(LOG_DIR, 'worker-render-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development' },
+      env: { NODE_ENV: 'development', ...localEnv },
     },
   ],
 };

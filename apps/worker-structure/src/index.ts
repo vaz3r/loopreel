@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
-import { getTemplate, getPrompt, autoSelectTemplate } from '@loopreel/loop-bridge';
+import { getTemplate, getPrompt, autoSelectTemplate, paginateContract } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
@@ -24,90 +24,6 @@ function stripMarkdownFences(text: string): string {
   else if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
   if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
   return cleaned.trim();
-}
-
-function chunkArray<T>(arr: T[], size: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size));
-  }
-  return chunks;
-}
-
-function paginateSlides(slides: Record<string, unknown>[]): Record<string, unknown>[] {
-  const result: Record<string, unknown>[] = [];
-
-  for (const slide of slides) {
-    const type = slide['type'] as string;
-
-    if (type === 'sequence') {
-      const items = slide['items'] as unknown[] | undefined;
-      if (items && items.length > 4) {
-        const chunks = chunkArray(items, 4);
-        chunks.forEach((chunk, i) => {
-          result.push({
-            ...slide,
-            items: chunk,
-            tag: `${slide['tag']} [${i + 1}/${chunks.length}]`,
-            footerRight: `${(slide['footerRight'] as string)} (${i + 1}/${chunks.length})`,
-          });
-        });
-        continue;
-      }
-    }
-
-    if (type === 'telemetry') {
-      const stats = slide['stats'] as unknown[] | undefined;
-      if (stats && stats.length > 4) {
-        const chunks = chunkArray(stats, 4);
-        chunks.forEach((chunk, i) => {
-          result.push({
-            ...slide,
-            stats: chunk,
-            tag: `${slide['tag']} [${i + 1}/${chunks.length}]`,
-            footerRight: `${(slide['footerRight'] as string)} (${i + 1}/${chunks.length})`,
-          });
-        });
-        continue;
-      }
-    }
-
-    if (type === 'timeline') {
-      const events = slide['events'] as unknown[] | undefined;
-      if (events && events.length > 4) {
-        const chunks = chunkArray(events, 4);
-        chunks.forEach((chunk, i) => {
-          result.push({
-            ...slide,
-            events: chunk,
-            tag: `${slide['tag']} [${i + 1}/${chunks.length}]`,
-            footerRight: `${(slide['footerRight'] as string)} (${i + 1}/${chunks.length})`,
-          });
-        });
-        continue;
-      }
-    }
-
-    if (type === 'table') {
-      const rows = slide['rows'] as unknown[] | undefined;
-      if (rows && rows.length > 5) {
-        const chunks = chunkArray(rows, 5);
-        chunks.forEach((chunk, i) => {
-          result.push({
-            ...slide,
-            rows: chunk,
-            tag: `${slide['tag']} [${i + 1}/${chunks.length}]`,
-            footerRight: `${(slide['footerRight'] as string)} (${i + 1}/${chunks.length})`,
-          });
-        });
-        continue;
-      }
-    }
-
-    result.push(slide);
-  }
-
-  return result;
 }
 
 async function fetchImagesForSlides(
@@ -211,7 +127,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
     const data = result.data as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
 
-    const paginated = paginateSlides(data.slides);
+    const { slides: paginated } = paginateContract({ slides: data.slides });
 
     const withImages = await fetchImagesForSlides(paginated, jobId);
 

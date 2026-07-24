@@ -15,10 +15,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@loopreel/db": "workspace:*",
-    "pino": "^9.6.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.7.0"
   }

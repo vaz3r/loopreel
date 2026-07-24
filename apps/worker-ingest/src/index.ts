@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { IngestPayload } from '@loopreel/schemas';
-import { handleError } from '@loopreel/errors';
+import { classifyError } from '@loopreel/errors';
 import pino from 'pino';
 import { handleYouTube } from './handlers/youtube.js';
 import { handleBlog } from './handlers/blog.js';
@@ -37,7 +37,19 @@ const worker = createWorker<IngestPayload>('ingest', async (job) => {
       await handleBlog(jobId, sourceUrl, jobLogger);
     }
   } catch (err) {
-    await handleError(jobId, err, jobLogger);
+    const classified = classifyError(err);
+
+    if (classified.type === 'fatal') {
+      jobLogger.error({ err, jobId }, 'Fatal error, marking job failed');
+      await JobRepository.markFailed(jobId, {
+        stage: 'ingesting',
+        reason: classified.type,
+        details: classified.message,
+      });
+    } else {
+      jobLogger.warn({ err, jobId }, 'Transient error, will retry');
+      throw classified;
+    }
   }
 });
 

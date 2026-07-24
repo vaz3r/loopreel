@@ -76,36 +76,10 @@ export async function handleBlog(
 
     if (response.ok) {
       const html = await response.text();
-      const $ = cheerio.load(html);
-
-      $('script, style, nav, header, footer, iframe, noscript').remove();
-
-      const article = $('article').length > 0
-        ? $('article')
-        : $('main').length > 0
-          ? $('main')
-          : $('body');
-
-      const textParts: string[] = [];
-      article.find('h1, h2, h3, h4, p, li, blockquote').each((_i, el) => {
-        const tag = $(el).prop('tagName')?.toLowerCase() ?? '';
-        const text = $(el).text().trim();
-        if (text.length === 0) return;
-
-        if (tag.startsWith('h')) {
-          textParts.push(`\n## ${text}\n`);
-        } else if (tag === 'li') {
-          textParts.push(`- ${text}`);
-        } else if (tag === 'blockquote') {
-          textParts.push(`> ${text}`);
-        } else {
-          textParts.push(text);
-        }
-      });
-
-      rawText = textParts.join('\n\n').trim();
+      rawText = await scrapeWithCheerioHtml(html);
 
       if (rawText.length < 200) {
+        const $ = cheerio.load(html);
         rawText = $.text().trim();
       }
     }

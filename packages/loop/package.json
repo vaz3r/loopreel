@@ -6,6 +6,7 @@
     ".": "./src/main.tsx",
     "./contracts": "./src/contracts.ts",
     "./brandkits": "./src/brandkits.ts",
+    "./engine-utils": "./src/engine-utils.ts",
     "./exporter": "./src/exporter.ts",
     "./vite-server": "./src/vite-server.ts",
     "./layouts": "./src/layouts/index.ts",

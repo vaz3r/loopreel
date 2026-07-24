@@ -1,6 +1,3 @@
-import { JobRepository } from '@loopreel/db';
-import type pino from 'pino';
-
 export type ErrorType = 'transient' | 'fatal';
 
 export interface ClassifiedError extends Error {
@@ -34,24 +31,4 @@ export function classifyError(err: unknown): ClassifiedError {
 
   classified.type = 'fatal';
   return classified;
-}
-
-export async function handleError(
-  jobId: string,
-  err: unknown,
-  logger: pino.Logger,
-): Promise<void> {
-  const classified = classifyError(err);
-
-  if (classified.type === 'fatal') {
-    logger.error({ err, jobId }, 'Fatal error, marking job failed');
-    await JobRepository.markFailed(jobId, {
-      stage: 'ingesting',
-      reason: classified.type,
-      details: classified.message,
-    });
-  } else {
-    logger.warn({ err, jobId }, 'Transient error, will retry');
-    throw classified;
-  }
 }
