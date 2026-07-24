@@ -89,72 +89,68 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
 
     const payload = existing.content_payload as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
     const totalSlides = payload.slides.length;
+    const poolSize = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
 
-    const page = await currentPool.acquire();
+    // Render slides in parallel using one tab per slide (batch by pool size)
+    for (let batchStart = 0; batchStart < totalSlides; batchStart += poolSize) {
+      const batchEnd = Math.min(batchStart + poolSize, totalSlides);
+      const batch = payload.slides.slice(batchStart, batchEnd);
+      const batchSize = batch.length;
 
-    try {
-      await page.setViewportSize({ width, height });
+      const pages = await Promise.all(
+        Array.from({ length: batchSize }, () => currentPool.acquire()),
+      );
 
-      if (totalSlides > 0) {
-        await page.addInitScript({
-          content: `
-            window.__SLIDE_DATA = ${JSON.stringify(payload.slides[0])};
-            window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
-            window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
-            window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
-            ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
-          `,
-        });
-      }
-
-      await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
-
-      for (let i = 0; i < totalSlides; i++) {
-        const slide = payload.slides[i];
-
-        await page.evaluate(
-          ({ slideData, schemeId, templateIdVal, renderSize, brandKitVal }) => {
-            const w = window as any;
-            w.__SLIDE_DATA = slideData;
-            w.__SLIDE_SCHEME_ID = schemeId;
-            w.__SLIDE_TEMPLATE_ID = templateIdVal;
-            w.__SLIDE_SIZE = renderSize;
-            if (brandKitVal) w.__BRAND_KIT = brandKitVal;
-            w.dispatchEvent(new Event('slide-update'));
-          },
-          {
-            slideData: slide,
-            schemeId: template.schemeId,
-            templateIdVal: templateId,
-            renderSize: { width, height },
-            brandKitVal: payload.meta?.brandKit as Record<string, string | undefined> | undefined,
-          },
+      try {
+        // Set viewport and inject slide data for all batch pages in parallel
+        await Promise.all(
+          pages.map(async (page, idx) => {
+            const slide = batch[idx];
+            await page.setViewportSize({ width, height });
+            await page.addInitScript({
+              content: `
+                window.__SLIDE_DATA = ${JSON.stringify(slide)};
+                window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
+                window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
+                window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
+                ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
+              `,
+            });
+            await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
+          }),
         );
 
-        const slideId = (slide as any).id;
-        if (slideId) {
-          await page.waitForSelector(`[data-slide-id="${slideId}"]`, { timeout: 5000 }).catch(() => {});
+        // Screenshot all batch slides in parallel
+        const screenshots = await Promise.all(
+          pages.map(async (page, idx) => {
+            const slide = batch[idx];
+            const slideId = (slide as any).id;
+            if (slideId) {
+              await page.waitForSelector(`[data-slide-id="${slideId}"]`, { timeout: 5000 }).catch(() => {});
+            }
+            await page.evaluate(
+              () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+            );
+            await page.evaluate(() => document.fonts.ready);
+            const screenshot = await page.screenshot({ type: 'png' });
+            return { screenshot, slideIndex: batchStart + idx };
+          }),
+        );
+
+        // Upload screenshots serially (R2 is the bottleneck, not CPU)
+        for (const { screenshot, slideIndex } of screenshots) {
+          const r2Key = await uploadSlide(jobId, slideIndex, screenshot);
+          jobLogger.info({ slideIndex, r2Key, platform }, 'Slide rendered');
+          assets.push({
+            jobId,
+            formatType: 'carousel_slide',
+            slideIndex,
+            storageUrl: r2Key,
+          });
         }
-
-        await page.evaluate(
-          () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
-        );
-
-        await page.evaluate(() => document.fonts.ready);
-        const screenshot = await page.screenshot({ type: 'png' });
-        const r2Key = await uploadSlide(jobId, i, screenshot);
-
-        jobLogger.info({ slideIndex: i, r2Key, platform }, 'Slide rendered');
-
-        assets.push({
-          jobId,
-          formatType: 'carousel_slide',
-          slideIndex: i,
-          storageUrl: r2Key,
-        });
+      } finally {
+        await Promise.all(pages.map((p) => currentPool.release(p)));
       }
-    } finally {
-      currentPool.release(page);
     }
 
     // Generate LinkedIn post text
