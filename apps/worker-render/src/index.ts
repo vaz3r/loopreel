@@ -32,7 +32,7 @@ async function ensurePool() {
 startStaticServer(STATIC_PORT);
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
-const RENDER_CONCURRENCY = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
+const RENDER_CONCURRENCY = 1;
 
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
