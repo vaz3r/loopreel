@@ -91,43 +91,53 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
     const totalSlides = payload.slides.length;
     const poolSize = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
 
-    // Render slides in parallel using one tab per slide (batch by pool size)
+    // Render slides in parallel — each tab loads the app fresh, then we inject slide data via evaluate
     for (let batchStart = 0; batchStart < totalSlides; batchStart += poolSize) {
       const batchEnd = Math.min(batchStart + poolSize, totalSlides);
       const batch = payload.slides.slice(batchStart, batchEnd);
-      const batchSize = batch.length;
 
       const pages = await Promise.all(
-        Array.from({ length: batchSize }, () => currentPool.acquire()),
+        Array.from({ length: batch.length }, () => currentPool.acquire()),
       );
 
       try {
-        // Set viewport and inject slide data for all batch pages in parallel
+        // Load the React app in all tabs in parallel
         await Promise.all(
-          pages.map(async (page, idx) => {
-            const slide = batch[idx];
+          pages.map(async (page) => {
             await page.setViewportSize({ width, height });
-            await page.addInitScript({
-              content: `
-                window.__SLIDE_DATA = ${JSON.stringify(slide)};
-                window.__SLIDE_SCHEME_ID = ${JSON.stringify(template.schemeId)};
-                window.__SLIDE_TEMPLATE_ID = ${JSON.stringify(templateId)};
-                window.__SLIDE_SIZE = ${JSON.stringify({ width, height })};
-                ${payload.meta?.brandKit ? `window.__BRAND_KIT = ${JSON.stringify(payload.meta.brandKit)};` : ''}
-              `,
-            });
             await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
           }),
         );
 
-        // Screenshot all batch slides in parallel
+        // Inject slide data, wait for render, and screenshot all tabs in parallel
         const screenshots = await Promise.all(
           pages.map(async (page, idx) => {
             const slide = batch[idx];
             const slideId = (slide as any).id;
+
+            await page.evaluate(
+              ({ slideData, schemeId, templateIdVal, renderSize, brandKitVal }) => {
+                const w = window as any;
+                w.__SLIDE_DATA = slideData;
+                w.__SLIDE_SCHEME_ID = schemeId;
+                w.__SLIDE_TEMPLATE_ID = templateIdVal;
+                w.__SLIDE_SIZE = renderSize;
+                if (brandKitVal) w.__BRAND_KIT = brandKitVal;
+                w.dispatchEvent(new Event('slide-update'));
+              },
+              {
+                slideData: slide,
+                schemeId: template.schemeId,
+                templateIdVal: templateId,
+                renderSize: { width, height },
+                brandKitVal: payload.meta?.brandKit as Record<string, string | undefined> | undefined,
+              },
+            );
+
             if (slideId) {
               await page.waitForSelector(`[data-slide-id="${slideId}"]`, { timeout: 5000 }).catch(() => {});
             }
+
             await page.evaluate(
               () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
             );
