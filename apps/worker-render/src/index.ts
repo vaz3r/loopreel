@@ -9,6 +9,7 @@ import { getPlatform } from '@loopreel/design';
 import pino from 'pino';
 import { getPool } from './pool/browser-pool.js';
 import { startMetricsServer } from './sidecar.js';
+import { startStaticServer } from './serve-static.js';
 
 const logger = pino({
   level: process.env['LOG_LEVEL'] ?? 'info',
@@ -17,7 +18,8 @@ const logger = pino({
   },
 });
 
-const VITE_SERVER_URL = process.env['VITE_SERVER_URL'] ?? 'http://localhost:5173';
+const STATIC_PORT = 3001;
+const VITE_SERVER_URL = process.env['VITE_SERVER_URL'] ?? `http://localhost:${STATIC_PORT}`;
 let pool: Awaited<ReturnType<typeof getPool>> | null = null;
 
 async function ensurePool() {
@@ -27,6 +29,7 @@ async function ensurePool() {
   return pool;
 }
 
+startStaticServer(STATIC_PORT);
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
 const RENDER_CONCURRENCY = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');

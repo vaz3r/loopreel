@@ -32,6 +32,7 @@ RUN pnpm --filter @loopreel/queue build
 RUN pnpm --filter @loopreel/llm build
 RUN pnpm --filter @loopreel/errors build
 RUN pnpm --filter @loopreel/design build
+RUN pnpm --filter @loopreel/loop build
 RUN pnpm --filter @loopreel/worker-render build
 
 FROM base AS runner
@@ -60,6 +61,7 @@ COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/design/dist ./packages/design/dist
 COPY --from=builder /app/packages/loop-bridge/src ./packages/loop-bridge/src
 COPY --from=builder /app/packages/loop/src ./packages/loop/src
+COPY --from=builder /app/packages/loop/dist ./packages/loop/dist
 COPY --from=builder /app/apps/worker-render/dist ./apps/worker-render/dist
 
 EXPOSE 8004
