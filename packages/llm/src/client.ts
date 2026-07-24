@@ -1,28 +1,28 @@
-const LLM_API_KEY = process.env['LLM_API_KEY'] ?? '';
-const LLM_BASE_URL = process.env['LLM_BASE_URL'] ?? 'https://openrouter.ai/api/v1';
-const LLM_MODEL = process.env['LLM_MODEL'] ?? 'openrouter/free';
-const LLM_TIMEOUT = Number(process.env['LLM_TIMEOUT'] ?? '60000');
-const LLM_MAX_RETRIES = Number(process.env['LLM_MAX_RETRIES'] ?? '3');
-
 export interface LLMClient {
   generateJSON(systemPrompt: string, userText: string): Promise<string>;
 }
 
 class OpenRouterClient implements LLMClient {
   async generateJSON(systemPrompt: string, userText: string): Promise<string> {
+    const apiKey = process.env['LLM_API_KEY'] ?? '';
+    const baseUrl = process.env['LLM_BASE_URL'] ?? 'https://openrouter.ai/api/v1';
+    const model = process.env['LLM_MODEL'] ?? 'openai/gpt-oss-20b:free';
+    const timeout = Number(process.env['LLM_TIMEOUT'] ?? '60000');
+    const maxRetries = Number(process.env['LLM_MAX_RETRIES'] ?? '3');
+
     let lastError: Error | null = null;
 
-    for (let attempt = 0; attempt < LLM_MAX_RETRIES; attempt++) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        const response = await fetch(`${LLM_BASE_URL}/chat/completions`, {
+        const response = await fetch(`${baseUrl}/chat/completions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${LLM_API_KEY}`,
+            Authorization: `Bearer ${apiKey}`,
           },
-          signal: AbortSignal.timeout(LLM_TIMEOUT),
+          signal: AbortSignal.timeout(timeout),
           body: JSON.stringify({
-            model: LLM_MODEL,
+            model,
             messages: [
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userText },
@@ -35,7 +35,7 @@ class OpenRouterClient implements LLMClient {
           throw new Error(`OpenRouter ${response.status}: ${body.slice(0, 200)}`);
         }
 
-        const data = await response.json() as {
+        const data = (await response.json()) as {
           choices: Array<{ message: { content: string } }>;
         };
 
@@ -49,7 +49,7 @@ class OpenRouterClient implements LLMClient {
           lastError.message.includes('ECONNRESET') ||
           lastError.message.includes('timeout');
 
-        if (!isTransient || attempt === LLM_MAX_RETRIES - 1) {
+        if (!isTransient || attempt === maxRetries - 1) {
           throw lastError;
         }
 
@@ -195,8 +195,19 @@ class MockLLMClient implements LLMClient {
   }
 }
 
+class DynamicLLMClient implements LLMClient {
+  private openRouter = new OpenRouterClient();
+  private mock = new MockLLMClient();
+
+  async generateJSON(systemPrompt: string, userText: string): Promise<string> {
+    const provider = process.env['LLM_PROVIDER'] ?? 'openrouter';
+    if (provider === 'openrouter') {
+      return this.openRouter.generateJSON(systemPrompt, userText);
+    }
+    return this.mock.generateJSON(systemPrompt, userText);
+  }
+}
+
 export function createLLMClient(): LLMClient {
-  const provider = process.env['LLM_PROVIDER'] ?? 'mock';
-  if (provider === 'openrouter') return new OpenRouterClient();
-  return new MockLLMClient();
+  return new DynamicLLMClient();
 }
