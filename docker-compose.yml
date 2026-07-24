@@ -128,6 +128,7 @@ services:
       DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
       REDIS_URL: redis://redis:6379
       API_URL: http://api:3000
+      VITE_SERVER_URL: http://vite-render:5173
       R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
       R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
       R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
@@ -135,6 +136,20 @@ services:
       PLAYWRIGHT_POOL_SIZE: ${PLAYWRIGHT_POOL_SIZE:-5}
       METRICS_PORT: ${METRICS_PORT:-8004}
       LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      vite-render:
+        condition: service_started
+
+  vite-render:
+    build:
+      context: .
+      dockerfile: apps/vite-render/Dockerfile
+    ports:
+      - "5173:5173"
     depends_on:
       postgres:
         condition: service_healthy
