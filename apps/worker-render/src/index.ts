@@ -32,7 +32,7 @@ async function ensurePool() {
 startStaticServer(STATIC_PORT);
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
-const RENDER_CONCURRENCY = 1;
+const RENDER_CONCURRENCY = 4;
 
 const worker = createWorker<RenderPayload>('render', async (job) => {
   const { jobId } = job.data;
@@ -100,17 +100,19 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
         Array.from({ length: batch.length }, () => currentPool.acquire()),
       );
 
+      let screenshots: { buffer: Buffer; slideIndex: number }[] = [];
+
       try {
-        // Load the React app in all tabs in parallel
+        // Warm up the React app in each tab (goto only on first use)
         await Promise.all(
           pages.map(async (page) => {
             await page.setViewportSize({ width, height });
-            await page.goto(VITE_SERVER_URL, { waitUntil: 'networkidle', timeout: 30000 });
+            await currentPool.warmup(page, VITE_SERVER_URL);
           }),
         );
 
         // Inject slide data, wait for render, and screenshot all tabs in parallel
-        const screenshots = await Promise.all(
+        screenshots = await Promise.all(
           pages.map(async (page, idx) => {
             const slide = batch[idx];
             const slideId = (slide as any).id;
@@ -142,24 +144,25 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
               () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
             );
             await page.evaluate(() => document.fonts.ready);
-            const screenshot = await page.screenshot({ type: 'png' });
-            return { screenshot, slideIndex: batchStart + idx };
+            const buffer = await page.screenshot({ type: 'png' });
+            return { buffer, slideIndex: batchStart + idx };
           }),
         );
-
-        // Upload screenshots serially (R2 is the bottleneck, not CPU)
-        for (const { screenshot, slideIndex } of screenshots) {
-          const r2Key = await uploadSlide(jobId, slideIndex, screenshot);
-          jobLogger.info({ slideIndex, r2Key, platform }, 'Slide rendered');
-          assets.push({
-            jobId,
-            formatType: 'carousel_slide',
-            slideIndex,
-            storageUrl: r2Key,
-          });
-        }
       } finally {
+        // Release tabs immediately — don't hold them during uploads
         await Promise.all(pages.map((p) => currentPool.release(p)));
+      }
+
+      // Upload screenshots after tabs are released (R2 is slow, don't block the pool)
+      for (const { buffer, slideIndex } of screenshots) {
+        const r2Key = await uploadSlide(jobId, slideIndex, buffer);
+        jobLogger.info({ slideIndex, r2Key, platform }, 'Slide rendered');
+        assets.push({
+          jobId,
+          formatType: 'carousel_slide',
+          slideIndex,
+          storageUrl: r2Key,
+        });
       }
     }
 

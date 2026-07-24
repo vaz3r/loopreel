@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
+    mem_limit: 2g
     ports:
       - "5432:5432"
     environment:
@@ -17,6 +18,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    mem_limit: 512m
     ports:
       - "6379:6379"
     volumes:
@@ -29,6 +31,7 @@ services:
 
   faster-whisper:
     image: onerahmet/openai-whisper-asr-webservice:latest
+    mem_limit: 2g
     ports:
       - "8000:8000"
     environment:
@@ -39,6 +42,7 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+    mem_limit: 500m
     ports:
       - "3000:3000"
     environment:
@@ -63,6 +67,7 @@ services:
     build:
       context: .
       dockerfile: apps/worker-ingest/Dockerfile
+    mem_limit: 500m
     environment:
       DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
       REDIS_URL: redis://redis:6379
@@ -81,6 +86,7 @@ services:
     build:
       context: .
       dockerfile: apps/worker-transcribe/Dockerfile
+    mem_limit: 500m
     environment:
       DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
       REDIS_URL: redis://redis:6379
@@ -102,6 +108,7 @@ services:
     build:
       context: .
       dockerfile: apps/worker-structure/Dockerfile
+    mem_limit: 500m
     environment:
       DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
       REDIS_URL: redis://redis:6379
@@ -122,8 +129,7 @@ services:
     build:
       context: .
       dockerfile: apps/worker-render/Dockerfile
-    ports:
-      - "8004:8004"
+    mem_limit: 10g
     environment:
       DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
       REDIS_URL: redis://redis:6379
@@ -132,7 +138,7 @@ services:
       R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
       R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
       R2_BUCKET_NAME: ${R2_BUCKET_NAME:-loopreel}
-      PLAYWRIGHT_POOL_SIZE: ${PLAYWRIGHT_POOL_SIZE:-5}
+      PLAYWRIGHT_POOL_SIZE: ${PLAYWRIGHT_POOL_SIZE:-20}
       METRICS_PORT: ${METRICS_PORT:-8004}
       LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:

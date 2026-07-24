@@ -8,7 +8,7 @@ const logger = pino({
   },
 });
 
-const POOL_SIZE = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
+const POOL_SIZE = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '20');
 const MAX_USES_PER_PAGE = 100;
 
 interface PooledPage {
@@ -16,6 +16,7 @@ interface PooledPage {
   uses: number;
   index: number;
   inUse: boolean;
+  loaded: boolean;
 }
 
 export class BrowserPool {
@@ -31,7 +32,13 @@ export class BrowserPool {
   async init(): Promise<void> {
     this.browser = await chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--force-device-scale-factor=2'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--force-device-scale-factor=2',
+      ],
     });
 
     for (let i = 0; i < POOL_SIZE; i++) {
@@ -39,7 +46,7 @@ export class BrowserPool {
         deviceScaleFactor: 2,
       });
       const page = await context.newPage();
-      this.pages.push({ page, uses: 0, index: i, inUse: false });
+      this.pages.push({ page, uses: 0, index: i, inUse: false, loaded: false });
     }
 
     logger.info({ poolSize: POOL_SIZE }, 'Browser pool initialized');
@@ -108,6 +115,14 @@ export class BrowserPool {
     }
   }
 
+  async warmup(page: Page, url: string): Promise<void> {
+    const pooled = this.pages.find((p) => p.page === page);
+    if (!pooled) throw new Error('Unknown page');
+    if (pooled.loaded) return;
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+    pooled.loaded = true;
+  }
+
   private async replacePage(index: number): Promise<void> {
     if (!this.browser) return;
     const old = this.pages[index];
@@ -118,7 +133,7 @@ export class BrowserPool {
       deviceScaleFactor: 2,
     });
     const newPage = await context.newPage();
-    this.pages[index] = { page: newPage, uses: 0, index, inUse: false };
+    this.pages[index] = { page: newPage, uses: 0, index, inUse: false, loaded: false };
     logger.debug({ index }, 'Page replaced');
   }
 

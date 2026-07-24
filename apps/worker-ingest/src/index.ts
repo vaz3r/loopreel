@@ -51,7 +51,7 @@ const worker = createWorker<IngestPayload>('ingest', async (job) => {
       throw classified;
     }
   }
-});
+}, { concurrency: 3 });
 
 worker.on('failed', (job, err) => {
   logger.error({ jobId: job?.id, err }, 'Worker failed');

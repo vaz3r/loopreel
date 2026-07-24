@@ -156,7 +156,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       details: classified.message,
     });
   }
-});
+}, { concurrency: 5 });
 
 worker.on('failed', (job, err) => {
   logger.error({ jobId: job?.id, err }, 'Worker failed');
