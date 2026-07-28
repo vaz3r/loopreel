@@ -26,6 +26,18 @@ export interface CreateJobParams {
   brandKit?: Record<string, string>;
 }
 
+export interface JobListItem {
+  id: string;
+  source_url: string;
+  source_type: SourceType;
+  status: JobStatus;
+  template_id: string;
+  platform: string;
+  slide_count: number | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export class JobRepository {
   static async create(params: CreateJobParams): Promise<string> {
     const { rows } = await pool.query<{ id: string }>(
@@ -100,5 +112,61 @@ export class JobRepository {
        WHERE id = $2`,
       [JSON.stringify(errorPayload), jobId],
     );
+  }
+
+  static async findAll(params: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    search?: string;
+  } = {}): Promise<{ jobs: JobListItem[]; total: number }> {
+    const page = params.page ?? 1;
+    const limit = Math.min(params.limit ?? 20, 100);
+    const offset = (page - 1) * limit;
+
+    const conditions: string[] = [];
+    const values: unknown[] = [];
+    let idx = 1;
+
+    if (params.status) {
+      conditions.push(`status = $${idx++}`);
+      values.push(params.status);
+    }
+    if (params.search) {
+      conditions.push(`source_url ILIKE $${idx++}`);
+      values.push(`%${params.search}%`);
+    }
+
+    const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countResult = await pool.query<{ count: string }>(
+      `SELECT COUNT(*) FROM generation_jobs ${where}`,
+      values,
+    );
+    const total = Number(countResult.rows[0]!.count);
+
+    const dataResult = await pool.query(
+      `SELECT id, source_url, source_type, status, template_id, platform, slide_count, created_at, updated_at
+       FROM generation_jobs ${where}
+       ORDER BY created_at DESC
+       LIMIT $${idx++} OFFSET $${idx++}`,
+      [...values, limit, offset],
+    );
+
+    return { jobs: dataResult.rows as JobListItem[], total };
+  }
+
+  static async countByStatus(): Promise<Record<string, number>> {
+    const { rows } = await pool.query<{ status: string; count: string }>(
+      `SELECT status, COUNT(*) as count FROM generation_jobs GROUP BY status`,
+    );
+    const counts: Record<string, number> = {};
+    let total = 0;
+    for (const row of rows) {
+      counts[row.status] = Number(row.count);
+      total += Number(row.count);
+    }
+    counts.total = total;
+    return counts;
   }
 }

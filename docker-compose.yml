@@ -147,6 +147,16 @@ services:
       redis:
         condition: service_healthy
 
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    mem_limit: 128m
+    ports:
+      - "5175:80"
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
   redis_data:

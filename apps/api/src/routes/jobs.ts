@@ -71,6 +71,57 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
     return reply.status(201).send({ jobId, status: 'queued' });
   });
 
+  app.get('/api/jobs', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          page: { type: 'integer', minimum: 1, default: 1 },
+          limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
+          status: { type: 'string', enum: ['queued', 'ingesting', 'transcribing', 'structuring', 'rendering', 'complete', 'failed'] },
+          search: { type: 'string' },
+        },
+      },
+    },
+  }, async (request, reply) => {
+    const { page, limit, status, search } = request.query as {
+      page?: number;
+      limit?: number;
+      status?: string;
+      search?: string;
+    };
+
+    const result = await JobRepository.findAll({ page, limit, status, search });
+
+    return reply.send({
+      jobs: result.jobs.map((j) => ({
+        id: j.id,
+        sourceUrl: j.source_url,
+        sourceType: j.source_type,
+        status: j.status,
+        templateId: j.template_id,
+        platform: j.platform,
+        slideCount: j.slide_count,
+        createdAt: j.created_at,
+        updatedAt: j.updated_at,
+      })),
+      total: result.total,
+      page: page ?? 1,
+      limit: limit ?? 20,
+    });
+  });
+
+  app.get('/api/stats', async (_request, reply) => {
+    const counts = await JobRepository.countByStatus();
+    return reply.send({
+      total: counts.total ?? 0,
+      queued: counts.queued ?? 0,
+      processing: (counts.ingesting ?? 0) + (counts.transcribing ?? 0) + (counts.structuring ?? 0) + (counts.rendering ?? 0),
+      complete: counts.complete ?? 0,
+      failed: counts.failed ?? 0,
+    });
+  });
+
   app.get('/api/jobs/:id', {
     schema: {
       params: {
@@ -93,12 +144,16 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
 
     return reply.send({
       id: job.id,
+      sourceUrl: job.source_url,
+      sourceType: job.source_type,
       status: job.status,
       templateId: job.template_id,
       platform: job.platform,
       errorPayload: job.error_payload,
       contentPayload: job.content_payload,
       slideCount: job.slide_count,
+      createdAt: job.created_at,
+      updatedAt: job.updated_at,
       assets: assets.map((a) => ({
         id: a.id,
         formatType: a.format_type,
