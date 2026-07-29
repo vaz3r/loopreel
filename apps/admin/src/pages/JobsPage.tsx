@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useJobs } from '@/api/hooks';
+import { Search, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { useJobs, useRetryJob } from '@/api/hooks';
 import { StatusBadge } from '@/components/StatusBadge';
 import { PLATFORM_LABELS } from '@/lib/constants';
 import { Link } from 'react-router-dom';
@@ -27,6 +27,7 @@ export function JobsPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+  const retryMutation = useRetryJob();
 
   const { data, isLoading } = useJobs({ page, status: statusFilter || undefined, search });
 
@@ -124,9 +125,21 @@ export function JobsPage() {
                     {new Date(job.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-2.5">
-                    <Link to={`/jobs/${job.id}`} className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors">
-                      →
-                    </Link>
+                    <div className="flex items-center justify-end gap-1.5">
+                      {job.status === 'failed' && (
+                        <button
+                          onClick={() => retryMutation.mutate(job.id)}
+                          disabled={retryMutation.isPending}
+                          className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors p-1"
+                          title="Retry job"
+                        >
+                          <RotateCcw className="h-3 w-3" />
+                        </button>
+                      )}
+                      <Link to={`/jobs/${job.id}`} className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors">
+                        →
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))

@@ -103,6 +103,11 @@ export const api = {
   downloadJob: (id: string, format: 'slides' | 'linkedin' | 'twitter' | 'all' = 'all') =>
     request<DownloadResponse>(`/jobs/${id}/download?format=${format}`),
 
+  retryJob: (id: string) =>
+    request<{ jobId: string; status: string }>(`/jobs/${id}/retry`, {
+      method: 'POST',
+    }),
+
   getStats: () => request<StatsResponse>('/stats'),
 
   purgeAll: () =>

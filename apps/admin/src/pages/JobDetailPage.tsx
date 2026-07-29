@@ -1,22 +1,33 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Download, ClipboardCopy, Check } from 'lucide-react';
-import { useJob } from '@/api/hooks';
+import { ArrowLeft, Download, ClipboardCopy, Check, RotateCcw } from 'lucide-react';
+import { useJob, useRetryJob } from '@/api/hooks';
 import { StatusTimeline } from '@/components/StatusTimeline';
 import { SlidePreview } from '@/components/SlidePreview';
 import { PLATFORM_LABELS } from '@/lib/constants';
 
 export function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data: job, isLoading, error } = useJob(id!);
+  const retryMutation = useRetryJob();
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   function copyToClipboard(text: string, label: string) {
     navigator.clipboard.writeText(text);
     setCopiedText(label);
     setTimeout(() => setCopiedText(null), 2000);
+  }
+
+  function handleRetry() {
+    if (!id) return;
+    retryMutation.mutate(id, {
+      onSuccess: () => {
+        navigate('/jobs');
+      },
+    });
   }
 
   if (isLoading) {
@@ -62,6 +73,16 @@ export function JobDetailPage() {
             </a>
           </Button>
         )}
+        {job.status === 'failed' && (
+          <Button
+            onClick={handleRetry}
+            disabled={retryMutation.isPending}
+            className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium"
+          >
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            {retryMutation.isPending ? 'Retrying...' : 'Retry'}
+          </Button>
+        )}
       </div>
 
       <StatusTimeline job={job} />
@@ -79,6 +100,26 @@ export function JobDetailPage() {
           </div>
         ))}
       </div>
+
+      {job.status === 'failed' && job.errorPayload && (
+        <div className="rounded-lg border border-border bg-card p-5">
+          <h3 className="text-[13px] font-medium text-text-secondary mb-3">Error Details</h3>
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <span className="text-[12px] text-text-quaternary font-medium w-16">Stage</span>
+              <span className="text-[12px] text-text-tertiary">{job.errorPayload.stage}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-[12px] text-text-quaternary font-medium w-16">Reason</span>
+              <span className="text-[12px] text-text-tertiary">{job.errorPayload.reason}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-[12px] text-text-quaternary font-medium w-16">Details</span>
+              <span className="text-[12px] text-text-tertiary break-all">{job.errorPayload.details}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       <SlidePreview job={job} />
 

@@ -46,3 +46,19 @@ export function useCreateJob() {
     },
   });
 }
+
+export function useRetryJob() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.retryJob(id),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ['jobs'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
+      qc.invalidateQueries({ queryKey: ['job', data.jobId] });
+      toast.success('Job restarted');
+    },
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
+  });
+}
