@@ -1,29 +1,30 @@
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PlusCircle, BarChart3, Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useStats, useJobs } from '@/api/hooks';
 import { JobCard } from '@/components/JobCard';
+
+const statLabels = ['Total Jobs', 'Processing', 'Complete', 'Failed'] as const;
 
 export function DashboardPage() {
   const { data: stats, isLoading: statsLoading } = useStats();
   const { data: jobsData, isLoading: jobsLoading } = useJobs({ limit: 10 });
 
-  const statCards = [
-    { label: 'Total Jobs', value: stats?.total ?? 0, icon: BarChart3, color: 'text-primary' },
-    { label: 'Processing', value: stats?.processing ?? 0, icon: Loader2, color: 'text-blue-500' },
-    { label: 'Complete', value: stats?.complete ?? 0, icon: CheckCircle2, color: 'text-emerald-500' },
-    { label: 'Failed', value: stats?.failed ?? 0, icon: XCircle, color: 'text-red-500' },
+  const statValues = [
+    stats?.total ?? 0,
+    stats?.processing ?? 0,
+    stats?.complete ?? 0,
+    stats?.failed ?? 0,
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <Button asChild>
+        <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">Dashboard</h1>
+        <Button asChild className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium">
           <Link to="/create">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
             New Job
           </Link>
         </Button>
@@ -32,59 +33,44 @@ export function DashboardPage() {
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {statsLoading
           ? Array.from({ length: 4 }).map((_, i) => (
-              <Card key={i}>
-                <CardContent className="p-4">
-                  <Skeleton className="h-4 w-20 mb-2" />
-                  <Skeleton className="h-8 w-12" />
-                </CardContent>
-              </Card>
+              <div key={i} className="rounded-lg border border-border bg-card p-5">
+                <Skeleton className="h-3 w-16 mb-3 bg-surface-2" />
+                <Skeleton className="h-8 w-10 bg-surface-2" />
+              </div>
             ))
-          : statCards.map((stat) => (
-              <Card key={stat.label}>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                    <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                    {stat.label}
-                  </div>
-                  <p className="text-2xl font-bold mt-1">{stat.value}</p>
-                </CardContent>
-              </Card>
+          : statLabels.map((label, i) => (
+              <div key={label} className="rounded-lg border border-border bg-card p-5">
+                <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">{label}</p>
+                <p className="text-[28px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{statValues[i]}</p>
+              </div>
             ))}
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Recent Jobs</h2>
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/jobs">
-              View all
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[13px] font-medium text-text-secondary">Recent Jobs</h2>
+          <Link to="/jobs" className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors">
+            View all →
+          </Link>
         </div>
 
         {jobsLoading ? (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {Array.from({ length: 3 }).map((_, i) => (
-              <Card key={i}>
-                <CardContent className="p-4">
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-3 w-1/2" />
-                </CardContent>
-              </Card>
+              <div key={i} className="rounded-lg border border-border bg-card p-3">
+                <Skeleton className="h-4 w-full bg-surface-2" />
+              </div>
             ))}
           </div>
         ) : jobsData?.jobs.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground mb-4">No jobs yet</p>
-              <Button asChild>
-                <Link to="/create">Create your first job</Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="rounded-lg border border-border bg-card p-12 text-center">
+            <p className="text-[13px] text-text-tertiary">No jobs yet.</p>
+            <Link to="/create" className="text-[13px] text-text-secondary hover:text-text-primary transition-colors mt-1 inline-block">
+              Create your first job →
+            </Link>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {jobsData?.jobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
