@@ -174,9 +174,11 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     const template = getTemplate(targetTemplateId);
 
     if (useMultiPhase) {
+      const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
       const result = await generateSlidesMultiPhase(rawText, template.schema, {
         llm,
         templateHint: targetTemplateId,
+        brandKit,
         onProgress: (phase, detail) => {
           jobLogger.info({ phase, detail }, 'Multi-phase progress');
         },

@@ -7,13 +7,13 @@ import { JobDetailPage } from './pages/JobDetailPage';
 
 export function App() {
   return (
-    <Layout>
-      <Routes>
+    <Routes>
+      <Route element={<Layout />}>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/create" element={<CreateJobPage />} />
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/jobs/:id" element={<JobDetailPage />} />
-      </Routes>
-    </Layout>
+      </Route>
+    </Routes>
   );
 }

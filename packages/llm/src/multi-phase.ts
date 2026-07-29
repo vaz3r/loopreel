@@ -1,145 +1,153 @@
 import { z } from 'zod';
-import { parseXml, xmlElementToObjects } from './xml-parser.js';
+import { parseXml } from './xml-parser.js';
 
-const SLIDE_TYPE_CONSTRAINTS: Record<string, string> = {
-  cover: `id: REQUIRED (string), type: "cover", tag?: string, headline: REQUIRED (max 80 chars), subheadline?: string (max 200), authorName?: string, authorRole?: string, footerLeft?: string, footerRight?: string`,
-  sequence: `id: REQUIRED (string), type: "sequence", tag?: string, headline: REQUIRED (max 60 chars), items: REQUIRED array of {num: string, title: string (max 50), desc: string (max 200)}, footerLeft?: string, footerRight?: string`,
-  'image-split': `id: REQUIRED (string), type: "image-split", tag?: string, headline: REQUIRED (max 60 chars), bodyText?: string (max 400), imageUrl?: string (URL), credit?: string, footerLeft?: string, footerRight?: string`,
-  telemetry: `id: REQUIRED (string), type: "telemetry", tag?: string, headline: REQUIRED (max 60 chars), stats: REQUIRED array of {value: string, unit?: string, label: string (max 150), color?: "green"|"red"|"amber"|"blue"}, footerLeft?: string, footerRight?: string`,
-  interview: `id: REQUIRED (string), type: "interview", tag?: string, headline: REQUIRED (max 60 chars), question: REQUIRED (max 200), answer: REQUIRED (max 600), respondentName?: string, respondentRole?: string, footerLeft?: string, footerRight?: string`,
-  quadrant: `id: REQUIRED (string), type: "quadrant", tag?: string, headline: REQUIRED (max 60 chars), topLeft: REQUIRED {title: string (max 40), desc: string (max 150)}, topRight: REQUIRED, bottomLeft: REQUIRED, bottomRight: REQUIRED, topLabel?: string, bottomLabel?: string, leftLabel?: string, rightLabel?: string, highlight?: "topLeft"|"topRight"|"bottomLeft"|"bottomRight", footerLeft?: string, footerRight?: string`,
-  'case-study': `id: REQUIRED (string), type: "case-study", tag?: string, headline: REQUIRED (max 60 chars), stages: REQUIRED array of {label: string, title: string (max 50), desc: string (max 250), highlighted: "true"|"false"}, footerLeft?: string, footerRight?: string`,
-  'myth-fact': `id: REQUIRED (string), type: "myth-fact", tag?: string, headline: REQUIRED (max 60 chars), myth: REQUIRED (max 300), fact: REQUIRED (max 300), footerLeft?: string, footerRight?: string`,
-  'resource-grid': `id: REQUIRED (string), type: "resource-grid", tag?: string, headline: REQUIRED (max 60 chars), items: REQUIRED array of {title: string (max 40), desc: string (max 150)}, footerLeft?: string, footerRight?: string`,
-  timeline: `id: REQUIRED (string), type: "timeline", tag?: string, headline: REQUIRED (max 60 chars), events: REQUIRED array of {date: string, title: string (max 50), desc: string (max 200), highlight: "true"|"false"}, footerLeft?: string, footerRight?: string`,
-  quote: `id: REQUIRED (string), type: "quote", tag?: string, quote: REQUIRED (max 500), author?: string, role?: string, footerLeft?: string, footerRight?: string`,
-  cta: `id: REQUIRED (string), type: "cta", tag?: string, headline: REQUIRED (max 60 chars), subtext?: string (max 200), actionLabel?: string, socialHandle?: string, footerLeft?: string, footerRight?: string`,
-};
+// ─── Phase 1: Summarise ──────────────────────────────────────────────────────
 
-const EXTRACTION_PROMPT = `You are an expert content analyst. Extract the essential content from this article into a structured brief for a social media carousel.
-
-## Input
-The full article text will be provided as user content.
+const EXTRACTION_PROMPT = `You are an expert content analyst. Summarise the article into a structured content brief for a social media carousel.
 
 ## Output Format
-Return a single <contentBrief> element with these fields as child elements:
+
+Return a single <contentBrief> element:
 
 <contentBrief>
   <title>The article title</title>
   <oneLiner>One sentence summary of the article's core argument (max 25 words)</oneLiner>
-  <keyPoints>
+  <keyInsights>
     <point>The first key insight or argument</point>
     <point>The second key insight</point>
     <point>The third key insight</point>
     <point>The fourth key insight</point>
     <point>The fifth key insight</point>
-  </keyPoints>
+  </keyInsights>
   <quotes>
     <quote text="Exact direct quote from the article — word for word" author="Person Name" role="Their Title" />
   </quotes>
   <counterpoints>
-    <point>A common objection or alternative view mentioned</point>
+    <point>A common objection or alternative view mentioned in the article</point>
   </counterpoints>
-  <dataPoints>
+  <hardData>
     <point>A specific number, percentage, dollar amount, or measurable fact from the article</point>
-  </dataPoints>
+  </hardData>
   <hasRealNumbers>true or false — does the article contain ACTUAL hard statistics (percentages, dollar amounts, specific counts)? Not general references to numbers.</hasRealNumbers>
-  <companies>
-    <company name="Company Name" role="What they did or represent" />
-  </companies>
-  <conclusion>The article's conclusion or call to action</conclusion>
+  <people>
+    <person name="Person Name" role="Their role or title in the article" />
+  </people>
+  <tone>Describe the article's tone in one word (e.g., analytical, opinionated, newsy, academic, provocative)</tone>
+  <readingLevel>professional | general | technical</readingLevel>
 </contentBrief>
 
 ## Rules
-- Extract 5-7 key points that capture the article's core argument
+- Extract 5-7 keyInsights that capture the article's core argument
 - Include direct quotes ONLY if the article has notable ones with named attribution
-- Capture counterpoints or alternative views
-- dataPoints: ONLY include actual numbers, percentages, dollar amounts, or measurable facts. Do NOT include opinions, advice, or qualitative statements as data points. If the article has no numbers, leave <dataPoints> empty.
+- hardData: ONLY include actual numbers, percentages, dollar amounts, or measurable facts. Do NOT include opinions, advice, or qualitative statements. If the article has no numbers, leave <hardData> empty.
 - hasRealNumbers: Answer "true" ONLY if the article contains specific, citable statistics. "2-3 percent" mentioned casually is NOT a real statistic. "42% year-over-year growth" IS a real statistic. When in doubt, answer "false".
-- Note companies or people mentioned
+- counterpoints: Capture objections, "but actually" moments, or myths the article debunks
 - Do NOT invent content not in the article
 - Keep each point concise (1-2 sentences)
-- Return ONLY the XML element, no markdown fences`;
+- Return ONLY the XML, no markdown fences, no explanation`;
 
-function getSlidePrompt(slideType: string, briefXml: string): { system: string; user: string } {
-  const constraints = SLIDE_TYPE_CONSTRAINTS[slideType]!;
+// ─── Phase 2: Configure ──────────────────────────────────────────────────────
 
-  const examples: Record<string, string> = {
-    cover: `<slide type="cover" id="slide-01" tag="MARKET DATA" headline="Nobody tells you this about AI" subheadline="$184B in enterprise spending — and most founders are missing it." authorName="Terminal Intelligence" footerLeft="ANALYSIS" footerRight="PAGE 01" />`,
-    telemetry: `<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Growth Metrics" footerLeft="METRICS" footerRight="PAGE 01">
-  <stats>
-    <stat value="42" unit="%" label="Year-over-year growth" color="green" />
-    <stat value="184" unit="B" label="Global market size by 2026" color="blue" />
-  </stats>
-</slide>`,
-    sequence: `<slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Why most founders fail" footerLeft="ANALYSIS" footerRight="PAGE 02">
-  <items>
-    <item num="1" title="Chasing 'sexy'" desc="Ignore what's trendy. Focus on what's missing." />
-    <item num="2" title="Forcing ideas" desc="You're building fake solutions for non-existent problems." />
-    <item num="3" title="Ignoring the schlep" desc="The boring work = the billion-dollar opportunity." />
-  </items>
-</slide>`,
-    'myth-fact': `<slide type="myth-fact" id="slide-01" tag="ANALYSIS" headline="The competition myth" myth="You need a unique idea to win." fact="The best ideas aren't unique. They're executed well." footerLeft="RESEARCH" footerRight="PAGE 01" />`,
-    interview: `<slide type="interview" id="slide-01" tag="EXPERT VOICE" headline="Central Bank Perspective" question="What does the current rate environment mean for emerging markets?" answer="We are seeing a structural shift. Countries with dollar-denominated debt face significant refinancing risk." respondentName="Dr. Sarah Chen" respondentRole="IMF Chief Economist" footerLeft="INTERVIEW" footerRight="PAGE 01" />`,
-    quadrant: `<slide type="quadrant" id="slide-01" tag="ANALYSIS" headline="Risk Matrix" footerLeft="FRAMEWORK" footerRight="PAGE 01">
-  <topLeft title="High Yield" desc="Corporate bonds with elevated default risk" />
-  <topRight title="Investment Grade" desc="Stable returns with lower volatility" />
-  <bottomLeft title="Emerging Markets" desc="Currency and sovereign risk exposure" />
-  <bottomRight title="Private Credit" desc="Illiquid but higher yield potential" />
-</slide>`,
-    'case-study': `<slide type="case-study" id="slide-01" tag="CASE STUDY" headline="Apple's Market Entry" footerLeft="ANALYSIS" footerRight="PAGE 01">
-  <stages>
-    <stage label="Step 1" title="Research" desc="Deep user research into mobile phone market" highlighted="true" />
-    <stage label="Step 2" title="Design" desc="Minimalist design philosophy applied to phone" highlighted="false" />
-    <stage label="Step 3" title="Launch" desc="iPhone launches and disrupts Nokia" highlighted="true" />
-  </stages>
-</slide>`,
-    'resource-grid': `<slide type="resource-grid" id="slide-01" tag="RESOURCES" headline="Essential Reading" footerLeft="RESOURCES" footerRight="PAGE 01">
-  <items>
-    <item title="Book A" desc="Key resource description" />
-    <item title="Book B" desc="Another important resource" />
-  </items>
-</slide>`,
-    timeline: `<slide type="timeline" id="slide-01" tag="TIMELINE" headline="Key Milestones" footerLeft="TIMELINE" footerRight="PAGE 01">
-  <events>
-    <event date="2020" title="Started" desc="Initial research phase" highlight="true" />
-    <event date="2022" title="Launched" desc="Product launch" highlight="true" />
-  </events>
-</slide>`,
-    quote: `<slide type="quote" id="slide-01" tag="THESIS" quote="The best way to predict the future is to invent it." author="Alan Kay" role="Computer Scientist" footerLeft="REFERENCE" footerRight="PAGE 01" />`,
-    cta: `<slide type="cta" id="slide-01" tag="CONCLUSION" headline="Your turn" subtext="Comment your biggest frustration. Let's solve it together." actionLabel="Subscribe" socialHandle="@terminal" footerLeft="END" footerRight="PAGE 01" />`,
-  };
+const TEMPLATE_STYLES = [
+  { id: 'paper-of-record', name: 'The Paper of Record', aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.' },
+  { id: 'the-globalist', name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.' },
+  { id: 'the-terminal', name: 'The Terminal', aesthetics: 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative.' },
+  { id: 'the-curator', name: 'The Curator', aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.' },
+  { id: 'the-academic', name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured.' },
+];
 
+function getConfigPrompt(briefXml: string, brandKit?: Record<string, string | undefined>): { system: string; user: string } {
   return {
-    system: `You are a slide copywriter for "The Terminal" — a Bloomberg-style data intelligence platform. You write punchy, social-media-ready copy that stops the scroll.
-
-Generate exactly ONE slide element for a social media carousel.
+    system: `You are a carousel strategist for a social media platform. Given a content brief, select the best template and design the carousel's narrative arc.
 
 ## Content Brief
-The following XML contains the extracted content from the source article. Use ONLY facts from this brief.
-
 ${briefXml}
 
-## Slide Type to Generate: ${slideType}
+## Brand Kit
+${brandKit ? `Background: ${brandKit.bg ?? 'not set'}
+Text: ${brandKit.text ?? 'not set'}
+Accent: ${brandKit.accent ?? 'not set'}
+Font: ${brandKit.fontSerif ?? brandKit.fontSans ?? brandKit.fontMono ?? 'not set'}` : 'Use default brand colors for the selected template.'}
 
-## Schema Constraints for This Slide Type
-${constraints}
+## Available Templates
 
-## CRITICAL: XML Child Element Format
-For fields that are ARRAYS (like stats, items, events, stages), you MUST use nested child elements — NOT stringified JSON in attributes.
-
-CORRECT format for telemetry:
-<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Metrics" footerLeft="METRICS" footerRight="PAGE 01">
-  <stats>
-    <stat value="42" unit="%" label="Year-over-year growth" color="green" />
-  </stats>
-</slide>
-
-WRONG (do NOT do this):
-<slide type="telemetry" id="slide-01" stats="[{value: '42'}]" ... />
+${TEMPLATE_STYLES.map(t => `### ${t.id}
+Name: ${t.name}
+Aesthetics: ${t.aesthetics}`).join('\n\n')}
 
 ## Output Format
-Return a single <slide> element with type="${slideType}". Include exactly: id="slide-01", tag (short category), type, footerLeft, footerRight ("PAGE 01"), and all required fields for this slide type.
+
+Return a single <slideConfig> element:
+
+<slideConfig>
+  <templateId>the-template-id</templateId>
+  <narrativeArc>Describe the story this carousel tells in 2-3 sentences. What journey does the reader go on?</narrativeArc>
+  <slidePlan>
+    <slide type="cover" purpose="Hook the reader, set the tone" />
+    <slide type="sequence" purpose="Explain the core argument or framework" />
+    <slide type="myth-fact" purpose="Challenge a common misconception" />
+    <slide type="quote" purpose="The article's most memorable quote" />
+    <slide type="cta" purpose="Drive the reader to take action" />
+  </slidePlan>
+  <slideCount>6</slideCount>
+  <copyVoice>
+    <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Use curiosity gaps and pattern interrupts.</rule>
+    <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Shocking, Hidden, Reverse</rule>
+    <rule>Max 5 words per line. No sentences. Fragments only.</rule>
+    <rule>Active voice only. No passive constructions.</rule>
+    <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
+    <rule>Use "YOU" language. Make it personal.</rule>
+    <rule>End EVERY slide with emotional punch, not information.</rule>
+    <rule>Write like you're talking to a friend, not writing a report.</rule>
+  </copyVoice>
+</slideConfig>
+
+## Rules
+1. Choose the template that best fits the article's topic and tone.
+2. Plan 5-7 slides. Start with cover, end with CTA. Vary types.
+3. If hasRealNumbers="false", do NOT include telemetry. Use sequence, quote, myth-fact instead.
+4. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
+5. copyVoice: These are the COPYWRITING rules for all slides. Every slide must follow these rules.
+6. Return ONLY the XML, no markdown fences, no explanation.`,
+    user: 'Design the carousel configuration for this content brief.',
+  };
+}
+
+// ─── Phase 3: Generate ───────────────────────────────────────────────────────
+
+function getGeneratePrompt(briefXml: string, configXml: string, templateAesthetics: string): { system: string; user: string } {
+  return {
+    system: `You are a social media carousel designer. Generate a complete carousel of slides for a social media post.
+
+## Template Aesthetics
+${templateAesthetics}
+
+## Carousel Configuration
+${configXml}
+
+## Content Brief
+${briefXml}
+
+## Output Format
+
+Return a single <presentation> element containing all slides.
+
+## Slide Type Constraints
+
+cover: id, tag?, headline (max 40), subheadline (max 80), authorName?, authorRole?, footerLeft?, footerRight?
+sequence: id, tag?, headline (max 40), items (array of {num, title (max 20), desc (max 60)}), footerLeft?, footerRight?
+myth-fact: id, tag?, headline (max 40), myth (max 100), fact (max 100), footerLeft?, footerRight?
+quote: id, tag?, quote (max 500), author?, role?, footerLeft?, footerRight?
+cta: id, tag?, headline (max 40), subtext (max 80), actionLabel?, socialHandle?, footerLeft?, footerRight?
+
+## XML Child Element Format
+
+For arrays (stats, items), use nested child elements:
+<slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Five Trends" footerLeft="ANALYSIS" footerRight="PAGE 02">
+  <items>
+    <item num="1" title="Edge AI" desc="Processing moves to devices" />
+  </items>
+</slide>
 
 ## ANTI-HALLUCINATION RULES (CRITICAL)
 
@@ -196,177 +204,41 @@ Return a single <slide> element with type="${slideType}". Include exactly: id="s
 ### Cover slides (THE MAKE-OR-BREAK MOMENT):
 - headline: max 8 words. MUST use a curiosity gap or pattern interrupt.
 - subheadline: max 15 words. Create intrigue. Make them NEED to swipe.
-- Examples:
-  - headline="Nobody tells you this about startup ideas" subheadline="The truth is simpler — and more powerful — than you think."
-  - headline="You're brainstorming wrong" subheadline="Here's the 2-minute fix that changes everything."
-  - headline="The startup myth that's killing you" subheadline="Stop believing this. Start noticing instead."
 
 ### Sequence slides (MAKE IT SCANNABLE):
 - item titles: max 5 words. Use power words.
 - item descriptions: max 12 words. Punchy. No fluff.
-- Examples:
-  - title="Solve YOUR problem" desc="Build what you need first. Not what others want."
-  - title="Live in the future" desc="Work where the world is heading tomorrow."
-  - title="Notice the gaps" desc="See what's missing in your daily life."
 
 ### Myth-fact slides (SHOCK VALUE):
 - myth: max 12 words. Something EVERYONE believes.
 - fact: max 12 words. Sharp, surprising, contrarian.
-- Examples:
-  - myth="You need a brilliant idea to start." fact="The best ideas aren't thought up. They're noticed."
-  - myth="Competition is bad for startups." fact="Competition proves demand. Avoid it and you avoid money."
 
 ### Quote slides:
-- Use the EXACT quote text from the brief — do not paraphrase
+- Use the EXACT quote text from the brief
 - Keep the full quote, even if long
 
 ### CTA slides (DRIVE ENGAGEMENT):
 - headline: max 6 words. Action-oriented. Create urgency.
 - subtext: max 12 words. Tell them EXACTLY what to do. Make it easy.
-- Examples:
-  - headline="Your turn" subtext="Comment your biggest frustration. Let's solve it."
-  - headline="Try this now" subtext="Spend 2 minutes writing down your problems."
 
 ### Footer convention:
 - footerLeft: short category label (e.g., "INSIGHT", "RESEARCH", "METHODOLOGY")
 - footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
 
 ## RULES
-- Return ONLY the XML <slide> element. No markdown fences, no explanation.
+- Return ONLY the XML <presentation> element. No markdown fences, no explanation.
+- Generate ALL slides in order as specified in the slidePlan.
 - Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
 - Respect character limits exactly.
-- Use self-closing tags <stat ... /> for simple leaf elements.
-
-## Example Output
-${examples[slideType] ?? examples.cover}`,
-    user: `Generate a single "${slideType}" slide from the content brief above.`,
+- Self-closing tags for simple elements: <item ... />`,
+    user: 'Generate all slides for this carousel.',
   };
 }
 
-function buildSlidePlan(briefXml: string): string[] {
-  const plan: string[] = ['cover'];
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
-  if (briefXml.includes('<counterpoints>') && /<point>/.test(briefXml.split('<counterpoints>')[1]?.split('</counterpoints>')[0] ?? '')) {
-    plan.push('myth-fact');
-  }
-
-  // Check hasRealNumbers flag — only include telemetry if article has actual stats
-  const hasRealNumbers = briefXml.includes('<hasRealNumbers>true</hasRealNumbers>');
-  if (hasRealNumbers) {
-    const dataPointsSection = briefXml.includes('<dataPoints>')
-      ? briefXml.split('<dataPoints>')[1]?.split('</dataPoints>')[0] ?? ''
-      : '';
-    const hasNumbers = /<point>[^<]*\d+[%$xBMKkTt]/.test(dataPointsSection);
-    if (hasNumbers) {
-      plan.push('telemetry');
-    }
-  }
-
-  if (briefXml.includes('<keyPoints>')) {
-    plan.push('sequence');
-  }
-
-  if (briefXml.includes('<quotes>') && /<quote /.test(briefXml.split('<quotes>')[1]?.split('</quotes>')[0] ?? '')) {
-    plan.push('quote');
-  }
-
-  if (briefXml.includes('<companies>') && /<company /.test(briefXml.split('<companies>')[1]?.split('</companies>')[0] ?? '')) {
-    plan.push('interview');
-  }
-
-  if (plan.length < 5) {
-    const extras = ['quadrant', 'timeline', 'resource-grid'];
-    for (const e of extras) {
-      if (plan.length >= 6) break;
-      if (!plan.includes(e)) plan.push(e);
-    }
-  }
-
-  plan.push('cta');
-  return plan.slice(0, 8);
-}
-
-export interface MultiPhaseResult {
-  slides: Record<string, unknown>[];
-  briefXml: string;
-  extractionLatencyMs: number;
-  slideLatenciesMs: number[];
-  totalLatencyMs: number;
-  totalTokens: { input: number; output: number };
-  slidePlan: string[];
-}
-
-export async function generateSlidesMultiPhase(
-  rawText: string,
-  _templateSchema: z.ZodTypeAny,
-  options: {
-    llm: { generateJSON(system: string, user: string): Promise<string> };
-    templateHint?: string;
-    onProgress?: (phase: string, detail: string) => void;
-  },
-): Promise<MultiPhaseResult> {
-  const { llm, onProgress } = options;
-  const totalStart = Date.now();
-
-  onProgress?.('extraction', 'Extracting content brief...');
-
-  const extractionPrompt = EXTRACTION_PROMPT;
-  const briefXml = await llm.generateJSON(extractionPrompt, rawText);
-  const extractionLatencyMs = Date.now() - totalStart;
-
-  onProgress?.('extraction', `Extracted in ${extractionLatencyMs}ms`);
-
-  const slidePlan = buildSlidePlan(briefXml);
-  onProgress?.('planning', `Plan: ${slidePlan.join(', ')}`);
-
-  const slides: Record<string, unknown>[] = [];
-  const slideLatenciesMs: number[] = [];
-  let totalTokens = { input: 0, output: 0 };
-
-  for (let i = 0; i < slidePlan.length; i++) {
-    const slideType = slidePlan[i]!;
-    onProgress?.('slide', `Generating slide ${i + 1}/${slidePlan.length}: ${slideType}`);
-
-    const slideStart = Date.now();
-    const { system, user } = getSlidePrompt(slideType, briefXml);
-    const raw = await llm.generateJSON(system, user);
-    const latency = Date.now() - slideStart;
-    slideLatenciesMs.push(latency);
-
-    let cleaned = raw.trim();
-    if (cleaned.startsWith('```xml')) cleaned = cleaned.slice(6);
-    else if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
-    if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
-    cleaned = cleaned.trim();
-
-    let parsed: Record<string, unknown>;
-    try {
-      const xmlResult = parseXml(cleaned);
-      parsed = unwrapChildWrappers(xmlElementToObjects(xmlResult) as Record<string, unknown>);
-    } catch {
-      onProgress?.('slide', `Parse failed for ${slideType}, using fallback`);
-      parsed = createFallbackSlide(slideType, i + 1);
-    }
-
-    parsed.id = `slide-${String(i + 1).padStart(2, '0')}`;
-    slides.push(parsed);
-
-    onProgress?.('slide', `Generated ${slideType} in ${latency}ms`);
-  }
-
-  onProgress?.('validation', 'Validating against schema...');
-
-  const totalLatencyMs = Date.now() - totalStart;
-
-  return {
-    slides,
-    briefXml,
-    extractionLatencyMs,
-    slideLatenciesMs,
-    totalLatencyMs,
-    totalTokens,
-    slidePlan,
-  };
+function stripFences(text: string): string {
+  return text.replace(/^```(?:xml)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
 }
 
 function unwrapChildWrappers(obj: Record<string, unknown>): Record<string, unknown> {
@@ -402,8 +274,6 @@ function createFallbackSlide(type: string, index: number): Record<string, unknow
       return { id, type: 'cover', tag: 'INSIGHT', headline: 'Key Insights', footerLeft: 'ANALYSIS', footerRight };
     case 'sequence':
       return { id, type: 'sequence', tag: 'HIGHLIGHTS', headline: 'Main Takeaways', items: [{ num: '1', title: 'First Point', desc: 'Key insight from the content' }], footerLeft: 'ANALYSIS', footerRight };
-    case 'telemetry':
-      return { id, type: 'telemetry', tag: 'DATA', headline: 'Key Metrics', stats: [{ value: 'N/A', label: 'Data not available', color: 'amber' as const }], footerLeft: 'METRICS', footerRight };
     case 'myth-fact':
       return { id, type: 'myth-fact', tag: 'ANALYSIS', headline: 'Common Misconception', myth: 'A common belief about this topic.', fact: 'The reality is more nuanced than most people think.', footerLeft: 'RESEARCH', footerRight };
     case 'quote':
@@ -413,4 +283,149 @@ function createFallbackSlide(type: string, index: number): Record<string, unknow
     default:
       return { id, type: 'sequence', tag: 'INSIGHT', headline: 'Additional Insight', items: [{ num: '1', title: 'Point', desc: 'Key point' }], footerLeft: 'ANALYSIS', footerRight };
   }
+}
+
+// ─── Main Export ─────────────────────────────────────────────────────────────
+
+export interface MultiPhaseResult {
+  slides: Record<string, unknown>[];
+  briefXml: string;
+  configXml: string;
+  extractionLatencyMs: number;
+  configLatencyMs: number;
+  generationLatencyMs: number;
+  totalLatencyMs: number;
+  totalTokens: { input: number; output: number };
+  slidePlan: string[];
+}
+
+export async function generateSlidesMultiPhase(
+  rawText: string,
+  _templateSchema: z.ZodTypeAny,
+  options: {
+    llm: { generateJSON(system: string, user: string): Promise<string> };
+    templateHint?: string;
+    brandKit?: Record<string, string | undefined>;
+    onProgress?: (phase: string, detail: string) => void;
+  },
+): Promise<MultiPhaseResult> {
+  const { llm, onProgress, brandKit } = options;
+  const totalStart = Date.now();
+
+  // ── PHASE 1: Summarise ──────────────────────────────────────────────────────
+  onProgress?.('extraction', 'Phase 1: Extracting content brief...');
+
+  const phase1Start = Date.now();
+  const briefRaw = await llm.generateJSON(EXTRACTION_PROMPT, rawText);
+  const briefXml = stripFences(briefRaw);
+  const extractionLatencyMs = Date.now() - phase1Start;
+
+  onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);
+
+  // ── PHASE 2: Configure ──────────────────────────────────────────────────────
+  onProgress?.('config', 'Phase 2: Designing carousel configuration...');
+
+  const phase2Start = Date.now();
+  const { system: configSystem, user: configUser } = getConfigPrompt(briefXml, brandKit);
+  const configRaw = await llm.generateJSON(configSystem, configUser);
+  const configXml = stripFences(configRaw);
+  const configLatencyMs = Date.now() - phase2Start;
+
+  onProgress?.('config', `Phase 2 complete: ${configLatencyMs}ms`);
+
+  // Parse config to get template and slide plan
+  let templateId = 'the-terminal';
+  let slidePlan: string[] = [];
+  try {
+    const configObj = xmlToObjects(parseXml(configXml)) as Record<string, unknown>;
+    templateId = (configObj['templateId'] as string) ?? 'the-terminal';
+    const plan = configObj['slidePlan'] as Record<string, unknown>;
+    if (plan && typeof plan === 'object') {
+      const slides = plan['slide'] as Array<Record<string, string>> | Record<string, string>;
+      if (Array.isArray(slides)) {
+        slidePlan = slides.map(s => s['type'] ?? 'sequence');
+      } else if (slides && slides['type']) {
+        slidePlan = [slides['type']];
+      }
+    }
+  } catch {
+    // Fallback plan
+    slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
+  }
+
+  if (slidePlan.length === 0) {
+    slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
+  }
+
+  const templateStyle = TEMPLATE_STYLES.find(t => t.id === templateId) ?? TEMPLATE_STYLES[2]!;
+  onProgress?.('config', `Template: ${templateStyle.name}, Slides: ${slidePlan.join(', ')}`);
+
+  // ── PHASE 3: Generate ───────────────────────────────────────────────────────
+  onProgress?.('generation', 'Phase 3: Generating all slides...');
+
+  const phase3Start = Date.now();
+  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, configXml, templateStyle.aesthetics);
+  const genRaw = await llm.generateJSON(genSystem, genUser);
+  const genCleaned = stripFences(genRaw);
+  const generationLatencyMs = Date.now() - phase3Start;
+
+  onProgress?.('generation', `Phase 3 complete: ${generationLatencyMs}ms`);
+
+  // Parse all slides
+  const slides: Record<string, unknown>[] = [];
+  try {
+    const root = parseXml(genCleaned);
+    const rootObj = xmlToObjects(root) as Record<string, unknown>;
+    const slideData = rootObj['slide'];
+
+    if (Array.isArray(slideData)) {
+      for (const s of slideData) {
+        const slide = unwrapChildWrappers(s as Record<string, unknown>);
+        slides.push(slide);
+      }
+    } else if (slideData && typeof slideData === 'object') {
+      slides.push(unwrapChildWrappers(slideData as Record<string, unknown>));
+    }
+  } catch {
+    onProgress?.('generation', 'Parse failed, using fallback slides');
+    for (let i = 0; i < slidePlan.length; i++) {
+      slides.push(createFallbackSlide(slidePlan[i]!, i + 1));
+    }
+  }
+
+  // Ensure IDs
+  for (let i = 0; i < slides.length; i++) {
+    slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
+  }
+
+  const totalLatencyMs = Date.now() - totalStart;
+  onProgress?.('complete', `Total: ${totalLatencyMs}ms, ${slides.length} slides`);
+
+  return {
+    slides,
+    briefXml,
+    configXml,
+    extractionLatencyMs,
+    configLatencyMs,
+    generationLatencyMs,
+    totalLatencyMs,
+    totalTokens: { input: 0, output: 0 },
+    slidePlan,
+  };
+}
+
+function xmlToObjects(el: ReturnType<typeof parseXml>): unknown {
+  if (el.text && el.children.length === 0) return el.text;
+  const result: Record<string, unknown> = { ...el.attributes };
+  if (el.children.length > 0) {
+    const grouped: Record<string, unknown[]> = {};
+    for (const child of el.children) {
+      const obj = xmlToObjects(child);
+      (grouped[child.tag] ??= []).push(obj);
+    }
+    for (const [k, v] of Object.entries(grouped)) {
+      result[k] = v.length === 1 ? v[0] : v;
+    }
+  }
+  return result;
 }

@@ -1,16 +1,17 @@
-import { clsx } from 'clsx';
-import type { JobStatus } from '../api/types';
-import { STATUS_COLORS } from '../lib/constants';
+import { Badge } from '@/components/ui/badge';
+import type { JobStatus } from '@/api/types';
+
+const statusConfig: Record<JobStatus, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+  queued: { label: 'Queued', variant: 'secondary' },
+  ingesting: { label: 'Ingesting', variant: 'default' },
+  transcribing: { label: 'Transcribing', variant: 'default' },
+  structuring: { label: 'Structuring', variant: 'default' },
+  rendering: { label: 'Rendering', variant: 'default' },
+  complete: { label: 'Complete', variant: 'outline' },
+  failed: { label: 'Failed', variant: 'destructive' },
+};
 
 export function StatusBadge({ status }: { status: JobStatus }) {
-  return (
-    <span
-      className={clsx(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize',
-        STATUS_COLORS[status] ?? 'bg-gray-600 text-gray-100',
-      )}
-    >
-      {status}
-    </span>
-  );
+  const config = statusConfig[status] ?? { label: status, variant: 'secondary' as const };
+  return <Badge variant={config.variant}>{config.label}</Badge>;
 }

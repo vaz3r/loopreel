@@ -1,89 +1,104 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCreateJob } from '../api/hooks';
-import { PlatformSelect } from '../components/PlatformSelect';
-import { TemplateSelect } from '../components/TemplateSelect';
-import { BrandKitForm } from '../components/BrandKitForm';
-import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Loader2, ChevronDown, Sparkles } from 'lucide-react';
+import { useCreateJob } from '@/api/hooks';
+import { PlatformSelect } from '@/components/PlatformSelect';
+import { TemplateSelect } from '@/components/TemplateSelect';
+import { BrandKitForm } from '@/components/BrandKitForm';
+import type { CreateJobInput } from '@/api/client';
 
 export function CreateJobPage() {
   const navigate = useNavigate();
   const createJob = useCreateJob();
-
   const [url, setUrl] = useState('');
   const [platform, setPlatform] = useState('instagram-feed');
   const [templateId, setTemplateId] = useState('auto');
-  const [brandKit, setBrandKit] = useState({});
+  const [brandKit, setBrandKit] = useState<CreateJobInput['brandKit']>({});
   const [showBrandKit, setShowBrandKit] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    let sourceUrl = url.trim();
-    if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
-      sourceUrl = 'https://' + sourceUrl;
+    const sourceUrl = url.startsWith('http') ? url : `https://${url}`;
+    const input: CreateJobInput = {
+      sourceUrl,
+      platform,
+      templateId,
+    };
+    if (brandKit && Object.keys(brandKit).length > 0) {
+      input.brandKit = brandKit;
     }
-    createJob.mutate(
-      { sourceUrl, platform, templateId, brandKit: Object.keys(brandKit).length > 0 ? brandKit : undefined },
-      { onSuccess: (data) => navigate(`/jobs/${data.jobId}`) },
-    );
-  };
+    createJob.mutate(input, {
+      onSuccess: (data) => navigate(`/jobs/${data.jobId}`),
+    });
+  }
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-100">New Content Job</h1>
-      <p className="mt-1 text-sm text-gray-400">
-        Submit a URL to generate a multi-format social carousel.
-      </p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">New Job</h1>
+        <p className="text-muted-foreground">Generate social media content from any URL.</p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-300">Source URL</label>
-          <input
-            type="url"
-            required
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://example.com/article or YouTube URL"
-            className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-300">Platform</label>
-            <PlatformSelect value={platform} onChange={setPlatform} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-300">Template</label>
-            <TemplateSelect value={templateId} onChange={setTemplateId} />
-          </div>
-        </div>
-
-        <div>
-          <button
-            type="button"
-            onClick={() => setShowBrandKit(!showBrandKit)}
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-200"
-          >
-            {showBrandKit ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            Brand Kit (optional)
-          </button>
-          {showBrandKit && (
-            <div className="mt-3 rounded-lg border border-gray-800 bg-gray-900/50 p-4">
-              <BrandKitForm value={brandKit} onChange={setBrandKit as never} />
+      <Card className="max-w-xl">
+        <CardHeader>
+          <CardTitle>Source Content</CardTitle>
+          <CardDescription>Paste a URL to any article, video, or podcast.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="url">URL</Label>
+              <Input
+                id="url"
+                type="url"
+                required
+                placeholder="https://example.com/article"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+              />
             </div>
-          )}
-        </div>
 
-        <button
-          type="submit"
-          disabled={createJob.isPending || !url}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {createJob.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-          {createJob.isPending ? 'Creating…' : 'Generate Content'}
-        </button>
-      </form>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Platform</Label>
+                <PlatformSelect value={platform} onChange={setPlatform} />
+              </div>
+              <div className="space-y-2">
+                <Label>Template</Label>
+                <TemplateSelect value={templateId} onChange={setTemplateId} />
+              </div>
+            </div>
+
+            <Collapsible open={showBrandKit} onOpenChange={setShowBrandKit}>
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" type="button" className="w-full justify-between">
+                  Brand Kit
+                  <ChevronDown className={`h-4 w-4 transition-transform ${showBrandKit ? 'rotate-180' : ''}`} />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-4">
+                <div className="rounded-lg border p-4">
+                  <BrandKitForm value={brandKit ?? {}} onChange={setBrandKit} />
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Button type="submit" className="w-full" disabled={createJob.isPending || !url}>
+              {createJob.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4" />
+              )}
+              Generate Content
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

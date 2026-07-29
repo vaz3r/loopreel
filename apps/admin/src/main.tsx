@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'react-hot-toast';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
 import { App } from './App';
 import './index.css';
 
@@ -17,15 +18,12 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            className: 'bg-gray-800 text-gray-100 border border-gray-700',
-          }}
-        />
-      </BrowserRouter>
+      <TooltipProvider>
+        <BrowserRouter>
+          <App />
+          <Toaster richColors position="bottom-right" />
+        </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );

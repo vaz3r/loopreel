@@ -1,133 +1,156 @@
-import { useParams, Link } from 'react-router-dom';
-import { useJob } from '../api/hooks';
-import { StatusTimeline } from '../components/StatusTimeline';
-import { SlidePreview } from '../components/SlidePreview';
-import { PLATFORM_LABELS } from '../lib/constants';
-import { ArrowLeft, Download, Copy, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowLeft, Download, ClipboardCopy, Check } from 'lucide-react';
+import { useJob } from '@/api/hooks';
+import { StatusTimeline } from '@/components/StatusTimeline';
+import { SlidePreview } from '@/components/SlidePreview';
+import { PLATFORM_LABELS } from '@/lib/constants';
 
 export function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: job, isLoading, error } = useJob(id!);
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
-  const copyToClipboard = (text: string, label: string) => {
+  function copyToClipboard(text: string, label: string) {
     navigator.clipboard.writeText(text);
     setCopiedText(label);
     setTimeout(() => setCopiedText(null), 2000);
-  };
+  }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20 text-gray-500">Loading…</div>
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-48 w-full" />
+      </div>
     );
   }
 
   if (error || !job) {
     return (
-      <div className="py-20 text-center text-red-400">
-        {error?.message ?? 'Job not found'}
+      <div className="text-center py-12">
+        <p className="text-destructive text-lg">Failed to load job</p>
+        <p className="text-muted-foreground text-sm mt-1">{error?.message ?? 'Not found'}</p>
+        <Button variant="ghost" asChild className="mt-4">
+          <Link to="/jobs"><ArrowLeft className="mr-2 h-4 w-4" />Back to jobs</Link>
+        </Button>
       </div>
     );
   }
 
-  const linkedinPost = job.assets.find((a) => a.formatType === 'linkedin_post');
-  const twitterThread = job.assets.find((a) => a.formatType === 'twitter_thread');
+  const linkedinPost = job.assets.find(
+    (a) => a.formatType === 'linkedin_post' && a.contentText,
+  );
+  const twitterThread = job.assets.find(
+    (a) => a.formatType === 'twitter_thread' && a.contentText,
+  );
 
   return (
-    <div>
-      <Link to="/jobs" className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-200">
-        <ArrowLeft className="h-4 w-4" /> Back to jobs
-      </Link>
-
-      <div className="mt-2 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-100">Job Details</h1>
-          <p className="mt-1 font-mono text-xs text-gray-500">{job.id}</p>
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" size="sm" asChild>
+          <Link to="/jobs"><ArrowLeft className="h-4 w-4" /></Link>
+        </Button>
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold tracking-tight">Job Details</h1>
+          <p className="text-xs text-muted-foreground font-mono">{job.id}</p>
         </div>
         {job.status === 'complete' && (
-          <a
-            href={`/api/jobs/${job.id}/download?format=all`}
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
-          >
-            <Download className="h-4 w-4" />
-            Download All
-          </a>
+          <Button asChild>
+            <a href={`/api/jobs/${job.id}/download?format=all`}>
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </a>
+          </Button>
         )}
       </div>
 
-      <div className="mt-6 space-y-6">
-        <div className="rounded-lg border border-gray-800 bg-gray-900 p-4">
-          <h2 className="mb-3 text-sm font-medium text-gray-300">Pipeline Progress</h2>
-          <StatusTimeline job={job} />
-          {job.errorPayload && (
-            <div className="mt-3 rounded bg-red-900/30 p-3 text-xs text-red-300">
-              <p className="font-medium">Error at {job.errorPayload.stage}: {job.errorPayload.reason}</p>
-              {job.errorPayload.details && <p className="mt-1 text-red-400/70">{job.errorPayload.details}</p>}
-            </div>
-          )}
-        </div>
+      <StatusTimeline job={job} />
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-            <p className="text-xs text-gray-500">Source</p>
-            <p className="mt-1 truncate text-sm text-gray-300" title={job.sourceUrl}>{job.sourceUrl}</p>
-          </div>
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-            <p className="text-xs text-gray-500">Platform</p>
-            <p className="mt-1 text-sm text-gray-300">{PLATFORM_LABELS[job.platform] ?? job.platform}</p>
-          </div>
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-            <p className="text-xs text-gray-500">Template</p>
-            <p className="mt-1 text-sm text-gray-300">{job.templateId}</p>
-          </div>
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-3">
-            <p className="text-xs text-gray-500">Slides</p>
-            <p className="mt-1 text-sm text-gray-300">{job.slideCount ?? '—'}</p>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <Card>
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground">Source</p>
+            <p className="text-sm font-medium truncate mt-1">{job.sourceUrl}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground">Platform</p>
+            <p className="text-sm font-medium mt-1">{PLATFORM_LABELS[job.platform] ?? job.platform}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground">Template</p>
+            <p className="text-sm font-medium mt-1">{job.templateId}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground">Slides</p>
+            <p className="text-sm font-medium mt-1">{job.slideCount ?? '—'}</p>
+          </CardContent>
+        </Card>
+      </div>
 
-        <div>
-          <h2 className="mb-3 text-sm font-medium text-gray-300">Slides</h2>
-          <SlidePreview job={job} />
-        </div>
+      <SlidePreview job={job} />
 
-        {linkedinPost?.contentText && (
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-4">
-            <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-sm font-medium text-gray-300">LinkedIn Post</h2>
-              <button
+      {linkedinPost && (
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">LinkedIn Post</CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => copyToClipboard(linkedinPost.contentText!, 'linkedin')}
-                className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200"
               >
-                {copiedText === 'linkedin' ? <CheckCircle className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-                Copy
-              </button>
+                {copiedText === 'linkedin' ? (
+                  <Check className="h-4 w-4 text-emerald-500" />
+                ) : (
+                  <ClipboardCopy className="h-4 w-4" />
+                )}
+              </Button>
             </div>
-            <pre className="whitespace-pre-wrap rounded bg-gray-800/50 p-3 text-xs text-gray-300">
+          </CardHeader>
+          <CardContent>
+            <pre className="text-sm text-muted-foreground whitespace-pre-wrap font-sans">
               {linkedinPost.contentText}
             </pre>
-          </div>
-        )}
+          </CardContent>
+        </Card>
+      )}
 
-        {twitterThread?.contentText && (
-          <div className="rounded-lg border border-gray-800 bg-gray-900 p-4">
-            <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-sm font-medium text-gray-300">Twitter Thread</h2>
-              <button
+      {twitterThread && (
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">Twitter Thread</CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => copyToClipboard(twitterThread.contentText!, 'twitter')}
-                className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200"
               >
-                {copiedText === 'twitter' ? <CheckCircle className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-                Copy
-              </button>
+                {copiedText === 'twitter' ? (
+                  <Check className="h-4 w-4 text-emerald-500" />
+                ) : (
+                  <ClipboardCopy className="h-4 w-4" />
+                )}
+              </Button>
             </div>
-            <pre className="whitespace-pre-wrap rounded bg-gray-800/50 p-3 text-xs text-gray-300">
+          </CardHeader>
+          <CardContent>
+            <pre className="text-sm text-muted-foreground whitespace-pre-wrap font-sans">
               {twitterThread.contentText}
             </pre>
-          </div>
-        )}
-      </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, type CreateJobInput, type JobDetail, type JobsListResponse, type StatsResponse } from './client';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 export function useStats() {
   return useQuery({

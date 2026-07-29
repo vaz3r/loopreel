@@ -1,53 +1,71 @@
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, PlusCircle, List, Activity } from 'lucide-react';
-import { clsx } from 'clsx';
+import { NavLink, Outlet } from 'react-router-dom';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
+import { Separator } from '@/components/ui/separator';
+import { LayoutDashboard, PlusCircle, List, Zap } from 'lucide-react';
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/create', icon: PlusCircle, label: 'New Job' },
   { to: '/jobs', icon: List, label: 'All Jobs' },
 ];
 
-function NavItem({ to, icon: Icon, label }: { to: string; icon: typeof LayoutDashboard; label: string }) {
+export function Layout() {
   return (
-    <NavLink
-      to={to}
-      end={to === '/'}
-      className={({ isActive }) =>
-        clsx(
-          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-          isActive
-            ? 'bg-indigo-600/20 text-indigo-400'
-            : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200',
-        )
-      }
-    >
-      <Icon className="h-4 w-4" />
-      {label}
-    </NavLink>
-  );
-}
-
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex h-screen overflow-hidden bg-gray-950">
-      <aside className="flex w-60 flex-col border-r border-gray-800 bg-gray-900">
-        <div className="flex items-center gap-2 border-b border-gray-800 px-4 py-4">
-          <Activity className="h-5 w-5 text-indigo-500" />
-          <span className="text-sm font-semibold text-gray-100">Loopreel Admin</span>
-        </div>
-        <nav className="flex-1 space-y-1 p-3">
-          {navItems.map((item) => (
-            <NavItem key={item.to} {...item} />
-          ))}
-        </nav>
-        <div className="border-t border-gray-800 p-4 text-xs text-gray-600">
-          API: localhost:3000
-        </div>
-      </aside>
-      <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-6xl px-6 py-8">{children}</div>
-      </main>
-    </div>
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader className="border-b border-border/50 p-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Zap className="h-4 w-4 text-primary" />
+            </div>
+            <span className="text-lg font-semibold tracking-tight">Loopreel</span>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navItems.map((item) => (
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton asChild>
+                      <NavLink to={item.to} end={item.end}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-12 items-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <span className="text-sm text-muted-foreground">Loopreel Admin</span>
+        </header>
+        <main className="flex-1 p-6">
+          <div className="mx-auto max-w-6xl">
+            <Outlet />
+          </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
