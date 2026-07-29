@@ -1,7 +1,7 @@
 import { TEMPLATE_KEYS } from '@loopreel/schemas';
 import { getTemplate } from './registry.js';
 import { getBrandKitDescription } from './brandkits.js';
-import { introspectSchema } from './schema-introspect.js';
+import { introspectSchema, extractSlideTypes } from './schema-introspect.js';
 import { generateUniqueColors } from './color-utils.js';
 import { generateUniqueLayouts, describeLayout } from './layout-utils.js';
 
@@ -82,6 +82,9 @@ export async function getPrompt(
   // Auto-generate schema constraints from Zod contracts
   const schemaConstraints = introspectSchema(template.schema);
 
+  // Extract the slide types this template actually supports
+  const supportedTypes = extractSlideTypes(template.schema);
+
   // Auto-generate brand kit description from per-template brandkit schema
   const brandKitDesc = getBrandKitDescription(templateId);
 
@@ -101,7 +104,7 @@ export async function getPrompt(
   const seed = articleTopic ?? rawText.slice(0, 100);
   const primaryColor = brandKit?.['primary'] ?? brandKit?.['bg'] ?? '#1a1a2e';
   const uniqueColors = generateUniqueColors(primaryColor, seed);
-  const uniqueLayouts = generateUniqueLayouts(seed);
+  const uniqueLayouts = generateUniqueLayouts(seed, supportedTypes);
 
   const copyVoice = getCopyVoice();
 
@@ -133,12 +136,7 @@ ${copyVoice}
     <muted>${uniqueColors.muted}</muted>
   </colors>
   <layouts>
-    <cover>${uniqueLayouts.cover} — ${describeLayout(uniqueLayouts.cover)}</cover>
-    <sequence>${uniqueLayouts.sequence} — ${describeLayout(uniqueLayouts.sequence)}</sequence>
-    <mythFact>${uniqueLayouts.mythFact} — ${describeLayout(uniqueLayouts.mythFact)}</mythFact>
-    <quote>${uniqueLayouts.quote} — ${describeLayout(uniqueLayouts.quote)}</quote>
-    <cta>${uniqueLayouts.cta} — ${describeLayout(uniqueLayouts.cta)}</cta>
-    <extra>${uniqueLayouts.extra} — ${describeLayout(uniqueLayouts.extra)}</extra>
+    ${Object.entries(uniqueLayouts).map(([type, layout]) => `<${type}>${layout} — ${describeLayout(layout)}</${type}>`).join('\n    ')}
   </layouts>
 </uniqueStyling>
 

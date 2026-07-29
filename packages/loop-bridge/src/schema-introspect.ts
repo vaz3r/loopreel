@@ -166,3 +166,40 @@ export function introspectSchema(contract: z.ZodTypeAny): string {
 
   return lines.join('\n').trim();
 }
+
+/**
+ * Extract the list of supported slide type names from a template's Zod contract.
+ */
+export function extractSlideTypes(contract: z.ZodTypeAny): string[] {
+  const types: string[] = [];
+
+  const contractObj = stripOptionalAndDefault(contract);
+  if ((contractObj._def?.typeName as string) !== ZodFirstPartyTypeKind.ZodObject) {
+    return types;
+  }
+
+  const slidesField = (contractObj as z.ZodObject<any>).shape['slides'];
+  if (!slidesField) return types;
+
+  const slidesType = stripOptionalAndDefault(slidesField);
+  if ((slidesType._def?.typeName as string) !== ZodFirstPartyTypeKind.ZodArray) {
+    return types;
+  }
+
+  const elementType = (slidesType._def as any).type;
+
+  if ((elementType._def?.typeName as string) === ZodFirstPartyTypeKind.ZodDiscriminatedUnion) {
+    const options = (elementType._def as any).options;
+    for (const option of options) {
+      const stripped = stripOptionalAndDefault(option);
+      if ((stripped._def?.typeName as string) === ZodFirstPartyTypeKind.ZodObject) {
+        const typeField = (stripped as z.ZodObject<any>).shape['type'];
+        if ((typeField._def?.typeName as string) === ZodFirstPartyTypeKind.ZodLiteral) {
+          types.push((typeField._def as any).value as string);
+        }
+      }
+    }
+  }
+
+  return types;
+}

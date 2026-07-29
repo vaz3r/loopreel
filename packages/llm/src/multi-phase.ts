@@ -308,13 +308,15 @@ export async function generateSlidesMultiPhase(
     templateHint?: string;
     brandKit?: Record<string, string | undefined>;
     onProgress?: (phase: string, detail: string) => void;
+    onDebug?: (filename: string, content: string) => void;
   },
 ): Promise<MultiPhaseResult> {
-  const { llm, onProgress, brandKit } = options;
+  const { llm, onProgress, onDebug, brandKit } = options;
   const totalStart = Date.now();
 
   // ── PHASE 1: Summarise ──────────────────────────────────────────────────────
   onProgress?.('extraction', 'Phase 1: Extracting content brief...');
+  onDebug?.('01-prompt-phase1-extraction.md', `## System\n\n${EXTRACTION_PROMPT}\n\n## User\n\n${rawText}`);
 
   const phase1Start = Date.now();
   const briefRaw = await llm.generateJSON(EXTRACTION_PROMPT, rawText);
@@ -328,6 +330,7 @@ export async function generateSlidesMultiPhase(
 
   const phase2Start = Date.now();
   const { system: configSystem, user: configUser } = getConfigPrompt(briefXml, brandKit);
+  onDebug?.('02-prompt-phase2-config.md', `## System\n\n${configSystem}\n\n## User\n\n${configUser}`);
   const configRaw = await llm.generateJSON(configSystem, configUser);
   const configXml = stripFences(configRaw);
   const configLatencyMs = Date.now() - phase2Start;
@@ -366,6 +369,7 @@ export async function generateSlidesMultiPhase(
 
   const phase3Start = Date.now();
   const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, configXml, templateStyle.aesthetics);
+  onDebug?.('03-prompt-phase3-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
   const genRaw = await llm.generateJSON(genSystem, genUser);
   const genCleaned = stripFences(genRaw);
   const generationLatencyMs = Date.now() - phase3Start;

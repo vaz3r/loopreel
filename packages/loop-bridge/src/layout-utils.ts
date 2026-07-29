@@ -24,48 +24,51 @@ const ALL_LAYOUTS: LayoutType[] = [
 
 // ─── Deterministic Layout Generation ─────────────────────────────────────────
 
-export interface UniqueLayouts {
-  cover: LayoutType;
-  sequence: LayoutType;
-  mythFact: LayoutType;
-  quote: LayoutType;
-  cta: LayoutType;
-  extra: LayoutType;
-}
-
 /**
- * Generate unique layouts based on article topic hash.
- * Each article gets different layout assignments.
+ * Generate unique layouts for a given set of slide types.
+ * Each article gets different layout assignments based on a hash of the seed.
  */
-export function generateUniqueLayouts(seed: string): UniqueLayouts {
+export function generateUniqueLayouts(seed: string, slideTypes: string[]): Record<string, LayoutType> {
   const hash = createHash('md5').update(seed).digest('hex');
-  const layouts: LayoutType[] = [];
+  const result: Record<string, LayoutType> = {};
+  const used: LayoutType[] = [];
 
-  // Pick 6 unique layouts based on hash
-  for (let i = 0; i < 6 && layouts.length < 6; i++) {
-    const idx = parseInt(hash.slice(i * 2, i * 2 + 2), 16) % ALL_LAYOUTS.length;
-    const layout = ALL_LAYOUTS[idx];
-    if (layout && !layouts.includes(layout)) {
-      layouts.push(layout);
+  for (let i = 0; i < slideTypes.length; i++) {
+    const slideType = slideTypes[i]!;
+
+    // Try to pick a unique layout from the hash
+    let picked = false;
+    for (let attempt = 0; attempt < ALL_LAYOUTS.length; attempt++) {
+      const hashSlice = hash.slice(((i * ALL_LAYOUTS.length + attempt) * 2) % hash.length, ((i * ALL_LAYOUTS.length + attempt) * 2 + 2) % hash.length + 2);
+      const idx = parseInt(hashSlice || '00', 16) % ALL_LAYOUTS.length;
+      const layout = ALL_LAYOUTS[idx];
+      if (layout && !used.includes(layout)) {
+        result[slideType] = layout;
+        used.push(layout);
+        picked = true;
+        break;
+      }
+    }
+
+    // Fallback: cycle through unused layouts
+    if (!picked) {
+      for (const layout of ALL_LAYOUTS) {
+        if (!used.includes(layout)) {
+          result[slideType] = layout;
+          used.push(layout);
+          picked = true;
+          break;
+        }
+      }
+    }
+
+    // Last resort: reuse layouts in order
+    if (!picked) {
+      result[slideType] = ALL_LAYOUTS[i % ALL_LAYOUTS.length]!;
     }
   }
 
-  // Fill remaining if needed
-  for (const layout of ALL_LAYOUTS) {
-    if (layouts.length >= 6) break;
-    if (!layouts.includes(layout)) {
-      layouts.push(layout);
-    }
-  }
-
-  return {
-    cover: layouts[0]!,
-    sequence: layouts[1]!,
-    mythFact: layouts[2]!,
-    quote: layouts[3]!,
-    cta: layouts[4]!,
-    extra: layouts[5]!,
-  };
+  return result;
 }
 
 /**

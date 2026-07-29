@@ -4,6 +4,7 @@ import Quote from './quote';
 import Definition from './definition';
 import Sequence from './sequence';
 import Dichotomy from './dichotomy';
+import MythFact from './myth-fact';
 import Telemetry from './telemetry';
 import Timeline from './timeline';
 import ImageSplit from './image-split';
@@ -27,6 +28,7 @@ export const slides: Record<string, any> = {
   definition: Definition,
   sequence: Sequence,
   dichotomy: Dichotomy,
+  'myth-fact': MythFact,
   telemetry: Telemetry,
   timeline: Timeline,
   'image-split': ImageSplit,

@@ -144,10 +144,20 @@ const CtaSlide = z.object({
   ...FooterFields,
 });
 
+const MythFactSlide = z.object({
+  id: z.string(),
+  type: z.literal('myth-fact'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  myth: z.string().min(5).max(300),
+  fact: z.string().min(5).max(300),
+  ...FooterFields,
+});
+
 const PaperOfRecordSlideSchema = z.discriminatedUnion('type', [
   CoverSlide, QuoteSlide, DefinitionSlide, SequenceSlide, DichotomySlide,
   TelemetrySlide, TimelineSlide, ImageSplitSlide, TableSlide,
-  AnalysisSlide, ProfileSlide, CtaSlide,
+  AnalysisSlide, ProfileSlide, CtaSlide, MythFactSlide,
 ]);
 
 export const PaperOfRecordContract = z.object({

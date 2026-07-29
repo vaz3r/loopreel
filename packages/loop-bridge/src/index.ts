@@ -2,7 +2,7 @@ export { TEMPLATES, getTemplate, getTemplateIds } from './registry.js';
 export type { TemplateEntry } from './registry.js';
 export { getPrompt, TEMPLATE_IDS } from './prompts.js';
 export { adaptSlideForEngine } from './adapter.js';
-export { introspectSchema } from './schema-introspect.js';
+export { introspectSchema, extractSlideTypes } from './schema-introspect.js';
 export { autoSelectTemplate, classifyByHeuristics } from './classifier.js';
 export { paginateContract, chunkArray } from '@loopreel/loop/engine-utils';
 export {
@@ -33,4 +33,4 @@ export {
 export { generateUniqueColors } from './color-utils.js';
 export type { UniqueColors } from './color-utils.js';
 export { generateUniqueLayouts, describeLayout } from './layout-utils.js';
-export type { UniqueLayouts, LayoutType } from './layout-utils.js';
+export type { LayoutType } from './layout-utils.js';

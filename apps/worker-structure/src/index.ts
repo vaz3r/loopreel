@@ -198,6 +198,9 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         onProgress: (phase, detail) => {
           jobLogger.info({ phase, detail }, 'Multi-phase progress');
         },
+        onDebug: (filename, content) => {
+          void writeDebug(jobId, filename, content);
+        },
       });
 
       jobLogger.info({
@@ -214,6 +217,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       const { slides: paginated } = paginateContract({ slides: result.slides });
       const withImages = await fetchImagesForSlides(paginated, jobId);
 
+      await writeDebug(jobId, '05-paginated.json', JSON.stringify({ slides: withImages }, null, 2));
+
       await JobRepository.updateStatus(jobId, 'rendering', {
         contentPayload: { slides: withImages },
         slideCount: withImages.length,
@@ -228,6 +233,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     } else {
       const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
       const basePrompt = await getPrompt(targetTemplateId, rawText, brandKit);
+      await writeDebug(jobId, '01-prompt-monolithic.md', `## System\n\n${basePrompt}\n\n## User\n\n(See 00-extracted.txt for raw text input)`);
 
       let lastValidationErrors = '';
 
