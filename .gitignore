@@ -5,6 +5,8 @@ dist/
 .DS_Store
 tmp/
 logs/
+.env
+debug/
 test-slides/*
 debug-slides/*
 slides/*
