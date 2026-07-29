@@ -231,7 +231,33 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         slidePlan: result.slidePlan,
       }, 'Multi-phase pipeline completed');
 
-      const { slides: paginated } = paginateContract({ slides: result.slides });
+      // Bug 1 fix: Use the Phase 2 template selection, not the pre-selected one
+      if (result.selectedTemplateId !== targetTemplateId) {
+        jobLogger.info({ from: targetTemplateId, to: result.selectedTemplateId }, 'Phase 2 selected different template, updating job');
+        targetTemplateId = result.selectedTemplateId;
+        await JobRepository.updateTemplate(jobId, targetTemplateId);
+      }
+
+      // Bug 2 fix: Sanitize and validate slides against schema
+      const selectedTpl = getTemplate(targetTemplateId);
+      const sanitized = { slides: sanitizeSlides(result.slides) };
+      const validationResult = selectedTpl.schema.safeParse(sanitized);
+
+      if (!validationResult.success) {
+        jobLogger.error({ errors: validationResult.error.issues }, 'Schema validation failed after multi-phase generation');
+        const validationErrors = validationResult.error.issues
+          .map((i: { path: (string | number)[]; message: string }) => `${i.path.join('.')}: ${i.message}`)
+          .join('\n');
+
+        await JobRepository.markFailed(jobId, {
+          stage: 'structuring',
+          reason: 'schema_validation_failed',
+          details: validationErrors,
+        });
+        return;
+      }
+
+      const { slides: paginated } = paginateContract({ slides: validationResult.data.slides });
       const withImages = await fetchImagesForSlides(paginated, jobId);
 
       await writeDebug(jobId, '05-paginated.json', JSON.stringify({ slides: withImages }, null, 2));
@@ -244,7 +270,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       await renderQueue.add('render-slide', { jobId });
 
       jobLogger.info(
-        { slideCount: withImages.length, template: targetTemplateId },
+        { slideCount: withImages.length, template: targetTemplateId, validated: true },
         'Dispatched to render queue (multi-phase)',
       );
     } else {

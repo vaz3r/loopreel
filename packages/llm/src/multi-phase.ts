@@ -215,7 +215,16 @@ For arrays (stats, items), use nested child elements:
   <rule>NEVER invent quotes. Use ONLY quotes from the brief's quotes section.</rule>
 </antiHallucination>
 
-## PREMIUM COPYWRITING RULES (follow exactly)
+## RULES
+- Return ONLY the XML <presentation> element. No markdown fences, no explanation.
+- Generate ALL slides in order as specified in the slidePlan.
+- Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
+- Respect ALL field constraints (character limits, required fields, array sizes) exactly.
+- Self-closing tags for simple elements: <item ... />
+- Every slide MUST have: id, type, tag, footerLeft, footerRight.
+- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
+
+## PREMIUM COPYWRITING RULES (follow exactly — these override everything else)
 
 <copyRules>
   <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Make it count.</rule>
@@ -254,14 +263,22 @@ For arrays (stats, items), use nested child elements:
   GREAT: "Your biggest frustration = your biggest opportunity."
 </copyExamples>
 
-## RULES
-- Return ONLY the XML <presentation> element. No markdown fences, no explanation.
-- Generate ALL slides in order as specified in the slidePlan.
-- Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
-- Respect ALL field constraints (character limits, required fields, array sizes) exactly.
-- Self-closing tags for simple elements: <item ... />
-- Every slide MUST have: id, type, tag, footerLeft, footerRight.
-- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)`,
+## COPY ENFORCEMENT — CHECK BEFORE RETURNING
+
+<copyEnforcement>
+  For EVERY headline in your output, verify:
+  1. Is it MAX 5 words? If longer, rewrite.
+  2. Does it use a POWER WORD? If not, add one.
+  3. Is it a FRAGMENT (no verb/is/are)? If it reads like a sentence, rewrite.
+  4. Would YOU stop scrolling for this? If not, rewrite.
+
+  COMMON MISTAKES TO AVOID:
+  - "The Freshman Sire Data Gap" → boring, informational. Use: "Nobody Tells You This About Sires"
+  - "Stop Chasing Early Speed" → decent but generic. Use: "You're Measuring Sires Wrong"
+  - "Flightline's Slow Burn: Winning The Long Game" → too long, no curiosity. Use: "Flightline's Secret Weapon"
+  - "Why You're Evaluating Wrong" → close but needs punch. Use: "Your Sire Metrics Are Broken"
+  - "Ready For The Truth?" → weak CTA. Use: "Stop Believing the Numbers"
+</copyEnforcement>`,
     user: 'Generate all slides for this carousel.',
   };
 }
