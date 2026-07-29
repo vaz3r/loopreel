@@ -19,11 +19,12 @@ export function CreateJobPage() {
   const [templateId, setTemplateId] = useState('auto');
   const [brandKit, setBrandKit] = useState<CreateJobInput['brandKit']>({});
   const [showBrandKit, setShowBrandKit] = useState(false);
+  const [generateText, setGenerateText] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const sourceUrl = url.startsWith('http') ? url : `https://${url}`;
-    const input: CreateJobInput = { sourceUrl, platform, templateId };
+    const input: CreateJobInput = { sourceUrl, platform, templateId, generateText };
     if (brandKit && Object.keys(brandKit).length > 0) {
       input.brandKit = brandKit;
     }
@@ -76,6 +77,19 @@ export function CreateJobPage() {
             </div>
           </CollapsibleContent>
         </Collapsible>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            id="generateText"
+            checked={generateText}
+            onChange={(e) => setGenerateText(e.target.checked)}
+            className="h-4 w-4 rounded border-border bg-surface-2 accent-text-primary"
+          />
+          <Label htmlFor="generateText" className="text-[13px] text-text-tertiary cursor-pointer">
+            Generate LinkedIn &amp; Twitter text
+          </Label>
+        </div>
 
         <Button
           type="submit"

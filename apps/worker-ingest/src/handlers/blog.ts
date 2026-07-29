@@ -1,8 +1,12 @@
 import * as cheerio from 'cheerio';
 import { JobRepository } from '@loopreel/db';
 import { createQueue } from '@loopreel/queue';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import type pino from 'pino';
 
+const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
+const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
 const MAX_TEXT_LENGTH = 100_000;
 const structureQueue = createQueue('structure');
 
@@ -106,6 +110,16 @@ export async function handleBlog(
   }
 
   logger.info({ textLength: rawText.length }, 'Content scraped');
+
+  if (DEBUG_LOG) {
+    try {
+      const dir = join(DEBUG_DIR, jobId);
+      await mkdir(dir, { recursive: true });
+      await writeFile(join(dir, '00-extracted.txt'), rawText, 'utf-8');
+    } catch {
+      // best effort
+    }
+  }
 
   await JobRepository.updateStatus(jobId, 'structuring');
 

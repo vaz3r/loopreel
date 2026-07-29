@@ -9,6 +9,7 @@ export interface JobRow {
   template_id: string;
   platform: string;
   brand_kit: Record<string, string> | null;
+  generate_text: boolean;
   audio_r2_key: string | null;
   content_payload: unknown;
   error_payload: unknown;
@@ -24,6 +25,7 @@ export interface CreateJobParams {
   templateId: string;
   platform: string;
   brandKit?: Record<string, string>;
+  generateText?: boolean;
 }
 
 export interface JobListItem {
@@ -41,10 +43,10 @@ export interface JobListItem {
 export class JobRepository {
   static async create(params: CreateJobParams): Promise<string> {
     const { rows } = await pool.query<{ id: string }>(
-      `INSERT INTO generation_jobs (source_url, source_type, template_id, platform, brand_kit)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO generation_jobs (source_url, source_type, template_id, platform, brand_kit, generate_text)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
-      [params.sourceUrl, params.sourceType, params.templateId, params.platform, JSON.stringify(params.brandKit ?? {})],
+      [params.sourceUrl, params.sourceType, params.templateId, params.platform, JSON.stringify(params.brandKit ?? {}), params.generateText ?? false],
     );
     return rows[0]!.id;
   }
@@ -168,5 +170,10 @@ export class JobRepository {
     }
     counts.total = total;
     return counts;
+  }
+
+  static async purgeAll(): Promise<number> {
+    const { rowCount } = await pool.query(`DELETE FROM generation_jobs`);
+    return rowCount ?? 0;
   }
 }

@@ -49,6 +49,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
               logoUrl: { type: 'string' },
             },
           },
+          generateText: { type: 'boolean', default: false },
         },
       },
     },
@@ -58,7 +59,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, platform, templateId, brandKit } = parse.data;
+    const { sourceUrl, platform, templateId, brandKit, generateText } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
 
     const jobId = await JobRepository.create({
@@ -67,6 +68,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       templateId: templateId ?? 'auto',
       platform: platform ?? 'instagram-feed',
       brandKit: brandKit ?? {},
+      generateText: generateText ?? false,
     });
 
     const jobPayload = { jobId, sourceUrl, sourceType };

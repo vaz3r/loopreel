@@ -4,6 +4,7 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { jobsRoute, slidesRoute } from './routes/jobs.js';
 import { healthRoute } from './routes/health.js';
+import { adminRoute } from './routes/admin.js';
 import { startTtlSweeper } from './services/sweeper.js';
 
 const app = Fastify({
@@ -36,6 +37,7 @@ await app.register(swaggerUi, {
 await app.register(jobsRoute);
 await app.register(slidesRoute);
 await app.register(healthRoute);
+await app.register(adminRoute);
 
 startTtlSweeper();
 

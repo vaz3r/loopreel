@@ -46,4 +46,9 @@ export class OutboxRepository {
       [ids],
     );
   }
+
+  static async purgeAll(): Promise<number> {
+    const { rowCount } = await pool.query(`DELETE FROM outbox_events`);
+    return rowCount ?? 0;
+  }
 }

@@ -291,6 +291,7 @@ export interface MultiPhaseResult {
   slides: Record<string, unknown>[];
   briefXml: string;
   configXml: string;
+  rawGenerationXml: string;
   extractionLatencyMs: number;
   configLatencyMs: number;
   generationLatencyMs: number;
@@ -405,6 +406,7 @@ export async function generateSlidesMultiPhase(
     slides,
     briefXml,
     configXml,
+    rawGenerationXml: genCleaned,
     extractionLatencyMs,
     configLatencyMs,
     generationLatencyMs,

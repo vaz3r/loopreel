@@ -64,6 +64,7 @@ export const JobCreateSchema = z.object({
   platform: PlatformEnum.default('instagram-feed'),
   templateId: z.enum(ALL_TEMPLATE_KEYS).default('auto'),
   brandKit: BrandKitSchema.optional(),
+  generateText: z.boolean().default(false),
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;
 

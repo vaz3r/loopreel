@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { CreateJobPage } from './pages/CreateJobPage';
 import { JobsPage } from './pages/JobsPage';
 import { JobDetailPage } from './pages/JobDetailPage';
+import { MaintenancePage } from './pages/MaintenancePage';
 
 export function App() {
   return (
@@ -13,6 +14,7 @@ export function App() {
         <Route path="/create" element={<CreateJobPage />} />
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/jobs/:id" element={<JobDetailPage />} />
+        <Route path="/maintenance" element={<MaintenancePage />} />
       </Route>
     </Routes>
   );

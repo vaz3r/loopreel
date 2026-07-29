@@ -7,9 +7,14 @@ import { uploadSlide } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
 import { getPlatform } from '@loopreel/design';
 import pino from 'pino';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { getPool } from './pool/browser-pool.js';
 import { startMetricsServer } from './sidecar.js';
 import { startStaticServer } from './serve-static.js';
+
+const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
+const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
 
 const logger = pino({
   level: process.env['LOG_LEVEL'] ?? 'info',
@@ -27,6 +32,17 @@ async function ensurePool() {
     pool = await getPool();
   }
   return pool;
+}
+
+async function writeDebug(jobId: string, filename: string, content: string): Promise<void> {
+  if (!DEBUG_LOG) return;
+  try {
+    const dir = join(DEBUG_DIR, jobId);
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, filename), content, 'utf-8');
+  } catch {
+    // best effort
+  }
 }
 
 startStaticServer(STATIC_PORT);
@@ -166,49 +182,59 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       }
     }
 
-    // Generate LinkedIn post text
-    const linkedinText = payload.slides
-      .map((s: Record<string, unknown>) => {
-        const type = s['type'] as string;
-        if (type === 'cover') return `${s['headline']}\n${s['subheadline'] ?? ''}`;
-        if (type === 'quote') return `"${s['quote']}" — ${s['author'] ?? ''}`;
-        if (type === 'sequence') {
-          const items = (s['items'] as Array<Record<string, unknown>> ?? [])
-            .map((item) => `${item['num']} ${item['title']}: ${item['desc']}`)
-            .join('\n');
-          return `${s['headline']}\n${items}`;
-        }
-        if (type === 'telemetry') {
-          const stats = (s['stats'] as Array<Record<string, unknown>> ?? [])
-            .map((stat) => `${stat['value']}${stat['unit'] ?? ''} ${stat['label']}`)
-            .join('\n');
-          return `${s['headline']}\n${stats}`;
-        }
-        if (type === 'cta') return `${s['headline']}\n${s['subtext'] ?? ''}`;
-        return [s['headline'] ?? '', s['bodyText'] ?? ''].filter(Boolean).join('\n');
-      })
-      .join('\n\n');
+    const generateText = existing.generate_text ?? false;
 
-    // Generate Twitter thread text
-    const twitterThread = payload.slides
-      .map((s: Record<string, unknown>, i: number) => {
-        const type = s['type'] as string;
-        let text = '';
-        if (type === 'cover') text = `${s['headline']}`;
-        else if (type === 'quote') text = `"${s['quote']}"`;
-        else if (type === 'cta') text = `${s['headline']}`;
-        else text = [s['headline'] ?? s['value'] ?? '', s['bodyText'] ?? s['label'] ?? ''].filter(Boolean).join(' — ');
-        return `${i + 1}/${totalSlides} ${text}`;
-      })
-      .join('\n\n');
+    if (generateText) {
+      // Generate LinkedIn post text
+      const linkedinText = payload.slides
+        .map((s: Record<string, unknown>) => {
+          const type = s['type'] as string;
+          if (type === 'cover') return `${s['headline']}\n${s['subheadline'] ?? ''}`;
+          if (type === 'quote') return `"${s['quote']}" — ${s['author'] ?? ''}`;
+          if (type === 'sequence') {
+            const items = (s['items'] as Array<Record<string, unknown>> ?? [])
+              .map((item) => `${item['num']} ${item['title']}: ${item['desc']}`)
+              .join('\n');
+            return `${s['headline']}\n${items}`;
+          }
+          if (type === 'telemetry') {
+            const stats = (s['stats'] as Array<Record<string, unknown>> ?? [])
+              .map((stat) => `${stat['value']}${stat['unit'] ?? ''} ${stat['label']}`)
+              .join('\n');
+            return `${s['headline']}\n${stats}`;
+          }
+          if (type === 'cta') return `${s['headline']}\n${s['subtext'] ?? ''}`;
+          return [s['headline'] ?? '', s['bodyText'] ?? ''].filter(Boolean).join('\n');
+        })
+        .join('\n\n');
 
-    assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
-    assets.push({ jobId, formatType: 'twitter_thread', contentText: twitterThread });
+      // Generate Twitter thread text
+      const twitterThread = payload.slides
+        .map((s: Record<string, unknown>, i: number) => {
+          const type = s['type'] as string;
+          let text = '';
+          if (type === 'cover') text = `${s['headline']}`;
+          else if (type === 'quote') text = `"${s['quote']}"`;
+          else if (type === 'cta') text = `${s['headline']}`;
+          else text = [s['headline'] ?? s['value'] ?? '', s['bodyText'] ?? s['label'] ?? ''].filter(Boolean).join(' — ');
+          return `${i + 1}/${totalSlides} ${text}`;
+        })
+        .join('\n\n');
+
+      assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
+      assets.push({ jobId, formatType: 'twitter_thread', contentText: twitterThread });
+    }
 
     await AssetRepository.insertBatch(assets);
     await JobRepository.updateStatus(jobId, 'complete');
 
-    jobLogger.info({ assetCount: assets.length, platform, template: templateId }, 'Job complete');
+    await writeDebug(jobId, '06-rendered.json', JSON.stringify({
+      assetCount: assets.length,
+      hasText: generateText,
+      slideCount: existing.slide_count,
+    }, null, 2));
+
+    jobLogger.info({ assetCount: assets.length, platform, template: templateId, generateText }, 'Job complete');
   } catch (err) {
     const classified = classifyError(err);
     jobLogger.error({ err, errorType: classified.type }, 'Render failed');

@@ -6,7 +6,12 @@ import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase } from '@l
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import pino from 'pino';
+
+const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
+const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
 
 const logger = pino({
   level: process.env['LOG_LEVEL'] ?? 'info',
@@ -17,6 +22,17 @@ const logger = pino({
 
 const llm = createLLMClient();
 const renderQueue = createQueue('render');
+
+async function writeDebug(jobId: string, filename: string, content: string): Promise<void> {
+  if (!DEBUG_LOG) return;
+  try {
+    const dir = join(DEBUG_DIR, jobId);
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, filename), content, 'utf-8');
+  } catch {
+    // best effort, don't fail the job
+  }
+}
 
 function stripMarkdownFences(text: string): string {
   let cleaned = text.trim();
@@ -191,6 +207,10 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         slidePlan: result.slidePlan,
       }, 'Multi-phase pipeline completed');
 
+      await writeDebug(jobId, '02-phase1-brief.xml', result.briefXml);
+      await writeDebug(jobId, '03-phase2-config.xml', result.configXml);
+      await writeDebug(jobId, '04-phase3-slides.xml', result.rawGenerationXml);
+
       const { slides: paginated } = paginateContract({ slides: result.slides });
       const withImages = await fetchImagesForSlides(paginated, jobId);
 
@@ -218,6 +238,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
         const rawResponse = await llm.generateJSON(prompt, rawText);
         jobLogger.info({ attempt, rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');
+
+        await writeDebug(jobId, `02-monolithic-attempt${attempt}.txt`, rawResponse);
 
         const cleaned = stripMarkdownFences(rawResponse);
         let parsed: unknown;
@@ -263,6 +285,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       const { slides: paginated } = paginateContract({ slides: data.slides });
 
       const withImages = await fetchImagesForSlides(paginated, jobId);
+
+      await writeDebug(jobId, '05-paginated.json', JSON.stringify({ slides: withImages }, null, 2));
 
       await JobRepository.updateStatus(jobId, 'rendering', {
         contentPayload: { ...data, slides: withImages },

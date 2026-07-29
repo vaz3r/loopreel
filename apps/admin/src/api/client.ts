@@ -3,8 +3,12 @@ import type { JobStatus } from './types';
 const BASE = '/api';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (options?.body) {
+    headers['Content-Type'] = 'application/json';
+  }
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     ...options,
   });
   if (!res.ok) {
@@ -18,6 +22,7 @@ export interface CreateJobInput {
   sourceUrl: string;
   platform?: string;
   templateId?: string;
+  generateText?: boolean;
   brandKit?: {
     bg?: string;
     text?: string;
@@ -99,4 +104,10 @@ export const api = {
     request<DownloadResponse>(`/jobs/${id}/download?format=${format}`),
 
   getStats: () => request<StatsResponse>('/stats'),
+
+  purgeAll: () =>
+    request<{ jobsDeleted: number; outboxDeleted: number; queuesCleared: number }>(
+      '/admin/purge',
+      { method: 'DELETE' },
+    ),
 };

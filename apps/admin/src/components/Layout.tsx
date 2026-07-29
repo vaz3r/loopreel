@@ -14,12 +14,13 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
-import { LayoutDashboard, PlusCircle, List } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, List, Wrench } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/create', icon: PlusCircle, label: 'New Job' },
   { to: '/jobs', icon: List, label: 'Jobs' },
+  { to: '/maintenance', icon: Wrench, label: 'Maintenance' },
 ];
 
 export function Layout() {

@@ -2,9 +2,14 @@ import { JobRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
 import type { IngestPayload } from '@loopreel/schemas';
 import { classifyError } from '@loopreel/errors';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import pino from 'pino';
 import { handleYouTube } from './handlers/youtube.js';
 import { handleBlog } from './handlers/blog.js';
+
+const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
+const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
 
 const logger = pino({
   level: process.env['LOG_LEVEL'] ?? 'info',
@@ -16,6 +21,17 @@ const logger = pino({
 const worker = createWorker<IngestPayload>('ingest', async (job) => {
   const { jobId, sourceUrl, sourceType } = job.data;
   const jobLogger = logger.child({ jobId, workerType: 'ingest' });
+
+  async function writeDebug(filename: string, content: string): Promise<void> {
+    if (!DEBUG_LOG) return;
+    try {
+      const dir = join(DEBUG_DIR, jobId);
+      await mkdir(dir, { recursive: true });
+      await writeFile(join(dir, filename), content, 'utf-8');
+    } catch {
+      // best effort
+    }
+  }
 
   const existing = await JobRepository.findById(jobId);
   if (!existing) {
@@ -36,6 +52,8 @@ const worker = createWorker<IngestPayload>('ingest', async (job) => {
     } else {
       await handleBlog(jobId, sourceUrl, jobLogger);
     }
+
+    await writeDebug('00-ingest-complete.json', JSON.stringify({ sourceType, sourceUrl, jobId }, null, 2));
   } catch (err) {
     const classified = classifyError(err);
 
