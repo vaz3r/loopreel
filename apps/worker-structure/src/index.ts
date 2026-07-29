@@ -1,8 +1,9 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
-import { getTemplate, getPrompt, autoSelectTemplate, paginateContract } from '@loopreel/loop-bridge';
+import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase } from '@loopreel/llm';
+import type { TemplateInfo } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
@@ -191,9 +192,25 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
     if (useMultiPhase) {
       const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
-      const result = await generateSlidesMultiPhase(rawText, template.schema, {
+
+      // Build template info with full schema introspection for each template
+      const TEMPLATE_STYLES: Record<string, { name: string; aesthetics: string }> = {
+        'paper-of-record': { name: 'The Paper of Record', aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.' },
+        'the-globalist': { name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.' },
+        'the-terminal': { name: 'The Terminal', aesthetics: 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative.' },
+        'the-curator': { name: 'The Curator', aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.' },
+        'the-academic': { name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured.' },
+      };
+
+      const templates: TemplateInfo[] = Object.entries(TEMPLATES).map(([id, entry]) => ({
+        id,
+        name: TEMPLATE_STYLES[id]?.name ?? entry.name,
+        aesthetics: TEMPLATE_STYLES[id]?.aesthetics ?? '',
+        schemaText: introspectSchema(entry.schema),
+      }));
+
+      const result = await generateSlidesMultiPhase(rawText, templates, {
         llm,
-        templateHint: targetTemplateId,
         brandKit,
         onProgress: (phase, detail) => {
           jobLogger.info({ phase, detail }, 'Multi-phase progress');
@@ -205,14 +222,14 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
       jobLogger.info({
         slideCount: result.slides.length,
+        selectedTemplate: result.selectedTemplateId,
         extractionMs: result.extractionLatencyMs,
+        selectionMs: result.selectionLatencyMs,
+        planMs: result.planLatencyMs,
+        generationMs: result.generationLatencyMs,
         totalMs: result.totalLatencyMs,
         slidePlan: result.slidePlan,
       }, 'Multi-phase pipeline completed');
-
-      await writeDebug(jobId, '02-phase1-brief.xml', result.briefXml);
-      await writeDebug(jobId, '03-phase2-config.xml', result.configXml);
-      await writeDebug(jobId, '04-phase3-slides.xml', result.rawGenerationXml);
 
       const { slides: paginated } = paginateContract({ slides: result.slides });
       const withImages = await fetchImagesForSlides(paginated, jobId);

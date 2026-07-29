@@ -1,5 +1,13 @@
-import { z } from 'zod';
 import { parseXml } from './xml-parser.js';
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+export interface TemplateInfo {
+  id: string;
+  name: string;
+  aesthetics: string;
+  schemaText: string; // introspectSchema output — full slide type/field constraints
+}
 
 // ─── Phase 1: Summarise ──────────────────────────────────────────────────────
 
@@ -46,22 +54,74 @@ Return a single <contentBrief> element:
 - Keep each point concise (1-2 sentences)
 - Return ONLY the XML, no markdown fences, no explanation`;
 
-// ─── Phase 2: Configure ──────────────────────────────────────────────────────
+// ─── Phase 2: Select Template ────────────────────────────────────────────────
 
-const TEMPLATE_STYLES = [
-  { id: 'paper-of-record', name: 'The Paper of Record', aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.' },
-  { id: 'the-globalist', name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.' },
-  { id: 'the-terminal', name: 'The Terminal', aesthetics: 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative.' },
-  { id: 'the-curator', name: 'The Curator', aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.' },
-  { id: 'the-academic', name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured.' },
-];
+function getTemplateSelectionPrompt(briefXml: string, templates: TemplateInfo[]): { system: string; user: string } {
+  const templateSections = templates.map(t => `### ${t.id}
+Name: ${t.name}
+Aesthetics: ${t.aesthetics}
 
-function getConfigPrompt(briefXml: string, brandKit?: Record<string, string | undefined>): { system: string; user: string } {
+Supported slide types and their fields:
+${t.schemaText}`).join('\n\n---\n\n');
+
   return {
-    system: `You are a carousel strategist for a social media platform. Given a content brief, select the best template and design the carousel's narrative arc.
+    system: `You are a carousel strategist selecting the best template for a social media carousel.
 
 ## Content Brief
 ${briefXml}
+
+## Available Templates
+
+Each template below includes its name, visual aesthetics, and the FULL schema of supported slide types with all field constraints.
+
+${templateSections}
+
+## Task
+
+1. Read the content brief carefully.
+2. Review each template's supported slide types and their field constraints.
+3. Choose the template whose slide types best match the content's needs (e.g., if the content has data/numbers, prefer a template with telemetry. If it has contrasting ideas, prefer one with dichotomy or myth-fact. If it has quotes, ensure the template supports quote slides).
+4. Write a brief rationale explaining WHY this template is the best fit.
+
+## Output Format
+
+Return a single <templateSelection> element:
+
+<templateSelection>
+  <templateId>the-selected-template-id</templateId>
+  <rationale>Why this template is the best fit for this content. Reference specific slide types from the template's schema that will be useful.</rationale>
+</templateSelection>
+
+## Rules
+- Pick exactly ONE template.
+- The rationale must reference actual slide types from the selected template's schema.
+- If the content has hard statistics, prefer templates with telemetry slide type.
+- If the content has contrasting ideas or myths, prefer templates with dichotomy or myth-fact.
+- If the content has notable quotes, ensure the template supports quote slides.
+- Return ONLY the XML, no markdown fences, no explanation.`,
+    user: 'Select the best template for this content brief.',
+  };
+}
+
+// ─── Phase 3: Plan Slides ────────────────────────────────────────────────────
+
+function getSlidePlanPrompt(
+  briefXml: string,
+  selectedTemplate: TemplateInfo,
+  brandKit?: Record<string, string | undefined>,
+): { system: string; user: string } {
+  return {
+    system: `You are a carousel planner. Given a content brief and a selected template, plan the exact slide types and their purpose for each slide.
+
+## Content Brief
+${briefXml}
+
+## Selected Template: ${selectedTemplate.name}
+Aesthetics: ${selectedTemplate.aesthetics}
+
+## Supported Slide Types (use ONLY these types)
+
+${selectedTemplate.schemaText}
 
 ## Brand Kit
 ${brandKit ? `Background: ${brandKit.bg ?? 'not set'}
@@ -69,27 +129,21 @@ Text: ${brandKit.text ?? 'not set'}
 Accent: ${brandKit.accent ?? 'not set'}
 Font: ${brandKit.fontSerif ?? brandKit.fontSans ?? brandKit.fontMono ?? 'not set'}` : 'Use default brand colors for the selected template.'}
 
-## Available Templates
+## Task
 
-${TEMPLATE_STYLES.map(t => `### ${t.id}
-Name: ${t.name}
-Aesthetics: ${t.aesthetics}`).join('\n\n')}
+Plan 5-7 slides. For each slide, choose a type from the supported list above and describe what content goes in it.
 
 ## Output Format
 
-Return a single <slideConfig> element:
+Return a single <slidePlan> element:
 
-<slideConfig>
-  <templateId>the-template-id</templateId>
+<slidePlan>
   <narrativeArc>Describe the story this carousel tells in 2-3 sentences. What journey does the reader go on?</narrativeArc>
-  <slidePlan>
-    <slide type="cover" purpose="Hook the reader, set the tone" />
-    <slide type="sequence" purpose="Explain the core argument or framework" />
-    <slide type="myth-fact" purpose="Challenge a common misconception" />
-    <slide type="quote" purpose="The article's most memorable quote" />
-    <slide type="cta" purpose="Drive the reader to take action" />
-  </slidePlan>
-  <slideCount>6</slideCount>
+  <slide type="cover" purpose="What this slide communicates — be specific about the headline hook" />
+  <slide type="sequence" purpose="What framework or list this presents — list the actual items" />
+  <slide type="myth-fact" purpose="What misconception this challenges — state the myth and fact" />
+  <slide type="quote" purpose="Which quote from the brief — include the attribution" />
+  <slide type="cta" purpose="What action the reader should take" />
   <copyVoice>
     <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Use curiosity gaps and pattern interrupts.</rule>
     <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Shocking, Hidden, Reverse</rule>
@@ -100,45 +154,46 @@ Return a single <slideConfig> element:
     <rule>End EVERY slide with emotional punch, not information.</rule>
     <rule>Write like you're talking to a friend, not writing a report.</rule>
   </copyVoice>
-</slideConfig>
+</slidePlan>
 
 ## Rules
-1. Choose the template that best fits the article's topic and tone.
-2. Plan 5-7 slides. Start with cover, end with CTA. Vary types.
-3. If hasRealNumbers="false", do NOT include telemetry. Use sequence, quote, myth-fact instead.
-4. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
-5. copyVoice: These are the COPYWRITING rules for all slides. Every slide must follow these rules.
-6. Return ONLY the XML, no markdown fences, no explanation.`,
-    user: 'Design the carousel configuration for this content brief.',
+1. Use ONLY slide types from the supported list above. Do NOT invent new types.
+2. Start with a cover slide. End with a CTA slide.
+3. Vary slide types — never repeat the same type twice in a row.
+4. If hasRealNumbers="false" in the brief, do NOT use telemetry. Use sequence, quote, or myth-fact instead.
+5. Each slide's purpose must be SPECIFIC — reference actual content from the brief, not generic descriptions.
+6. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
+7. Return ONLY the XML, no markdown fences, no explanation.`,
+    user: 'Plan the slides for this carousel.',
   };
 }
 
-// ─── Phase 3: Generate ───────────────────────────────────────────────────────
+// ─── Phase 4: Generate Content ───────────────────────────────────────────────
 
-function getGeneratePrompt(briefXml: string, configXml: string, templateAesthetics: string): { system: string; user: string } {
+function getGeneratePrompt(
+  briefXml: string,
+  planXml: string,
+  selectedTemplate: TemplateInfo,
+): { system: string; user: string } {
   return {
-    system: `You are a social media carousel designer. Generate a complete carousel of slides for a social media post.
+    system: `You are a social media carousel designer. Generate a complete carousel of slides.
 
-## Template Aesthetics
-${templateAesthetics}
+## Template: ${selectedTemplate.name}
+Aesthetics: ${selectedTemplate.aesthetics}
 
-## Carousel Configuration
-${configXml}
+## Slide Plan
+${planXml}
 
 ## Content Brief
 ${briefXml}
 
+## Slide Type Constraints (EXACT — you MUST follow these)
+
+${selectedTemplate.schemaText}
+
 ## Output Format
 
 Return a single <presentation> element containing all slides.
-
-## Slide Type Constraints
-
-cover: id, tag?, headline (max 40), subheadline (max 80), authorName?, authorRole?, footerLeft?, footerRight?
-sequence: id, tag?, headline (max 40), items (array of {num, title (max 20), desc (max 60)}), footerLeft?, footerRight?
-myth-fact: id, tag?, headline (max 40), myth (max 100), fact (max 100), footerLeft?, footerRight?
-quote: id, tag?, quote (max 500), author?, role?, footerLeft?, footerRight?
-cta: id, tag?, headline (max 40), subtext (max 80), actionLabel?, socialHandle?, footerLeft?, footerRight?
 
 ## XML Child Element Format
 
@@ -199,38 +254,14 @@ For arrays (stats, items), use nested child elements:
   GREAT: "Your biggest frustration = your biggest opportunity."
 </copyExamples>
 
-## SLIDE-SPECIFIC RULES
-
-### Cover slides (THE MAKE-OR-BREAK MOMENT):
-- headline: max 8 words. MUST use a curiosity gap or pattern interrupt.
-- subheadline: max 15 words. Create intrigue. Make them NEED to swipe.
-
-### Sequence slides (MAKE IT SCANNABLE):
-- item titles: max 5 words. Use power words.
-- item descriptions: max 12 words. Punchy. No fluff.
-
-### Myth-fact slides (SHOCK VALUE):
-- myth: max 12 words. Something EVERYONE believes.
-- fact: max 12 words. Sharp, surprising, contrarian.
-
-### Quote slides:
-- Use the EXACT quote text from the brief
-- Keep the full quote, even if long
-
-### CTA slides (DRIVE ENGAGEMENT):
-- headline: max 6 words. Action-oriented. Create urgency.
-- subtext: max 12 words. Tell them EXACTLY what to do. Make it easy.
-
-### Footer convention:
-- footerLeft: short category label (e.g., "INSIGHT", "RESEARCH", "METHODOLOGY")
-- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
-
 ## RULES
 - Return ONLY the XML <presentation> element. No markdown fences, no explanation.
 - Generate ALL slides in order as specified in the slidePlan.
 - Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
-- Respect character limits exactly.
-- Self-closing tags for simple elements: <item ... />`,
+- Respect ALL field constraints (character limits, required fields, array sizes) exactly.
+- Self-closing tags for simple elements: <item ... />
+- Every slide MUST have: id, type, tag, footerLeft, footerRight.
+- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)`,
     user: 'Generate all slides for this carousel.',
   };
 }
@@ -290,22 +321,24 @@ function createFallbackSlide(type: string, index: number): Record<string, unknow
 export interface MultiPhaseResult {
   slides: Record<string, unknown>[];
   briefXml: string;
-  configXml: string;
+  selectionXml: string;
+  planXml: string;
   rawGenerationXml: string;
   extractionLatencyMs: number;
-  configLatencyMs: number;
+  selectionLatencyMs: number;
+  planLatencyMs: number;
   generationLatencyMs: number;
   totalLatencyMs: number;
   totalTokens: { input: number; output: number };
+  selectedTemplateId: string;
   slidePlan: string[];
 }
 
 export async function generateSlidesMultiPhase(
   rawText: string,
-  _templateSchema: z.ZodTypeAny,
+  templates: TemplateInfo[],
   options: {
     llm: { generateJSON(system: string, user: string): Promise<string> };
-    templateHint?: string;
     brandKit?: Record<string, string | undefined>;
     onProgress?: (phase: string, detail: string) => void;
     onDebug?: (filename: string, content: string) => void;
@@ -324,36 +357,57 @@ export async function generateSlidesMultiPhase(
   const extractionLatencyMs = Date.now() - phase1Start;
 
   onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);
+  onDebug?.('05-phase1-brief.xml', briefXml);
 
-  // ── PHASE 2: Configure ──────────────────────────────────────────────────────
-  onProgress?.('config', 'Phase 2: Designing carousel configuration...');
+  // ── PHASE 2: Select Template ────────────────────────────────────────────────
+  onProgress?.('selection', 'Phase 2: Selecting best template...');
 
   const phase2Start = Date.now();
-  const { system: configSystem, user: configUser } = getConfigPrompt(briefXml, brandKit);
-  onDebug?.('02-prompt-phase2-config.md', `## System\n\n${configSystem}\n\n## User\n\n${configUser}`);
-  const configRaw = await llm.generateJSON(configSystem, configUser);
-  const configXml = stripFences(configRaw);
-  const configLatencyMs = Date.now() - phase2Start;
+  const { system: selSystem, user: selUser } = getTemplateSelectionPrompt(briefXml, templates);
+  onDebug?.('02-prompt-phase2-select-template.md', `## System\n\n${selSystem}\n\n## User\n\n${selUser}`);
+  const selRaw = await llm.generateJSON(selSystem, selUser);
+  const selectionXml = stripFences(selRaw);
+  const selectionLatencyMs = Date.now() - phase2Start;
 
-  onProgress?.('config', `Phase 2 complete: ${configLatencyMs}ms`);
+  onProgress?.('selection', `Phase 2 complete: ${selectionLatencyMs}ms`);
+  onDebug?.('06-phase2-selection.xml', selectionXml);
 
-  // Parse config to get template and slide plan
-  let templateId = 'the-terminal';
+  // Parse selection to get template ID
+  let selectedTemplateId = templates[0]!.id;
+  try {
+    const selObj = xmlToObjects(parseXml(selectionXml)) as Record<string, unknown>;
+    selectedTemplateId = (selObj['templateId'] as string) ?? templates[0]!.id;
+  } catch {
+    // Fallback to first template
+  }
+
+  const selectedTemplate = templates.find(t => t.id === selectedTemplateId) ?? templates[0]!;
+  onProgress?.('selection', `Selected: ${selectedTemplate.name}`);
+
+  // ── PHASE 3: Plan Slides ────────────────────────────────────────────────────
+  onProgress?.('plan', 'Phase 3: Planning slide sequence...');
+
+  const phase3Start = Date.now();
+  const { system: planSystem, user: planUser } = getSlidePlanPrompt(briefXml, selectedTemplate, brandKit);
+  onDebug?.('03-prompt-phase3-plan-slides.md', `## System\n\n${planSystem}\n\n## User\n\n${planUser}`);
+  const planRaw = await llm.generateJSON(planSystem, planUser);
+  const planXml = stripFences(planRaw);
+  const planLatencyMs = Date.now() - phase3Start;
+
+  onProgress?.('plan', `Phase 3 complete: ${planLatencyMs}ms`);
+  onDebug?.('07-phase3-plan.xml', planXml);
+
+  // Parse plan to get slide types
   let slidePlan: string[] = [];
   try {
-    const configObj = xmlToObjects(parseXml(configXml)) as Record<string, unknown>;
-    templateId = (configObj['templateId'] as string) ?? 'the-terminal';
-    const plan = configObj['slidePlan'] as Record<string, unknown>;
-    if (plan && typeof plan === 'object') {
-      const slides = plan['slide'] as Array<Record<string, string>> | Record<string, string>;
-      if (Array.isArray(slides)) {
-        slidePlan = slides.map(s => s['type'] ?? 'sequence');
-      } else if (slides && slides['type']) {
-        slidePlan = [slides['type']];
-      }
+    const planObj = xmlToObjects(parseXml(planXml)) as Record<string, unknown>;
+    const slides = planObj['slide'] as Array<Record<string, string>> | Record<string, string>;
+    if (Array.isArray(slides)) {
+      slidePlan = slides.map(s => s['type'] ?? 'sequence');
+    } else if (slides && slides['type']) {
+      slidePlan = [slides['type']];
     }
   } catch {
-    // Fallback plan
     slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
   }
 
@@ -361,20 +415,20 @@ export async function generateSlidesMultiPhase(
     slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
   }
 
-  const templateStyle = TEMPLATE_STYLES.find(t => t.id === templateId) ?? TEMPLATE_STYLES[2]!;
-  onProgress?.('config', `Template: ${templateStyle.name}, Slides: ${slidePlan.join(', ')}`);
+  onProgress?.('plan', `Slides: ${slidePlan.join(', ')}`);
 
-  // ── PHASE 3: Generate ───────────────────────────────────────────────────────
-  onProgress?.('generation', 'Phase 3: Generating all slides...');
+  // ── PHASE 4: Generate Content ───────────────────────────────────────────────
+  onProgress?.('generation', 'Phase 4: Generating slide content...');
 
-  const phase3Start = Date.now();
-  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, configXml, templateStyle.aesthetics);
-  onDebug?.('03-prompt-phase3-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
+  const phase4Start = Date.now();
+  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate);
+  onDebug?.('04-prompt-phase4-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
   const genRaw = await llm.generateJSON(genSystem, genUser);
   const genCleaned = stripFences(genRaw);
-  const generationLatencyMs = Date.now() - phase3Start;
+  const generationLatencyMs = Date.now() - phase4Start;
 
-  onProgress?.('generation', `Phase 3 complete: ${generationLatencyMs}ms`);
+  onProgress?.('generation', `Phase 4 complete: ${generationLatencyMs}ms`);
+  onDebug?.('08-phase4-slides.xml', genCleaned);
 
   // Parse all slides
   const slides: Record<string, unknown>[] = [];
@@ -409,13 +463,16 @@ export async function generateSlidesMultiPhase(
   return {
     slides,
     briefXml,
-    configXml,
+    selectionXml,
+    planXml,
     rawGenerationXml: genCleaned,
     extractionLatencyMs,
-    configLatencyMs,
+    selectionLatencyMs,
+    planLatencyMs,
     generationLatencyMs,
     totalLatencyMs,
     totalTokens: { input: 0, output: 0 },
+    selectedTemplateId: selectedTemplate.id,
     slidePlan,
   };
 }

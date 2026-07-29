@@ -1,7 +1,7 @@
 FROM node:24-slim AS base
 ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.1 --activate
-RUN npx playwright install --with-deps chromium
+RUN npm install -g playwright@1.61.1 && npx playwright install --with-deps chromium
 WORKDIR /app
 
 FROM base AS deps
