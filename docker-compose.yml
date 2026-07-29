@@ -33,7 +33,7 @@ services:
     image: onerahmet/openai-whisper-asr-webservice:latest
     mem_limit: 2g
     ports:
-      - "8000:8000"
+      - "8000:80"
     environment:
       ASR_MODEL: base
       ASR_ENGINE: openai_whisper
@@ -94,7 +94,7 @@ services:
       R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
       R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
       R2_BUCKET_NAME: ${R2_BUCKET_NAME:-loopreel}
-      WHISPER_URL: http://faster-whisper:8000
+      WHISPER_URL: http://faster-whisper:80
       LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:
       postgres:
@@ -118,6 +118,7 @@ services:
       LLM_PROVIDER: ${LLM_PROVIDER:-mock}
       LLM_TIMEOUT: ${LLM_TIMEOUT:-60000}
       LLM_MAX_RETRIES: ${LLM_MAX_RETRIES:-3}
+      LLM_MULTI_PHASE: ${LLM_MULTI_PHASE:-true}
       LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:
       postgres:

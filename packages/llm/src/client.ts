@@ -36,10 +36,13 @@ class OpenRouterClient implements LLMClient {
         }
 
         const data = (await response.json()) as {
-          choices: Array<{ message: { content: string } }>;
+          choices?: Array<{ message: { content: string } }>;
         };
 
-        return data.choices[0]?.message?.content ?? '';
+        const content = data.choices?.[0]?.message?.content;
+        if (content) return content;
+
+        throw new Error(`Empty LLM response: ${JSON.stringify(data).slice(0, 200)}`);
       } catch (err) {
         lastError = err instanceof Error ? err : new Error(String(err));
 

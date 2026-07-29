@@ -2,7 +2,7 @@ import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract } from '@loopreel/loop-bridge';
-import { createLLMClient, parseLlmXmlOutput } from '@loopreel/llm';
+import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
@@ -58,6 +58,90 @@ async function fetchImagesForSlides(
   );
 }
 
+const VALID_SLIDE_TYPES = ['cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant', 'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta'];
+
+const TYPE_MAP: Record<string, string> = {
+  'hero-metric': 'telemetry',
+  'hero': 'telemetry',
+  'metric': 'telemetry',
+  'stats': 'telemetry',
+  'data': 'telemetry',
+  'comparison': 'quadrant',
+  'dichotomy': 'quadrant',
+  'vs': 'quadrant',
+  'checklist': 'resource-grid',
+  'resources': 'resource-grid',
+  'list': 'sequence',
+  'steps': 'sequence',
+  'pros-cons': 'quadrant',
+  'proscons': 'quadrant',
+  'myth': 'myth-fact',
+  'fact': 'myth-fact',
+  'debunk': 'myth-fact',
+  'expert': 'interview',
+  'qa': 'interview',
+  'q&a': 'interview',
+  'interview-slide': 'interview',
+};
+
+function sanitizeSlides(slides: Record<string, unknown>[]): Record<string, unknown>[] {
+  return slides
+    .filter((s) => typeof s === 'object' && s !== null)
+    .map((slide) => {
+      let type = String(slide.type ?? '');
+
+      if (!VALID_SLIDE_TYPES.includes(type)) {
+        const mapped = TYPE_MAP[type.toLowerCase()];
+        type = mapped ?? 'sequence';
+      }
+
+      const fixed: Record<string, unknown> = { ...slide, type };
+
+      // Fix string fields that the LLM wraps in objects
+      const stringFields = ['headline', 'subheadline', 'tag', 'myth', 'fact', 'quote',
+        'respondentName', 'respondentRole', 'author', 'role', 'credit', 'bodyText',
+        'subtext', 'actionLabel', 'socialHandle'];
+      for (const field of stringFields) {
+        if (fixed[field] && typeof fixed[field] === 'object') {
+          const obj = fixed[field] as Record<string, unknown>;
+          fixed[field] = obj.title ?? obj.text ?? obj.name ?? obj.value ?? JSON.stringify(obj);
+        }
+      }
+
+      // Ensure quadrant slides have required fields
+      if (type === 'quadrant') {
+        for (const corner of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']) {
+          if (!fixed[corner] || typeof fixed[corner] !== 'object') {
+            fixed[corner] = { title: corner, desc: '' };
+          }
+        }
+      }
+
+      // Ensure interview slides have string respondentName
+      if (type === 'interview') {
+        if (typeof fixed.respondentName !== 'string') fixed.respondentName = '';
+        if (typeof fixed.respondentRole !== 'string') fixed.respondentRole = '';
+      }
+
+      // Ensure case-study has stages array
+      if (type === 'case-study' && (!fixed.stages || !Array.isArray(fixed.stages))) {
+        fixed.stages = [{ label: 'Step 1', title: 'Process', desc: 'Key process step', highlighted: 'true' }];
+      }
+
+      // Ensure resource-grid has items array
+      if (type === 'resource-grid' && (!fixed.items || !Array.isArray(fixed.items))) {
+        fixed.items = [{ title: 'Resource', desc: 'Key resource' }];
+      }
+
+      // Ensure timeline has events array
+      if (type === 'timeline' && (!fixed.events || !Array.isArray(fixed.events))) {
+        fixed.events = [{ date: '2024', title: 'Event', desc: 'Key event', highlight: 'true' }];
+      }
+
+      return fixed;
+    });
+}
+
 const worker = createWorker<StructurePayload>('structure', async (job) => {
   const { jobId, rawText } = job.data;
   const jobLogger = logger.child({ jobId, workerType: 'structure' });
@@ -72,7 +156,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     return;
   }
 
-  jobLogger.info('Starting structuring with loop-bridge pipeline');
+  const useMultiPhase = process.env['LLM_MULTI_PHASE'] !== 'false';
+  jobLogger.info({ useMultiPhase }, 'Starting structuring pipeline');
 
   try {
     let targetTemplateId = existing.template_id;
@@ -87,61 +172,108 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     }
 
     const template = getTemplate(targetTemplateId);
-    const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
-    const prompt = await getPrompt(targetTemplateId, rawText, brandKit);
-    const rawResponse = await llm.generateJSON(prompt, rawText);
 
-    jobLogger.info({ rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');
-
-    const cleaned = stripMarkdownFences(rawResponse);
-    let parsed: unknown;
-
-    // Try XML first (primary format), then JSON (fallback)
-    try {
-      const result = parseLlmXmlOutput(cleaned);
-      parsed = result;
-    } catch {
-      try {
-        parsed = JSON.parse(cleaned);
-      } catch {
-        throw new Error('Could not parse LLM response as XML or JSON');
-      }
-    }
-
-    const result = template.schema.safeParse(parsed);
-
-    if (!result.success) {
-      const errorMessages = result.error.issues
-        .map((i: { path: (string | number)[]; message: string }) => `${i.path.join('.')}: ${i.message}`)
-        .join(', ');
-
-      jobLogger.error({ errors: result.error.issues }, 'Schema validation failed');
-
-      await JobRepository.markFailed(jobId, {
-        stage: 'structuring',
-        reason: 'schema_validation_failed',
-        details: errorMessages,
+    if (useMultiPhase) {
+      const result = await generateSlidesMultiPhase(rawText, template.schema, {
+        llm,
+        templateHint: targetTemplateId,
+        onProgress: (phase, detail) => {
+          jobLogger.info({ phase, detail }, 'Multi-phase progress');
+        },
       });
-      return;
+
+      jobLogger.info({
+        slideCount: result.slides.length,
+        extractionMs: result.extractionLatencyMs,
+        totalMs: result.totalLatencyMs,
+        slidePlan: result.slidePlan,
+      }, 'Multi-phase pipeline completed');
+
+      const { slides: paginated } = paginateContract({ slides: result.slides });
+      const withImages = await fetchImagesForSlides(paginated, jobId);
+
+      await JobRepository.updateStatus(jobId, 'rendering', {
+        contentPayload: { slides: withImages },
+        slideCount: withImages.length,
+      });
+
+      await renderQueue.add('render-slide', { jobId });
+
+      jobLogger.info(
+        { slideCount: withImages.length, template: targetTemplateId },
+        'Dispatched to render queue (multi-phase)',
+      );
+    } else {
+      const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
+      const basePrompt = await getPrompt(targetTemplateId, rawText, brandKit);
+
+      let lastValidationErrors = '';
+
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const prompt = lastValidationErrors
+          ? `${basePrompt}\n\n## PREVIOUS ATTEMPT FAILED VALIDATION\nYour previous output had these errors:\n${lastValidationErrors}\nFix ALL of these errors. Do NOT invent slide types that are not in the schema.`
+          : basePrompt;
+
+        const rawResponse = await llm.generateJSON(prompt, rawText);
+        jobLogger.info({ attempt, rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');
+
+        const cleaned = stripMarkdownFences(rawResponse);
+        let parsed: unknown;
+
+        try {
+          const result = parseLlmXmlOutput(cleaned);
+          parsed = result;
+        } catch {
+          try {
+            parsed = JSON.parse(cleaned);
+          } catch {
+            throw new Error('Could not parse LLM response as XML or JSON');
+          }
+        }
+
+        const sanitized = { slides: sanitizeSlides((parsed as Record<string, unknown>).slides as Record<string, unknown>[] ?? []) };
+        const result = template.schema.safeParse(sanitized);
+
+        if (result.success) {
+          var validData = result.data;
+          break;
+        }
+
+        lastValidationErrors = result.error.issues
+          .map((i: { path: (string | number)[]; message: string }) => `${i.path.join('.')}: ${i.message}`)
+          .join('\n');
+
+        jobLogger.error({ attempt, errors: result.error.issues }, 'Schema validation failed, retrying');
+
+        if (attempt === 2) {
+          await JobRepository.markFailed(jobId, {
+            stage: 'structuring',
+            reason: 'schema_validation_failed',
+            details: lastValidationErrors,
+          });
+          return;
+        }
+      }
+
+      if (!validData!) return;
+      const data = validData as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
+
+      const { slides: paginated } = paginateContract({ slides: data.slides });
+
+      const withImages = await fetchImagesForSlides(paginated, jobId);
+
+      await JobRepository.updateStatus(jobId, 'rendering', {
+        contentPayload: { ...data, slides: withImages },
+        slideCount: withImages.length,
+      });
+
+      await renderQueue.add('render-slide', { jobId });
+
+      jobLogger.info(
+        { slideCount: withImages.length, template: targetTemplateId },
+        'Dispatched to render queue (monolithic)',
+      );
     }
-
-    const data = result.data as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
-
-    const { slides: paginated } = paginateContract({ slides: data.slides });
-
-    const withImages = await fetchImagesForSlides(paginated, jobId);
-
-    await JobRepository.updateStatus(jobId, 'rendering', {
-      contentPayload: { ...data, slides: withImages },
-      slideCount: withImages.length,
-    });
-
-    await renderQueue.add('render-slide', { jobId });
-
-    jobLogger.info(
-      { slideCount: withImages.length, template: existing.template_id },
-      'Dispatched to render queue',
-    );
   } catch (err) {
     const classified = classifyError(err);
     jobLogger.error({ err, errorType: classified.type }, 'Structuring failed');

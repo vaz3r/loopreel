@@ -309,6 +309,10 @@ importers:
         version: 5.9.3
 
   packages/llm:
+    dependencies:
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
     devDependencies:
       '@types/node':
         specifier: ^22.0.0

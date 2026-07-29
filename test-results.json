@@ -1,0 +1,128 @@
+[
+  {
+    "id": "extract-bare",
+    "phase": "extraction",
+    "variant": "bare",
+    "promptLength": 1192,
+    "promptPreview": "You are a content analyst. Extract key elements from the article below into XML.",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 488,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "extract-templateAware",
+    "phase": "extraction",
+    "variant": "templateAware",
+    "promptLength": 1333,
+    "promptPreview": "You are a content analyst for \"The Terminal\" — a Bloomberg-style data intelligen",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 266,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "extract-withExample",
+    "phase": "extraction",
+    "variant": "withExample",
+    "promptLength": 2697,
+    "promptPreview": "You are a content analyst. Extract key elements from the article below into XML.",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 121,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "slide-cover",
+    "phase": "single-slide",
+    "variant": "cover",
+    "promptLength": 2436,
+    "promptPreview": "You are a slide content writer for \"The Terminal\" — a Bloomberg-style data intel",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 54,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "slide-telemetry",
+    "phase": "single-slide",
+    "variant": "telemetry",
+    "promptLength": 2556,
+    "promptPreview": "You are a slide content writer for \"The Terminal\" — a Bloomberg-style data intel",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 57,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "slide-myth-fact",
+    "phase": "single-slide",
+    "variant": "myth-fact",
+    "promptLength": 2465,
+    "promptPreview": "You are a slide content writer for \"The Terminal\" — a Bloomberg-style data intel",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 54,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  {
+    "id": "monolithic",
+    "phase": "monolithic",
+    "variant": "full",
+    "promptLength": 43554,
+    "promptPreview": "You are a world-class editorial content strategist. Your task is to transform th",
+    "responseRaw": "",
+    "responseLength": 0,
+    "latencyMs": 83,
+    "parsed": null,
+    "parseError": "Error: LLM 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remaining\":\"0\",\"X-RateLimit-Reset\":\"1785283200000\"},\"provider_name\":null,\"previous_errors\":[{\"code\":429,\"m",
+    "validXml": false,
+    "hasPresentationRoot": false,
+    "tokenEstimate": {
+      "input": 0,
+      "output": 0
+    }
+  }
+]

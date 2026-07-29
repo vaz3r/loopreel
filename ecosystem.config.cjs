@@ -88,5 +88,18 @@ module.exports = {
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       env: { NODE_ENV: 'development', ...localEnv },
     },
+    {
+      name: 'admin',
+      script: 'npx',
+      args: 'vite --host --port 5175',
+      cwd: resolve(__dirname, 'apps/admin'),
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      error_file: resolve(LOG_DIR, 'admin-error.log'),
+      out_file: resolve(LOG_DIR, 'admin-out.log'),
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      env: { NODE_ENV: 'development', ...localEnv },
+    },
   ],
 };

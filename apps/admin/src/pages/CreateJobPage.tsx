@@ -18,8 +18,12 @@ export function CreateJobPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    let sourceUrl = url.trim();
+    if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
+      sourceUrl = 'https://' + sourceUrl;
+    }
     createJob.mutate(
-      { sourceUrl: url, platform, templateId, brandKit: Object.keys(brandKit).length > 0 ? brandKit : undefined },
+      { sourceUrl, platform, templateId, brandKit: Object.keys(brandKit).length > 0 ? brandKit : undefined },
       { onSuccess: (data) => navigate(`/jobs/${data.jobId}`) },
     );
   };
