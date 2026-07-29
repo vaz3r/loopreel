@@ -2,30 +2,75 @@ import { TEMPLATE_KEYS } from '@loopreel/schemas';
 import { getTemplate } from './registry.js';
 import { getBrandKitDescription } from './brandkits.js';
 import { introspectSchema } from './schema-introspect.js';
+import { generateUniqueColors } from './color-utils.js';
+import { generateUniqueLayouts, describeLayout } from './layout-utils.js';
 
 const TEMPLATE_IDS = TEMPLATE_KEYS;
 
 function getTemplateStyle(templateId: string): string {
   switch (templateId) {
     case 'paper-of-record':
-      return 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative tone. Content should feel like breaking news or deep investigative journalism.';
+      return 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative tone.';
     case 'the-globalist':
-      return 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, financial analysis. Sophisticated and worldly. Content should feel like a premium intelligence briefing.';
+      return 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, financial analysis. Sophisticated and worldly.';
     case 'the-terminal':
-      return 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative. Technical and precise. Content should feel like real-time market intelligence.';
+      return 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative. Technical and precise.';
     case 'the-curator':
-      return 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual. Heavy use of negative space. Content should feel like a gallery exhibition — every word is curated.';
+      return 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual. Heavy use of negative space.';
     case 'the-academic':
-      return 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured. Citation-heavy, methodical. Content should feel like a peer-reviewed journal article.';
+      return 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured. Citation-heavy, methodical.';
     default:
       return '';
   }
+}
+
+function getCopyVoice(): string {
+  return `
+## PREMIUM COPYWRITING RULES (this is what makes posts go viral)
+
+<copyRules>
+  <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Make it count.</rule>
+  <rule>Use CURIOSITY GAPS: create an information void the reader MUST fill. "Nobody tells you this about..." "The mistake 90% make..."</rule>
+  <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Always, Shocking, Hidden, Reverse</rule>
+  <rule>Use PATTERN INTERRUPTS: break expectations. "Don't do this." "This is wrong." "Everyone gets this backwards."</rule>
+  <rule>Max 5 words per line. No sentences. Fragments only.</rule>
+  <rule>Active voice only. No passive constructions.</rule>
+  <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
+  <rule>Write like you're talking to a friend, not writing a report.</rule>
+  <rule>End EVERY slide with emotional punch, not information.</rule>
+  <rule>Use "YOU" language. Make it personal. "Your problem" not "one's problem"</rule>
+</copyRules>
+
+## PREMIUM COPY EXAMPLES — GOOD vs GREAT
+
+<copyExamples>
+  BAD: "Evidence suggests superior ventures are noticed, not manufactured through abstract brainstorming."
+  GOOD: "Stop brainstorming. Start noticing."
+  GREAT: "You're brainstorming wrong. Here's why."
+
+  BAD: "Maintain residency at the leading edge of your field to perceive gaps before the market."
+  GOOD: "Live in the future. Build what's missing."
+  GREAT: "The future is already here. You're just not looking."
+
+  BAD: "Startup success requires a brilliant, original 'lightbulb moment' generated through brainstorming."
+  GOOD: "You don't need a lightbulb moment."
+  GREAT: "Nobody tells you this: lightbulb moments are a myth."
+
+  BAD: "Embrace tedious, unglamorous problems; they often harbor the highest barriers to entry and value."
+  GOOD: "The unsexy problems = the billion-dollar ones."
+  GREAT: "The boring problems? That's where the money hides."
+
+  BAD: "Focus on problems you encounter that you possess the unique technical skill to resolve."
+  GOOD: "Solve YOUR problem first."
+  GREAT: "Your biggest frustration = your biggest opportunity."
+</copyExamples>`;
 }
 
 export async function getPrompt(
   templateId: string,
   rawText: string,
   brandKit?: Record<string, string | undefined>,
+  articleTopic?: string,
 ): Promise<string> {
   if (!TEMPLATE_IDS.includes(templateId as any)) {
     throw new Error(`Unknown template "${templateId}"`);
@@ -52,10 +97,52 @@ export async function getPrompt(
       : '';
   }
 
+  // Generate unique colors and layouts for this specific job
+  const seed = articleTopic ?? rawText.slice(0, 100);
+  const primaryColor = brandKit?.['primary'] ?? brandKit?.['bg'] ?? '#1a1a2e';
+  const uniqueColors = generateUniqueColors(primaryColor, seed);
+  const uniqueLayouts = generateUniqueLayouts(seed);
+
+  const copyVoice = getCopyVoice();
+
   return `You are a world-class editorial content strategist. Your task is to transform the provided source content into a structured social media carousel for the "${template.name}" template.
 
 ## Template Style
 ${style}
+${copyVoice}
+
+## ANTI-HALLUCINATION RULES (CRITICAL)
+
+<antiHallucination>
+  <rule>Every fact, number, and quote MUST come DIRECTLY from the source content. Do NOT paraphrase, round, interpolate, or invent anything.</rule>
+  <rule>If the source content has NO hard data, do NOT generate telemetry. Use sequence, quote, or myth-fact instead.</rule>
+  <rule>If the source content says "2-3%", you MUST write exactly that. Do NOT change to "3%" or "2.5%".</rule>
+  <rule>If you cannot find an exact number in the source, the stat does not exist. Period.</rule>
+  <rule>NEVER invent statistics, percentages, dollar amounts, or counts. NEVER.</rule>
+  <rule>NEVER invent quotes. Use ONLY quotes from the source content.</rule>
+</antiHallucination>
+
+## UNIQUE VISUAL STYLING (This job's unique colors and layouts)
+
+<uniqueStyling>
+  <colors>
+    <bg>${uniqueColors.bg}</bg>
+    <text>${uniqueColors.text}</text>
+    <accent>${uniqueColors.accent}</accent>
+    <highlight>${uniqueColors.highlight}</highlight>
+    <muted>${uniqueColors.muted}</muted>
+  </colors>
+  <layouts>
+    <cover>${uniqueLayouts.cover} — ${describeLayout(uniqueLayouts.cover)}</cover>
+    <sequence>${uniqueLayouts.sequence} — ${describeLayout(uniqueLayouts.sequence)}</sequence>
+    <mythFact>${uniqueLayouts.mythFact} — ${describeLayout(uniqueLayouts.mythFact)}</mythFact>
+    <quote>${uniqueLayouts.quote} — ${describeLayout(uniqueLayouts.quote)}</quote>
+    <cta>${uniqueLayouts.cta} — ${describeLayout(uniqueLayouts.cta)}</cta>
+    <extra>${uniqueLayouts.extra} — ${describeLayout(uniqueLayouts.extra)}</extra>
+  </layouts>
+</uniqueStyling>
+
+IMPORTANT: Use these exact colors and layouts for each slide. Each slide type has a pre-assigned layout. Follow the layout description when positioning elements.
 
 ## Output Format
 Return an XML document with a <presentation> root element. Each slide is a <slide> element. Simple fields (strings, numbers, booleans) go as XML attributes on the <slide> tag. Complex fields (nested objects, arrays) go as child elements. Do NOT use markdown fences — return raw XML only.

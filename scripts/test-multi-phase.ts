@@ -1,34 +1,74 @@
 /**
- * Multi-Phase LLM Pipeline Test
+ * 3-Phase LLM Pipeline Test — V2 (Premium Quality)
  *
- * Tests the hypothesis that splitting a monolithic LLM call into smaller,
- * focused phases produces more reliable output for smaller models.
+ * Phase 1: SUMMARISE — Extract structured content brief with hasRealNumbers flag
+ * Phase 2: CONFIGURE — Select template, plan slides, define copy voice
+ * Phase 3: GENERATE — Generate all slides with anti-hallucination + copy quality rules
  *
  * Run: pnpm tsx scripts/test-multi-phase.ts
  */
 
-const API_KEY = process.env['LLM_API_KEY'] ?? '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';
+import 'dotenv/config';
+
+const PROVIDER = process.env['LLM_PROVIDER'] ?? 'openrouter';
+const API_KEY = process.env['LLM_API_KEY'] ?? '';
+const GOOGLE_API_KEY = process.env['LLM_GOOGLE_API_KEY'] ?? '';
 const BASE_URL = process.env['LLM_BASE_URL'] ?? 'https://openrouter.ai/api/v1';
-const MODEL = process.env['LLM_MODEL'] ?? 'google/gemma-4-26b-a4b-it:free';
-const TIMEOUT_MS = 120_000;
+const MODEL = process.env['LLM_MODEL'] ?? (PROVIDER === 'google' ? 'gemini-2.5-flash-lite' : 'google/gemma-4-26b-a4b-it:free');
+const TIMEOUT_MS = 180_000;
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface TestResult {
-  id: string;
+interface PhaseResult {
   phase: string;
-  variant: string;
   promptLength: number;
-  promptPreview: string;
   responseRaw: string;
   responseLength: number;
   latencyMs: number;
   parsed: unknown;
   parseError: string | null;
   validXml: boolean;
-  hasPresentationRoot: boolean;
   tokenEstimate: { input: number; output: number };
 }
+
+interface PipelineResult {
+  article: string;
+  phase1: PhaseResult;
+  phase2: PhaseResult;
+  phase3: PhaseResult;
+  totalMs: number;
+  slidesJson: unknown;
+}
+
+// ─── Template Styles (Publication Aesthetics) ────────────────────────────────
+
+const TEMPLATE_STYLES = [
+  {
+    id: 'paper-of-record',
+    name: 'The Paper of Record',
+    aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.',
+  },
+  {
+    id: 'the-globalist',
+    name: 'The Globalist',
+    aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.',
+  },
+  {
+    id: 'the-terminal',
+    name: 'The Terminal',
+    aesthetics: 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative.',
+  },
+  {
+    id: 'the-curator',
+    name: 'The Curator',
+    aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.',
+  },
+  {
+    id: 'the-academic',
+    name: 'The Academic',
+    aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured.',
+  },
+];
 
 // ─── LLM Call ────────────────────────────────────────────────────────────────
 
@@ -36,6 +76,55 @@ async function callLLM(systemPrompt: string, userContent: string, retries = 3): 
   for (let attempt = 0; attempt < retries; attempt++) {
     const start = Date.now();
     try {
+      if (PROVIDER === 'google') {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GOOGLE_API_KEY}`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ role: 'user', parts: [{ text: userContent }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 8192 },
+          }),
+        });
+
+        if (!response.ok) {
+          const body = await response.text().catch(() => '');
+          if ((response.status === 429 || response.status >= 500) && attempt < retries - 1) {
+            const delay = 5000 * (attempt + 1);
+            console.log(`    ⚠ ${response.status} error, retrying in ${delay / 1000}s...`);
+            await new Promise(r => setTimeout(r, delay));
+            continue;
+          }
+          throw new Error(`Google AI ${response.status}: ${body.slice(0, 300)}`);
+        }
+
+        const data = (await response.json()) as {
+          candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+          usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number };
+        };
+
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) {
+          if (attempt < retries - 1) {
+            await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
+            continue;
+          }
+          throw new Error(`Empty response`);
+        }
+
+        return {
+          text,
+          latencyMs: Date.now() - start,
+          tokenEstimate: {
+            input: data.usageMetadata?.promptTokenCount ?? Math.round(systemPrompt.length / 4),
+            output: data.usageMetadata?.candidatesTokenCount ?? Math.round(text.length / 4),
+          },
+        };
+      }
+
+      // Default: OpenRouter
       const response = await fetch(`${BASE_URL}/chat/completions`, {
         method: 'POST',
         headers: {
@@ -54,14 +143,13 @@ async function callLLM(systemPrompt: string, userContent: string, retries = 3): 
 
       if (!response.ok) {
         const body = await response.text().catch(() => '');
-        const is500 = response.status >= 500;
-        if (is500 && attempt < retries - 1) {
+        if ((response.status === 429 || response.status >= 500) && attempt < retries - 1) {
           const delay = 5000 * (attempt + 1);
-          console.log(`    ⚠ ${response.status} error, retrying in ${delay / 1000}s (attempt ${attempt + 1}/${retries})...`);
+          console.log(`    ⚠ ${response.status} error, retrying in ${delay / 1000}s...`);
           await new Promise(r => setTimeout(r, delay));
           continue;
         }
-        throw new Error(`LLM ${response.status}: ${body.slice(0, 300)}`);
+        throw new Error(`OpenRouter ${response.status}: ${body.slice(0, 300)}`);
       }
 
       const data = (await response.json()) as {
@@ -72,12 +160,10 @@ async function callLLM(systemPrompt: string, userContent: string, retries = 3): 
       const content = data.choices?.[0]?.message?.content;
       if (!content) {
         if (attempt < retries - 1) {
-          const delay = 3000 * (attempt + 1);
-          console.log(`    ⚠ Empty response, retrying in ${delay / 1000}s...`);
-          await new Promise(r => setTimeout(r, delay));
+          await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
           continue;
         }
-        throw new Error(`Empty response: ${JSON.stringify(data).slice(0, 200)}`);
+        throw new Error(`Empty response`);
       }
 
       return {
@@ -89,10 +175,8 @@ async function callLLM(systemPrompt: string, userContent: string, retries = 3): 
         },
       };
     } catch (e) {
-      if (attempt < retries - 1 && String(e).includes('500')) {
-        const delay = 5000 * (attempt + 1);
-        console.log(`    ⚠ Retrying in ${delay / 1000}s after error...`);
-        await new Promise(r => setTimeout(r, delay));
+      if (attempt < retries - 1) {
+        await new Promise(r => setTimeout(r, 5000 * (attempt + 1)));
         continue;
       }
       throw e;
@@ -101,7 +185,7 @@ async function callLLM(systemPrompt: string, userContent: string, retries = 3): 
   throw new Error('Failed after retries');
 }
 
-// ─── XML Parser (inline, no imports needed) ──────────────────────────────────
+// ─── XML Parser (inline) ─────────────────────────────────────────────────────
 
 interface XmlElement {
   tag: string;
@@ -133,7 +217,7 @@ function parseXmlNode(xml: string, pos: number): { element: XmlElement; endPos: 
   while (pos < xml.length && xml[pos] !== '>' && !(xml[pos] === '/' && xml[pos + 1] === '>')) { attrStr += xml[pos]!; pos++; }
   const attributes = parseAttributes(attrStr);
   if (xml[pos] === '/' && xml[pos + 1] === '>') return { element: { tag, attributes, children: [] }, endPos: pos + 2 };
-  pos++; // skip >
+  pos++;
   const children: XmlElement[] = [];
   let text = '';
   while (pos < xml.length) {
@@ -172,362 +256,8 @@ function xmlToObjects(el: XmlElement): unknown {
   return result;
 }
 
-// ─── Test Data ───────────────────────────────────────────────────────────────
-
-// Fetch real article from Paul Graham
-async function fetchArticle(): Promise<string> {
-  console.log('  Fetching real article from paulgraham.com...');
-  const res = await fetch('https://www.paulgraham.com/startupideas.html');
-  const html = await res.text();
-  // Strip HTML tags, collapse whitespace (same as ingest worker)
-  const text = html
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  console.log(`  Article fetched: ${text.length} chars`);
-  return text;
-}
-
-const TEMPLATE_STYLE_TERMINAL = 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative. Technical and precise.';
-
-// ─── Slide Schema Constraints (for single-slide generation) ──────────────────
-
-const SLIDE_TYPE_CONSTRAINTS: Record<string, string> = {
-  cover: `cover:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 80 chars, REQUIRED
-  subheadline: string, max 200 chars, optional
-  authorName: string, optional
-  authorRole: string, optional
-  footerLeft: string, optional
-  footerRight: string, optional`,
-
-  telemetry: `telemetry:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  stats: array of {value: string, unit: string, label: string, max 150 chars, color: green | red | amber | blue}, min 1, max 4, REQUIRED
-  footerLeft: string, optional
-  footerRight: string, optional`,
-
-  'myth-fact': `myth-fact:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  myth: string, max 300 chars, REQUIRED
-  fact: string, max 300 chars, REQUIRED
-  footerLeft: string, optional
-  footerRight: string, optional`,
-};
-
-// ─── TEST 1: Content Extraction ──────────────────────────────────────────────
-
-const EXTRACTION_PROMPTS = {
-  bare: {
-    variant: 'bare',
-    system: `You are a content analyst. Extract key elements from the article below into XML.
-
-Output format — return ONLY this XML structure:
-
-<contentBrief>
-  <title>Article title</title>
-  <oneLiner>One sentence summary of the article's main argument</oneLiner>
-  <keyPoints>
-    <point>Key takeaway 1</point>
-    <point>Key takeaway 2</point>
-    <point>Key takeaway 3</point>
-    <point>Key takeaway 4</point>
-  </keyPoints>
-  <quotes>
-    <quote text="Exact quote from the article" attribution="Person Name" role="Their title" />
-  </quotes>
-  <statistics>
-    <stat value="42" unit="%" label="What the stat measures" color="green" />
-  </statistics>
-  <timelineEvents>
-    <event date="Year or date" title="Event name" desc="Brief description" />
-  </timelineEvents>
-  <counterpoints>
-    <item myth="Common misconception" fact="What the article actually says" />
-  </counterpoints>
-</contentBrief>
-
-Rules:
-- Extract real data from the article. Do NOT invent facts or statistics.
-- If the article doesn't contain statistics, leave <statistics> empty.
-- If the article doesn't contain quotes, leave <quotes> empty.
-- Provide 3-6 key points.
-- Return ONLY the XML, no markdown fences, no explanation.`,
-  },
-
-  templateAware: {
-    variant: 'template-aware',
-    system: `You are a content analyst for "The Terminal" — a Bloomberg-style data intelligence platform. Your audience is quantitative professionals who care about metrics, data, and market trends.
-
-Extract key elements from the article below into XML.
-
-Output format — return ONLY this XML structure:
-
-<contentBrief>
-  <title>Article title</title>
-  <oneLiner>One sentence summary</oneLiner>
-  <keyPoints>
-    <point>Key takeaway 1</point>
-    <point>Key takeaway 2</point>
-    <point>Key takeaway 3</point>
-    <point>Key takeaway 4</point>
-  </keyPoints>
-  <quotes>
-    <quote text="Exact quote" attribution="Person Name" role="Their title" />
-  </quotes>
-  <statistics>
-    <stat value="42" unit="%" label="What the stat measures" color="green" />
-  </statistics>
-  <timelineEvents>
-    <event date="Year" title="Event" desc="Description" />
-  </timelineEvents>
-  <counterpoints>
-    <item myth="Common misconception" fact="What the article says" />
-  </counterpoints>
-</contentBrief>
-
-Rules:
-- PRIORITIZE quantitative data: growth rates, market sizes, percentages, dollar amounts.
-- If the article contains any numbers, extract them as <statistics>.
-- Extract direct quotes for attribution slides.
-- Extract counterpoints as myth/fact pairs when the article debunks common beliefs.
-- Return ONLY the XML, no markdown fences, no explanation.`,
-  },
-
-  withExample: {
-    variant: 'with-example',
-    system: `You are a content analyst. Extract key elements from the article below into XML.
-
-## Output Format
-
-<contentBrief>
-  <title>Article title</title>
-  <oneLiner>One sentence summary</oneLiner>
-  <keyPoints>
-    <point>Key takeaway 1</point>
-    <point>Key takeaway 2</point>
-    <point>Key takeaway 3</point>
-    <point>Key takeaway 4</point>
-  </keyPoints>
-  <quotes>
-    <quote text="Exact quote" attribution="Person Name" role="Their title" />
-  </quotes>
-  <statistics>
-    <stat value="42" unit="%" label="What the stat measures" color="green" />
-  </statistics>
-  <timelineEvents>
-    <event date="Year" title="Event" desc="Description" />
-  </timelineEvents>
-  <counterpoints>
-    <item myth="Common misconception" fact="What the article says" />
-  </counterpoints>
-</contentBrief>
-
-## Example (for a hypothetical article about AI adoption)
-
-<contentBrief>
-  <title>Enterprise AI Adoption Reaches Inflection Point</title>
-  <oneLiner>Global enterprise AI spending is projected to reach $184B in 2026, driven by cost reduction and competitive pressure.</oneLiner>
-  <keyPoints>
-    <point>Enterprise AI adoption grew 42% year-over-year</point>
-    <point>Healthcare and finance are the fastest-adopting sectors</point>
-    <point>ROI realization timeline dropped from 18 to 6 months</point>
-  </keyPoints>
-  <quotes>
-    <quote text="AI is not replacing humans. It is replacing tasks humans shouldn't be doing." attribution="Dr. Sarah Chen" role="VP of AI, Microsoft" />
-  </quotes>
-  <statistics>
-    <stat value="42" unit="%" label="Year-over-year enterprise AI adoption growth" color="green" />
-    <stat value="184" unit="B" label="Global enterprise AI market size projected for 2026" color="blue" />
-    <stat value="6" unit="months" label="Average ROI realization timeline for enterprise AI" color="amber" />
-  </statistics>
-  <timelineEvents>
-    <event date="2023" title="ChatGPT Launch" desc="Public LLM adoption begins" />
-    <event date="2024" title="Enterprise Integration" desc="Fortune 500 deploy internal AI tools" />
-    <event date="2025" title="ROI Inflection" desc="AI projects start showing measurable returns" />
-  </timelineEvents>
-  <counterpoints>
-    <item myth="AI will replace all jobs" fact="AI augments roles; only 5% of occupations are fully automatable" />
-    <item myth="Small companies can't compete in AI" fact="73% of AI startups are founded by companies under 100 employees" />
-  </counterpoints>
-</contentBrief>
-
-## Rules
-
-- Extract REAL data from the article. Do NOT invent facts or statistics.
-- If the article doesn't contain a type of data, leave that section empty.
-- Provide 3-6 key points.
-- Return ONLY the XML, no markdown fences, no explanation.`,
-  },
-};
-
-// ─── TEST 2: Single-Slide Prompts ────────────────────────────────────────────
-
-function getSlidePrompt(slideType: string, briefXml: string): { system: string; user: string } {
-  const constraints = SLIDE_TYPE_CONSTRAINTS[slideType]!;
-
-  const examples: Record<string, string> = {
-    cover: `<slide type="cover" id="slide-01" tag="MARKET DATA" headline="AI Adoption Reaches Inflection Point" subheadline="Enterprise spending projected at $184B in 2026" authorName="Terminal Intelligence" footerLeft="ANALYSIS" footerRight="PAGE 01" />`,
-    telemetry: `<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Growth Metrics" footerLeft="METRICS" footerRight="PAGE 01">
-  <stats>
-    <stat value="42" unit="%" label="Year-over-year growth" color="green" />
-    <stat value="184" unit="B" label="Global market size projected for 2026" color="blue" />
-  </stats>
-</slide>`,
-    'myth-fact': `<slide type="myth-fact" id="slide-01" tag="ANALYSIS" headline="The Market Size Fallacy" myth="Market size is the most important factor for startup success." fact="Growth rate is the key metric that determines whether a company will succeed." footerLeft="RESEARCH" footerRight="PAGE 01" />`,
-  };
-
-  return {
-    system: `You are a slide content writer for "The Terminal" — a Bloomberg-style data intelligence platform.
-
-Generate exactly ONE slide element for a social media carousel.
-
-## Content Brief
-The following XML contains the extracted content from the source article. Use ONLY facts from this brief.
-
-${briefXml}
-
-## Slide Type to Generate: ${slideType}
-
-## Schema Constraints for This Slide Type
-${constraints}
-
-## CRITICAL: XML Child Element Format
-For fields that are ARRAYS (like stats, items, events, stages), you MUST use nested child elements — NOT stringified JSON in attributes.
-
-CORRECT format for telemetry:
-<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Metrics" footerLeft="METRICS" footerRight="PAGE 01">
-  <stats>
-    <stat value="42" unit="%" label="Growth rate" color="green" />
-    <stat value="184" unit="B" label="Market size" color="blue" />
-  </stats>
-</slide>
-
-WRONG format (do NOT do this):
-<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Metrics" stats="[{value: '42', unit: '%'}]" footerLeft="METRICS" footerRight="PAGE 01" />
-
-Same for sequence: use <items><item num="1" .../></items>
-Same for timeline: use <events><event .../></events>
-Same for case-study: use <stages><stage .../></stages>
-
-## Output Format
-Return a single <slide> element with type="${slideType}". Include exactly: id="slide-01", tag (short category), type, footerLeft, footerRight ("PAGE 01"), and all required fields for this slide type.
-
-## Rules
-- Return ONLY the XML <slide> element. No markdown fences, no explanation, no presentation wrapper.
-- Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
-- Respect character limits exactly.
-- For stats: use concrete numbers with units (e.g., "42%", "3.2x", "$184B").
-- For quotes: use exact text from the brief with proper attribution.
-- For myth-fact: use counterpoints from the brief.
-- Use self-closing tags <stat ... /> for simple leaf elements.
-
-## Example Output
-${examples[slideType] ?? examples.cover!}`,
-    user: `Generate a single "${slideType}" slide from the content brief above.`,
-  };
-}
-
-// ─── TEST 3: Monolithic Prompt ───────────────────────────────────────────────
-
-function getMonolithicPrompt(articleText: string): string {
-  return `You are a world-class editorial content strategist. Your task is to transform the provided source content into a structured social media carousel for "The Terminal" template.
-
-## Template Style
-Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative. Technical and precise. Content should feel like real-time market intelligence.
-
-## Output Format
-Return an XML document with a <presentation> root element. Each slide is a <slide> element. Simple fields go as XML attributes. Complex fields go as child elements. Do NOT use markdown fences — return raw XML only.
-
-## Slide Type Constraints
-Each slide type has specific fields with character limits and array size limits. YOU MUST FOLLOW THESE EXACTLY.
-
-cover:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 80 chars, REQUIRED
-  subheadline: string, max 200 chars, optional
-  authorName: string, optional
-  authorRole: string, optional
-  footerLeft: string, optional
-  footerRight: string, optional
-
-sequence:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  items: array of {num: string, title: string, max 50 chars, desc: string, max 200 chars}, min 1, max 20, REQUIRED
-  footerLeft: string, optional
-  footerRight: string, optional
-
-telemetry:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  stats: array of {value: string, unit: string, label: string, max 150 chars, color: green | red | amber | blue}, min 1, max 4, REQUIRED
-  footerLeft: string, optional
-  footerRight: string, optional
-
-quote:
-  id: string, REQUIRED
-  tag: string, optional
-  quote: string, max 500 chars, REQUIRED
-  author: string, optional
-  role: string, optional
-  footerLeft: string, optional
-  footerRight: string, optional
-
-myth-fact:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  myth: string, max 300 chars, REQUIRED
-  fact: string, max 300 chars, REQUIRED
-  footerLeft: string, optional
-  footerRight: string, optional
-
-cta:
-  id: string, REQUIRED
-  tag: string, optional
-  headline: string, max 60 chars, REQUIRED
-  subtext: string, max 200 chars, optional
-  actionLabel: string, optional
-  socialHandle: string, optional
-  footerLeft: string, optional
-  footerRight: string, optional
-
-## Universal Rules
-1. Generate 6-8 slides. Start with a cover slide, end with a CTA slide.
-2. Use a variety of slide types — never repeat the same type twice in a row.
-3. Every slide MUST have: id, type, tag, footerLeft, footerRight.
-4. Respect the character limits listed above for each field.
-5. Stats should have concrete numbers with units (e.g., "42%", "3.2x", "$184B").
-6. Quotes must have named attribution with role.
-7. footerRight: "PAGE 01", "PAGE 02", etc.
-8. Return ONLY the XML document, no markdown fences, no explanation.
-9. Use self-closing tags <slide ... /> for slides with no child elements.
-10. Use nested elements for arrays.
-
-## Source Content
-${articleText}`;
-}
-
-// ─── Test Runner ─────────────────────────────────────────────────────────────
-
 function stripFences(text: string): string {
   return text.replace(/^```(?:xml)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
-}
-
-function isXml(text: string): boolean {
-  return text.startsWith('<') && text.endsWith('>');
 }
 
 function tryParseXml(text: string): { ok: boolean; root: XmlElement | null; error: string | null } {
@@ -539,166 +269,445 @@ function tryParseXml(text: string): { ok: boolean; root: XmlElement | null; erro
   }
 }
 
-async function runTest(id: string, phase: string, variant: string, systemPrompt: string, userContent: string): Promise<TestResult> {
-  console.log(`\n  ▶ ${id} [${variant}] — prompt: ${systemPrompt.length} chars`);
-  const start = Date.now();
+// ─── Article Fetch ───────────────────────────────────────────────────────────
 
-  try {
-    const { text, latencyMs, tokenEstimate } = await callLLM(systemPrompt, userContent);
-    const cleaned = stripFences(text);
+async function fetchArticle(): Promise<string> {
+  console.log('  Fetching real article from paulgraham.com...');
+  const res = await fetch('https://www.paulgraham.com/startupideas.html');
+  const html = await res.text();
+  const text = html
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  console.log(`  Article fetched: ${text.length} chars`);
+  return text;
+}
 
-    console.log(`    ✓ response: ${cleaned.length} chars, ${latencyMs}ms, ~${tokenEstimate.input}→${tokenEstimate.output} tokens`);
-    console.log(`    preview: ${cleaned.slice(0, 120).replace(/\n/g, ' ')}...`);
+// ─── Phase 1: Summarise ──────────────────────────────────────────────────────
 
-    const parsed = tryParseXml(cleaned);
+function getPhase1Prompt(): { system: string; user: string } {
+  return {
+    system: `You are an expert content analyst. Summarise the article into a structured content brief for a social media carousel.
 
-    return {
-      id, phase, variant,
-      promptLength: systemPrompt.length,
-      promptPreview: systemPrompt.slice(0, 80).replace(/\n/g, ' '),
-      responseRaw: text,
-      responseLength: cleaned.length,
-      latencyMs,
-      parsed: parsed.root ? xmlToObjects(parsed.root) : null,
-      parseError: parsed.error,
-      validXml: parsed.ok,
-      hasPresentationRoot: parsed.root?.tag === 'presentation' || parsed.root?.tag === 'contentBrief',
-      tokenEstimate,
-    };
-  } catch (e) {
-    const err = String(e);
-    console.log(`    ✗ ERROR: ${err.slice(0, 150)}`);
-    return {
-      id, phase, variant,
-      promptLength: systemPrompt.length,
-      promptPreview: systemPrompt.slice(0, 80).replace(/\n/g, ' '),
-      responseRaw: '',
-      responseLength: 0,
-      latencyMs: Date.now() - start,
-      parsed: null,
-      parseError: err,
-      validXml: false,
-      hasPresentationRoot: false,
-      tokenEstimate: { input: 0, output: 0 },
-    };
-  }
+## Output Format
+
+Return a single <contentBrief> element:
+
+<contentBrief>
+  <title>The article title</title>
+  <oneLiner>One sentence summary of the article's core argument (max 25 words)</oneLiner>
+  <keyInsights>
+    <point>The first key insight or argument</point>
+    <point>The second key insight</point>
+    <point>The third key insight</point>
+    <point>The fourth key insight</point>
+    <point>The fifth key insight</point>
+  </keyInsights>
+  <quotes>
+    <quote text="Exact direct quote from the article — word for word" author="Person Name" role="Their Title" />
+  </quotes>
+  <counterpoints>
+    <point>A common objection or alternative view mentioned in the article</point>
+  </counterpoints>
+  <hardData>
+    <point>A specific number, percentage, dollar amount, or measurable fact from the article</point>
+  </hardData>
+  <hasRealNumbers>true or false — does the article contain ACTUAL hard statistics (percentages, dollar amounts, specific counts)? Not general references to numbers.</hasRealNumbers>
+  <people>
+    <person name="Person Name" role="Their role or title in the article" />
+  </people>
+  <tone>Describe the article's tone in one word (e.g., analytical, opinionated, newsy, academic, provocative)</tone>
+  <readingLevel>professional | general | technical</readingLevel>
+</contentBrief>
+
+## Rules
+- Extract 5-7 keyInsights that capture the article's core argument
+- Include direct quotes ONLY if the article has notable ones with named attribution
+- hardData: ONLY include actual numbers, percentages, dollar amounts, or measurable facts. Do NOT include opinions, advice, or qualitative statements. If the article has no numbers, leave <hardData> empty.
+- hasRealNumbers: Answer "true" ONLY if the article contains specific, citable statistics. "2-3 percent" mentioned casually is NOT a real statistic. "42% year-over-year growth" IS a real statistic. When in doubt, answer "false".
+- counterpoints: Capture objections, "but actually" moments, or myths the article debunks
+- Do NOT invent content not in the article
+- Keep each point concise (1-2 sentences)
+- Return ONLY the XML, no markdown fences, no explanation`,
+    user: 'Summarise this article into the structured content brief above.',
+  };
+}
+
+// ─── Phase 2: Configure ──────────────────────────────────────────────────────
+
+function getPhase2Prompt(briefXml: string): { system: string; user: string } {
+  return {
+    system: `You are a carousel strategist for a social media platform. Given a content brief, select the best template and design the carousel's narrative arc.
+
+## Content Brief
+${briefXml}
+
+## Available Templates
+
+${TEMPLATE_STYLES.map(t => `### ${t.id}
+Name: ${t.name}
+Aesthetics: ${t.aesthetics}`).join('\n\n')}
+
+## Output Format
+
+Return a single <slideConfig> element:
+
+<slideConfig>
+  <templateId>the-template-id</templateId>
+  <narrativeArc>Describe the story this carousel tells in 2-3 sentences. What journey does the reader go on?</narrativeArc>
+  <slidePlan>
+    <slide type="cover" purpose="Hook the reader, set the tone" />
+    <slide type="sequence" purpose="Explain the core argument or framework" />
+    <slide type="myth-fact" purpose="Challenge a common misconception" />
+    <slide type="quote" purpose="The article's most memorable quote" />
+    <slide type="cta" purpose="Drive the reader to take action" />
+  </slidePlan>
+  <slideCount>6</slideCount>
+  <copyVoice>
+    <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Use curiosity gaps and pattern interrupts.</rule>
+    <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Shocking, Hidden, Reverse</rule>
+    <rule>Max 5 words per line. No sentences. Fragments only.</rule>
+    <rule>Active voice only. No passive constructions.</rule>
+    <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
+    <rule>Use "YOU" language. Make it personal.</rule>
+    <rule>End EVERY slide with emotional punch, not information.</rule>
+    <rule>Write like you're talking to a friend, not writing a report.</rule>
+  </copyVoice>
+</slideConfig>
+
+## Rules
+1. Choose the template that best fits the article's topic and tone.
+2. Plan 5-7 slides. Start with cover, end with CTA. Vary types.
+3. If hasRealNumbers="false", do NOT include telemetry. Use sequence, quote, myth-fact instead.
+4. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
+5. copyVoice: These are the COPYWRITING rules for all slides. Every slide must follow these rules.
+6. Return ONLY the XML, no markdown fences, no explanation.`,
+    user: 'Design the carousel configuration for this content brief.',
+  };
+}
+
+// ─── Phase 3: Generate ───────────────────────────────────────────────────────
+
+function getPhase3Prompt(briefXml: string, configXml: string, templateAesthetics: string): { system: string; user: string } {
+  return {
+    system: `You are a social media carousel designer. Generate a complete carousel of slides for a social media post.
+
+## Template Aesthetics
+${templateAesthetics}
+
+## Carousel Configuration
+${configXml}
+
+## Content Brief
+${briefXml}
+
+## Output Format
+
+Return a single <presentation> element containing all slides.
+
+## Slide Type Constraints
+
+cover: id, tag?, headline (max 40), subheadline (max 80), authorName?, authorRole?, footerLeft?, footerRight?
+sequence: id, tag?, headline (max 40), items (array of {num, title (max 20), desc (max 60)}), footerLeft?, footerRight?
+myth-fact: id, tag?, headline (max 40), myth (max 100), fact (max 100), footerLeft?, footerRight?
+quote: id, tag?, quote (max 500), author?, role?, footerLeft?, footerRight?
+cta: id, tag?, headline (max 40), subtext (max 80), actionLabel?, socialHandle?, footerLeft?, footerRight?
+
+## XML Child Element Format
+
+For arrays (stats, items), use nested child elements:
+<slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Five Trends" footerLeft="ANALYSIS" footerRight="PAGE 02">
+  <items>
+    <item num="1" title="Edge AI" desc="Processing moves to devices" />
+  </items>
+</slide>
+
+## ANTI-HALLUCINATION RULES (CRITICAL)
+
+<antiHallucination>
+  <rule>Every fact, number, and quote MUST come DIRECTLY from the content brief above. Do NOT paraphrase, round, interpolate, or invent anything.</rule>
+  <rule>If the content brief has NO hard data, do NOT generate telemetry. Use sequence, quote, or myth-fact instead.</rule>
+  <rule>If the content brief says "2-3%", you MUST write exactly that. Do NOT change to "3%" or "2.5%".</rule>
+  <rule>If you cannot find an exact number in the brief, the stat does not exist. Period.</rule>
+  <rule>NEVER invent statistics, percentages, dollar amounts, or counts. NEVER.</rule>
+  <rule>NEVER invent quotes. Use ONLY quotes from the brief's quotes section.</rule>
+</antiHallucination>
+
+## PREMIUM COPYWRITING RULES (this is what makes posts go viral)
+
+<copyRules>
+  <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Make it count.</rule>
+  <rule>Use CURIOSITY GAPS: create an information void the reader MUST fill. "Nobody tells you this about..." "The mistake 90% make..."</rule>
+  <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Always, Shocking, Hidden, Reverse</rule>
+  <rule>Use PATTERN INTERRUPTS: break expectations. "Don't do this." "This is wrong." "Everyone gets this backwards."</rule>
+  <rule>Max 5 words per line. No sentences. Fragments only.</rule>
+  <rule>Active voice only. No passive constructions.</rule>
+  <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
+  <rule>Write like you're talking to a friend, not writing a report.</rule>
+  <rule>End EVERY slide with emotional punch, not information.</rule>
+  <rule>Use "YOU" language. Make it personal. "Your problem" not "one's problem"</rule>
+  <rule>Use numbers and specifics when possible. "7 ways" > "several ways". "3 minutes" > "a few minutes"</rule>
+</copyRules>
+
+## PREMIUM COPY EXAMPLES — GOOD vs GREAT
+
+<copyExamples>
+  BAD: "Evidence suggests superior ventures are noticed, not manufactured through abstract brainstorming."
+  GOOD: "Stop brainstorming. Start noticing."
+  GREAT: "You're brainstorming wrong. Here's why."
+
+  BAD: "Maintain residency at the leading edge of your field to perceive gaps before the market."
+  GOOD: "Live in the future. Build what's missing."
+  GREAT: "The future is already here. You're just not looking."
+
+  BAD: "Startup success requires a brilliant, original 'lightbulb moment' generated through brainstorming."
+  GOOD: "You don't need a lightbulb moment."
+  GREAT: "Nobody tells you this: lightbulb moments are a myth."
+
+  BAD: "Embrace tedious, unglamorous problems; they often harbor the highest barriers to entry and value."
+  GOOD: "The unsexy problems = the billion-dollar ones."
+  GREAT: "The boring problems? That's where the money hides."
+
+  BAD: "Focus on problems you encounter that you possess the unique technical skill to resolve."
+  GOOD: "Solve YOUR problem first."
+  GREAT: "Your biggest frustration = your biggest opportunity."
+
+  BAD: "Prioritize narrow, deep market penetration over broad, shallow initiatives to ensure product-market fit."
+  GOOD: "Go narrow and deep. Not wide and shallow."
+  GREAT: "Go deep, not wide. That's how you win."
+
+  BAD: "Avoid markets that are crowded."
+  GOOD: "Crowds prove demand."
+  GREAT: "Everyone avoids competition. That's the mistake."
+
+  BAD: "Write it down today. Start building your solution now."
+  GOOD: "Drop your problem in the comments."
+  GREAT: "Comment your biggest frustration. Let's solve it together."
+</copyExamples>
+
+## SLIDE-SPECIFIC RULES
+
+### Cover slides (THE MAKE-OR-BREAK MOMENT):
+- headline: max 8 words. MUST use a curiosity gap or pattern interrupt.
+- subheadline: max 15 words. Create intrigue. Make them NEED to swipe.
+- Examples:
+  - headline="Nobody tells you this about startup ideas" subheadline="The truth is simpler — and more powerful — than you think."
+  - headline="You're brainstorming wrong" subheadline="Here's the 2-minute fix that changes everything."
+  - headline="The startup myth that's killing you" subheadline="Stop believing this. Start noticing instead."
+
+### Sequence slides (MAKE IT SCANNABLE):
+- item titles: max 5 words. Use power words.
+- item descriptions: max 12 words. Punchy. No fluff.
+- Examples:
+  - title="Solve YOUR problem" desc="Build what you need first. Not what others want."
+  - title="Live in the future" desc="Work where the world is heading tomorrow."
+  - title="Notice the gaps" desc="See what's missing in your daily life."
+
+### Myth-fact slides (SHOCK VALUE):
+- myth: max 12 words. Something EVERYONE believes.
+- fact: max 12 words. Sharp, surprising, contrarian.
+- Examples:
+  - myth="You need a brilliant idea to start." fact="The best ideas aren't thought up. They're noticed."
+  - myth="Competition is bad for startups." fact="Competition proves demand. Avoid it and you avoid money."
+  - myth="Brainstorming works." fact="Brainstorming produces garbage. Observation produces gold."
+
+### Quote slides:
+- Use the EXACT quote text from the brief
+- Keep the full quote, even if long
+
+### CTA slides (DRIVE ENGAGEMENT):
+- headline: max 6 words. Action-oriented. Create urgency.
+- subtext: max 12 words. Tell them EXACTLY what to do. Make it easy.
+- Examples:
+  - headline="Your turn" subtext="Comment your biggest frustration. Let's solve it."
+  - headline="Try this now" subtext="Spend 2 minutes writing down your problems."
+  - headline="What's your take?" subtext="Drop your answer below. I read every comment."
+
+### Footer convention:
+- footerLeft: short category label (e.g., "INSIGHT", "RESEARCH", "METHODOLOGY")
+- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
+
+## RULES
+- Return ONLY the XML <presentation> element. No markdown fences, no explanation.
+- Generate ALL slides in order as specified in the slidePlan.
+- Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
+- Respect character limits exactly.
+- Self-closing tags for simple elements: <item ... />`,
+    user: 'Generate all slides for this carousel.',
+  };
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const MOCK_ARTICLE = await fetchArticle();
+  const article = await fetchArticle();
 
+  console.log('');
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('  MULTI-PHASE LLM PIPELINE TEST');
-  console.log(`  Model: ${MODEL}`);
-  console.log(`  Article: ${MOCK_ARTICLE.length} chars`);
-  console.log('═══════════════════════════════════════════════════════════════');
-
-  const results: TestResult[] = [];
-
-  // ── TEST 1: Content Extraction (3 variants) ────────────────────────────────
-  console.log('\n┌─ TEST 1: Content Extraction ──────────────────────────────┐');
-
-  for (const [key, prompt] of Object.entries(EXTRACTION_PROMPTS)) {
-    const result = await runTest(`extract-${key}`, 'extraction', key, prompt.system, MOCK_ARTICLE);
-    results.push(result);
-  }
-
-  // Show extraction results
-  console.log('\n┌─ TEST 1 RESULTS ──────────────────────────────────────────┐');
-  for (const r of results) {
-    const status = r.validXml ? (r.hasPresentationRoot ? '✓ VALID XML' : '⚠ WRONG ROOT') : `✗ PARSE FAILED: ${r.parseError?.slice(0, 60)}`;
-    console.log(`  ${r.variant}: ${status} | ${r.responseLength} chars | ${r.latencyMs}ms`);
-  }
-
-  // Pick best extraction for phase 2
-  const bestExtraction = results.find(r => r.validXml && r.hasPresentationRoot && r.parseError === null);
-  if (!bestExtraction) {
-    console.log('\n  ⚠ No valid extraction found. Using first result anyway for phase 2.');
-  }
-
-  const bestBriefXml = bestExtraction ? stripFences(bestExtraction.responseRaw) : results[0]?.responseRaw ?? '';
-
-  // ── TEST 2: Single-Slide Generation (3 slide types) ────────────────────────
-  console.log('\n┌─ TEST 2: Single-Slide Generation ─────────────────────────┐');
-
-  for (const slideType of ['cover', 'telemetry', 'myth-fact']) {
-    const { system, user } = getSlidePrompt(slideType, bestBriefXml);
-    const result = await runTest(`slide-${slideType}`, 'single-slide', slideType, system, user);
-    results.push(result);
-  }
-
-  // ── TEST 3: Monolithic Comparison ───────────────────────────────────────────
-  console.log('\n┌─ TEST 3: Monolithic Comparison ────────────────────────────┐');
-
-  const monoPrompt = getMonolithicPrompt(MOCK_ARTICLE);
-  const monoResult = await runTest('monolithic', 'monolithic', 'full', monoPrompt, 'Generate the carousel slides.');
-  results.push(monoResult);
-
-  // ── FINAL REPORT ────────────────────────────────────────────────────────────
-  console.log('\n═══════════════════════════════════════════════════════════════');
-  console.log('  FINAL REPORT');
+  console.log('  3-PHASE PIPELINE TEST — V2 (Premium Quality)');
+  console.log(`  Provider: ${PROVIDER} | Model: ${MODEL}`);
+  console.log(`  Article: ${article.length} chars`);
   console.log('═══════════════════════════════════════════════════════════════');
 
-  console.log('\n  Phase         Variant          Valid?    ParseErr?  Chars  Latency  Tokens');
-  console.log('  ───────────── ──────────────── ───────── ────────── ────── ──────── ──────');
+  const totalStart = Date.now();
 
-  for (const r of results) {
-    const valid = r.validXml ? '✓ YES' : '✗ NO';
-    const err = r.parseError ? r.parseError.slice(0, 20) : 'none';
-    const tokens = `${r.tokenEstimate.input}→${r.tokenEstimate.output}`;
-    console.log(`  ${r.phase.padEnd(14)} ${r.variant.padEnd(16)} ${valid.padEnd(10)} ${err.padEnd(9)} ${String(r.responseLength).padStart(5)} ${String(r.latencyMs).padStart(7)}ms ${tokens}`);
-  }
+  // ── PHASE 1: Summarise ──────────────────────────────────────────────────────
+  console.log('\n┌─ PHASE 1: SUMMARISE ──────────────────────────────────────┐');
 
-  // Detailed extraction output
-  for (const r of results.filter(r => r.phase === 'extraction' && r.validXml)) {
-    console.log(`\n  ── ${r.variant} extraction output ──`);
-    console.log(r.responseRaw.slice(0, 800));
-    console.log('  ...');
-  }
+  const { system: p1System, user: p1User } = getPhase1Prompt();
+  console.log(`  ▶ Prompt: ${p1System.length} chars`);
+  const p1Start = Date.now();
+  const p1Raw = await callLLM(p1System, article);
+  const p1Cleaned = stripFences(p1Raw.text);
+  const p1Parsed = tryParseXml(p1Cleaned);
 
-  // Detailed slide output
-  for (const r of results.filter(r => r.phase === 'single-slide' && r.validXml)) {
-    console.log(`\n  ── ${r.variant} slide output ──`);
-    console.log(r.responseRaw.slice(0, 500));
-  }
+  console.log(`  ✓ Response: ${p1Cleaned.length} chars, ${p1Raw.latencyMs}ms`);
+  console.log(`  ✓ Parsed: ${p1Parsed.ok ? 'valid XML' : 'PARSE ERROR: ' + p1Parsed.error}`);
 
-  // Detailed monolithic output
-  for (const r of results.filter(r => r.phase === 'monolithic')) {
-    console.log(`\n  ── monolithic output ──`);
-    if (r.validXml) {
-      console.log(r.responseRaw.slice(0, 1000));
-      console.log('  ...');
-    } else {
-      console.log(`  PARSE ERROR: ${r.parseError}`);
-      console.log(`  RAW (first 300): ${r.responseRaw.slice(0, 300)}`);
+  // Check hasRealNumbers
+  const hasRealNumbers = p1Cleaned.includes('<hasRealNumbers>true</hasRealNumbers>');
+  console.log(`  ✓ hasRealNumbers: ${hasRealNumbers}`);
+
+  const phase1: PhaseResult = {
+    phase: 'summarise',
+    promptLength: p1System.length,
+    responseRaw: p1Raw.text,
+    responseLength: p1Cleaned.length,
+    latencyMs: p1Raw.latencyMs,
+    parsed: p1Parsed.root ? xmlToObjects(p1Parsed.root) : null,
+    parseError: p1Parsed.error,
+    validXml: p1Parsed.ok,
+    tokenEstimate: p1Raw.tokenEstimate,
+  };
+
+  // ── PHASE 2: Configure ──────────────────────────────────────────────────────
+  console.log('\n┌─ PHASE 2: CONFIGURE ──────────────────────────────────────┐');
+
+  const { system: p2System, user: p2User } = getPhase2Prompt(p1Cleaned);
+  console.log(`  ▶ Prompt: ${p2System.length} chars`);
+  const p2Raw = await callLLM(p2System, p2User);
+  const p2Cleaned = stripFences(p2Raw.text);
+  const p2Parsed = tryParseXml(p2Cleaned);
+
+  console.log(`  ✓ Response: ${p2Cleaned.length} chars, ${p2Raw.latencyMs}ms`);
+  console.log(`  ✓ Parsed: ${p2Parsed.ok ? 'valid XML' : 'PARSE ERROR: ' + p2Parsed.error}`);
+
+  // Extract config details
+  const configObj = p2Parsed.ok && p2Parsed.root ? xmlToObjects(p2Parsed.root) as Record<string, unknown> : null;
+  if (configObj) {
+    console.log(`  Template: ${configObj['templateId'] ?? 'unknown'}`);
+    console.log(`  Slides: ${configObj['slideCount'] ?? 'unknown'}`);
+    if (typeof configObj['narrativeArc'] === 'string') {
+      console.log(`  Narrative: ${configObj['narrativeArc'].slice(0, 120)}...`);
     }
   }
 
-  // Token comparison
-  const extractTokens = results.filter(r => r.phase === 'extraction').reduce((s, r) => s + r.tokenEstimate.input + r.tokenEstimate.output, 0);
-  const slideTokens = results.filter(r => r.phase === 'single-slide').reduce((s, r) => s + r.tokenEstimate.input + r.tokenEstimate.output, 0);
-  const monoTokens = results.filter(r => r.phase === 'monolithic').reduce((s, r) => s + r.tokenEstimate.input + r.tokenEstimate.output, 0);
+  // Find the template aesthetics for Phase 3
+  const selectedTemplateId = (configObj?.['templateId'] as string) ?? 'the-terminal';
+  const selectedTemplate = TEMPLATE_STYLES.find(t => t.id === selectedTemplateId) ?? TEMPLATE_STYLES[2]!;
+  console.log(`  Using template: ${selectedTemplate.name}`);
 
-  console.log('\n  ── Token Comparison ──');
-  console.log(`  Multi-phase total (extract + 3 slides): ${extractTokens + slideTokens} tokens`);
-  console.log(`  Monolithic total:                        ${monoTokens} tokens`);
+  const phase2: PhaseResult = {
+    phase: 'configure',
+    promptLength: p2System.length,
+    responseRaw: p2Raw.text,
+    responseLength: p2Cleaned.length,
+    latencyMs: p2Raw.latencyMs,
+    parsed: p2Parsed.root ? xmlToObjects(p2Parsed.root) : null,
+    parseError: p2Parsed.error,
+    validXml: p2Parsed.ok,
+    tokenEstimate: p2Raw.tokenEstimate,
+  };
 
-  // Validity comparison
-  const extractValid = results.filter(r => r.phase === 'extraction' && r.validXml && r.hasPresentationRoot).length;
-  const slideValid = results.filter(r => r.phase === 'single-slide' && r.validXml).length;
-  const monoValid = results.filter(r => r.phase === 'monolithic' && r.validXml).length;
+  // ── PHASE 3: Generate ───────────────────────────────────────────────────────
+  console.log('\n┌─ PHASE 3: GENERATE ──────────────────────────────────────┐');
 
-  console.log('\n  ── Validity ──');
-  console.log(`  Extraction: ${extractValid}/${results.filter(r => r.phase === 'extraction').length} valid`);
-  console.log(`  Single-slide: ${slideValid}/${results.filter(r => r.phase === 'single-slide').length} valid`);
-  console.log(`  Monolithic: ${monoValid}/${results.filter(r => r.phase === 'monolithic').length} valid`);
+  const { system: p3System, user: p3User } = getPhase3Prompt(p1Cleaned, p2Cleaned, selectedTemplate.aesthetics);
+  console.log(`  ▶ Prompt: ${p3System.length} chars`);
+  const p3Raw = await callLLM(p3System, p3User);
+  const p3Cleaned = stripFences(p3Raw.text);
+  const p3Parsed = tryParseXml(p3Cleaned);
 
-  // Save full results
-  const outPath = new URL('../test-results.json', import.meta.url).pathname;
-  await import('node:fs/promises').then(fs => fs.writeFile(outPath, JSON.stringify(results, null, 2)));
-  console.log(`\n  Full results saved to test-results.json`);
+  console.log(`  ✓ Response: ${p3Cleaned.length} chars, ${p3Raw.latencyMs}ms`);
+  console.log(`  ✓ Parsed: ${p3Parsed.ok ? 'valid XML' : 'PARSE ERROR: ' + p3Parsed.error}`);
+
+  // Count slides
+  if (p3Parsed.ok && p3Parsed.root) {
+    const slideCount = p3Parsed.root.children.filter(c => c.tag === 'slide').length;
+    console.log(`  Slides generated: ${slideCount}`);
+  }
+
+  const phase3: PhaseResult = {
+    phase: 'generate',
+    promptLength: p3System.length,
+    responseRaw: p3Raw.text,
+    responseLength: p3Cleaned.length,
+    latencyMs: p3Raw.latencyMs,
+    parsed: p3Parsed.root ? xmlToObjects(p3Parsed.root) : null,
+    parseError: p3Parsed.error,
+    validXml: p3Parsed.ok,
+    tokenEstimate: p3Raw.tokenEstimate,
+  };
+
+  const totalMs = Date.now() - totalStart;
+
+  // ── REPORT ──────────────────────────────────────────────────────────────────
+  console.log('\n═══════════════════════════════════════════════════════════════');
+  console.log('  PIPELINE RESULTS');
+  console.log('═══════════════════════════════════════════════════════════════');
+
+  console.log('\n  Phase         Valid?    Chars   Latency  Tokens');
+  console.log('  ───────────── ───────── ─────── ──────── ─────────────');
+
+  for (const r of [phase1, phase2, phase3]) {
+    const valid = r.validXml ? '✓ YES' : '✗ NO';
+    const tokens = `${r.tokenEstimate.input}→${r.tokenEstimate.output}`;
+    console.log(`  ${r.phase.padEnd(14)} ${valid.padEnd(10)} ${String(r.responseLength).padStart(6)} ${String(r.latencyMs).padStart(7)}ms ${tokens}`);
+  }
+
+  const totalTokens = phase1.tokenEstimate.input + phase1.tokenEstimate.output +
+    phase2.tokenEstimate.input + phase2.tokenEstimate.output +
+    phase3.tokenEstimate.input + phase3.tokenEstimate.output;
+
+  console.log(`\n  Total: ${totalMs}ms, ~${totalTokens} tokens`);
+
+  // ── DETAILED OUTPUT ─────────────────────────────────────────────────────────
+
+  console.log('\n  ── Phase 1: Content Brief ──');
+  console.log(p1Cleaned.slice(0, 800));
+  console.log('  ...');
+
+  console.log('\n  ── Phase 2: Configuration ──');
+  console.log(p2Cleaned.slice(0, 800));
+  console.log('  ...');
+
+  console.log('\n  ── Phase 3: Slides ──');
+  console.log(p3Cleaned.slice(0, 1500));
+  console.log('  ...');
+
+  // ── SAVE ────────────────────────────────────────────────────────────────────
+
+  const result: PipelineResult = {
+    article: article.slice(0, 200) + '...',
+    phase1,
+    phase2,
+    phase3,
+    totalMs,
+    slidesJson: phase3.parsed,
+  };
+
+  const outPath = new URL('../test-3phase-output.json', import.meta.url).pathname;
+  await import('node:fs/promises').then(fs => fs.writeFile(outPath, JSON.stringify(result, null, 2)));
+  console.log(`\n  Full results saved to test-3phase-output.json`);
+
+  // Save slides-only for easy review
+  const slidesOnly = phase3.parsed;
+  const slidesPath = new URL('../test-slides-output.json', import.meta.url).pathname;
+  await import('node:fs/promises').then(fs => fs.writeFile(slidesPath, JSON.stringify(slidesOnly, null, 2)));
+  console.log(`  Slides JSON saved to test-slides-output.json`);
+
   console.log('═══════════════════════════════════════════════════════════════\n');
 }
 

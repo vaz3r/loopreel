@@ -26,7 +26,7 @@ Return a single <contentBrief> element with these fields as child elements:
 
 <contentBrief>
   <title>The article title</title>
-  <oneLiner>One sentence summary of the article's core argument</oneLiner>
+  <oneLiner>One sentence summary of the article's core argument (max 25 words)</oneLiner>
   <keyPoints>
     <point>The first key insight or argument</point>
     <point>The second key insight</point>
@@ -35,14 +35,15 @@ Return a single <contentBrief> element with these fields as child elements:
     <point>The fifth key insight</point>
   </keyPoints>
   <quotes>
-    <quote text="Direct quote from the article" author="Person Name" role="Their Title" />
+    <quote text="Exact direct quote from the article — word for word" author="Person Name" role="Their Title" />
   </quotes>
   <counterpoints>
     <point>A common objection or alternative view mentioned</point>
   </counterpoints>
   <dataPoints>
-    <point>Statistic or data point with source</point>
+    <point>A specific number, percentage, dollar amount, or measurable fact from the article</point>
   </dataPoints>
+  <hasRealNumbers>true or false — does the article contain ACTUAL hard statistics (percentages, dollar amounts, specific counts)? Not general references to numbers.</hasRealNumbers>
   <companies>
     <company name="Company Name" role="What they did or represent" />
   </companies>
@@ -51,9 +52,10 @@ Return a single <contentBrief> element with these fields as child elements:
 
 ## Rules
 - Extract 5-7 key points that capture the article's core argument
-- Include direct quotes if the article has notable ones
+- Include direct quotes ONLY if the article has notable ones with named attribution
 - Capture counterpoints or alternative views
-- List specific data, statistics, or examples
+- dataPoints: ONLY include actual numbers, percentages, dollar amounts, or measurable facts. Do NOT include opinions, advice, or qualitative statements as data points. If the article has no numbers, leave <dataPoints> empty.
+- hasRealNumbers: Answer "true" ONLY if the article contains specific, citable statistics. "2-3 percent" mentioned casually is NOT a real statistic. "42% year-over-year growth" IS a real statistic. When in doubt, answer "false".
 - Note companies or people mentioned
 - Do NOT invent content not in the article
 - Keep each point concise (1-2 sentences)
@@ -63,21 +65,21 @@ function getSlidePrompt(slideType: string, briefXml: string): { system: string; 
   const constraints = SLIDE_TYPE_CONSTRAINTS[slideType]!;
 
   const examples: Record<string, string> = {
-    cover: `<slide type="cover" id="slide-01" tag="MARKET DATA" headline="AI Adoption Reaches Inflection Point" subheadline="Enterprise spending projected at $184B in 2026" authorName="Terminal Intelligence" footerLeft="ANALYSIS" footerRight="PAGE 01" />`,
+    cover: `<slide type="cover" id="slide-01" tag="MARKET DATA" headline="Nobody tells you this about AI" subheadline="$184B in enterprise spending — and most founders are missing it." authorName="Terminal Intelligence" footerLeft="ANALYSIS" footerRight="PAGE 01" />`,
     telemetry: `<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Growth Metrics" footerLeft="METRICS" footerRight="PAGE 01">
   <stats>
     <stat value="42" unit="%" label="Year-over-year growth" color="green" />
-    <stat value="184" unit="B" label="Global market size projected for 2026" color="blue" />
+    <stat value="184" unit="B" label="Global market size by 2026" color="blue" />
   </stats>
 </slide>`,
-    sequence: `<slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Five Trends Shaping AI in 2026" footerLeft="ANALYSIS" footerRight="PAGE 02">
+    sequence: `<slide type="sequence" id="slide-02" tag="KEY FINDINGS" headline="Why most founders fail" footerLeft="ANALYSIS" footerRight="PAGE 02">
   <items>
-    <item num="1" title="Edge AI" desc="Processing moves to devices, reducing latency" />
-    <item num="2" title="Multimodal Models" desc="Systems that understand text, images, and audio" />
-    <item num="3" title="AI Agents" desc="Autonomous systems for complex tasks" />
+    <item num="1" title="Chasing 'sexy'" desc="Ignore what's trendy. Focus on what's missing." />
+    <item num="2" title="Forcing ideas" desc="You're building fake solutions for non-existent problems." />
+    <item num="3" title="Ignoring the schlep" desc="The boring work = the billion-dollar opportunity." />
   </items>
 </slide>`,
-    'myth-fact': `<slide type="myth-fact" id="slide-01" tag="ANALYSIS" headline="The Market Size Fallacy" myth="Market size is the most important factor for startup success." fact="Growth rate is the key metric that determines whether a company will succeed." footerLeft="RESEARCH" footerRight="PAGE 01" />`,
+    'myth-fact': `<slide type="myth-fact" id="slide-01" tag="ANALYSIS" headline="The competition myth" myth="You need a unique idea to win." fact="The best ideas aren't unique. They're executed well." footerLeft="RESEARCH" footerRight="PAGE 01" />`,
     interview: `<slide type="interview" id="slide-01" tag="EXPERT VOICE" headline="Central Bank Perspective" question="What does the current rate environment mean for emerging markets?" answer="We are seeing a structural shift. Countries with dollar-denominated debt face significant refinancing risk." respondentName="Dr. Sarah Chen" respondentRole="IMF Chief Economist" footerLeft="INTERVIEW" footerRight="PAGE 01" />`,
     quadrant: `<slide type="quadrant" id="slide-01" tag="ANALYSIS" headline="Risk Matrix" footerLeft="FRAMEWORK" footerRight="PAGE 01">
   <topLeft title="High Yield" desc="Corporate bonds with elevated default risk" />
@@ -105,11 +107,11 @@ function getSlidePrompt(slideType: string, briefXml: string): { system: string; 
   </events>
 </slide>`,
     quote: `<slide type="quote" id="slide-01" tag="THESIS" quote="The best way to predict the future is to invent it." author="Alan Kay" role="Computer Scientist" footerLeft="REFERENCE" footerRight="PAGE 01" />`,
-    cta: `<slide type="cta" id="slide-01" tag="CONCLUSION" headline="Stay Ahead of the Curve" subtext="Subscribe for weekly intelligence briefings" actionLabel="Subscribe" socialHandle="@terminal" footerLeft="END" footerRight="PAGE 01" />`,
+    cta: `<slide type="cta" id="slide-01" tag="CONCLUSION" headline="Your turn" subtext="Comment your biggest frustration. Let's solve it together." actionLabel="Subscribe" socialHandle="@terminal" footerLeft="END" footerRight="PAGE 01" />`,
   };
 
   return {
-    system: `You are a slide content writer for "The Terminal" — a Bloomberg-style data intelligence platform.
+    system: `You are a slide copywriter for "The Terminal" — a Bloomberg-style data intelligence platform. You write punchy, social-media-ready copy that stops the scroll.
 
 Generate exactly ONE slide element for a social media carousel.
 
@@ -129,28 +131,110 @@ For fields that are ARRAYS (like stats, items, events, stages), you MUST use nes
 CORRECT format for telemetry:
 <slide type="telemetry" id="slide-01" tag="DATA" headline="Key Metrics" footerLeft="METRICS" footerRight="PAGE 01">
   <stats>
-    <stat value="42" unit="%" label="Growth rate" color="green" />
-    <stat value="184" unit="B" label="Market size" color="blue" />
+    <stat value="42" unit="%" label="Year-over-year growth" color="green" />
   </stats>
 </slide>
 
-WRONG format (do NOT do this):
-<slide type="telemetry" id="slide-01" tag="DATA" headline="Key Metrics" stats="[{value: '42', unit: '%'}]" footerLeft="METRICS" footerRight="PAGE 01" />
-
-Same for sequence: use <items><item num="1" .../></items>
-Same for timeline: use <events><event .../></events>
-Same for case-study: use <stages><stage .../></stages>
+WRONG (do NOT do this):
+<slide type="telemetry" id="slide-01" stats="[{value: '42'}]" ... />
 
 ## Output Format
 Return a single <slide> element with type="${slideType}". Include exactly: id="slide-01", tag (short category), type, footerLeft, footerRight ("PAGE 01"), and all required fields for this slide type.
 
-## Rules
-- Return ONLY the XML <slide> element. No markdown fences, no explanation, no presentation wrapper.
+## ANTI-HALLUCINATION RULES (CRITICAL)
+
+<antiHallucination>
+  <rule>Every fact, number, and quote MUST come DIRECTLY from the content brief above. Do NOT paraphrase, round, interpolate, or invent anything.</rule>
+  <rule>If the content brief has NO hard data, do NOT generate telemetry. Use sequence, quote, or myth-fact instead.</rule>
+  <rule>If the content brief says "2-3%", you MUST write exactly that. Do NOT change to "3%" or "2.5%".</rule>
+  <rule>If you cannot find an exact number in the brief, the stat does not exist. Period.</rule>
+  <rule>NEVER invent statistics, percentages, dollar amounts, or counts. NEVER.</rule>
+  <rule>NEVER invent quotes. Use ONLY quotes from the brief's quotes section.</rule>
+</antiHallucination>
+
+## PREMIUM COPYWRITING RULES (follow exactly)
+
+<copyRules>
+  <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Make it count.</rule>
+  <rule>Use CURIOSITY GAPS: create an information void the reader MUST fill. "Nobody tells you this about..." "The mistake 90% make..."</rule>
+  <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Always, Shocking, Hidden, Reverse</rule>
+  <rule>Use PATTERN INTERRUPTS: break expectations. "Don't do this." "This is wrong." "Everyone gets this backwards."</rule>
+  <rule>Max 5 words per line. No sentences. Fragments only.</rule>
+  <rule>Active voice only. No passive constructions.</rule>
+  <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
+  <rule>Write like you're talking to a friend, not writing a report.</rule>
+  <rule>End EVERY slide with emotional punch, not information.</rule>
+  <rule>Use "YOU" language. Make it personal. "Your problem" not "one's problem"</rule>
+</copyRules>
+
+## PREMIUM COPY EXAMPLES — GOOD vs GREAT
+
+<copyExamples>
+  BAD: "Evidence suggests superior ventures are noticed, not manufactured through abstract brainstorming."
+  GOOD: "Stop brainstorming. Start noticing."
+  GREAT: "You're brainstorming wrong. Here's why."
+
+  BAD: "Maintain residency at the leading edge of your field to perceive gaps before the market."
+  GOOD: "Live in the future. Build what's missing."
+  GREAT: "The future is already here. You're just not looking."
+
+  BAD: "Startup success requires a brilliant, original 'lightbulb moment' generated through brainstorming."
+  GOOD: "You don't need a lightbulb moment."
+  GREAT: "Nobody tells you this: lightbulb moments are a myth."
+
+  BAD: "Embrace tedious, unglamorous problems; they often harbor the highest barriers to entry and value."
+  GOOD: "The unsexy problems = the billion-dollar ones."
+  GREAT: "The boring problems? That's where the money hides."
+
+  BAD: "Focus on problems you encounter that you possess the unique technical skill to resolve."
+  GOOD: "Solve YOUR problem first."
+  GREAT: "Your biggest frustration = your biggest opportunity."
+</copyExamples>
+
+## SLIDE-SPECIFIC RULES
+
+### Cover slides (THE MAKE-OR-BREAK MOMENT):
+- headline: max 8 words. MUST use a curiosity gap or pattern interrupt.
+- subheadline: max 15 words. Create intrigue. Make them NEED to swipe.
+- Examples:
+  - headline="Nobody tells you this about startup ideas" subheadline="The truth is simpler — and more powerful — than you think."
+  - headline="You're brainstorming wrong" subheadline="Here's the 2-minute fix that changes everything."
+  - headline="The startup myth that's killing you" subheadline="Stop believing this. Start noticing instead."
+
+### Sequence slides (MAKE IT SCANNABLE):
+- item titles: max 5 words. Use power words.
+- item descriptions: max 12 words. Punchy. No fluff.
+- Examples:
+  - title="Solve YOUR problem" desc="Build what you need first. Not what others want."
+  - title="Live in the future" desc="Work where the world is heading tomorrow."
+  - title="Notice the gaps" desc="See what's missing in your daily life."
+
+### Myth-fact slides (SHOCK VALUE):
+- myth: max 12 words. Something EVERYONE believes.
+- fact: max 12 words. Sharp, surprising, contrarian.
+- Examples:
+  - myth="You need a brilliant idea to start." fact="The best ideas aren't thought up. They're noticed."
+  - myth="Competition is bad for startups." fact="Competition proves demand. Avoid it and you avoid money."
+
+### Quote slides:
+- Use the EXACT quote text from the brief — do not paraphrase
+- Keep the full quote, even if long
+
+### CTA slides (DRIVE ENGAGEMENT):
+- headline: max 6 words. Action-oriented. Create urgency.
+- subtext: max 12 words. Tell them EXACTLY what to do. Make it easy.
+- Examples:
+  - headline="Your turn" subtext="Comment your biggest frustration. Let's solve it."
+  - headline="Try this now" subtext="Spend 2 minutes writing down your problems."
+
+### Footer convention:
+- footerLeft: short category label (e.g., "INSIGHT", "RESEARCH", "METHODOLOGY")
+- footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
+
+## RULES
+- Return ONLY the XML <slide> element. No markdown fences, no explanation.
 - Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
 - Respect character limits exactly.
-- For stats: use concrete numbers with units (e.g., "42%", "3.2x", "$184B").
-- For quotes: use exact text from the brief with proper attribution.
-- For myth-fact: use counterpoints from the brief.
 - Use self-closing tags <stat ... /> for simple leaf elements.
 
 ## Example Output
@@ -165,15 +249,27 @@ function buildSlidePlan(briefXml: string): string[] {
   if (briefXml.includes('<counterpoints>') && /<point>/.test(briefXml.split('<counterpoints>')[1]?.split('</counterpoints>')[0] ?? '')) {
     plan.push('myth-fact');
   }
-  if (briefXml.includes('<dataPoints>') && /<point>/.test(briefXml.split('<dataPoints>')[1]?.split('</dataPoints>')[0] ?? '')) {
-    plan.push('telemetry');
+
+  // Check hasRealNumbers flag — only include telemetry if article has actual stats
+  const hasRealNumbers = briefXml.includes('<hasRealNumbers>true</hasRealNumbers>');
+  if (hasRealNumbers) {
+    const dataPointsSection = briefXml.includes('<dataPoints>')
+      ? briefXml.split('<dataPoints>')[1]?.split('</dataPoints>')[0] ?? ''
+      : '';
+    const hasNumbers = /<point>[^<]*\d+[%$xBMKkTt]/.test(dataPointsSection);
+    if (hasNumbers) {
+      plan.push('telemetry');
+    }
   }
+
   if (briefXml.includes('<keyPoints>')) {
     plan.push('sequence');
   }
+
   if (briefXml.includes('<quotes>') && /<quote /.test(briefXml.split('<quotes>')[1]?.split('</quotes>')[0] ?? '')) {
     plan.push('quote');
   }
+
   if (briefXml.includes('<companies>') && /<company /.test(briefXml.split('<companies>')[1]?.split('</companies>')[0] ?? '')) {
     plan.push('interview');
   }
@@ -187,7 +283,7 @@ function buildSlidePlan(briefXml: string): string[] {
   }
 
   plan.push('cta');
-  return plan.slice(0, 10);
+  return plan.slice(0, 8);
 }
 
 export interface MultiPhaseResult {

@@ -30,3 +30,7 @@ export {
   TheCuratorContract,
   TheAcademicContract,
 } from './schemas.js';
+export { generateUniqueColors } from './color-utils.js';
+export type { UniqueColors } from './color-utils.js';
+export { generateUniqueLayouts, describeLayout } from './layout-utils.js';
+export type { UniqueLayouts, LayoutType } from './layout-utils.js';
