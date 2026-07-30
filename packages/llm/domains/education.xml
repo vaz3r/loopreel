@@ -1,0 +1,46 @@
+<domain id="education" name="Education &amp; Learning">
+  <description>Teaching, learning methods, skills development, career growth, personal development</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, master, unlock, learn, skill, career, growth, unlock</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>The most effective learning strategies backed by research</bad>
+      <good>You're learning wrong.</good>
+      <great>This skill replaces your degree.</great>
+    </example>
+    <example type="cover">
+      <bad>Why traditional education fails most students</bad>
+      <good>School is broken.</good>
+      <great>Nobody tells you this.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Students who use spaced repetition retain 200% more information</bad>
+      <good>200% more retention. One technique.</good>
+      <great>This is the secret.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Self-taught developers earn 15% more than graduates</bad>
+      <good>15% more. No degree.</good>
+      <great>Your degree is worthless.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Many people believe you need a degree to succeed</bad>
+      <good>Degrees are overrated.</good>
+      <great>The university wants you to think otherwise.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Practice doesn't make perfect — deliberate practice does</bad>
+      <good>Practice isn't enough.</good>
+      <great>You've been practicing wrong.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three skills that will be worth more than any degree</bad>
+      <good>3 skills. Worth more than a degree.</good>
+      <great>Learn these or stay average.</great>
+    </example>
+    <example type="cta">
+      <bad>Subscribe for more learning tips and career advice</bad>
+      <good>Stop studying. Start mastering.</good>
+      <great>Or stay stuck.</great>
+    </example>
+  </examples>

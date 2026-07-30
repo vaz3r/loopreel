@@ -223,7 +223,9 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       jobLogger.info({
         slideCount: result.slides.length,
         selectedTemplate: result.selectedTemplateId,
+        domain: result.domainId,
         extractionMs: result.extractionLatencyMs,
+        domainMs: result.domainClassificationMs,
         selectionMs: result.selectionLatencyMs,
         planMs: result.planLatencyMs,
         generationMs: result.generationLatencyMs,

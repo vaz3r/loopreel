@@ -1,0 +1,52 @@
+<domain id="sports" name="Sports &amp; Athletics">
+  <description>Athletes, teams, competitions, performance analysis, coaching, fitness</description>
+  <powerWords>dominate, destroy, crush, elite, secret, explosive, unstoppable, clutch, legacy,GOAT, blueprint, masterclass, surgical, relentless, wired different</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>Analysis shows the team's performance improved significantly this season</bad>
+      <good>They're not winning. They're dominating.</good>
+      <great>Nobody saw this coming.</great>
+    </example>
+    <example type="cover">
+      <bad>The rookie quarterback has shown remarkable development</bad>
+      <good>This rookie breaks every rule.</good>
+      <great>He's wired different.</great>
+    </example>
+    <example type="telemetry">
+      <bad>The statistics reveal a clear upward trend in scoring</bad>
+      <good>The numbers don't lie.</good>
+      <great>This stat changes everything.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Player efficiency rating shows significant improvement</bad>
+      <good>42 points. Zero turnovers.</good>
+      <great>Read that again.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Contrary to popular belief, rest is important for recovery</bad>
+      <good>Rest is weakness.</good>
+      <great>You've been resting wrong.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Talent alone does not guarantee success in professional sports</bad>
+      <good>Talent is overrated.</good>
+      <great>The GOAT wasn't the most talented.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three key factors contribute to championship performance</bad>
+      <good>Three things champions do differently.</good>
+      <great>Do these or lose.</great>
+    </example>
+    <example type="quote">
+      <bad>The coach emphasized the importance of teamwork and dedication</bad>
+      <good>"Hard work beats talent when talent doesn't work hard."</good>
+      <great>Write this down.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more sports analysis and updates</bad>
+      <good>Stop watching. Start understanding.</good>
+      <great>Or keep losing.</great>
+    </example>
+  </examples>
+</domain>

@@ -1,0 +1,47 @@
+<domain id="travel" name="Travel and Lifestyle">
+  <description>Destinations, experiences, remote work, digital nomads, luxury, budget travel</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, luxury, adventure, escape, discover, explore, wander, paradise</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>The best destinations for your next vacation</bad>
+      <good>Tourists go here. Locals go here.</good>
+      <great>This place is a secret.</great>
+    </example>
+    <example type="cover">
+      <bad>How to travel the world on a budget</bad>
+      <good>Travel isn't expensive.</good>
+      <great>You're paying too much. Here's why.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Remote workers save $12,000 per year by traveling</bad>
+      <good>$12K saved. Just by traveling.</good>
+      <great>This number is insane.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Budget flights are 60% cheaper if you book on Tuesdays</bad>
+      <good>60% cheaper. One day.</good>
+      <great>This is the secret.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Many people believe travel is only for the wealthy</bad>
+      <good>Travel is cheap. You're booking wrong.</good>
+      <great>The airlines want you to think otherwise.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Popular tourist destinations are often the worst experiences</bad>
+      <good>Tourist traps are terrible.</good>
+      <great>Nobody tells you this.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three destinations that will change your perspective on life</bad>
+      <good>3 destinations. Life-changing.</good>
+      <great>Visit these or stay narrow-minded.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more travel tips and destination guides</bad>
+      <good>Stop dreaming. Start exploring.</good>
+      <great>Or stay home.</great>
+    </example>
+  </examples>
+</domain>

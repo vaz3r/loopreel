@@ -1,0 +1,47 @@
+<domain id="legal" name="Legal and Compliance">
+  <description>Law, regulations, compliance, rights, justice, policy, governance</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, rights, protect, justice, fight, claim, demand</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>Understanding your rights under the new regulation</bad>
+      <good>They don't want you to know this.</good>
+      <great>This changes everything.</great>
+    </example>
+    <example type="cover">
+      <bad>What every employee should know about workplace law</bad>
+      <good>Your boss is breaking the law.</good>
+      <great>Nobody tells you this.</great>
+    </example>
+    <example type="telemetry">
+      <bad>80% of employees don't know their basic workplace rights</bad>
+      <good>80% don't know their rights.</good>
+      <great>This is a crisis.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Companies pay $4 billion in discrimination settlements annually</bad>
+      <good>$4B in settlements. Every year.</good>
+      <great>This is insane.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Many people believe legal advice is always expensive</bad>
+      <good>Legal advice isn't always expensive.</good>
+      <great>The lawyers want you to think otherwise.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>You don't always need a lawyer to protect your rights</bad>
+      <good>You don't always need a lawyer.</good>
+      <great>This is the secret.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three legal rights most people don't know they have</bad>
+      <good>3 rights. You have them.</good>
+      <great>Know this or lose them.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more legal insights and compliance updates</bad>
+      <good>Stop being ignorant. Know your rights.</good>
+      <great>Or get exploited.</great>
+    </example>
+  </examples>
+</domain>

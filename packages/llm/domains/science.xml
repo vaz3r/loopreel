@@ -1,0 +1,46 @@
+<domain id="science" name="Science &amp; Research">
+  <description>Discoveries, studies, innovation, space, biology, physics, medicine</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, breakthrough, discover, unlock, prove, debunk, myth</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>New research findings challenge existing scientific understanding</bad>
+      <good>Everything we knew is wrong.</good>
+      <great>This discovery changes everything.</great>
+    </example>
+    <example type="cover">
+      <bad>The latest study reveals surprising results about sleep</bad>
+      <good>Sleep isn't what you think.</good>
+      <great>Scientists just proved this.</great>
+    </example>
+    <example type="telemetry">
+      <bad>The study found a 35% reduction in disease markers</bad>
+      <good>35% less disease. One change.</good>
+      <great>This is the breakthrough.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Research shows this compound increases lifespan by 20%</bad>
+      <good>20% longer life. One molecule.</good>
+      <great>This is insane.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Common belief that science is settled on this topic is incorrect</bad>
+      <good>Science isn't settled.</good>
+      <great>You've been lied to.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>New evidence contradicts decades of accepted theory</bad>
+      <good>Decades of theory. Wrong.</good>
+      <great>This just got debunked.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three discoveries that changed our understanding of the universe</bad>
+      <good>3 discoveries. Everything changes.</good>
+      <great>Read this or stay ignorant.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more science news and research updates</bad>
+      <good>Stop believing. Start understanding.</good>
+      <great>Or stay misinformed.</great>
+    </example>
+  </examples>

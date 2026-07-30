@@ -1,4 +1,6 @@
 import { parseXml } from './xml-parser.js';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -7,6 +9,82 @@ export interface TemplateInfo {
   name: string;
   aesthetics: string;
   schemaText: string; // introspectSchema output — full slide type/field constraints
+}
+
+export interface DomainExamples {
+  id: string;
+  name: string;
+  description: string;
+  powerWords: string[];
+  examples: { type: string; bad: string; good: string; great: string }[];
+}
+
+// ─── Domain Classification ──────────────────────────────────────────────────
+
+const DOMAINS_DIR = join(import.meta.dirname ?? '.', 'domains');
+
+function loadAllDomains(): DomainExamples[] {
+  try {
+    const files = readdirSync(DOMAINS_DIR).filter(f => f.endsWith('.xml'));
+    return files.map(file => {
+      const xml = readFileSync(join(DOMAINS_DIR, file), 'utf-8');
+      const root = parseXml(xml);
+      const obj = xmlToObjects(root) as Record<string, unknown>;
+      const examples = (obj['example'] as Array<Record<string, unknown>> ?? []).map(ex => ({
+        type: (ex['type'] as string) ?? 'cover',
+        bad: (ex['bad'] as string) ?? '',
+        good: (ex['good'] as string) ?? '',
+        great: (ex['great'] as string) ?? '',
+      }));
+      return {
+        id: (obj['id'] as string) ?? file.replace('.xml', ''),
+        name: (obj['name'] as string) ?? file.replace('.xml', ''),
+        description: (obj['description'] as string) ?? '',
+        powerWords: ((obj['powerWords'] as string) ?? '').split(',').map(w => w.trim()).filter(Boolean),
+        examples,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+const DOMAIN_CLASSIFICATION_PROMPT = `You are a content classifier. Classify the content into ONE of the provided domains.
+
+## Available Domains
+{domains}
+
+## Task
+Read the content brief and classify it into the single most appropriate domain.
+
+## Output Format
+Return a single <domainClassification> element:
+
+<domainClassification>
+  <domainId>the-domain-id</domainId>
+  <confidence>high | medium | low</confidence>
+</domainClassification>
+
+## Rules
+- Pick EXACTLY ONE domain.
+- If content spans multiple domains, pick the PRIMARY one.
+- If unsure, use "general" as fallback.
+- Return ONLY the XML, no markdown fences, no explanation.`;
+
+function classifyDomainPrompt(briefXml: string, domains: DomainExamples[]): { system: string; user: string } {
+  const domainList = domains.map(d => `- **${d.id}**: ${d.description}`).join('\n');
+  const system = DOMAIN_CLASSIFICATION_PROMPT.replace('{domains}', domainList);
+  return { system, user: briefXml };
+}
+
+function parseDomainClassification(xml: string, domains: DomainExamples[]): DomainExamples {
+  try {
+    const obj = xmlToObjects(parseXml(xml)) as Record<string, unknown>;
+    const domainId = (obj['domainId'] as string) ?? 'general';
+    return domains.find(d => d.id === domainId) ?? domains.find(d => d.id === 'general') ?? domains[0]!;
+  } catch {
+    return domains.find(d => d.id === 'general') ?? domains[0]!;
+  }
 }
 
 // ─── Phase 1: Summarise ──────────────────────────────────────────────────────
@@ -174,7 +252,35 @@ function getGeneratePrompt(
   briefXml: string,
   planXml: string,
   selectedTemplate: TemplateInfo,
+  domainExamples?: DomainExamples,
 ): { system: string; user: string } {
+  // Build domain-specific examples section
+  let domainExamplesSection = '';
+  if (domainExamples && domainExamples.examples.length > 0) {
+    const exampleBlocks = domainExamples.examples.map(ex => `  ${ex.type.toUpperCase()}:
+  BAD: "${ex.bad}"
+  GOOD: "${ex.good}"
+  GREAT: "${ex.great}"`).join('\n\n');
+
+    domainExamplesSection = `
+## DOMAIN-SPECIFIC COPY EXAMPLES (${domainExamples.name})
+
+These are hand-crafted examples for ${domainExamples.name} content. Study them carefully.
+
+<domainExamples>
+${exampleBlocks}
+</domainExamples>
+
+## DOMAIN POWER WORDS
+Use these power words in headlines: ${domainExamples.powerWords.join(', ')}
+
+## CRITICAL: YOUR HEADLINES MUST MATCH THE "GREAT" QUALITY ABOVE
+Do NOT write "GOOD" headlines. Write "GREAT" headlines. The difference:
+- GOOD is acceptable. GREAT stops the scroll.
+- GOOD follows rules. GREAT breaks patterns.
+- GOOD informs. GREAT provokes.`;
+  }
+
   return {
     system: `You are a social media carousel designer. Generate a complete carousel of slides.
 
@@ -238,30 +344,7 @@ For arrays (stats, items), use nested child elements:
   <rule>End EVERY slide with emotional punch, not information.</rule>
   <rule>Use "YOU" language. Make it personal. "Your problem" not "one's problem"</rule>
 </copyRules>
-
-## PREMIUM COPY EXAMPLES — GOOD vs GREAT
-
-<copyExamples>
-  BAD: "Evidence suggests superior ventures are noticed, not manufactured through abstract brainstorming."
-  GOOD: "Stop brainstorming. Start noticing."
-  GREAT: "You're brainstorming wrong. Here's why."
-
-  BAD: "Maintain residency at the leading edge of your field to perceive gaps before the market."
-  GOOD: "Live in the future. Build what's missing."
-  GREAT: "The future is already here. You're just not looking."
-
-  BAD: "Startup success requires a brilliant, original 'lightbulb moment' generated through brainstorming."
-  GOOD: "You don't need a lightbulb moment."
-  GREAT: "Nobody tells you this: lightbulb moments are a myth."
-
-  BAD: "Embrace tedious, unglamorous problems; they often harbor the highest barriers to entry and value."
-  GOOD: "The unsexy problems = the billion-dollar ones."
-  GREAT: "The boring problems? That's where the money hides."
-
-  BAD: "Focus on problems you encounter that you possess the unique technical skill to resolve."
-  GOOD: "Solve YOUR problem first."
-  GREAT: "Your biggest frustration = your biggest opportunity."
-</copyExamples>
+${domainExamplesSection}
 
 ## COPY ENFORCEMENT — CHECK BEFORE RETURNING
 
@@ -273,11 +356,11 @@ For arrays (stats, items), use nested child elements:
   4. Would YOU stop scrolling for this? If not, rewrite.
 
   COMMON MISTAKES TO AVOID:
-  - "The Freshman Sire Data Gap" → boring, informational. Use: "Nobody Tells You This About Sires"
-  - "Stop Chasing Early Speed" → decent but generic. Use: "You're Measuring Sires Wrong"
-  - "Flightline's Slow Burn: Winning The Long Game" → too long, no curiosity. Use: "Flightline's Secret Weapon"
-  - "Why You're Evaluating Wrong" → close but needs punch. Use: "Your Sire Metrics Are Broken"
-  - "Ready For The Truth?" → weak CTA. Use: "Stop Believing the Numbers"
+  - "The Freshman Sire Data Gap" -> boring, informational. Use: "Nobody Tells You This About Sires"
+  - "Stop Chasing Early Speed" -> decent but generic. Use: "You're Measuring Sires Wrong"
+  - "Flightline's Slow Burn: Winning The Long Game" -> too long, no curiosity. Use: "Flightline's Secret Weapon"
+  - "Why You're Evaluating Wrong" -> close but needs punch. Use: "Your Sire Metrics Are Broken"
+  - "Ready For The Truth?" -> weak CTA. Use: "Stop Believing the Numbers"
 </copyEnforcement>`,
     user: 'Generate all slides for this carousel.',
   };
@@ -349,6 +432,8 @@ export interface MultiPhaseResult {
   totalTokens: { input: number; output: number };
   selectedTemplateId: string;
   slidePlan: string[];
+  domainId: string;
+  domainClassificationMs: number;
 }
 
 export async function generateSlidesMultiPhase(
@@ -375,6 +460,32 @@ export async function generateSlidesMultiPhase(
 
   onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);
   onDebug?.('05-phase1-brief.xml', briefXml);
+
+  // ── PHASE 1.5: Classify Domain ────────────────────────────────────────────
+  onProgress?.('domain', 'Phase 1.5: Classifying content domain...');
+
+  const allDomains = loadAllDomains();
+  let selectedDomain = allDomains.find(d => d.id === 'general') ?? allDomains[0]!;
+  let domainClassificationMs = 0;
+
+  if (allDomains.length > 0) {
+    const domainStart = Date.now();
+    const { system: domainSystem, user: domainUser } = classifyDomainPrompt(briefXml, allDomains);
+    onDebug?.('01b-prompt-domain-classify.md', `## System\n\n${domainSystem}\n\n## User\n\n${domainUser}`);
+
+    try {
+      const domainRaw = await llm.generateJSON(domainSystem, domainUser);
+      const domainXml = stripFences(domainRaw);
+      selectedDomain = parseDomainClassification(domainXml, allDomains);
+      domainClassificationMs = Date.now() - domainStart;
+      onDebug?.('05b-domain-classification.xml', domainXml);
+    } catch {
+      domainClassificationMs = Date.now() - domainStart;
+      onProgress?.('domain', 'Domain classification failed, using general');
+    }
+  }
+
+  onProgress?.('domain', `Domain: ${selectedDomain.name} (${domainClassificationMs}ms)`);
 
   // ── PHASE 2: Select Template ────────────────────────────────────────────────
   onProgress?.('selection', 'Phase 2: Selecting best template...');
@@ -438,7 +549,7 @@ export async function generateSlidesMultiPhase(
   onProgress?.('generation', 'Phase 4: Generating slide content...');
 
   const phase4Start = Date.now();
-  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate);
+  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate, selectedDomain);
   onDebug?.('04-prompt-phase4-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
   const genRaw = await llm.generateJSON(genSystem, genUser);
   const genCleaned = stripFences(genRaw);
@@ -491,6 +602,8 @@ export async function generateSlidesMultiPhase(
     totalTokens: { input: 0, output: 0 },
     selectedTemplateId: selectedTemplate.id,
     slidePlan,
+    domainId: selectedDomain.id,
+    domainClassificationMs,
   };
 }
 

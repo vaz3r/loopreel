@@ -1,0 +1,52 @@
+<domain id="tech" name="Technology &amp; AI">
+  <description>Software, AI, startups, programming, gadgets, digital transformation</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, unlock, hack, build, ship, scale, disrupt, obsolete, future</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>The future of artificial intelligence in business applications</bad>
+      <good>AI isn't coming. It's here.</good>
+      <great>You're already behind.</great>
+    </example>
+    <example type="cover">
+      <bad>Understanding the impact of automation on modern workflows</bad>
+      <good>Your job is automating.</good>
+      <great>This skill replaces you.</great>
+    </example>
+    <example type="telemetry">
+      <bad>AI adoption has increased by 250% in the past two years</bad>
+      <good>250% growth. 2 years.</good>
+      <great>This number is insane.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Companies using AI report 40% productivity gains</bad>
+      <good>40% more productive. With AI.</good>
+      <great>Your competitor already uses this.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Many developers believe AI will replace all programming jobs</bad>
+      <good>AI won't replace you. People using AI will.</good>
+      <great>This is the real threat.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Building a successful startup requires extensive funding</bad>
+      <good>You don't need funding.</good>
+      <great>Bootstrapped beats funded. Here's why.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three tools every developer should learn in 2024</bad>
+      <good>3 tools. Learn them now.</good>
+      <great>Or become obsolete.</great>
+    </example>
+    <example type="quote">
+      <bad>Sam Altman discussed the rapid advancement of AI capabilities</bad>
+      <good>"The future is already here."</good>
+      <great>You're just not looking.</great>
+    </example>
+    <example type="cta">
+      <bad>Subscribe for more tech insights and AI updates</bad>
+      <good>Stop scrolling. Start building.</good>
+      <great>Or get left behind.</great>
+    </example>
+  </examples>
+</domain>

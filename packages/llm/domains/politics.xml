@@ -1,0 +1,46 @@
+<domain id="politics" name="Politics &amp; Policy">
+  <description>Elections, governance, policy analysis, advocacy, social issues, reform</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody, tells, you, this, lie, cover</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>Understanding the implications of the new policy proposal</bad>
+      <good>They don't want you to see this.</good>
+      <great>This changes everything.</great>
+    </example>
+    <example type="cover">
+      <bad>What the latest poll numbers actually tell us</bad>
+      <good>The polls are lying.</good>
+      <great>Nobody tells you this.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Voter turnout has decreased by 12% in recent elections</bad>
+      <good>12% fewer voters. Democracy is dying.</good>
+      <great>This number is terrifying.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Public trust in institutions is at historic lows</bad>
+      <good>Trust is at 23%. Historically low.</good>
+      <great>This is a crisis.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Many citizens believe their vote doesn't matter</bad>
+      <good>Your vote matters. They want you to think otherwise.</good>
+      <great>This is the biggest lie.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Both parties share more common ground than differences</bad>
+      <good>Both parties are the same.</good>
+      <great>You've been divided. Here's why.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three things every citizen should know about this bill</bad>
+      <good>3 things. Know them now.</good>
+      <great>This affects you directly.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more political analysis and policy updates</bad>
+      <good>Stop scrolling. Start paying attention.</good>
+      <great>Or stay uninformed.</great>
+    </example>
+  </examples>

@@ -1,0 +1,52 @@
+<domain id="general" name="General">
+  <description>Any content that doesn't fit a specific domain. Universal copy patterns.</description>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody, tells, you, this, why, how</powerWords>
+  
+  <examples>
+    <example type="cover">
+      <bad>Why most people get this wrong</bad>
+      <good>You're doing this wrong.</good>
+      <great>Nobody tells you this.</great>
+    </example>
+    <example type="cover">
+      <bad>The truth about what really works</bad>
+      <good>Everything you know is wrong.</good>
+      <great>This changes everything.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Research shows a significant correlation between these factors</bad>
+      <good>92% get this wrong.</good>
+      <great>This stat is shocking.</great>
+    </example>
+    <example type="telemetry">
+      <bad>Data reveals surprising trends in user behavior</bad>
+      <good>The data is clear.</good>
+      <great>Read that again.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Contrary to popular belief, this common practice is ineffective</bad>
+      <good>This is a myth.</good>
+      <great>You've been lied to.</great>
+    </example>
+    <example type="myth-fact">
+      <bad>Experts agree that the conventional wisdom is outdated</bad>
+      <good>Experts are wrong.</good>
+      <great>The truth is opposite.</great>
+    </example>
+    <example type="sequence">
+      <bad>Three things you should know about this topic</bad>
+      <good>3 things. Remember them.</good>
+      <great>Do this or regret it.</great>
+    </example>
+    <example type="quote">
+      <bad>As the saying goes, knowledge is power</bad>
+      <good>"Knowledge is power."</good>
+      <great>Write this down.</great>
+    </example>
+    <example type="cta">
+      <bad>Follow for more insights and updates</bad>
+      <good>Stop scrolling. Start learning.</good>
+      <great>Or stay average.</great>
+    </example>
+  </examples>
+</domain>
