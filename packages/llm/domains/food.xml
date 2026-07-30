@@ -11,7 +11,7 @@
     <example type="cover">
       <bad>How to eat healthier without sacrificing taste</bad>
       <good>Healthy food isn't boring.</good>
-      <great>Nobody tells you this.</great>
+      <great>Your diet is backwards.</great>
     </example>
     <example type="telemetry">
       <bad>This ingredient reduces inflammation by 40%</bad>
@@ -42,6 +42,11 @@
       <bad>Follow for more recipes and nutrition tips</bad>
       <good>Stop eating boring. Start cooking.</good>
       <great>Or keep ordering takeout.</great>
+    </example>
+    <example type="quote">
+      <bad>Julia Child once said that people who love to eat are always the best people</bad>
+      <good>Julia Child: "People who love to eat are always the best people."</good>
+      <great>Julia Child knew this. Your diet culture doesn't.</great>
     </example>
   </examples>
 </domain>

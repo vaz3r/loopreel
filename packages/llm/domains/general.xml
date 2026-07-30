@@ -1,6 +1,6 @@
 <domain id="general" name="General">
   <description>Any content that doesn't fit a specific domain. Universal copy patterns.</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody, tells, you, this, why, how</powerWords>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody tells you this, why, how</powerWords>
   
   <examples>
     <example type="cover">

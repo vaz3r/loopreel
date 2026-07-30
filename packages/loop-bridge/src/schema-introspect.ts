@@ -167,6 +167,58 @@ export function introspectSchema(contract: z.ZodTypeAny): string {
   return lines.join('\n').trim();
 }
 
+function describeSlideTypeConcise(typeName: string, schema: z.ZodTypeAny): string {
+  const stripped = stripOptionalAndDefault(schema);
+  const kind = stripped._def?.typeName as string;
+  if (kind !== ZodFirstPartyTypeKind.ZodObject) return `${typeName}: ${describeZodType(stripped)}`;
+
+  const fields = getFieldsFromObject(stripped as z.ZodObject<any>);
+  const required = fields
+    .filter(f => f.required && f.name !== 'id' && f.name !== 'type' && f.name !== 'footerLeft' && f.name !== 'footerRight')
+    .map(f => {
+      if (f.type.includes('array')) return `${f.name}[...]`;
+      if (f.type.includes('max')) {
+        const maxMatch = f.type.match(/max (\d+) chars/);
+        return maxMatch ? `${f.name} (max ${maxMatch[1]})` : f.name;
+      }
+      return f.name;
+    });
+  return `${typeName}: ${required.join(', ')}`;
+}
+
+export function introspectSchemaConcise(contract: z.ZodTypeAny): string {
+  const lines: string[] = [];
+
+  const contractObj = stripOptionalAndDefault(contract);
+  if ((contractObj._def?.typeName as string) !== ZodFirstPartyTypeKind.ZodObject) {
+    return '';
+  }
+
+  const slidesField = (contractObj as z.ZodObject<any>).shape['slides'];
+  if (!slidesField) return '';
+
+  const slidesType = stripOptionalAndDefault(slidesField);
+  if ((slidesType._def?.typeName as string) !== ZodFirstPartyTypeKind.ZodArray) return '';
+
+  const elementType = (slidesType._def as any).type;
+  if ((elementType._def?.typeName as string) !== ZodFirstPartyTypeKind.ZodDiscriminatedUnion) return '';
+
+  const options = (elementType._def as any).options;
+  for (const option of options) {
+    const stripped = stripOptionalAndDefault(option);
+    if ((stripped._def?.typeName as string) === ZodFirstPartyTypeKind.ZodObject) {
+      const typeField = (stripped as z.ZodObject<any>).shape['type'];
+      let typeName = 'unknown';
+      if ((typeField._def?.typeName as string) === ZodFirstPartyTypeKind.ZodLiteral) {
+        typeName = (typeField._def as any).value as string;
+      }
+      lines.push(describeSlideTypeConcise(typeName, stripped));
+    }
+  }
+
+  return lines.join('\n');
+}
+
 /**
  * Extract the list of supported slide type names from a template's Zod contract.
  */

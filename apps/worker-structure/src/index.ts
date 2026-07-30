@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
-import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema } from '@loopreel/loop-bridge';
+import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
@@ -207,6 +207,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         name: TEMPLATE_STYLES[id]?.name ?? entry.name,
         aesthetics: TEMPLATE_STYLES[id]?.aesthetics ?? '',
         schemaText: introspectSchema(entry.schema),
+        schemaTextConcise: introspectSchemaConcise(entry.schema),
+        toneKeywords: entry.toneKeywords,
       }));
 
       const result = await generateSlidesMultiPhase(rawText, templates, {

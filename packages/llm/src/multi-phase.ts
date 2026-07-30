@@ -8,7 +8,9 @@ export interface TemplateInfo {
   id: string;
   name: string;
   aesthetics: string;
-  schemaText: string; // introspectSchema output — full slide type/field constraints
+  schemaText: string;
+  schemaTextConcise: string;
+  toneKeywords: string[];
 }
 
 export interface DomainExamples {
@@ -50,7 +52,11 @@ function loadAllDomains(): DomainExamples[] {
       const xml = readFileSync(join(DOMAINS_DIR, file), 'utf-8');
       const root = parseXml(xml);
       const obj = xmlToObjects(root) as Record<string, unknown>;
-      const examples = (obj['example'] as Array<Record<string, unknown>> ?? []).map(ex => ({
+      // XML structure: <domain><examples><example type="cover">...</example></examples></domain>
+      // xmlToObjects produces: { examples: { example: [...] } }
+      const examplesContainer = obj['examples'] as Record<string, unknown> | undefined;
+      const rawExamples = (examplesContainer?.['example'] ?? []) as Array<Record<string, unknown>>;
+      const examples = rawExamples.map(ex => ({
         type: (ex['type'] as string) ?? 'cover',
         bad: (ex['bad'] as string) ?? '',
         good: (ex['good'] as string) ?? '',
@@ -160,6 +166,7 @@ function getTemplateSelectionPrompt(briefXml: string, templates: TemplateInfo[])
   const templateSections = templates.map(t => `### ${t.id}
 Name: ${t.name}
 Aesthetics: ${t.aesthetics}
+Best for tones: ${t.toneKeywords.join(', ')}
 
 Supported slide types and their fields:
 ${t.schemaText}`).join('\n\n---\n\n');
@@ -172,15 +179,15 @@ ${briefXml}
 
 ## Available Templates
 
-Each template below includes its name, visual aesthetics, and the FULL schema of supported slide types with all field constraints.
+Each template below includes its name, visual aesthetics, tone keywords, and the FULL schema of supported slide types with all field constraints.
 
 ${templateSections}
 
 ## Task
 
-1. Read the content brief carefully.
-2. Review each template's supported slide types and their field constraints.
-3. Choose the template whose slide types best match the content's needs (e.g., if the content has data/numbers, prefer a template with telemetry. If it has contrasting ideas, prefer one with dichotomy or myth-fact. If it has quotes, ensure the template supports quote slides).
+1. Read the content brief carefully. Note the tone field.
+2. Match the content's tone to each template's tone keywords.
+3. Choose the template whose tone keywords AND slide types best match the content.
 4. Write a brief rationale explaining WHY this template is the best fit.
 
 ## Output Format
@@ -189,14 +196,14 @@ Return a single <templateSelection> element:
 
 <templateSelection>
   <templateId>the-selected-template-id</templateId>
-  <rationale>Why this template is the best fit for this content. Reference specific slide types from the template's schema that will be useful.</rationale>
+  <rationale>Why this template is the best fit. Reference tone keywords and slide types.</rationale>
 </templateSelection>
 
 ## Rules
 - Pick exactly ONE template.
-- The rationale must reference actual slide types from the selected template's schema.
-- If the content has hard statistics, prefer templates with telemetry slide type.
-- If the content has contrasting ideas or myths, prefer templates with dichotomy or myth-fact.
+- Prefer templates whose tone keywords match the content's tone.
+- If the content has hard statistics, ensure the template supports telemetry.
+- If the content has contrasting ideas, ensure the template supports dichotomy or myth-fact.
 - If the content has notable quotes, ensure the template supports quote slides.
 - Return ONLY the XML, no markdown fences, no explanation.`,
     user: 'Select the best template for this content brief.',
@@ -209,7 +216,24 @@ function getSlidePlanPrompt(
   briefXml: string,
   selectedTemplate: TemplateInfo,
   brandKit?: Record<string, string | undefined>,
+  domainExamples?: DomainExamples,
 ): { system: string; user: string } {
+  // Build domain examples section for the planner
+  let domainExamplesSection = '';
+  if (domainExamples && domainExamples.examples.length > 0) {
+    const exampleBlocks = domainExamples.examples.map(ex => `  ${ex.type.toUpperCase()}:
+  GREAT: "${ex.great}"`).join('\n\n');
+
+    domainExamplesSection = `
+## DOMAIN COPY EXAMPLES (${domainExamples.name})
+
+Study these to understand the quality bar for headlines. When writing slide purposes, describe the HOOK STRATEGY that would produce headlines at this quality level.
+
+<domainExamples>
+${exampleBlocks}
+</domainExamples>`;
+  }
+
   return {
     system: `You are a carousel planner. Given a content brief and a selected template, plan the exact slide types and their purpose for each slide.
 
@@ -228,6 +252,7 @@ ${brandKit ? `Background: ${brandKit.bg ?? 'not set'}
 Text: ${brandKit.text ?? 'not set'}
 Accent: ${brandKit.accent ?? 'not set'}
 Font: ${brandKit.fontSerif ?? brandKit.fontSans ?? brandKit.fontMono ?? 'not set'}` : 'Use default brand colors for the selected template.'}
+${domainExamplesSection}
 
 ## Task
 
@@ -239,7 +264,7 @@ Return a single <slidePlan> element:
 
 <slidePlan>
   <narrativeArc>Describe the story this carousel tells in 2-3 sentences. What journey does the reader go on?</narrativeArc>
-  <slide type="cover" purpose="What this slide communicates — be specific about the headline hook" />
+  <slide type="cover" purpose="Hook strategy — what rhetorical approach stops the scroll (e.g., curiosity gap about human cost, pattern interrupt about what nobody knows). Do NOT write the exact headline text." />
   <slide type="sequence" purpose="What framework or list this presents — list the actual items" />
   <slide type="myth-fact" purpose="What misconception this challenges — state the myth and fact" />
   <slide type="quote" purpose="Which quote from the brief — include the attribution" />
@@ -261,7 +286,7 @@ Return a single <slidePlan> element:
 2. Start with a cover slide. End with a CTA slide.
 3. Vary slide types — never repeat the same type twice in a row.
 4. If hasRealNumbers="false" in the brief, do NOT use telemetry. Use sequence, quote, or myth-fact instead.
-5. Each slide's purpose must be SPECIFIC — reference actual content from the brief, not generic descriptions.
+5. Each slide's purpose must describe the HOOK STRATEGY or CONTENT APPROACH — do NOT write exact headline text. Phase 4 will generate headlines. Your job is to describe the rhetorical approach.
 6. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
 7. Return ONLY the XML, no markdown fences, no explanation.`,
     user: 'Plan the slides for this carousel.',
@@ -309,6 +334,18 @@ Do NOT write "GOOD" headlines. Write "GREAT" headlines. The difference:
 ## Template: ${selectedTemplate.name}
 Aesthetics: ${selectedTemplate.aesthetics}
 
+## COVER SLIDE RULES (HIGHEST PRIORITY — OVERRIDES ALL OTHER RULES)
+
+The cover is the MOST important slide. It must stop the scroll.
+
+<coverSlideRules>
+  <rule>The cover headline must be a CURIOSITY GAP, not a summary.</rule>
+  <rule>NEVER start with the event name, location, or topic. Start with the HOOK.</rule>
+  <rule>The cover must create an information void the reader MUST fill.</rule>
+  <rule>Use the domain-specific cover examples from the examples section above for formulas.</rule>
+  <rule>Ask yourself: "Would I stop scrolling for this?" If not, rewrite.</rule>
+</coverSlideRules>
+
 ## Slide Plan
 ${planXml}
 
@@ -317,7 +354,7 @@ ${briefXml}
 
 ## Slide Type Constraints (EXACT — you MUST follow these)
 
-${selectedTemplate.schemaText}
+${selectedTemplate.schemaTextConcise}
 
 ## Output Format
 
@@ -345,7 +382,7 @@ For arrays (stats, items), use nested child elements:
 
 ## RULES
 - Return ONLY the XML <presentation> element. No markdown fences, no explanation.
-- Generate ALL slides in order as specified in the slidePlan.
+- Generate ALL slides in order as specified in the slidePlan. You MUST generate a slide for EVERY slide in the slidePlan. Do NOT skip any slides. Do NOT change the order. The slidePlan is a REQUIREMENT, not a suggestion.
 - Use ONLY data from the content brief. Do NOT invent facts, statistics, or quotes.
 - Respect ALL field constraints (character limits, required fields, array sizes) exactly.
 - Self-closing tags for simple elements: <item ... />
@@ -546,7 +583,7 @@ export async function generateSlidesMultiPhase(
   onProgress?.('plan', 'Phase 3: Planning slide sequence...');
 
   const phase3Start = Date.now();
-  const { system: planSystem, user: planUser } = getSlidePlanPrompt(briefXml, selectedTemplate, brandKit);
+  const { system: planSystem, user: planUser } = getSlidePlanPrompt(briefXml, selectedTemplate, brandKit, selectedDomain);
   onDebug?.('03-prompt-phase3-plan-slides.md', `## System\n\n${planSystem}\n\n## User\n\n${planUser}`);
   const planRaw = await llm.generateJSON(planSystem, planUser);
   const planXml = stripFences(planRaw);
@@ -603,6 +640,24 @@ export async function generateSlidesMultiPhase(
     } else if (slideData && typeof slideData === 'object') {
       slides.push(unwrapChildWrappers(slideData as Record<string, unknown>));
     }
+
+    // Also collect bare typed elements that the LLM outputs without <slide> wrapper
+    // e.g. <telemetry ...> or <myth-fact ...> at root level
+    const BARE_TYPE_TAGS = ['telemetry', 'myth-fact', 'case-study', 'resource-grid', 'timeline', 'quadrant', 'interview', 'image-split', 'image-cover'];
+    for (const tag of BARE_TYPE_TAGS) {
+      const bareData = rootObj[tag];
+      if (bareData && typeof bareData === 'object' && !Array.isArray(bareData)) {
+        const slide = unwrapChildWrappers(bareData as Record<string, unknown>);
+        if (!slide['type']) slide['type'] = tag;
+        slides.push(slide);
+      } else if (Array.isArray(bareData)) {
+        for (const s of bareData) {
+          const slide = unwrapChildWrappers(s as Record<string, unknown>);
+          if (!slide['type']) slide['type'] = tag;
+          slides.push(slide);
+        }
+      }
+    }
   } catch {
     onProgress?.('generation', 'Parse failed, using fallback slides');
     for (let i = 0; i < slidePlan.length; i++) {
@@ -613,6 +668,24 @@ export async function generateSlidesMultiPhase(
   // Ensure IDs
   for (let i = 0; i < slides.length; i++) {
     slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
+  }
+
+  // Headline validation — catch obvious failures
+  const headlineWarnings: string[] = [];
+  for (const slide of slides) {
+    const headline = slide['headline'] as string | undefined;
+    if (!headline) continue;
+    const words = headline.split(/\s+/).length;
+    if (words > 5) {
+      headlineWarnings.push(`${slide['type']}: "${headline}" (${words} words, max 5)`);
+    }
+    const lc = headline.toLowerCase();
+    if (lc.startsWith('the ') || lc.startsWith('a ') || lc.startsWith('an ')) {
+      headlineWarnings.push(`${slide['type']}: "${headline}" starts with article`);
+    }
+  }
+  if (headlineWarnings.length > 0) {
+    onProgress?.('validation', `Headline warnings: ${headlineWarnings.join('; ')}`);
   }
 
   const totalLatencyMs = Date.now() - totalStart;

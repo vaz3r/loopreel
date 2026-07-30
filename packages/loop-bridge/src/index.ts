@@ -1,8 +1,8 @@
-export { TEMPLATES, getTemplate, getTemplateIds } from './registry.js';
+export { TEMPLATES, getTemplate, getTemplateIds, getTemplatesByCluster, getClusters } from './registry.js';
 export type { TemplateEntry } from './registry.js';
 export { getPrompt, TEMPLATE_IDS } from './prompts.js';
 export { adaptSlideForEngine } from './adapter.js';
-export { introspectSchema, extractSlideTypes } from './schema-introspect.js';
+export { introspectSchema, introspectSchemaConcise, extractSlideTypes } from './schema-introspect.js';
 export { autoSelectTemplate, classifyByHeuristics } from './classifier.js';
 export { paginateContract, chunkArray } from '@loopreel/loop/engine-utils';
 export {

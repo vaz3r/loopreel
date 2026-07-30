@@ -1,6 +1,6 @@
 <domain id="education" name="Education &amp; Learning">
   <description>Teaching, learning methods, skills development, career growth, personal development</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, master, unlock, learn, skill, career, growth, unlock</powerWords>
+  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, master, unlock, learn, skill, career, growth</powerWords>
   
   <examples>
     <example type="cover">
@@ -11,7 +11,7 @@
     <example type="cover">
       <bad>Why traditional education fails most students</bad>
       <good>School is broken.</good>
-      <great>Nobody tells you this.</great>
+      <great>Your degree doesn't teach this.</great>
     </example>
     <example type="telemetry">
       <bad>Students who use spaced repetition retain 200% more information</bad>
@@ -42,5 +42,10 @@
       <bad>Subscribe for more learning tips and career advice</bad>
       <good>Stop studying. Start mastering.</good>
       <great>Or stay stuck.</great>
+    </example>
+    <example type="quote">
+      <bad>As Albert Einstein said, education is not the learning of facts, but the training of the mind to think</bad>
+      <good>Einstein: "Education is not the learning of facts, but the training of the mind to think."</good>
+      <great>Einstein said this 100 years ago. Schools still ignore it.</great>
     </example>
   </examples>

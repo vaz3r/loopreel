@@ -23,6 +23,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/*/node_modules ./packages/*/node_modules/
 COPY --from=deps /app/apps/*/node_modules ./apps/*/node_modules/
 COPY . .
+RUN rm -rf packages/llm/dist packages/loop-bridge/dist
 RUN pnpm --filter @loopreel/schemas build
 RUN pnpm --filter @loopreel/types build
 RUN pnpm --filter @loopreel/db build

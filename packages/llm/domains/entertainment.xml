@@ -43,5 +43,10 @@
       <good>Stop scrolling. Start watching.</good>
       <great>Or stay boring.</great>
     </example>
+    <example type="quote">
+      <bad>Stanley Kubrick once said that the most terrifying fact about the universe is that it is indifferent to human suffering</bad>
+      <good>Kubrick: "The most terrifying fact about the universe is that it is indifferent to human suffering."</good>
+      <great>Kubrick said this. Hollywood still doesn't get it.</great>
+    </example>
   </examples>
 </domain>

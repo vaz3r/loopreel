@@ -11,6 +11,8 @@ export interface TemplateEntry {
   schemeId: string;
   schema: z.ZodTypeAny;
   defaultPlatform: string;
+  toneKeywords: string[];
+  cluster: string;
 }
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
@@ -20,6 +22,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     schemeId: 'archive_paper',
     schema: PaperOfRecordContract,
     defaultPlatform: 'instagram-feed',
+    toneKeywords: ['news', 'editorial', 'human-interest', 'opinion', 'breaking', 'disaster', 'crisis'],
+    cluster: 'editorial',
   },
   'the-globalist': {
     id: 'the-globalist',
@@ -27,6 +31,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     schemeId: 'globalist_editorial',
     schema: TheGlobalistContract,
     defaultPlatform: 'instagram-feed',
+    toneKeywords: ['world', 'geopolitics', 'culture', 'society', 'longform', 'analysis'],
+    cluster: 'editorial',
   },
   'the-terminal': {
     id: 'the-terminal',
@@ -34,6 +40,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     schemeId: 'terminal_dark',
     schema: TheTerminalContract,
     defaultPlatform: 'instagram-feed',
+    toneKeywords: ['finance', 'data', 'analytics', 'markets', 'technical', 'numbers', 'quantitative'],
+    cluster: 'data',
   },
   'the-curator': {
     id: 'the-curator',
@@ -41,6 +49,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     schemeId: 'curator_gallery',
     schema: TheCuratorContract,
     defaultPlatform: 'instagram-feed',
+    toneKeywords: ['creative', 'artistic', 'minimal', 'conceptual', 'design', 'visual'],
+    cluster: 'creative',
   },
   'the-academic': {
     id: 'the-academic',
@@ -48,6 +58,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     schemeId: 'academic_research',
     schema: TheAcademicContract,
     defaultPlatform: 'instagram-feed',
+    toneKeywords: ['research', 'science', 'evidence', 'academic', 'structured', 'methodology'],
+    cluster: 'academic',
   },
 };
 
@@ -61,4 +73,12 @@ export function getTemplate(id: string): TemplateEntry {
 
 export function getTemplateIds(): string[] {
   return Object.keys(TEMPLATES);
+}
+
+export function getTemplatesByCluster(cluster: string): TemplateEntry[] {
+  return Object.values(TEMPLATES).filter(t => t.cluster === cluster);
+}
+
+export function getClusters(): string[] {
+  return [...new Set(Object.values(TEMPLATES).map(t => t.cluster))];
 }

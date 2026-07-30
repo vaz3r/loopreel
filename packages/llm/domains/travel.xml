@@ -31,7 +31,7 @@
     <example type="myth-fact">
       <bad>Popular tourist destinations are often the worst experiences</bad>
       <good>Tourist traps are terrible.</good>
-      <great>Nobody tells you this.</great>
+      <great>This destination is a secret.</great>
     </example>
     <example type="sequence">
       <bad>Three destinations that will change your perspective on life</bad>
@@ -42,6 +42,11 @@
       <bad>Follow for more travel tips and destination guides</bad>
       <good>Stop dreaming. Start exploring.</good>
       <great>Or stay home.</great>
+    </example>
+    <example type="quote">
+      <bad>Mark Twain said that travel is fatal to prejudice, bigotry, and narrow-mindedness</bad>
+      <good>Mark Twain: "Travel is fatal to prejudice, bigotry, and narrow-mindedness."</good>
+      <great>Twain knew this. Your comfort zone doesn't.</great>
     </example>
   </examples>
 </domain>
