@@ -1,5 +1,5 @@
 import { parseXml } from './xml-parser.js';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -21,12 +21,32 @@ export interface DomainExamples {
 
 // ─── Domain Classification ──────────────────────────────────────────────────
 
-const DOMAINS_DIR = join(import.meta.dirname ?? '.', 'domains');
+function resolveDomainsDir(): string {
+  // Try multiple paths to find the domains directory
+  const candidates = [
+    // During development (source)
+    join(process.cwd(), 'packages', 'llm', 'domains'),
+    // In Docker container (built)
+    join('/app', 'packages', 'llm', 'domains'),
+    // Relative to this file's compiled location
+    join(import.meta.dirname ?? '.', 'domains'),
+    join(import.meta.dirname ?? '.', '..', 'domains'),
+  ];
+  for (const dir of candidates) {
+    if (existsSync(dir)) return dir;
+  }
+  return candidates[0]!; // fallback
+}
+
+const DOMAINS_DIR = resolveDomainsDir();
+
+let _domainsCache: DomainExamples[] | null = null;
 
 function loadAllDomains(): DomainExamples[] {
+  if (_domainsCache) return _domainsCache;
   try {
     const files = readdirSync(DOMAINS_DIR).filter(f => f.endsWith('.xml'));
-    return files.map(file => {
+    _domainsCache = files.map(file => {
       const xml = readFileSync(join(DOMAINS_DIR, file), 'utf-8');
       const root = parseXml(xml);
       const obj = xmlToObjects(root) as Record<string, unknown>;
@@ -44,7 +64,9 @@ function loadAllDomains(): DomainExamples[] {
         examples,
       };
     });
+    return _domainsCache;
   } catch {
+    _domainsCache = [];
     return [];
   }
 }
@@ -465,7 +487,15 @@ export async function generateSlidesMultiPhase(
   onProgress?.('domain', 'Phase 1.5: Classifying content domain...');
 
   const allDomains = loadAllDomains();
-  let selectedDomain = allDomains.find(d => d.id === 'general') ?? allDomains[0]!;
+  // Fallback domain if loading fails
+  const fallbackDomain: DomainExamples = {
+    id: 'general',
+    name: 'General',
+    description: 'General content',
+    powerWords: ['secret', 'hidden', 'wrong', 'never', 'stop', 'truth', 'reverse', 'shocking'],
+    examples: [],
+  };
+  let selectedDomain = allDomains.find(d => d.id === 'general') ?? allDomains[0] ?? fallbackDomain;
   let domainClassificationMs = 0;
 
   if (allDomains.length > 0) {
