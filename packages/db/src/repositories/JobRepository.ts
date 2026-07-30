@@ -15,6 +15,9 @@ export interface JobRow {
   error_payload: unknown;
   slide_count: number | null;
   retry_count: number;
+  checkpoint_phase: string | null;
+  checkpoint_data: Record<string, unknown>;
+  retries_used: Record<string, number>;
   created_at: Date;
   updated_at: Date;
 }
@@ -175,5 +178,68 @@ export class JobRepository {
   static async purgeAll(): Promise<number> {
     const { rowCount } = await pool.query(`DELETE FROM generation_jobs`);
     return rowCount ?? 0;
+  }
+
+  static async checkpoint(
+    jobId: string,
+    phase: string,
+    data: Record<string, unknown>,
+  ): Promise<void> {
+    await pool.query(
+      `UPDATE generation_jobs
+       SET checkpoint_phase = $1, checkpoint_data = $2, updated_at = NOW()
+       WHERE id = $3`,
+      [phase, JSON.stringify(data), jobId],
+    );
+  }
+
+  static async getCheckpoint(jobId: string): Promise<{ phase: string; data: Record<string, unknown> } | null> {
+    const { rows } = await pool.query<{ checkpoint_phase: string | null; checkpoint_data: Record<string, unknown> }>(
+      `SELECT checkpoint_phase, checkpoint_data FROM generation_jobs WHERE id = $1`,
+      [jobId],
+    );
+    const row = rows[0];
+    if (!row?.checkpoint_phase) return null;
+    return { phase: row.checkpoint_phase, data: row.checkpoint_data ?? {} };
+  }
+
+  static async incrementRetry(jobId: string, phase: string): Promise<number> {
+    const { rows } = await pool.query<{ retries_used: Record<string, number> }>(
+      `SELECT retries_used FROM generation_jobs WHERE id = $1`,
+      [jobId],
+    );
+    const current = rows[0]?.retries_used ?? {};
+    const updated = { ...current, [phase]: (current[phase] ?? 0) + 1 };
+    await pool.query(
+      `UPDATE generation_jobs SET retries_used = $1, updated_at = NOW() WHERE id = $2`,
+      [JSON.stringify(updated), jobId],
+    );
+    return updated[phase] ?? 0;
+  }
+
+  static async getRetriesUsed(jobId: string): Promise<Record<string, number>> {
+    const { rows } = await pool.query<{ retries_used: Record<string, number> }>(
+      `SELECT retries_used FROM generation_jobs WHERE id = $1`,
+      [jobId],
+    );
+    return rows[0]?.retries_used ?? {};
+  }
+
+  static async markNeedsReview(jobId: string, reason: string): Promise<void> {
+    await pool.query(
+      `UPDATE generation_jobs
+       SET status = 'needs_review', error_payload = $1, updated_at = NOW()
+       WHERE id = $2`,
+      [JSON.stringify({ stage: 'label-detection', reason }), jobId],
+    );
+  }
+
+  static async clearCheckpoint(jobId: string): Promise<void> {
+    await pool.query(
+      `UPDATE generation_jobs
+       SET checkpoint_phase = NULL, checkpoint_data = '{}', updated_at = NOW()
+       WHERE id = $1`,
+      [jobId],
+    );
   }
 }

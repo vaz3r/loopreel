@@ -70,6 +70,7 @@ export interface StatsResponse {
   processing: number;
   complete: number;
   failed: number;
+  needsReview: number;
 }
 
 export interface DownloadResponse {

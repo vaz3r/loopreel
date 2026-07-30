@@ -1,6 +1,7 @@
 <domain id="marketing" name="Marketing">
   <description>Advertising, branding, social media, digital marketing, consumer behavior</description>
   <powerWords>secret, hidden, proven, viral, convert, engage, stop, never, truth, reveal, powerful, overlooked</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as ROI or performance metrics — what actually works</principle>
     <principle>Use data-driven language — conversion rates, engagement, revenue</principle>

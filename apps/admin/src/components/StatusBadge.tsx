@@ -1,5 +1,5 @@
 import type { JobStatus } from '@/api/types';
-import { Check, Loader2, X, Clock } from 'lucide-react';
+import { Check, Loader2, X, Clock, AlertTriangle } from 'lucide-react';
 
 const statusConfig: Record<JobStatus, {
   label: string;
@@ -13,6 +13,7 @@ const statusConfig: Record<JobStatus, {
   rendering: { label: 'Rendering', icon: Loader2, active: true },
   complete: { label: 'Complete', icon: Check, active: false },
   failed: { label: 'Failed', icon: X, active: false },
+  needs_review: { label: 'Needs Review', icon: AlertTriangle, active: false },
 };
 
 export function StatusBadge({ status, size = 'default' }: { status: JobStatus; size?: 'sm' | 'default' }) {

@@ -1,6 +1,7 @@
 <domain id="news" name="News and Current Events">
   <description>Breaking news, disasters, politics, world events, investigations, human interest</description>
   <powerWords>breaking, shocking, urgent, hidden, never, stop, truth, secret, revealed, crisis, exclusive, devastating, confirmed, alarming</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Lead with specific numbers and names — never vague labels</principle>
     <principle>Use urgency language — "right now", "breaking", "just in"</principle>

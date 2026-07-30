@@ -1,4 +1,4 @@
-import { Check, Loader2, X } from 'lucide-react';
+import { Check, Loader2, X, AlertTriangle } from 'lucide-react';
 import { STATUS_FLOW } from '@/lib/constants';
 import type { JobDetail } from '@/api/client';
 
@@ -14,6 +14,8 @@ const stepLabels: Record<string, string> = {
 export function StatusTimeline({ job }: { job: JobDetail }) {
   const currentIdx = STATUS_FLOW.indexOf(job.status as typeof STATUS_FLOW[number]);
   const isFailed = job.status === 'failed';
+  const isNeedsReview = job.status === 'needs_review';
+  const isTerminal = isFailed || isNeedsReview;
   const failedStage = job.errorPayload?.stage;
 
   return (
@@ -26,7 +28,7 @@ export function StatusTimeline({ job }: { job: JobDetail }) {
       <div className="flex items-center">
         {STATUS_FLOW.map((step, idx) => {
           let state: 'done' | 'active' | 'upcoming' = 'upcoming';
-          if (isFailed && failedStage === step) state = 'active';
+          if (isTerminal && failedStage === step) state = 'active';
           else if (idx < currentIdx) state = 'done';
           else if (idx === currentIdx) state = 'active';
 
@@ -37,7 +39,7 @@ export function StatusTimeline({ job }: { job: JobDetail }) {
                   state === 'done'
                     ? 'bg-text-primary'
                     : state === 'active'
-                      ? isFailed && failedStage === step
+                      ? isTerminal && failedStage === step
                         ? 'bg-text-primary'
                         : 'border-2 border-text-primary bg-transparent'
                       : 'border border-border bg-transparent'
@@ -45,8 +47,12 @@ export function StatusTimeline({ job }: { job: JobDetail }) {
                   {state === 'done' ? (
                     <Check className="h-3 w-3 text-background" />
                   ) : state === 'active' ? (
-                    isFailed && failedStage === step ? (
-                      <X className="h-3 w-3 text-background" />
+                    isTerminal && failedStage === step ? (
+                      isNeedsReview ? (
+                        <AlertTriangle className="h-3 w-3 text-background" />
+                      ) : (
+                        <X className="h-3 w-3 text-background" />
+                      )
                     ) : (
                       <Loader2 className="h-3 w-3 text-text-primary animate-spin" />
                     )
@@ -77,6 +83,17 @@ export function StatusTimeline({ job }: { job: JobDetail }) {
           </p>
           <p className="text-[12px] text-text-tertiary mt-1">
             {job.errorPayload.reason}: {job.errorPayload.details}
+          </p>
+        </div>
+      )}
+
+      {isNeedsReview && (
+        <div className="mt-5 rounded-md border border-border bg-surface-2 p-3">
+          <p className="text-[13px] font-medium text-text-primary">
+            Needs review — label detection failed after retries
+          </p>
+          <p className="text-[12px] text-text-tertiary mt-1">
+            Headlines may contain labels that violate platform guidelines. Review the slides and retry or mark as complete.
           </p>
         </div>
       )}

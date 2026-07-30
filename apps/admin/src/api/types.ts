@@ -5,4 +5,5 @@ export type JobStatus =
   | 'structuring'
   | 'rendering'
   | 'complete'
-  | 'failed';
+  | 'failed'
+  | 'needs_review';

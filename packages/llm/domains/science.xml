@@ -1,6 +1,7 @@
 <domain id="science" name="Science">
   <description>Research, discoveries, space, physics, biology, scientific breakthroughs</description>
   <powerWords>breakthrough, discovery, secret, hidden, never, stop, truth, reveal, shocking, paradigm, shift, paradigm</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as discovery or breakthrough — what we now know</principle>
     <principle>Use specific data from studies or experiments</principle>

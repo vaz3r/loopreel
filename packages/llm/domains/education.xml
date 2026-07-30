@@ -1,6 +1,7 @@
 <domain id="education" name="Education">
   <description>Learning, schools, universities, training, skills development, EdTech</description>
   <powerWords>unlock, secret, hidden, proven, result, success, failure, never, stop, truth, reveal, transformative</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as outcomes — what students or learners actually gain</principle>
     <principle>Use specific data on completion rates, salary impacts, or skill gains</principle>

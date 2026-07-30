@@ -9,7 +9,7 @@ import { PLATFORM_LABELS } from '@/lib/constants';
 import { Link } from 'react-router-dom';
 import type { JobStatus } from '@/api/types';
 
-const STATUSES: (JobStatus | '')[] = ['', 'queued', 'ingesting', 'transcribing', 'structuring', 'rendering', 'complete', 'failed'];
+const STATUSES: (JobStatus | '')[] = ['', 'queued', 'ingesting', 'transcribing', 'structuring', 'rendering', 'complete', 'failed', 'needs_review'];
 
 const statusLabels: Record<string, string> = {
   '': 'All',
@@ -20,6 +20,7 @@ const statusLabels: Record<string, string> = {
   rendering: 'Rendering',
   complete: 'Complete',
   failed: 'Failed',
+  needs_review: 'Needs Review',
 };
 
 export function JobsPage() {
@@ -126,7 +127,7 @@ export function JobsPage() {
                   </td>
                   <td className="px-4 py-2.5">
                     <div className="flex items-center justify-end gap-1.5">
-                      {job.status === 'failed' && (
+                      {(job.status === 'failed' || job.status === 'needs_review') && (
                         <button
                           onClick={() => retryMutation.mutate(job.id)}
                           disabled={retryMutation.isPending}

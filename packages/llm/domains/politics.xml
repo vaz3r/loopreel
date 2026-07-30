@@ -1,6 +1,7 @@
 <domain id="politics" name="Politics and Policy">
   <description>Elections, governance, policy analysis, advocacy, social issues, reform</description>
   <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody tells you this, lie, cover</powerWords>
+  <fewShotId>politics</fewShotId>
   <principles>
     <principle>Frame as power dynamics — who benefits, who loses</principle>
     <principle>Use contrast pairs — public vs private, promise vs reality</principle>

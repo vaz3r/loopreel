@@ -1,6 +1,7 @@
 <domain id="general" name="General">
   <description>Universal topics, everyday life, personal development, miscellaneous</description>
   <powerWords>secret, hidden, wrong, never, stop, truth, reveal, shocking, surprising, little-known, overlooked, powerful</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as personal relevance — why this matters to the reader</principle>
     <principle>Use everyday language that resonates broadly</principle>

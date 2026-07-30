@@ -1,6 +1,7 @@
 <domain id="travel" name="Travel">
   <description>Destinations, tourism, travel tips, cultural experiences, adventure</description>
   <powerWords>secret, hidden, forbidden, authentic, exclusive, stunning, breathtaking, never, stop, reveal, overlooked, must-see</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as discovery — what travelers don't know yet</principle>
     <principle>Use sensory language — sights, sounds, tastes</principle>

@@ -83,6 +83,16 @@ export function JobDetailPage() {
             {retryMutation.isPending ? 'Retrying...' : 'Retry'}
           </Button>
         )}
+        {job.status === 'needs_review' && (
+          <Button
+            onClick={handleRetry}
+            disabled={retryMutation.isPending}
+            className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium"
+          >
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            {retryMutation.isPending ? 'Retrying...' : 'Retry'}
+          </Button>
+        )}
       </div>
 
       <StatusTimeline job={job} />
@@ -116,6 +126,22 @@ export function JobDetailPage() {
             <div className="flex gap-2">
               <span className="text-[12px] text-text-quaternary font-medium w-16">Details</span>
               <span className="text-[12px] text-text-tertiary break-all">{job.errorPayload.details}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {job.status === 'needs_review' && job.errorPayload && (
+        <div className="rounded-lg border border-border bg-card p-5">
+          <h3 className="text-[13px] font-medium text-text-secondary mb-3">Review Details</h3>
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <span className="text-[12px] text-text-quaternary font-medium w-16">Stage</span>
+              <span className="text-[12px] text-text-tertiary">{job.errorPayload.stage}</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-[12px] text-text-quaternary font-medium w-16">Reason</span>
+              <span className="text-[12px] text-text-tertiary">{job.errorPayload.reason}</span>
             </div>
           </div>
         </div>

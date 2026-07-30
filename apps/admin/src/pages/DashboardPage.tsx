@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import { useStats, useJobs } from '@/api/hooks';
 import { JobCard } from '@/components/JobCard';
 
-const statLabels = ['Total Jobs', 'Processing', 'Complete', 'Failed'] as const;
+const statLabels = ['Total Jobs', 'Processing', 'Complete', 'Failed', 'Needs Review'] as const;
 
 export function DashboardPage() {
   const { data: stats, isLoading: statsLoading } = useStats();
@@ -16,6 +16,7 @@ export function DashboardPage() {
     stats?.processing ?? 0,
     stats?.complete ?? 0,
     stats?.failed ?? 0,
+    stats?.needsReview ?? 0,
   ];
 
   return (
@@ -30,9 +31,9 @@ export function DashboardPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
         {statsLoading
-          ? Array.from({ length: 4 }).map((_, i) => (
+          ? Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="rounded-lg border border-border bg-card p-5">
                 <Skeleton className="h-3 w-16 mb-3 bg-surface-2" />
                 <Skeleton className="h-8 w-10 bg-surface-2" />

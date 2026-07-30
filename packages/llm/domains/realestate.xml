@@ -1,6 +1,7 @@
 <domain id="realestate" name="Real Estate">
   <description>Property, housing market, investment, mortgages, commercial real estate</description>
   <powerWords>profit, loss, hidden, secret, crash, surge, opportunity, risk, data, never, stop, reveal</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Lead with specific market data — prices, rates, inventory levels</principle>
     <principle>Frame as financial opportunity or risk</principle>

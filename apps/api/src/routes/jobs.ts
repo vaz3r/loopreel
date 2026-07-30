@@ -102,8 +102,8 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(404).send({ error: 'Job not found' });
     }
 
-    if (job.status !== 'failed') {
-      return reply.status(400).send({ error: 'Only failed jobs can be retried' });
+    if (job.status !== 'failed' && job.status !== 'needs_review') {
+      return reply.status(400).send({ error: 'Only failed or needs_review jobs can be retried' });
     }
 
     // Clear error state and reset to queued
@@ -135,7 +135,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         properties: {
           page: { type: 'integer', minimum: 1, default: 1 },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
-          status: { type: 'string', enum: ['queued', 'ingesting', 'transcribing', 'structuring', 'rendering', 'complete', 'failed'] },
+          status: { type: 'string', enum: ['queued', 'ingesting', 'transcribing', 'structuring', 'rendering', 'complete', 'failed', 'needs_review'] },
           search: { type: 'string' },
         },
       },
@@ -176,6 +176,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       processing: (counts.ingesting ?? 0) + (counts.transcribing ?? 0) + (counts.structuring ?? 0) + (counts.rendering ?? 0),
       complete: counts.complete ?? 0,
       failed: counts.failed ?? 0,
+      needsReview: counts.needs_review ?? 0,
     });
   });
 

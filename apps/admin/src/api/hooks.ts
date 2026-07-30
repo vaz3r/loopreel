@@ -24,7 +24,7 @@ export function useJob(id: string) {
     queryFn: () => api.getJob(id),
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status && !['complete', 'failed'].includes(status)) {
+      if (status && !['complete', 'failed', 'needs_review'].includes(status)) {
         return 5_000;
       }
       return false;

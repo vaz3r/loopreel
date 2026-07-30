@@ -1,6 +1,7 @@
 <domain id="entertainment" name="Entertainment">
   <description>Movies, music, TV, celebrities, pop culture, gaming</description>
   <powerWords>secret, hidden, never, stop, truth, reveal, shocking, exclusive, behind-the-scenes, untold, forbidden, viral</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as insider knowledge or behind-the-scenes access</principle>
     <principle>Use fan engagement language — what "nobody is talking about"</principle>

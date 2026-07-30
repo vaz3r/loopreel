@@ -19,6 +19,37 @@ export interface DomainExamples {
   description: string;
   powerWords: string[];
   principles: string[];
+  fewShotId?: string;
+}
+
+// ─── Per-Phase Retry Budgets ────────────────────────────────────────────────
+
+const RETRY_BUDGETS: Record<string, number> = {
+  extraction: 1,
+  planning: 1,
+  generation: 1,
+  labelDetection: 2,
+};
+
+async function withPhaseRetry<T>(
+  fn: () => Promise<T>,
+  phase: string,
+  retriesUsed: Record<string, number>,
+  onError?: (err: Error) => void,
+): Promise<T> {
+  const budget = RETRY_BUDGETS[phase] ?? 0;
+  const used = retriesUsed[phase] ?? 0;
+
+  try {
+    return await fn();
+  } catch (err) {
+    if (used >= budget) {
+      onError?.(err as Error);
+      throw err;
+    }
+    retriesUsed[phase] = used + 1;
+    throw err;
+  }
 }
 
 // ─── Few-Shot Examples ──────────────────────────────────────────────────────
@@ -81,6 +112,12 @@ Domain: politics
 
 Notice: Cover uses a SPECIFIC NUMBER (1,100 pages) to create curiosity. Myth-fact is factually accurate — the brief says scientists were divided, not that there was a cover-up. Headlines use Title Case. Headlines are claims or commands. All facts come from the content brief.`;
 
+const FEW_SHOT_MAP: Record<string, string> = {
+  news: FEW_SHOT_NEWS,
+  politics: FEW_SHOT_POLITICS,
+};
+const DEFAULT_FEW_SHOT = FEW_SHOT_NEWS;
+
 // ─── Domain Classification ──────────────────────────────────────────────────
 
 function resolveDomainsDir(): string {
@@ -121,6 +158,7 @@ function loadAllDomains(): DomainExamples[] {
         description: (obj['description'] as string) ?? '',
         powerWords: ((obj['powerWords'] as string) ?? '').split(',').map(w => w.trim()).filter(Boolean),
         principles,
+        fewShotId: (obj['fewShotId'] as string) ?? undefined,
       };
     });
     return _domainsCache;
@@ -333,6 +371,14 @@ Return a single <slidePlan> element:
   };
 }
 
+// ─── Domain-Matched Few-Shot ─────────────────────────────────────────────────
+
+function getDomainFewShot(domain?: DomainExamples): string {
+  if (!domain) return DEFAULT_FEW_SHOT;
+  const fewShotId = domain.fewShotId ?? domain.id;
+  return FEW_SHOT_MAP[fewShotId] ?? DEFAULT_FEW_SHOT;
+}
+
 // ─── Slide-Type Rules (Universal) ───────────────────────────────────────────
 
 const SLIDE_TYPE_RULES = [
@@ -406,9 +452,7 @@ Use these power words in headlines: ${domainExamples.powerWords.join(', ')}`;
 ## Template: ${selectedTemplate.name}
 Aesthetics: ${selectedTemplate.aesthetics}
 
-${domainExamples && domainExamples.id === 'news' ? FEW_SHOT_NEWS : ''}
-${domainExamples && domainExamples.id === 'politics' ? FEW_SHOT_POLITICS : ''}
-${!domainExamples || (domainExamples.id !== 'news' && domainExamples.id !== 'politics') ? FEW_SHOT_NEWS + '\n\n' + FEW_SHOT_POLITICS : ''}
+${getDomainFewShot(domainExamples)}
 
 ## Slide Plan
 ${planXml}
@@ -644,6 +688,7 @@ export interface MultiPhaseResult {
   slidePlan: string[];
   domainId: string;
   domainClassificationMs: number;
+  needsReview: boolean;
 }
 
 export async function generateSlidesMultiPhase(
@@ -654,129 +699,233 @@ export async function generateSlidesMultiPhase(
     brandKit?: Record<string, string | undefined>;
     onProgress?: (phase: string, detail: string) => void;
     onDebug?: (filename: string, content: string) => void;
+    checkpoint?: { phase: string; data: Record<string, unknown> };
+    retriesUsed?: Record<string, number>;
+    onSaveCheckpoint?: (phase: string, data: Record<string, unknown>) => Promise<void>;
   },
 ): Promise<MultiPhaseResult> {
-  const { llm, onProgress, onDebug, brandKit } = options;
+  const { llm, onProgress, onDebug, brandKit, checkpoint, retriesUsed = {}, onSaveCheckpoint } = options;
   const totalStart = Date.now();
 
-  // ── PHASE 1: Summarise ──────────────────────────────────────────────────────
-  onProgress?.('extraction', 'Phase 1: Extracting content brief...');
-  onDebug?.('01-prompt-phase1-extraction.md', `## System\n\n${EXTRACTION_PROMPT}\n\n## User\n\n${rawText}`);
+  // Resume from checkpoint if available
+  let briefXml = checkpoint?.data?.briefXml as string | undefined;
+  let selectedDomain = checkpoint?.data?.domain as DomainExamples | undefined;
+  let selectedTemplate = checkpoint?.data?.template as TemplateInfo | undefined;
+  let planXml = checkpoint?.data?.planXml as string | undefined;
+  let slidePlan = checkpoint?.data?.slidePlan as string[] | undefined;
+  let genCleaned = checkpoint?.data?.genCleaned as string | undefined;
+  let selectionXml = checkpoint?.data?.selectionXml as string | undefined;
 
-  const phase1Start = Date.now();
-  const briefRaw = await llm.generateJSON(EXTRACTION_PROMPT, rawText);
-  const briefXml = stripFences(briefRaw);
-  const extractionLatencyMs = Date.now() - phase1Start;
-
-  onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);
-  onDebug?.('05-phase1-brief.xml', briefXml);
-
-  // ── PHASE 1.5: Classify Domain ────────────────────────────────────────────
-  onProgress?.('domain', 'Phase 1.5: Classifying content domain...');
-
-  const allDomains = loadAllDomains();
-  // Fallback domain if loading fails
-  const fallbackDomain: DomainExamples = {
-    id: 'general',
-    name: 'General',
-    description: 'General content',
-    powerWords: ['secret', 'hidden', 'wrong', 'never', 'stop', 'truth', 'reverse', 'shocking'],
-    principles: ['Lead with specific details and numbers', 'Use urgency language', 'Make it personal with "you" language'],
-  };
-  let selectedDomain = allDomains.find(d => d.id === 'general') ?? allDomains[0] ?? fallbackDomain;
+  let extractionLatencyMs = 0;
   let domainClassificationMs = 0;
+  let selectionLatencyMs = 0;
+  let planLatencyMs = 0;
+  let generationLatencyMs = 0;
 
-  if (allDomains.length > 0) {
-    const domainStart = Date.now();
-    const { system: domainSystem, user: domainUser } = classifyDomainPrompt(briefXml, allDomains);
-    onDebug?.('01b-prompt-domain-classify.md', `## System\n\n${domainSystem}\n\n## User\n\n${domainUser}`);
+  // ── PHASE 1: Extract Content Brief ────────────────────────────────────────
+  if (!briefXml) {
+    onProgress?.('extraction', 'Phase 1: Extracting content brief...');
+    onDebug?.('01-prompt-phase1-extraction.md', `## System\n\n${EXTRACTION_PROMPT}\n\n## User\n\n${rawText}`);
 
+    const phase1Start = Date.now();
+    briefXml = await withPhaseRetry(
+      async () => {
+        const raw = await llm.generateJSON(EXTRACTION_PROMPT, rawText);
+        return stripFences(raw);
+      },
+      'extraction',
+      retriesUsed,
+    );
+    extractionLatencyMs = Date.now() - phase1Start;
+
+    // Validation gate: brief must have content
+    if (!briefXml || briefXml.length < 50) {
+      throw new Error('Extraction produced empty or invalid brief');
+    }
+
+    onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);
+    onDebug?.('05-phase1-brief.xml', briefXml);
+    await onSaveCheckpoint?.('extraction', { briefXml });
+  } else {
+    onProgress?.('extraction', 'Phase 1: Resumed from checkpoint');
+  }
+
+  // ── PHASE 1.5 + Phase 2: Domain Classification + Template Selection (PARALLEL) ──
+  if (!selectedDomain || !selectedTemplate) {
+    const allDomains = loadAllDomains();
+    const fallbackDomain: DomainExamples = {
+      id: 'general',
+      name: 'General',
+      description: 'General content',
+      powerWords: ['secret', 'hidden', 'wrong', 'never', 'stop', 'truth', 'reverse', 'shocking'],
+      principles: ['Lead with specific details and numbers', 'Use urgency language', 'Make it personal with "you" language'],
+    };
+
+    onProgress?.('domain', 'Phase 1.5: Classifying content domain...');
+    onProgress?.('selection', 'Phase 2: Selecting best template...');
+
+    const parallelStart = Date.now();
+
+    // Run both in parallel
+    const [domainResult, templateResult] = await Promise.all([
+      // Domain classification
+      (async () => {
+        if (allDomains.length === 0) return fallbackDomain;
+        const { system: domainSystem, user: domainUser } = classifyDomainPrompt(briefXml!, allDomains);
+        onDebug?.('01b-prompt-domain-classify.md', `## System\n\n${domainSystem}\n\n## User\n\n${domainUser}`);
+
+        try {
+          const domainRaw = await withPhaseRetry(
+            async () => {
+              const raw = await llm.generateJSON(domainSystem, domainUser);
+              return stripFences(raw);
+            },
+            'extraction', // using extraction budget for domain classification
+            retriesUsed,
+          );
+          const domainXml = domainRaw;
+          onDebug?.('05b-domain-classification.xml', domainXml);
+          return parseDomainClassification(domainXml, allDomains);
+        } catch {
+          onProgress?.('domain', 'Domain classification failed, using general');
+          return allDomains.find(d => d.id === 'general') ?? fallbackDomain;
+        }
+      })(),
+      // Template selection
+      (async () => {
+        const { system: selSystem, user: selUser } = getTemplateSelectionPrompt(briefXml!, templates);
+        onDebug?.('02-prompt-phase2-select-template.md', `## System\n\n${selSystem}\n\n## User\n\n${selUser}`);
+
+        try {
+          const selRaw = await llm.generateJSON(selSystem, selUser);
+          const selXml = stripFences(selRaw);
+          selectionXml = selXml;
+          onDebug?.('06-phase2-selection.xml', selXml);
+
+          // Parse and validate template ID
+          const selObj = xmlToObjects(parseXml(selXml)) as Record<string, unknown>;
+          const templateId = (selObj['templateId'] as string) ?? templates[0]!.id;
+          const found = templates.find(t => t.id === templateId);
+          if (!found) {
+            onProgress?.('selection', `Unknown template "${templateId}", using default`);
+            return templates[0]!;
+          }
+          return found;
+        } catch {
+          onProgress?.('selection', 'Template selection failed, using default');
+          return templates[0]!;
+        }
+      })(),
+    ]);
+
+    selectedDomain = domainResult;
+    selectedTemplate = templateResult;
+    domainClassificationMs = Date.now() - parallelStart;
+    selectionLatencyMs = domainClassificationMs; // same duration since parallel
+
+    onProgress?.('domain', `Domain: ${selectedDomain.name} (${domainClassificationMs}ms)`);
+    onProgress?.('selection', `Selected: ${selectedTemplate.name}`);
+    await onSaveCheckpoint?.('classification', { domain: selectedDomain, template: selectedTemplate, selectionXml });
+  } else {
+    onProgress?.('domain', 'Phase 1.5: Resumed from checkpoint');
+    onProgress?.('selection', 'Phase 2: Resumed from checkpoint');
+  }
+
+  // ── PHASE 3: Plan Slides ──────────────────────────────────────────────────
+  if (!planXml || !slidePlan) {
+    onProgress?.('plan', 'Phase 3: Planning slide sequence...');
+
+    const phase3Start = Date.now();
+    const { system: planSystem, user: planUser } = getSlidePlanPrompt(briefXml!, selectedTemplate!, brandKit, selectedDomain);
+    onDebug?.('03-prompt-phase3-plan-slides.md', `## System\n\n${planSystem}\n\n## User\n\n${planUser}`);
+
+    planXml = await withPhaseRetry(
+      async () => {
+        const raw = await llm.generateJSON(planSystem, planUser);
+        return stripFences(raw);
+      },
+      'planning',
+      retriesUsed,
+    );
+    planLatencyMs = Date.now() - phase3Start;
+
+    // Parse plan to get slide types
+    slidePlan = [];
     try {
-      const domainRaw = await llm.generateJSON(domainSystem, domainUser);
-      const domainXml = stripFences(domainRaw);
-      selectedDomain = parseDomainClassification(domainXml, allDomains);
-      domainClassificationMs = Date.now() - domainStart;
-      onDebug?.('05b-domain-classification.xml', domainXml);
+      const planObj = xmlToObjects(parseXml(planXml)) as Record<string, unknown>;
+      const slides = planObj['slide'] as Array<Record<string, string>> | Record<string, string>;
+      if (Array.isArray(slides)) {
+        slidePlan = slides.map(s => s['type'] ?? 'sequence');
+      } else if (slides && slides['type']) {
+        slidePlan = [slides['type']];
+      }
     } catch {
-      domainClassificationMs = Date.now() - domainStart;
-      onProgress?.('domain', 'Domain classification failed, using general');
+      slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
     }
-  }
 
-  onProgress?.('domain', `Domain: ${selectedDomain.name} (${domainClassificationMs}ms)`);
-
-  // ── PHASE 2: Select Template ────────────────────────────────────────────────
-  onProgress?.('selection', 'Phase 2: Selecting best template...');
-
-  const phase2Start = Date.now();
-  const { system: selSystem, user: selUser } = getTemplateSelectionPrompt(briefXml, templates);
-  onDebug?.('02-prompt-phase2-select-template.md', `## System\n\n${selSystem}\n\n## User\n\n${selUser}`);
-  const selRaw = await llm.generateJSON(selSystem, selUser);
-  const selectionXml = stripFences(selRaw);
-  const selectionLatencyMs = Date.now() - phase2Start;
-
-  onProgress?.('selection', `Phase 2 complete: ${selectionLatencyMs}ms`);
-  onDebug?.('06-phase2-selection.xml', selectionXml);
-
-  // Parse selection to get template ID
-  let selectedTemplateId = templates[0]!.id;
-  try {
-    const selObj = xmlToObjects(parseXml(selectionXml)) as Record<string, unknown>;
-    selectedTemplateId = (selObj['templateId'] as string) ?? templates[0]!.id;
-  } catch {
-    // Fallback to first template
-  }
-
-  const selectedTemplate = templates.find(t => t.id === selectedTemplateId) ?? templates[0]!;
-  onProgress?.('selection', `Selected: ${selectedTemplate.name}`);
-
-  // ── PHASE 3: Plan Slides ────────────────────────────────────────────────────
-  onProgress?.('plan', 'Phase 3: Planning slide sequence...');
-
-  const phase3Start = Date.now();
-  const { system: planSystem, user: planUser } = getSlidePlanPrompt(briefXml, selectedTemplate, brandKit, selectedDomain);
-  onDebug?.('03-prompt-phase3-plan-slides.md', `## System\n\n${planSystem}\n\n## User\n\n${planUser}`);
-  const planRaw = await llm.generateJSON(planSystem, planUser);
-  const planXml = stripFences(planRaw);
-  const planLatencyMs = Date.now() - phase3Start;
-
-  onProgress?.('plan', `Phase 3 complete: ${planLatencyMs}ms`);
-  onDebug?.('07-phase3-plan.xml', planXml);
-
-  // Parse plan to get slide types
-  let slidePlan: string[] = [];
-  try {
-    const planObj = xmlToObjects(parseXml(planXml)) as Record<string, unknown>;
-    const slides = planObj['slide'] as Array<Record<string, string>> | Record<string, string>;
-    if (Array.isArray(slides)) {
-      slidePlan = slides.map(s => s['type'] ?? 'sequence');
-    } else if (slides && slides['type']) {
-      slidePlan = [slides['type']];
+    if (slidePlan.length === 0) {
+      slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
     }
-  } catch {
-    slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
+
+    // Validation gate: all slide types must exist in schema
+    const validTypes = new Set(selectedTemplate!.schemaTextConcise.split('\n').map(l => l.split(':')[0]?.trim()));
+    const invalidTypes = slidePlan.filter(t => !validTypes.has(t));
+    if (invalidTypes.length > 0) {
+      onProgress?.('plan', `Invalid slide types: ${invalidTypes.join(', ')} — dropping`);
+      slidePlan = slidePlan.filter(t => validTypes.has(t));
+    }
+
+    onProgress?.('plan', `Phase 3 complete: ${planLatencyMs}ms — Slides: ${slidePlan.join(', ')}`);
+    onDebug?.('07-phase3-plan.xml', planXml);
+    await onSaveCheckpoint?.('planning', { planXml, slidePlan });
+  } else {
+    onProgress?.('plan', 'Phase 3: Resumed from checkpoint');
   }
 
-  if (slidePlan.length === 0) {
-    slidePlan = ['cover', 'sequence', 'myth-fact', 'quote', 'cta'];
+  // ── PHASE 4: Generate Content ─────────────────────────────────────────────
+  if (!genCleaned) {
+    onProgress?.('generation', 'Phase 4: Generating slide content...');
+
+    const phase4Start = Date.now();
+    const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml!, planXml!, selectedTemplate!, slidePlan!, selectedDomain);
+    onDebug?.('04-prompt-phase4-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
+
+    genCleaned = await withPhaseRetry(
+      async () => {
+        const raw = await llm.generateJSON(genSystem, genUser);
+        return stripFences(raw);
+      },
+      'generation',
+      retriesUsed,
+    );
+    generationLatencyMs = Date.now() - phase4Start;
+
+    // Validation gate: XML must be well-formed and have slides
+    try {
+      const root = parseXml(genCleaned);
+      const rootObj = xmlToObjects(root) as Record<string, unknown>;
+      const slideData = rootObj['slide'];
+      if (!slideData) {
+        throw new Error('Generated XML has no slides');
+      }
+    } catch (err) {
+      onProgress?.('generation', `Validation failed: ${err} — retrying`);
+      // One more attempt with error context
+      const retryRaw = await llm.generateJSON(
+        genSystem + `\n\n## PREVIOUS ATTEMPT FAILED\nThe XML was malformed or had no slides. Return valid XML with a <slidePlan> containing all slides.`,
+        genUser,
+      );
+      genCleaned = stripFences(retryRaw);
+    }
+
+    onProgress?.('generation', `Phase 4 complete: ${generationLatencyMs}ms`);
+    onDebug?.('08-phase4-slides.xml', genCleaned);
+    await onSaveCheckpoint?.('generation', { genCleaned });
+  } else {
+    onProgress?.('generation', 'Phase 4: Resumed from checkpoint');
   }
 
-  onProgress?.('plan', `Slides: ${slidePlan.join(', ')}`);
-
-  // ── PHASE 4: Generate Content ───────────────────────────────────────────────
-  onProgress?.('generation', 'Phase 4: Generating slide content...');
-
-  const phase4Start = Date.now();
-  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate, slidePlan, selectedDomain);
-  onDebug?.('04-prompt-phase4-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
-  const genRaw = await llm.generateJSON(genSystem, genUser);
-  const genCleaned = stripFences(genRaw);
-  const generationLatencyMs = Date.now() - phase4Start;
-
-  onProgress?.('generation', `Phase 4 complete: ${generationLatencyMs}ms`);
-  onDebug?.('08-phase4-slides.xml', genCleaned);
-
-  // Parse all slides
+  // ── Parse Slides ──────────────────────────────────────────────────────────
   const slides: Record<string, unknown>[] = [];
   try {
     const root = parseXml(genCleaned);
@@ -785,15 +934,13 @@ export async function generateSlidesMultiPhase(
 
     if (Array.isArray(slideData)) {
       for (const s of slideData) {
-        const slide = unwrapChildWrappers(s as Record<string, unknown>);
-        slides.push(slide);
+        slides.push(unwrapChildWrappers(s as Record<string, unknown>));
       }
     } else if (slideData && typeof slideData === 'object') {
       slides.push(unwrapChildWrappers(slideData as Record<string, unknown>));
     }
 
-    // Also collect bare typed elements that the LLM outputs without <slide> wrapper
-    // e.g. <telemetry ...> or <myth-fact ...> at root level
+    // Collect bare typed elements
     const BARE_TYPE_TAGS = ['telemetry', 'myth-fact', 'case-study', 'resource-grid', 'timeline', 'quadrant', 'interview', 'image-split', 'image-cover'];
     for (const tag of BARE_TYPE_TAGS) {
       const bareData = rootObj[tag];
@@ -811,8 +958,8 @@ export async function generateSlidesMultiPhase(
     }
   } catch {
     onProgress?.('generation', 'Parse failed, using fallback slides');
-    for (let i = 0; i < slidePlan.length; i++) {
-      slides.push(createFallbackSlide(slidePlan[i]!, i + 1));
+    for (let i = 0; i < slidePlan!.length; i++) {
+      slides.push(createFallbackSlide(slidePlan![i]!, i + 1));
     }
   }
 
@@ -821,7 +968,8 @@ export async function generateSlidesMultiPhase(
     slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
   }
 
-  // ── PHASE 4.5: Label Detection ──────────────────────────────────────────────
+  // ── PHASE 4.5: Label Detection + Retry ────────────────────────────────────
+  let needsReview = false;
   const slidesWithHeadlines = slides.filter(s => s['headline']);
   if (slidesWithHeadlines.length > 0) {
     onProgress?.('validation', 'Phase 4.5: Checking headline quality...');
@@ -840,14 +988,20 @@ export async function generateSlidesMultiPhase(
       if (labelSlides.length > 0) {
         onProgress?.('validation', `Found ${labelSlides.length} label headline(s): ${labelSlides.map(l => `"${l.headline}"`).join(', ')}`);
 
-        // Retry up to 2 slides
         const toRetry = labelSlides.slice(0, 2);
         for (const label of toRetry) {
+          const labelRetries = retriesUsed['labelDetection'] ?? 0;
+          if (labelRetries >= (RETRY_BUDGETS['labelDetection'] ?? 0)) {
+            onProgress?.('retry', `Label detection retry budget exhausted for ${label.id}`);
+            needsReview = true;
+            continue;
+          }
+
           onProgress?.('retry', `Retrying slide ${label.id}: "${label.headline}" → "${label.fix ?? 'rewrite'}"`);
 
           const { system: retrySystem, user: retryUser } = buildRetryPrompt(
             { id: label.id, headline: label.headline, fix: label.fix ?? '' },
-            slides, briefXml, selectedDomain.id,
+            slides, briefXml!, selectedDomain!.id,
           );
           onDebug?.(`11-retry-${label.id}-prompt.md`, `## System\n\n${retrySystem}\n\n## User\n\n${retryUser}`);
 
@@ -856,7 +1010,6 @@ export async function generateSlidesMultiPhase(
             const retryCleaned = stripFences(retryRaw);
             onDebug?.(`12-retry-${label.id}-result.xml`, retryCleaned);
 
-            // Parse the retry result and replace the slide
             const retryRoot = parseXml(retryCleaned);
             const retryObj = xmlToObjects(retryRoot) as Record<string, unknown>;
             const retrySlide = retryObj['slide'] ?? retryObj;
@@ -868,8 +1021,10 @@ export async function generateSlidesMultiPhase(
                 onProgress?.('retry', `Fixed slide ${label.id}: "${fixed['headline'] ?? label.headline}"`);
               }
             }
+            retriesUsed['labelDetection'] = labelRetries + 1;
           } catch (retryErr) {
             onProgress?.('retry', `Retry failed for ${label.id}: ${retryErr}`);
+            retriesUsed['labelDetection'] = labelRetries + 1;
           }
         }
       } else {
@@ -883,7 +1038,7 @@ export async function generateSlidesMultiPhase(
   // Write final slides debug after retries
   onDebug?.('13-final-slides.json', JSON.stringify(slides, null, 2));
 
-  // Headline validation — catch obvious failures
+  // Headline validation
   const headlineWarnings: string[] = [];
   for (const slide of slides) {
     const headline = slide['headline'] as string | undefined;
@@ -906,20 +1061,21 @@ export async function generateSlidesMultiPhase(
 
   return {
     slides,
-    briefXml,
-    selectionXml,
-    planXml,
-    rawGenerationXml: genCleaned,
+    briefXml: briefXml!,
+    selectionXml: selectionXml ?? '',
+    planXml: planXml!,
+    rawGenerationXml: genCleaned!,
     extractionLatencyMs,
     selectionLatencyMs,
     planLatencyMs,
     generationLatencyMs,
     totalLatencyMs,
     totalTokens: { input: 0, output: 0 },
-    selectedTemplateId: selectedTemplate.id,
-    slidePlan,
-    domainId: selectedDomain.id,
+    selectedTemplateId: selectedTemplate!.id,
+    slidePlan: slidePlan!,
+    domainId: selectedDomain!.id,
     domainClassificationMs,
+    needsReview,
   };
 }
 

@@ -1,6 +1,7 @@
 <domain id="legal" name="Legal">
   <description>Law, justice, regulations, rights, lawsuits, legal analysis</description>
   <powerWords>secret, hidden, wrong, broken, never, stop, truth, justice, rigged, corrupt, reveal, cover-up</powerWords>
+  <fewShotId>news</fewShotId>
   <principles>
     <principle>Frame as rights implications — what this means for YOUR rights</principle>
     <principle>Use justice framing — who wins, who loses under the law</principle>

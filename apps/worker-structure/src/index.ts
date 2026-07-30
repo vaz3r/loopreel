@@ -220,7 +220,19 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         onDebug: (filename, content) => {
           void writeDebug(jobId, filename, content);
         },
+        checkpoint: await JobRepository.getCheckpoint(jobId) ?? undefined,
+        retriesUsed: await JobRepository.getRetriesUsed(jobId),
+        onSaveCheckpoint: async (phase, data) => {
+          await JobRepository.checkpoint(jobId, phase, data);
+        },
       });
+
+      // Handle needs_review terminal state
+      if (result.needsReview) {
+        jobLogger.warn('Label detection failed after retries, flagging for review');
+        await JobRepository.markNeedsReview(jobId, 'label_detection_failed');
+        return;
+      }
 
       jobLogger.info({
         slideCount: result.slides.length,
@@ -272,6 +284,9 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       });
 
       await renderQueue.add('render-slide', { jobId });
+
+      // Clear checkpoint after successful completion
+      await JobRepository.clearCheckpoint(jobId);
 
       jobLogger.info(
         { slideCount: withImages.length, template: targetTemplateId, validated: true },
