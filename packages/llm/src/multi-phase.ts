@@ -61,7 +61,7 @@ Domain: news
 
 <presentation>
   <slide type="cover" id="slide-01" tag="BREAKING NEWS" headline="13 Dead. Mall Collapsed. They're Hiding Something." subheadline="The Kumamoto earthquake nobody saw coming. You need to know." authorName="Editorial Desk" authorRole="Investigative Unit" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 01" />
-  <slide type="telemetry" id="slide-02" tag="SHOCKING DATA" headline="These Numbers Tell the Real Story" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 02">
+  <slide type="telemetry" id="slide-02" tag="SHOCKING DATA" headline="6.8 Mag. 13 Lives. Zero Warning." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 02">
     <stats>
       <stat value="6.8" unit="mag" label="Earthquake magnitude" />
       <stat value="13" unit="lives" label="Confirmed deaths" />
@@ -69,19 +69,19 @@ Domain: news
       <stat value="3,600" unit="troops" label="Personnel deployed" />
     </stats>
   </slide>
-  <slide type="sequence" id="slide-03" tag="URGENT RESCUE" headline="3 Things Happening Right Now" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
+  <slide type="sequence" id="slide-03" tag="URGENT RESCUE" headline="3 Threats You Can't Ignore" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
     <items>
       <item num="1" title="Mall collapse rescue" desc="Two women confirmed dead. Teams searching for trapped survivors." />
       <item num="2" title="3,600 troops deployed" desc="Self-defense forces searching affected areas immediately." />
       <item num="3" title="Nuclear facilities stable" desc="No abnormalities reported at nearby plants." />
     </items>
   </slide>
-  <slide type="myth-fact" id="slide-04" tag="TSUNAMI TRUTH" headline="Tsunami Warning. Lifted. Panic Was Real" myth="The tsunami threat is ongoing and catastrophic." fact="Advisory was lifted. The immediate danger to your coast is gone." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
+  <slide type="myth-fact" id="slide-04" tag="TSUNAMI TRUTH" headline="Advisory Lifted. Panic Was Real." myth="The tsunami threat is ongoing and catastrophic." fact="Advisory was lifted. The immediate danger to your coast is gone." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
   <slide type="quote" id="slide-05" tag="OFFICIAL STATEMENT" quote="We have already confirmed extensive damage, including casualties, collapsed buildings, damaged roads and fires" author="Takaichi Sanae" role="Japanese Prime Minister" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 05" />
-  <slide type="cta" id="slide-06" tag="STAY VIGILANT" headline="Don't Scroll Past This" subtext="Aftershocks remain a threat. Follow trusted sources for live updates." actionLabel="Follow for updates" socialHandle="@PaperOfRecord" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 06" />
+  <slide type="cta" id="slide-06" tag="STAY VIGILANT" headline="Follow Now. Lives Depend on It." subtext="Aftershocks remain a threat. Follow trusted sources for live updates." actionLabel="Follow for updates" socialHandle="@PaperOfRecord" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 06" />
 </presentation>
 
-Notice: Cover uses a SPECIFIC DETAIL (13 dead + mall collapse), not a generic label. Headlines use Title Case. Headlines are claims or commands, never noun phrases. Myth-fact is factually accurate — the advisory WAS lifted. All data comes from the content.`;
+Notice: Cover uses a SPECIFIC DETAIL (13 dead + mall collapse), not a generic label. Telemetry uses "Zero Warning" for emotional punch. Sequence uses "Threats You Can't Ignore" instead of generic "Things Happening". CTA uses "Follow Now. Lives Depend on It." for urgency. Headlines use Title Case. All data comes from the content.`;
 
 const FEW_SHOT_POLITICS = `## EXAMPLE CAROUSEL — Politics/Investigation (GREAT quality)
 
@@ -105,12 +105,12 @@ Domain: politics
       <item num="4" title="Fame discomfort" desc="He tracked his celebrity status while writing he didn't like it." />
     </items>
   </slide>
-  <slide type="myth-fact" id="slide-04" tag="THE DECEPTION" headline="Public Said One Thing. Private Said Another" myth="The journals reveal a deliberate cover-up of lab-leak evidence." fact="The journals show scientists were genuinely divided, with no definitive proof of either origin." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
+  <slide type="myth-fact" id="slide-04" tag="THE DECEPTION" headline="Public Said One Thing. Private Said Another." myth="The journals reveal a deliberate cover-up of lab-leak evidence." fact="The journals show scientists were genuinely divided, with no definitive proof of either origin." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
   <slide type="quote" id="slide-05" tag="THE VERDICT" quote="We've probably never ever seen people so completely at odds with their private thoughts, and then publicly proclaiming the opposite of what they were truly saying in private." author="Rand Paul" role="Republican Senator" footerLeft="SENATE TESTIMONY" footerRight="PAGE 05" />
-  <slide type="cta" id="slide-06" tag="YOUR TURN" headline="Read the Files. Decide" subtext="1,100 pages are public. Form your own opinion." actionLabel="Share your thoughts" socialHandle="@PaperOfRecord" footerLeft="THE FINAL WORD" footerRight="PAGE 06" />
+  <slide type="cta" id="slide-06" tag="YOUR TURN" headline="Read the Files. Decide for Yourself." subtext="1,100 pages are public. Form your own opinion." actionLabel="Share your thoughts" socialHandle="@PaperOfRecord" footerLeft="THE FINAL WORD" footerRight="PAGE 06" />
 </presentation>
 
-Notice: Cover uses a SPECIFIC NUMBER (1,100 pages) to create curiosity. Myth-fact is factually accurate — the brief says scientists were divided, not that there was a cover-up. Headlines use Title Case. Headlines are claims or commands. All facts come from the content brief.`;
+Notice: Cover uses a SPECIFIC NUMBER (1,100 pages) to create curiosity. Telemetry uses "2 vs 10" for contrast. Sequence uses "What His Private Notes Actually Say" for specificity. Myth-fact is factually accurate — the brief says scientists were divided, not that there was a cover-up. CTA uses "Read the Files. Decide for Yourself." for engagement. Headlines use Title Case. All facts come from the content brief.`;
 
 const FEW_SHOT_MAP: Record<string, string> = {
   news: FEW_SHOT_NEWS,
@@ -382,28 +382,28 @@ function getDomainFewShot(domain?: DomainExamples): string {
 // ─── Slide-Type Rules (Universal) ───────────────────────────────────────────
 
 const SLIDE_TYPE_RULES = [
-  { type: 'cover', rule: '- MUST include a specific detail: number, name, or action from the brief\n- Pattern: "[Detail]. [Emotion/Curiosity]."\n- Example: "13 Dead. Mall Collapsed."' },
-  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- Pattern: "[Number] [Unit]. [Number] [Unit]."\n- Example: "6.8 Mag. 13 Lives."' },
-  { type: 'sequence', rule: '- MUST use numbered urgency or specific detail\n- Pattern: "[Number] Things Happening Right Now"\n- Example: "3 Things Happening Right Now"' },
-  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- Pattern: "[Contrast]. [Pivot]."\n- Example: "Advisory Lifted. Panic Was Real."' },
-  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- If used: "[Evocative tagline]" — 2-4 words\n- Example: "THE VERDICT" or "OFFICIAL STATEMENT"' },
-  { type: 'cta', rule: '- MUST be a command or question\n- Pattern: "[Command]. [Specific Detail]."\n- Example: "Don\'t Scroll Past This."' },
-  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- Pattern: "[Event]. [Consequence]." or "From [X] to [Y]"\n- Example: "3 Years. Zero Progress."' },
-  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- Pattern: "What [Data] Actually Means"\n- Example: "What These Numbers Actually Mean"' },
-  { type: 'definition', rule: '- MUST explain a concept clearly\n- Pattern: "[Concept]: [Plain English]"\n- Example: "Inflation: Your Dollar Worth Less"' },
-  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- Pattern: "[X] vs [Y]. [Stakes]."\n- Example: "Growth vs Stability. Your Choice."' },
-  { type: 'table', rule: '- MUST compare data across categories\n- Pattern: "[Comparison]: [Winner/Loser]"\n- Example: "Q3 Earnings: Who Won, Who Lost"' },
-  { type: 'profile', rule: '- MUST humanize a person or entity\n- Pattern: "[Person]. [What They Did]."\n- Example: "The Engineer Who Saw It Coming"' },
-  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- Headline describes the visual split\n- Pattern: "[Left Side] vs [Right Side]"\n- Example: "Before the Storm. After."' },
-  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- Pattern: "[Topic]: [Number] Parts"\n- Example: "The Deal: 3 Moving Parts"' },
-  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- Pattern: "[Thing A]. [Thing B]. [Insight]."\n- Example: "Public Promise. Private Reality."' },
-  { type: 'methodology', rule: '- MUST explain a process or approach\n- Pattern: "How [Entity] [Did X]"\n- Example: "How We Calculated the Risk"' },
-  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- Pattern: "[Number]. [Context]."\n- Example: "47%. The Real Unemployment Rate."' },
-  { type: 'checklist', rule: '- MUST provide actionable steps\n- Pattern: "[Number] Steps to [Outcome]"\n- Example: "3 Steps to Protect Your Data"' },
-  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- Pattern: "[Category]: [Key Insight]"\n- Example: "High Risk, High Reward: Where You Fall"' },
-  { type: 'case-study', rule: '- MUST tell a story with outcome\n- Pattern: "[Entity] Tried [X]. What Happened."\n- Example: "Apple Tried Foldables. What Happened."' },
-  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- Pattern: "[Number] Resources for [Outcome]"\n- Example: "5 Tools to Automate Your Workflow"' },
-  { type: 'interview', rule: '- MUST feature Q&A format\n- Pattern: "Q: [Question]" / "A: [Key Answer]"\n- Example: "Q: Is This Safe?" / "A: We Don\'t Know Yet"' },
+  { type: 'cover', rule: '- MUST include a specific detail: number, name, or action from the brief\n- PATTERN A: "[Detail]. [Emotion/Curiosity]." — "13 Dead. Mall Collapsed."\n- PATTERN B: "[Question they\'re asking]. [Answer]." — "Is This the End? Experts Say Yes."\n- PATTERN C: "[Action]. [Stakes]." — "Japan Deploys 3,600 Troops. Lives Hang in Balance."\n- PATTERN D: "[Person/Entity]. [What They Did]." — "PM Tanae Breaks Silence. Her Words Chill."\n- VARY your pattern. Do NOT always use Pattern A.' },
+  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- PATTERN A: "[Number] [Unit]. [Number] [Unit]." — "6.8 Mag. 13 Lives."\n- PATTERN B: "[Number] [Unit]. [Emotion]." — "3,600 Troops. Zero Time to Waste."\n- PATTERN C: "The [Noun]: [Number]." — "The Human Cost: 13 Confirmed Dead."\n- PATTERN D: "[Number] [Unit] — and [Contrast]." — "6 Miles Deep — and Still Shaking."\n- VARY your pattern. Do NOT always use Pattern A.' },
+  { type: 'sequence', rule: '- MUST use numbered urgency or specific detail\n- PATTERN A: "[Number] Things Happening Right Now" — "3 Things Happening Right Now"\n- PATTERN B: "What We Know (and What We Don\'t)" — "What We Know Right Now"\n- PATTERN C: "[Number] Threats You Can\'t Ignore" — "3 Threats You Can\'t Ignore"\n- PATTERN D: "The [Number] Questions Everyone\'s Asking" — "The 3 Questions Everyone\'s Asking"\n- VARY your pattern. Do NOT always use Pattern A.' },
+  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- PATTERN A: "[Contrast]. [Pivot]." — "Advisory Lifted. Panic Was Real."\n- PATTERN B: "[Myth]. [Truth]." — "They Said 7.1. The Truth: 6.8."\n- PATTERN C: "The [X] Everyone Believed — Except [Y]" — "The Magnitude Everyone Believed — Except Scientists"\n- PATTERN D: "[Fact]. Not [Myth]." — "6.8. Not 7.1."\n- VARY your pattern. Do NOT always use Pattern A.' },
+  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- PATTERN A: "[Evocative tagline]" — "THE VERDICT" or "OFFICIAL STATEMENT"\n- PATTERN B: "[What They Said]" — "Her Words speak volumes"\n- PATTERN C: "[Person]: [Key phrase]" — "PM Tanae: We\'re Not Done Yet"\n- VARY your pattern.' },
+  { type: 'cta', rule: '- MUST be a command or question\n- PATTERN A: "[Command]. [Specific Detail]." — "Don\'t Scroll Past This."\n- PATTERN B: "[Question]. [Stakes]." — "Ready for What\'s Next?"\n- PATTERN C: "[Action]. [Why]." — "Follow Now. Lives Depend on It."\n- PATTERN D: "[Number] Reasons to [Action]" — "3 Reasons to Stay Alert"\n- VARY your pattern. Do NOT always use Pattern A. Make it SPECIFIC to the content.' },
+  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- PATTERN A: "[Event]. [Consequence]." — "3 Years. Zero Progress."\n- PATTERN B: "From [X] to [Y]" — "From Warning to Devastation"\n- PATTERN C: "[Timeframe]: [What Changed]" — "72 Hours: Everything Changed"\n- VARY your pattern.' },
+  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- PATTERN A: "What [Data] Actually Means" — "What These Numbers Actually Mean"\n- PATTERN B: "[Data]. Here\'s Why It Matters." — "6.8 Magnitude. Here\'s Why It Matters."\n- PATTERN C: "The [Noun] Behind [Data]" — "The Story Behind the Death Toll"\n- VARY your pattern.' },
+  { type: 'definition', rule: '- MUST explain a concept clearly\n- PATTERN A: "[Concept]: [Plain English]" — "Inflation: Your Dollar Worth Less"\n- PATTERN B: "What [Concept] Really Means for You" — "What \'Magnitude\' Really Means for You"\n- VARY your pattern.' },
+  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- left and right MUST be objects with {title, desc} — NOT strings\n- PATTERN A: "[X] vs [Y]. [Stakes]." — "Growth vs Stability. Your Choice."\n- PATTERN B: "[X] or [Y]. [Consequence]." — "Act Now or Pay Later."\n- VARY your pattern.\n- Example: left={title:"The Destruction", desc:"Widespread infrastructure failure"} right={title:"The Nuclear Status", desc:"No abnormalities reported"}' },
+  { type: 'table', rule: '- MUST compare data across categories\n- PATTERN A: "[Comparison]: [Winner/Loser]" — "Q3 Earnings: Who Won, Who Lost"\n- PATTERN B: "[Topic]: The Numbers Tell a Different Story" — "Polls: The Numbers Tell a Different Story"\n- VARY your pattern.' },
+  { type: 'profile', rule: '- MUST humanize a person or entity\n- PATTERN A: "[Person]. [What They Did]." — "The Engineer Who Saw It Coming"\n- PATTERN B: "[Person]: [Their Quote]" — "PM Tanae: We\'re Not Done Yet"\n- VARY your pattern.' },
+  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- PATTERN A: "[Left Side] vs [Right Side]" — "Before the Storm. After."\n- VARY your pattern.' },
+  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- PATTERN A: "[Topic]: [Number] Parts" — "The Deal: 3 Moving Parts"\n- PATTERN B: "Breaking Down [Topic]" — "Breaking Down the Earthquake Response"\n- VARY your pattern.' },
+  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- PATTERN A: "[Thing A]. [Thing B]. [Insight]." — "Public Promise. Private Reality."\n- VARY your pattern.' },
+  { type: 'methodology', rule: '- MUST explain a process or approach\n- PATTERN A: "How [Entity] [Did X]" — "How We Calculated the Risk"\n- VARY your pattern.' },
+  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- PATTERN A: "[Number]. [Context]." — "47%. The Real Unemployment Rate."\n- PATTERN B: "The Number That Changes Everything: [Number]" — "The Number That Changes Everything: 6.8"\n- VARY your pattern.' },
+  { type: 'checklist', rule: '- MUST provide actionable steps\n- PATTERN A: "[Number] Steps to [Outcome]" — "3 Steps to Protect Your Data"\n- PATTERN B: "What to Do Right Now" — "What to Do Right Now"\n- VARY your pattern.' },
+  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- PATTERN A: "[Category]: [Key Insight]" — "High Risk, High Reward: Where You Fall"\n- VARY your pattern.' },
+  { type: 'case-study', rule: '- MUST tell a story with outcome\n- PATTERN A: "[Entity] Tried [X]. What Happened." — "Apple Tried Foldables. What Happened."\n- VARY your pattern.' },
+  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- PATTERN A: "[Number] Resources for [Outcome]" — "5 Tools to Automate Your Workflow"\n- VARY your pattern.' },
+  { type: 'interview', rule: '- MUST feature Q&A format\n- PATTERN A: "Q: [Question]" / "A: [Key Answer]" — "Q: Is This Safe?" / "A: We Don\'t Know Yet"\n- VARY your pattern.' },
 ];
 
 // ─── Phase 4: Generate Content ───────────────────────────────────────────────
@@ -506,6 +506,8 @@ For arrays (stats, items), use nested child elements:
 <headlineRules>
   <rule>Headlines MUST be a CLAIM, QUESTION, or COMMAND — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
   <rule>Max 5 words. Fragments only. Active voice. Use contractions.</rule>
+  <rule>VARY emotional angles: curiosity ("Nobody Expected This"), urgency ("Act Now"), fear ("What's Coming"), surprise ("The Number That Changes Everything"), empathy ("Their Stories Matter"). Do NOT always use the same emotion.</rule>
+  <rule>Use power words: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Denied, Revealed, Unexpected, Alarming, Critical, Essential, Vital.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
 </headlineRules>${domainPrinciplesSection ? `\n${domainPrinciplesSection}` : ''}`,
     user: 'Generate all slides for this carousel.',
