@@ -21,6 +21,66 @@ export interface DomainExamples {
   examples: { type: string; bad: string; good: string; great: string }[];
 }
 
+// ─── Few-Shot Examples ──────────────────────────────────────────────────────
+
+const FEW_SHOT_NEWS = `## EXAMPLE CAROUSEL — News/Disaster (GREAT quality)
+
+Content: 13 dead after 6.8 earthquake in Kumamoto, Japan. Mall collapsed. 3,600 troops deployed.
+Domain: news
+
+<presentation>
+  <slide type="cover" id="slide-01" tag="BREAKING NEWS" headline="13 Dead. Mall Collapsed. They're Hiding Something." subheadline="The Kumamoto earthquake nobody saw coming. You need to know." authorName="Editorial Desk" authorRole="Investigative Unit" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 01" />
+  <slide type="telemetry" id="slide-02" tag="SHOCKING DATA" headline="These Numbers Tell the Real Story" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 02">
+    <stats>
+      <stat value="6.8" unit="mag" label="Earthquake magnitude" />
+      <stat value="13" unit="lives" label="Confirmed deaths" />
+      <stat value="6" unit="miles" label="Depth of quake" />
+      <stat value="3,600" unit="troops" label="Personnel deployed" />
+    </stats>
+  </slide>
+  <slide type="sequence" id="slide-03" tag="URGENT RESCUE" headline="3 Things Happening Right Now" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
+    <items>
+      <item num="1" title="Mall collapse rescue" desc="Two women confirmed dead. Teams searching for trapped survivors." />
+      <item num="2" title="3,600 troops deployed" desc="Self-defense forces searching affected areas immediately." />
+      <item num="3" title="Nuclear facilities stable" desc="No abnormalities reported at nearby plants." />
+    </items>
+  </slide>
+  <slide type="myth-fact" id="slide-04" tag="TSUNAMI TRUTH" headline="Tsunami Warning. Lifted. Panic Was Real" myth="The tsunami threat is ongoing and catastrophic." fact="Advisory was lifted. The immediate danger to your coast is gone." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
+  <slide type="quote" id="slide-05" tag="OFFICIAL STATEMENT" quote="We have already confirmed extensive damage, including casualties, collapsed buildings, damaged roads and fires" author="Takaichi Sanae" role="Japanese Prime Minister" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 05" />
+  <slide type="cta" id="slide-06" tag="STAY VIGILANT" headline="Don't Scroll Past This" subtext="Aftershocks remain a threat. Follow trusted sources for live updates." actionLabel="Follow for updates" socialHandle="@PaperOfRecord" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 06" />
+</presentation>
+
+Notice: Cover uses a SPECIFIC DETAIL (13 dead + mall collapse), not a generic label. Headlines use Title Case. Headlines are claims or commands, never noun phrases. Myth-fact is factually accurate — the advisory WAS lifted. All data comes from the content.`;
+
+const FEW_SHOT_POLITICS = `## EXAMPLE CAROUSEL — Politics/Investigation (GREAT quality)
+
+Content: Fauci's leaked journals reveal private thoughts on COVID origins. 1,100 pages. Rand Paul released them. 10 of 12 scientists saw lab leak as possible.
+Domain: politics
+
+<presentation>
+  <slide type="cover" id="slide-01" tag="THE HIDDEN FILES" headline="1,100 Pages They Tried to Bury" subheadline="Fauci's private journals. The truth is inside." authorName="Editorial Desk" authorRole="Investigative Analysis" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 01" />
+  <slide type="telemetry" id="slide-02" tag="THE EVIDENCE" headline="2 vs 10. The Debate Was Real" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 02">
+    <stats>
+      <stat value="1,100" unit="pages" label="Leaked private journal documents" />
+      <stat value="12" unit="scientists" label="On the February 1, 2020 call" />
+      <stat value="10" unit="of 12" label="Saw lab leak as possible" />
+    </stats>
+  </slide>
+  <slide type="sequence" id="slide-03" tag="WHAT HE WROTE" headline="What His Private Notes Actually Say" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
+    <items>
+      <item num="1" title="Lab leak was possible" desc="10 of 12 scientists on the Feb 1 call thought deliberate insertion was possible." />
+      <item num="2" title="Market was amplifier" desc="Fauci privately wrote the market spread the virus, didn't start it." />
+      <item num="3" title="Trump frustration" desc="Fauci called Trump's rhetoric nonsense and an embarrassment." />
+      <item num="4" title="Fame discomfort" desc="He tracked his celebrity status while writing he didn't like it." />
+    </items>
+  </slide>
+  <slide type="myth-fact" id="slide-04" tag="THE DECEPTION" headline="Public Said One Thing. Private Said Another" myth="The journals reveal a deliberate cover-up of lab-leak evidence." fact="The journals show scientists were genuinely divided, with no definitive proof of either origin." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
+  <slide type="quote" id="slide-05" tag="THE VERDICT" quote="We've probably never ever seen people so completely at odds with their private thoughts, and then publicly proclaiming the opposite of what they were truly saying in private." author="Rand Paul" role="Republican Senator" footerLeft="SENATE TESTIMONY" footerRight="PAGE 05" />
+  <slide type="cta" id="slide-06" tag="YOUR TURN" headline="Read the Files. Decide" subtext="1,100 pages are public. Form your own opinion." actionLabel="Share your thoughts" socialHandle="@PaperOfRecord" footerLeft="THE FINAL WORD" footerRight="PAGE 06" />
+</presentation>
+
+Notice: Cover uses a SPECIFIC NUMBER (1,100 pages) to create curiosity. Myth-fact is factually accurate — the brief says scientists were divided, not that there was a cover-up. Headlines use Title Case. Headlines are claims or commands. All facts come from the content brief.`;
+
 // ─── Domain Classification ──────────────────────────────────────────────────
 
 function resolveDomainsDir(): string {
@@ -269,16 +329,6 @@ Return a single <slidePlan> element:
   <slide type="myth-fact" purpose="What misconception this challenges — state the myth and fact" />
   <slide type="quote" purpose="Which quote from the brief — include the attribution" />
   <slide type="cta" purpose="What action the reader should take" />
-  <copyVoice>
-    <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Use curiosity gaps and pattern interrupts.</rule>
-    <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Shocking, Hidden, Reverse</rule>
-    <rule>Max 5 words per line. No sentences. Fragments only.</rule>
-    <rule>Active voice only. No passive constructions.</rule>
-    <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
-    <rule>Use "YOU" language. Make it personal.</rule>
-    <rule>End EVERY slide with emotional punch, not information.</rule>
-    <rule>Write like you're talking to a friend, not writing a report.</rule>
-  </copyVoice>
 </slidePlan>
 
 ## Rules
@@ -334,17 +384,9 @@ Do NOT write "GOOD" headlines. Write "GREAT" headlines. The difference:
 ## Template: ${selectedTemplate.name}
 Aesthetics: ${selectedTemplate.aesthetics}
 
-## COVER SLIDE RULES (HIGHEST PRIORITY — OVERRIDES ALL OTHER RULES)
-
-The cover is the MOST important slide. It must stop the scroll.
-
-<coverSlideRules>
-  <rule>The cover headline must be a CURIOSITY GAP, not a summary.</rule>
-  <rule>NEVER start with the event name, location, or topic. Start with the HOOK.</rule>
-  <rule>The cover must create an information void the reader MUST fill.</rule>
-  <rule>Use the domain-specific cover examples from the examples section above for formulas.</rule>
-  <rule>Ask yourself: "Would I stop scrolling for this?" If not, rewrite.</rule>
-</coverSlideRules>
+${domainExamples && domainExamples.id === 'news' ? FEW_SHOT_NEWS : ''}
+${domainExamples && domainExamples.id === 'politics' ? FEW_SHOT_POLITICS : ''}
+${!domainExamples || (domainExamples.id !== 'news' && domainExamples.id !== 'politics') ? FEW_SHOT_NEWS + '\n\n' + FEW_SHOT_POLITICS : ''}
 
 ## Slide Plan
 ${planXml}
@@ -389,40 +431,127 @@ For arrays (stats, items), use nested child elements:
 - Every slide MUST have: id, type, tag, footerLeft, footerRight.
 - footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
 
-## PREMIUM COPYWRITING RULES (follow exactly — these override everything else)
+## HEADLINE RULES (follow exactly)
 
-<copyRules>
-  <rule>HEADLINE = HOOK. You have 0.3 seconds to stop the scroll. Make it count.</rule>
-  <rule>Use CURIOSITY GAPS: create an information void the reader MUST fill. "Nobody tells you this about..." "The mistake 90% make..."</rule>
-  <rule>Use POWER WORDS in every headline: Secret, Mistake, Truth, Nobody Tells You, Why, How, Stop, Never, Always, Shocking, Hidden, Reverse</rule>
-  <rule>Use PATTERN INTERRUPTS: break expectations. "Don't do this." "This is wrong." "Everyone gets this backwards."</rule>
-  <rule>Max 5 words per line. No sentences. Fragments only.</rule>
-  <rule>Active voice only. No passive constructions.</rule>
-  <rule>Contractions mandatory (you're, don't, can't) — sounds human, not corporate.</rule>
-  <rule>Write like you're talking to a friend, not writing a report.</rule>
-  <rule>End EVERY slide with emotional punch, not information.</rule>
-  <rule>Use "YOU" language. Make it personal. "Your problem" not "one's problem"</rule>
-</copyRules>
-${domainExamplesSection}
-
-## COPY ENFORCEMENT — CHECK BEFORE RETURNING
-
-<copyEnforcement>
-  For EVERY headline in your output, verify:
-  1. Is it MAX 5 words? If longer, rewrite.
-  2. Does it use a POWER WORD? If not, add one.
-  3. Is it a FRAGMENT (no verb/is/are)? If it reads like a sentence, rewrite.
-  4. Would YOU stop scrolling for this? If not, rewrite.
-
-  COMMON MISTAKES TO AVOID:
-  - "The Freshman Sire Data Gap" -> boring, informational. Use: "Nobody Tells You This About Sires"
-  - "Stop Chasing Early Speed" -> decent but generic. Use: "You're Measuring Sires Wrong"
-  - "Flightline's Slow Burn: Winning The Long Game" -> too long, no curiosity. Use: "Flightline's Secret Weapon"
-  - "Why You're Evaluating Wrong" -> close but needs punch. Use: "Your Sire Metrics Are Broken"
-  - "Ready For The Truth?" -> weak CTA. Use: "Stop Believing the Numbers"
-</copyEnforcement>`,
+<headlineRules>
+  <rule>Every headline MUST reference a SPECIFIC DETAIL from the content brief — a number, a name, an action. Never use a generic label.</rule>
+  <rule>Headlines must be a CLAIM, QUESTION, or COMMAND — never a noun phrase. "The Truth From Leadership" is a label (bad). "They don't want you to see this" is a claim (good).</rule>
+  <rule>Max 5 words. Fragments only. No sentences.</rule>
+  <rule>Active voice only. Use contractions (you're, don't, can't).</rule>
+  <rule>Use "YOU" language. Make it personal.</rule>
+  <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
+</headlineRules>${domainExamples ? `
+${domainExamplesSection}` : ''}`,
     user: 'Generate all slides for this carousel.',
   };
+}
+
+// ─── Phase 4.5: Label Detection ─────────────────────────────────────────────
+
+function buildLabelDetectionPrompt(slides: Record<string, unknown>[]): { system: string; user: string } {
+  const headlineList = slides
+    .filter(s => s['headline'])
+    .map(s => `[${s['id']}] ${s['headline']}`)
+    .join('\n');
+
+  return {
+    system: `You are a headline quality checker. Classify each headline.
+
+## Classification Types
+- "claim" — states something specific (e.g., "13 dead. Mall collapsed.")
+- "question" — asks the reader (e.g., "Was your trust misplaced?")
+- "command" — tells the reader to act (e.g., "Stop believing the official story")
+- "pattern-interrupt" — breaks expectations (e.g., "Nobody saw this coming")
+- "label" — noun phrase with no action, urgency, or curiosity (e.g., "The Truth From Leadership", "Fauci's Secret Private Journals")
+
+## Output Format
+Return a JSON array. For each slide:
+{"id": "slide-01", "headline": "...", "type": "claim|question|command|pattern-interrupt|label", "fix": "if label, suggest a rewrite as claim/question/command (max 5 words, reference specific detail from content)"}
+
+## Rules
+- A "label" is a noun phrase that describes WHAT something is without creating urgency or curiosity.
+- "The Truth From Leadership" = label (no action, no specificity)
+- "They don't want you to see this" = claim (has urgency, uses "you")
+- "1,100 pages they tried to bury" = claim (specific number + curiosity)
+- Return ONLY the JSON array, no markdown fences, no explanation.`,
+    user: `Classify these headlines:\n${headlineList}`,
+  };
+}
+
+function buildRetryPrompt(
+  labelResult: { id: string; headline: string; fix: string },
+  slides: Record<string, unknown>[],
+  briefXml: string,
+  domainId: string,
+): { system: string; user: string } {
+  const slide = slides.find(s => s['id'] === labelResult.id);
+  const slideXml = slide ? objectToXml(slide) : `<slide type="cover" id="${labelResult.id}" headline="${labelResult.headline}" />`;
+
+  return {
+    system: `You are a headline rewriter. Fix one slide whose headline is a "label" (noun phrase, no urgency).
+
+## Rules
+- Max 5 words
+- Must be a claim, question, or command — not a noun phrase
+- Use a specific detail from the content brief
+- Keep the same slide type and structure
+- Return ONLY the fixed slide XML element
+
+## Headline Rewrite Guidance
+${labelResult.fix ? `Suggested rewrite direction: "${labelResult.fix}"` : 'Rewrite the headline to be a claim, question, or command.'}`,
+    user: `Fix this slide:
+
+Original:
+${slideXml}
+
+Domain: ${domainId}
+
+Content brief excerpt:
+${briefXml.slice(0, 1000)}`,
+  };
+}
+
+function objectToXml(obj: Record<string, unknown>): string {
+  const attrs = Object.entries(obj)
+    .filter(([k, v]) => k !== 'items' && k !== 'stats' && k !== 'events' && k !== 'left' && k !== 'right' && typeof v !== 'object')
+    .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
+    .join(' ');
+
+  const children: string[] = [];
+  for (const [key, value] of Object.entries(obj)) {
+    if (key === 'items' && Array.isArray(value)) {
+      children.push(`<items>${value.map(item => {
+        const attrs = Object.entries(item as Record<string, unknown>)
+          .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
+          .join(' ');
+        return `<item ${attrs} />`;
+      }).join('')}</items>`);
+    } else if (key === 'stats' && Array.isArray(value)) {
+      children.push(`<stats>${value.map(item => {
+        const attrs = Object.entries(item as Record<string, unknown>)
+          .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
+          .join(' ');
+        return `<stat ${attrs} />`;
+      }).join('')}</stats>`);
+    } else if (key === 'left' && typeof value === 'object') {
+      const inner = Object.entries(value as Record<string, unknown>)
+        .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
+        .join(' ');
+      children.push(`<left ${inner} />`);
+    } else if (key === 'right' && typeof value === 'object') {
+      const inner = Object.entries(value as Record<string, unknown>)
+        .map(([k, v]) => `${k}="${String(v).replace(/"/g, '&quot;')}"`)
+        .join(' ');
+      children.push(`<right ${inner} />`);
+    } else if (typeof value === 'object' && value !== null && key !== 'id' && key !== 'type') {
+      // Skip nested objects we don't handle
+    }
+  }
+
+  if (children.length > 0) {
+    return `<slide ${attrs}>\n${children.join('\n')}\n</slide>`;
+  }
+  return `<slide ${attrs} />`;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -669,6 +798,68 @@ export async function generateSlidesMultiPhase(
   for (let i = 0; i < slides.length; i++) {
     slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
   }
+
+  // ── PHASE 4.5: Label Detection ──────────────────────────────────────────────
+  const slidesWithHeadlines = slides.filter(s => s['headline']);
+  if (slidesWithHeadlines.length > 0) {
+    onProgress?.('validation', 'Phase 4.5: Checking headline quality...');
+
+    const { system: detectSystem, user: detectUser } = buildLabelDetectionPrompt(slides);
+    onDebug?.('09-prompt-label-detect.md', `## System\n\n${detectSystem}\n\n## User\n\n${detectUser}`);
+
+    try {
+      const detectRaw = await llm.generateJSON(detectSystem, detectUser);
+      const detectCleaned = stripFences(detectRaw);
+      onDebug?.('10-label-detection.json', detectCleaned);
+
+      const classifications: Array<{ id: string; headline: string; type: string; fix?: string }> = JSON.parse(detectCleaned);
+      const labelSlides = classifications.filter(c => c.type === 'label');
+
+      if (labelSlides.length > 0) {
+        onProgress?.('validation', `Found ${labelSlides.length} label headline(s): ${labelSlides.map(l => `"${l.headline}"`).join(', ')}`);
+
+        // Retry up to 2 slides
+        const toRetry = labelSlides.slice(0, 2);
+        for (const label of toRetry) {
+          onProgress?.('retry', `Retrying slide ${label.id}: "${label.headline}" → "${label.fix ?? 'rewrite'}"`);
+
+          const { system: retrySystem, user: retryUser } = buildRetryPrompt(
+            { id: label.id, headline: label.headline, fix: label.fix ?? '' },
+            slides, briefXml, selectedDomain.id,
+          );
+          onDebug?.(`11-retry-${label.id}-prompt.md`, `## System\n\n${retrySystem}\n\n## User\n\n${retryUser}`);
+
+          try {
+            const retryRaw = await llm.generateJSON(retrySystem, retryUser);
+            const retryCleaned = stripFences(retryRaw);
+            onDebug?.(`12-retry-${label.id}-result.xml`, retryCleaned);
+
+            // Parse the retry result and replace the slide
+            const retryRoot = parseXml(retryCleaned);
+            const retryObj = xmlToObjects(retryRoot) as Record<string, unknown>;
+            const retrySlide = retryObj['slide'] ?? retryObj;
+            if (retrySlide && typeof retrySlide === 'object') {
+              const fixed = unwrapChildWrappers(retrySlide as Record<string, unknown>);
+              const slideIndex = slides.findIndex(s => s['id'] === label.id);
+              if (slideIndex >= 0) {
+                slides[slideIndex] = { ...slides[slideIndex], ...fixed, id: label.id };
+                onProgress?.('retry', `Fixed slide ${label.id}: "${fixed['headline'] ?? label.headline}"`);
+              }
+            }
+          } catch (retryErr) {
+            onProgress?.('retry', `Retry failed for ${label.id}: ${retryErr}`);
+          }
+        }
+      } else {
+        onProgress?.('validation', 'All headlines pass quality check');
+      }
+    } catch (detectErr) {
+      onProgress?.('validation', `Label detection failed: ${detectErr}`);
+    }
+  }
+
+  // Write final slides debug after retries
+  onDebug?.('13-final-slides.json', JSON.stringify(slides, null, 2));
 
   // Headline validation — catch obvious failures
   const headlineWarnings: string[] = [];

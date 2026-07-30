@@ -167,23 +167,54 @@ export function introspectSchema(contract: z.ZodTypeAny): string {
   return lines.join('\n').trim();
 }
 
+function describeArrayFieldConcise(fieldName: string, arrayType: z.ZodTypeAny): string {
+  const inner = stripOptionalAndDefault((arrayType._def as any).type);
+  const innerKind = inner._def?.typeName as string;
+  if (innerKind === ZodFirstPartyTypeKind.ZodObject) {
+    const shape = (inner as z.ZodObject<any>).shape;
+    const innerParts: string[] = [];
+    for (const [key, value] of Object.entries(shape)) {
+      if (key === 'type') continue;
+      const fieldType = value as z.ZodTypeAny;
+      const required = isRequired(fieldType);
+      const stripped = stripOptionalAndDefault(fieldType);
+      const desc = describeZodType(stripped, true);
+      const maxMatch = desc.match(/max (\d+) chars/);
+      const short = maxMatch ? `${key} (max ${maxMatch[1]})` : key;
+      innerParts.push(required ? short : `${short}?`);
+    }
+    return `${fieldName}[{${innerParts.join(', ')}}]`;
+  }
+  return `${fieldName}[...]`;
+}
+
 function describeSlideTypeConcise(typeName: string, schema: z.ZodTypeAny): string {
   const stripped = stripOptionalAndDefault(schema);
   const kind = stripped._def?.typeName as string;
   if (kind !== ZodFirstPartyTypeKind.ZodObject) return `${typeName}: ${describeZodType(stripped)}`;
 
-  const fields = getFieldsFromObject(stripped as z.ZodObject<any>);
-  const required = fields
-    .filter(f => f.required && f.name !== 'id' && f.name !== 'type' && f.name !== 'footerLeft' && f.name !== 'footerRight')
-    .map(f => {
-      if (f.type.includes('array')) return `${f.name}[...]`;
-      if (f.type.includes('max')) {
-        const maxMatch = f.type.match(/max (\d+) chars/);
-        return maxMatch ? `${f.name} (max ${maxMatch[1]})` : f.name;
-      }
-      return f.name;
-    });
-  return `${typeName}: ${required.join(', ')}`;
+  const shape = (stripped as z.ZodObject<any>).shape;
+  const parts: string[] = [];
+  for (const [key, value] of Object.entries(shape)) {
+    if (key === 'id' || key === 'type' || key === 'footerLeft' || key === 'footerRight') continue;
+    const fieldType = value as z.ZodTypeAny;
+    const required = isRequired(fieldType);
+    const fieldStripped = stripOptionalAndDefault(fieldType);
+    const fieldKind = fieldStripped._def?.typeName as string;
+
+    let desc: string;
+    if (fieldKind === ZodFirstPartyTypeKind.ZodArray) {
+      desc = describeArrayFieldConcise(key, fieldStripped);
+    } else if (fieldKind === ZodFirstPartyTypeKind.ZodBoolean) {
+      desc = key;
+    } else {
+      const typeDesc = describeZodType(fieldStripped);
+      const maxMatch = typeDesc.match(/max (\d+) chars/);
+      desc = maxMatch ? `${key} (max ${maxMatch[1]})` : key;
+    }
+    parts.push(required ? desc : `${desc}?`);
+  }
+  return `${typeName}: ${parts.join(', ')}`;
 }
 
 export function introspectSchemaConcise(contract: z.ZodTypeAny): string {

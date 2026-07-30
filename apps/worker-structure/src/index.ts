@@ -75,7 +75,7 @@ async function fetchImagesForSlides(
   );
 }
 
-const VALID_SLIDE_TYPES = ['cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant', 'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta'];
+const VALID_SLIDE_TYPES = ['cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant', 'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta', 'profile', 'analysis', 'definition', 'dichotomy', 'table', 'breakdown', 'juxtaposition', 'methodology', 'hero-metric', 'checklist'];
 
 const TYPE_MAP: Record<string, string> = {
   'hero-metric': 'telemetry',
