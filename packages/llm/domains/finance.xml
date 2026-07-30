@@ -1,52 +1,10 @@
-<domain id="finance" name="Finance &amp; Investing">
-  <description>Stocks, crypto, personal finance, wealth building, markets, economy</description>
-  <powerWords>billion, millionaire, secret, hidden, broken, wrong, never, stop, truth, wealthy, passive, risk, reward, compound, leverage</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>Understanding the fundamentals of long-term wealth building</bad>
-      <good>Your portfolio is missing this.</good>
-      <great>Rich people don't do this.</great>
-    </example>
-    <example type="cover">
-      <bad>Market analysis suggests potential opportunities in emerging sectors</bad>
-      <good>The market is lying to you.</good>
-      <great>Nobody tells you this.</great>
-    </example>
-    <example type="telemetry">
-      <bad>The S&amp;P 500 has returned an average of 10% annually</bad>
-      <good>10% a year. Every year.</good>
-      <great>This number retired 47 people last year.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Compound interest can significantly grow your savings over time</bad>
-      <good>$100 becomes $1.3M. Here's how.</good>
-      <great>The math is stupid simple.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe you need a lot of money to start investing</bad>
-      <good>You need $100. Not $100K.</good>
-      <great>The rich want you to think otherwise.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Timing the market is generally not a successful long-term strategy</bad>
-      <good>Timing the market is a myth.</good>
-      <great>Time IN the market beats timing.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three essential steps to building financial freedom</bad>
-      <good>3 moves. Financial freedom.</good>
-      <great>Do these or stay broke.</great>
-    </example>
-    <example type="quote">
-      <bad>Warren Buffett famously advised to be fearful when others are greedy</bad>
-      <good>"Be fearful when others are greedy."</good>
-      <great>Write this down.</great>
-    </example>
-    <example type="cta">
-      <bad>Subscribe for more financial insights and investment tips</bad>
-      <good>Stop being average. Start building.</good>
-      <great>Or stay poor.</great>
-    </example>
-  </examples>
+<domain id="finance" name="Finance and Business">
+  <description>Markets, investing, economics, personal finance, business news</description>
+  <powerWords>profit, loss, crash, surge, wealth, risk, opportunity, hidden, revealed, data, returns, growth, collapse</powerWords>
+  <principles>
+    <principle>Lead with specific numbers — percentages, dollar amounts, market caps</principle>
+    <principle>Frame data as implications for the reader's wallet or portfolio</principle>
+    <principle>Use contrast — gains vs losses, expectations vs reality</principle>
+    <principle>Create urgency around time-sensitive opportunities or risks</principle>
+  </principles>
 </domain>

@@ -18,7 +18,7 @@ export interface DomainExamples {
   name: string;
   description: string;
   powerWords: string[];
-  examples: { type: string; bad: string; good: string; great: string }[];
+  principles: string[];
 }
 
 // ─── Few-Shot Examples ──────────────────────────────────────────────────────
@@ -112,22 +112,15 @@ function loadAllDomains(): DomainExamples[] {
       const xml = readFileSync(join(DOMAINS_DIR, file), 'utf-8');
       const root = parseXml(xml);
       const obj = xmlToObjects(root) as Record<string, unknown>;
-      // XML structure: <domain><examples><example type="cover">...</example></examples></domain>
-      // xmlToObjects produces: { examples: { example: [...] } }
-      const examplesContainer = obj['examples'] as Record<string, unknown> | undefined;
-      const rawExamples = (examplesContainer?.['example'] ?? []) as Array<Record<string, unknown>>;
-      const examples = rawExamples.map(ex => ({
-        type: (ex['type'] as string) ?? 'cover',
-        bad: (ex['bad'] as string) ?? '',
-        good: (ex['good'] as string) ?? '',
-        great: (ex['great'] as string) ?? '',
-      }));
+      const principlesContainer = obj['principles'] as Record<string, unknown> | undefined;
+      const rawPrinciples = (principlesContainer?.['principle'] ?? []) as string[];
+      const principles = Array.isArray(rawPrinciples) ? rawPrinciples : [];
       return {
         id: (obj['id'] as string) ?? file.replace('.xml', ''),
         name: (obj['name'] as string) ?? file.replace('.xml', ''),
         description: (obj['description'] as string) ?? '',
         powerWords: ((obj['powerWords'] as string) ?? '').split(',').map(w => w.trim()).filter(Boolean),
-        examples,
+        principles,
       };
     });
     return _domainsCache;
@@ -278,20 +271,17 @@ function getSlidePlanPrompt(
   brandKit?: Record<string, string | undefined>,
   domainExamples?: DomainExamples,
 ): { system: string; user: string } {
-  // Build domain examples section for the planner
-  let domainExamplesSection = '';
-  if (domainExamples && domainExamples.examples.length > 0) {
-    const exampleBlocks = domainExamples.examples.map(ex => `  ${ex.type.toUpperCase()}:
-  GREAT: "${ex.great}"`).join('\n\n');
+  // Build domain principles section for the planner
+  let domainPrinciplesSection = '';
+  if (domainExamples && domainExamples.principles.length > 0) {
+    const principleList = domainExamples.principles.map(p => `- ${p}`).join('\n');
 
-    domainExamplesSection = `
-## DOMAIN COPY EXAMPLES (${domainExamples.name})
+    domainPrinciplesSection = `
+## DOMAIN PRINCIPLES (${domainExamples.name})
 
-Study these to understand the quality bar for headlines. When writing slide purposes, describe the HOOK STRATEGY that would produce headlines at this quality level.
+When writing slide purposes, ensure the hook strategy aligns with these domain principles:
 
-<domainExamples>
-${exampleBlocks}
-</domainExamples>`;
+${principleList}`;
   }
 
   return {
@@ -312,7 +302,7 @@ ${brandKit ? `Background: ${brandKit.bg ?? 'not set'}
 Text: ${brandKit.text ?? 'not set'}
 Accent: ${brandKit.accent ?? 'not set'}
 Font: ${brandKit.fontSerif ?? brandKit.fontSans ?? brandKit.fontMono ?? 'not set'}` : 'Use default brand colors for the selected template.'}
-${domainExamplesSection}
+${domainPrinciplesSection}
 
 ## Task
 
@@ -343,40 +333,72 @@ Return a single <slidePlan> element:
   };
 }
 
+// ─── Slide-Type Rules (Universal) ───────────────────────────────────────────
+
+const SLIDE_TYPE_RULES = [
+  { type: 'cover', rule: '- MUST include a specific detail: number, name, or action from the brief\n- Pattern: "[Detail]. [Emotion/Curiosity]."\n- Example: "13 Dead. Mall Collapsed."' },
+  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- Pattern: "[Number] [Unit]. [Number] [Unit]."\n- Example: "6.8 Mag. 13 Lives."' },
+  { type: 'sequence', rule: '- MUST use numbered urgency or specific detail\n- Pattern: "[Number] Things Happening Right Now"\n- Example: "3 Things Happening Right Now"' },
+  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- Pattern: "[Contrast]. [Pivot]."\n- Example: "Advisory Lifted. Panic Was Real."' },
+  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- If used: "[Evocative tagline]" — 2-4 words\n- Example: "THE VERDICT" or "OFFICIAL STATEMENT"' },
+  { type: 'cta', rule: '- MUST be a command or question\n- Pattern: "[Command]. [Specific Detail]."\n- Example: "Don\'t Scroll Past This."' },
+  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- Pattern: "[Event]. [Consequence]." or "From [X] to [Y]"\n- Example: "3 Years. Zero Progress."' },
+  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- Pattern: "What [Data] Actually Means"\n- Example: "What These Numbers Actually Mean"' },
+  { type: 'definition', rule: '- MUST explain a concept clearly\n- Pattern: "[Concept]: [Plain English]"\n- Example: "Inflation: Your Dollar Worth Less"' },
+  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- Pattern: "[X] vs [Y]. [Stakes]."\n- Example: "Growth vs Stability. Your Choice."' },
+  { type: 'table', rule: '- MUST compare data across categories\n- Pattern: "[Comparison]: [Winner/Loser]"\n- Example: "Q3 Earnings: Who Won, Who Lost"' },
+  { type: 'profile', rule: '- MUST humanize a person or entity\n- Pattern: "[Person]. [What They Did]."\n- Example: "The Engineer Who Saw It Coming"' },
+  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- Headline describes the visual split\n- Pattern: "[Left Side] vs [Right Side]"\n- Example: "Before the Storm. After."' },
+  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- Pattern: "[Topic]: [Number] Parts"\n- Example: "The Deal: 3 Moving Parts"' },
+  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- Pattern: "[Thing A]. [Thing B]. [Insight]."\n- Example: "Public Promise. Private Reality."' },
+  { type: 'methodology', rule: '- MUST explain a process or approach\n- Pattern: "How [Entity] [Did X]"\n- Example: "How We Calculated the Risk"' },
+  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- Pattern: "[Number]. [Context]."\n- Example: "47%. The Real Unemployment Rate."' },
+  { type: 'checklist', rule: '- MUST provide actionable steps\n- Pattern: "[Number] Steps to [Outcome]"\n- Example: "3 Steps to Protect Your Data"' },
+  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- Pattern: "[Category]: [Key Insight]"\n- Example: "High Risk, High Reward: Where You Fall"' },
+  { type: 'case-study', rule: '- MUST tell a story with outcome\n- Pattern: "[Entity] Tried [X]. What Happened."\n- Example: "Apple Tried Foldables. What Happened."' },
+  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- Pattern: "[Number] Resources for [Outcome]"\n- Example: "5 Tools to Automate Your Workflow"' },
+  { type: 'interview', rule: '- MUST feature Q&A format\n- Pattern: "Q: [Question]" / "A: [Key Answer]"\n- Example: "Q: Is This Safe?" / "A: We Don\'t Know Yet"' },
+];
+
 // ─── Phase 4: Generate Content ───────────────────────────────────────────────
 
 function getGeneratePrompt(
   briefXml: string,
   planXml: string,
   selectedTemplate: TemplateInfo,
+  slidePlan: string[],
   domainExamples?: DomainExamples,
 ): { system: string; user: string } {
-  // Build domain-specific examples section
-  let domainExamplesSection = '';
-  if (domainExamples && domainExamples.examples.length > 0) {
-    const exampleBlocks = domainExamples.examples.map(ex => `  ${ex.type.toUpperCase()}:
-  BAD: "${ex.bad}"
-  GOOD: "${ex.good}"
-  GREAT: "${ex.great}"`).join('\n\n');
+  // Filter schema to only selected slide types
+  const selectedTypes = new Set(slidePlan);
+  const filteredSchema = selectedTemplate.schemaTextConcise
+    .split('\n')
+    .filter(line => {
+      const typeName = line.split(':')[0]?.trim();
+      return typeName && selectedTypes.has(typeName);
+    })
+    .join('\n');
 
-    domainExamplesSection = `
-## DOMAIN-SPECIFIC COPY EXAMPLES (${domainExamples.name})
+  // Build domain principles section
+  let domainPrinciplesSection = '';
+  if (domainExamples && domainExamples.principles.length > 0) {
+    const principleList = domainExamples.principles.map(p => `- ${p}`).join('\n');
+    domainPrinciplesSection = `
+## DOMAIN PRINCIPLES (${domainExamples.name})
 
-These are hand-crafted examples for ${domainExamples.name} content. Study them carefully.
+Apply these principles to your copy:
 
-<domainExamples>
-${exampleBlocks}
-</domainExamples>
+${principleList}
 
 ## DOMAIN POWER WORDS
-Use these power words in headlines: ${domainExamples.powerWords.join(', ')}
-
-## CRITICAL: YOUR HEADLINES MUST MATCH THE "GREAT" QUALITY ABOVE
-Do NOT write "GOOD" headlines. Write "GREAT" headlines. The difference:
-- GOOD is acceptable. GREAT stops the scroll.
-- GOOD follows rules. GREAT breaks patterns.
-- GOOD informs. GREAT provokes.`;
+Use these power words in headlines: ${domainExamples.powerWords.join(', ')}`;
   }
+
+  // Build slide-type rules for selected types only
+  const slideTypeRules = SLIDE_TYPE_RULES
+    .filter(rule => selectedTypes.has(rule.type))
+    .map(rule => `### ${rule.type.charAt(0).toUpperCase() + rule.type.slice(1)}\n${rule.rule}`)
+    .join('\n\n');
 
   return {
     system: `You are a social media carousel designer. Generate a complete carousel of slides.
@@ -396,9 +418,13 @@ ${briefXml}
 
 ## Slide Type Constraints (EXACT — you MUST follow these)
 
-${selectedTemplate.schemaTextConcise}
+${filteredSchema}
 
-## Output Format
+## SLIDE TYPE RULES
+
+${slideTypeRules}
+
+## OUTPUT FORMAT
 
 Return a single <presentation> element containing all slides.
 
@@ -431,17 +457,13 @@ For arrays (stats, items), use nested child elements:
 - Every slide MUST have: id, type, tag, footerLeft, footerRight.
 - footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
 
-## HEADLINE RULES (follow exactly)
+## HEADLINE RULES
 
 <headlineRules>
-  <rule>Every headline MUST reference a SPECIFIC DETAIL from the content brief — a number, a name, an action. Never use a generic label.</rule>
-  <rule>Headlines must be a CLAIM, QUESTION, or COMMAND — never a noun phrase. "The Truth From Leadership" is a label (bad). "They don't want you to see this" is a claim (good).</rule>
-  <rule>Max 5 words. Fragments only. No sentences.</rule>
-  <rule>Active voice only. Use contractions (you're, don't, can't).</rule>
-  <rule>Use "YOU" language. Make it personal.</rule>
+  <rule>Headlines MUST be a CLAIM, QUESTION, or COMMAND — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
+  <rule>Max 5 words. Fragments only. Active voice. Use contractions.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
-</headlineRules>${domainExamples ? `
-${domainExamplesSection}` : ''}`,
+</headlineRules>${domainPrinciplesSection ? `\n${domainPrinciplesSection}` : ''}`,
     user: 'Generate all slides for this carousel.',
   };
 }
@@ -659,7 +681,7 @@ export async function generateSlidesMultiPhase(
     name: 'General',
     description: 'General content',
     powerWords: ['secret', 'hidden', 'wrong', 'never', 'stop', 'truth', 'reverse', 'shocking'],
-    examples: [],
+    principles: ['Lead with specific details and numbers', 'Use urgency language', 'Make it personal with "you" language'],
   };
   let selectedDomain = allDomains.find(d => d.id === 'general') ?? allDomains[0] ?? fallbackDomain;
   let domainClassificationMs = 0;
@@ -745,7 +767,7 @@ export async function generateSlidesMultiPhase(
   onProgress?.('generation', 'Phase 4: Generating slide content...');
 
   const phase4Start = Date.now();
-  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate, selectedDomain);
+  const { system: genSystem, user: genUser } = getGeneratePrompt(briefXml, planXml, selectedTemplate, slidePlan, selectedDomain);
   onDebug?.('04-prompt-phase4-generate.md', `## System\n\n${genSystem}\n\n## User\n\n${genUser}`);
   const genRaw = await llm.generateJSON(genSystem, genUser);
   const genCleaned = stripFences(genRaw);

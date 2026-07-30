@@ -1,52 +1,10 @@
 <domain id="news" name="News and Current Events">
   <description>Breaking news, disasters, politics, world events, investigations, human interest</description>
   <powerWords>breaking, shocking, urgent, hidden, never, stop, truth, secret, revealed, crisis, exclusive, devastating, confirmed, alarming</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>A powerful earthquake has struck the region causing damage</bad>
-      <good>Breaking: This changes everything.</good>
-      <great>Nobody saw this coming.</great>
-    </example>
-    <example type="cover">
-      <bad>Government officials respond to the latest crisis</bad>
-      <good>They don't want you to see this.</good>
-      <great>This just happened. You need to know.</great>
-    </example>
-    <example type="telemetry">
-      <bad>The death toll has risen to 13 according to officials</bad>
-      <good>13 dead. 6.8 magnitude. This is real.</good>
-      <great>These numbers are devastating.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Emergency personnel have been deployed to the area</bad>
-      <good>3,600 troops deployed. Now.</good>
-      <great>This is a crisis.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Authorities have clarified that the tsunami advisory was lifted</bad>
-      <good>Tsunami panic. Lifted.</good>
-      <great>You're being lied to about the waves.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe earthquakes cannot be predicted</bad>
-      <good>Earthquakes can be predicted.</good>
-      <great>The science is there. They ignore it.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three major infrastructure failures have been reported</bad>
-      <good>3 failures. Right now.</good>
-      <great>This is collapsing fast.</great>
-    </example>
-    <example type="quote">
-      <bad>The Prime Minister confirmed extensive damage in a statement</bad>
-      <good>"We have confirmed extensive damage."</good>
-      <great>Write this down. This is official.</great>
-    </example>
-    <example type="cta">
-      <bad>Stay informed about the latest developments</bad>
-      <good>Stop scrolling. This matters.</good>
-      <great>Don't look away. Help now.</great>
-    </example>
-  </examples>
+  <principles>
+    <principle>Lead with specific numbers and names — never vague labels</principle>
+    <principle>Use urgency language — "right now", "breaking", "just in"</principle>
+    <principle>Frame events as having hidden context or untold stories</principle>
+    <principle>Use period-separated fragments for dramatic rhythm — "13 Dead. Mall Collapsed."</principle>
+  </principles>
 </domain>

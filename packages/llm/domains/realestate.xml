@@ -1,52 +1,10 @@
 <domain id="realestate" name="Real Estate">
-  <description>Property, housing market, investment properties, home buying, renovation</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, luxury, equity, cash flow, appreciation, market, deal, mortgage</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>Understanding the current real estate market conditions</bad>
-      <good>The housing market is lying to you.</good>
-      <great>Nobody tells you this about mortgages.</great>
-    </example>
-    <example type="cover">
-      <bad>Why now might be a good time to consider buying property</bad>
-      <good>Stop waiting. Start buying.</good>
-      <great>Rich people don't rent.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Housing prices have increased by 15% in the past year</bad>
-      <good>15% appreciation. 1 year.</good>
-      <great>This number is insane.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Rental yields average 6-8% in prime locations</bad>
-      <good>8% passive income. Every month.</good>
-      <great>Your savings account gives you 0.5%.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe you need 20% down to buy a home</bad>
-      <good>You need 3%. Not 20%.</good>
-      <great>The bank wants you to think otherwise.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Renting is often more affordable than buying in major cities</bad>
-      <good>Renting is throwing money away.</good>
-      <great>Landlords love when you think this.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three steps to your first investment property</bad>
-      <good>3 steps. First property.</good>
-      <great>Do this or stay broke.</great>
-    </example>
-    <example type="cta">
-      <bad>Follow for more real estate tips and market updates</bad>
-      <good>Stop renting. Start owning.</good>
-      <great>Or keep paying someone else's mortgage.</great>
-    </example>
-    <example type="quote">
-      <bad>Robert Kiyosaki said that real estate investing, even on a small scale, is a tried and true means of building wealth</bad>
-      <good>Kiyosaki: "Real estate investing, even on a small scale, is a tried and true means of building wealth."</good>
-      <great>Kiyosaki built an empire on this. Your savings account won't.</great>
-    </example>
-  </examples>
+  <description>Property, housing market, investment, mortgages, commercial real estate</description>
+  <powerWords>profit, loss, hidden, secret, crash, surge, opportunity, risk, data, never, stop, reveal</powerWords>
+  <principles>
+    <principle>Lead with specific market data — prices, rates, inventory levels</principle>
+    <principle>Frame as financial opportunity or risk</principle>
+    <principle>Use urgency around market timing</principle>
+    <principle>Reference specific markets, neighborhoods, or property types</principle>
+  </principles>
 </domain>

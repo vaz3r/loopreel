@@ -1,52 +1,10 @@
-<domain id="health" name="Health &amp; Wellness">
-  <description>Fitness, nutrition, mental health, longevity, biohacking, medicine</description>
-  <powerWords>secret, hidden, wrong, reverse, never, stop, truth, unlock, optimize, hack, transform, energy, vitality, sleep, gut</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>The science of sleep optimization for better health</bad>
-      <good>You're sleeping wrong.</good>
-      <great>This ruins your sleep. You do it daily.</great>
-    </example>
-    <example type="cover">
-      <bad>Understanding how gut health affects overall wellness</bad>
-      <good>Your gut controls everything.</good>
-      <great>Nobody tells you this.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Studies show that 7 hours of sleep is optimal for most adults</bad>
-      <good>7 hours. Not 8.</good>
-      <great>This number changed my life.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Regular exercise can reduce the risk of chronic disease by 40%</bad>
-      <good>40% less disease. Just move.</good>
-      <great>Your couch is killing you.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe breakfast is the most important meal of the day</bad>
-      <good>Breakfast is optional.</good>
-      <great>The cereal industry lied to you.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Current research suggests that excessive cardio may not be optimal</bad>
-      <good>More cardio isn't better.</good>
-      <great>You're overtraining. Here's why.</great>
-    </example>
-    <example type="sequence">
-      <bad>Four habits that can transform your energy levels</bad>
-      <good>4 habits. More energy.</good>
-      <great>Do these or stay tired.</great>
-    </example>
-    <example type="quote">
-      <bad>Dr. Andrew Huberman emphasizes the importance of morning sunlight</bad>
-      <good>"Get sunlight within 30 minutes of waking."</good>
-      <great>This fixes your sleep.</great>
-    </example>
-    <example type="cta">
-      <bad>Follow for more health tips and wellness advice</bad>
-      <good>Stop guessing. Start optimizing.</good>
-      <great>Or keep feeling mediocre.</great>
-    </example>
-  </examples>
+<domain id="health" name="Health and Wellness">
+  <description>Medicine, fitness, nutrition, mental health, public health, research</description>
+  <powerWords>secret, hidden, proven, breakthrough, risk, warning, truth, reveal, devastating, shocking, never, stop</powerWords>
+  <principles>
+    <principle>Lead with specific health outcomes or study results</principle>
+    <principle>Frame as personal relevance — what this means for YOUR health</principle>
+    <principle>Use urgency for warnings, calm for reassurance</principle>
+    <principle>Reference specific research, studies, or medical findings</principle>
+  </principles>
 </domain>

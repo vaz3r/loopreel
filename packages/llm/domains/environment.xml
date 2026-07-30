@@ -1,52 +1,10 @@
-<domain id="environment" name="Environment and Sustainability">
-  <description>Climate change, green energy, conservation, sustainability, eco-friendly</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, crisis, urgent, future, planet, impact, legacy</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>The urgent need for climate action in 2024</bad>
-      <good>Our planet is dying. Here's why.</good>
-      <great>This changes how you see the planet.</great>
-    </example>
-    <example type="cover">
-      <bad>How small changes can make a big environmental impact</bad>
-      <good>Your habits are destroying the planet.</good>
-      <great>This one change saves everything.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Renewable energy has grown by 300% in the past decade</bad>
-      <good>300% growth. One decade.</good>
-      <great>This is the future.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Plastic pollution will triple by 2040 if we don't act</bad>
-      <good>3x more plastic. 15 years.</good>
-      <great>This is terrifying.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe individual actions don't matter</bad>
-      <good>Your actions matter. They want you to think otherwise.</good>
-      <great>This is the biggest lie.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Green energy is now cheaper than fossil fuels</bad>
-      <good>Fossil fuels are expensive.</good>
-      <great>The oil industry is lying to you.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three changes you can make today to help the planet</bad>
-      <good>3 changes. Today. Help the planet.</good>
-      <great>Do this or doom us all.</great>
-    </example>
-    <example type="cta">
-      <bad>Follow for more environmental news and sustainability tips</bad>
-      <good>Stop ignoring. Start acting.</good>
-      <great>Or watch the world burn.</great>
-    </example>
-    <example type="quote">
-      <bad>David Attenborough said that what we do in the next few years will profoundly affect the next few thousand years</bad>
-      <good>Attenborough: "What we do in the next few years will profoundly affect the next few thousand years."</good>
-      <great>Attenborough warned us. We're still ignoring him.</great>
-    </example>
-  </examples>
+<domain id="environment" name="Environment">
+  <description>Climate change, sustainability, conservation, green energy, environmental policy</description>
+  <powerWords>crisis, warning, urgent, hidden, truth, reveal, devastating, shocking, never, stop, future, legacy</powerWords>
+  <principles>
+    <principle>Lead with specific environmental data — temperatures, CO2 levels, species counts</principle>
+    <principle>Frame as consequences for future generations</principle>
+    <principle>Use urgency for threats, hope for solutions</principle>
+    <principle>Reference specific research, locations, or policies</principle>
+  </principles>
 </domain>

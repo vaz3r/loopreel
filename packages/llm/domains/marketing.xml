@@ -1,52 +1,10 @@
-<domain id="marketing" name="Marketing &amp; Business">
-  <description>Growth hacking, branding, sales, entrepreneurship, productivity, leadership</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, scale, revenue, convert, funnel, brand, authority, leverage</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>How to build a successful marketing strategy</bad>
-      <good>Your marketing is broken.</good>
-      <great>This one move doubles revenue.</great>
-    </example>
-    <example type="cover">
-      <bad>Understanding the principles of effective branding</bad>
-      <good>Branding isn't what you think.</good>
-      <great>This strategy doubles your reach.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Companies with strong brands see 20% higher revenue</bad>
-      <good>20% more revenue. Just branding.</good>
-      <great>This stat is insane.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Email marketing delivers 42:1 ROI on average</bad>
-      <good>$42 return. $1 spent.</good>
-      <great>Your ads give you $2.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many businesses believe they need a large budget to compete</bad>
-      <good>You need $0. Not $10K.</good>
-      <great>Big brands want you to think otherwise.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Posting more on social media doesn't guarantee growth</bad>
-      <good>More posts isn't better.</good>
-      <great>You're posting wrong. Here's why.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three changes that double your conversion rate</bad>
-      <good>3 changes. 2x conversions.</good>
-      <great>Do this or stay broke.</great>
-    </example>
-    <example type="cta">
-      <bad>Subscribe for more marketing tips and business advice</bad>
-      <good>Stop guessing. Start converting.</good>
-      <great>Or keep wasting money.</great>
-    </example>
-    <example type="quote">
-      <bad>Seth Godin said that marketing is no longer about the stuff that you make, but about the stories you tell</bad>
-      <good>Seth Godin: "Marketing is no longer about the stuff that you make, but about the stories you tell."</good>
-      <great>Godin said this. Your brand still doesn't get it.</great>
-    </example>
-  </examples>
+<domain id="marketing" name="Marketing">
+  <description>Advertising, branding, social media, digital marketing, consumer behavior</description>
+  <powerWords>secret, hidden, proven, viral, convert, engage, stop, never, truth, reveal, powerful, overlooked</powerWords>
+  <principles>
+    <principle>Frame as ROI or performance metrics — what actually works</principle>
+    <principle>Use data-driven language — conversion rates, engagement, revenue</principle>
+    <principle>Create urgency around competitive advantage</principle>
+    <principle>Reference real campaigns, tools, or strategies</principle>
+  </principles>
 </domain>

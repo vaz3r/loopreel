@@ -1,0 +1,68 @@
+sequenceDiagram
+    participant User
+    participant API
+    participant IngestWorker
+    participant StructureWorker
+    participant LLM
+    participant RenderWorker
+
+    User->>API: POST /api/jobs {sourceUrl, templateId}
+    API->>API: Create job (status: queued)
+    API-->>User: {jobId, status: queued}
+
+    Note over API,IngestWorker: Phase 0: Ingest
+    API->>IngestWorker: Dequeue job
+    IngestWorker->>IngestWorker: Scrape content from sourceUrl
+    IngestWorker->>IngestWorker: Extract text, metadata
+    IngestWorker->>API: Update job (status: ingested)
+    API->>API: Publish to outbox → structure queue
+
+    Note over StructureWorker,LLM: Phase 1: Content Extraction
+    StructureWorker->>API: Dequeue job
+    StructureWorker->>LLM: getExtractionPrompt(content)
+    LLM-->>StructureWorker: Content Brief (XML)<br/>title, summary, keyPoints,<br/>quotes, stats, counterpoints
+    StructureWorker->>StructureWorker: Write debug: 00-extracted.txt<br/>Write debug: 01-prompt-phase1-extraction.md<br/>Write debug: 05-phase1-brief.xml
+
+    Note over StructureWorker,LLM: Phase 1.5: Domain Classification
+    StructureWorker->>StructureWorker: loadAllDomains()<br/>Read 16 domain XML files<br/>(principles + power words)
+    StructureWorker->>LLM: classifyDomainPrompt()<br/>(brief + list of 16 domains<br/>with principles)
+    LLM-->>StructureWorker: Domain ID + confidence<br/>(news, politics, etc.)
+    StructureWorker->>StructureWorker: Write debug: 05b-domain-classification.xml
+
+    Note over StructureWorker,LLM: Phase 2: Template Selection
+    StructureWorker->>LLM: getTemplateSelectionPrompt()<br/>(brief + list of ALL templates<br/>with name, description, aesthetics)
+    LLM-->>StructureWorker: Selected Template ID
+    StructureWorker->>StructureWorker: Write debug: 06-phase2-selection.xml
+
+    Note over StructureWorker,LLM: Phase 3: Slide Planning
+    StructureWorker->>LLM: getSlidePlanPrompt()<br/>(brief + selected template +<br/>domain principles [4-5 sentences] +<br/>ALL supported slide types from schema)
+    LLM-->>StructureWorker: Slide Plan (5-7 slides)<br/>type, purpose, content summary<br/>for each slide
+    StructureWorker->>StructureWorker: Write debug: 07-phase3-plan.xml
+
+    Note over StructureWorker: Phase 3→4: Filter by Selected Types
+    StructureWorker->>StructureWorker: Extract slide types from plan<br/>(e.g. cover, telemetry, sequence,<br/>myth-fact, quote, cta)
+    StructureWorker->>StructureWorker: Filter schema to only<br/>selected types (6 of 13)
+    StructureWorker->>StructureWorker: Filter slide-type rules<br/>to only selected types
+
+    Note over StructureWorker,LLM: Phase 4: Content Generation
+    StructureWorker->>LLM: getGeneratePrompt()<br/>(slide plan + content brief +<br/>FILTERED schema [6 types only] +<br/>domain principles + power words +<br/>slide-type rules [6 rules] +<br/>few-shot examples [news + politics] +<br/>compressed headline rules [3 rules] +<br/>anti-hallucination rules)
+    LLM-->>StructureWorker: Complete Carousel XML<br/>(all slides with full content)
+    StructureWorker->>StructureWorker: Write debug: 08-phase4-slides.xml
+
+    Note over StructureWorker,LLM: Phase 4.5: Label Detection + Retry
+    StructureWorker->>LLM: buildLabelDetectionPrompt()<br/>(check each headline for labels)
+    LLM-->>StructureWorker: Label classification per slide
+    alt Any labels found
+        StructureWorker->>LLM: buildRetryPrompt()<br/>(rewrite label headlines<br/>max 2 retries per job)
+        LLM-->>StructureWorker: Fixed headlines
+    end
+    StructureWorker->>StructureWorker: Write debug: 13-final-slides.json
+
+    StructureWorker->>API: Store slides, update job status
+    StructureWorker->>API: Publish to outbox → render queue
+
+    Note over RenderWorker: Phase 5: Render
+    API->>RenderWorker: Dequeue job
+    RenderWorker->>RenderWorker: Generate images with Playwright
+    RenderWorker->>RenderWorker: Write debug: 06-rendered.json
+    RenderWorker->>API: Update job (status: rendered)

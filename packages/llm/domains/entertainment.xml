@@ -1,52 +1,10 @@
-<domain id="entertainment" name="Entertainment and Culture">
-  <description>Movies, music, books, celebrities, trends, pop culture, art</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, iconic, legendary, viral, trend, obsession, binge</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>The cultural impact of this year's biggest releases</bad>
-      <good>This changed everything.</good>
-      <great>Nobody saw this coming.</great>
-    </example>
-    <example type="cover">
-      <bad>Why this show became the most watched of all time</bad>
-      <good>This show is addictive. Here's why.</good>
-      <great>You're missing this.</great>
-    </example>
-    <example type="telemetry">
-      <bad>This album broke streaming records with 50 million plays</bad>
-      <good>50 million streams. First week.</good>
-      <great>This number is insane.</great>
-    </example>
-    <example type="telemetry">
-      <bad>The movie grossed $1 billion worldwide in just 3 weeks</bad>
-      <good>$1B. 3 weeks.</good>
-      <great>This broke every record.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe blockbusters are always better than indie films</bad>
-      <good>Blockbusters are overrated.</good>
-      <great>The studios want you to think otherwise.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Streaming hasn't killed cinema, it transformed it</bad>
-      <good>Streaming didn't kill movies.</good>
-      <great>You've been watching wrong.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three shows you need to watch right now</bad>
-      <good>3 shows. Watch now.</good>
-      <great>Miss this or regret it.</great>
-    </example>
-    <example type="cta">
-      <bad>Follow for more entertainment news and recommendations</bad>
-      <good>Stop scrolling. Start watching.</good>
-      <great>Or stay boring.</great>
-    </example>
-    <example type="quote">
-      <bad>Stanley Kubrick once said that the most terrifying fact about the universe is that it is indifferent to human suffering</bad>
-      <good>Kubrick: "The most terrifying fact about the universe is that it is indifferent to human suffering."</good>
-      <great>Kubrick said this. Hollywood still doesn't get it.</great>
-    </example>
-  </examples>
+<domain id="entertainment" name="Entertainment">
+  <description>Movies, music, TV, celebrities, pop culture, gaming</description>
+  <powerWords>secret, hidden, never, stop, truth, reveal, shocking, exclusive, behind-the-scenes, untold, forbidden, viral</powerWords>
+  <principles>
+    <principle>Frame as insider knowledge or behind-the-scenes access</principle>
+    <principle>Use fan engagement language — what "nobody is talking about"</principle>
+    <principle>Create curiosity about untold stories or hidden details</principle>
+    <principle>Reference specific works, artists, or cultural moments</principle>
+  </principles>
 </domain>

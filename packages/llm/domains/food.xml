@@ -1,52 +1,10 @@
-<domain id="food" name="Food and Nutrition">
-  <description>Recipes, cooking, diet, meal planning, food industry, restaurants</description>
-  <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, delicious, healthy, simple, quick, easy, transform, crave</powerWords>
-  
-  <examples>
-    <example type="cover">
-      <bad>The science behind perfect cooking techniques</bad>
-      <good>You're cooking wrong.</good>
-      <great>This one trick changes everything.</great>
-    </example>
-    <example type="cover">
-      <bad>How to eat healthier without sacrificing taste</bad>
-      <good>Healthy food isn't boring.</good>
-      <great>Your diet is backwards.</great>
-    </example>
-    <example type="telemetry">
-      <bad>This ingredient reduces inflammation by 40%</bad>
-      <good>40% less inflammation. One ingredient.</good>
-      <great>This is the secret.</great>
-    </example>
-    <example type="telemetry">
-      <bad>Meal prep saves 5 hours per week on average</bad>
-      <good>5 hours saved. Every week.</good>
-      <great>Your time is worth this.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Many people believe healthy food is expensive</bad>
-      <good>Healthy food is cheap.</good>
-      <great>The fast food industry wants you to think otherwise.</great>
-    </example>
-    <example type="myth-fact">
-      <bad>Carbs are not the enemy, processed carbs are</bad>
-      <good>Carbs aren't the problem.</good>
-      <great>You've been eating wrong.</great>
-    </example>
-    <example type="sequence">
-      <bad>Three meals that take 10 minutes and are actually healthy</bad>
-      <good>3 meals. 10 minutes. Healthy.</good>
-      <great>Do this or stay unhealthy.</great>
-    </example>
-    <example type="cta">
-      <bad>Follow for more recipes and nutrition tips</bad>
-      <good>Stop eating boring. Start cooking.</good>
-      <great>Or keep ordering takeout.</great>
-    </example>
-    <example type="quote">
-      <bad>Julia Child once said that people who love to eat are always the best people</bad>
-      <good>Julia Child: "People who love to eat are always the best people."</good>
-      <great>Julia Child knew this. Your diet culture doesn't.</great>
-    </example>
-  </examples>
+<domain id="food" name="Food and Drink">
+  <description>Cuisine, nutrition, restaurants, cooking, food industry, dietary trends</description>
+  <powerWords>secret, hidden, proven, delicious, dangerous, shocking, truth, reveal, never, stop, authentic, forbidden</powerWords>
+  <principles>
+    <principle>Frame as taste experience or health impact</principle>
+    <principle>Use sensory language — what it tastes like, how it feels</principle>
+    <principle>Create curiosity about hidden ingredients or techniques</principle>
+    <principle>Reference specific cuisines, ingredients, or preparation methods</principle>
+  </principles>
 </domain>
