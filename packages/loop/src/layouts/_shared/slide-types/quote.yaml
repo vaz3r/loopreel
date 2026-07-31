@@ -1,0 +1,50 @@
+id: quote
+name: Quote Slide
+description: "Feature a direct quote from the content. Headline is optional — the quote IS the content."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: false
+    maxLength: 80
+    description: "Optional headline. Often better to leave empty."
+    example: ""
+  - name: quote
+    type: string
+    required: true
+    maxLength: 500
+    description: "The exact quote from the content"
+    example: "We believe public health is a shared responsibility."
+  - name: author
+    type: string
+    required: true
+    maxLength: 40
+    description: "Who said the quote"
+    example: "Taco Bell"
+  - name: role
+    type: string
+    required: false
+    maxLength: 60
+    description: "Author's role or title"
+    example: "Restaurant Chain"
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "OFFICIAL STATEMENT"
+
+headlinePatterns: []
+  # Quote slides often don't need headlines — the quote speaks for itself.
+  # If a headline is used, it should be a short tagline, not a full headline.
+
+rules:
+  - "Headline is optional — the quote IS the content"
+  - "Use ONLY quotes from the brief's quotes section. NEVER invent quotes."
+  - "If the quote is long, trim it to the most impactful sentence."
+  - "Author and role must match the brief exactly."
+
+powerWords: []
+
+hasHeadline: false

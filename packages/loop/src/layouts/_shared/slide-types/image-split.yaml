@@ -1,0 +1,81 @@
+id: image-split
+name: Image Split Slide
+description: "Visual contrast or juxtaposition between two images or concepts."
+category: visual
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the contrast"
+    example: "Before vs After: The Real Impact"
+  - name: left
+    type: object
+    required: true
+    description: "Left side content with title and description"
+  - name: left.title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Left side title"
+    example: "Before"
+  - name: left.desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Left side description"
+    example: "Initial outbreak. Limited information."
+  - name: right
+    type: object
+    required: true
+    description: "Right side content with title and description"
+  - name: right.title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Right side title"
+    example: "After"
+  - name: right.desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Right side description"
+    example: "Full containment. Clear protocols."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "VISUAL CONTRAST"
+
+headlinePatterns:
+  - id: is-vs
+    name: "X vs Y"
+    template: "[X] vs [Y]"
+    example: "Before vs After: The Real Impact"
+    emotionalTrigger: surprise
+    bestFor: "When two states can be clearly contrasted"
+  - id: is-left-right
+    name: "Left vs Right"
+    template: "[Left Side] vs [Right Side]"
+    example: "What We Thought vs What We Know"
+    emotionalTrigger: surprise
+    bestFor: "When two perspectives conflict"
+
+rules:
+  - "MUST use visual contrast or juxtaposition"
+  - "left and right MUST be objects with {title, desc}"
+  - "The contrast should reveal an insight, not just list differences"
+  - "VARY your pattern."
+
+powerWords:
+  - contrast
+  - vs
+  - before
+  - after
+  - reality
+  - truth
+
+hasHeadline: true
+hasLeftRight: true

@@ -1,0 +1,188 @@
+id: cover
+name: Cover Slide
+description: "The opening slide. Must hook the reader in the first 3 words."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 120
+    description: "The main hook. Must be a CLAIM, QUESTION, COMMAND, or PATTERN-INTERRUPT."
+    example: "1,100 Pages They Tried to Bury"
+    notes: "Max 5-7 words preferred. NEVER start with the same word as the previous cover."
+  - name: subheadline
+    type: string
+    required: false
+    maxLength: 200
+    description: "Supporting context. 1-2 sentences max."
+    example: "Fauci's private journals. The truth is inside."
+  - name: authorName
+    type: string
+    required: false
+    maxLength: 40
+    description: "Author attribution"
+    example: "Editorial Desk"
+  - name: authorRole
+    type: string
+    required: false
+    maxLength: 40
+    description: "Author role/title"
+    example: "Investigative Unit"
+  - name: tag
+    type: string
+    required: true
+    maxLength: 30
+    description: "Category tag in ALL CAPS"
+    example: "BREAKING NEWS"
+
+headlinePatterns:
+  # CURIOSITY GAP
+  - id: curiosity-undefined
+    name: "The Undefined This"
+    template: "[Subject] doesn't... [This does]"
+    example: "Your doctor doesn't screen for this. This test does."
+    emotionalTrigger: curiosity
+    bestFor: "When brief reveals an unknown risk or solution"
+    firstThreeWords: "Mystery"
+  - id: curiosity-open-loop
+    name: "The Open Loop"
+    template: "What happens next will [emotion]"
+    example: "What happens next changes everything."
+    emotionalTrigger: curiosity
+    bestFor: "When brief has a dramatic sequence of events"
+    firstThreeWords: "Mystery"
+  - id: curiosity-single-secret
+    name: "The Single Secret"
+    template: "The one thing [authority] won't tell you"
+    example: "The one thing your insurance company won't tell you."
+    emotionalTrigger: curiosity
+    bestFor: "When brief reveals hidden information"
+    firstThreeWords: "Mystery"
+
+  # LOSS AVERSION / FOMO
+  - id: loss-direct-callout
+    name: "The Direct Callout"
+    template: "You're doing [X] wrong"
+    example: "You're reading nutrition labels wrong."
+    emotionalTrigger: loss-aversion
+    bestFor: "When brief debunks a common practice"
+    firstThreeWords: "Warning"
+  - id: loss-stop-command
+    name: "The Stop Command"
+    template: "Stop doing [X] immediately"
+    example: "Stop taking this supplement without knowing this."
+    emotionalTrigger: loss-aversion
+    bestFor: "When brief warns against a dangerous habit"
+    firstThreeWords: "Command"
+  - id: loss-visceral-warning
+    name: "The Visceral Warning"
+    template: "Most [things] fail because [reason]"
+    example: "Most diets fail because of this one mistake."
+    emotionalTrigger: loss-aversion
+    bestFor: "When brief explains why something commonly fails"
+    firstThreeWords: "Warning"
+
+  # SURPRISE / CONTRARIAN
+  - id: surprise-belief-challenge
+    name: "The Belief Challenge"
+    template: "[Common belief] is wrong"
+    example: "Breakfast isn't the most important meal."
+    emotionalTrigger: surprise
+    bestFor: "When brief contradicts conventional wisdom"
+    firstThreeWords: "Contrarian"
+  - id: surprise-myth-buster
+    name: "The Myth Buster"
+    template: "Myth: [X]. Truth: [Y]"
+    example: "Myth: 8 glasses of water a day. Truth: Your body tells you."
+    emotionalTrigger: surprise
+    bestFor: "When brief debunks a specific myth"
+    firstThreeWords: "Myth"
+  - id: surprise-unpopular-opinion
+    name: "The Unpopular Opinion"
+    template: "Hot take: [contrarian claim]"
+    example: "Hot take: your morning routine is making you tired."
+    emotionalTrigger: surprise
+    bestFor: "When brief supports a contrarian position"
+    firstThreeWords: "Contrarian"
+
+  # DATA / NUMBERS
+  - id: data-stat-contrast
+    name: "The Stat Contrast"
+    template: "[High %] fail. Here's why [low %] don't."
+    example: "87% of patients never get this diagnosis. Here's why."
+    emotionalTrigger: data
+    bestFor: "When brief has contrasting statistics"
+    firstThreeWords: "Number"
+  - id: data-before-after
+    name: "The Before/After"
+    template: "[Number] changes that [result]"
+    example: "3 changes that cut my risk in half."
+    emotionalTrigger: data
+    bestFor: "When brief has measurable outcomes"
+    firstThreeWords: "Number"
+  - id: data-research-frame
+    name: "The Research Frame"
+    template: "I analyzed [X]. Here's what [Y] reveals."
+    example: "I analyzed 100 studies. Here's what the data reveals."
+    emotionalTrigger: data
+    bestFor: "When brief is based on research or analysis"
+    firstThreeWords: "Number"
+
+  # EMPATHY / STORY
+  - id: empathy-mid-crisis
+    name: "In Medias Res"
+    template: "I [dramatic event]... here's what happened"
+    example: "I collapsed at work... here's what my doctor found."
+    emotionalTrigger: empathy
+    bestFor: "When brief has a personal story or case study"
+    firstThreeWords: "Personal"
+  - id: empathy-hindsight
+    name: "The Hindsight Lesson"
+    template: "[Time] ago I [struggle]. Here's what I wish I knew."
+    example: "Six months ago I almost quit. Here's what changed."
+    emotionalTrigger: empathy
+    bestFor: "When brief has a transformation or learning arc"
+    firstThreeWords: "Personal"
+
+  # PROMISE / OUTCOME
+  - id: promise-outcome-first
+    name: "Outcome-First"
+    template: "How I [achieved result] in [timeframe]"
+    example: "How I reversed my pre-diabetes in 90 days."
+    emotionalTrigger: promise
+    bestFor: "When brief has a clear positive outcome"
+    firstThreeWords: "Promise"
+  - id: promise-objection-handling
+    name: "Objection-Handling"
+    template: "How to [X] (even if you [objection])"
+    example: "How to sleep 8 hours (even if you're busy)."
+    emotionalTrigger: promise
+    bestFor: "When brief addresses a common barrier"
+    firstThreeWords: "Promise"
+
+rules:
+  - "MUST hook the reader in the first 3 words"
+  - "Choose ONE pattern from the headline patterns above. Match the pattern to the content type."
+  - "Max 5-7 words preferred. Fragments preferred. Active voice."
+  - "NEVER start with the same word as the previous carousel cover"
+  - "The first 3 words must create a pattern interrupt before the reader's thumb continues scrolling"
+
+powerWords:
+  - secret
+  - hidden
+  - never
+  - stop
+  - truth
+  - reveal
+  - shocking
+  - surprising
+  - little-known
+  - overlooked
+  - powerful
+  - devastating
+  - breaking
+  - exclusive
+  - confirmed
+
+hasHeadline: true

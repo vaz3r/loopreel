@@ -1,0 +1,16 @@
+# The Globalist - inherits 8 shared + adds 4 cross-shared types
+inherits:
+  - cover
+  - cta
+  - sequence
+  - telemetry
+  - myth-fact
+  - quote
+  - timeline
+  - image-split
+  - interview
+  - quadrant
+  - case-study
+  - resource-grid
+
+types: {}

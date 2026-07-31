@@ -30,6 +30,10 @@ Use these power words in headlines: {{domainPowerWords}}
 
 {{{slideTypeRules}}}
 
+## HEADLINE PATTERNS (use these to craft compelling headlines)
+
+{{{headlinePatterns}}}
+
 ## OUTPUT FORMAT
 
 Return a single <presentation> element containing all slides.
@@ -42,6 +46,10 @@ For arrays (stats, items), use nested child elements:
     <item num="1" title="Edge AI" desc="Processing moves to devices" />
   </items>
 </slide>
+
+## FIELD CHARACTER LIMITS (CRITICAL — violating these causes schema validation failures)
+
+{{{fieldLimits}}}
 
 ## ANTI-HALLUCINATION RULES (CRITICAL)
 
@@ -74,7 +82,7 @@ For arrays (stats, items), use nested child elements:
   <rule>Headlines MUST be a CLAIM, QUESTION, COMMAND, or PATTERN-INTERRUPT — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
   <rule>Max 7 words. Fragments preferred. Active voice. Use contractions when natural.</rule>
   <rule>Vary emotional angles across slides. Available angles: curiosity, urgency, fear, surprise, empathy, concern, challenge. Each angle at most once per carousel.</rule>
-  <rule>Use power words sparingly. Generic: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Revealed, Unexpected, Critical, Essential, Rare, Pivotal. Domain-specific: {{domainPowerWords}}. Combined budget: each power word (generic OR domain) may appear at most ONCE per carousel.</rule>
+  <rule>Use power words sparingly. Combined budget: each power word may appear at most ONCE per carousel.</rule>
   <rule>The few-shot example demonstrates STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content — do NOT replicate the few-shot's headlines, tags, or CTAs.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
 </headlineRules>

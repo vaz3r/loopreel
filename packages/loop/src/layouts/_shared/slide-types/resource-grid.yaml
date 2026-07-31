@@ -1,0 +1,65 @@
+id: resource-grid
+name: Resource Grid Slide
+description: "Provide multiple resources, references, or tools."
+category: interactive
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the resources"
+    example: "5 Resources for Better Sleep"
+  - name: items
+    type: array
+    required: true
+    description: "Array of resource items"
+  - name: items[].title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Resource title"
+    example: "Sleep Tracker App"
+  - name: items[].desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Resource description"
+    example: "Tracks sleep patterns and provides personalized recommendations."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "RESOURCES"
+
+headlinePatterns:
+  - id: rg-number
+    name: "Number Resources"
+    template: "[Number] Resources for [Outcome]"
+    example: "5 Resources for Better Sleep"
+    emotionalTrigger: promise
+    bestFor: "When brief has multiple actionable resources"
+  - id: rg-save-this
+    name: "Save This"
+    template: "Save this: [What's inside]"
+    example: "Save this: 7 tools for remote work productivity"
+    emotionalTrigger: promise
+    bestFor: "When resources are highly actionable"
+
+rules:
+  - "MUST provide multiple resources or references"
+  - "Each resource should be actionable or informative"
+  - "Order by importance or relevance"
+  - "VARY your pattern."
+
+powerWords:
+  - resources
+  - tools
+  - guide
+  - checklist
+  - template
+  - free
+
+hasHeadline: true
+hasItems: true

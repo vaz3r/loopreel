@@ -1,0 +1,78 @@
+id: timeline
+name: Timeline Slide
+description: "Show progression or sequence of events with time markers."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the timeline"
+    example: "From Outbreak to Recall: The 72-Hour Timeline"
+  - name: items
+    type: array
+    required: true
+    description: "Array of timeline events"
+    notes: "3-5 items recommended"
+  - name: items[].num
+    type: string
+    required: true
+    maxLength: 4
+    description: "Sequence number or time marker"
+    example: "1"
+  - name: items[].title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Event title or time period"
+    example: "Day 1: First Cases Reported"
+  - name: items[].desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Description of this event"
+    example: "CDC receives initial reports of illness in 3 states."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "TIMELINE"
+
+headlinePatterns:
+  - id: tl-period-change
+    name: "Period + Change"
+    template: "[Time period]. [What changed]."
+    example: "72 Hours. Everything Changed."
+    emotionalTrigger: curiosity
+    bestFor: "When events have clear time boundaries"
+  - id: tl-from-to
+    name: "From X to Y"
+    template: "From [X] to [Y]"
+    example: "From First Case to Full Recall"
+    emotionalTrigger: curiosity
+    bestFor: "When brief shows a transformation"
+  - id: tl-turning-point
+    name: "Turning Point"
+    template: "[Timeframe]: [Turning point]"
+    example: "Day 3: The Moment Everything Shifted"
+    emotionalTrigger: surprise
+    bestFor: "When one event changed the trajectory"
+
+rules:
+  - "MUST show progression or sequence of events"
+  - "Use time markers (dates, hours, phases) to anchor the sequence"
+  - "Each event should build on the previous one"
+  - "VARY your pattern."
+
+powerWords:
+  - timeline
+  - unfolding
+  - developed
+  - escalated
+  - shifted
+  - turned
+
+hasHeadline: true
+hasItems: true

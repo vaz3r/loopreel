@@ -1,5 +1,5 @@
 <domain id="politics" name="Politics and Policy">
-  <description>Elections, governance, policy analysis, advocacy, social issues, reform</description>
+  <description>Elections, governance, policy analysis, advocacy, social issues, reform, Congress, Senate, President, voting, campaigns, legislation, partisan, bipartisan, Democratic, Republican, White House, Capitol</description>
   <powerWords>secret, hidden, wrong, broken, never, stop, truth, reverse, shocking, nobody tells you this, lie, cover</powerWords>
   <fewShotId>politics</fewShotId>
   <principles>

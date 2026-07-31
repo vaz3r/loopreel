@@ -1,8 +1,13 @@
 import type { LLMClient } from '../client.js';
 import type { PhaseUsage } from './types.js';
 
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export const RETRY_BUDGETS: Record<string, number> = {
   extraction: 1,
+  classification: 1,
   planning: 1,
   generation: 1,
   labelDetection: 2,
@@ -22,6 +27,9 @@ export function createUsageTracker() {
       userText: string,
       temperature?: number,
     ): Promise<string> {
+      // Small delay between calls to avoid hitting rate limits
+      await delay(100);
+      
       const start = Date.now();
       const response = await llm.generateJSON(systemPrompt, userText, temperature);
       const latencyMs = Date.now() - start;

@@ -1,5 +1,5 @@
 <domain id="entertainment" name="Entertainment">
-  <description>Movies, music, TV, celebrities, pop culture, gaming</description>
+  <description>Movies, music, TV shows, celebrities, pop culture, gaming, streaming, awards, box office, celebrity news, social media trends, Netflix, Spotify, Taylor Swift, Marvel, Oscar, Grammy, album, film, series</description>
   <powerWords>secret, hidden, never, stop, truth, reveal, shocking, exclusive, behind-the-scenes, untold, forbidden, viral</powerWords>
   <fewShotId>entertainment</fewShotId>
   <principles>

@@ -1,0 +1,87 @@
+id: telemetry
+name: Telemetry Slide
+description: "Present hard data with multiple stats. Must include at least one number in the headline."
+category: data
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Data-driven headline with at least one number from the stats"
+    example: "6.8 Mag. 13 Lives. Zero Warning."
+    notes: "Must reference specific data from the stats array"
+  - name: stats
+    type: array
+    required: true
+    description: "Array of stat objects"
+    notes: "3-5 stats recommended"
+  - name: stats[].value
+    type: string
+    required: true
+    maxLength: 20
+    description: "The numeric value"
+    example: "1,644"
+  - name: stats[].unit
+    type: string
+    required: false
+    maxLength: 10
+    description: "Unit of measurement"
+    example: "cases"
+  - name: stats[].label
+    type: string
+    required: true
+    maxLength: 120
+    description: "What this stat represents"
+    example: "Total reported cases"
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "SHOCKING DATA"
+
+headlinePatterns:
+  - id: data-contrast
+    name: "Dual Data Contrast"
+    template: "[Number] [Unit]. [Number] [Unit]."
+    example: "6.8 Mag. 13 Lives. Zero Warning."
+    emotionalTrigger: data
+    bestFor: "When brief has contrasting data points"
+  - id: data-impact
+    name: "Number + Impact"
+    template: "[Number] [Unit]. [What it means for you]."
+    example: "94 hospitalized. Your local store is affected."
+    emotionalTrigger: data
+    bestFor: "When stats have personal relevance"
+  - id: data-noun
+    name: "The Noun Reveal"
+    template: "The [Noun]: [Number]"
+    example: "The human cost: 13 lives lost."
+    emotionalTrigger: data
+    bestFor: "When one stat is the headline story"
+  - id: data-contrast-unexpected
+    name: "Number + Unexpected"
+    template: "[Number] [Unit] — and [something unexpected]"
+    example: "1,644 cases — and the source is still unknown."
+    emotionalTrigger: surprise
+    bestFor: "When brief has a surprising data twist"
+
+rules:
+  - "MUST include at least one number from the stats in the headline"
+  - "VARY your pattern. Do NOT copy the few-shot telemetry headline."
+  - "Stats should tell a story, not just list numbers. Order by importance."
+  - "Use the stat pattern that best fits the data shape."
+
+powerWords:
+  - data
+  - proven
+  - exact
+  - tested
+  - revealed
+  - confirmed
+  - recorded
+  - measured
+
+hasHeadline: true
+hasStats: true

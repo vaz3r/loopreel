@@ -1,5 +1,5 @@
 <domain id="finance" name="Finance and Business">
-  <description>Markets, investing, economics, personal finance, business news</description>
+  <description>Markets, investing, economics, personal finance, business news, stocks, crypto, Bitcoin, S&P 500, Dow Jones, Federal Reserve, interest rates, inflation, GDP, retirement, 401k, portfolio, Wall Street, hedge fund, IPO, merger, acquisition</description>
   <powerWords>profit, loss, crash, surge, wealth, risk, opportunity, hidden, revealed, data, returns, growth, collapse</powerWords>
   <fewShotId>finance</fewShotId>
   <principles>

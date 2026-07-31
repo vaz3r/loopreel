@@ -1,5 +1,5 @@
 <domain id="legal" name="Legal">
-  <description>Law, justice, regulations, rights, lawsuits, legal analysis</description>
+  <description>Law, justice, regulations, rights, lawsuits, legal analysis, court, judge, attorney, trial, verdict, Supreme Court, Constitution, indictment, conviction, sentencing, plaintiff, defendant</description>
   <powerWords>secret, hidden, wrong, broken, never, stop, truth, justice, rigged, corrupt, reveal, cover-up</powerWords>
   <fewShotId>news</fewShotId>
   <principles>

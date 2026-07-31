@@ -1,5 +1,5 @@
 <domain id="news" name="News and Current Events">
-  <description>Breaking news, disasters, politics, world events, investigations, human interest</description>
+  <description>Breaking news, disasters, accidents, crime, investigations, human interest stories, local news, national news, international events, weather</description>
   <powerWords>breaking, shocking, urgent, hidden, revealed, crisis, exclusive, devastating, confirmed, alarming, unexpected, critical, essential, rare, unprecedented, pivotal, alarming</powerWords>
   <fewShotId>news</fewShotId>
   <principles>

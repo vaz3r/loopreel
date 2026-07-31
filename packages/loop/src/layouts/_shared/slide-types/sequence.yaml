@@ -1,0 +1,84 @@
+id: sequence
+name: Sequence Slide
+description: "Tell a story or show progression through numbered steps or timeline."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the sequence"
+    example: "What Happened in the First 24 Hours"
+  - name: items
+    type: array
+    required: true
+    description: "Array of sequence items"
+    notes: "3-5 items recommended"
+  - name: items[].num
+    type: string
+    required: true
+    maxLength: 4
+    description: "Sequence number"
+    example: "1"
+  - name: items[].title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Step or event title"
+    example: "Initial Identification"
+  - name: items[].desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Description of this step"
+    example: "CDC traced illness to specific lettuce from a farm."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "TIMELINE"
+
+headlinePatterns:
+  - id: seq-timeframe
+    name: "Timeframe Reveal"
+    template: "[Timeframe]: What Changed"
+    example: "First 24 Hours: What We Know Now"
+    emotionalTrigger: curiosity
+    bestFor: "When events have clear time markers"
+  - id: seq-know-dont-know
+    name: "Know vs Don't Know"
+    template: "What We Know (and What We Don't)"
+    example: "What We Know About the Outbreak (and What We Don't)"
+    emotionalTrigger: curiosity
+    bestFor: "When brief has partial information"
+  - id: seq-number-things
+    name: "Number Things"
+    template: "[Number] Things That Happened"
+    example: "5 Things That Changed While You Slept"
+    emotionalTrigger: data
+    bestFor: "When brief has multiple distinct events"
+  - id: seq-from-to
+    name: "From X to Y"
+    template: "From [X] to [Y]: The Timeline"
+    example: "From Farm to Table: How Contamination Spread"
+    emotionalTrigger: curiosity
+    bestFor: "When brief shows a transformation or journey"
+
+rules:
+  - "MUST tell a story or reveal progression"
+  - "Order items by logical sequence (time, importance, or cause-effect)"
+  - "Each item should be self-contained but build on the previous"
+  - "VARY your pattern. Make the headline specific to the content."
+
+powerWords:
+  - timeline
+  - sequence
+  - progression
+  - revealed
+  - unfolded
+  - developed
+
+hasHeadline: true
+hasItems: true

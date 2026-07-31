@@ -1,0 +1,74 @@
+id: myth-fact
+name: Myth-Fact Slide
+description: "Contrast a common myth with the factual truth. Check brief's counterpoint section."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the myth vs fact"
+    example: "Is Your Salad Still Safe?"
+  - name: myth
+    type: string
+    required: true
+    maxLength: 300
+    description: "The common misconception or assumption"
+    example: "All lettuce is contaminated by this supply chain issue."
+  - name: fact
+    type: string
+    required: true
+    maxLength: 300
+    description: "The factual truth that corrects the myth"
+    example: "Grocery stores and other restaurants are not affected."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "CLARIFYING THE RISK"
+
+headlinePatterns:
+  - id: mf-belief-evidence
+    name: "Belief vs Evidence"
+    template: "[Common belief]. [What evidence shows]."
+    example: "All lettuce is dangerous. The evidence says otherwise."
+    emotionalTrigger: surprise
+    bestFor: "When brief has clear evidence contradicting a belief"
+  - id: mf-myth-truth
+    name: "Myth vs Truth"
+    template: "[Myth]. [Truth]."
+    example: "Myth: You need expensive equipment. Truth: Your body weight is enough."
+    emotionalTrigger: surprise
+    bestFor: "When myth and truth are clearly defined"
+  - id: mf-assumption-reality
+    name: "Assumption vs Reality"
+    template: "The [assumption] everyone made — Except [reality]"
+    example: "The assumption everyone made — Except the data says different."
+    emotionalTrigger: surprise
+    bestFor: "When brief shows a widespread assumption"
+  - id: mf-fact-not-myth
+    name: "Fact, Not Myth"
+    template: "[Fact]. Not [myth]."
+    example: "This outbreak is contained. Not widespread."
+    emotionalTrigger: surprise
+    bestFor: "When fact is stronger than myth framing"
+
+rules:
+  - "MUST contrast myth vs fact — check brief's counterpoint section"
+  - "Frame myths as assumptions, not lies. People believe them for a reason."
+  - "Fact should be specific and evidence-based, not vague reassurance."
+  - "VARY your pattern. Make the contrast feel fresh."
+
+powerWords:
+  - truth
+  - myth
+  - fact
+  - reality
+  - actually
+  - truth
+  - revealed
+  - confirmed
+
+hasHeadline: true

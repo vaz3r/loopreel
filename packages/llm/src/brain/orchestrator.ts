@@ -5,31 +5,7 @@ import { getDomainFewShot } from './few-shot.js';
 import { loadAllDomains, classifyDomainPrompt, parseDomainClassification } from './domain-classification.js';
 import { stripFences, unwrapChildWrappers, createFallbackSlide, xmlToObjects, objectToXml } from './xml-helpers.js';
 import { renderPrompt } from './prompts/loader.js';
-
-const SLIDE_TYPE_RULES = [
-  { type: 'cover', rule: '- MUST hook the reader in the first 3 words\n- Choose ONE of these approaches (do NOT default to the same one every time):\n- APPROACH A: Lead with the most shocking number or fact from the brief\n- APPROACH B: Ask a question the reader is already thinking\n- APPROACH C: Lead with the human impact — who is affected, what they lost\n- APPROACH D: Lead with the unexpected — what nobody anticipated\n- NEVER start with the same word as the previous carousel cover. NEVER use "13" as the first word more than once per batch.' },
-  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- PATTERN A: "[Number] [Unit]. [Number] [Unit]." — two data points contrasted\n- PATTERN B: "[Number] [Unit]. [What it means for you]."\n- PATTERN C: "The [Noun]: [Number]."\n- PATTERN D: "[Number] [Unit] — and [something unexpected]."\n- VARY your pattern. Do NOT copy the few-shot telemetry headline.' },
-  { type: 'sequence', rule: '- MUST tell a story or reveal progression\n- PATTERN A: "[Timeframe]: What Changed"\n- PATTERN B: "What We Know (and What We Don\'t)"\n- PATTERN C: "[Number] Things That Happened While You Slept"\n- PATTERN D: "From [X] to [Y]: The Timeline"\n- VARY your pattern. Make the headline specific to the content, not generic.' },
-  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- PATTERN A: "[Common belief]. [What evidence shows]."\n- PATTERN B: "[Myth]. [Truth]."\n- PATTERN C: "The [assumption] everyone made — Except [reality]"\n- PATTERN D: "[Fact]. Not [myth]."\n- VARY your pattern. Frame myths as assumptions, not lies.' },
-  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- PATTERN A: [Evocative tagline]\n- PATTERN B: [What They Said]\n- PATTERN C: [Person]: [Key phrase from quote]\n- VARY your pattern.' },
-  { type: 'cta', rule: '- MUST connect the content to the reader\'s life\n- PATTERN A: "[Question that makes it personal]."\n- PATTERN B: "[Action they can take]. [Why it matters]."\n- PATTERN C: "[What\'s at stake if they ignore this]."\n- PATTERN D: "[Number] reasons to [take action]"\n- VARY your pattern. Make it about THEM, not about following you.' },
-  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- PATTERN A: "[Time period]. [What changed]."\n- PATTERN B: "From [X] to [Y]"\n- PATTERN C: "[Timeframe]: [Turning point]"\n- VARY your pattern.' },
-  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- PATTERN A: "What [Data] Actually Means"\n- PATTERN B: "[Data]. Here\'s Why It Matters."\n- PATTERN C: "The [Noun] Behind [Data]"\n- VARY your pattern.' },
-  { type: 'definition', rule: '- MUST explain a concept clearly\n- PATTERN A: "[Concept]: [Plain English explanation]"\n- PATTERN B: "What [Concept] Really Means for You"\n- VARY your pattern.' },
-  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- left and right MUST be objects with {title, desc} — NOT strings\n- PATTERN A: "[X] vs [Y]. [Stakes]."\n- PATTERN B: "[X] or [Y]. [Consequence]."\n- VARY your pattern.' },
-  { type: 'table', rule: '- MUST compare data across categories\n- PATTERN A: "[Comparison]: [Winner/Loser]"\n- PATTERN B: "[Topic]: The Numbers Tell a Different Story"\n- VARY your pattern.' },
-  { type: 'profile', rule: '- MUST humanize a person or entity\n- PATTERN A: "[Person]. [What They Did]."\n- PATTERN B: "[Person]: [Their Quote]"\n- VARY your pattern.' },
-  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- PATTERN A: "[Left Side] vs [Right Side]"\n- VARY your pattern.' },
-  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- PATTERN A: "[Topic]: [Number] Parts"\n- PATTERN B: "Breaking Down [Topic]"\n- VARY your pattern.' },
-  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- PATTERN A: "[Thing A]. [Thing B]. [Insight]."\n- VARY your pattern.' },
-  { type: 'methodology', rule: '- MUST explain a process or approach\n- PATTERN A: "How [Entity] [Did X]"\n- VARY your pattern.' },
-  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- PATTERN A: "[Number]. [Context]."\n- PATTERN B: "The Number That Changes Everything: [Number]"\n- VARY your pattern.' },
-  { type: 'checklist', rule: '- MUST provide actionable steps\n- PATTERN A: "[Number] Steps to [Outcome]"\n- PATTERN B: "What to Do Right Now"\n- VARY your pattern.' },
-  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- PATTERN A: "[Category]: [Key Insight]"\n- VARY your pattern.' },
-  { type: 'case-study', rule: '- MUST tell a story with outcome\n- PATTERN A: "[Entity] Tried [X]. What Happened."\n- VARY your pattern.' },
-  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- PATTERN A: "[Number] Resources for [Outcome]"\n- VARY your pattern.' },
-  { type: 'interview', rule: '- MUST feature Q&A format\n- PATTERN A: "Q: [Question]" / "A: [Key Answer]"\n- VARY your pattern.' },
-];
+import { buildSlideTypeRules, buildFieldLimitsSection, buildHeadlinePatterns, getAllPowerWords } from './slide-type-loader.js';
 
 function buildSlidePlanPrompt(
   briefXml: string,
@@ -80,10 +56,11 @@ function buildGeneratePrompt(
     })
     .join('\n');
 
-  const slideTypeRules = SLIDE_TYPE_RULES
-    .filter(rule => selectedTypes.has(rule.type))
-    .map(rule => `### ${rule.type.charAt(0).toUpperCase() + rule.type.slice(1)}\n${rule.rule}`)
-    .join('\n\n');
+  // Load slide type rules, field limits, headline patterns from YAML configs
+  const slideTypeRules = buildSlideTypeRules(selectedTypes, selectedTemplate.id);
+  const fieldLimits = buildFieldLimitsSection(selectedTemplate.id);
+  const headlinePatterns = buildHeadlinePatterns(selectedTypes, selectedTemplate.id);
+  const templatePowerWords = getAllPowerWords(selectedTypes, selectedTemplate.id);
 
   let domainPrinciples = '';
   let domainName = '';
@@ -94,6 +71,9 @@ function buildGeneratePrompt(
     domainPowerWords = domainExamples.powerWords.join(', ');
   }
 
+  // Merge domain + template power words for the prompt
+  const allPowerWords = [...new Set([...templatePowerWords, ...domainPowerWords.split(', ').filter(Boolean)])].join(', ');
+
   const system = renderPrompt('content-generation', {
     templateName: selectedTemplate.name,
     templateAesthetics: selectedTemplate.aesthetics,
@@ -102,9 +82,11 @@ function buildGeneratePrompt(
     briefXml,
     filteredSchema,
     slideTypeRules,
+    fieldLimits,
+    headlinePatterns,
     domainPrinciples,
     domainName,
-    domainPowerWords,
+    domainPowerWords: allPowerWords,
   });
 
   return { system, user: 'Generate all slides for this carousel.' };
@@ -244,7 +226,7 @@ export async function generateSlides(
               const raw = await usageTracker.callLLM(llm, 'classification', domainSystem, domainUser, 0.3);
               return stripFences(raw);
             },
-            'extraction',
+            'classification',
             retriesUsed,
           );
           const domainXml = domainRaw;

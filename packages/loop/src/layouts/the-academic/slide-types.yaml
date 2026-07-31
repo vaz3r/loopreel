@@ -1,0 +1,331 @@
+# The Academic - inherits 8 shared + 4 cross-shared + 5 unique types
+# Same slide types as The Curator with academic tone
+inherits:
+  - cover
+  - cta
+  - sequence
+  - telemetry
+  - myth-fact
+  - quote
+  - timeline
+  - image-split
+  - interview
+  - quadrant
+  - case-study
+  - resource-grid
+
+types:
+  hero-metric:
+    name: Hero Metric Slide
+    description: "Highlight a single key number with academic rigor"
+    category: data
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the metric"
+        example: "The Key Finding"
+      - name: metric
+        type: object
+        required: true
+        description: "The hero metric"
+      - name: metric.value
+        type: string
+        required: true
+        maxLength: 20
+        description: "The number"
+        example: "42%"
+      - name: metric.label
+        type: string
+        required: true
+        maxLength: 120
+        description: "What the number represents"
+        example: "Reduction in hospital readmissions"
+      - name: context
+        type: string
+        required: false
+        maxLength: 200
+        description: "Why this number matters"
+        example: "This finding suggests a significant improvement in patient outcomes."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "KEY FINDING"
+    headlinePatterns:
+      - id: hm-finding
+        name: "The Finding"
+        template: "The [Finding]: [Number]"
+        example: "The Key Finding: 42% Improvement"
+        emotionalTrigger: data
+        bestFor: "When one number is the story"
+      - id: hm-implication
+        name: "The Implication"
+        template: "[Number]. [What it means]."
+        example: "42%. What this means for patient care."
+        emotionalTrigger: curiosity
+        bestFor: "When number has practical implications"
+    rules:
+      - "MUST highlight a single key number"
+      - "The number must come from the brief or cited research"
+      - "Context should explain implications, not just describe"
+      - "VARY your pattern."
+    powerWords:
+      - finding
+      - data
+      - revealed
+      - demonstrated
+      - significant
+    hasHeadline: true
+
+  methodology:
+    name: Methodology Slide
+    description: "Explain research methodology or analytical approach"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the methodology"
+        example: "How This Study Was Conducted"
+      - name: steps
+        type: array
+        required: true
+        description: "Array of methodology steps"
+      - name: steps[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Step title"
+        example: "Study Design"
+      - name: steps[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Step description"
+        example: "Double-blind randomized controlled trial with 500 participants."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "METHODOLOGY"
+    headlinePatterns:
+      - id: meth-how-conducted
+        name: "How Conducted"
+        template: "How [This Study/Research] Was [Conducted/Done]"
+        example: "How This Study Was Conducted"
+        emotionalTrigger: curiosity
+        bestFor: "When methodology is the story"
+      - id: meth-approach
+        name: "The Approach"
+        template: "The [Approach] Behind [Discovery]"
+        example: "The Research Behind the Discovery"
+        emotionalTrigger: curiosity
+        bestFor: "When approach explains findings"
+    rules:
+      - "MUST explain research methodology or approach"
+      - "Steps should be from the brief or standard research practice"
+      - "Use academic language appropriate for the domain"
+      - "VARY your pattern."
+    powerWords:
+      - methodology
+      - approach
+      - conducted
+      - designed
+      - analyzed
+    hasHeadline: true
+    hasItems: true
+
+  juxtaposition:
+    name: Juxtaposition Slide
+    description: "Contrast two related concepts to reveal insight"
+    category: visual
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the juxtaposition"
+        example: "Theory vs Practice"
+      - name: left
+        type: object
+        required: true
+        description: "Left side"
+      - name: left.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Left title"
+        example: "Theoretical Model"
+      - name: left.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Left description"
+        example: "Predicts a 30% improvement under ideal conditions."
+      - name: right
+        type: object
+        required: true
+        description: "Right side"
+      - name: right.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Right title"
+        example: "Real-World Results"
+      - name: right.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Right description"
+        example: "Actual improvement of 18% in clinical settings."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "COMPARISON"
+    headlinePatterns:
+      - id: jux-theory-practice
+        name: "Theory vs Practice"
+        template: "[Concept A] vs [Concept B]. [Insight]."
+        example: "Theory vs Practice. The gap tells the story."
+        emotionalTrigger: surprise
+        bestFor: "When two perspectives reveal a gap"
+    rules:
+      - "MUST contrast two related concepts"
+      - "left and right MUST be objects with {title, desc}"
+      - "The contrast should reveal a meaningful insight"
+      - "VARY your pattern."
+    powerWords:
+      - vs
+      - contrast
+      - theory
+      - practice
+      - reality
+    hasHeadline: true
+    hasLeftRight: true
+
+  checklist:
+    name: Checklist Slide
+    description: "Provide evidence-based recommendations or criteria"
+    category: interactive
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the checklist"
+        example: "Criteria for Evaluation"
+      - name: items
+        type: array
+        required: true
+        description: "Array of checklist items"
+      - name: items[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Checklist item"
+        example: "Sample Size"
+      - name: items[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Item description"
+        example: "Minimum of 100 participants for statistical significance."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "EVALUATION CRITERIA"
+    headlinePatterns:
+      - id: cl-criteria
+        name: "Criteria"
+        template: "[Number] Criteria for [Evaluation]"
+        example: "5 Criteria for Evaluating Research Quality"
+        emotionalTrigger: curiosity
+        bestFor: "When evaluation criteria are important"
+      - id: cl-what-to-look
+        name: "What to Look For"
+        template: "What to Look for in [Topic]"
+        example: "What to Look for in Clinical Trials"
+        emotionalTrigger: curiosity
+        bestFor: "When guidance is needed"
+    rules:
+      - "MUST provide evidence-based recommendations"
+      - "Each criterion should be specific and measurable"
+      - "Order by importance or priority"
+      - "VARY your pattern."
+    powerWords:
+      - criteria
+      - evaluation
+      - evidence-based
+      - recommended
+      - standards
+    hasHeadline: true
+    hasItems: true
+
+  breakdown:
+    name: Breakdown Slide
+    description: "Decompose complex research or findings into parts"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the breakdown"
+        example: "Breaking Down the Findings"
+      - name: parts
+        type: array
+        required: true
+        description: "Array of breakdown parts"
+      - name: parts[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Part title"
+        example: "Finding 1: Efficacy"
+      - name: parts[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Part description"
+        example: "The intervention showed a 42% improvement in outcomes."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "FINDINGS BREAKDOWN"
+    headlinePatterns:
+      - id: bd-findings
+        name: "Findings Breakdown"
+        template: "[Topic]: [Number] Key Findings"
+        example: "Study Results: 3 Key Findings"
+        emotionalTrigger: curiosity
+        bestFor: "When findings have clear components"
+      - id: bd-breaking-down
+        name: "Breaking Down"
+        template: "Breaking Down [Topic]"
+        example: "Breaking Down the Clinical Trial Results"
+        emotionalTrigger: curiosity
+        bestFor: "When topic needs decomposition"
+    rules:
+      - "MUST decompose complex findings"
+      - "Each part should be based on the brief or cited research"
+      - "Use precise academic language"
+      - "VARY your pattern."
+    powerWords:
+      - findings
+      - breakdown
+      - analysis
+      - components
+      - results
+    hasHeadline: true
+    hasItems: true

@@ -1,5 +1,5 @@
 <domain id="sports" name="Sports">
-  <description>Professional sports, athletes, teams, competitions, analysis</description>
+  <description>Professional sports, athletes, teams, competitions, analysis, NFL, NBA, MLB, NHL, soccer, football, basketball, baseball, Olympics, championship, tournament, draft, trade, player, coach</description>
   <powerWords>legacy, goat, dynasty, clutch, choke, revenge, redemption, record, shattered, dynasty, dynasty, unstoppable</powerWords>
   <fewShotId>sports</fewShotId>
   <principles>

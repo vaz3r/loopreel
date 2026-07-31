@@ -1,0 +1,63 @@
+id: interview
+name: Interview Slide
+description: "Q&A format featuring direct questions and answers."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the interview"
+    example: "What the CEO Said About the Crisis"
+  - name: qas
+    type: array
+    required: true
+    description: "Array of question-answer pairs"
+  - name: qas[].question
+    type: string
+    required: true
+    maxLength: 200
+    description: "The question asked"
+    example: "What went wrong?"
+  - name: qas[].answer
+    type: string
+    required: true
+    maxLength: 300
+    description: "The answer given"
+    example: "We identified a gap in our supply chain monitoring."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "INSIDER Q&A"
+
+headlinePatterns:
+  - id: int-person-key
+    name: "Person + Key Insight"
+    template: "[Person]: [Key phrase from answer]"
+    example: "CEO: 'We failed to act in time'"
+    emotionalTrigger: curiosity
+    bestFor: "When one answer is the headline story"
+  - id: int-qa-reveal
+    name: "Q&A Reveal"
+    template: "Q: [Question]"
+    example: "Q: What did you know and when?"
+    emotionalTrigger: curiosity
+    bestFor: "When the question itself is provocative"
+
+rules:
+  - "MUST feature Q&A format"
+  - "Use ONLY quotes from the brief's quotes section"
+  - "Keep questions and answers concise"
+  - "VARY your pattern."
+
+powerWords:
+  - revealed
+  - admitted
+  - confirmed
+  - disclosed
+  - stated
+
+hasHeadline: true

@@ -1,0 +1,81 @@
+id: cta
+name: CTA Slide
+description: "Call to action. Must connect the content to the reader's life. Make it about THEM."
+category: interactive
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 100
+    description: "Action-oriented headline"
+    example: "Know Someone in Kyushu?"
+  - name: subtext
+    type: string
+    required: false
+    maxLength: 300
+    description: "Supporting context for the action"
+    example: "Share this with anyone in the affected area."
+  - name: actionLabel
+    type: string
+    required: false
+    maxLength: 40
+    description: "Button or link text"
+    example: "Share now"
+  - name: socialHandle
+    type: string
+    required: false
+    maxLength: 40
+    description: "Social media handle"
+    example: "@PaperOfRecord"
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "YOUR NEXT STEP"
+
+headlinePatterns:
+  - id: cta-personal-question
+    name: "Personal Question"
+    template: "[Question that makes it personal]"
+    example: "Know someone in the affected area?"
+    emotionalTrigger: empathy
+    bestFor: "When content has geographic or demographic specificity"
+  - id: cta-action-why
+    name: "Action + Why"
+    template: "[Action they can take]. [Why it matters]."
+    example: "Check the CDC website. Your health depends on it."
+    emotionalTrigger: urgency
+    bestFor: "When there's a clear next step"
+  - id: cta-stakes
+    name: "The Stakes"
+    template: "[What's at stake if they ignore this]"
+    example: "Ignoring these symptoms could cost you weeks."
+    emotionalTrigger: loss-aversion
+    bestFor: "When inaction has consequences"
+  - id: cta-number-reasons
+    name: "Number Reasons"
+    template: "[Number] reasons to [take action]"
+    example: "3 reasons to check your local store today."
+    emotionalTrigger: data
+    bestFor: "When brief has multiple supporting points"
+
+rules:
+  - "MUST connect the content to the reader's life"
+  - "Make it about THEM, not about following you"
+  - "The action should be specific and doable right now"
+  - "VARY your pattern. Don't always ask for follows."
+
+powerWords:
+  - now
+  - today
+  - immediately
+  - save
+  - share
+  - act
+  - try
+  - check
+  - verify
+
+hasHeadline: true

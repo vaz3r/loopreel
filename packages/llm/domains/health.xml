@@ -1,5 +1,5 @@
 <domain id="health" name="Health and Wellness">
-  <description>Medicine, fitness, nutrition, mental health, public health, research</description>
+  <description>Medicine, fitness, nutrition, mental health, public health, medical research, disease outbreaks, healthcare policy, drugs, treatments, hospital, doctor, patient, symptoms, diagnosis, COVID, vaccine</description>
   <powerWords>secret, hidden, proven, breakthrough, risk, warning, truth, reveal, devastating, shocking, never, stop</powerWords>
   <fewShotId>health</fewShotId>
   <principles>

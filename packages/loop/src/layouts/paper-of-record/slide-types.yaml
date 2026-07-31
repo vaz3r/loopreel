@@ -1,0 +1,296 @@
+# Paper of Record - inherits 8 shared + adds 5 unique types
+inherits:
+  - cover
+  - cta
+  - sequence
+  - telemetry
+  - myth-fact
+  - quote
+  - timeline
+  - image-split
+
+types:
+  definition:
+    name: Definition Slide
+    description: "Explain a medical, scientific, or technical term"
+    category: narrative
+    fields:
+      - name: term
+        type: string
+        required: true
+        maxLength: 60
+        description: "The term being defined"
+        example: "Cyclosporiasis"
+      - name: phonetic
+        type: string
+        required: false
+        maxLength: 60
+        description: "Pronunciation guide"
+        example: "sigh-klo-spor-EYE-uh-sis"
+      - name: definition
+        type: string
+        required: true
+        maxLength: 600
+        description: "Clear plain-English explanation"
+        example: "An intestinal infection caused by the microscopic parasite Cyclospora cayetanensis."
+      - name: example
+        type: string
+        required: false
+        maxLength: 200
+        description: "Real-world example"
+        example: "Symptoms include watery diarrhea and fatigue."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "GLOSSARY"
+    headlinePatterns: []
+    rules:
+      - "Do NOT include a headline attribute on definition slides"
+      - "Use the `term` field for the concept name (REQUIRED)"
+      - "Use the `definition` field for the explanation (REQUIRED)"
+      - "`phonetic` is optional — include only if pronunciation is non-obvious"
+      - "`example` is optional — include a real-world scenario when helpful"
+    powerWords: []
+    hasHeadline: false
+
+  dichotomy:
+    name: Dichotomy Slide
+    description: "Contrast two opposing ideas or approaches"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the dichotomy"
+        example: "Rehabilitation vs. Punishment: Where Do You Stand?"
+      - name: left
+        type: object
+        required: true
+        description: "Left side with title and description"
+      - name: left.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Left side title"
+        example: "Rehabilitation"
+      - name: left.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Left side description"
+        example: "Focus on reform and reintegration into society."
+      - name: right
+        type: object
+        required: true
+        description: "Right side with title and description"
+      - name: right.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Right side title"
+        example: "Punishment"
+      - name: right.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Right side description"
+        example: "Focus on accountability and deterrence."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "THE DEBATE"
+    headlinePatterns:
+      - id: dich-vs
+        name: "X vs Y"
+        template: "[X] vs [Y]. [Stakes]."
+        example: "Rehabilitation vs Punishment. The choice defines us."
+        emotionalTrigger: surprise
+        bestFor: "When two clear opposites exist"
+      - id: dich-or
+        name: "X or Y"
+        template: "[X] or [Y]. [Consequence]."
+        example: "Reform or rot. Our prisons decide."
+        emotionalTrigger: urgency
+        bestFor: "When the choice has consequences"
+    rules:
+      - "left and right MUST be objects with {title, desc} — NOT strings"
+      - "Contrast should reveal insight, not just list differences"
+      - "Frame as a genuine tension, not a strawman"
+      - "VARY your pattern."
+    powerWords:
+      - debate
+      - tension
+      - contrast
+      - vs
+    hasHeadline: true
+    hasLeftRight: true
+
+  table:
+    name: Table Slide
+    description: "Compare data across categories in a structured format"
+    category: data
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the comparison"
+        example: "Sentencing by the Numbers"
+      - name: columns
+        type: array
+        required: true
+        description: "Column headers"
+      - name: rows
+        type: array
+        required: true
+        description: "Row data"
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "DATA TABLE"
+    headlinePatterns:
+      - id: tbl-comparison
+        name: "Comparison Label"
+        template: "[Comparison]: [Winner/Loser]"
+        example: "Sentencing: The Numbers Tell a Different Story"
+        emotionalTrigger: surprise
+        bestFor: "When data reveals unexpected patterns"
+      - id: tbl-numbers
+        name: "Numbers Tell"
+        template: "[Topic]: The Numbers Tell a Different Story"
+        example: "Juvenile Sentencing: The Numbers Tell a Different Story"
+        emotionalTrigger: data
+        bestFor: "When data contradicts assumptions"
+    rules:
+      - "MUST compare data across categories"
+      - "Use data from the brief only — no invented numbers"
+      - "Order rows by importance or impact"
+      - "VARY your pattern."
+    powerWords:
+      - data
+      - revealed
+      - compared
+      - analyzed
+    hasHeadline: true
+
+  analysis:
+    name: Analysis Slide
+    description: "Present insight or interpretation of data"
+    category: data
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the analysis"
+        example: "What the Data Actually Shows"
+      - name: insight
+        type: string
+        required: true
+        maxLength: 300
+        description: "The key insight or interpretation"
+        example: "Despite rising case counts, the infection rate is declining."
+      - name: evidence
+        type: string
+        required: false
+        maxLength: 300
+        description: "Supporting evidence or data"
+        example: "CDC data shows a 15% decrease in infection rate over the past month."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "ANALYSIS"
+    headlinePatterns:
+      - id: ana-what-data
+        name: "What Data Shows"
+        template: "What [Data] Actually Means"
+        example: "What the Outbreak Data Actually Means"
+        emotionalTrigger: curiosity
+        bestFor: "When data needs interpretation"
+      - id: ana-data-matters
+        name: "Data + Why It Matters"
+        template: "[Data]. Here's Why It Matters."
+        example: "Cases are dropping. Here's why it matters."
+        emotionalTrigger: curiosity
+        bestFor: "When insight has practical implications"
+    rules:
+      - "MUST present insight or interpretation of data"
+      - "Insight must come from the brief's data, not invented"
+      - "Evidence should support the insight directly"
+      - "VARY your pattern."
+    powerWords:
+      - insight
+      - revealed
+      - shows
+      - analysis
+      - data
+    hasHeadline: true
+
+  profile:
+    name: Profile Slide
+    description: "Humanize a person or entity mentioned in the content"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that introduces the person"
+        example: "The Senator Behind the Investigation"
+      - name: person
+        type: string
+        required: true
+        maxLength: 60
+        description: "Person's name"
+        example: "Rand Paul"
+      - name: role
+        type: string
+        required: false
+        maxLength: 100
+        description: "Person's role or title"
+        example: "Republican Senator and Committee Chair"
+      - name: keyFact
+        type: string
+        required: true
+        maxLength: 200
+        description: "Key fact about this person"
+        example: "Led the effort to release 1,100 pages of journal entries."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "PROFILE"
+    headlinePatterns:
+      - id: prof-person-role
+        name: "Person + Role"
+        template: "[Person]. [What They Did]."
+        example: "Rand Paul. The Man Behind the Subpoena."
+        emotionalTrigger: curiosity
+        bestFor: "When person is the story's driver"
+      - id: prof-person-action
+        name: "Person + Action"
+        template: "[Person]: [Key phrase from their role]"
+        example: "The Senator: 'We need answers'"
+        emotionalTrigger: curiosity
+        bestFor: "When person's action is the headline"
+    rules:
+      - "MUST humanize a person or entity"
+      - "Use ONLY information from the brief"
+      - "Key fact should be the most newsworthy detail"
+      - "VARY your pattern."
+    powerWords:
+      - revealed
+      - led
+      - confirmed
+      - disclosed
+    hasHeadline: true

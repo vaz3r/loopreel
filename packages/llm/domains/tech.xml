@@ -1,5 +1,5 @@
 <domain id="tech" name="Technology">
-  <description>Software, hardware, AI, startups, digital transformation, innovation</description>
+  <description>Software, hardware, AI, startups, digital transformation, innovation, gadgets, apps, cybersecurity, space tech, robotics, iPhone, Android, Google, Apple, Microsoft, OpenAI, ChatGPT, coding, programming, data center, cloud</description>
   <powerWords>future, revolution, disrupt, breakthrough, secret, hidden, never, stop, game-changing, paradigm, shift, reveal</powerWords>
   <fewShotId>tech</fewShotId>
   <principles>

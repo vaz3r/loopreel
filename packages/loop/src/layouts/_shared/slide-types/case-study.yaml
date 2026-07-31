@@ -1,0 +1,71 @@
+id: case-study
+name: Case Study Slide
+description: "Tell a story with a clear outcome or lesson."
+category: narrative
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the case study"
+    example: "How One Company Saved $2M in 6 Months"
+  - name: entity
+    type: string
+    required: true
+    maxLength: 60
+    description: "The entity (person, company, organization)"
+    example: "Acme Corp"
+  - name: challenge
+    type: string
+    required: true
+    maxLength: 200
+    description: "The challenge or problem faced"
+    example: "Rising costs and declining efficiency."
+  - name: solution
+    type: string
+    required: true
+    maxLength: 200
+    description: "The solution implemented"
+    example: "Implemented automated monitoring system."
+  - name: outcome
+    type: string
+    required: true
+    maxLength: 200
+    description: "The result or outcome"
+    example: "23% cost reduction in 6 months."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "CASE STUDY"
+
+headlinePatterns:
+  - id: cs-entity-tried
+    name: "Entity Tried X"
+    template: "[Entity] Tried [X]. What Happened."
+    example: "Acme Corp Tried Automation. Here's What Happened."
+    emotionalTrigger: curiosity
+    bestFor: "When brief has a clear story arc"
+  - id: cs-result-first
+    name: "Result First"
+    template: "[Result]. Here's How."
+    example: "Saved $2M in 6 months. Here's how."
+    emotionalTrigger: promise
+    bestFor: "When outcome is the headline story"
+
+rules:
+  - "MUST tell a story with outcome"
+  - "Entity, challenge, solution, outcome must all be from the brief"
+  - "Outcome should be specific and measurable"
+  - "VARY your pattern."
+
+powerWords:
+  - proven
+  - tested
+  - achieved
+  - delivered
+  - results
+
+hasHeadline: true

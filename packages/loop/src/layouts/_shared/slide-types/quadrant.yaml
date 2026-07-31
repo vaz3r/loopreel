@@ -1,0 +1,62 @@
+id: quadrant
+name: Quadrant Slide
+description: "Categorize or map concepts into a 2x2 grid."
+category: data
+
+fields:
+  - name: headline
+    type: string
+    required: true
+    maxLength: 80
+    description: "Headline that frames the categorization"
+    example: "The 4 Types of Risk"
+  - name: quadrants
+    type: array
+    required: true
+    description: "Array of 4 quadrant items"
+  - name: quadrants[].title
+    type: string
+    required: true
+    maxLength: 60
+    description: "Quadrant title"
+    example: "High Risk, Low Reward"
+  - name: quadrants[].desc
+    type: string
+    required: true
+    maxLength: 200
+    description: "Quadrant description"
+    example: "Investments that carry significant risk but offer minimal potential return."
+  - name: tag
+    type: string
+    required: false
+    maxLength: 30
+    description: "Category tag"
+    example: "CATEGORY MAP"
+
+headlinePatterns:
+  - id: q-category
+    name: "Category Label"
+    template: "[Category]: [Key Insight]"
+    example: "Risk Profile: What Each Quadrant Means"
+    emotionalTrigger: curiosity
+    bestFor: "When brief has clear categories"
+  - id: q-four-parts
+    name: "Four Parts"
+    template: "[Topic]: [Number] Quadrants"
+    example: "Market Risk: 4 Quadrants"
+    emotionalTrigger: data
+    bestFor: "When brief has 4 distinct elements"
+
+rules:
+  - "MUST categorize or map concepts"
+  - "Each quadrant must be distinct and non-overlapping"
+  - "Quadrants should reveal insight, not just list categories"
+  - "VARY your pattern."
+
+powerWords:
+  - mapped
+  - categorized
+  - revealed
+  - classified
+
+hasHeadline: true

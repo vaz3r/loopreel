@@ -1,0 +1,330 @@
+# The Curator - inherits 8 shared + 4 cross-shared + 5 unique types
+inherits:
+  - cover
+  - cta
+  - sequence
+  - telemetry
+  - myth-fact
+  - quote
+  - timeline
+  - image-split
+  - interview
+  - quadrant
+  - case-study
+  - resource-grid
+
+types:
+  hero-metric:
+    name: Hero Metric Slide
+    description: "Highlight a single key number with maximum impact"
+    category: data
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the metric"
+        example: "The Number That Changes Everything"
+      - name: metric
+        type: object
+        required: true
+        description: "The hero metric"
+      - name: metric.value
+        type: string
+        required: true
+        maxLength: 20
+        description: "The number"
+        example: "42%"
+      - name: metric.label
+        type: string
+        required: true
+        maxLength: 120
+        description: "What the number represents"
+        example: "Reduction in hospital readmissions"
+      - name: context
+        type: string
+        required: false
+        maxLength: 200
+        description: "Why this number matters"
+        example: "This single change saved hospitals $2.3 billion annually."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "KEY NUMBER"
+    headlinePatterns:
+      - id: hm-number-context
+        name: "Number + Context"
+        template: "[Number]. [Context]."
+        example: "42%. The number that changed hospital policy."
+        emotionalTrigger: data
+        bestFor: "When one number is the story"
+      - id: hm-number-changes
+        name: "Number Changes Everything"
+        template: "The Number That Changes Everything: [Number]"
+        example: "The Number That Changes Everything: 42%"
+        emotionalTrigger: surprise
+        bestFor: "When number has dramatic implications"
+    rules:
+      - "MUST highlight a single key number"
+      - "The number should be from the brief, not invented"
+      - "Context should explain why this number matters"
+      - "VARY your pattern."
+    powerWords:
+      - number
+      - data
+      - revealed
+      - proven
+      - key
+    hasHeadline: true
+
+  methodology:
+    name: Methodology Slide
+    description: "Explain a process, approach, or methodology"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the methodology"
+        example: "How Scientists Track Outbreaks"
+      - name: steps
+        type: array
+        required: true
+        description: "Array of methodology steps"
+      - name: steps[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Step title"
+        example: "Step 1: Data Collection"
+      - name: steps[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Step description"
+        example: "Gather patient samples and epidemiological data."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "METHODOLOGY"
+    headlinePatterns:
+      - id: meth-how-entity
+        name: "How Entity Did X"
+        template: "How [Entity] [Did X]"
+        example: "How Scientists Track Disease Outbreaks"
+        emotionalTrigger: curiosity
+        bestFor: "When process is the story"
+      - id: meth-process
+        name: "The Process"
+        template: "The [Process] Behind [Outcome]"
+        example: "The Science Behind Disease Tracking"
+        emotionalTrigger: curiosity
+        bestFor: "When methodology explains an outcome"
+    rules:
+      - "MUST explain a process or approach"
+      - "Steps should be from the brief or based on established methodology"
+      - "Order by logical sequence"
+      - "VARY your pattern."
+    powerWords:
+      - process
+      - method
+      - approach
+      - system
+      - framework
+    hasHeadline: true
+    hasItems: true
+
+  juxtaposition:
+    name: Juxtaposition Slide
+    description: "Contrast two related things to reveal insight"
+    category: visual
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the juxtaposition"
+        example: "Expectation vs Reality"
+      - name: left
+        type: object
+        required: true
+        description: "Left side"
+      - name: left.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Left title"
+        example: "What We Expected"
+      - name: left.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Left description"
+        example: "A quick recovery within weeks."
+      - name: right
+        type: object
+        required: true
+        description: "Right side"
+      - name: right.title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Right title"
+        example: "What Actually Happened"
+      - name: right.desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Right description"
+        example: "A months-long struggle with lasting effects."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "JUXTAPOSITION"
+    headlinePatterns:
+      - id: jux-expect-reality
+        name: "Expectation vs Reality"
+        template: "[Thing A]. [Thing B]. [Insight]."
+        example: "Expectation vs Reality. The gap is staggering."
+        emotionalTrigger: surprise
+        bestFor: "When two perspectives reveal a gap"
+    rules:
+      - "MUST contrast two related things"
+      - "left and right MUST be objects with {title, desc}"
+      - "The contrast should reveal a meaningful insight"
+      - "VARY your pattern."
+    powerWords:
+      - vs
+      - contrast
+      - reality
+      - expectation
+      - truth
+    hasHeadline: true
+    hasLeftRight: true
+
+  checklist:
+    name: Checklist Slide
+    description: "Provide actionable steps or items to check"
+    category: interactive
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the checklist"
+        example: "5 Things to Check Before You Travel"
+      - name: items
+        type: array
+        required: true
+        description: "Array of checklist items"
+      - name: items[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Checklist item"
+        example: "Check travel advisories"
+      - name: items[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Item description"
+        example: "Review current alerts for your destination."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "CHECKLIST"
+    headlinePatterns:
+      - id: cl-number-steps
+        name: "Number Steps"
+        template: "[Number] Steps to [Outcome]"
+        example: "5 Steps to Safer Travel"
+        emotionalTrigger: promise
+        bestFor: "When brief has actionable steps"
+      - id: cl-what-to-do
+        name: "What to Do"
+        template: "What to Do Right Now"
+        example: "What to Do Right Now: Travel Safety Checklist"
+        emotionalTrigger: urgency
+        bestFor: "When immediate action is needed"
+    rules:
+      - "MUST provide actionable steps"
+      - "Each step should be specific and doable"
+      - "Order by importance or sequence"
+      - "VARY your pattern."
+    powerWords:
+      - steps
+      - checklist
+      - guide
+      - how to
+      - do this
+    hasHeadline: true
+    hasItems: true
+
+  breakdown:
+    name: Breakdown Slide
+    description: "Decompose a complex topic into understandable parts"
+    category: narrative
+    fields:
+      - name: headline
+        type: string
+        required: true
+        maxLength: 80
+        description: "Headline that frames the breakdown"
+        example: "Breaking Down the New Policy"
+      - name: parts
+        type: array
+        required: true
+        description: "Array of breakdown parts"
+      - name: parts[].title
+        type: string
+        required: true
+        maxLength: 60
+        description: "Part title"
+        example: "Part 1: What Changes"
+      - name: parts[].desc
+        type: string
+        required: true
+        maxLength: 200
+        description: "Part description"
+        example: "New reporting requirements take effect January 1st."
+      - name: tag
+        type: string
+        required: false
+        maxLength: 30
+        description: "Category tag"
+        example: "BREAKDOWN"
+    headlinePatterns:
+      - id: bd-topic-parts
+        name: "Topic + Parts"
+        template: "[Topic]: [Number] Parts"
+        example: "The New Policy: 3 Parts Explained"
+        emotionalTrigger: curiosity
+        bestFor: "When topic has clear components"
+      - id: bd-breaking-down
+        name: "Breaking Down"
+        template: "Breaking Down [Topic]"
+        example: "Breaking Down the New Healthcare Policy"
+        emotionalTrigger: curiosity
+        bestFor: "When topic needs decomposition"
+    rules:
+      - "MUST decompose a complex topic"
+      - "Each part should be self-contained but build on the previous"
+      - "Use language from the brief"
+      - "VARY your pattern."
+    powerWords:
+      - breakdown
+      - decompose
+      - explained
+      - parts
+      - components
+    hasHeadline: true
+    hasItems: true
