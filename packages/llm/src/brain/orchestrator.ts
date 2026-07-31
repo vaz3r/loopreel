@@ -3,7 +3,7 @@ import type { BrainResult, BrainOptions, DomainExamples, TemplateInfo } from './
 import { createUsageTracker, withPhaseRetry, RETRY_BUDGETS } from './retry.js';
 import { getDomainFewShot } from './few-shot.js';
 import { loadAllDomains, classifyDomainPrompt, parseDomainClassification } from './domain-classification.js';
-import { stripFences, unwrapChildWrappers, createFallbackSlide, xmlToObjects } from './xml-helpers.js';
+import { stripFences, unwrapChildWrappers, createFallbackSlide, xmlToObjects, objectToXml } from './xml-helpers.js';
 import { renderPrompt } from './prompts/loader.js';
 
 const SLIDE_TYPE_RULES = [
@@ -127,7 +127,7 @@ function buildRetryPrompt(
   domainId: string,
 ): { system: string; user: string } {
   const slide = slides.find(s => s['id'] === labelResult.id);
-  const slideXml = slide ? require('./xml-helpers.js').objectToXml(slide) : `<slide type="cover" id="${labelResult.id}" headline="${labelResult.headline}" />`;
+  const slideXml = slide ? objectToXml(slide) : `<slide type="cover" id="${labelResult.id}" headline="${labelResult.headline}" />`;
 
   const system = renderPrompt('label-retry', {
     fixSuggestion: labelResult.fix || null,
