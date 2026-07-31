@@ -1,7 +1,7 @@
 <domain id="finance" name="Finance and Business">
   <description>Markets, investing, economics, personal finance, business news</description>
   <powerWords>profit, loss, crash, surge, wealth, risk, opportunity, hidden, revealed, data, returns, growth, collapse</powerWords>
-  <fewShotId>news</fewShotId>
+  <fewShotId>finance</fewShotId>
   <principles>
     <principle>Lead with specific numbers — percentages, dollar amounts, market caps</principle>
     <principle>Frame data as implications for the reader's wallet or portfolio</principle>

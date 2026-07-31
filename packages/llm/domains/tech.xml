@@ -1,7 +1,7 @@
 <domain id="tech" name="Technology">
   <description>Software, hardware, AI, startups, digital transformation, innovation</description>
   <powerWords>future, revolution, disrupt, breakthrough, secret, hidden, never, stop, game-changing, paradigm, shift, reveal</powerWords>
-  <fewShotId>news</fewShotId>
+  <fewShotId>tech</fewShotId>
   <principles>
     <principle>Frame as disruption or paradigm shift — what changes for the user</principle>
     <principle>Use specific specs or performance numbers when available</principle>

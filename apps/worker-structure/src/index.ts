@@ -2,7 +2,7 @@ import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop-bridge';
-import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase } from '@loopreel/llm';
+import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
 import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
@@ -243,9 +243,35 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         selectionMs: result.selectionLatencyMs,
         planMs: result.planLatencyMs,
         generationMs: result.generationLatencyMs,
+        creativeDirectorMs: result.creativeDirectorLatencyMs,
         totalMs: result.totalLatencyMs,
         slidePlan: result.slidePlan,
+        totalTokens: result.totalTokens,
+        phaseUsages: result.phaseUsages,
       }, 'Multi-phase pipeline completed');
+
+      // Write per-phase LLM usage to llm_usage table
+      const model = process.env['LLM_MODEL'] ?? 'gemini-2.5-flash-lite';
+      for (const usage of result.phaseUsages) {
+        await JobRepository.insertLlmUsage({
+          jobId,
+          phase: usage.phase,
+          provider: process.env['LLM_PROVIDER'] ?? 'google',
+          model,
+          promptTokens: usage.promptTokens,
+          completionTokens: usage.completionTokens,
+          latencyMs: usage.latencyMs,
+          estimatedCostUsd: calculateCost(model, usage.promptTokens, usage.completionTokens),
+        });
+      }
+
+      // Update generation_jobs cost columns
+      await JobRepository.updateCostColumns(jobId, {
+        domainId: result.domainId,
+        totalPromptTokens: result.totalTokens.input,
+        totalCompletionTokens: result.totalTokens.output,
+        totalCostUsd: calculateCost(model, result.totalTokens.input, result.totalTokens.output),
+      });
 
       // Bug 1 fix: Use the Phase 2 template selection, not the pre-selected one
       if (result.selectedTemplateId !== targetTemplateId) {
@@ -276,6 +302,21 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       const { slides: paginated } = paginateContract({ slides: validationResult.data.slides });
       const withImages = await fetchImagesForSlides(paginated, jobId);
 
+      // Write per-slide rows to slide_data table
+      for (let i = 0; i < withImages.length; i++) {
+        const slide = withImages[i];
+        if (slide) {
+          await JobRepository.insertSlideData({
+            jobId,
+            phase: 'phase4',
+            slideIndex: i,
+            slideType: String(slide.type ?? 'unknown'),
+            headline: String(slide.headline ?? slide.tag ?? null),
+            content: slide,
+          });
+        }
+      }
+
       await writeDebug(jobId, '05-paginated.json', JSON.stringify({ slides: withImages }, null, 2));
 
       await JobRepository.updateStatus(jobId, 'rendering', {
@@ -305,11 +346,11 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
           : basePrompt;
 
         const rawResponse = await llm.generateJSON(prompt, rawText);
-        jobLogger.info({ attempt, rawSnippet: rawResponse.slice(0, 200) }, 'Raw LLM response');
+        jobLogger.info({ attempt, rawSnippet: rawResponse.text.slice(0, 200) }, 'Raw LLM response');
 
-        await writeDebug(jobId, `02-monolithic-attempt${attempt}.txt`, rawResponse);
+        await writeDebug(jobId, `02-monolithic-attempt${attempt}.txt`, rawResponse.text);
 
-        const cleaned = stripMarkdownFences(rawResponse);
+        const cleaned = stripMarkdownFences(rawResponse.text);
         let parsed: unknown;
 
         try {

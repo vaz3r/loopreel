@@ -159,6 +159,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         templateId: j.template_id,
         platform: j.platform,
         slideCount: j.slide_count,
+        totalCostUsd: Number(j.total_cost_usd),
         createdAt: j.created_at,
         updatedAt: j.updated_at,
       })),
@@ -170,6 +171,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
 
   app.get('/api/stats', async (_request, reply) => {
     const counts = await JobRepository.countByStatus();
+    const costStats = await JobRepository.getCostStats();
     return reply.send({
       total: counts.total ?? 0,
       queued: counts.queued ?? 0,
@@ -177,6 +179,9 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       complete: counts.complete ?? 0,
       failed: counts.failed ?? 0,
       needsReview: counts.needs_review ?? 0,
+      avgCost: costStats.avgCost,
+      totalCost: costStats.totalCost,
+      costJobs: costStats.totalJobs,
     });
   });
 
@@ -199,6 +204,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
     }
 
     const assets = await AssetRepository.findByJobId(id);
+    const llmUsage = await JobRepository.getLlmUsage(id);
 
     return reply.send({
       id: job.id,
@@ -210,6 +216,10 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       errorPayload: job.error_payload,
       contentPayload: job.content_payload,
       slideCount: job.slide_count,
+      totalPromptTokens: job.total_prompt_tokens,
+      totalCompletionTokens: job.total_completion_tokens,
+      totalCostUsd: Number(job.total_cost_usd),
+      llmUsage,
       createdAt: job.created_at,
       updatedAt: job.updated_at,
       assets: assets.map((a) => ({

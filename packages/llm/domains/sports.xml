@@ -1,7 +1,7 @@
 <domain id="sports" name="Sports">
   <description>Professional sports, athletes, teams, competitions, analysis</description>
   <powerWords>legacy, goat, dynasty, clutch, choke, revenge, redemption, record, shattered, dynasty, dynasty, unstoppable</powerWords>
-  <fewShotId>news</fewShotId>
+  <fewShotId>sports</fewShotId>
   <principles>
     <principle>Lead with specific stats — points, yards, percentages, records</principle>
     <principle>Frame as legacy, rivalry, or redemption narrative</principle>

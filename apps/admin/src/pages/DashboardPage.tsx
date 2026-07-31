@@ -19,6 +19,12 @@ export function DashboardPage() {
     stats?.needsReview ?? 0,
   ];
 
+  const formatCost = (cost: number) => {
+    if (cost === 0) return '$0.00';
+    if (cost < 0.01) return '<$0.01';
+    return `$${cost.toFixed(4)}`;
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex items-center justify-between">
@@ -46,6 +52,24 @@ export function DashboardPage() {
               </div>
             ))}
       </div>
+
+      {/* Cost Stats */}
+      {stats && stats.costJobs > 0 && (
+        <div className="grid gap-4 grid-cols-3">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Avg Cost/Job</p>
+            <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{formatCost(stats.avgCost)}</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Total Cost</p>
+            <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{formatCost(stats.totalCost)}</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Jobs with Cost Data</p>
+            <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{stats.costJobs}</p>
+          </div>
+        </div>
+      )}
 
       <div>
         <div className="flex items-center justify-between mb-3">

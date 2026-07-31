@@ -41,6 +41,7 @@ export interface JobSummary {
   platform: string;
   templateId: string;
   slideCount: number | null;
+  totalCostUsd: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -48,6 +49,15 @@ export interface JobSummary {
 export interface JobDetail extends JobSummary {
   errorPayload: { stage: string; reason: string; details: string } | null;
   contentPayload: unknown;
+  totalPromptTokens: number;
+  totalCompletionTokens: number;
+  llmUsage: Array<{
+    phase: string;
+    promptTokens: number;
+    completionTokens: number;
+    latencyMs: number;
+    estimatedCostUsd: number;
+  }>;
   assets: {
     id: string;
     formatType: string;
@@ -71,6 +81,9 @@ export interface StatsResponse {
   complete: number;
   failed: number;
   needsReview: number;
+  avgCost: number;
+  totalCost: number;
+  costJobs: number;
 }
 
 export interface DownloadResponse {

@@ -124,7 +124,7 @@ Respond ONLY with a JSON object in the following format:
 }`;
 
     const llmResponse = await llm.generateJSON(systemPrompt, rawText.slice(0, 3000));
-    const jsonMatch = llmResponse.match(/\{[\s\S]*\}/);
+    const jsonMatch = llmResponse.text.match(/\{[\s\S]*\}/);
 
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]) as { selectedTemplate?: string; rationale?: string };

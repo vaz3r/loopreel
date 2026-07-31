@@ -1,7 +1,7 @@
 <domain id="health" name="Health and Wellness">
   <description>Medicine, fitness, nutrition, mental health, public health, research</description>
   <powerWords>secret, hidden, proven, breakthrough, risk, warning, truth, reveal, devastating, shocking, never, stop</powerWords>
-  <fewShotId>news</fewShotId>
+  <fewShotId>health</fewShotId>
   <principles>
     <principle>Lead with specific health outcomes or study results</principle>
     <principle>Frame as personal relevance — what this means for YOUR health</principle>

@@ -1,7 +1,7 @@
 <domain id="environment" name="Environment">
   <description>Climate change, sustainability, conservation, green energy, environmental policy</description>
   <powerWords>crisis, warning, urgent, hidden, truth, reveal, devastating, shocking, never, stop, future, legacy</powerWords>
-  <fewShotId>news</fewShotId>
+  <fewShotId>environment</fewShotId>
   <principles>
     <principle>Lead with specific environmental data — temperatures, CO2 levels, species counts</principle>
     <principle>Frame as consequences for future generations</principle>

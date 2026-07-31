@@ -18,6 +18,11 @@ export interface JobRow {
   checkpoint_phase: string | null;
   checkpoint_data: Record<string, unknown>;
   retries_used: Record<string, number>;
+  domain_id: string | null;
+  variety_seed: number | null;
+  total_prompt_tokens: number;
+  total_completion_tokens: number;
+  total_cost_usd: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -39,6 +44,7 @@ export interface JobListItem {
   template_id: string;
   platform: string;
   slide_count: number | null;
+  total_cost_usd: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -151,7 +157,7 @@ export class JobRepository {
     const total = Number(countResult.rows[0]!.count);
 
     const dataResult = await pool.query(
-      `SELECT id, source_url, source_type, status, template_id, platform, slide_count, created_at, updated_at
+      `SELECT id, source_url, source_type, status, template_id, platform, slide_count, total_cost_usd, created_at, updated_at
        FROM generation_jobs ${where}
        ORDER BY created_at DESC
        LIMIT $${idx++} OFFSET $${idx++}`,
@@ -173,6 +179,22 @@ export class JobRepository {
     }
     counts.total = total;
     return counts;
+  }
+
+  static async getCostStats(): Promise<{ avgCost: number; totalCost: number; totalJobs: number }> {
+    const { rows } = await pool.query<{ avg: string; total: string; count: string }>(
+      `SELECT 
+        AVG(total_cost_usd) as avg,
+        SUM(total_cost_usd) as total,
+        COUNT(*) as count
+       FROM generation_jobs 
+       WHERE total_cost_usd > 0`,
+    );
+    return {
+      avgCost: Number(rows[0]?.avg ?? 0),
+      totalCost: Number(rows[0]?.total ?? 0),
+      totalJobs: Number(rows[0]?.count ?? 0),
+    };
   }
 
   static async purgeAll(): Promise<number> {
@@ -241,5 +263,126 @@ export class JobRepository {
        WHERE id = $1`,
       [jobId],
     );
+  }
+
+  static async insertSlideData(params: {
+    jobId: string;
+    phase: string;
+    slideIndex: number;
+    slideType: string;
+    headline?: string;
+    content: Record<string, unknown>;
+    varietySeed?: number;
+  }): Promise<void> {
+    await pool.query(
+      `INSERT INTO slide_data (job_id, phase, slide_index, slide_type, headline, content, variety_seed)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (job_id, phase, slide_index) DO UPDATE SET
+         slide_type = EXCLUDED.slide_type,
+         headline = EXCLUDED.headline,
+         content = EXCLUDED.content,
+         variety_seed = EXCLUDED.variety_seed`,
+      [
+        params.jobId,
+        params.phase,
+        params.slideIndex,
+        params.slideType,
+        params.headline ?? null,
+        JSON.stringify(params.content),
+        params.varietySeed ?? null,
+      ],
+    );
+  }
+
+  static async insertLlmUsage(params: {
+    jobId: string;
+    phase: string;
+    provider: string;
+    model: string;
+    promptTokens: number;
+    completionTokens: number;
+    latencyMs: number;
+    estimatedCostUsd: number;
+  }): Promise<void> {
+    await pool.query(
+      `INSERT INTO llm_usage (job_id, phase, provider, model, prompt_tokens, completion_tokens, latency_ms, estimated_cost_usd)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [
+        params.jobId,
+        params.phase,
+        params.provider,
+        params.model,
+        params.promptTokens,
+        params.completionTokens,
+        params.latencyMs,
+        params.estimatedCostUsd,
+      ],
+    );
+  }
+
+  static async updateCostColumns(
+    jobId: string,
+    params: {
+      domainId?: string;
+      varietySeed?: number;
+      totalPromptTokens: number;
+      totalCompletionTokens: number;
+      totalCostUsd: number;
+    },
+  ): Promise<void> {
+    const sets: string[] = [
+      'total_prompt_tokens = $1',
+      'total_completion_tokens = $2',
+      'total_cost_usd = $3',
+      'updated_at = NOW()',
+    ];
+    const values: unknown[] = [
+      params.totalPromptTokens,
+      params.totalCompletionTokens,
+      params.totalCostUsd,
+    ];
+    let idx = 4;
+
+    if (params.domainId !== undefined) {
+      sets.push(`domain_id = $${idx++}`);
+      values.push(params.domainId);
+    }
+    if (params.varietySeed !== undefined) {
+      sets.push(`variety_seed = $${idx++}`);
+      values.push(params.varietySeed);
+    }
+
+    values.push(jobId);
+    await pool.query(
+      `UPDATE generation_jobs SET ${sets.join(', ')} WHERE id = $${idx}`,
+      values,
+    );
+  }
+
+  static async getLlmUsage(jobId: string): Promise<Array<{
+    phase: string;
+    promptTokens: number;
+    completionTokens: number;
+    latencyMs: number;
+    estimatedCostUsd: number;
+  }>> {
+    const { rows } = await pool.query<{
+      phase: string;
+      prompt_tokens: number;
+      completion_tokens: number;
+      latency_ms: number;
+      estimated_cost_usd: number;
+    }>(
+      `SELECT phase, prompt_tokens, completion_tokens, latency_ms, estimated_cost_usd
+       FROM llm_usage WHERE job_id = $1 ORDER BY created_at`,
+      [jobId],
+    );
+    return rows.map(r => ({
+      phase: r.phase,
+      promptTokens: r.prompt_tokens,
+      completionTokens: r.completion_tokens,
+      latencyMs: r.latency_ms,
+      estimatedCostUsd: Number(r.estimated_cost_usd),
+    }));
   }
 }
