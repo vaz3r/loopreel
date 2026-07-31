@@ -30,7 +30,7 @@ When writing slide purposes, ensure the hook strategy aligns with these domain p
 
 ## Task
 
-Plan 5-7 slides. For each slide, choose a type from the supported list above and describe what content goes in it.
+Plan 5-7 slides. The example below shows 5 slides — you MUST plan at least 5 and at most 7. For each slide, choose a type from the supported list above and describe what content goes in it.
 
 ## Output Format
 
@@ -47,10 +47,11 @@ Return a single <slidePlan> element:
 
 ## Rules
 1. Use ONLY slide types from the supported list above. Do NOT invent new types.
-2. Start with a cover slide. End with a CTA slide.
-3. Vary slide types — never repeat the same type twice in a row.
-4. If hasRealNumbers="false" in the brief, do NOT use telemetry. Use sequence, quote, or myth-fact instead.
-5. Each slide's purpose must describe the HOOK STRATEGY or CONTENT APPROACH — do NOT write exact headline text. Phase 4 will generate headlines. Your job is to describe the rhetorical approach.
-6. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
-7. VARY the narrative structure: Some carousels should open with data, others with a question, others with a human story. Don't always follow the same order of slide types.
-8. Return ONLY the XML, no markdown fences, no explanation.
+2. Start with a cover slide. End with a CTA slide. Only ONE CTA slide is allowed, at the end.
+3. Vary slide types — never repeat the same type twice in a row. No more than 2 slides of the same type in a 7-slide carousel.
+4. If `<hasRealNumbers>` is `false` in the brief, do NOT use telemetry. Use sequence, quote, or myth-fact instead.
+5. If `<quotes>` is empty in the brief, do NOT use quote. Use sequence, myth-fact, or analysis instead.
+6. Each slide's purpose must describe the HOOK STRATEGY or CONTENT APPROACH — do NOT write exact headline text. Phase 4 will generate headlines. Your job is to describe the rhetorical approach. Keep purpose concise (1-2 sentences, max 30 words).
+7. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
+8. VARY the narrative structure: Some carousels should open with data, others with a question, others with a human story. Don't always follow the same order of slide types.
+9. Return ONLY the XML, no markdown fences, no explanation.

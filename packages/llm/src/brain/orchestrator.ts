@@ -142,10 +142,24 @@ function buildRetryPrompt(
 function buildCreativeDirectorPrompt(
   genCleaned: string,
   varietyIssues: string[],
+  domain?: DomainExamples,
 ): { system: string; user: string } {
+  let domainName = '';
+  let domainPrinciples = '';
+  let domainPowerWords = '';
+
+  if (domain && domain.principles.length > 0) {
+    domainName = domain.name;
+    domainPrinciples = domain.principles.map(p => `- ${p}`).join('\n');
+    domainPowerWords = domain.powerWords.join(', ');
+  }
+
   const system = renderPrompt('creative-director', {
     carousel: genCleaned,
     issues: varietyIssues,
+    domainName,
+    domainPrinciples,
+    domainPowerWords,
   });
 
   return { system, user: '' };
@@ -556,7 +570,7 @@ export async function generateSlides(
   if (varietyIssues.length > 0) {
     onProgress?.('creative-director', `Variety issues found: ${varietyIssues.join('; ')}`);
 
-    const { system: cdSystem, user: cdUser } = buildCreativeDirectorPrompt(genCleaned!, varietyIssues);
+    const { system: cdSystem, user: cdUser } = buildCreativeDirectorPrompt(genCleaned!, varietyIssues, selectedDomain);
     onDebug?.('14-prompt-creative-director.md', `## System\n\n${cdSystem}\n\n## User\n\n${cdUser}`);
 
     try {

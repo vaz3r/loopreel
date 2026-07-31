@@ -5,6 +5,17 @@ Aesthetics: {{templateAesthetics}}
 
 {{{fewShot}}}
 
+{{#if domainPrinciples}}
+## DOMAIN PRINCIPLES ({{domainName}})
+
+Apply these principles to your copy:
+
+{{domainPrinciples}}
+
+## DOMAIN POWER WORDS
+Use these power words in headlines: {{domainPowerWords}}
+{{/if}}
+
 ## Slide Plan
 {{{planXml}}}
 
@@ -36,7 +47,6 @@ For arrays (stats, items), use nested child elements:
 
 <antiHallucination>
   <rule>Every fact, number, and quote MUST come DIRECTLY from the content brief above. Do NOT paraphrase, round, interpolate, or invent anything.</rule>
-  <rule>If the content brief has NO hard data, do NOT generate telemetry. Use sequence, quote, or myth-fact instead.</rule>
   <rule>If the content brief says "2-3%", you MUST write exactly that. Do NOT change to "3%" or "2.5%".</rule>
   <rule>If you cannot find an exact number in the brief, the stat does not exist. Period.</rule>
   <rule>NEVER invent statistics, percentages, dollar amounts, or counts. NEVER.</rule>
@@ -55,28 +65,16 @@ For arrays (stats, items), use nested child elements:
 ## VARIETY RULES (CRITICAL)
 - NEVER use the same headline structure twice in one carousel. If your cover uses "[Number]. [Event].", your telemetry MUST use a different structure like "The [Noun]: [Number]" or "[Number] [Unit] — and [Contrast]".
 - NEVER start two consecutive slides with the same word.
-- NEVER use the same emotional angle twice. If your cover is urgent, your sequence should be analytical, your myth-fact should be curious, your CTA should be personal.
-- The few-shot example is for QUALITY calibration only. Do NOT replicate its specific headlines, tags, or CTAs. Your output must be ORIGINAL.
+- VARY emotional angles across slides. Use these 7 angles — each at most once per carousel: curiosity, urgency, fear, surprise, empathy, concern, challenge.
 - Each carousel must feel like a DIFFERENT editorial voice — not the same template with different numbers plugged in.
 
 ## HEADLINE RULES
 
 <headlineRules>
-  <rule>Headlines MUST be a CLAIM, QUESTION, or COMMAND — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
+  <rule>Headlines MUST be a CLAIM, QUESTION, COMMAND, or PATTERN-INTERRUPT — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
   <rule>Max 7 words. Fragments preferred. Active voice. Use contractions when natural.</rule>
-  <rule>VARY emotional angles across slides: curiosity ("Nobody Expected This"), urgency ("Act Now"), fear ("What's Coming"), surprise ("The Number That Changes Everything"), empathy ("Their Stories Matter"), concern ("Why This Matters"), challenge ("Is This Really True?"). Do NOT use the same emotion twice in one carousel.</rule>
-  <rule>Use power words sparingly: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Revealed, Unexpected, Critical, Essential, Rare, Pivotal. Each power word should appear at most ONCE per carousel.</rule>
-  <rule>NEVER copy the few-shot example headlines. The few-shows demonstrate STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content.</rule>
+  <rule>Vary emotional angles across slides. Available angles: curiosity, urgency, fear, surprise, empathy, concern, challenge. Each angle at most once per carousel.</rule>
+  <rule>Use power words sparingly. Generic: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Revealed, Unexpected, Critical, Essential, Rare, Pivotal. Domain-specific: {{domainPowerWords}}. Combined budget: each power word (generic OR domain) may appear at most ONCE per carousel.</rule>
+  <rule>The few-shot example demonstrates STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content — do NOT replicate the few-shot's headlines, tags, or CTAs.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
 </headlineRules>
-{{#if domainPrinciples}}
-
-## DOMAIN PRINCIPLES ({{domainName}})
-
-Apply these principles to your copy:
-
-{{domainPrinciples}}
-
-## DOMAIN POWER WORDS
-Use these power words in headlines: {{domainPowerWords}}
-{{/if}}
