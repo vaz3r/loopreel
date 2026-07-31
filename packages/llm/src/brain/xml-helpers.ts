@@ -1,9 +1,5 @@
-export interface XmlElement {
-  tag: string;
-  attributes: Record<string, string>;
-  children: XmlElement[];
-  text?: string;
-}
+import type { XmlElement } from '../xml-parser.js';
+export type { XmlElement } from '../xml-parser.js';
 
 export function objectToXml(obj: Record<string, unknown>): string {
   const attrs = Object.entries(obj)
