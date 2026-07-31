@@ -1,11 +1,12 @@
 <domain id="news" name="News and Current Events">
   <description>Breaking news, disasters, politics, world events, investigations, human interest</description>
-  <powerWords>breaking, shocking, urgent, hidden, never, stop, truth, secret, revealed, crisis, exclusive, devastating, confirmed, alarming</powerWords>
+  <powerWords>breaking, shocking, urgent, hidden, revealed, crisis, exclusive, devastating, confirmed, alarming, unexpected, critical, essential, rare, unprecedented, pivotal, alarming</powerWords>
   <fewShotId>news</fewShotId>
   <principles>
     <principle>Lead with specific numbers and names — never vague labels</principle>
-    <principle>Use urgency language — "right now", "breaking", "just in"</principle>
-    <principle>Frame events as having hidden context or untold stories</principle>
-    <principle>Use period-separated fragments for dramatic rhythm — "13 Dead. Mall Collapsed."</principle>
+    <principle>Vary your emotional angle: urgency, curiosity, empathy, surprise, concern — do NOT always use urgency</principle>
+    <principle>Frame events from different perspectives: human impact, systemic failure, historical context, what comes next</principle>
+    <principle>Some headlines should provoke thought, not just alarm — ask questions, challenge assumptions, reveal patterns</principle>
+    <principle>Use period-separated fragments sparingly — they lose power when overused</principle>
   </principles>
 </domain>

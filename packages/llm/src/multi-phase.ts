@@ -51,9 +51,10 @@ function createUsageTracker() {
       phase: string,
       systemPrompt: string,
       userText: string,
+      temperature?: number,
     ): Promise<string> {
       const start = Date.now();
-      const response = await llm.generateJSON(systemPrompt, userText);
+      const response = await llm.generateJSON(systemPrompt, userText, temperature);
       const latencyMs = Date.now() - start;
 
       const promptTokens = response.usage?.promptTokens ?? 0;
@@ -108,7 +109,7 @@ Content: 13 dead after 6.8 earthquake in Kumamoto, Japan. Mall collapsed. 3,600 
 Domain: news
 
 <presentation>
-  <slide type="cover" id="slide-01" tag="BREAKING NEWS" headline="13 Dead. Mall Collapsed. They're Hiding Something." subheadline="The Kumamoto earthquake nobody saw coming. You need to know." authorName="Editorial Desk" authorRole="Investigative Unit" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 01" />
+  <slide type="cover" id="slide-01" tag="BREAKING NEWS" headline="13 Dead. Mall Collapsed. Questions Remain." subheadline="The Kumamoto earthquake nobody saw coming. You need to know." authorName="Editorial Desk" authorRole="Investigative Unit" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 01" />
   <slide type="telemetry" id="slide-02" tag="SHOCKING DATA" headline="6.8 Mag. 13 Lives. Zero Warning." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 02">
     <stats>
       <stat value="6.8" unit="mag" label="Earthquake magnitude" />
@@ -117,7 +118,7 @@ Domain: news
       <stat value="3,600" unit="troops" label="Personnel deployed" />
     </stats>
   </slide>
-  <slide type="sequence" id="slide-03" tag="URGENT RESCUE" headline="3 Threats You Can't Ignore" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
+  <slide type="sequence" id="slide-03" tag="URGENT RESCUE" headline="What Happened in the First 24 Hours" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 03">
     <items>
       <item num="1" title="Mall collapse rescue" desc="Two women confirmed dead. Teams searching for trapped survivors." />
       <item num="2" title="3,600 troops deployed" desc="Self-defense forces searching affected areas immediately." />
@@ -126,10 +127,10 @@ Domain: news
   </slide>
   <slide type="myth-fact" id="slide-04" tag="TSUNAMI TRUTH" headline="Advisory Lifted. Panic Was Real." myth="The tsunami threat is ongoing and catastrophic." fact="Advisory was lifted. The immediate danger to your coast is gone." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
   <slide type="quote" id="slide-05" tag="OFFICIAL STATEMENT" quote="We have already confirmed extensive damage, including casualties, collapsed buildings, damaged roads and fires" author="Takaichi Sanae" role="Japanese Prime Minister" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 05" />
-  <slide type="cta" id="slide-06" tag="STAY VIGILANT" headline="Follow Now. Lives Depend on It." subtext="Aftershocks remain a threat. Follow trusted sources for live updates." actionLabel="Follow for updates" socialHandle="@PaperOfRecord" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 06" />
+  <slide type="cta" id="slide-06" tag="YOUR NEXT STEP" headline="Know Someone in Kyushu?" subtext="Share this with anyone in the affected area. Information saves lives." actionLabel="Share now" socialHandle="@PaperOfRecord" footerLeft="THE PAPER OF RECORD" footerRight="PAGE 06" />
 </presentation>
 
-Notice: Cover uses a SPECIFIC DETAIL (13 dead + mall collapse), not a generic label. Telemetry uses "Zero Warning" for emotional punch. Sequence uses "Threats You Can't Ignore" instead of generic "Things Happening". CTA uses "Follow Now. Lives Depend on It." for urgency. Headlines use Title Case. All data comes from the content.`;
+Notice: STRUCTURE ONLY — do NOT copy these specific headlines. Cover leads with specific numbers. Telemetry contrasts multiple data points. Sequence tells a chronological story. CTA connects to the reader personally. All data comes from the content.`;
 
 const FEW_SHOT_POLITICS = `## EXAMPLE CAROUSEL — Politics/Investigation (GREAT quality)
 
@@ -155,10 +156,10 @@ Domain: politics
   </slide>
   <slide type="myth-fact" id="slide-04" tag="THE DECEPTION" headline="Public Said One Thing. Private Said Another." myth="The journals reveal a deliberate cover-up of lab-leak evidence." fact="The journals show scientists were genuinely divided, with no definitive proof of either origin." footerLeft="THE PAPER OF RECORD" footerRight="PAGE 04" />
   <slide type="quote" id="slide-05" tag="THE VERDICT" quote="We've probably never ever seen people so completely at odds with their private thoughts, and then publicly proclaiming the opposite of what they were truly saying in private." author="Rand Paul" role="Republican Senator" footerLeft="SENATE TESTIMONY" footerRight="PAGE 05" />
-  <slide type="cta" id="slide-06" tag="YOUR TURN" headline="Read the Files. Decide for Yourself." subtext="1,100 pages are public. Form your own opinion." actionLabel="Share your thoughts" socialHandle="@PaperOfRecord" footerLeft="THE FINAL WORD" footerRight="PAGE 06" />
+  <slide type="cta" id="slide-06" tag="YOUR TURN" headline="The Files Are Public. Read Them." subtext="1,100 pages are public. Form your own opinion." actionLabel="Share your thoughts" socialHandle="@PaperOfRecord" footerLeft="THE FINAL WORD" footerRight="PAGE 06" />
 </presentation>
 
-Notice: Cover uses a SPECIFIC NUMBER (1,100 pages) to create curiosity. Telemetry uses "2 vs 10" for contrast. Sequence uses "What His Private Notes Actually Say" for specificity. Myth-fact is factually accurate — the brief says scientists were divided, not that there was a cover-up. CTA uses "Read the Files. Decide for Yourself." for engagement. Headlines use Title Case. All facts come from the content brief.`;
+Notice: STRUCTURE ONLY — do NOT copy these specific headlines. Cover uses a specific number to create curiosity. Telemetry uses contrast. Sequence reveals hidden details. CTA empowers the reader. All facts come from the content brief.`;
 
 const FEW_SHOT_FINANCE = `## EXAMPLE CAROUSEL — Finance/Business (GREAT quality)
 
@@ -646,7 +647,8 @@ Return a single <slidePlan> element:
 4. If hasRealNumbers="false" in the brief, do NOT use telemetry. Use sequence, quote, or myth-fact instead.
 5. Each slide's purpose must describe the HOOK STRATEGY or CONTENT APPROACH — do NOT write exact headline text. Phase 4 will generate headlines. Your job is to describe the rhetorical approach.
 6. narrativeArc: Tell me the STORY, not a list. "The reader opens with X, discovers Y, is challenged by Z, and leaves with W."
-7. Return ONLY the XML, no markdown fences, no explanation.`,
+7. VARY the narrative structure: Some carousels should open with data, others with a question, others with a human story. Don't always follow the same order of slide types.
+8. Return ONLY the XML, no markdown fences, no explanation.`,
     user: 'Plan the slides for this carousel.',
   };
 }
@@ -662,28 +664,28 @@ function getDomainFewShot(domain?: DomainExamples): string {
 // ─── Slide-Type Rules (Universal) ───────────────────────────────────────────
 
 const SLIDE_TYPE_RULES = [
-  { type: 'cover', rule: '- MUST include a specific detail: number, name, or action from the brief\n- PATTERN A: "[Detail]. [Emotion/Curiosity]." — "13 Dead. Mall Collapsed."\n- PATTERN B: "[Question they\'re asking]. [Answer]." — "Is This the End? Experts Say Yes."\n- PATTERN C: "[Action]. [Stakes]." — "Japan Deploys 3,600 Troops. Lives Hang in Balance."\n- PATTERN D: "[Person/Entity]. [What They Did]." — "PM Tanae Breaks Silence. Her Words Chill."\n- VARY your pattern. Do NOT always use Pattern A.' },
-  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- PATTERN A: "[Number] [Unit]. [Number] [Unit]." — "6.8 Mag. 13 Lives."\n- PATTERN B: "[Number] [Unit]. [Emotion]." — "3,600 Troops. Zero Time to Waste."\n- PATTERN C: "The [Noun]: [Number]." — "The Human Cost: 13 Confirmed Dead."\n- PATTERN D: "[Number] [Unit] — and [Contrast]." — "6 Miles Deep — and Still Shaking."\n- VARY your pattern. Do NOT always use Pattern A.' },
-  { type: 'sequence', rule: '- MUST use numbered urgency or specific detail\n- PATTERN A: "[Number] Things Happening Right Now" — "3 Things Happening Right Now"\n- PATTERN B: "What We Know (and What We Don\'t)" — "What We Know Right Now"\n- PATTERN C: "[Number] Threats You Can\'t Ignore" — "3 Threats You Can\'t Ignore"\n- PATTERN D: "The [Number] Questions Everyone\'s Asking" — "The 3 Questions Everyone\'s Asking"\n- VARY your pattern. Do NOT always use Pattern A.' },
-  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- PATTERN A: "[Contrast]. [Pivot]." — "Advisory Lifted. Panic Was Real."\n- PATTERN B: "[Myth]. [Truth]." — "They Said 7.1. The Truth: 6.8."\n- PATTERN C: "The [X] Everyone Believed — Except [Y]" — "The Magnitude Everyone Believed — Except Scientists"\n- PATTERN D: "[Fact]. Not [Myth]." — "6.8. Not 7.1."\n- VARY your pattern. Do NOT always use Pattern A.' },
-  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- PATTERN A: "[Evocative tagline]" — "THE VERDICT" or "OFFICIAL STATEMENT"\n- PATTERN B: "[What They Said]" — "Her Words speak volumes"\n- PATTERN C: "[Person]: [Key phrase]" — "PM Tanae: We\'re Not Done Yet"\n- VARY your pattern.' },
-  { type: 'cta', rule: '- MUST be a command or question\n- PATTERN A: "[Command]. [Specific Detail]." — "Don\'t Scroll Past This."\n- PATTERN B: "[Question]. [Stakes]." — "Ready for What\'s Next?"\n- PATTERN C: "[Action]. [Why]." — "Follow Now. Lives Depend on It."\n- PATTERN D: "[Number] Reasons to [Action]" — "3 Reasons to Stay Alert"\n- VARY your pattern. Do NOT always use Pattern A. Make it SPECIFIC to the content.' },
-  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- PATTERN A: "[Event]. [Consequence]." — "3 Years. Zero Progress."\n- PATTERN B: "From [X] to [Y]" — "From Warning to Devastation"\n- PATTERN C: "[Timeframe]: [What Changed]" — "72 Hours: Everything Changed"\n- VARY your pattern.' },
-  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- PATTERN A: "What [Data] Actually Means" — "What These Numbers Actually Mean"\n- PATTERN B: "[Data]. Here\'s Why It Matters." — "6.8 Magnitude. Here\'s Why It Matters."\n- PATTERN C: "The [Noun] Behind [Data]" — "The Story Behind the Death Toll"\n- VARY your pattern.' },
-  { type: 'definition', rule: '- MUST explain a concept clearly\n- PATTERN A: "[Concept]: [Plain English]" — "Inflation: Your Dollar Worth Less"\n- PATTERN B: "What [Concept] Really Means for You" — "What \'Magnitude\' Really Means for You"\n- VARY your pattern.' },
-  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- left and right MUST be objects with {title, desc} — NOT strings\n- PATTERN A: "[X] vs [Y]. [Stakes]." — "Growth vs Stability. Your Choice."\n- PATTERN B: "[X] or [Y]. [Consequence]." — "Act Now or Pay Later."\n- VARY your pattern.\n- Example: left={title:"The Destruction", desc:"Widespread infrastructure failure"} right={title:"The Nuclear Status", desc:"No abnormalities reported"}' },
-  { type: 'table', rule: '- MUST compare data across categories\n- PATTERN A: "[Comparison]: [Winner/Loser]" — "Q3 Earnings: Who Won, Who Lost"\n- PATTERN B: "[Topic]: The Numbers Tell a Different Story" — "Polls: The Numbers Tell a Different Story"\n- VARY your pattern.' },
-  { type: 'profile', rule: '- MUST humanize a person or entity\n- PATTERN A: "[Person]. [What They Did]." — "The Engineer Who Saw It Coming"\n- PATTERN B: "[Person]: [Their Quote]" — "PM Tanae: We\'re Not Done Yet"\n- VARY your pattern.' },
-  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- PATTERN A: "[Left Side] vs [Right Side]" — "Before the Storm. After."\n- VARY your pattern.' },
-  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- PATTERN A: "[Topic]: [Number] Parts" — "The Deal: 3 Moving Parts"\n- PATTERN B: "Breaking Down [Topic]" — "Breaking Down the Earthquake Response"\n- VARY your pattern.' },
-  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- PATTERN A: "[Thing A]. [Thing B]. [Insight]." — "Public Promise. Private Reality."\n- VARY your pattern.' },
-  { type: 'methodology', rule: '- MUST explain a process or approach\n- PATTERN A: "How [Entity] [Did X]" — "How We Calculated the Risk"\n- VARY your pattern.' },
-  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- PATTERN A: "[Number]. [Context]." — "47%. The Real Unemployment Rate."\n- PATTERN B: "The Number That Changes Everything: [Number]" — "The Number That Changes Everything: 6.8"\n- VARY your pattern.' },
-  { type: 'checklist', rule: '- MUST provide actionable steps\n- PATTERN A: "[Number] Steps to [Outcome]" — "3 Steps to Protect Your Data"\n- PATTERN B: "What to Do Right Now" — "What to Do Right Now"\n- VARY your pattern.' },
-  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- PATTERN A: "[Category]: [Key Insight]" — "High Risk, High Reward: Where You Fall"\n- VARY your pattern.' },
-  { type: 'case-study', rule: '- MUST tell a story with outcome\n- PATTERN A: "[Entity] Tried [X]. What Happened." — "Apple Tried Foldables. What Happened."\n- VARY your pattern.' },
-  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- PATTERN A: "[Number] Resources for [Outcome]" — "5 Tools to Automate Your Workflow"\n- VARY your pattern.' },
-  { type: 'interview', rule: '- MUST feature Q&A format\n- PATTERN A: "Q: [Question]" / "A: [Key Answer]" — "Q: Is This Safe?" / "A: We Don\'t Know Yet"\n- VARY your pattern.' },
+  { type: 'cover', rule: '- MUST hook the reader in the first 3 words\n- Choose ONE of these approaches (do NOT default to the same one every time):\n- APPROACH A: Lead with the most shocking number or fact from the brief\n- APPROACH B: Ask a question the reader is already thinking\n- APPROACH C: Lead with the human impact — who is affected, what they lost\n- APPROACH D: Lead with the unexpected — what nobody anticipated\n- NEVER start with the same word as the previous carousel cover. NEVER use "13" as the first word more than once per batch.' },
+  { type: 'telemetry', rule: '- MUST include at least one number from the stats in the headline\n- PATTERN A: "[Number] [Unit]. [Number] [Unit]." — two data points contrasted\n- PATTERN B: "[Number] [Unit]. [What it means for you]."\n- PATTERN C: "The [Noun]: [Number]."\n- PATTERN D: "[Number] [Unit] — and [something unexpected]."\n- VARY your pattern. Do NOT copy the few-shot telemetry headline.' },
+  { type: 'sequence', rule: '- MUST tell a story or reveal progression\n- PATTERN A: "[Timeframe]: What Changed"\n- PATTERN B: "What We Know (and What We Don\'t)"\n- PATTERN C: "[Number] Things That Happened While You Slept"\n- PATTERN D: "From [X] to [Y]: The Timeline"\n- VARY your pattern. Make the headline specific to the content, not generic.' },
+  { type: 'myth-fact', rule: '- MUST contrast myth vs fact — check brief\'s counterpoint section\n- PATTERN A: "[Common belief]. [What evidence shows]."\n- PATTERN B: "[Myth]. [Truth]."\n- PATTERN C: "The [assumption] everyone made — Except [reality]"\n- PATTERN D: "[Fact]. Not [myth]."\n- VARY your pattern. Frame myths as assumptions, not lies.' },
+  { type: 'quote', rule: '- Headline is optional — the quote IS the content\n- PATTERN A: [Evocative tagline]\n- PATTERN B: [What They Said]\n- PATTERN C: [Person]: [Key phrase from quote]\n- VARY your pattern.' },
+  { type: 'cta', rule: '- MUST connect the content to the reader\'s life\n- PATTERN A: "[Question that makes it personal]."\n- PATTERN B: "[Action they can take]. [Why it matters]."\n- PATTERN C: "[What\'s at stake if they ignore this]."\n- PATTERN D: "[Number] reasons to [take action]"\n- VARY your pattern. Make it about THEM, not about following you.' },
+  { type: 'timeline', rule: '- MUST show progression or sequence of events\n- PATTERN A: "[Time period]. [What changed]."\n- PATTERN B: "From [X] to [Y]"\n- PATTERN C: "[Timeframe]: [Turning point]"\n- VARY your pattern.' },
+  { type: 'analysis', rule: '- MUST present insight or interpretation of data\n- PATTERN A: "What [Data] Actually Means"\n- PATTERN B: "[Data]. Here\'s Why It Matters."\n- PATTERN C: "The [Noun] Behind [Data]"\n- VARY your pattern.' },
+  { type: 'definition', rule: '- MUST explain a concept clearly\n- PATTERN A: "[Concept]: [Plain English explanation]"\n- PATTERN B: "What [Concept] Really Means for You"\n- VARY your pattern.' },
+  { type: 'dichotomy', rule: '- MUST contrast two opposing ideas\n- left and right MUST be objects with {title, desc} — NOT strings\n- PATTERN A: "[X] vs [Y]. [Stakes]."\n- PATTERN B: "[X] or [Y]. [Consequence]."\n- VARY your pattern.' },
+  { type: 'table', rule: '- MUST compare data across categories\n- PATTERN A: "[Comparison]: [Winner/Loser]"\n- PATTERN B: "[Topic]: The Numbers Tell a Different Story"\n- VARY your pattern.' },
+  { type: 'profile', rule: '- MUST humanize a person or entity\n- PATTERN A: "[Person]. [What They Did]."\n- PATTERN B: "[Person]: [Their Quote]"\n- VARY your pattern.' },
+  { type: 'image-split', rule: '- MUST use visual contrast or juxtaposition\n- PATTERN A: "[Left Side] vs [Right Side]"\n- VARY your pattern.' },
+  { type: 'breakdown', rule: '- MUST decompose a complex topic\n- PATTERN A: "[Topic]: [Number] Parts"\n- PATTERN B: "Breaking Down [Topic]"\n- VARY your pattern.' },
+  { type: 'juxtaposition', rule: '- MUST contrast two related things\n- PATTERN A: "[Thing A]. [Thing B]. [Insight]."\n- VARY your pattern.' },
+  { type: 'methodology', rule: '- MUST explain a process or approach\n- PATTERN A: "How [Entity] [Did X]"\n- VARY your pattern.' },
+  { type: 'hero-metric', rule: '- MUST highlight a single key number\n- PATTERN A: "[Number]. [Context]."\n- PATTERN B: "The Number That Changes Everything: [Number]"\n- VARY your pattern.' },
+  { type: 'checklist', rule: '- MUST provide actionable steps\n- PATTERN A: "[Number] Steps to [Outcome]"\n- PATTERN B: "What to Do Right Now"\n- VARY your pattern.' },
+  { type: 'quadrant', rule: '- MUST categorize or map concepts\n- PATTERN A: "[Category]: [Key Insight]"\n- VARY your pattern.' },
+  { type: 'case-study', rule: '- MUST tell a story with outcome\n- PATTERN A: "[Entity] Tried [X]. What Happened."\n- VARY your pattern.' },
+  { type: 'resource-grid', rule: '- MUST provide multiple resources or references\n- PATTERN A: "[Number] Resources for [Outcome]"\n- VARY your pattern.' },
+  { type: 'interview', rule: '- MUST feature Q&A format\n- PATTERN A: "Q: [Question]" / "A: [Key Answer]"\n- VARY your pattern.' },
 ];
 
 // ─── Phase 4: Generate Content ───────────────────────────────────────────────
@@ -781,13 +783,21 @@ For arrays (stats, items), use nested child elements:
 - Every slide MUST have: id, type, tag, footerLeft, footerRight.
 - footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
 
+## VARIETY RULES (CRITICAL)
+- NEVER use the same headline structure twice in one carousel. If your cover uses "[Number]. [Event].", your telemetry MUST use a different structure like "The [Noun]: [Number]" or "[Number] [Unit] — and [Contrast]".
+- NEVER start two consecutive slides with the same word.
+- NEVER use the same emotional angle twice. If your cover is urgent, your sequence should be analytical, your myth-fact should be curious, your CTA should be personal.
+- The few-shot example is for QUALITY calibration only. Do NOT replicate its specific headlines, tags, or CTAs. Your output must be ORIGINAL.
+- Each carousel must feel like a DIFFERENT editorial voice — not the same template with different numbers plugged in.
+
 ## HEADLINE RULES
 
 <headlineRules>
   <rule>Headlines MUST be a CLAIM, QUESTION, or COMMAND — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
-  <rule>Max 5 words. Fragments only. Active voice. Use contractions.</rule>
-  <rule>VARY emotional angles: curiosity ("Nobody Expected This"), urgency ("Act Now"), fear ("What's Coming"), surprise ("The Number That Changes Everything"), empathy ("Their Stories Matter"). Do NOT always use the same emotion.</rule>
-  <rule>Use power words: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Denied, Revealed, Unexpected, Alarming, Critical, Essential, Vital.</rule>
+  <rule>Max 7 words. Fragments preferred. Active voice. Use contractions when natural.</rule>
+  <rule>VARY emotional angles across slides: curiosity ("Nobody Expected This"), urgency ("Act Now"), fear ("What's Coming"), surprise ("The Number That Changes Everything"), empathy ("Their Stories Matter"), concern ("Why This Matters"), challenge ("Is This Really True?"). Do NOT use the same emotion twice in one carousel.</rule>
+  <rule>Use power words sparingly: Devastating, Shocking, Urgent, Breaking, Exclusive, Hidden, Exposed, Confirmed, Revealed, Unexpected, Critical, Essential, Rare, Pivotal. Each power word should appear at most ONCE per carousel.</rule>
+  <rule>NEVER copy the few-shot example headlines. The few-shows demonstrate STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
 </headlineRules>${domainPrinciplesSection ? `\n${domainPrinciplesSection}` : ''}`,
     user: 'Generate all slides for this carousel.',
@@ -1020,7 +1030,7 @@ export async function generateSlidesMultiPhase(
     const phase1Start = Date.now();
     briefXml = await withPhaseRetry(
       async () => {
-        const raw = await usageTracker.callLLM(llm, 'extraction', EXTRACTION_PROMPT, rawText);
+        const raw = await usageTracker.callLLM(llm, 'extraction', EXTRACTION_PROMPT, rawText, 0.3);
         return stripFences(raw);
       },
       'extraction',
@@ -1067,7 +1077,7 @@ export async function generateSlidesMultiPhase(
         try {
           const domainRaw = await withPhaseRetry(
             async () => {
-              const raw = await usageTracker.callLLM(llm, 'classification', domainSystem, domainUser);
+              const raw = await usageTracker.callLLM(llm, 'classification', domainSystem, domainUser, 0.3);
               return stripFences(raw);
             },
             'extraction', // using extraction budget for domain classification
@@ -1087,7 +1097,7 @@ export async function generateSlidesMultiPhase(
         onDebug?.('02-prompt-phase2-select-template.md', `## System\n\n${selSystem}\n\n## User\n\n${selUser}`);
 
         try {
-          const selRaw = await usageTracker.callLLM(llm, 'selection', selSystem, selUser);
+          const selRaw = await usageTracker.callLLM(llm, 'selection', selSystem, selUser, 0.5);
           const selXml = stripFences(selRaw);
           selectionXml = selXml;
           onDebug?.('06-phase2-selection.xml', selXml);
@@ -1131,7 +1141,7 @@ export async function generateSlidesMultiPhase(
 
     planXml = await withPhaseRetry(
       async () => {
-        const raw = await usageTracker.callLLM(llm, 'planning', planSystem, planUser);
+        const raw = await usageTracker.callLLM(llm, 'planning', planSystem, planUser, 0.5);
         return stripFences(raw);
       },
       'planning',
@@ -1182,7 +1192,7 @@ export async function generateSlidesMultiPhase(
 
     genCleaned = await withPhaseRetry(
       async () => {
-        const raw = await usageTracker.callLLM(llm, 'generation', genSystem, genUser);
+        const raw = await usageTracker.callLLM(llm, 'generation', genSystem, genUser, 0.9);
         return stripFences(raw);
       },
       'generation',
@@ -1206,6 +1216,7 @@ export async function generateSlidesMultiPhase(
         'generation',
         genSystem + `\n\n## PREVIOUS ATTEMPT FAILED\nThe XML was malformed or had no slides. Return valid XML with a <slidePlan> containing all slides.`,
         genUser,
+        0.9,
       );
       genCleaned = stripFences(retryRaw);
     }
@@ -1270,7 +1281,7 @@ export async function generateSlidesMultiPhase(
     onDebug?.('09-prompt-label-detect.md', `## System\n\n${detectSystem}\n\n## User\n\n${detectUser}`);
 
     try {
-      const detectRaw = await usageTracker.callLLM(llm, 'label-detection', detectSystem, detectUser);
+      const detectRaw = await usageTracker.callLLM(llm, 'label-detection', detectSystem, detectUser, 0.1);
       const detectCleaned = stripFences(detectRaw);
       onDebug?.('10-label-detection.json', detectCleaned);
 
@@ -1298,7 +1309,7 @@ export async function generateSlidesMultiPhase(
           onDebug?.(`11-retry-${label.id}-prompt.md`, `## System\n\n${retrySystem}\n\n## User\n\n${retryUser}`);
 
           try {
-            const retryRaw = await usageTracker.callLLM(llm, 'label-detection', retrySystem, retryUser);
+            const retryRaw = await usageTracker.callLLM(llm, 'label-detection', retrySystem, retryUser, 0.1);
             const retryCleaned = stripFences(retryRaw);
             onDebug?.(`12-retry-${label.id}-result.xml`, retryCleaned);
 
@@ -1423,7 +1434,7 @@ Return the fixed XML carousel.`;
 
     try {
       const response = await withPhaseRetry(
-        () => usageTracker.callLLM(llm, 'creativeDirector', creativeDirectorPrompt, ''),
+        () => usageTracker.callLLM(llm, 'creativeDirector', creativeDirectorPrompt, '', 0.9),
         'creativeDirector',
         retriesUsed,
       );

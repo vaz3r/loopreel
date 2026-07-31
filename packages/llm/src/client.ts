@@ -9,11 +9,11 @@ export interface LLMResponse {
 }
 
 export interface LLMClient {
-  generateJSON(systemPrompt: string, userText: string): Promise<LLMResponse>;
+  generateJSON(systemPrompt: string, userText: string, temperature?: number): Promise<LLMResponse>;
 }
 
 class OpenRouterClient implements LLMClient {
-  async generateJSON(systemPrompt: string, userText: string): Promise<LLMResponse> {
+  async generateJSON(systemPrompt: string, userText: string, temperature?: number): Promise<LLMResponse> {
     const apiKey = process.env['LLM_API_KEY'] ?? '';
     const baseUrl = process.env['LLM_BASE_URL'] ?? 'https://openrouter.ai/api/v1';
     const model = process.env['LLM_MODEL'] ?? 'openai/gpt-oss-20b:free';
@@ -33,6 +33,7 @@ class OpenRouterClient implements LLMClient {
           signal: AbortSignal.timeout(timeout),
           body: JSON.stringify({
             model,
+            temperature: temperature ?? 0.7,
             messages: [
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userText },
@@ -84,7 +85,7 @@ class OpenRouterClient implements LLMClient {
 }
 
 class GoogleAIStudioClient implements LLMClient {
-  async generateJSON(systemPrompt: string, userText: string): Promise<LLMResponse> {
+  async generateJSON(systemPrompt: string, userText: string, temperature?: number): Promise<LLMResponse> {
     const apiKey = process.env['LLM_GOOGLE_API_KEY'] ?? '';
     const model = process.env['LLM_MODEL'] ?? 'gemini-2.5-flash-lite';
     const timeout = Number(process.env['LLM_TIMEOUT'] ?? '120000');
@@ -113,7 +114,7 @@ class GoogleAIStudioClient implements LLMClient {
               },
             ],
             generationConfig: {
-              temperature: 0.7,
+              temperature: temperature ?? 0.7,
               maxOutputTokens: 4096,
             },
           }),
@@ -339,8 +340,8 @@ class DynamicLLMClient implements LLMClient {
     return this.provider;
   }
 
-  async generateJSON(systemPrompt: string, userText: string): Promise<LLMResponse> {
-    return this.getProvider().generateJSON(systemPrompt, userText);
+  async generateJSON(systemPrompt: string, userText: string, temperature?: number): Promise<LLMResponse> {
+    return this.getProvider().generateJSON(systemPrompt, userText, temperature);
   }
 }
 
