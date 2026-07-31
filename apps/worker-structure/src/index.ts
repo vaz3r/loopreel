@@ -2,11 +2,11 @@ import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import type { StructurePayload } from '@loopreel/schemas';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop-bridge';
-import { createLLMClient, parseLlmXmlOutput, generateSlidesMultiPhase, calculateCost } from '@loopreel/llm';
+import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
-import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
-import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
 import { classifyError } from '@loopreel/errors';
+import { sanitizeSlides } from './slide-sanitizer.js';
+import { fetchImagesForSlides } from './image-fetcher.js';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import pino from 'pino';
@@ -43,122 +43,6 @@ function stripMarkdownFences(text: string): string {
   return cleaned.trim();
 }
 
-async function fetchImagesForSlides(
-  slides: Record<string, unknown>[],
-  jobId: string,
-): Promise<Record<string, unknown>[]> {
-  return Promise.all(
-    slides.map(async (slide, idx) => {
-      const type = slide['type'] as string;
-      if ((type === 'image-split' || type === 'image-cover') && slide['imageKeywords'] && !slide['imageUrl']) {
-        try {
-          const keywords = slide['imageKeywords'] as string;
-          let imageUrl: string;
-
-          try {
-            const photo = await getRandomPhoto(keywords, { orientation: 'portrait' });
-            const url = getPhotoUrl(photo, 'raw', 1080);
-            const buffer = await downloadImage(url);
-            const r2Key = await uploadImage(jobId, idx, buffer);
-            imageUrl = await getPresignedUrl(r2Key);
-          } catch {
-            imageUrl = getPlaceholderUrl(keywords);
-          }
-
-          return { ...slide, imageUrl };
-        } catch {
-          return slide;
-        }
-      }
-      return slide;
-    }),
-  );
-}
-
-const VALID_SLIDE_TYPES = ['cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant', 'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta', 'profile', 'analysis', 'definition', 'dichotomy', 'table', 'breakdown', 'juxtaposition', 'methodology', 'hero-metric', 'checklist'];
-
-const TYPE_MAP: Record<string, string> = {
-  'hero-metric': 'telemetry',
-  'hero': 'telemetry',
-  'metric': 'telemetry',
-  'stats': 'telemetry',
-  'data': 'telemetry',
-  'comparison': 'quadrant',
-  'dichotomy': 'quadrant',
-  'vs': 'quadrant',
-  'checklist': 'resource-grid',
-  'resources': 'resource-grid',
-  'list': 'sequence',
-  'steps': 'sequence',
-  'pros-cons': 'quadrant',
-  'proscons': 'quadrant',
-  'myth': 'myth-fact',
-  'fact': 'myth-fact',
-  'debunk': 'myth-fact',
-  'expert': 'interview',
-  'qa': 'interview',
-  'q&a': 'interview',
-  'interview-slide': 'interview',
-};
-
-function sanitizeSlides(slides: Record<string, unknown>[]): Record<string, unknown>[] {
-  return slides
-    .filter((s) => typeof s === 'object' && s !== null)
-    .map((slide) => {
-      let type = String(slide.type ?? '');
-
-      if (!VALID_SLIDE_TYPES.includes(type)) {
-        const mapped = TYPE_MAP[type.toLowerCase()];
-        type = mapped ?? 'sequence';
-      }
-
-      const fixed: Record<string, unknown> = { ...slide, type };
-
-      // Fix string fields that the LLM wraps in objects
-      const stringFields = ['headline', 'subheadline', 'tag', 'myth', 'fact', 'quote',
-        'respondentName', 'respondentRole', 'author', 'role', 'credit', 'bodyText',
-        'subtext', 'actionLabel', 'socialHandle'];
-      for (const field of stringFields) {
-        if (fixed[field] && typeof fixed[field] === 'object') {
-          const obj = fixed[field] as Record<string, unknown>;
-          fixed[field] = obj.title ?? obj.text ?? obj.name ?? obj.value ?? JSON.stringify(obj);
-        }
-      }
-
-      // Ensure quadrant slides have required fields
-      if (type === 'quadrant') {
-        for (const corner of ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']) {
-          if (!fixed[corner] || typeof fixed[corner] !== 'object') {
-            fixed[corner] = { title: corner, desc: '' };
-          }
-        }
-      }
-
-      // Ensure interview slides have string respondentName
-      if (type === 'interview') {
-        if (typeof fixed.respondentName !== 'string') fixed.respondentName = '';
-        if (typeof fixed.respondentRole !== 'string') fixed.respondentRole = '';
-      }
-
-      // Ensure case-study has stages array
-      if (type === 'case-study' && (!fixed.stages || !Array.isArray(fixed.stages))) {
-        fixed.stages = [{ label: 'Step 1', title: 'Process', desc: 'Key process step', highlighted: 'true' }];
-      }
-
-      // Ensure resource-grid has items array
-      if (type === 'resource-grid' && (!fixed.items || !Array.isArray(fixed.items))) {
-        fixed.items = [{ title: 'Resource', desc: 'Key resource' }];
-      }
-
-      // Ensure timeline has events array
-      if (type === 'timeline' && (!fixed.events || !Array.isArray(fixed.events))) {
-        fixed.events = [{ date: '2024', title: 'Event', desc: 'Key event', highlight: 'true' }];
-      }
-
-      return fixed;
-    });
-}
-
 const worker = createWorker<StructurePayload>('structure', async (job) => {
   const { jobId, rawText } = job.data;
   const jobLogger = logger.child({ jobId, workerType: 'structure' });
@@ -193,7 +77,6 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     if (useMultiPhase) {
       const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
 
-      // Build template info with full schema introspection for each template
       const TEMPLATE_STYLES: Record<string, { name: string; aesthetics: string }> = {
         'paper-of-record': { name: 'The Paper of Record', aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.' },
         'the-globalist': { name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.' },
@@ -211,7 +94,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         toneKeywords: entry.toneKeywords,
       }));
 
-      const result = await generateSlidesMultiPhase(rawText, templates, {
+      const result = await generateSlides(rawText, templates, {
         llm,
         brandKit,
         onProgress: (phase, detail) => {

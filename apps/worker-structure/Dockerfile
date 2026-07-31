@@ -56,6 +56,7 @@ COPY --from=builder /app/packages/types/dist ./packages/types/dist
 COPY --from=builder /app/packages/queue/dist ./packages/queue/dist
 COPY --from=builder /app/packages/llm/dist ./packages/llm/dist
 COPY --from=builder /app/packages/llm/domains ./packages/llm/domains
+COPY --from=builder /app/packages/llm/src/brain/prompts ./packages/llm/src/brain/prompts
 COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
 COPY --from=builder /app/packages/backgrounds/dist ./packages/backgrounds/dist
 COPY --from=builder /app/packages/storage/dist ./packages/storage/dist

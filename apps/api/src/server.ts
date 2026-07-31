@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import { jobsRoute, slidesRoute } from './routes/jobs.js';
+import { routes } from './routes/index.js';
 import { healthRoute } from './routes/health.js';
 import { adminRoute } from './routes/admin.js';
 import { startTtlSweeper } from './services/sweeper.js';
@@ -34,8 +34,7 @@ await app.register(swaggerUi, {
   routePrefix: '/docs',
 });
 
-await app.register(jobsRoute);
-await app.register(slidesRoute);
+await app.register(routes);
 await app.register(healthRoute);
 await app.register(adminRoute);
 

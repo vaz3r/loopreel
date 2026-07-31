@@ -1,37 +1,19 @@
-import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Download, ClipboardCopy, Check, RotateCcw } from 'lucide-react';
 import { useJob, useRetryJob } from '@/api/hooks';
 import { StatusTimeline } from '@/components/StatusTimeline';
 import { SlidePreview } from '@/components/SlidePreview';
-import { PLATFORM_LABELS } from '@/lib/constants';
-
-function formatCost(cost: number): string {
-  if (cost === 0) return '$0.00';
-  if (cost < 0.01) return '<$0.01';
-  return `$${cost.toFixed(4)}`;
-}
-
-function formatTokens(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
-  return String(n);
-}
+import { JobHeader } from '@/components/jobs/JobHeader';
+import { JobInfoGrid } from '@/components/jobs/JobInfoGrid';
+import { CostBreakdown } from '@/components/jobs/CostBreakdown';
+import { ErrorDetails } from '@/components/jobs/ErrorDetails';
+import { SocialPostCard } from '@/components/jobs/SocialPostCard';
 
 export function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: job, isLoading, error } = useJob(id!);
   const retryMutation = useRetryJob();
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-
-  function copyToClipboard(text: string, label: string) {
-    navigator.clipboard.writeText(text);
-    setCopiedText(label);
-    setTimeout(() => setCopiedText(null), 2000);
-  }
 
   function handleRetry() {
     if (!id) return;
@@ -69,189 +51,47 @@ export function JobDetailPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-3">
-        <Link to="/jobs" className="text-text-quaternary hover:text-text-primary transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <div className="flex-1">
-          <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">Job Details</h1>
-          <p className="text-[11px] text-text-quaternary font-mono mt-0.5">{job.id}</p>
-        </div>
-        {job.status === 'complete' && (
-          <Button asChild className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium">
-            <a href={`/api/jobs/${job.id}/download?format=all`}>
-              <Download className="mr-1.5 h-3.5 w-3.5" />
-              Download
-            </a>
-          </Button>
-        )}
-        {job.status === 'failed' && (
-          <Button
-            onClick={handleRetry}
-            disabled={retryMutation.isPending}
-            className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium"
-          >
-            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {retryMutation.isPending ? 'Retrying...' : 'Retry'}
-          </Button>
-        )}
-        {job.status === 'needs_review' && (
-          <Button
-            onClick={handleRetry}
-            disabled={retryMutation.isPending}
-            className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium"
-          >
-            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {retryMutation.isPending ? 'Retrying...' : 'Retry'}
-          </Button>
-        )}
-      </div>
+      <JobHeader
+        jobId={job.id}
+        status={job.status}
+        onRetry={handleRetry}
+        isRetrying={retryMutation.isPending}
+      />
 
       <StatusTimeline job={job} />
 
-      <div className="grid grid-cols-2 gap-px bg-border rounded-lg overflow-hidden sm:grid-cols-4">
-        {[
-          { label: 'Source', value: job.sourceUrl, truncate: true },
-          { label: 'Platform', value: PLATFORM_LABELS[job.platform] ?? job.platform },
-          { label: 'Template', value: job.templateId },
-          { label: 'Slides', value: String(job.slideCount ?? '—') },
-        ].map((item) => (
-          <div key={item.label} className="bg-card p-4">
-            <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">{item.label}</p>
-            <p className={`text-[13px] text-text-secondary mt-1 ${item.truncate ? 'truncate' : ''}`}>{item.value}</p>
-          </div>
-        ))}
-      </div>
+      <JobInfoGrid
+        sourceUrl={job.sourceUrl}
+        platform={job.platform}
+        templateId={job.templateId}
+        slideCount={job.slideCount}
+      />
 
-      {/* Cost Breakdown */}
-      {job.totalCostUsd > 0 && (
-        <div className="rounded-lg border border-border bg-card p-5">
-          <h3 className="text-[13px] font-medium text-text-secondary mb-4">Cost Breakdown</h3>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Total Cost</p>
-              <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{formatCost(job.totalCostUsd)}</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Input Tokens</p>
-              <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{formatTokens(job.totalPromptTokens)}</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary">Output Tokens</p>
-              <p className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary mt-1">{formatTokens(job.totalCompletionTokens)}</p>
-            </div>
-          </div>
+      <CostBreakdown
+        totalCostUsd={job.totalCostUsd}
+        totalPromptTokens={job.totalPromptTokens}
+        totalCompletionTokens={job.totalCompletionTokens}
+        llmUsage={job.llmUsage}
+      />
 
-          {job.llmUsage.length > 0 && (
-            <div className="mt-4">
-              <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-text-quaternary mb-2">Per-Phase Breakdown</p>
-              <div className="overflow-x-auto">
-                <table className="w-full text-[12px]">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 text-text-quaternary font-medium">Phase</th>
-                      <th className="text-right py-2 text-text-quaternary font-medium">Input</th>
-                      <th className="text-right py-2 text-text-quaternary font-medium">Output</th>
-                      <th className="text-right py-2 text-text-quaternary font-medium">Latency</th>
-                      <th className="text-right py-2 text-text-quaternary font-medium">Cost</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {job.llmUsage.map((u, i) => (
-                      <tr key={i} className="border-b border-border/50">
-                        <td className="py-1.5 text-text-tertiary">{u.phase}</td>
-                        <td className="py-1.5 text-text-tertiary text-right font-mono">{formatTokens(u.promptTokens)}</td>
-                        <td className="py-1.5 text-text-tertiary text-right font-mono">{formatTokens(u.completionTokens)}</td>
-                        <td className="py-1.5 text-text-tertiary text-right font-mono">{u.latencyMs}ms</td>
-                        <td className="py-1.5 text-text-tertiary text-right font-mono">{formatCost(u.estimatedCostUsd)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {job.status === 'failed' && job.errorPayload && (
-        <div className="rounded-lg border border-border bg-card p-5">
-          <h3 className="text-[13px] font-medium text-text-secondary mb-3">Error Details</h3>
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <span className="text-[12px] text-text-quaternary font-medium w-16">Stage</span>
-              <span className="text-[12px] text-text-tertiary">{job.errorPayload.stage}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-[12px] text-text-quaternary font-medium w-16">Reason</span>
-              <span className="text-[12px] text-text-tertiary">{job.errorPayload.reason}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-[12px] text-text-quaternary font-medium w-16">Details</span>
-              <span className="text-[12px] text-text-tertiary break-all">{job.errorPayload.details}</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {job.status === 'needs_review' && job.errorPayload && (
-        <div className="rounded-lg border border-border bg-card p-5">
-          <h3 className="text-[13px] font-medium text-text-secondary mb-3">Review Details</h3>
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <span className="text-[12px] text-text-quaternary font-medium w-16">Stage</span>
-              <span className="text-[12px] text-text-tertiary">{job.errorPayload.stage}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-[12px] text-text-quaternary font-medium w-16">Reason</span>
-              <span className="text-[12px] text-text-tertiary">{job.errorPayload.reason}</span>
-            </div>
-          </div>
-        </div>
-      )}
+      <ErrorDetails status={job.status} errorPayload={job.errorPayload} />
 
       <SlidePreview job={job} />
 
       {linkedinPost && (
-        <div className="rounded-lg border border-border bg-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[13px] font-medium text-text-secondary">LinkedIn Post</h3>
-            <button
-              onClick={() => copyToClipboard(linkedinPost.contentText!, 'linkedin')}
-              className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors flex items-center gap-1"
-            >
-              {copiedText === 'linkedin' ? (
-                <><Check className="h-3 w-3" /> Copied</>
-              ) : (
-                <><ClipboardCopy className="h-3 w-3" /> Copy</>
-              )}
-            </button>
-          </div>
-          <pre className="text-[13px] text-text-tertiary whitespace-pre-wrap font-sans leading-relaxed bg-surface-1 rounded-md p-3 max-h-64 overflow-y-auto border border-border">
-            {linkedinPost.contentText}
-          </pre>
-        </div>
+        <SocialPostCard
+          title="LinkedIn Post"
+          content={linkedinPost.contentText!}
+          copyLabel="linkedin"
+        />
       )}
 
       {twitterThread && (
-        <div className="rounded-lg border border-border bg-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[13px] font-medium text-text-secondary">Twitter Thread</h3>
-            <button
-              onClick={() => copyToClipboard(twitterThread.contentText!, 'twitter')}
-              className="text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors flex items-center gap-1"
-            >
-              {copiedText === 'twitter' ? (
-                <><Check className="h-3 w-3" /> Copied</>
-              ) : (
-                <><ClipboardCopy className="h-3 w-3" /> Copy</>
-              )}
-            </button>
-          </div>
-          <pre className="text-[13px] text-text-tertiary whitespace-pre-wrap font-sans leading-relaxed bg-surface-1 rounded-md p-3 max-h-64 overflow-y-auto border border-border">
-            {twitterThread.contentText}
-          </pre>
-        </div>
+        <SocialPostCard
+          title="Twitter Thread"
+          content={twitterThread.contentText!}
+          copyLabel="twitter"
+        />
       )}
     </div>
   );
