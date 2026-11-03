@@ -19,20 +19,51 @@ const MIME: Record<string, string> = {
   '.woff2': 'font/woff2',
 };
 
-export function startStaticServer(port: number): void {
-  const distDir = path.resolve(process.cwd(), 'packages/loop/dist');
+function resolveLoopDistDir(): string {
+  if (process.env['LOOP_DIST_DIR'] && fs.existsSync(process.env['LOOP_DIST_DIR'])) {
+    return process.env['LOOP_DIST_DIR'];
+  }
 
-  if (!fs.existsSync(distDir)) {
+  const candidates = [
+    // Relative from apps/worker-render (PM2 / dev)
+    path.resolve(process.cwd(), '../../packages/loop/dist'),
+    // Next to app root in monorepo
+    path.resolve(process.cwd(), 'packages/loop/dist'),
+    // Relative to source or compiled file location
+    path.resolve(import.meta.dirname ?? '.', '../../../packages/loop/dist'),
+    path.resolve(import.meta.dirname ?? '.', '../../../../packages/loop/dist'),
+    // In Docker container
+    '/app/packages/loop/dist',
+  ];
+
+  for (const dir of candidates) {
+    if (fs.existsSync(dir) && fs.existsSync(path.join(dir, 'index.html'))) {
+      return dir;
+    }
+  }
+
+  return candidates[0]!;
+}
+
+export function startStaticServer(port: number): void {
+  const distDir = resolveLoopDistDir();
+
+  if (!fs.existsSync(distDir) || !fs.existsSync(path.join(distDir, 'index.html'))) {
     logger.warn({ distDir }, 'Loop static dist not found, render will fail');
   }
 
   http.createServer((req, res) => {
-    const url = req.url === '/' ? '/index.html' : req.url!;
-    const filePath = path.join(distDir, url);
+    const parsedUrl = new URL(req.url ?? '/', 'http://localhost');
+    const pathname = parsedUrl.pathname === '/' ? '/index.html' : parsedUrl.pathname;
+    let filePath = path.join(distDir, pathname);
+
+    if (!fs.existsSync(filePath) && !path.extname(pathname)) {
+      filePath = path.join(distDir, 'index.html');
+    }
 
     fs.readFile(filePath, (err, data) => {
       if (err) {
-        res.writeHead(404);
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not found');
         return;
       }

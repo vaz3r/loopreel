@@ -6,6 +6,7 @@ const localEnv = {
   REDIS_URL: 'redis://localhost:6379',
   LLM_PROVIDER: 'mock',
   LOG_LEVEL: 'info',
+  LOOP_DIST_DIR: resolve(__dirname, 'packages/loop/dist'),
 };
 
 module.exports = {
