@@ -109,6 +109,18 @@ export async function handleBlog(
     throw new Error('Extracted text is too short (< 10 chars)');
   }
 
+  // Pre-structure validation: fail fast on garbage/insufficient content
+  if (rawText.length < 500) {
+    logger.warn({ textLength: rawText.length, sourceUrl }, 'Content too short for reliable structuring — marking failed');
+    await JobRepository.updateStatus(jobId, 'failed');
+    await JobRepository.markFailed(jobId, {
+      stage: 'ingesting',
+      reason: 'content_too_short',
+      details: `Only ${rawText.length} chars scraped from ${sourceUrl}. Article may be behind a paywall, login wall, or the page returned an error. Minimum required: 500 chars.`,
+    });
+    return;
+  }
+
   logger.info({ textLength: rawText.length }, 'Content scraped');
 
   if (DEBUG_LOG) {

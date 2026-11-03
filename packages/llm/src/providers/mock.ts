@@ -2,7 +2,120 @@ import type { LLMClient, LLMResponse } from '../client.js';
 
 export class MockLLMClient implements LLMClient {
   async generateJSON(_systemPrompt: string, _userText: string): Promise<LLMResponse> {
-    if (_systemPrompt.includes('"The Paper of Record"')) {
+    // Phase 4.7: Source Fidelity
+    if (_systemPrompt.includes('You are a content auditor')) {
+      return {
+        text: `<fidelityCheck>
+  <sourceGrounding count="5" pass="PASS">
+    Found key insights, metrics, quotes, and author references from the brief.
+  </sourceGrounding>
+  <selfReference detected="false" pass="PASS">
+    No references to the generator tool or AI limitations detected.
+  </selfReference>
+  <fillerDetection detected="false" pass="PASS">
+    No generic filler slides found.
+  </fillerDetection>
+  <topicAlignment match="true" pass="PASS">
+    Slides align directly with the enterprise AI subject matter.
+  </topicAlignment>
+  <verdict>PASS</verdict>
+</fidelityCheck>`,
+        usage: { promptTokens: 300, completionTokens: 120 },
+      };
+    }
+
+    // Phase 4.7: Narrative Coherence
+    if (_systemPrompt.includes('You are an editorial reviewer')) {
+      return {
+        text: JSON.stringify({
+          repetitions: [],
+          fillerSlides: [],
+          narrativeArc: 'strong',
+          verdict: 'pass',
+        }),
+        usage: { promptTokens: 250, completionTokens: 50 },
+      };
+    }
+
+    // Phase 4.5: Label Detection
+    if (_systemPrompt.includes('You are a copy editor evaluating slide headlines') || _userText.startsWith('Classify these headlines')) {
+      return {
+        text: `<labelDetection>
+  <labelsFound>false</labelsFound>
+</labelDetection>`,
+        usage: { promptTokens: 250, completionTokens: 40 },
+      };
+    }
+
+    // Phase 3: Template Selection
+    if (_systemPrompt.includes('templateSelection') || _systemPrompt.includes('Select the single best slide template')) {
+      return {
+        text: `<templateSelection>
+  <templateId>paper-of-record</templateId>
+  <rationale>Authoritative longform technical analysis fits the Paper of Record layout</rationale>
+</templateSelection>`,
+        usage: { promptTokens: 300, completionTokens: 80 },
+      };
+    }
+
+    // Phase 3: Slide Planning
+    if (_systemPrompt.includes('slidePlan') || _systemPrompt.includes('Plan the sequence of slides')) {
+      return {
+        text: `<slidePlan>
+  <slide num="1" type="cover" />
+  <slide num="2" type="sequence" />
+  <slide num="3" type="telemetry" />
+  <slide num="4" type="quote" />
+  <slide num="5" type="cta" />
+</slidePlan>`,
+        usage: { promptTokens: 300, completionTokens: 70 },
+      };
+    }
+
+    // Phase 2: Domain Classification
+    if (_systemPrompt.includes('domainClassification') || _systemPrompt.includes('Classify the provided content brief')) {
+      return {
+        text: `<domainClassification>
+  <domainId>tech</domainId>
+  <confidence>high</confidence>
+</domainClassification>`,
+        usage: { promptTokens: 200, completionTokens: 50 },
+      };
+    }
+
+    // Phase 1: Extraction
+    if (_systemPrompt.includes('Extract structured insights') || (_systemPrompt.includes('contentBrief') && _systemPrompt.includes('readingLevel'))) {
+      return {
+        text: `<contentBrief>
+  <title>The Rise of Artificial Intelligence in Enterprise</title>
+  <oneLiner>How machine learning is reshaping enterprise workflows and data operations</oneLiner>
+  <keyInsights>
+    <insight>Autonomous AI agents are increasingly handling complex multi-step tasks</insight>
+    <insight>Multimodal models process vision, code, and audio in real-time pipelines</insight>
+    <insight>Data gravity is driving enterprise compute closer to edge devices</insight>
+  </keyInsights>
+  <quotes>
+    <quote text="Artificial intelligence is transforming every modern industry with unprecedented speed." speaker="Jane Smith" context="Annual Technology Review" />
+  </quotes>
+  <counterpoints>
+    <point>Legacy architecture challenges continue to slow deployment in regulated sectors</point>
+  </counterpoints>
+  <hardData>
+    <data metric="Enterprise adoption growth" value="42%" />
+    <data metric="Global market value" value="$184B" />
+  </hardData>
+  <hasRealNumbers>true</hasRealNumbers>
+  <people>
+    <person name="Jane Smith" title="Lead Researcher" affiliation="AI Lab" />
+  </people>
+  <tone>analytical</tone>
+  <readingLevel>professional</readingLevel>
+</contentBrief>`,
+        usage: { promptTokens: 350, completionTokens: 250 },
+      };
+    }
+
+    if (_systemPrompt.includes('Paper of Record')) {
       return {
         text: `<presentation>
   <slide type="cover" id="slide-01" tag="TECHNOLOGY" headline="The Future of Artificial Intelligence" subheadline="How machine learning is reshaping every industry from healthcare to finance" authorName="Jane Smith" authorRole="Technology Correspondent" footerLeft="AI SERIES" footerRight="PAGE 01" />
@@ -26,7 +139,7 @@ export class MockLLMClient implements LLMClient {
       };
     }
 
-    if (_systemPrompt.includes('"The Globalist"')) {
+    if (_systemPrompt.includes('The Globalist')) {
       return {
         text: `<presentation>
   <slide type="cover" id="slide-01" tag="SPECIAL REPORT" headline="The End of Cheap Capital" subheadline="How rising rates are forcing a global restructuring of corporate debt" authorName="Maria Torres" authorRole="Financial Correspondent" footerLeft="MACRO-ECONOMICS" footerRight="PAGE 01" />
@@ -49,7 +162,7 @@ export class MockLLMClient implements LLMClient {
       };
     }
 
-    if (_systemPrompt.includes('"The Terminal"')) {
+    if (_systemPrompt.includes('The Terminal')) {
       return {
         text: `<presentation>
   <slide type="cover" id="slide-01" tag="MARKET_DATA" headline="Terminal Access Granted" subheadline="Real-time quantitative analysis of global macro trends" authorName="J. Stevens" authorRole="Macro Strategy" footerLeft="SYSTEM" footerRight="PAGE 01" />
@@ -74,7 +187,7 @@ export class MockLLMClient implements LLMClient {
       };
     }
 
-    if (_systemPrompt.includes('"The Curator"')) {
+    if (_systemPrompt.includes('The Curator')) {
       return {
         text: `<presentation>
   <slide type="cover" id="slide-01" tag="EXHIBITION" headline="The Space Between" subheadline="An architectural study of negative space in modern design" pullQuote="True luxury is never loud." footerLeft="ARCHIVE REF: CURATOR.STUDIO" footerRight="PAGE 01" />
@@ -105,7 +218,7 @@ export class MockLLMClient implements LLMClient {
       };
     }
 
-    if (_systemPrompt.includes('"The Academic"')) {
+    if (_systemPrompt.includes('The Academic')) {
       return {
         text: `<presentation>
   <slide type="cover" id="slide-01" tag="ABSTRACT" headline="The Organizational Friction Matrix" subheadline="This paper examines the counter-intuitive paradigm wherein intentionally introducing friction yields expansion in net margins" authorName="Dr. Arthur Vance" authorRole="Department of Behavioral Economics" footerLeft="DOI: 10.1016/J.BUSRES.2026" footerRight="PAGE 01" />

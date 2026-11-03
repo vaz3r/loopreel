@@ -47,3 +47,24 @@ Return a single <contentBrief> element:
 - Keep each point concise (1-2 sentences)
 - readingLevel: "general" = accessible to any reader, no specialized knowledge required. "professional" = assumes industry knowledge, uses business/sector terminology. "technical" = requires domain expertise, uses jargon or specialized concepts.
 - Return ONLY the XML, no markdown fences, no explanation
+
+## Edge Cases
+
+- If the article content is empty, garbled, incomplete, or appears to be an error page (e.g., "404 Not Found", "Page does not exist", "Access Denied", or very short fragments), return this minimal brief WITHOUT inventing any content:
+
+<contentBrief>
+  <title>UNABLE TO EXTRACT</title>
+  <oneLiner>The source content could not be read or contains no meaningful article text.</oneLiner>
+  <keyInsights></keyInsights>
+  <quotes></quotes>
+  <counterpoints></counterpoints>
+  <hardData></hardData>
+  <hasRealNumbers>false</hasRealNumbers>
+  <people></people>
+  <tone>neutral</tone>
+  <readingLevel>general</readingLevel>
+</contentBrief>
+
+- Do NOT invent content to fill the brief when the source is empty or unreadable. An empty brief is better than a fabricated one.
+- Do NOT hallucinate article titles, insights, quotes, or data that do not appear in the provided text.
+- If the text appears to be navigation menus, cookie notices, or page boilerplate rather than article content, return the empty brief above.

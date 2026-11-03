@@ -5,3 +5,4 @@ export { generateSlides } from './brain/index.js';
 export type { BrainResult, TemplateInfo } from './brain/index.js';
 export { introspectSchema } from './schema-introspect.js';
 export { calculateCost, MODEL_PRICING } from './pricing.js';
+export { validateInput } from './brain/input-validator.js';

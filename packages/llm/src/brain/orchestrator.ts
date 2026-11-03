@@ -6,6 +6,8 @@ import { loadAllDomains, classifyDomainPrompt, parseDomainClassification } from 
 import { stripFences, unwrapChildWrappers, createFallbackSlide, xmlToObjects, objectToXml } from './xml-helpers.js';
 import { renderPrompt } from './prompts/loader.js';
 import { buildSlideTypeRules, buildFieldLimitsSection, buildHeadlinePatterns, getAllPowerWords } from './slide-type-loader.js';
+import { validateInput } from './input-validator.js';
+import { checkCoherence, checkSourceFidelity, checkCoherenceLLM, type FidelityCheckResult, type CoherenceLLMCheckResult } from './content-validator.js';
 
 function buildSlidePlanPrompt(
   briefXml: string,
@@ -155,6 +157,20 @@ export async function generateSlides(
   const { llm, onProgress, onDebug, brandKit, checkpoint, retriesUsed = {}, onSaveCheckpoint } = options;
   const totalStart = Date.now();
   const usageTracker = createUsageTracker();
+
+  // ── PHASE 0: Input Validation ─────────────────────────────────────────────
+  // Deterministic pre-flight check — no LLM calls, prevents garbage-in scenarios.
+  if (!checkpoint?.data?.briefXml) {
+    onProgress?.('input-validation', 'Phase 0: Validating input quality...');
+    const inputResult = validateInput(rawText);
+    onDebug?.('00-input-validation.json', JSON.stringify(inputResult, null, 2));
+
+    if (!inputResult.valid) {
+      onProgress?.('input-validation', `Input rejected: ${inputResult.reason} — ${inputResult.details}`);
+      throw new Error(`Input validation failed: ${inputResult.reason} — ${inputResult.details}`);
+    }
+    onProgress?.('input-validation', `Input OK: ${inputResult.textLength} chars, ${inputResult.bodyLineCount} body lines`);
+  }
 
   let briefXml = checkpoint?.data?.briefXml as string | undefined;
   let selectedDomain = checkpoint?.data?.domain as DomainExamples | undefined;
@@ -412,8 +428,123 @@ export async function generateSlides(
     slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
   }
 
-  // ── PHASE 4.5: Label Detection + Retry ────────────────────────────────────
+  // ── PHASE 4.7: Content Validation (Source Fidelity + Coherence) ──────────
   let needsReview = false;
+  let sourceFidelityResult: FidelityCheckResult | null = null;
+  let coherenceResult: CoherenceLLMCheckResult | null = null;
+
+  if (briefXml && slides.length > 0 && !checkpoint?.data?.genCleaned) {
+    // Deterministic coherence check (no LLM, instant)
+    onProgress?.('content-validation', 'Phase 4.7a: Checking coherence and repetition...');
+    const deterministicCoherence = checkCoherence(slides);
+    onDebug?.('14a-coherence-deterministic.json', JSON.stringify(deterministicCoherence, null, 2));
+
+    if (deterministicCoherence.issues.length > 0) {
+      onProgress?.('content-validation', `Coherence issues: ${deterministicCoherence.issues.join('; ')}`);
+    }
+
+    // LLM-based source fidelity check
+    if (slides.length >= 3) {
+      onProgress?.('content-validation', 'Phase 4.7b: Checking source fidelity...');
+      try {
+        const slidesXmlStr = slides.map(s => objectToXml(s)).join('\n');
+        sourceFidelityResult = await checkSourceFidelity(briefXml, slidesXmlStr, llm);
+        onDebug?.('14b-source-fidelity.json', JSON.stringify(sourceFidelityResult, null, 2));
+
+        if (sourceFidelityResult.verdict === 'fail') {
+          onProgress?.('content-validation', `Source fidelity FAILED — selfReference: ${sourceFidelityResult.selfReference.detected}, filler: ${sourceFidelityResult.fillerDetection.detected}, topicMatch: ${sourceFidelityResult.topicAlignment.match}`);
+        } else {
+          onProgress?.('content-validation', 'Source fidelity PASSED');
+        }
+      } catch (err) {
+        onProgress?.('content-validation', `Source fidelity check failed: ${err}`);
+      }
+
+      // LLM-based coherence check
+      onProgress?.('content-validation', 'Phase 4.7c: Checking narrative coherence...');
+      try {
+        const slidesXmlStr = slides.map(s => objectToXml(s)).join('\n');
+        coherenceResult = await checkCoherenceLLM(slidesXmlStr, llm);
+        onDebug?.('14c-coherence-llm.json', JSON.stringify(coherenceResult, null, 2));
+
+        if (coherenceResult.verdict !== 'pass') {
+          onProgress?.('content-validation', `Coherence check: ${coherenceResult.verdict} — arc: ${coherenceResult.narrativeArc}, repetitions: ${coherenceResult.repetitions.length}, filler: ${coherenceResult.fillerSlides.length}`);
+        } else {
+          onProgress?.('content-validation', 'Coherence check PASSED');
+        }
+      } catch (err) {
+        onProgress?.('content-validation', `Coherence check failed: ${err}`);
+      }
+    }
+
+    // Handle fidelity/coherence failures — retry generation with feedback
+    const fidelityFailed = sourceFidelityResult?.verdict === 'fail';
+    const coherenceRetry = coherenceResult?.verdict === 'retry';
+    const coherenceNeedsReview = coherenceResult?.verdict === 'needs_review';
+
+    if (fidelityFailed || coherenceRetry) {
+      onProgress?.('content-validation', 'Content validation failed — retrying generation with feedback...');
+
+      let retryFeedback = '\n\n## PREVIOUS ATTEMPT FAILED CONTENT VALIDATION\n';
+      if (sourceFidelityResult?.selfReference.detected) {
+        retryFeedback += `- CRITICAL: Your slides contained content about the tool/AI limitations instead of the article topic. Every slide MUST be about the article's actual content.\n`;
+      }
+      if (sourceFidelityResult?.fillerDetection.detected) {
+        retryFeedback += `- Your slides contained generic filler content. Every slide must contain specific information from the content brief.\n`;
+      }
+      if (!sourceFidelityResult?.topicAlignment.match) {
+        retryFeedback += `- The slides covered a different topic than the article. Read the content brief carefully and generate slides about THAT topic.\n`;
+      }
+      if (coherenceResult?.repetitions.length) {
+        retryFeedback += `- Slides had repetitive arguments: ${coherenceResult.repetitions.map(r => `${r.slide1} ≈ ${r.slide2}`).join(', ')}. Vary the angles and arguments.\n`;
+      }
+      retryFeedback += '\nREMEMBER: The content brief contains the article. Generate slides about the ARTICLE, not about the tool.';
+
+      try {
+        const { system: retryGenSystem, user: retryGenUser } = buildGeneratePrompt(briefXml!, planXml!, selectedTemplate!, slidePlan!, selectedDomain!);
+        const retrySystem = retryGenSystem + retryFeedback;
+        const retryRaw = await usageTracker.callLLM(llm, 'generation', retrySystem, retryGenUser, 0.9);
+        const retryCleaned = stripFences(retryRaw);
+
+        // Re-parse the retried generation
+        try {
+          const retryRoot = parseXml(retryCleaned);
+          const retryRootObj = xmlToObjects(retryRoot) as Record<string, unknown>;
+          const retrySlideData = retryRootObj['slide'];
+          const retrySlides: Record<string, unknown>[] = [];
+
+          if (Array.isArray(retrySlideData)) {
+            for (const s of retrySlideData) {
+              retrySlides.push(unwrapChildWrappers(s as Record<string, unknown>));
+            }
+          } else if (retrySlideData && typeof retrySlideData === 'object') {
+            retrySlides.push(unwrapChildWrappers(retrySlideData as Record<string, unknown>));
+          }
+
+          if (retrySlides.length > 0) {
+            // Replace slides with retried version
+            slides.length = 0;
+            slides.push(...retrySlides);
+            for (let i = 0; i < slides.length; i++) {
+              slides[i]!['id'] = `slide-${String(i + 1).padStart(2, '0')}`;
+            }
+            genCleaned = retryCleaned;
+            onProgress?.('content-validation', `Retry produced ${retrySlides.length} slides`);
+          }
+        } catch {
+          onProgress?.('content-validation', 'Retry parse failed, keeping original slides');
+        }
+      } catch (err) {
+        onProgress?.('content-validation', `Retry generation failed: ${err}`);
+      }
+    }
+
+    if (coherenceNeedsReview || (fidelityFailed && coherenceResult?.verdict !== 'retry')) {
+      needsReview = true;
+    }
+  }
+
+  // ── PHASE 4.5: Label Detection + Retry ────────────────────────────────────
   const slidesWithHeadlines = slides.filter(s => s['headline']);
   if (slidesWithHeadlines.length > 0) {
     onProgress?.('validation', 'Phase 4.5: Checking headline quality...');
@@ -481,21 +612,22 @@ export async function generateSlides(
 
   onDebug?.('13-final-slides.json', JSON.stringify(slides, null, 2));
 
-  const headlineWarnings: string[] = [];
+  // Headline quality check — now blocking if 3+ issues found
+  const headlineIssues: string[] = [];
   for (const slide of slides) {
     const headline = slide['headline'] as string | undefined;
     if (!headline) continue;
     const words = headline.split(/\s+/).length;
-    if (words > 5) {
-      headlineWarnings.push(`${slide['type']}: "${headline}" (${words} words, max 5)`);
+    if (words > 7) {
+      headlineIssues.push(`${slide['id']}: "${headline}" (${words} words, max 7)`);
     }
     const lc = headline.toLowerCase();
     if (lc.startsWith('the ') || lc.startsWith('a ') || lc.startsWith('an ')) {
-      headlineWarnings.push(`${slide['type']}: "${headline}" starts with article`);
+      headlineIssues.push(`${slide['id']}: "${headline}" starts with article`);
     }
   }
-  if (headlineWarnings.length > 0) {
-    onProgress?.('validation', `Headline warnings: ${headlineWarnings.join('; ')}`);
+  if (headlineIssues.length > 0) {
+    onProgress?.('validation', `Headline issues: ${headlineIssues.join('; ')}`);
   }
 
   // ─── Phase 5: Creative Director (variety enforcement) ──────────────────────
@@ -503,6 +635,11 @@ export async function generateSlides(
   onProgress?.('creative-director', 'Starting variety enforcement...');
 
   const varietyIssues: string[] = [];
+
+  // If 3+ headline issues, trigger creative director for headline fixes
+  if (headlineIssues.length >= 3 && varietyIssues.length === 0) {
+    varietyIssues.push(`... ${headlineIssues.length} headlines need improvement: ${headlineIssues.slice(0, 3).join('; ')}`);
+  }
 
   const coverHeadlines = slides.filter(s => s['type'] === 'cover').map(s => String(s['headline'] ?? ''));
   if (coverHeadlines.length > 1) {

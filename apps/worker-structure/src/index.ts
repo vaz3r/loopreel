@@ -5,6 +5,7 @@ import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES
 import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
 import { classifyError } from '@loopreel/errors';
+import { validateInput } from '@loopreel/llm';
 import { sanitizeSlides } from './slide-sanitizer.js';
 import { fetchImagesForSlides } from './image-fetcher.js';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -59,6 +60,19 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
   const useMultiPhase = process.env['LLM_MULTI_PHASE'] !== 'false';
   jobLogger.info({ useMultiPhase }, 'Starting structuring pipeline');
+
+  // Pre-flight input validation: fail fast before any LLM calls
+  const inputResult = validateInput(rawText);
+  if (!inputResult.valid) {
+    jobLogger.warn({ reason: inputResult.reason, details: inputResult.details, textLength: rawText.length }, 'Input validation failed — rejecting');
+    await JobRepository.updateStatus(jobId, 'failed');
+    await JobRepository.markFailed(jobId, {
+      stage: 'structuring',
+      reason: inputResult.reason ?? 'input_validation_failed',
+      details: `${inputResult.details} (${inputResult.textLength} chars, ${inputResult.bodyLineCount} body lines)`,
+    });
+    return;
+  }
 
   try {
     let targetTemplateId = existing.template_id;

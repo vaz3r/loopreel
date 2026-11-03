@@ -48,11 +48,16 @@ function convertToXmlElement(obj: Record<string, unknown>, tag: string): XmlElem
       for (const item of value) {
         if (typeof item === 'object' && item !== null) {
           children.push(convertToXmlElement(item as Record<string, unknown>, key));
+        } else if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') {
+          children.push({ tag: key, attributes: {}, children: [], text: String(item) });
         }
       }
     } else if (typeof value === 'object' && value !== null) {
       // Single child element
       children.push(convertToXmlElement(value as Record<string, unknown>, key));
+    } else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      // Primitive child element with text only
+      children.push({ tag: key, attributes: {}, children: [], text: String(value) });
     }
   }
 

@@ -11,6 +11,8 @@ export const RETRY_BUDGETS: Record<string, number> = {
   planning: 1,
   generation: 1,
   labelDetection: 2,
+  sourceFidelity: 1,
+  coherenceCheck: 1,
   creativeDirector: 1,
 };
 

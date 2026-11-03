@@ -86,3 +86,14 @@ For arrays (stats, items), use nested child elements:
   <rule>The few-shot example demonstrates STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content — do NOT replicate the few-shot's headlines, tags, or CTAs.</rule>
   <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
 </headlineRules>
+
+## ANTI-SELF-REFERENCE RULES (CRITICAL)
+
+<antiSelfReference>
+  <rule>NEVER write slides about the carousel tool, the generation process, or limitations of AI/technology. The slides MUST contain the ARTICLE'S content — not commentary about the tool that generated them.</rule>
+  <rule>NEVER write slides with tags like "Editor's Note", "Source Integrity", "Editorial Standard", "Reliability Check" that are about the publication process itself rather than the article's topic.</rule>
+  <rule>Every slide must teach, inform, or persuade the READER about the ARTICLE'S topic — not about the carousel tool or how content is generated.</rule>
+  <rule>If you find yourself writing about "refusing to invent", "hallucinated links", "AI cannot verify", or similar meta-topics — STOP. You are writing about the tool, not the content. Rewrite to focus on the article's actual topic from the brief.</rule>
+  <rule>The brief's `<title>` field tells you what the article is about. Every slide must relate to that topic. If a slide could not be posted on a social media account about that topic, it does not belong.</rule>
+  <rule>CTA slides may reference the content source (e.g., "Read the full article") but must NOT contain product tutorials like "Paste your article. Get your brief." or onboarding instructions.</rule>
+</antiSelfReference>
