@@ -115,10 +115,11 @@ export class BrowserPool {
     }
   }
 
-  async warmup(page: Page, url: string): Promise<void> {
+  async warmup(page: Page, url: string, forceReload: boolean = false): Promise<void> {
     const pooled = this.pages.find((p) => p.page === page);
     if (!pooled) throw new Error('Unknown page');
-    if (pooled.loaded) return;
+    const isDev = process.env['NODE_ENV'] !== 'production';
+    if (pooled.loaded && !forceReload && !isDev) return;
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
     pooled.loaded = true;
   }

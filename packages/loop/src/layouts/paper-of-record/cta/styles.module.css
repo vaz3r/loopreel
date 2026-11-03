@@ -3,24 +3,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
   padding: 0 40px;
   min-height: 0;
   height: 100%;
 }
 
-.contentWrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
 .icon {
-  margin-bottom: var(--density-item-gap, 48px);
+  margin-bottom: var(--density-item-gap, 36px);
 }
 
 .iconSvg {
@@ -31,49 +22,50 @@
 
 .headline {
   font-family: var(--font-headline);
-  font-size: var(--density-headline-size, 85px);
+  font-size: var(--density-headline-size, 80px);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--ink);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   text-wrap: balance;
 }
 
 .subtext {
   font-family: var(--font-body);
-  font-size: var(--density-body-size, 32px);
+  font-size: var(--density-body-size, 30px);
   line-height: var(--density-line-height, 1.4);
   font-style: italic;
   color: var(--charcoal);
-  margin-bottom: 56px;
+  margin-bottom: 44px;
+  max-width: 85%;
 }
 
 .button {
   display: inline-block;
-  padding: 24px 64px;
+  padding: 22px 64px;
   background-color: var(--ink);
   color: #ffffff;
   font-family: var(--font-sans);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   cursor: pointer;
 }
 
-.footer {
-  margin-top: auto;
-  padding-top: 32px;
+.handle {
+  margin-top: 36px;
+  padding-top: 20px;
   border-top: 1px solid var(--steel);
-  width: 50%;
-  flex-shrink: 0;
+  width: 40%;
 }
 
-.footerText {
+.handleText {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.15em;
   color: #999999;
+  font-weight: 600;
 }
