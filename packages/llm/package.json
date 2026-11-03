@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/brain/prompts dist/brain/prompts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

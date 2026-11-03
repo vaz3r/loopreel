@@ -3,7 +3,7 @@ import type { LLMClient, LLMResponse } from '../client.js';
 export class MockLLMClient implements LLMClient {
   async generateJSON(_systemPrompt: string, _userText: string): Promise<LLMResponse> {
     // Phase 4.7: Source Fidelity
-    if (_systemPrompt.includes('You are a content auditor')) {
+    if (_userText.includes('Audit this carousel for source fidelity') || _systemPrompt.includes('You are a content auditor')) {
       return {
         text: `<fidelityCheck>
   <sourceGrounding count="5" pass="PASS">
@@ -25,7 +25,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 4.7: Narrative Coherence
-    if (_systemPrompt.includes('You are an editorial reviewer')) {
+    if (_userText.includes('Check this carousel for coherence and repetition') || _systemPrompt.includes('You are an editorial reviewer')) {
       return {
         text: JSON.stringify({
           repetitions: [],
@@ -38,7 +38,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 4.5: Label Detection
-    if (_systemPrompt.includes('You are a copy editor evaluating slide headlines') || _userText.startsWith('Classify these headlines')) {
+    if (_userText.startsWith('Classify these headlines') || _systemPrompt.includes('You are a copy editor evaluating slide headlines')) {
       return {
         text: `<labelDetection>
   <labelsFound>false</labelsFound>
@@ -48,7 +48,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 3: Template Selection
-    if (_systemPrompt.includes('templateSelection') || _systemPrompt.includes('Select the single best slide template')) {
+    if (_userText.includes('Select the best template for this article') || _systemPrompt.includes('Select the single best slide template')) {
       return {
         text: `<templateSelection>
   <templateId>paper-of-record</templateId>
@@ -59,7 +59,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 3: Slide Planning
-    if (_systemPrompt.includes('slidePlan') || _systemPrompt.includes('Plan the sequence of slides')) {
+    if (_userText.includes('Plan the slides for this carousel') || _systemPrompt.includes('Plan the sequence of slides')) {
       return {
         text: `<slidePlan>
   <slide num="1" type="cover" />
@@ -73,7 +73,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 2: Domain Classification
-    if (_systemPrompt.includes('domainClassification') || _systemPrompt.includes('Classify the provided content brief')) {
+    if (_systemPrompt.includes('Classify the provided content brief into exactly one domain') || _systemPrompt.includes('domainClassification')) {
       return {
         text: `<domainClassification>
   <domainId>tech</domainId>
@@ -84,7 +84,7 @@ export class MockLLMClient implements LLMClient {
     }
 
     // Phase 1: Extraction
-    if (_systemPrompt.includes('Extract structured insights') || (_systemPrompt.includes('contentBrief') && _systemPrompt.includes('readingLevel'))) {
+    if (_systemPrompt.includes('Extract structured insights') && _systemPrompt.includes('contentBrief')) {
       return {
         text: `<contentBrief>
   <title>The Rise of Artificial Intelligence in Enterprise</title>

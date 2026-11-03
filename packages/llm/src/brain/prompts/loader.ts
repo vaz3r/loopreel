@@ -4,17 +4,21 @@ import { join } from 'node:path';
 
 function resolvePromptsDir(): string {
   const candidates = [
+    // Next to compiled loader in dist/brain/prompts/
+    join(import.meta.dirname ?? '.', '.'),
+    // Next to compiled file if in dist/brain/
+    join(import.meta.dirname ?? '.', 'prompts'),
     // During development (source)
     join(process.cwd(), 'packages', 'llm', 'src', 'brain', 'prompts'),
-    // In Docker container (copied to src)
-    join('/app', 'packages', 'llm', 'src', 'brain', 'prompts'),
-    // Relative to this file's compiled location (dist/brain/prompts -> src/brain/prompts)
+    // Relative from dist/brain/prompts -> packages/llm/src/brain/prompts
+    join(import.meta.dirname ?? '.', '..', '..', '..', 'src', 'brain', 'prompts'),
+    // Relative from dist/brain -> packages/llm/src/brain/prompts
     join(import.meta.dirname ?? '.', '..', '..', 'src', 'brain', 'prompts'),
-    // Fallback: same directory
-    join(import.meta.dirname ?? '.', '.'),
+    // In Docker container
+    join('/app', 'packages', 'llm', 'src', 'brain', 'prompts'),
   ];
   for (const dir of candidates) {
-    if (existsSync(dir)) return dir;
+    if (existsSync(dir) && existsSync(join(dir, 'extraction.md'))) return dir;
   }
   return candidates[0]!;
 }

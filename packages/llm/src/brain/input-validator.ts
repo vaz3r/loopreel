@@ -68,19 +68,27 @@ export function validateInput(rawText: string): InputValidationResult {
     };
   }
 
-  // 3. Error page detection — multiple error signals
-  const lowerText = rawText.toLowerCase();
-  const errorHits = ERROR_PAGE_SIGNALS.filter(s => lowerText.includes(s));
+  // 3. Error page detection — only check on short or sparse pages (< 5000 chars or < 10 body lines)
+  if (textLength < 5000 || bodyLineCount < 10) {
+    const lowerText = rawText.toLowerCase();
+    const errorHits = ERROR_PAGE_SIGNALS.filter(s => {
+      if (/^\d+$/.test(s)) {
+        const regex = new RegExp(`\\b(error\\s+)?${s}\\b`, 'i');
+        return regex.test(lowerText);
+      }
+      return lowerText.includes(s);
+    });
 
-  if (errorHits.length >= 2) {
-    return {
-      valid: false,
-      reason: 'error_page_detected',
-      details: `Detected error page indicators: ${errorHits.slice(0, 3).join(', ')}`,
-      textLength,
-      lineCount,
-      bodyLineCount,
-    };
+    if (errorHits.length >= 2) {
+      return {
+        valid: false,
+        reason: 'error_page_detected',
+        details: `Detected error page indicators: ${errorHits.slice(0, 3).join(', ')}`,
+        textLength,
+        lineCount,
+        bodyLineCount,
+      };
+    }
   }
 
   // 4. Ratio check — if text is mostly short lines (nav/menu), it's noise
