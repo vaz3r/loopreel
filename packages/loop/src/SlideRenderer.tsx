@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { getFrame, getLayout } from './layouts';
 import { SCHEMES, injectFonts, type Scheme } from './engine-utils';
 import type { Slide } from '../schema';
+import { computeSlideDensity } from './layouts/_shared/density-engine';
 
 declare global {
   interface Window {
@@ -21,14 +22,26 @@ interface SlideRendererProps {
   size?: { width: number; height: number };
 }
 
-export function SlideRenderer({ slide, scheme, templateId = 'paper-of-record', brandKit, size }: SlideRendererProps) {
+export function SlideRenderer({ slide, scheme, templateId = 'paper-of-record', brandKit, size = { width: 1080, height: 1350 } }: SlideRendererProps) {
   const Frame = getFrame(templateId);
   const Layout = getLayout(templateId, slide.type);
+  const density = computeSlideDensity(slide, size);
 
   return (
-    <Frame slide={slide} scheme={scheme} brandKit={brandKit} size={size}>
-      <Layout slide={slide} scheme={scheme} />
-    </Frame>
+    <div
+      className={density.classes.join(' ')}
+      style={{
+        width: size.width,
+        height: size.height,
+        position: 'relative',
+        overflow: 'hidden',
+        ...density.cssVariables,
+      }}
+    >
+      <Frame slide={slide} scheme={scheme} brandKit={brandKit} size={size} density={density}>
+        <Layout slide={slide} scheme={scheme} density={density} />
+      </Frame>
+    </div>
   );
 }
 

@@ -61,6 +61,17 @@ For arrays (stats, items), use nested child elements:
   <rule>NEVER invent quotes. Use ONLY quotes from the brief's quotes section.</rule>
 </antiHallucination>
 
+## EDITORIAL SUBSTANCE & DENSITY RULES (CRITICAL)
+
+<editorialDensity>
+  <rule>Social media carousel slides require high visual completeness. Empty, barren slides with 3-word bullet points look amateur and unfinished. Write substantive, high-value editorial copy.</rule>
+  <rule>For sequence items: Each item description (`desc`) MUST be an informative, well-crafted 1-2 sentence explanation (15–25 words, staying under 180 chars). Explain the mechanism, significance, or impact — never write just a 3-word stub.</rule>
+  <rule>For sequence slides: Generate 3 to 4 items whenever supported by the brief.</rule>
+  <rule>For telemetry stats: Generate 3 to 4 statistics whenever supported by the brief (or at least 2 strong stats). Each stat label MUST provide analytical context (6–14 words, staying under 100 chars) explaining what the number signifies in reality, not just a 2-word title like "Total Users".</rule>
+  <rule>For cover slides: Provide an insightful subheadline (15–28 words) that frames the central tension, breakthrough, or question of the story.</rule>
+  <rule>For quote slides: Use the most profound, complete quote available in the brief (15–40 words), and include the speaker's authoritative title or institution.</rule>
+</editorialDensity>
+
 ## RULES
 - Return ONLY the XML <presentation> element. No markdown fences, no explanation.
 - Generate ALL slides in order as specified in the slidePlan. You MUST generate a slide for EVERY slide in the slidePlan. Do NOT skip any slides. Do NOT change the order. The slidePlan is a REQUIREMENT, not a suggestion.

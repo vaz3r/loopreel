@@ -3,14 +3,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   text-align: center;
   padding: 0 40px;
   min-height: 0;
+  height: 100%;
+}
+
+.contentWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .icon {
-  margin-bottom: 48px;
+  margin-bottom: var(--density-item-gap, 48px);
 }
 
 .iconSvg {
@@ -21,7 +31,7 @@
 
 .headline {
   font-family: var(--font-headline);
-  font-size: 85px;
+  font-size: var(--density-headline-size, 85px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -32,10 +42,11 @@
 
 .subtext {
   font-family: var(--font-body);
-  font-size: 32px;
+  font-size: var(--density-body-size, 32px);
+  line-height: var(--density-line-height, 1.4);
   font-style: italic;
   color: var(--charcoal);
-  margin-bottom: 64px;
+  margin-bottom: 56px;
 }
 
 .button {
@@ -52,10 +63,11 @@
 }
 
 .footer {
-  margin-top: 48px;
+  margin-top: auto;
   padding-top: 32px;
   border-top: 1px solid var(--steel);
   width: 50%;
+  flex-shrink: 0;
 }
 
 .footerText {

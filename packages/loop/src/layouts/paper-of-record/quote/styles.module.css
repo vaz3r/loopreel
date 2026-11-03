@@ -6,6 +6,8 @@
   text-align: center;
   padding: 0 40px;
   position: relative;
+  min-height: 0;
+  height: 100%;
 }
 
 .topBar {
@@ -20,21 +22,21 @@
 
 .mark {
   font-family: var(--font-headline);
-  font-size: 240px;
+  font-size: var(--density-quote-mark-size, 240px);
   line-height: 0.3;
   color: var(--steel);
   margin-bottom: 32px;
-  margin-top: 64px;
+  margin-top: 32px;
 }
 
 .quoteText {
   font-family: var(--font-headline);
-  font-size: 64px;
+  font-size: var(--density-quote-font-size, 64px);
   font-weight: 700;
   line-height: 1.15;
   font-style: italic;
   color: var(--ink);
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 }
 
 .attribution {
@@ -42,7 +44,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin: auto;
+  margin-top: 16px;
 }
 
 .author {

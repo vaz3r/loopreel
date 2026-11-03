@@ -6,8 +6,10 @@ export default function PaperOfRecordCover({ slide, scheme }: LayoutProps) {
   const s = slide as any;
   return (
     <div className={styles.cover}>
-      <h1 className={styles.headline}>{s.headline}</h1>
-      {s.subheadline && <h2 className={styles.subheadline}>{s.subheadline}</h2>}
+      <div className={styles.headlineBlock}>
+        <h1 className={styles.headline}>{s.headline}</h1>
+        {s.subheadline && <h2 className={styles.subheadline}>{s.subheadline}</h2>}
+      </div>
       {(s.authorName || s.authorRole) && (
         <div className={styles.byline}>
           {s.authorName && (

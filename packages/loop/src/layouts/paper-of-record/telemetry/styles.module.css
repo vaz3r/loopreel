@@ -3,18 +3,19 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
 }
 
 .header {
   border-bottom: 4px solid var(--ink);
   padding-bottom: 24px;
-  margin-bottom: 48px;
+  margin-bottom: var(--density-item-gap, 48px);
   flex-shrink: 0;
 }
 
 .headline {
   font-family: var(--font-headline);
-  font-size: 64px;
+  font-size: var(--density-headline-size, 64px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -24,27 +25,32 @@
 .grid {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px 48px;
-  margin-top: 32px;
+  grid-template-columns: var(--density-stat-grid-cols, 1fr 1fr);
+  grid-template-rows: var(--density-stat-grid-rows, 1fr 1fr);
+  gap: var(--density-stat-gap, 64px 48px);
+  align-content: stretch;
+  align-items: center;
+  min-height: 0;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .statValue {
   font-family: var(--font-headline);
-  font-size: 110px;
+  font-size: var(--density-stat-value-size, 110px);
   font-weight: 900;
   line-height: 1;
   color: var(--ink);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .statUnit {
-  font-size: 60px;
+  font-size: var(--density-stat-unit-size, 60px);
 }
 
 .statBar {
@@ -56,7 +62,7 @@
 
 .statLabel {
   font-family: var(--font-body);
-  font-size: 24px;
-  line-height: 1.4;
+  font-size: var(--density-stat-label-size, 24px);
+  line-height: var(--density-line-height, 1.4);
   color: var(--charcoal);
 }
