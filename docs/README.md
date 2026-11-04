@@ -38,14 +38,17 @@ The revised, fully isolated template architecture blueprint:
 - **Multi-Platform Aspect Ratio Engine**: Standardized canvas sizing for Instagram Feed (4:5), Stories (9:16), Square (1:1), LinkedIn (4:5 PDF), and Pinterest (2:3).
 - **Pure Admin Testing Workflow**: Zero credit/auth friction with saved BrandKit presets in `localStorage`.
 
-### 5. [Implementation Plan: Antigravity Skill for Template Conversion](./plan-template-converter-skill.md)
-Creation of the official workspace Antigravity Skill (`.agents/skills/template-converter/SKILL.md`):
-- **Progressive Disclosure**: Antigravity automatically detects when to convert HTML design references into production templates.
+### 5. [Antigravity Skill: Template Converter](./skills-template-converter.md) & [Golden Prompt Recipe](./template-prompt-recipe.md)
+The official workspace Antigravity Skill (`.agents/skills/template-converter/SKILL.md`) for zero-manual-effort template conversion:
+- **Progressive Disclosure**: Antigravity automatically triggers when you ask to convert an HTML mock from `packages/loop/design-references/`.
 - **Zero-Manual-Friction Contract**: The user provides the HTML file; Antigravity executes 100% of the CSS translation, component isolation, registration, and visual testing.
-- **Golden Prompt Recipe**: Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
+- **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
+### 6. [Implementation Plan: Antigravity Skill for Template Conversion](./plan-template-converter-skill.md)
+Technical design document for the Antigravity Skill implementation and workflow architecture.
+
+### 7. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
 Technical and visual verification logs:
 - Systematic resolution of the CTA centering and duplicate footer bugs across all editorial templates.
 - Multi-template automated test suite (`scripts/test-all-templates-visual.ts`).
