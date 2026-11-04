@@ -210,3 +210,19 @@ A fresh technical article was submitted with a locked template and custom brandk
   - Dark modern slate background with cyan pill indicators.
   - All 20 slides across all 5 templates pass the automated visual audit suite (`scripts/test-all-templates-visual.ts`).
 
+---
+
+## 8. Antigravity Skill: Template Converter
+
+To establish a zero-manual-effort pipeline where you simply ask the AI agent to convert HTML design references, we created the official Antigravity workspace skill:
+
+### Directory & Components
+- **Skill Definition**: `.agents/skills/template-converter/SKILL.md`
+- **Golden Prompt Recipe**: `.agents/skills/template-converter/resources/prompt-recipe.md` (and [`docs/template-prompt-recipe.md`](./template-prompt-recipe.md))
+- **Pre & Post-Flight Checklist**: `.agents/skills/template-converter/resources/conversion-checklist.md`
+- **Documentation**: [`docs/skills-template-converter.md`](./skills-template-converter.md)
+
+### Verification
+- Full monorepo build and typecheck verified: `23 successful, 23 total, 0 errors`.
+- The skill is tracked in Git, ensuring all future sessions inherit the template conversion protocol automatically.
+
