@@ -38,12 +38,12 @@ The revised, fully isolated template architecture blueprint:
 - **Multi-Platform Aspect Ratio Engine**: Standardized canvas sizing for Instagram Feed (4:5), Stories (9:16), Square (1:1), LinkedIn (4:5 PDF), and Pinterest (2:3).
 - **Pure Admin Testing Workflow**: Zero credit/auth friction with saved BrandKit presets in `localStorage`.
 
-### 5. [Implementation Plan: HTML Design Reference Ingestion & Streamlined Template Workflow](./plan-template-ingestion-and-creation-workflow.md)
+### 5. [Implementation Plan: Agent-Driven Template Conversion Workflow](./plan-agent-driven-template-conversion.md)
 Streamlining single-file HTML design mocks (from ChatGPT, Claude, Gemini) into isolated production templates:
-- **Verdict & Assessment**: Why external LLM single-file HTML references are the ideal high-leverage design medium.
+- **Zero-Manual-Friction Contract**: The user provides the HTML file and asks the agent to convert it. The AI agent executes 100% of the CSS translation, component isolation, registration, and visual testing.
 - **Golden Prompt Recipe**: Standardized prompt template for ChatGPT/Claude generating parser-ready $1080 \times 1350$ single-file HTML mocks.
-- **Automated Ingestion Script**: `pnpm run ingest-template` to extract fonts, palettes, frame, and slide layouts into an isolated React template in < 60 seconds.
-- **Auto-Registration & Visual Audit**: Auto-updating template schemas, registry, and running visual screenshots.
+- **Agent Conversion Playbook**: Step-by-step procedure for the AI agent to scaffold, translate, register, and audit new templates.
+- **Visual Auditing**: Automated rendering of screenshots for human visual confirmation.
 
 ### 6. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
 Technical and visual verification logs:
