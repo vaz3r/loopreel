@@ -29,7 +29,15 @@ The complete executive strategy for launching Loopreel as a high-margin commerci
 - **Packaging, Tiers & Unit Economics**: \$49 / \$149 / \$399 / custom enterprise tiers with < \$0.01 direct COGS per carousel.
 - **Go-To-Market (GTM) Playbook**: Dogfooding in public, free teaser graders, and agency trial passes.
 
-### 3. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
+### 4. [Implementation Plan: Loop Simplification & Template System](./plan-loop-simplification-and-template-system.md)
+Radical simplification of `packages/loop` into canonical slide primitives:
+- **Refactoring 191 Files to Canonical Primitives**: Moving away from 60+ duplicate layout folders.
+- **10-Minute Template Creation**: Declarative theme tokens + frame wrapper.
+- **Fixed Template & BrandKit Enforcement**: Guaranteeing user-selected styles in Admin UI bypass auto-classifier.
+- **Typographic Wordmark & Handle System**: Replacing raw image logos with crisp font-based wordmarks.
+- **Multi-Platform Aspect Ratio Foundation**: Instagram Feed (4:5), Stories (9:16), Square (1:1), and LinkedIn PDF.
+
+### 5. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
 Technical and visual verification logs:
 - Systematic resolution of the CTA centering and duplicate footer bugs across all editorial templates.
 - Multi-template automated test suite (`scripts/test-all-templates-visual.ts`).
