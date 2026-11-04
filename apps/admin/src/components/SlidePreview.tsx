@@ -22,6 +22,19 @@ export function SlidePreview({ job }: { job: JobDetail }) {
 
   const currentSlide = selectedIdx !== null ? slides[selectedIdx] : null;
 
+  async function downloadAllSlides() {
+    for (const slide of slides) {
+      const url = `/api/slides/${slide.storageUrl}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `slide_${String((slide.slideIndex ?? 0) + 1).padStart(2, '0')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      await new Promise((r) => setTimeout(r, 200));
+    }
+  }
+
   return (
     <>
       <div className="rounded-lg border border-border bg-card p-6">
@@ -29,6 +42,16 @@ export function SlidePreview({ job }: { job: JobDetail }) {
           <h3 className="text-[13px] font-medium text-text-secondary">
             Slides <span className="text-text-quaternary">({slides.length})</span>
           </h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={downloadAllSlides}
+            className="h-7 text-[11px] gap-1.5 border-border text-text-secondary hover:text-text-primary"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download All Slides
+          </Button>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
           {slides.map((slide, idx) => (
