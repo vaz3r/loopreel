@@ -1,7 +1,7 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import { classifyError, type StructurePayload } from '@loopreel/schemas';
-import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop-bridge';
+import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop/bridge';
 import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
 import { validateInput } from '@loopreel/llm';

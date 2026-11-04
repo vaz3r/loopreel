@@ -4,7 +4,7 @@ export { getPrompt, TEMPLATE_IDS } from './prompts.js';
 export { adaptSlideForEngine } from './adapter.js';
 export { introspectSchema, introspectSchemaConcise, extractSlideTypes } from './schema-introspect.js';
 export { autoSelectTemplate, classifyByHeuristics } from './classifier.js';
-export { paginateContract, chunkArray } from '@loopreel/loop/engine-utils';
+export { paginateContract, chunkArray } from '../engine-utils.js';
 export {
   PaperOfRecordBrandKitSchema,
   TheGlobalistBrandKitSchema,

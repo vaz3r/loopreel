@@ -10,7 +10,6 @@ COPY packages/schemas/package.json ./packages/schemas/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
 COPY packages/storage/package.json ./packages/storage/
-COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
 COPY apps/worker-structure/package.json ./apps/worker-structure/
 RUN pnpm install --frozen-lockfile
@@ -20,7 +19,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/*/node_modules ./packages/*/node_modules/
 COPY --from=deps /app/apps/*/node_modules ./apps/*/node_modules/
 COPY . .
-RUN rm -rf packages/llm/dist packages/loop-bridge/dist
+RUN rm -rf packages/llm/dist
 RUN pnpm --filter @loopreel/schemas build
 RUN pnpm --filter @loopreel/db build
 RUN pnpm --filter @loopreel/queue build
@@ -36,7 +35,6 @@ COPY packages/schemas/package.json ./packages/schemas/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
 COPY packages/storage/package.json ./packages/storage/
-COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
 COPY apps/worker-structure/package.json ./apps/worker-structure/
 RUN pnpm install --frozen-lockfile --prod && npm install -g tsx
@@ -49,7 +47,6 @@ COPY --from=builder /app/packages/llm/domains ./packages/llm/domains
 COPY --from=builder /app/packages/llm/src/brain/prompts ./packages/llm/src/brain/prompts
 COPY --from=builder /app/packages/loop/src/layouts ./packages/loop/src/layouts
 COPY --from=builder /app/packages/storage/dist ./packages/storage/dist
-COPY --from=builder /app/packages/loop-bridge/src ./packages/loop-bridge/src
 COPY --from=builder /app/packages/loop/src ./packages/loop/src
 COPY --from=builder /app/apps/worker-structure/dist ./apps/worker-structure/dist
 

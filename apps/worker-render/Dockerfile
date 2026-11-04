@@ -11,7 +11,6 @@ COPY packages/schemas/package.json ./packages/schemas/
 COPY packages/storage/package.json ./packages/storage/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
-COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
 COPY apps/worker-render/package.json ./apps/worker-render/
 RUN pnpm install --frozen-lockfile
@@ -37,7 +36,6 @@ COPY packages/schemas/package.json ./packages/schemas/
 COPY packages/storage/package.json ./packages/storage/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
-COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
 COPY apps/worker-render/package.json ./apps/worker-render/
 RUN pnpm install --frozen-lockfile --prod && npm install -g tsx
@@ -47,7 +45,6 @@ COPY --from=builder /app/packages/schemas/dist ./packages/schemas/dist
 COPY --from=builder /app/packages/storage/dist ./packages/storage/dist
 COPY --from=builder /app/packages/queue/dist ./packages/queue/dist
 COPY --from=builder /app/packages/llm/dist ./packages/llm/dist
-COPY --from=builder /app/packages/loop-bridge/src ./packages/loop-bridge/src
 COPY --from=builder /app/packages/loop/src ./packages/loop/src
 COPY --from=builder /app/packages/loop/dist ./packages/loop/dist
 COPY --from=builder /app/apps/worker-render/dist ./apps/worker-render/dist

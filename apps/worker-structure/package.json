@@ -11,7 +11,7 @@
   "dependencies": {
     "@loopreel/db": "workspace:*",
     "@loopreel/llm": "workspace:*",
-    "@loopreel/loop-bridge": "workspace:*",
+    "@loopreel/loop": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
     "@loopreel/storage": "workspace:*",
