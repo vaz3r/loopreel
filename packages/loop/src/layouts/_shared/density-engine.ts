@@ -111,6 +111,15 @@ export function computeSlideDensity(
   // Dynamic CSS custom variables
   const cssVariables: Record<string, string> = {};
 
+  const headlineText = String(slide.headline || '');
+  const hasLongHeadline = headlineText.length > 40;
+
+  const maxValLength = Math.max(
+    ...((slide.stats || []).map((st: any) => String(st.value || '').length)),
+    0
+  );
+  const hasLongStatValues = maxValLength > 5;
+
   // 1. Spacing & Rhythm
   if (isStory) {
     cssVariables['--density-item-gap'] = mode === 'spacious' ? '56px' : mode === 'compact' ? '22px' : '36px';
@@ -123,7 +132,9 @@ export function computeSlideDensity(
     cssVariables['--density-item-padding'] = mode === 'spacious' ? '20px 0' : mode === 'compact' ? '10px 0' : '14px 0';
   } else {
     // Standard Portrait (4:5, 1080x1350)
-    cssVariables['--density-item-gap'] = mode === 'spacious' ? '48px' : mode === 'compact' ? '18px' : '32px';
+    cssVariables['--density-item-gap'] = hasLongHeadline
+      ? '28px'
+      : mode === 'spacious' ? '48px' : mode === 'compact' ? '18px' : '32px';
     cssVariables['--density-item-padding'] = mode === 'spacious' ? '40px 0' : mode === 'compact' ? '16px 0' : '26px 0';
   }
 
@@ -132,40 +143,46 @@ export function computeSlideDensity(
   cssVariables['--density-item-flex'] = mode === 'compact' ? '0 0 auto' : '1 1 0%';
 
   // 2. Typography
-  cssVariables['--density-headline-size'] = mode === 'spacious' ? '72px' : mode === 'compact' ? '52px' : '64px';
+  cssVariables['--density-headline-size'] = hasLongHeadline
+    ? '48px'
+    : mode === 'spacious' ? '72px' : mode === 'compact' ? '52px' : '64px';
   cssVariables['--density-body-size'] = mode === 'spacious' ? '26px' : mode === 'compact' ? '20px' : '23px';
   cssVariables['--density-line-height'] = mode === 'spacious' ? '1.5' : mode === 'compact' ? '1.3' : '1.4';
 
   // 3. Telemetry Stats
   if (itemCount <= 1) {
-    cssVariables['--density-stat-value-size'] = '160px';
-    cssVariables['--density-stat-unit-size'] = '75px';
+    cssVariables['--density-stat-value-size'] = hasLongStatValues ? '110px' : '160px';
+    cssVariables['--density-stat-unit-size'] = '60px';
     cssVariables['--density-stat-grid-cols'] = '1fr';
     cssVariables['--density-stat-grid-rows'] = '1fr';
   } else if (itemCount === 2) {
-    cssVariables['--density-stat-value-size'] = isLandscape ? '110px' : '135px';
-    cssVariables['--density-stat-unit-size'] = '65px';
+    cssVariables['--density-stat-value-size'] = hasLongStatValues ? '90px' : isLandscape ? '110px' : '135px';
+    cssVariables['--density-stat-unit-size'] = '50px';
     cssVariables['--density-stat-grid-cols'] = '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = '1fr';
   } else if (itemCount === 3) {
-    cssVariables['--density-stat-value-size'] = '115px';
-    cssVariables['--density-stat-unit-size'] = '50px';
+    cssVariables['--density-stat-value-size'] = hasLongStatValues ? '76px' : '105px';
+    cssVariables['--density-stat-unit-size'] = hasLongStatValues ? '34px' : '46px';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(3, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = isLandscape ? '1fr' : '1fr 1fr';
   } else if (itemCount === 4) {
-    cssVariables['--density-stat-value-size'] = isLandscape ? '85px' : '95px';
-    cssVariables['--density-stat-unit-size'] = '42px';
+    cssVariables['--density-stat-value-size'] = hasLongStatValues ? '68px' : isLandscape ? '80px' : '90px';
+    cssVariables['--density-stat-unit-size'] = '34px';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(4, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = isLandscape ? '1fr' : '1fr 1fr';
   } else {
-    cssVariables['--density-stat-value-size'] = '72px';
-    cssVariables['--density-stat-unit-size'] = '32px';
+    cssVariables['--density-stat-value-size'] = '64px';
+    cssVariables['--density-stat-unit-size'] = '28px';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(3, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = 'repeat(3, 1fr)';
   }
 
-  cssVariables['--density-stat-label-size'] = mode === 'spacious' ? '26px' : mode === 'compact' ? '19px' : '22px';
-  cssVariables['--density-stat-gap'] = mode === 'spacious' ? '56px 48px' : mode === 'compact' ? '24px 24px' : '40px 36px';
+  cssVariables['--density-stat-label-size'] = hasLongStatValues || wordCount > 50
+    ? '20px'
+    : mode === 'spacious' ? '26px' : mode === 'compact' ? '19px' : '22px';
+  cssVariables['--density-stat-gap'] = hasLongHeadline || hasLongStatValues
+    ? '24px 24px'
+    : mode === 'spacious' ? '56px 48px' : mode === 'compact' ? '24px 24px' : '40px 36px';
 
   // 4. Cover Slide
   cssVariables['--density-cover-headline-size'] = mode === 'spacious' ? '110px' : mode === 'compact' ? '80px' : '96px';
