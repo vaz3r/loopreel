@@ -45,12 +45,22 @@ export const instagramStories: PlatformFormat = {
 
 export const linkedin: PlatformFormat = {
   id: 'linkedin',
-  name: 'LinkedIn',
-  width: 1200,
-  height: 627,
+  name: 'LinkedIn Carousel',
+  width: 1080,
+  height: 1350,
+  maxSlides: 15,
+  safeZones: { top: 40, right: 40, bottom: 40, left: 40 },
+  typographyScale: 1.0,
+};
+
+export const pinterest: PlatformFormat = {
+  id: 'pinterest',
+  name: 'Pinterest Pin',
+  width: 1000,
+  height: 1500,
   maxSlides: 10,
-  safeZones: { top: 30, right: 30, bottom: 30, left: 30 },
-  typographyScale: 0.85,
+  safeZones: { top: 50, right: 40, bottom: 50, left: 40 },
+  typographyScale: 1.05,
 };
 
 export const xTwitter: PlatformFormat = {
@@ -78,6 +88,7 @@ export const platforms: Record<string, PlatformFormat> = {
   'instagram-square': instagramSquare,
   'instagram-stories': instagramStories,
   'linkedin': linkedin,
+  'pinterest': pinterest,
   'x': xTwitter,
   'facebook': facebook,
 };

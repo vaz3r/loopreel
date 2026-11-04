@@ -27,8 +27,13 @@ export interface CreateJobInput {
     bg?: string;
     text?: string;
     accent?: string;
+    surface?: string;
     fontSerif?: string;
     fontSans?: string;
+    fontMono?: string;
+    wordmark?: string;
+    handle?: string;
+    wordmarkStyle?: 'serif' | 'sans' | 'mono' | 'small-caps';
     logoUrl?: string;
   };
 }

@@ -254,6 +254,14 @@ export async function generateSlides(
         }
       })(),
       (async () => {
+        if (options.fixedTemplateId) {
+          const found = templates.find(t => t.id === options.fixedTemplateId);
+          if (found) {
+            onProgress?.('selection', `Using fixed template "${options.fixedTemplateId}" (Phase 2 LLM skipped)`);
+            return found;
+          }
+        }
+
         const { system: selSystem, user: selUser } = {
           system: renderPrompt('template-selection', { briefXml, templates }),
           user: 'Select the best template for this content brief.',

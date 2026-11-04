@@ -17,11 +17,25 @@ export interface LayoutProps<T extends Slide = Slide> {
   density?: DensityProfile;
 }
 
+export interface BrandKitConfig {
+  bg?: string;
+  text?: string;
+  accent?: string;
+  surface?: string;
+  fontSerif?: string;
+  fontSans?: string;
+  fontMono?: string;
+  wordmark?: string;
+  handle?: string;
+  wordmarkStyle?: 'serif' | 'sans' | 'mono' | 'small-caps';
+  logoUrl?: string;
+}
+
 export interface FrameProps {
   slide: Slide;
   scheme: Scheme;
   children: ReactNode;
-  brandKit?: Record<string, string | undefined>;
+  brandKit?: BrandKitConfig;
   size?: { width: number; height: number };
   density?: DensityProfile;
 }

@@ -74,6 +74,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
   }
 
   try {
+    const isFixedTemplate = Boolean(existing.template_id && existing.template_id !== 'auto');
     let targetTemplateId = existing.template_id;
 
     if (!targetTemplateId || targetTemplateId === 'auto') {
@@ -83,6 +84,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       jobLogger.info({ autoSelected: targetTemplateId, rationale: classification.rationale }, 'Template auto-selected');
 
       await JobRepository.updateTemplate(jobId, targetTemplateId);
+    } else {
+      jobLogger.info({ fixedTemplate: targetTemplateId }, 'Using user-selected fixed template (classifier bypassed)');
     }
 
     const template = getTemplate(targetTemplateId);
@@ -109,6 +112,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       const result = await generateSlides(rawText, templates, {
         llm,
         brandKit,
+        fixedTemplateId: isFixedTemplate ? targetTemplateId : undefined,
         onProgress: (phase, detail) => {
           jobLogger.info({ phase, detail }, 'Multi-phase progress');
         },
@@ -168,8 +172,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         totalCostUsd: calculateCost(model, result.totalTokens.input, result.totalTokens.output),
       });
 
-      // Bug 1 fix: Use the Phase 2 template selection, not the pre-selected one
-      if (result.selectedTemplateId !== targetTemplateId) {
+      // Use the Phase 2 template selection only if job was set to auto
+      if (!isFixedTemplate && result.selectedTemplateId !== targetTemplateId) {
         jobLogger.info({ from: targetTemplateId, to: result.selectedTemplateId }, 'Phase 2 selected different template, updating job');
         targetTemplateId = result.selectedTemplateId;
         await JobRepository.updateTemplate(jobId, targetTemplateId);

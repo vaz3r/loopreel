@@ -45,6 +45,14 @@ const TEMPLATE_CHARACTERISTICS: Record<TemplateId, { name: string; keywords: str
     ],
     description: 'Classic investigative journalism, broad breaking news, editorial features, and general non-fiction stories.',
   },
+  'the-signal': {
+    name: 'The Signal',
+    keywords: [
+      'startup', 'saas', 'founder', 'b2b', 'product', 'venture capital', 'vc', 'seed round',
+      'growth', 'framework', 'engineering', 'developer', 'silicon valley', 'tech briefing'
+    ],
+    description: 'Modern B2B tech briefing, startup playbooks, product strategy, and engineering frameworks.',
+  },
 };
 
 /**
@@ -57,6 +65,7 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
     'the-globalist': 0,
     'the-curator': 0,
     'the-academic': 0,
+    'the-signal': 0,
   };
 
   for (const [tid, char] of Object.entries(TEMPLATE_CHARACTERISTICS) as Array<[TemplateId, typeof TEMPLATE_CHARACTERISTICS[TemplateId]]>) {

@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { JobRepository, OutboxRepository } from '@loopreel/db';
-import { JobCreateSchema } from '@loopreel/schemas';
+import { JobCreateSchema, ALL_TEMPLATE_KEYS, getPlatformIds } from '@loopreel/schemas';
 import { createQueue } from '@loopreel/queue';
 
 function determineSourceType(sourceUrl: string): 'youtube' | 'blog' | 'article' {
@@ -24,16 +24,21 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
         required: ['sourceUrl'],
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
-          platform: { type: 'string', enum: ['instagram-feed', 'instagram-square', 'instagram-stories', 'linkedin', 'x', 'facebook'], default: 'instagram-feed' },
-          templateId: { type: 'string', enum: ['auto', 'paper-of-record', 'the-globalist', 'the-curator', 'the-academic'], default: 'auto' },
+          platform: { type: 'string', enum: getPlatformIds(), default: 'instagram-feed' },
+          templateId: { type: 'string', enum: ALL_TEMPLATE_KEYS, default: 'auto' },
           brandKit: {
             type: 'object',
             properties: {
               bg: { type: 'string' },
               text: { type: 'string' },
               accent: { type: 'string' },
+              surface: { type: 'string' },
               fontSerif: { type: 'string' },
               fontSans: { type: 'string' },
+              fontMono: { type: 'string' },
+              wordmark: { type: 'string' },
+              handle: { type: 'string' },
+              wordmarkStyle: { type: 'string' },
               logoUrl: { type: 'string' },
             },
           },

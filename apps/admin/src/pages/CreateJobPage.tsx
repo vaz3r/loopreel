@@ -8,7 +8,7 @@ import { Loader2, ChevronDown } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { TemplateSelect } from '@/components/TemplateSelect';
-import { BrandKitForm } from '@/components/BrandKitForm';
+import { BrandKitForm, type BrandKitValues } from '@/components/BrandKitForm';
 import type { CreateJobInput } from '@/api/client';
 
 export function CreateJobPage() {
@@ -17,8 +17,21 @@ export function CreateJobPage() {
   const [url, setUrl] = useState('');
   const [platform, setPlatform] = useState('instagram-feed');
   const [templateId, setTemplateId] = useState('auto');
-  const [brandKit, setBrandKit] = useState<CreateJobInput['brandKit']>({});
-  const [showBrandKit, setShowBrandKit] = useState(false);
+  const [brandKit, setBrandKit] = useState<BrandKitValues>(() => {
+    try {
+      const saved = localStorage.getItem('loopreel_saved_brandkit');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [showBrandKit, setShowBrandKit] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem('loopreel_saved_brandkit'));
+    } catch {
+      return false;
+    }
+  });
   const [generateText, setGenerateText] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
@@ -62,6 +75,9 @@ export function CreateJobPage() {
             <div className="space-y-1.5">
               <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Template</Label>
               <TemplateSelect value={templateId} onChange={setTemplateId} />
+              <p className="text-[10px] text-text-tertiary">
+                {templateId === 'auto' ? 'AI classifier auto-selects' : 'Fixed template locked'}
+              </p>
             </div>
           </div>
         </div>

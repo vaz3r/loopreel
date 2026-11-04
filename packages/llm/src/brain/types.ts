@@ -48,6 +48,7 @@ export interface BrainResult {
 
 export interface BrainOptions {
   llm: LLMClient;
+  fixedTemplateId?: string;
   brandKit?: Record<string, string | undefined>;
   onProgress?: (phase: string, detail: string) => void;
   onDebug?: (filename: string, content: string) => void;

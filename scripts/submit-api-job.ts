@@ -12,6 +12,8 @@ function parseArgs() {
     platform: 'instagram-feed',
     api: 'http://localhost:3000',
     outDir: '',
+    wordmark: '',
+    handle: '',
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -19,6 +21,8 @@ function parseArgs() {
     if ((arg === '--url' || arg === '-u') && args[i + 1]) options['url'] = args[++i];
     else if ((arg === '--template' || arg === '-t') && args[i + 1]) options['template'] = args[++i];
     else if ((arg === '--platform' || arg === '-p') && args[i + 1]) options['platform'] = args[++i];
+    else if ((arg === '--wordmark' || arg === '-w') && args[i + 1]) options['wordmark'] = args[++i];
+    else if (arg === '--handle' && args[i + 1]) options['handle'] = args[++i];
     else if (arg === '--api' && args[i + 1]) options['api'] = args[++i];
     else if ((arg === '--outDir' || arg === '-o') && args[i + 1]) options['outDir'] = args[++i];
     else if (arg === '--help' || arg === '-h') {
@@ -27,15 +31,12 @@ Usage: pnpm tsx scripts/submit-api-job.ts [options]
 
 Options:
   -u, --url <url>             URL of article, blog post, or YouTube video
-                              (default: "https://en.wikipedia.org/wiki/Artificial_intelligence")
-  -t, --template <template>   Template ID: auto | paper-of-record | the-globalist | the-curator | the-academic
-                              (default: "auto" - Dynamic LLM Template Auto-Selection)
-  -p, --platform <platform>   Platform: instagram-feed | instagram-square | instagram-stories | linkedin | x | facebook
-                              (default: "instagram-feed")
-  -o, --outDir <path>         Directory to save downloaded slide PNGs and text assets
-                              (default: "./output/api-job-<timestamp>")
+  -t, --template <template>   Template ID: auto | paper-of-record | the-globalist | the-curator | the-academic | the-signal
+  -p, --platform <platform>   Platform: instagram-feed | instagram-square | instagram-stories | linkedin | pinterest | x | facebook
+  -w, --wordmark <text>       Publication Wordmark (e.g. "TECH DISPATCH")
+  --handle <handle>           Social Handle (e.g. "@techdispatch")
+  -o, --outDir <path>         Directory to save downloaded slide PNGs
   --api <url>                 API Base URL (default: "http://localhost:3000")
-  -h, --help                  Display this help message
 `);
       process.exit(0);
     }
@@ -68,6 +69,10 @@ async function main() {
       sourceUrl: opts['url'],
       templateId: opts['template'],
       platform: opts['platform'],
+      brandKit: (opts['wordmark'] || opts['handle']) ? {
+        wordmark: opts['wordmark'] || undefined,
+        handle: opts['handle'] || undefined,
+      } : undefined,
     }),
   });
 

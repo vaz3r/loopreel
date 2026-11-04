@@ -47,7 +47,7 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
           borderBottom: `2px solid ${ink}`, paddingBottom: isWide ? 10 : 16,
         }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontFamily: "'Merriweather', serif", fontWeight: 900, fontSize: headerTitleSize, letterSpacing: '-0.02em', textTransform: 'uppercase' as const, color: ink, lineHeight: 1 }}>Management Review</span>
+            <span style={{ fontFamily: "'Merriweather', serif", fontWeight: 900, fontSize: headerTitleSize, letterSpacing: '-0.02em', textTransform: 'uppercase' as const, color: ink, lineHeight: 1 }}>{bk?.wordmark || 'Management Review'}</span>
             <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: headerSubtitleSize, color: graphite, marginTop: isWide ? 2 : 4, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Working Paper Series</span>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -65,7 +65,7 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
         borderTop: `1px solid ${hairline}`, paddingTop: isWide ? 10 : 16,
       }}>
         <div style={{ display: 'flex', gap: isWide ? 20 : 32 }}>
-          <span>DOI: 10.1016/J.BUSRES.2026</span>
+          <span>{bk?.handle ? `REF: ${bk.handle.toUpperCase()}` : 'DOI: 10.1016/J.BUSRES.2026'}</span>
           {!isWide && <span>VOL. 42, NO. 8</span>}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isWide ? 16 : 24 }}>

@@ -39,7 +39,7 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
 
       {/* Header */}
       <div style={{ position: 'absolute', top: headerTop, left: 0, right: 0, zIndex: 50, padding: `${headerPadV}px ${headerPadH}px ${isWide ? 8 : 12}px`, borderBottom: `1px solid ${hairline}`, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <span style={{ fontFamily: `'${fontCondensed}', sans-serif`, fontSize: isWide ? 28 : 42, fontWeight: 700, letterSpacing: '-0.02em', textTransform: 'uppercase' as const }}>The Globalist</span>
+        <span style={{ fontFamily: `'${fontCondensed}', sans-serif`, fontSize: isWide ? 28 : 42, fontWeight: 700, letterSpacing: '-0.02em', textTransform: 'uppercase' as const }}>{bk?.wordmark || 'The Globalist'}</span>
         <div style={{ textAlign: 'right', fontFamily: "'Inter', sans-serif", fontSize: isWide ? 10 : 12, textTransform: 'uppercase' as const, letterSpacing: '0.15em', color: slate, fontWeight: 600 }}>
           <div>Vol. 42 — No. 8</div>
           <div style={{ color: accent }}>{tag}</div>
@@ -48,7 +48,7 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
 
       {/* Footer */}
       <div style={{ position: 'absolute', bottom: footerBottom, left: side, right: side, zIndex: 40, borderTop: `1px solid ${hairline}`, paddingTop: isWide ? 10 : 16, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <span style={{ fontFamily: `'${fontCondensed}', sans-serif`, fontSize: isWide ? 12 : 16, textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontWeight: 700 }}>@theglobalist</span>
+        <span style={{ fontFamily: `'${fontCondensed}', sans-serif`, fontSize: isWide ? 12 : 16, textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontWeight: 700 }}>{bk?.handle || '@theglobalist'}</span>
         <span style={{ fontFamily: `'${fontCondensed}', sans-serif`, fontSize: isWide ? 12 : 16, textTransform: 'uppercase' as const, letterSpacing: '0.15em', color: slate, fontWeight: 500 }}>Page {s.footerRight?.replace('PAGE ', '') || '01'}</span>
       </div>
 

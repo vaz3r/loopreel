@@ -43,7 +43,7 @@ export default function PaperOfRecordFrame({ slide, scheme, children, size, bran
       <div className={styles.masthead}>
         <div className={styles.mastheadTop}>
           <span className={styles.mastheadTag}>{tag}</span>
-          <span className={styles.mastheadName}>The Daily Investigation</span>
+          <span className={styles.mastheadName}>{bk?.wordmark || 'The Daily Investigation'}</span>
         </div>
         <div className={styles.mastheadSub}>
           <span className={styles.mastheadVolume}>Vol. CLXXII .... No. 59,842</span>
@@ -54,7 +54,7 @@ export default function PaperOfRecordFrame({ slide, scheme, children, size, bran
       <div className={styles.content}>{children}</div>
 
       <div className={styles.footer}>
-        <span className={styles.footerHandle}>@editorialdesk</span>
+        <span className={styles.footerHandle}>{bk?.handle || '@editorialdesk'}</span>
         <div className={styles.footerDots}>
           <span className={styles.dot} />
           <span className={styles.dotInactive} />

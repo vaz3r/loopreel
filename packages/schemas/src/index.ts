@@ -36,17 +36,24 @@ export const PlatformEnum = z.enum([
   'linkedin',
   'x',
   'facebook',
+  'pinterest',
 ]);
 export type Platform = z.infer<typeof PlatformEnum>;
 
-// BrandKit schema
+// BrandKit schema with typographic wordmark support
 export const BrandKitSchema = z.object({
   bg: z.string().optional(),
   text: z.string().optional(),
   accent: z.string().optional(),
+  surface: z.string().optional(),
   fontSerif: z.string().optional(),
   fontSans: z.string().optional(),
-  logoUrl: z.string().optional(),
+  fontMono: z.string().optional(),
+  // Typographic brand identity (replaces clunky image logos)
+  wordmark: z.string().optional(), // e.g. "THE DAILY DIGEST"
+  handle: z.string().optional(),   // e.g. "@dailydigest"
+  wordmarkStyle: z.enum(['serif', 'sans', 'mono', 'small-caps']).optional(),
+  logoUrl: z.string().optional(), // Preserved for backwards compatibility
 });
 export type BrandKit = z.infer<typeof BrandKitSchema>;
 
@@ -55,6 +62,7 @@ export const TEMPLATE_KEYS = [
   'the-globalist',
   'the-curator',
   'the-academic',
+  'the-signal',
 ] as const;
 export type TemplateId = (typeof TEMPLATE_KEYS)[number];
 

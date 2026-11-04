@@ -51,6 +51,15 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     toneKeywords: ['research', 'science', 'evidence', 'academic', 'structured', 'methodology'],
     cluster: 'academic',
   },
+  'the-signal': {
+    id: 'the-signal',
+    name: 'The Signal',
+    schemeId: 'custom_brand',
+    schema: PaperOfRecordContract,
+    defaultPlatform: 'instagram-feed',
+    toneKeywords: ['the signal', 'modern', 'editorial'],
+    cluster: 'modern',
+  },
 };
 
 export function getTemplate(id: string): TemplateEntry {

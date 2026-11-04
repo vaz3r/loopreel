@@ -56,7 +56,7 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
       }}>
         <div>
           <span>ARCHIVE REF: </span>
-          <span style={{ fontWeight: 300, color: graphite }}>CURATOR.STUDIO</span>
+          <span style={{ fontWeight: 300, color: graphite }}>{bk?.wordmark || bk?.handle || 'CURATOR.STUDIO'}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isWide ? 16 : 24 }}>
           <span style={{ color: graphite }}>FOLIO</span>

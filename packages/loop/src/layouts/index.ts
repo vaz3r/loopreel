@@ -5,12 +5,14 @@ import * as PaperOfRecord from './paper-of-record/layout';
 import * as TheGlobalist from './the-globalist/layout';
 import * as TheCurator from './the-curator/layout';
 import * as TheAcademic from './the-academic/layout';
+import * as TheSignal from './the-signal/layout';
 
 const templateIndex: Record<string, typeof PaperOfRecord> = {
   'paper-of-record': PaperOfRecord,
   'the-globalist': TheGlobalist,
   'the-curator': TheCurator,
   'the-academic': TheAcademic,
+  'the-signal': TheSignal,
 };
 
 export type { FrameProps, LayoutProps };
