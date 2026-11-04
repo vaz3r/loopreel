@@ -45,7 +45,12 @@ The official workspace Antigravity Skill (`.agents/skills/template-converter/SKI
 - **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Strategic Template Catalog Expansion & Archetype Roadmap](./template-catalog-roadmap.md)
+### 6. [Design Reference Evaluation & Golden Prompt Fix](./design-reference-evaluation-and-prompt-fix.md)
+Strategic review of `ARCHIVIO.html` and `casa-forma-carousel-reference.html`:
+- **Diagnosis**: Why these mocks duplicate `paper-of-record` and `the-curator`, and why the LLM copied the prompt example.
+- **Fixes**: Removing prompt leakage, eliminating viewer shell bloat, and introducing dedicated presets for SaaS and Swiss brutalism.
+
+### 7. [Strategic Template Catalog Expansion & Archetype Roadmap](./template-catalog-roadmap.md)
 The expansion roadmap for the next 5 visual archetypes and new information slide structures:
 - **Priority 1: The Terminal** (Bloomberg / FinTech Data) - Ready to convert from `packages/loop/design-references/The Terminal.html`.
 - **Priority 2: The Blueprint / Operator** (Linear / Stripe Press SaaS Frameworks).
