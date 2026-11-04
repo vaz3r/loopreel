@@ -141,3 +141,72 @@ Following the removal of redundant packages, we unified the slide rendering engi
    - **6 Apps**: `api`, `admin`, `worker-ingest`, `worker-transcribe`, `worker-structure`, `worker-render`.
    - **6 Core Packages**: `schemas`, `db`, `queue`, `storage`, `loop`, `llm`.
    - **Monorepo Status**: `turbo run build typecheck lint` runs 100% green with 0 errors across all 12 projects. PM2 stack online with 7 running processes.
+
+---
+
+## 7. 100% Isolated Template Architecture, Wordmarks & Live Verification
+
+### Key Deliverables:
+
+1. **Total Template Isolation (Zero Shared Layout Code)**:
+   - Each template remains completely self-contained in its own directory with its own `frame.tsx`, `slides.tsx`, and CSS modules.
+   - You can rewrite, customize, or experiment with any template without risking regressions to other templates.
+
+2. **Automated Template Scaffolder (`pnpm run create-template`)**:
+   - Implemented `scripts/create-template.ts` and starter blueprint `packages/loop/src/layouts/_starter/`.
+   - Creating a new isolated template now takes **under 60 seconds**:
+     ```bash
+     pnpm run create-template the-signal "The Signal"
+     ```
+   - Automatically provisions the isolated template folder, registers it in `packages/loop`, updates `TEMPLATE_KEYS` in `@loopreel/schemas`, and hooks up the AI classifier.
+
+3. **Typographic Wordmark & Handle System**:
+   - Deprecated clunky raster image logos (`logoUrl`) in favor of vector-grade typographic wordmarks and handles.
+   - Frames in `paper-of-record`, `the-globalist`, `the-curator`, `the-academic`, and `the-signal` dynamically render custom publication wordmarks (e.g. `"TECH CHRONICLE"`) and handles (e.g. `"@techchronicle"`).
+
+4. **Preserved Auto-Select with Strict Fixed Template Override**:
+   - When a job is submitted with `templateId: "auto"`, the AI classifier auto-selects the optimal template.
+   - When an explicit template is chosen (e.g. `the-signal`), the pipeline immediately flags `isFixedTemplate: true`, skips the Phase 2 LLM selection call (saving tokens and latency), and locks the render to the chosen template.
+
+5. **Multi-Platform Aspect Ratio Support**:
+   - Standardized dimensions across Instagram Carousel (4:5 / $1080 \times 1350$), Stories/Reels (9:16 / $1080 \times 1920$), Square (1:1 / $1080 \times 1080$), LinkedIn Document Carousel ($1080 \times 1350$), and Pinterest Pin (2:3 / $1000 \times 1500$).
+
+6. **Bare Admin Testing Workflow**:
+   - Enhanced `apps/admin/src/components/BrandKitForm.tsx` with **Save Preset** and **Load Preset** buttons backed by `localStorage` so you can load your daily Instagram brand identity in 1 click.
+
+---
+
+### Verification: Live E2E Run with Fixed Template "The Signal"
+
+A fresh technical article was submitted with a locked template and custom brandkit:
+- **Source**: `https://en.wikipedia.org/wiki/Prompt_engineering`
+- **Fixed Template**: `the-signal`
+- **Publication Wordmark**: `"TECH CHRONICLE"`
+- **Social Handle**: `"@techchronicle"`
+- **Platform**: `instagram-feed` (4:5)
+- **Job ID**: `4a2d48b2-7d66-4f87-a68d-f315f1a66cdb`
+- **Total Runtime**: **83.2 seconds** (Phase 2 LLM selection bypassed in 1ms)
+- **Render Output**: 6 slides rendered at 2x Retina resolution ($2160 \times 2700$).
+
+### Visual Audit of Rendered "The Signal" Slides:
+
+````carousel
+![The Signal - Slide 1: Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_01.png)
+<!-- slide -->
+![The Signal - Slide 2: Definition & Fundamentals](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_02.png)
+<!-- slide -->
+![The Signal - Slide 3: Telemetry & Empirical Scaling](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_03.png)
+<!-- slide -->
+![The Signal - Slide 4: Sequence Hierarchy](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_04.png)
+<!-- slide -->
+![The Signal - Slide 5: Myth vs Fact](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_05.png)
+<!-- slide -->
+![The Signal - Slide 6: Centered CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-signal-run/slide_06.png)
+````
+
+- **Visual Results**:
+  - The masthead displays `"TECH CHRONICLE"` with clean letterspacing.
+  - The footer displays `"@techchronicle"` with page indicators.
+  - Dark modern slate background with cyan pill indicators.
+  - All 20 slides across all 5 templates pass the automated visual audit suite (`scripts/test-all-templates-visual.ts`).
+
