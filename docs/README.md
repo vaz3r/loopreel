@@ -13,7 +13,15 @@ Comprehensive technical overview of the monorepo topology:
 - **Subpath Export Integration**: Headless Node template introspection via `@loopreel/loop/bridge`.
 - **Data Flow & Queue Topology**: BullMQ pipeline routing from source ingestion to 2x Retina rendering.
 
-### 2. [Strategic Blueprint: Premium B2B SaaS](./premium-saas-strategy.md)
+### 2. [Strategic Blueprint: MVP Validation & Credit-Pack Model](./mvp-validation-and-credit-model.md)
+The lean execution and founder dogfooding blueprint:
+- **Founder Dogfooding & Customer Zero**: Launching a dedicated Instagram page to validate real audience traction and layout feedback daily before scaling tech.
+- **Credit-Pack Monetization**: Replacing friction-heavy recurring subscriptions with pay-as-you-go packs (\$19 for 5 carousels, \$49 for 15, \$99 for 35).
+- **BrandKit Differentiation Engine**: Ensuring no two brands look the same via dynamic hex harmonies, typography pairing presets, and border frame styles.
+- **Template Roadmap**: Expanding beyond the 4 broadsheet templates into modern B2B tech and high-contrast styles.
+- **Daily 15-Minute Playbook**: Content selection formula, operational loop, and signals to watch.
+
+### 3. [Strategic Blueprint: Premium B2B SaaS (Long-Term Reference)](./premium-saas-strategy.md)
 The complete executive strategy for launching Loopreel as a high-margin commercial SaaS:
 - **Value Proposition & Anchor Pricing**: Replacing \$3,000–\$8,000/month design agencies and ghostwriters.
 - **Ideal Customer Profiles (ICPs)**: Tech executives, B2B founders, and content marketing agencies.
