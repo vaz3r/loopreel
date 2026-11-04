@@ -7,11 +7,8 @@ FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY packages/db/package.json ./packages/db/
 COPY packages/schemas/package.json ./packages/schemas/
-COPY packages/types/package.json ./packages/types/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
-COPY packages/errors/package.json ./packages/errors/
-COPY packages/backgrounds/package.json ./packages/backgrounds/
 COPY packages/storage/package.json ./packages/storage/
 COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
@@ -25,13 +22,10 @@ COPY --from=deps /app/apps/*/node_modules ./apps/*/node_modules/
 COPY . .
 RUN rm -rf packages/llm/dist packages/loop-bridge/dist
 RUN pnpm --filter @loopreel/schemas build
-RUN pnpm --filter @loopreel/types build
 RUN pnpm --filter @loopreel/db build
 RUN pnpm --filter @loopreel/queue build
 RUN pnpm --filter @loopreel/llm build
-RUN pnpm --filter @loopreel/backgrounds build
 RUN pnpm --filter @loopreel/storage build
-RUN pnpm --filter @loopreel/errors build
 RUN pnpm --filter @loopreel/worker-structure build
 
 FROM base AS runner
@@ -39,11 +33,8 @@ WORKDIR /app
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY packages/db/package.json ./packages/db/
 COPY packages/schemas/package.json ./packages/schemas/
-COPY packages/types/package.json ./packages/types/
 COPY packages/queue/package.json ./packages/queue/
 COPY packages/llm/package.json ./packages/llm/
-COPY packages/errors/package.json ./packages/errors/
-COPY packages/backgrounds/package.json ./packages/backgrounds/
 COPY packages/storage/package.json ./packages/storage/
 COPY packages/loop-bridge/package.json ./packages/loop-bridge/
 COPY packages/loop/package.json ./packages/loop/
@@ -52,14 +43,11 @@ RUN pnpm install --frozen-lockfile --prod && npm install -g tsx
 COPY --from=builder /app/packages/db/dist ./packages/db/dist
 COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 COPY --from=builder /app/packages/schemas/dist ./packages/schemas/dist
-COPY --from=builder /app/packages/types/dist ./packages/types/dist
 COPY --from=builder /app/packages/queue/dist ./packages/queue/dist
 COPY --from=builder /app/packages/llm/dist ./packages/llm/dist
 COPY --from=builder /app/packages/llm/domains ./packages/llm/domains
 COPY --from=builder /app/packages/llm/src/brain/prompts ./packages/llm/src/brain/prompts
 COPY --from=builder /app/packages/loop/src/layouts ./packages/loop/src/layouts
-COPY --from=builder /app/packages/errors/dist ./packages/errors/dist
-COPY --from=builder /app/packages/backgrounds/dist ./packages/backgrounds/dist
 COPY --from=builder /app/packages/storage/dist ./packages/storage/dist
 COPY --from=builder /app/packages/loop-bridge/src ./packages/loop-bridge/src
 COPY --from=builder /app/packages/loop/src ./packages/loop/src

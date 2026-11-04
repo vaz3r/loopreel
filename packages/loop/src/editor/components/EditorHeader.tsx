@@ -26,7 +26,6 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
           {[
             { id: 'paper-of-record', label: 'Paper of Record' },
             { id: 'the-globalist', label: 'The Globalist' },
-            { id: 'the-terminal', label: 'The Terminal' },
             { id: 'the-curator', label: 'The Curator' },
             { id: 'the-academic', label: 'The Academic' },
           ].map((t) => (

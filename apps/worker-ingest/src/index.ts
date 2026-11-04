@@ -1,7 +1,6 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
-import type { IngestPayload } from '@loopreel/schemas';
-import { classifyError } from '@loopreel/errors';
+import { classifyError, type IngestPayload } from '@loopreel/schemas';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import pino from 'pino';

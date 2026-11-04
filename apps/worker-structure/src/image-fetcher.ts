@@ -1,4 +1,4 @@
-import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from '@loopreel/backgrounds';
+import { getRandomPhoto, getPhotoUrl, getPlaceholderUrl } from './services/unsplash/index.js';
 import { downloadImage, uploadImage, getPresignedUrl } from '@loopreel/storage';
 
 export async function fetchImagesForSlides(

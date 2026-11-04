@@ -147,7 +147,7 @@ export default function App() {
                 {Object.keys(TEMPLATE_MAP).map(tid => (
                   <button key={tid} onClick={() => switchTemplate(tid)}
                     className={`py-2 px-1 border text-[10px] font-mono uppercase transition-all ${activeTemplate === tid ? 'border-blue-500 bg-blue-500/10 text-blue-400 font-bold' : 'border-[#333] text-neutral-500 hover:border-[#555]'}`}>
-                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : tid === 'the-terminal' ? 'The Terminal' : tid === 'the-curator' ? 'The Curator' : 'The Academic'}
+                    {tid === 'paper-of-record' ? 'Paper of Record' : tid === 'the-globalist' ? 'The Globalist' : tid === 'the-curator' ? 'The Curator' : 'The Academic'}
                   </button>
                 ))}
               </div>

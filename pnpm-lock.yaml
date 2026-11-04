@@ -106,9 +106,6 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/design':
-        specifier: workspace:*
-        version: link:../../packages/design
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -140,9 +137,6 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/errors':
-        specifier: workspace:*
-        version: link:../../packages/errors
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -180,12 +174,6 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/design':
-        specifier: workspace:*
-        version: link:../../packages/design
-      '@loopreel/errors':
-        specifier: workspace:*
-        version: link:../../packages/errors
       '@loopreel/loop-bridge':
         specifier: workspace:*
         version: link:../../packages/loop-bridge
@@ -217,15 +205,9 @@ importers:
 
   apps/worker-structure:
     dependencies:
-      '@loopreel/backgrounds':
-        specifier: workspace:*
-        version: link:../../packages/backgrounds
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/errors':
-        specifier: workspace:*
-        version: link:../../packages/errors
       '@loopreel/llm':
         specifier: workspace:*
         version: link:../../packages/llm
@@ -260,9 +242,6 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@loopreel/errors':
-        specifier: workspace:*
-        version: link:../../packages/errors
       '@loopreel/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -289,15 +268,6 @@ importers:
         specifier: ^5.7.0
         version: 5.9.3
 
-  packages/backgrounds:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.0.0
-        version: 22.20.1
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
   packages/db:
     dependencies:
       '@loopreel/schemas':
@@ -310,18 +280,6 @@ importers:
       '@types/pg':
         specifier: ^8.11.0
         version: 8.20.0
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
-  packages/design:
-    devDependencies:
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
-  packages/errors:
-    devDependencies:
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -454,16 +412,6 @@ importers:
       '@types/node':
         specifier: ^22.0.0
         version: 22.20.1
-      typescript:
-        specifier: ^5.7.0
-        version: 5.9.3
-
-  packages/types:
-    dependencies:
-      '@loopreel/schemas':
-        specifier: workspace:*
-        version: link:../schemas
-    devDependencies:
       typescript:
         specifier: ^5.7.0
         version: 5.9.3

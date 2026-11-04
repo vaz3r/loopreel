@@ -99,8 +99,11 @@ async function fetchImageBackground(
 
       if (result.results.length > 0) {
         // Pick a random result for variety
-        photo = result.results[Math.floor(Math.random() * result.results.length)];
-        imageCache.set(cacheKey, photo);
+        const randomPhoto = result.results[Math.floor(Math.random() * result.results.length)];
+        if (randomPhoto) {
+          photo = randomPhoto;
+          imageCache.set(cacheKey, photo);
+        }
       }
     } catch (err) {
       console.error('Failed to fetch from Unsplash:', err);

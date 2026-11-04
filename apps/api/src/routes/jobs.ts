@@ -37,7 +37,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
           platform: { type: 'string', enum: ['instagram-feed', 'instagram-square', 'instagram-stories', 'linkedin', 'x', 'facebook'], default: 'instagram-feed' },
-          templateId: { type: 'string', enum: ['auto', 'paper-of-record', 'the-globalist', 'the-terminal', 'the-curator', 'the-academic'], default: 'auto' },
+          templateId: { type: 'string', enum: ['auto', 'paper-of-record', 'the-globalist', 'the-curator', 'the-academic'], default: 'auto' },
           brandKit: {
             type: 'object',
             properties: {

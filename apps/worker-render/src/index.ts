@@ -1,11 +1,8 @@
 import { JobRepository, AssetRepository } from '@loopreel/db';
 import { createWorker } from '@loopreel/queue';
-import type { RenderPayload } from '@loopreel/schemas';
-import type { FormatType } from '@loopreel/schemas';
+import { classifyError, getPlatform, type RenderPayload, type FormatType } from '@loopreel/schemas';
 import { getTemplate } from '@loopreel/loop-bridge';
 import { uploadSlide } from '@loopreel/storage';
-import { classifyError } from '@loopreel/errors';
-import { getPlatform } from '@loopreel/design';
 import pino from 'pino';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

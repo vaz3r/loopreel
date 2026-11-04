@@ -7,10 +7,6 @@ export {
   THE_GLOBALIST_BRANDKIT_DESCRIPTION,
 } from './layouts/the-globalist/brandkit.js';
 export {
-  TheTerminalBrandKit,
-  THE_TERMINAL_BRANDKIT_DESCRIPTION,
-} from './layouts/the-terminal/brandkit.js';
-export {
   TheCuratorBrandKit,
   THE_CURATOR_BRANDKIT_DESCRIPTION,
 } from './layouts/the-curator/brandkit.js';

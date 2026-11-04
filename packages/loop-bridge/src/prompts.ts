@@ -13,8 +13,6 @@ function getTemplateStyle(templateId: string): string {
       return 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative tone.';
     case 'the-globalist':
       return 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, financial analysis. Sophisticated and worldly.';
-    case 'the-terminal':
-      return 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative. Technical and precise.';
     case 'the-curator':
       return 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual. Heavy use of negative space.';
     case 'the-academic':

@@ -104,5 +104,5 @@ export function isConfigured(): boolean {
 
 export function getPlaceholderUrl(keywords: string, width = 1080, height = 1350): string {
   const safeQuery = encodeURIComponent(keywords.split(' ').slice(0, 3).join(' '));
-  return `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=${width}&h=${height}&fit=crop&q=80&utm_source=loopreel&utm_medium=referral`;
+  return `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=${width}&h=${height}&fit=crop&q=80&utm_source=loopreel&utm_medium=referral&query=${safeQuery}`;
 }

@@ -1,7 +1,6 @@
 import path from 'path';
 import { PaperOfRecordContract } from './layouts/paper-of-record/schema';
 import { TheGlobalistContract } from './layouts/the-globalist/schema';
-import { TheTerminalContract } from './layouts/the-terminal/schema';
 import { TheCuratorContract } from './layouts/the-curator/schema';
 import { TheAcademicContract } from './layouts/the-academic/schema';
 import { exportCarouselToImages } from './exporter';
@@ -29,16 +28,6 @@ const MOCKS: Record<string, { templateId: string; schemeId: string; contract: an
         { id: 'gen-cover-1', type: 'cover', tag: 'SPECIAL REPORT', headline: 'The End of Cheap Capital.', subheadline: 'How the sudden shift is forcing conglomerates to restructure.', authorName: 'Julian Sterling', authorRole: 'Reporting from Frankfurt', footerLeft: 'MACRO-ECONOMICS', footerRight: 'PAGE 01' },
         { id: 'gen-telem-1', type: 'telemetry', tag: 'Q3 DATA SET', headline: 'Global Telemetry', stats: [{ value: '5.25', unit: '%', label: 'Baseline interest rate.' }, { value: '1.4', unit: 'T', label: 'Corporate debt maturing.' }], footerLeft: 'TELEMETRY', footerRight: 'PAGE 02' },
         { id: 'gen-cta-1', type: 'cta', tag: 'INTELLIGENCE', headline: 'Master the Global Economy.', subtext: 'Analysis delivered weekly.', actionLabel: 'Subscribe Now', footerLeft: 'SUBSCRIPTION', footerRight: 'PAGE 03' },
-      ],
-    },
-  },
-  'the-terminal': {
-    templateId: 'the-terminal', schemeId: 'terminal_dark', contract: TheTerminalContract,
-    data: {
-      slides: [
-        { id: 'gen-cover-1', type: 'cover', tag: 'AUTH_REQ', headline: 'Terminal Access Granted.', subheadline: 'Quantitative tightening analysis.', authorName: 'J. Stevens', authorRole: 'Macro Strategy', footerLeft: 'MARKET_DATA', footerRight: 'PAGE 01' },
-        { id: 'gen-telem-1', type: 'telemetry', tag: 'DATA_SET', headline: 'Real-Time Telemetry', stats: [{ value: '4.8', unit: '%', label: 'U.S. Core CPI.', color: 'green' }, { value: '124', unit: '', label: 'Corp Defaults.', color: 'red' }], footerLeft: 'TELEMETRY', footerRight: 'PAGE 02' },
-        { id: 'gen-cta-1', type: 'cta', tag: 'AUTH_REQ', headline: 'Terminal Access Granted.', subtext: 'Macro-economic data feeds.', actionLabel: '> INITIALIZE_SUB', footerLeft: 'SUBSCRIPTION', footerRight: 'PAGE 03' },
       ],
     },
   },

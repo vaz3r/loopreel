@@ -8,7 +8,6 @@ export { paginateContract, chunkArray } from '@loopreel/loop/engine-utils';
 export {
   PaperOfRecordBrandKitSchema,
   TheGlobalistBrandKitSchema,
-  TheTerminalBrandKitSchema,
   TheCuratorBrandKitSchema,
   TheAcademicBrandKitSchema,
   BRANDKITS,
@@ -18,7 +17,6 @@ export {
 export type {
   PaperOfRecordBrandKit,
   TheGlobalistBrandKit,
-  TheTerminalBrandKit,
   TheCuratorBrandKit,
   TheAcademicBrandKit,
   BrandKitEntry,
@@ -26,7 +24,6 @@ export type {
 export {
   PaperOfRecordContract,
   TheGlobalistContract,
-  TheTerminalContract,
   TheCuratorContract,
   TheAcademicContract,
 } from './schemas.js';

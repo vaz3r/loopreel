@@ -1,7 +1,6 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
-import type { TranscribePayload } from '@loopreel/schemas';
-import { classifyError } from '@loopreel/errors';
+import { classifyError, type TranscribePayload } from '@loopreel/schemas';
 import pino from 'pino';
 import { transcribeAudio } from './services/whisper.js';
 

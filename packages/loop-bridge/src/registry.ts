@@ -1,7 +1,6 @@
 import type { z } from 'zod';
 import { PaperOfRecordContract } from './schemas.js';
 import { TheGlobalistContract } from './schemas.js';
-import { TheTerminalContract } from './schemas.js';
 import { TheCuratorContract } from './schemas.js';
 import { TheAcademicContract } from './schemas.js';
 
@@ -33,15 +32,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     defaultPlatform: 'instagram-feed',
     toneKeywords: ['world', 'geopolitics', 'culture', 'society', 'longform', 'analysis'],
     cluster: 'editorial',
-  },
-  'the-terminal': {
-    id: 'the-terminal',
-    name: 'The Terminal',
-    schemeId: 'terminal_dark',
-    schema: TheTerminalContract,
-    defaultPlatform: 'instagram-feed',
-    toneKeywords: ['finance', 'data', 'analytics', 'markets', 'technical', 'numbers', 'quantitative'],
-    cluster: 'data',
   },
   'the-curator': {
     id: 'the-curator',

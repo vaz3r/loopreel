@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export * from './errors.js';
+export * from './platforms.js';
+
 // Job Status enum (matches PostgreSQL job_status enum)
 export const JobStatusEnum = z.enum([
   'queued',
@@ -50,7 +53,6 @@ export type BrandKit = z.infer<typeof BrandKitSchema>;
 export const TEMPLATE_KEYS = [
   'paper-of-record',
   'the-globalist',
-  'the-terminal',
   'the-curator',
   'the-academic',
 ] as const;

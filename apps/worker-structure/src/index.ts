@@ -1,10 +1,9 @@
 import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
-import type { StructurePayload } from '@loopreel/schemas';
+import { classifyError, type StructurePayload } from '@loopreel/schemas';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop-bridge';
 import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
-import { classifyError } from '@loopreel/errors';
 import { validateInput } from '@loopreel/llm';
 import { sanitizeSlides } from './slide-sanitizer.js';
 import { fetchImagesForSlides } from './image-fetcher.js';
@@ -93,10 +92,9 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
       const TEMPLATE_STYLES: Record<string, { name: string; aesthetics: string }> = {
         'paper-of-record': { name: 'The Paper of Record', aesthetics: 'Classic newspaper editorial. Think New York Times, The Guardian longform. Authoritative, serious, investigative.' },
-        'the-globalist': { name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated.' },
-        'the-terminal': { name: 'The Terminal', aesthetics: 'Bloomberg Terminal / Financial Times dark mode. Data-driven, market-focused, quantitative.' },
+        'the-globalist': { name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated. Best for business, markets, and global trends.' },
         'the-curator': { name: 'The Curator', aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.' },
-        'the-academic': { name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured.' },
+        'the-academic': { name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, quantitative, structured.' },
       };
 
       const templates: TemplateInfo[] = Object.entries(TEMPLATES).map(([id, entry]) => ({

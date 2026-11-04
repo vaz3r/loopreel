@@ -8,32 +8,25 @@ export interface ClassificationResult {
 }
 
 const TEMPLATE_CHARACTERISTICS: Record<TemplateId, { name: string; keywords: string[]; description: string }> = {
-  'the-terminal': {
-    name: 'The Terminal',
-    keywords: [
-      'cpi', 'inflation', 'yield', 'fed', 'interest rate', 'hike', 'cuts', 'market',
-      'ticker', 'crypto', 'bitcoin', 'equity', 'bonds', 'sec', 'earnings', 'q1', 'q2',
-      'q3', 'q4', 'algorithm', 'quant', 'volatility', 's&p', 'nasdaq', 'fund', 'options'
-    ],
-    description: 'Quantitative finance, real-time market data, technical algorithms, and high-density financial metrics.',
-  },
   'the-academic': {
     name: 'The Academic',
     keywords: [
       'doi:', 'paper', 'research', 'study', 'empirical', 'methodology', 'university',
       'journal', 'hypothesis', 'regression', 'statistically significant', 'p-value',
-      'literature review', 'hbr', 'mit', 'stanford', 'harvard', 'meta-analysis', 'dataset'
+      'literature review', 'hbr', 'mit', 'stanford', 'harvard', 'meta-analysis', 'dataset',
+      'algorithm', 'quant', 'physics', 'computing', 'quantum', 'simulation'
     ],
-    description: 'Academic research, peer-reviewed studies, HBR-style essays, and methodology-driven insights.',
+    description: 'Academic research, peer-reviewed studies, quantitative algorithms, STEM, and methodology-driven insights.',
   },
   'the-globalist': {
     name: 'The Globalist',
     keywords: [
       'g7', 'g20', 'imf', 'world bank', 'central bank', 'foreign policy', 'geopolitics',
       'trade war', 'sanctions', 'conglomerate', 'debt maturing', 'tariffs', 'diplomacy',
-      'sovereign', 'macro-economics', 'global economy', 'frankfurt', 'davos', 'wef'
+      'sovereign', 'macro-economics', 'global economy', 'frankfurt', 'davos', 'wef',
+      'market', 'equity', 'bonds', 'crypto', 'bitcoin', 'earnings', 'inflation', 'cpi', 'yield', 'fed'
     ],
-    description: 'Macro-economic policy, geopolitical analysis, international trade, and global affairs.',
+    description: 'Macro-economic policy, market intelligence, geopolitical analysis, international trade, and global affairs.',
   },
   'the-curator': {
     name: 'The Curator',
@@ -62,7 +55,6 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
   const scores: Record<TemplateId, number> = {
     'paper-of-record': 1, // base default score
     'the-globalist': 0,
-    'the-terminal': 0,
     'the-curator': 0,
     'the-academic': 0,
   };
@@ -95,7 +87,7 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
 }
 
 /**
- * State-of-the-Art Dynamic LLM Template Auto-Selection Engine
+ * Dynamic LLM Template Auto-Selection Engine
  */
 export async function autoSelectTemplate(rawText: string): Promise<ClassificationResult> {
   const heuristicResult = classifyByHeuristics(rawText);
@@ -112,14 +104,13 @@ Analyze the provided article text and select the single best presentation templa
 
 Available Templates:
 1. "paper-of-record": Classic newspaper editorial (New York Times style). Best for breaking news, investigative stories, and general journalism.
-2. "the-globalist": Macro-economics & geopolitics magazine (Economist / Monocle style). Best for central banks, trade policy, and global affairs.
-3. "the-terminal": Quantitative market intelligence (Bloomberg Terminal style). Best for markets, crypto, interest rates, metrics, and algorithms.
-4. "the-curator": Avant-garde design & architecture (MoMA gallery style). Best for luxury, minimal design, art, and architectural studies.
-5. "the-academic": Peer-reviewed research paper (Harvard Business Review / MIT style). Best for empirical data, academic papers, and scientific studies.
+2. "the-globalist": Macro-economics & geopolitics magazine (Economist / Monocle style). Best for markets, central banks, trade policy, and global affairs.
+3. "the-curator": Avant-garde design & architecture (MoMA gallery style). Best for luxury, minimal design, art, and architectural studies.
+4. "the-academic": Peer-reviewed research paper (Harvard Business Review / MIT style). Best for empirical data, academic papers, scientific studies, and algorithms.
 
 Respond ONLY with a JSON object in the following format:
 {
-  "selectedTemplate": "paper-of-record" | "the-globalist" | "the-terminal" | "the-curator" | "the-academic",
+  "selectedTemplate": "paper-of-record" | "the-globalist" | "the-curator" | "the-academic",
   "rationale": "Brief 1-sentence reason for selection"
 }`;
 
@@ -139,7 +130,7 @@ Respond ONLY with a JSON object in the following format:
       }
     }
   } catch {
-    // Fall back to heuristic classification on any LLM error
+    // LLM fallback to heuristic result
   }
 
   return heuristicResult;

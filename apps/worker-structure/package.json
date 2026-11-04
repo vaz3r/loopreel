@@ -9,9 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@loopreel/backgrounds": "workspace:*",
     "@loopreel/db": "workspace:*",
-    "@loopreel/errors": "workspace:*",
     "@loopreel/llm": "workspace:*",
     "@loopreel/loop-bridge": "workspace:*",
     "@loopreel/queue": "workspace:*",

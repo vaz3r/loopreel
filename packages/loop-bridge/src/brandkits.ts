@@ -8,10 +8,6 @@ import {
   THE_GLOBALIST_BRANDKIT_DESCRIPTION,
 } from '@loopreel/loop/brandkits';
 import {
-  TheTerminalBrandKit as TT,
-  THE_TERMINAL_BRANDKIT_DESCRIPTION,
-} from '@loopreel/loop/brandkits';
-import {
   TheCuratorBrandKit as TC,
   THE_CURATOR_BRANDKIT_DESCRIPTION,
 } from '@loopreel/loop/brandkits';
@@ -22,13 +18,11 @@ import {
 
 export type PaperOfRecordBrandKit = z.infer<typeof POR>;
 export type TheGlobalistBrandKit = z.infer<typeof TG>;
-export type TheTerminalBrandKit = z.infer<typeof TT>;
 export type TheCuratorBrandKit = z.infer<typeof TC>;
 export type TheAcademicBrandKit = z.infer<typeof TA>;
 
 export { POR as PaperOfRecordBrandKitSchema, PAPER_OF_RECORD_BRANDKIT_DESCRIPTION };
 export { TG as TheGlobalistBrandKitSchema, THE_GLOBALIST_BRANDKIT_DESCRIPTION };
-export { TT as TheTerminalBrandKitSchema, THE_TERMINAL_BRANDKIT_DESCRIPTION };
 export { TC as TheCuratorBrandKitSchema, THE_CURATOR_BRANDKIT_DESCRIPTION };
 export { TA as TheAcademicBrandKitSchema, THE_ACADEMIC_BRANDKIT_DESCRIPTION };
 
@@ -40,7 +34,6 @@ export interface BrandKitEntry {
 export const BRANDKITS: Record<string, BrandKitEntry> = {
   'paper-of-record': { schema: POR, description: PAPER_OF_RECORD_BRANDKIT_DESCRIPTION },
   'the-globalist': { schema: TG, description: THE_GLOBALIST_BRANDKIT_DESCRIPTION },
-  'the-terminal': { schema: TT, description: THE_TERMINAL_BRANDKIT_DESCRIPTION },
   'the-curator': { schema: TC, description: THE_CURATOR_BRANDKIT_DESCRIPTION },
   'the-academic': { schema: TA, description: THE_ACADEMIC_BRANDKIT_DESCRIPTION },
 };
