@@ -38,12 +38,12 @@ The revised, fully isolated template architecture blueprint:
 - **Multi-Platform Aspect Ratio Engine**: Standardized canvas sizing for Instagram Feed (4:5), Stories (9:16), Square (1:1), LinkedIn (4:5 PDF), and Pinterest (2:3).
 - **Pure Admin Testing Workflow**: Zero credit/auth friction with saved BrandKit presets in `localStorage`.
 
-### 5. [Implementation Plan: Agent-Driven Template Conversion Workflow](./plan-agent-driven-template-conversion.md)
-Streamlining single-file HTML design mocks (from ChatGPT, Claude, Gemini) into isolated production templates:
-- **Zero-Manual-Friction Contract**: The user provides the HTML file and asks the agent to convert it. The AI agent executes 100% of the CSS translation, component isolation, registration, and visual testing.
-- **Golden Prompt Recipe**: Standardized prompt template for ChatGPT/Claude generating parser-ready $1080 \times 1350$ single-file HTML mocks.
-- **Agent Conversion Playbook**: Step-by-step procedure for the AI agent to scaffold, translate, register, and audit new templates.
-- **Visual Auditing**: Automated rendering of screenshots for human visual confirmation.
+### 5. [Implementation Plan: Antigravity Skill for Template Conversion](./plan-template-converter-skill.md)
+Creation of the official workspace Antigravity Skill (`.agents/skills/template-converter/SKILL.md`):
+- **Progressive Disclosure**: Antigravity automatically detects when to convert HTML design references into production templates.
+- **Zero-Manual-Friction Contract**: The user provides the HTML file; Antigravity executes 100% of the CSS translation, component isolation, registration, and visual testing.
+- **Golden Prompt Recipe**: Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
+- **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
 ### 6. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
 Technical and visual verification logs:
