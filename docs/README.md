@@ -45,10 +45,19 @@ The official workspace Antigravity Skill (`.agents/skills/template-converter/SKI
 - **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Implementation Plan: Antigravity Skill for Template Conversion](./plan-template-converter-skill.md)
+### 6. [Strategic Template Catalog Expansion & Archetype Roadmap](./template-catalog-roadmap.md)
+The expansion roadmap for the next 5 visual archetypes and new information slide structures:
+- **Priority 1: The Terminal** (Bloomberg / FinTech Data) - Ready to convert from `packages/loop/design-references/The Terminal.html`.
+- **Priority 2: The Blueprint / Operator** (Linear / Stripe Press SaaS Frameworks).
+- **Priority 3: The Vanguard / Manifesto** (Swiss Brutalism / Viral Scroll-Stopper).
+- **Priority 4: The Atelier** (Kinfolk / Warm Earthy Lifestyle & Pinterest).
+- **Priority 5: The Executive Brief** (McKinsey / Bain Corporate Navy & Gold for LinkedIn).
+- **New Slide Archetypes**: 2x2 Matrix Quadrant, Myth vs. Fact Binary, and 4-Card Resource Stack.
+
+### 7. [Implementation Plan: Antigravity Skill for Template Conversion](./plan-template-converter-skill.md)
 Technical design document for the Antigravity Skill implementation and workflow architecture.
 
-### 7. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
+### 8. [Layout Standardization & Verification Walkthrough](./walkthrough.md)
 Technical and visual verification logs:
 - Systematic resolution of the CTA centering and duplicate footer bugs across all editorial templates.
 - Multi-template automated test suite (`scripts/test-all-templates-visual.ts`).
