@@ -436,4 +436,55 @@ packages/loop/src/layouts/the-field-notes/
 ### 2. Backward Compatibility
 [`slides.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/slides.tsx) was refactored into a re-export barrel that exposes all slide components and types identically, ensuring zero disruption to any external scripts, tests, or render workers importing from `slides.js`.
 
+---
+
+## 13. Live End-to-End Audit: Antikythera Mechanism Field Log
+
+### 1. Verification Scope
+We audited the complete production asynchronous pipeline against a new, historical scientific article using the modularized **The Field Notes** template:
+- **Input Article**: [Antikythera Mechanism (Wikipedia)](https://en.wikipedia.org/wiki/Antikythera_mechanism)
+- **Engine / Workers**: Fastify API (`port 3000`), BullMQ Redis queue, `worker-ingest`, `worker-structure`, and `worker-render` (Playwright at 2x Retina $2160 \times 2700$).
+- **LLM**: Google AI `gemini-2.5-flash-lite`.
+- **Job ID**: `f122b534-9720-45b8-a713-021122c64f2c`.
+- **Branding**: Wordmark: `ARCHAEO FIELD LOG`, Social Handle: `@ArchaeoFieldNotes`.
+
+### 2. Pipeline Performance & Latency Metrics
+- **Job Status**: `COMPLETE`
+- **Total Pipeline Duration**: `36.4s`
+  - Extraction Phase: `3.7s` (29,194 prompt tokens, 986 completion tokens)
+  - Slide Planning Phase: `1.7s` (5,493 prompt tokens, 299 completion tokens)
+  - Slide Content Generation Phase: `4.5s` (8,264 prompt tokens, 1,031 completion tokens)
+  - Playwright 2x Retina Rendering: ~`19.7s` (7 slides, 2.8s per slide average)
+- **Generated Slide Count**: 7 high-resolution slides ($1080 \times 1350$ rendered at 2x)
+- **Slide Types Utilized**: `cover`, `sequence`, `specimen`, `quote`, `telemetry`, `compare`, `cta` (100% variety, zero placeholder leaks)
+
+### 3. Generated Slide Content Structure
+The LLM dynamically structured an authentic archaeological / mechanical field journal:
+1. **Slide 1 (`cover`)**: *"This Machine Predates Calculus"* (Subheadline: Discovered in a shipwreck, it's the oldest known analog computer...; Tag: `ANCIENT MYSTERY`).
+2. **Slide 2 (`sequence`)**: *"From the Depths: A Corroded Enigma"* (3 chronological milestones: 1901 Shipwreck discovery, Early Analysis by Spyridon Stais, Modern X-ray Tomography Revelation; Tag: `DISCOVERY LOG`).
+3. **Slide 3 (`specimen`)**: *"Antikythera Mechanism"* pinned specimen card (Pronunciation: `An-tik-ee-THEER-uh Mek-uh-nizm`, Position: `Ancient Greek Device`, Found: `Recovered from a Roman shipwreck off Antikythera, Greece`, Definition: 2nd-century BC Greek analog computer and orrery; Tag: `ARTIFACT DEFINITION`).
+4. **Slide 4 (`quote`)**: Derek J. de Solla Price seminal quote on the mechanism as a machine designed to predict celestial phenomena and a conception of pure genius (Tag: `HISTORIAN'S VIEW`, Role: `Science historian`).
+5. **Slide 5 (`telemetry`)**: *"A 2,000-Year Leap in Complexity"* (Bronze Gears: `35+`, Construction Era: `2nd Century BC`, Reappearance: `14th Century AD`, Largest Gear: `13 cm` with 223 teeth; Tag: `ENGINEERING STATS`).
+6. **Slide 6 (`compare`)**: Two-column contrast card: *"Brilliance and Imperfection: A Paradox"* (Before: Traditional paradigm vs. After: Reflective paradigm; Tag: `DESIGN VS. REALITY`).
+7. **Slide 7 (`cta`)**: *"Uncover More Ancient Innovations"* (Subtext: Understanding forgotten marvels of engineering, Action: `Explore Ancient Tech`, Social: `@ArchaeoFieldNotes`; Tag: `EXPLORE FURTHER`).
+
+### 4. Visual Verification (Retina 2x PNGs)
+
+````carousel
+![Antikythera Audit - Slide 01 Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_01.png)
+<!-- slide -->
+![Antikythera Audit - Slide 02 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_02.png)
+<!-- slide -->
+![Antikythera Audit - Slide 03 Specimen](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_03.png)
+<!-- slide -->
+![Antikythera Audit - Slide 04 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_04.png)
+<!-- slide -->
+![Antikythera Audit - Slide 05 Telemetry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_05.png)
+<!-- slide -->
+![Antikythera Audit - Slide 06 Compare](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_06.png)
+<!-- slide -->
+![Antikythera Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_07.png)
+````
+
+
 
