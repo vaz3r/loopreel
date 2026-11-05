@@ -45,7 +45,12 @@ The official workspace Antigravity Skill (`.agents/skills/template-converter/SKI
 - **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Architectural Analysis: Layout-Owned Schemas vs. System Schemas](./layout-schemas-vs-system-schemas.md)
+### 6. [Architectural Plan: Eliminating Collective Schemas in `packages/loop`](./purge-legacy-loop-schemas.md)
+Elimination of legacy dead schema artifacts and achieving 100% layout-owned schemas:
+- **Audit Findings**: `packages/loop/src/schemas/` and `packages/loop/schema.ts` were dead legacy files not imported by any code.
+- **De-coupling Plan**: Deleting the dead collective folder, adding isolated `schema.ts` to `the-signal` and `_starter`, and guaranteeing every layout exposes its schema directly from its folder.
+
+### 7. [Architectural Analysis: Layout-Owned Schemas vs. System Schemas](./layout-schemas-vs-system-schemas.md)
 Detailed examination of the two schema layers:
 - **Layer 1: System Transport Schemas (`packages/schemas`)**: Fastify HTTP validation, PostgreSQL status enums, and BullMQ queue message envelopes for microservices.
 - **Layer 2: Layout Content Schemas (`packages/loop/src/layouts/`)**: Slide definitions and Zod contracts (`CoverSlide`, `SequenceSlide`, `CtaSlide`).
