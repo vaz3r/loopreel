@@ -45,7 +45,13 @@ The official workspace Antigravity Skill (`.agents/skills/template-converter/SKI
 - **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Comprehensive Codebase Audit: Dead, Legacy & Duplicate Code](./codebase-dead-code-audit.md)
+### 6. [Implementation Plan: "The Field Notes" Production Template Conversion](./plan-convert-the-field-notes.md)
+End-to-end plan to convert the researcher pocket notebook reference into our 6th production template:
+- **Aesthetic**: Warm kraft paper (`#EEE5D0`), dot grid, red margin rule, spiral binding punch holes, Fraunces serif display, Newsreader body, and Caveat handwriting marginalia.
+- **100% Isolation**: Complete self-containment under `packages/loop/src/layouts/the-field-notes/` with dynamic wordmarks and isolated Zod schema.
+- **Multi-Template Registration**: Seamless registration across schemas, bridge, classifier, and admin dropdown.
+
+### 7. [Comprehensive Codebase Audit: Dead, Legacy & Duplicate Code](./codebase-dead-code-audit.md)
 Exhaustive monorepo-wide audit identifying technical debt across all 12 packages and apps:
 - **11 Dead Files**: Dead loop schemas, orphaned 260-line sample slides, abandoned adaptive primitives, duplicate schema AST parser, obsolete prompt markdown, and duplicate PM2 configs.
 - **Out-of-Sync Duplicates**: Outdated `packages/loop/src/platforms.ts` vs `@loopreel/schemas`.
