@@ -60,7 +60,7 @@ function resolveLayoutsDir(): string {
 }
 
 const LAYOUTS_DIR = resolveLayoutsDir();
-const SHARED_DIR = join(LAYOUTS_DIR, '_shared', 'slide-types');
+const SHARED_DIR = join(LAYOUTS_DIR, 'shared', 'slide-types');
 
 // ─── YAML Loading ───────────────────────────────────────────────────────────
 

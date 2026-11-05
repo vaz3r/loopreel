@@ -1,8 +1,13 @@
 import { z } from 'zod';
 import type { Scheme } from '../../engine-utils.js';
-import type { Slide } from '../../../schema.js';
 import type { ReactNode } from 'react';
-import type { DensityProfile } from '../_shared/density-engine.js';
+import type { DensityProfile } from './density-engine.js';
+
+export interface Slide {
+  id: string;
+  type: string;
+  [key: string]: unknown;
+}
 
 export type { DensityProfile };
 

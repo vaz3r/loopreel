@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react';
 import { getFrame, getLayout } from './layouts';
 import { SCHEMES, injectFonts, type Scheme } from './engine-utils';
-import type { Slide } from '../schema';
-import { computeSlideDensity } from './layouts/_shared/density-engine';
+import { computeSlideDensity } from './layouts/shared/density-engine';
 import { getAllDecks } from './layouts/registry';
+
+export interface RenderSlide {
+  id: string;
+  type: string;
+  [key: string]: unknown;
+}
 
 declare global {
   interface Window {
-    __SLIDE_DATA?: Slide;
+    __SLIDE_DATA?: RenderSlide;
     __SLIDE_SCHEME_ID?: string;
     __SLIDE_TEMPLATE_ID?: string;
     __SLIDE_SIZE?: { width: number; height: number };
@@ -16,7 +21,7 @@ declare global {
 }
 
 interface SlideRendererProps {
-  slide: Slide;
+  slide: RenderSlide;
   scheme: Scheme;
   templateId?: string;
   brandKit?: Record<string, string | undefined>;
@@ -77,7 +82,7 @@ export default function ExportRenderer() {
     injectFonts(schemeId === 'custom_brand' ? [scheme.fontSerif, scheme.fontSans] : []);
   }, [schemeId, scheme]);
 
-  const fallbackSlide = (getAllDecks()[0]?.sampleSlides as any)?.slides?.[0] as Slide | undefined;
+  const fallbackSlide = (getAllDecks()[0]?.sampleSlides as any)?.slides?.[0] as RenderSlide | undefined;
   const activeSlide = slide || fallbackSlide;
 
   if (!activeSlide) {

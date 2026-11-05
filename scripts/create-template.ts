@@ -41,6 +41,36 @@ brandkitContent = brandkitContent
   .replace(/handle: '@thesignal'/g, `handle: '@${templateId.replace(/-/g, '')}'`);
 fs.writeFileSync(brandkitPath, brandkitContent, 'utf8');
 
+// 3b. Customize schema.ts
+const contractName = `${toPascalCase(templateId)}Contract`;
+const schemaPath = path.join(targetDir, 'schema.ts');
+if (fs.existsSync(schemaPath)) {
+  let schemaContent = fs.readFileSync(schemaPath, 'utf8');
+  schemaContent = schemaContent
+    .replace(/StarterSlideSchema/g, `${toPascalCase(templateId)}SlideSchema`)
+    .replace(/StarterContract/g, contractName)
+    .replace(/StarterSlide/g, `${toPascalCase(templateId)}Slide`);
+  fs.writeFileSync(schemaPath, schemaContent, 'utf8');
+}
+
+// 3c. Register contract in packages/loop/src/contracts.ts
+const contractsPath = path.join(rootDir, 'packages/loop/src/contracts.ts');
+let contractsContent = fs.readFileSync(contractsPath, 'utf8');
+const contractExport = `export { ${contractName} } from './layouts/${templateId}/schema.js';\n`;
+if (!contractsContent.includes(contractExport)) {
+  contractsContent += contractExport;
+  fs.writeFileSync(contractsPath, contractsContent, 'utf8');
+}
+
+// 3d. Register contract in packages/loop/src/bridge/schemas.ts
+const bridgeSchemasPath = path.join(rootDir, 'packages/loop/src/bridge/schemas.ts');
+let bridgeSchemasContent = fs.readFileSync(bridgeSchemasPath, 'utf8');
+const bridgeContractExport = `export { ${contractName} } from '../contracts.js';\n`;
+if (!bridgeSchemasContent.includes(bridgeContractExport)) {
+  bridgeSchemasContent += bridgeContractExport;
+  fs.writeFileSync(bridgeSchemasPath, bridgeContractExport, 'utf8');
+}
+
 // 4. Update packages/loop/src/layouts/index.ts
 const loopIndexPath = path.join(rootDir, 'packages/loop/src/layouts/index.ts');
 let loopIndexContent = fs.readFileSync(loopIndexPath, 'utf8');
@@ -81,11 +111,19 @@ if (!schemasContent.includes(`'${templateId}',`)) {
 const registryPath = path.join(rootDir, 'packages/loop/src/bridge/registry.ts');
 let registryContent = fs.readFileSync(registryPath, 'utf8');
 if (!registryContent.includes(`'${templateId}':`)) {
+  const importRegex = /(import \{ [^}]+ \} from '\.\/schemas\.js';)/;
+  if (!registryContent.includes(`import { ${contractName} }`)) {
+    registryContent = registryContent.replace(
+      importRegex,
+      `$1\nimport { ${contractName} } from './schemas.js';`
+    );
+  }
+
   const newEntry = `  '${templateId}': {
     id: '${templateId}',
     name: '${templateName}',
     schemeId: 'custom_brand',
-    schema: PaperOfRecordContract,
+    schema: ${contractName},
     defaultPlatform: 'instagram-feed',
     toneKeywords: ['${templateId.replace(/-/g, ' ')}', 'modern', 'editorial'],
     cluster: 'modern',

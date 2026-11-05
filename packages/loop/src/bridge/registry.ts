@@ -3,6 +3,7 @@ import { PaperOfRecordContract } from './schemas.js';
 import { TheGlobalistContract } from './schemas.js';
 import { TheCuratorContract } from './schemas.js';
 import { TheAcademicContract } from './schemas.js';
+import { TheSignalContract } from './schemas.js';
 
 export interface TemplateEntry {
   id: string;
@@ -55,7 +56,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     id: 'the-signal',
     name: 'The Signal',
     schemeId: 'custom_brand',
-    schema: PaperOfRecordContract,
+    schema: TheSignalContract,
     defaultPlatform: 'instagram-feed',
     toneKeywords: ['the signal', 'modern', 'editorial'],
     cluster: 'modern',

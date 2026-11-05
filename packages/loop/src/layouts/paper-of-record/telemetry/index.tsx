@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LayoutProps } from '../../shared/types';
-import { getStatItemStyle } from '../../_shared/density-engine';
+import { getStatItemStyle } from '../../shared/density-engine';
 import styles from './styles.module.css';
 
 export default function PaperOfRecordTelemetry({ slide, scheme, density }: LayoutProps) {

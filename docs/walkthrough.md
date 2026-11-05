@@ -226,3 +226,29 @@ To establish a zero-manual-effort pipeline where you simply ask the AI agent to 
 - Full monorepo build and typecheck verified: `23 successful, 23 total, 0 errors`.
 - The skill is tracked in Git, ensuring all future sessions inherit the template conversion protocol automatically.
 
+---
+
+## 9. Monorepo Dead-Code Purge & 100% Layout Schema Isolation
+
+### 1. Deleted Dead Legacy Files
+- **`packages/loop/src/schemas/` & `packages/loop/schema.ts`**: Deleted dead prototype global schemas.
+- **`packages/loop/src/sample-slides.ts`**: Deleted 260 lines of orphaned mock data (zero imports).
+- **`packages/loop/src/layouts/_shared/primitives/`**: Deleted 5 abandoned "Adaptive" slide components.
+- **`packages/llm/src/schema-introspect.ts`**: Deleted duplicate schema AST parser.
+- **`packages/loop/user-prompt.md`**: Deleted obsolete July documentation.
+- **`packages/loop/ecosystem.config.cjs`**: Deleted obsolete loop-only PM2 configuration.
+
+### 2. Consolidated Folder Collisions & Platforms
+- Merged `_shared` into `shared/` (`density-engine.ts`, `slide-types/`, `TypographicWordmark.tsx`, `types.ts`).
+- Updated `packages/loop/src/platforms.ts` to re-export directly from `@loopreel/schemas`.
+
+### 3. Established 100% Layout-Owned Schemas
+- Created `packages/loop/src/layouts/the-signal/schema.ts` (`TheSignalContract`).
+- Created `packages/loop/src/layouts/_starter/schema.ts` (`StarterContract`).
+- Updated `scripts/create-template.ts` so all future templates automatically scaffold an isolated `schema.ts`.
+- Re-exported `TheSignalContract` in `contracts.ts` and wired it in `bridge/registry.ts`.
+
+### 4. Verification
+- **Turbo Build & Typecheck**: `23/23 tasks successful, 0 errors` (19.9s).
+- **Multi-Template Visual Audit**: `20/20 slides rendered across all 5 templates` (`test-all-templates-visual.ts`).
+
