@@ -252,3 +252,51 @@ To establish a zero-manual-effort pipeline where you simply ask the AI agent to 
 - **Turbo Build & Typecheck**: `23/23 tasks successful, 0 errors` (19.9s).
 - **Multi-Template Visual Audit**: `20/20 slides rendered across all 5 templates` (`test-all-templates-visual.ts`).
 
+---
+
+## 10. The Field Notes Template Conversion
+
+Successfully ingested single-file HTML design reference `packages/loop/design-references/The Field Notes.html` and turned it into a 100% isolated, production-grade template (`the-field-notes`).
+
+### 1. Aesthetic & Design System Translation
+- **Paper & Textures**: Dot-grid kraft paper (`#EEE5D0`) with a double-line red margin rule (`rgba(184, 67, 42, 0.5)`) and bound-edge spiral punch holes.
+- **Typography Stack**:
+  - **Headlines & Big Serifs**: `Fraunces` (variable optical size serif, 400–700 weights).
+  - **Body & Captions**: `Newsreader` (editorial serif, italic emphasis).
+  - **Metadata, Counters, & Tags**: `DM Mono` (monospaced data labels).
+  - **Handwriting Annotations**: `Caveat` (organic handwritten notes, margins, and signature).
+- **Amber Highlighter Engine**: `renderMarkedText()` parses `*text*` into linear-gradient simulated yellow highlighter tags (`rgba(236, 182, 62, 0.55)`).
+- **Notebook Primitives**: Hand-drawn SVG `Squiggle` divider and hand-drawn SVG `CircNumber` badge.
+
+### 2. File Structure (`packages/loop/src/layouts/the-field-notes/`)
+- `brandkit.ts`: Isolated BrandKit tokens (`bg`, `accent`, fonts, wordmark).
+- `frame.module.css`: CSS module containing canvas dimensions, dot grid, double margin line, spiral holes, and header/footer rules.
+- `frame.tsx`: Isolated notebook frame with dynamic slide index counter (`No. 01`), scribble header, and dot progress bar.
+- `slides.tsx`: Complete slide components (`Cover`, `Sequence`, `Telemetry`, `Quote`, `Cta`).
+- `schema.ts`: 100% isolated `TheFieldNotesContract` schema with strict Zod types.
+- `sample-slides.ts`: Rich sample data reflecting field research observations.
+- `layout.tsx`: Slide dictionary and metadata mapping.
+- `index.ts`: Public module exports.
+
+### 3. Monorepo Integration
+- **`packages/schemas`**: Registered `the-field-notes` in `TEMPLATE_KEYS`.
+- **`packages/loop/src/bridge/registry.ts`**: Registered in `TEMPLATES` with editorial keywords.
+- **`packages/loop/src/bridge/classifier.ts`**: Added qualitative research heuristic keywords (`user study`, `observations`, `interviews`).
+- **`packages/loop/src/layouts/registry.ts`**: Added `the-field-notes` deck entry to `DECKS`.
+- **`apps/admin`**: Added `the-field-notes` label to template selector dropdown.
+
+### 4. Verification & Visual Audit
+- **Monorepo Build & Typecheck**: `23/23 tasks successful, 0 errors`.
+- **Multi-Template Visual Audit**: `24/24 slides rendered across all 6 templates` ($1080 \times 1350$ PNGs at 2x DPR).
+
+````carousel
+![The Field Notes - Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cover.png)
+<!-- slide -->
+![The Field Notes - Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/sequence.png)
+<!-- slide -->
+![The Field Notes - Telemetry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/telemetry.png)
+<!-- slide -->
+![The Field Notes - CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cta.png)
+````
+
+

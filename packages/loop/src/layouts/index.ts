@@ -6,6 +6,7 @@ import * as TheGlobalist from './the-globalist/layout';
 import * as TheCurator from './the-curator/layout';
 import * as TheAcademic from './the-academic/layout';
 import * as TheSignal from './the-signal/layout';
+import * as TheFieldNotes from './the-field-notes/layout.js';
 
 const templateIndex: Record<string, typeof PaperOfRecord> = {
   'paper-of-record': PaperOfRecord,
@@ -13,6 +14,7 @@ const templateIndex: Record<string, typeof PaperOfRecord> = {
   'the-curator': TheCurator,
   'the-academic': TheAcademic,
   'the-signal': TheSignal,
+  'the-field-notes': TheFieldNotes,
 };
 
 export type { FrameProps, LayoutProps };

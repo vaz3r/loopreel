@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 import { PaperOfRecordContract } from './schemas.js';
+import { TheFieldNotesContract } from './schemas.js';
 import { TheGlobalistContract } from './schemas.js';
 import { TheCuratorContract } from './schemas.js';
 import { TheAcademicContract } from './schemas.js';
@@ -60,6 +61,15 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
     defaultPlatform: 'instagram-feed',
     toneKeywords: ['the signal', 'modern', 'editorial'],
     cluster: 'modern',
+  },
+  'the-field-notes': {
+    id: 'the-field-notes',
+    name: 'The Field Notes',
+    schemeId: 'custom_brand',
+    schema: TheFieldNotesContract,
+    defaultPlatform: 'instagram-feed',
+    toneKeywords: ['notebook', 'journal', 'field notes', 'observations', 'qualitative', 'ux', 'study', 'interviews'],
+    cluster: 'editorial',
   },
 };
 

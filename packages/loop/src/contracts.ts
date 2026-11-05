@@ -3,3 +3,4 @@ export { TheGlobalistContract } from './layouts/the-globalist/schema.js';
 export { TheCuratorContract } from './layouts/the-curator/schema.js';
 export { TheAcademicContract } from './layouts/the-academic/schema.js';
 export { TheSignalContract } from './layouts/the-signal/schema.js';
+export { TheFieldNotesContract } from './layouts/the-field-notes/schema.js';

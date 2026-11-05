@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Field Notes — Carousel Template</title>
+<!--
+  THE FIELD NOTES — reusable Instagram carousel template (1080 × 1350), no images.
+  Metaphor: a researcher's pocket notebook. Dot-grid paper, a margin rule, ink, one
+  highlighter, and handwriting used ONLY for annotations.
+
+  HOW TO REUSE
+  1. Edit the JSON in the left panel → Apply (Ctrl/⌘+Enter). Download/Import JSON to keep decks.
+  2. Click a slide → exact 1080×1350 export view. Scripted export:
+       The Field Notes.html?export=1&slide=3&theme=kraft
+     (scripted export reads the <script id="deck"> block — paste final JSON there.)
+  3. Text auto-shrinks to fit. *word* = highlighter.  \n = line break.
+     Any slide accepts:  label (header text)  ·  scribble (handwritten margin note)
+
+  SLIDE TYPES
+    cover      kicker, title, subtitle, meta:[…] (up to 3 short facts)
+    statement  text, note
+    list       title, items:[{title,text}]                      2–5
+    specimen   term, pos, pron, text, found                     (definition card)
+    measure    value, unit, label, title, text                  (single big number)
+    tally      title, items:[{value,unit,label,text}], note     2–4
+    route      title, items:[{title,text}]                      2–5 (process)
+    log        title, items:[{time,title,text,now}]             2–4 (timeline)
+    compare    title, left:{label,items[]}, right:{label,items[]}
+    table      title, columns[], rows[[…]], total(bool), note
+    chart      title, unit, data:[{label,value}], target:{value,label}, note   (horizontal bars, ≤8)
+    map        title, points:[{name,note}], scale, note         2–6 (journey)
+    quote      text, author, role
+    entry      title, date, text                                (long-form, drop cap)
+    qa         question, answer, by
+    kit        title, items:[{text,state:"done"|"open"|"flag"}]  (checklist)
+    cta        title, text, button, sign
+  DECK: brand:{series, handle, location}, theme: "kraft" | "ledger" | "campfire", accent (optional hex)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+
+<script type="application/json" id="deck">
+{
+  "brand": { "series": "Research Journal", "handle": "@yourhandle", "location": "Field site · Riyadh" },
+  "theme": "kraft",
+  "slides": [
+    { "type": "cover", "kicker": "Entry 01 · User interviews", "title": "What users *actually* do.", "subtitle": "Notes from twelve interviews, three cafés and one very honest grandmother.", "meta": ["12 participants", "5 days", "4 min read"] },
+    { "type": "statement", "text": "People don’t read your interface. They *scan it for permission* to stop thinking.", "note": "Observed in 9 out of 12 sessions.", "scribble": "the whole study, in one line" },
+    { "type": "list", "title": "Five things I *noticed.*", "items": [
+      { "title": "Nobody reads the onboarding", "text": "They tapped ‘Skip’ before the first sentence finished." },
+      { "title": "Labels beat icons", "text": "Unlabelled icons were guessed wrong almost every time." },
+      { "title": "Search is the real menu", "text": "Most people searched before they browsed." },
+      { "title": "Trust is built in the footer", "text": "Several checked contact details before paying." } ] },
+    { "type": "specimen", "term": "Workaround", "pos": "noun · behavioural", "pron": "/ˈwɜːk.ə.raʊnd/", "text": "A small, private system a user invents when your product doesn’t do what they need. Every one is a *feature request in disguise.*", "found": "Sticky notes, screenshots, spreadsheets" },
+    { "type": "measure", "value": "7", "unit": "of 12", "label": "Participants", "title": "kept a *screenshot* as their to-do list.", "text": "None of them mentioned it until we asked to see their phone." },
+    { "type": "tally", "title": "The study, *in numbers.*", "items": [
+      { "value": "12", "unit": "", "label": "Interviews", "text": "45 minutes each, in context." },
+      { "value": "38", "unit": "", "label": "Pain points", "text": "Clustered into 6 themes." },
+      { "value": "4", "unit": "×", "label": "Faster", "text": "With the redesigned search." },
+      { "value": "0", "unit": "", "label": "Read the FAQ", "text": "Not one participant." } ],
+      "note": "Illustrative values" },
+    { "type": "route", "title": "How a session *unfolds.*", "items": [
+      { "title": "Warm-up", "text": "Their day, in their words. No product yet." },
+      { "title": "Their world", "text": "Show me the last time you did this." },
+      { "title": "The task", "text": "Watch silently. Count the hesitations." },
+      { "title": "Debrief", "text": "What surprised you? What annoyed you?" } ] },
+    { "type": "log", "title": "Day one, *by the hour.*", "items": [
+      { "time": "09:10", "title": "First café session", "text": "Wi-fi failed. Best interview of the week." },
+      { "time": "11:40", "title": "The spreadsheet reveal", "text": "Participant 03 runs her shop from one tab." },
+      { "time": "14:05", "title": "Pattern emerges", "text": "Third person in a row ignores the tutorial.", "now": true } ] },
+    { "type": "compare", "title": "Expected vs. *observed.*",
+      "left":  { "label": "What we assumed", "items": ["Users explore the menu", "Icons are self-explanatory", "Onboarding sets context", "Price is the main concern"] },
+      "right": { "label": "What we saw", "items": ["They search first", "Labels win, every time", "Skipped in seconds", "Trust comes before price"] } },
+    { "type": "table", "title": "Session *log.*", "columns": ["Participant", "Setting", "Mins"], "rows": [
+      ["P01 · Teacher", "Home", "48"], ["P02 · Driver", "Café", "37"], ["P03 · Shop owner", "Store", "52"], ["P04 · Student", "Campus", "41"], ["Total", "", "178"] ], "total": true },
+    { "type": "chart", "title": "Where they *got stuck.*", "unit": "", "data": [
+      { "label": "Sign-up", "value": 3 }, { "label": "Search", "value": 2 }, { "label": "Filters", "value": 9 },
+      { "label": "Checkout", "value": 5 }, { "label": "Receipt", "value": 1 } ],
+      "target": { "value": 4, "label": "Acceptable" }, "note": "Participants who hesitated > 10 s" },
+    { "type": "map", "title": "The first week, *mapped.*", "scale": "Typical first week", "points": [
+      { "name": "Discover", "note": "Via a friend" }, { "name": "Sign up", "note": "2 minutes" },
+      { "name": "First task", "note": "Success" }, { "name": "Stuck", "note": "Filters" },
+      { "name": "Workaround", "note": "Screenshot" }, { "name": "Return", "note": "Day 6" } ] },
+    { "type": "quote", "text": "I don’t need more features. I need *fewer decisions.*", "author": "Participant 07", "role": "Pharmacist, 41" },
+    { "type": "entry", "title": "Reflection.", "date": "Day 3 · late evening", "text": "The most useful thing anyone said this week wasn’t an answer to a question. It was a sigh. Participant 09 reached the filters screen, exhaled, and put the phone face-down on the table. No survey would have captured that. We keep designing for the confident user who knows what they want, but most of the people we met were tired, interrupted and in a hurry. The job is not to give them more power. It is to give them fewer reasons to stop." },
+    { "type": "qa", "question": "Isn’t twelve interviews too few to be sure?", "answer": "For finding problems, no. Patterns repeat fast. By the eighth session we were hearing the same stories. Numbers tell you how many; conversations tell you why.", "by": "Research lead" },
+    { "type": "kit", "title": "Interview *kit.*", "items": [
+      { "text": "Consent form, signed", "state": "done" },
+      { "text": "Discussion guide, printed", "state": "done" },
+      { "text": "Backup recorder charged", "state": "flag" },
+      { "text": "Thank-you voucher", "state": "open" },
+      { "text": "Notes synthesised within 24 h", "state": "open" } ] },
+    { "type": "cta", "title": "Go and *watch* someone use it.", "text": "Save this entry. Follow for the next page of the journal.", "button": "Save this entry", "sign": "see you in the field" }
+  ]
+}
+</script>
+
+<style>
+/* =============================== THEMES =============================== */
+.canvas[data-theme="kraft"]    { --bg:#EEE5D0; --bg2:#E6DBC2; --ink:#2B2219; --muted:rgba(43,34,25,.68); --line:rgba(43,34,25,.42); --faint:rgba(43,34,25,.15); --dot:rgba(43,34,25,.2); --card:#F6F0E2; --acc:#B8432A; --acc-ink:#FBF6EA; --hl:rgba(236,182,62,.55); --margin:rgba(184,67,42,.5); }
+.canvas[data-theme="ledger"]   { --bg:#F5F2E9; --bg2:#ECE7D9; --ink:#1D2A23; --muted:rgba(29,42,35,.66); --line:rgba(29,42,35,.4); --faint:rgba(29,42,35,.13); --dot:rgba(29,42,35,.18); --card:#FFFDF7; --acc:#2E6A4E; --acc-ink:#FFFDF7; --hl:rgba(143,204,160,.55); --margin:rgba(46,106,78,.45); }
+.canvas[data-theme="campfire"] { --bg:#1E1C19; --bg2:#171513; --ink:#EFE7D6; --muted:rgba(239,231,214,.66); --line:rgba(239,231,214,.42); --faint:rgba(239,231,214,.14); --dot:rgba(239,231,214,.13); --card:#27241F; --acc:#F0A04B; --acc-ink:#1E1C19; --hl:rgba(240,160,75,.32); --margin:rgba(240,160,75,.45); }
+
+/* =============================== APP UI =============================== */
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:#14130F; color:#ECE6DA; font-family:"DM Mono", ui-monospace, monospace; }
+.app { display:grid; grid-template-columns:400px 1fr; min-height:100vh; }
+.side { position:sticky; top:0; height:100vh; display:flex; flex-direction:column; gap:12px; padding:20px; background:#1B1A16; border-right:1px solid #2E2C26; }
+.side h1 { font:600 24px Fraunces, Georgia, serif; letter-spacing:-.01em; }
+.side h1 i { color:#E0A458; font-weight:500; }
+.side p.sub { font:400 12px/1.6 "DM Mono", monospace; color:#9C9484; }
+.side label { font:500 11px "DM Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:#9C9484; }
+.row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.side select, .side button, .tool button { font:500 12px "DM Mono", monospace; background:#26241F; color:#ECE6DA; border:1px solid #3A372F; border-radius:8px; padding:9px 12px; cursor:pointer; }
+.side button.pri, .tool button.pri { background:#ECE6DA; color:#14130F; border-color:#ECE6DA; font-weight:500; }
+.side button:hover, .side select:hover, .tool button:hover { border-color:#6B6556; }
+:is(button, select, textarea):focus-visible { outline:2px solid #E0A458; outline-offset:2px; }
+.side textarea { flex:1; min-height:200px; width:100%; resize:none; background:#12110E; color:#D8D1C2; border:1px solid #3A372F; border-radius:8px; padding:12px; font:400 12px/1.55 "DM Mono", monospace; }
+.msg { font:500 12px "DM Mono", monospace; min-height:16px; }
+.msg.err { color:#FF8A7A; } .msg.ok { color:#9BD8A8; } .msg.warn { color:#F2C26B; }
+.main { padding:28px 32px 60px; }
+.main-head { display:flex; justify-content:space-between; margin-bottom:20px; color:#9C9484; font-size:12px; letter-spacing:.06em; }
+.stage { display:grid; grid-template-columns:repeat(auto-fill, 324px); gap:22px; }
+.thumb { width:324px; background:none; border:0; color:inherit; cursor:pointer; text-align:left; font:inherit; }
+.thumb .clip { width:324px; height:405px; overflow:hidden; border-radius:4px; box-shadow:0 12px 30px rgba(0,0,0,.5); transition:transform .15s; }
+.thumb:hover .clip { transform:translateY(-3px) rotate(-.4deg); }
+.thumb .clip .canvas { transform:scale(.3); transform-origin:0 0; }
+.thumb .cap { display:block; margin-top:8px; font-size:11px; letter-spacing:.08em; color:#9C9484; text-transform:uppercase; }
+.export { display:none; }
+body.mode-export .app { display:none; }
+body.mode-export .export { display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start; }
+.tool { display:flex; flex-direction:column; gap:10px; padding:24px 24px 24px 0; width:220px; font-size:12px; color:#9C9484; line-height:1.5; }
+.tool .row button { flex:1; }
+body.clean .tool { display:none; }
+
+/* =============================== CANVAS =============================== */
+.canvas {
+  --k:1;
+  --f-head:Fraunces, "Iowan Old Style", Georgia, serif;
+  --f-body:Newsreader, Georgia, serif;
+  --f-mono:"DM Mono", ui-monospace, Menlo, monospace;
+  --f-hand:Caveat, "Segoe Print", "Bradley Hand", cursive;
+  position:relative; width:1080px; height:1350px; overflow:hidden; flex-shrink:0;
+  color:var(--ink); background-color:var(--bg);
+  background-image:
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, var(--bg2) 100%),
+    radial-gradient(circle, var(--dot) 1.6px, transparent 2.2px);
+  background-size:100% 100%, 40px 40px;
+  background-position:0 0, 20px 20px;
+  -webkit-font-smoothing:antialiased;
+}
+/* Margin rule (notebook) */
+.canvas .margin { position:absolute; top:0; bottom:0; left:104px; width:6px; border-left:1.5px solid var(--margin); border-right:1.5px solid var(--margin); }
+/* Bound-edge holes */
+.canvas .holes { position:absolute; left:38px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:space-evenly; }
+.canvas .holes i { width:22px; height:22px; border-radius:50%; background:var(--bg2); box-shadow:inset 0 2px 3px rgba(0,0,0,.18); }
+
+/* Header & footer */
+.canvas .hd, .canvas .ft { position:absolute; left:150px; right:96px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.canvas .hd { top:62px; padding-bottom:20px; border-bottom:1.5px solid var(--line); }
+.canvas .hd .l { display:flex; align-items:baseline; gap:18px; font:500 20px var(--f-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); min-width:0; }
+.canvas .hd .no { font:italic 600 34px var(--f-head); letter-spacing:-.01em; text-transform:none; color:var(--acc); }
+.canvas .hd .l span:last-child { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.canvas .hd .r { font:600 34px var(--f-hand); color:var(--ink); transform:rotate(-1.5deg); white-space:nowrap; }
+.canvas .ft { bottom:60px; font:500 19px var(--f-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.canvas .ft .h { color:var(--ink); }
+.canvas .ft .dots { display:flex; gap:9px; flex-wrap:wrap; justify-content:center; max-width:460px; }
+.canvas .ft .dots i { width:11px; height:11px; border-radius:50%; border:1.5px solid var(--line); }
+.canvas .ft .dots i.on { background:var(--ink); border-color:var(--ink); }
+.canvas .ft .dots i.cur { background:var(--acc); border-color:var(--acc); transform:scale(1.3); }
+
+/* Safe area */
+.canvas .body { position:absolute; top:176px; bottom:148px; left:150px; right:96px; display:flex; flex-direction:column; overflow:hidden; }
+.canvas .content { margin:auto 0; width:100%; }
+
+/* Type scale (scales with --k) */
+.canvas .t-hero  { font:600 calc(var(--k)*124px)/.98 var(--f-head); letter-spacing:-.035em; font-variation-settings:"opsz" 144; }
+.canvas .t-disp  { font:500 calc(var(--k)*86px)/1.06 var(--f-head); letter-spacing:-.03em; font-variation-settings:"opsz" 144; }
+.canvas .t-h1    { font:600 calc(var(--k)*80px)/1.02 var(--f-head); letter-spacing:-.03em; font-variation-settings:"opsz" 144; }
+.canvas .t-h2    { font:600 calc(var(--k)*56px)/1.08 var(--f-head); letter-spacing:-.025em; }
+.canvas .t-h3    { font:600 calc(var(--k)*40px)/1.15 var(--f-head); letter-spacing:-.015em; }
+.canvas .t-lead  { font:400 calc(var(--k)*38px)/1.38 var(--f-body); }
+.canvas .t-body  { font:400 calc(var(--k)*30px)/1.42 var(--f-body); color:var(--muted); }
+.canvas .t-mono  { font:500 calc(var(--k)*20px)/1.35 var(--f-mono); letter-spacing:.14em; text-transform:uppercase; }
+.canvas .t-hand  { font:600 calc(var(--k)*44px)/1.1 var(--f-hand); color:var(--acc); }
+.canvas .t-note  { font:500 calc(var(--k)*18px)/1.3 var(--f-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-top:calc(var(--k)*30px); }
+.canvas .muted { color:var(--muted); } .canvas .acc { color:var(--acc); }
+.canvas .it { font-style:italic; }
+.canvas .mt-s { margin-top:calc(var(--k)*16px); } .canvas .mt-m { margin-top:calc(var(--k)*32px); } .canvas .mt-l { margin-top:calc(var(--k)*56px); }
+.canvas h1, .canvas h2, .canvas h3, .canvas blockquote { text-wrap:balance; }
+.canvas p { text-wrap:pretty; }
+
+/* Highlighter for *accent* */
+.canvas mark { color:inherit; background:linear-gradient(100deg, transparent .15em, var(--hl) .3em, var(--hl) calc(100% - .2em), transparent); background-size:100% .44em; background-repeat:no-repeat; background-position:0 86%; -webkit-box-decoration-break:clone; box-decoration-break:clone; padding:0 .06em; }
+
+/* Squiggle rule */
+.canvas .squig { display:block; width:calc(var(--k)*240px); height:calc(var(--k)*22px); margin:calc(var(--k)*38px) 0; overflow:visible; }
+.canvas .squig.full { width:100%; }
+
+/* Title block for content slides */
+.canvas .ttl { margin-bottom:calc(var(--k)*44px); }
+
+/* Handwritten circled number */
+.canvas .cn { position:relative; width:calc(var(--k)*64px); height:calc(var(--k)*64px); flex-shrink:0; display:flex; align-items:center; justify-content:center; font:700 calc(var(--k)*40px)/1 var(--f-hand); color:var(--acc); }
+.canvas .cn svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+
+/* Scribble (margin note) */
+.canvas .scribble { display:flex; justify-content:flex-end; align-items:flex-end; gap:12px; margin-top:calc(var(--k)*34px); font:600 calc(var(--k)*44px)/1.05 var(--f-hand); color:var(--acc); transform:rotate(-3deg); transform-origin:right; text-align:right; }
+.canvas .scribble svg { width:calc(var(--k)*80px); height:calc(var(--k)*56px); flex-shrink:0; overflow:visible; }
+
+/* cover */
+.canvas .cover-meta { display:flex; flex-wrap:wrap; gap:0; margin-top:calc(var(--k)*64px); border-top:1.5px solid var(--line); }
+.canvas .cover-meta span { padding:calc(var(--k)*20px) calc(var(--k)*28px) 0 0; margin-right:calc(var(--k)*28px); border-right:1.5px solid var(--faint); font:500 calc(var(--k)*20px) var(--f-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.canvas .cover-meta span:last-child { border-right:0; }
+.canvas .tape { position:absolute; width:250px; height:62px; background:repeating-linear-gradient(90deg, color-mix(in srgb, var(--acc) 30%, transparent) 0 14px, color-mix(in srgb, var(--acc) 20%, transparent) 14px 28px); opacity:.9; z-index:5; mask:linear-gradient(90deg, transparent 0, #000 6px, #000 calc(100% - 6px), transparent 100%); }
+
+/* list */
+.canvas .li { display:grid; grid-template-columns:calc(var(--k)*64px) 1fr; gap:calc(var(--k)*30px); padding:calc(var(--k)*28px) 0; border-top:1.5px dashed var(--line); }
+.canvas .li:last-child { border-bottom:1.5px dashed var(--line); }
+.canvas .li .t-body { margin-top:calc(var(--k)*6px); }
+
+/* specimen card */
+.canvas .spec { position:relative; background:var(--card); border:1.5px solid var(--ink); outline:1.5px solid var(--ink); outline-offset:-12px; padding:calc(var(--k)*64px) calc(var(--k)*58px) calc(var(--k)*52px); transform:rotate(-1deg); box-shadow:0 18px 30px -18px rgba(0,0,0,.35); }
+.canvas .spec .top { display:flex; justify-content:space-between; gap:20px; padding-bottom:calc(var(--k)*20px); border-bottom:1.5px solid var(--line); }
+.canvas .spec .term { font:italic 500 calc(var(--k)*112px)/1 var(--f-head); letter-spacing:-.03em; margin-top:calc(var(--k)*36px); font-variation-settings:"opsz" 144; }
+.canvas .spec .pron { font:400 calc(var(--k)*24px) var(--f-mono); color:var(--muted); margin-top:calc(var(--k)*16px); }
+.canvas .spec .t-lead { margin-top:calc(var(--k)*32px); padding-top:calc(var(--k)*32px); border-top:1.5px dashed var(--line); }
+.canvas .spec .found .t-mono { white-space:nowrap; }
+.canvas .spec .found { display:flex; gap:16px; align-items:baseline; margin-top:calc(var(--k)*36px); }
+.canvas .spec .found .t-hand { font-size:calc(var(--k)*40px); color:var(--ink); }
+.canvas .spec .tape { top:-30px; left:50%; margin-left:-125px; transform:rotate(2deg); }
+
+/* measure */
+.canvas .big { display:flex; align-items:flex-end; gap:calc(var(--k)*20px); }
+.canvas .big .v { font:600 calc(var(--k)*400px)/.8 var(--f-head); letter-spacing:-.06em; font-variation-settings:"opsz" 144; }
+.canvas .big .u { font:700 calc(var(--k)*80px)/1 var(--f-hand); color:var(--acc); padding-bottom:calc(var(--k)*20px); transform:rotate(-4deg); }
+.canvas .ruler { position:relative; height:calc(var(--k)*40px); margin:calc(var(--k)*40px) 0; border-bottom:1.5px solid var(--ink);
+  background-image:repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 100px), repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 50px), repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10px);
+  background-size:100% 100%, 100% 55%, 100% 30%; background-position:0 100%, 0 100%, 0 100%; background-repeat:no-repeat; }
+.canvas .ruler span { position:absolute; right:0; top:calc(var(--k)*-34px); font:500 calc(var(--k)*18px) var(--f-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); background:var(--bg); padding-left:12px; }
+
+/* tally */
+.canvas .tal { display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--k)*44px) calc(var(--k)*44px); }
+.canvas .tal.rows { grid-template-columns:1fr; gap:calc(var(--k)*30px); }
+.canvas .tc { padding:calc(var(--k)*30px) calc(var(--k)*30px) calc(var(--k)*28px); background:var(--card); border:1.5px solid var(--faint); position:relative; }
+.canvas .tal.rows .tc { display:grid; grid-template-columns:calc(var(--k)*300px) 1fr; align-items:center; gap:calc(var(--k)*28px); }
+.canvas .tc .v { font:600 calc(var(--k)*124px)/.85 var(--f-head); letter-spacing:-.05em; white-space:nowrap; font-variation-settings:"opsz" 144; }
+.canvas .tc .v .u { font:700 .52em var(--f-hand); color:var(--acc); margin-left:.06em; letter-spacing:0; }
+.canvas .tc .squig { width:calc(var(--k)*120px); height:calc(var(--k)*14px); margin:calc(var(--k)*18px) 0 calc(var(--k)*16px); }
+.canvas .tal.rows .tc .squig { display:none; }
+.canvas .tc h3 { font:600 calc(var(--k)*31px)/1.15 var(--f-head); letter-spacing:-.01em; }
+.canvas .tc .t-body { font-size:calc(var(--k)*25px); margin-top:calc(var(--k)*6px); }
+
+/* route */
+.canvas .rt { position:relative; display:grid; grid-template-columns:calc(var(--k)*64px) 1fr; gap:calc(var(--k)*32px); padding-bottom:calc(var(--k)*40px); }
+.canvas .rt:last-child { padding-bottom:0; }
+.canvas .rt:not(:last-child)::before { content:""; position:absolute; left:calc(var(--k)*32px - 1px); top:calc(var(--k)*70px); bottom:calc(var(--k)*6px); border-left:2.5px dotted var(--ink); }
+.canvas .wp { width:calc(var(--k)*64px); height:calc(var(--k)*64px); border-radius:50%; border:2px solid var(--ink); background:var(--bg); display:flex; align-items:center; justify-content:center; font:600 calc(var(--k)*28px) var(--f-head); }
+.canvas .rt.end .wp { border:0; background:none; }
+.canvas .rt.end .wp svg { width:100%; height:100%; overflow:visible; }
+.canvas .rt.end .t-h3 { color:var(--acc); }
+.canvas .rt .t-h3 { padding-top:calc(var(--k)*8px); }
+.canvas .rt .t-body { margin-top:calc(var(--k)*6px); }
+
+/* log */
+.canvas .lg { display:grid; grid-template-columns:calc(var(--k)*170px) 1fr; gap:calc(var(--k)*28px); padding:calc(var(--k)*30px) 0; border-top:1.5px solid var(--line); }
+.canvas .lg:last-child { border-bottom:1.5px solid var(--line); }
+.canvas .lg .tm { font:500 calc(var(--k)*30px)/1.2 var(--f-mono); letter-spacing:.04em; padding-top:calc(var(--k)*6px); color:var(--muted); }
+.canvas .lg .t-body { margin-top:calc(var(--k)*8px); }
+.canvas .lg.now .tm { color:var(--acc); }
+.canvas .lg.now .t-h3 mark { padding:0; }
+.canvas .lg .nowtag { display:inline-block; margin-left:14px; font:700 calc(var(--k)*36px) var(--f-hand); color:var(--acc); transform:rotate(-4deg); }
+
+/* compare */
+.canvas .cmp { display:grid; grid-template-columns:1fr auto 1fr; gap:calc(var(--k)*34px); }
+.canvas .cmp .divi { width:18px; }
+.canvas .cmp .divi svg { width:100%; height:100%; overflow:visible; }
+.canvas .cmp ul { list-style:none; display:flex; flex-direction:column; gap:calc(var(--k)*24px); margin-top:calc(var(--k)*26px); }
+.canvas .cmp li { font:400 calc(var(--k)*31px)/1.3 var(--f-body); padding-bottom:calc(var(--k)*24px); border-bottom:1.5px dashed var(--faint); }
+.canvas .cmp li:last-child { border-bottom:0; padding-bottom:0; }
+.canvas .cmp .a li { color:var(--muted); text-decoration:line-through; text-decoration-color:color-mix(in srgb, var(--acc) 70%, transparent); text-decoration-thickness:2px; }
+.canvas .cmp .b li { font-weight:500; }
+.canvas .cmp .hdr { font:700 calc(var(--k)*46px)/1 var(--f-hand); }
+.canvas .cmp .a .hdr { color:var(--muted); }
+.canvas .cmp .b .hdr { color:var(--acc); }
+
+/* table */
+.canvas .tb { width:100%; border-collapse:collapse; }
+.canvas .tb th { text-align:left; padding:0 calc(var(--k)*12px) calc(var(--k)*16px) 0; font:500 calc(var(--k)*18px) var(--f-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); border-bottom:1.5px solid var(--ink); }
+.canvas .tb td { padding:calc(var(--k)*24px) calc(var(--k)*12px) calc(var(--k)*24px) 0; border-bottom:1.5px dashed var(--line); font:400 calc(var(--k)*30px)/1.25 var(--f-body); color:var(--muted); }
+.canvas .tb td:first-child { font:500 calc(var(--k)*32px)/1.2 var(--f-head); color:var(--ink); }
+.canvas .tb .n { text-align:right; padding-right:0; font:500 calc(var(--k)*32px) var(--f-mono); color:var(--ink); }
+.canvas .tb th.n { font:500 calc(var(--k)*18px) var(--f-mono); color:var(--muted); }
+.canvas .tb tr.total td { border-bottom:0; padding-top:calc(var(--k)*28px); }
+.canvas .tb tr.total td.n { color:var(--acc); text-decoration:underline double; text-underline-offset:10px; text-decoration-thickness:1.5px; }
+.canvas .tb tr.total td:first-child { font-style:italic; }
+
+/* svg figures */
+.canvas svg.fig { display:block; width:100%; height:auto; overflow:visible; }
+
+/* map legend */
+.canvas .legend { display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--k)*22px) calc(var(--k)*36px); margin-top:calc(var(--k)*30px); }
+.canvas .legend .it2 { display:grid; grid-template-columns:calc(var(--k)*48px) 1fr; gap:calc(var(--k)*16px); align-items:start; }
+.canvas .legend .cn { width:calc(var(--k)*48px); height:calc(var(--k)*48px); font-size:calc(var(--k)*32px); }
+.canvas .legend h3 { font:600 calc(var(--k)*30px)/1.15 var(--f-head); }
+.canvas .legend .t-hand { font-size:calc(var(--k)*32px); color:var(--muted); }
+
+/* quote */
+.canvas .qm { font:italic 600 calc(var(--k)*260px)/.55 var(--f-head); color:var(--acc); height:calc(var(--k)*100px); }
+.canvas blockquote.t-disp { font-style:italic; font-weight:400; }
+.canvas .by { margin-top:calc(var(--k)*52px); display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; }
+.canvas .by .t-hand { font-size:calc(var(--k)*54px); color:var(--ink); }
+
+/* entry */
+.canvas .entry .date { font:600 calc(var(--k)*40px) var(--f-hand); color:var(--acc); transform:rotate(-1.5deg); display:inline-block; margin-top:calc(var(--k)*14px); }
+.canvas .entry p { font:400 calc(var(--k)*31px)/1.6 var(--f-body); color:var(--ink); margin-top:calc(var(--k)*36px); text-wrap:pretty; hyphens:auto; }
+.canvas .entry p::first-letter { float:left; font:600 calc(var(--k)*31px * 4.1)/.8 var(--f-head); padding:.06em .1em 0 0; color:var(--acc); }
+
+/* qa */
+.canvas .qa { display:grid; grid-template-columns:calc(var(--k)*90px) 1fr; gap:calc(var(--k)*20px); }
+.canvas .qa .k { font:700 calc(var(--k)*92px)/.8 var(--f-hand); color:var(--acc); }
+.canvas .qa + .qa { margin-top:calc(var(--k)*48px); padding-top:calc(var(--k)*48px); border-top:1.5px dashed var(--line); }
+
+/* kit */
+.canvas .kt { display:grid; grid-template-columns:calc(var(--k)*56px) 1fr; gap:calc(var(--k)*26px); align-items:center; padding:calc(var(--k)*24px) 0; border-bottom:1.5px dashed var(--line); }
+.canvas .kt:first-of-type { border-top:1.5px dashed var(--line); }
+.canvas .kt .bx { width:calc(var(--k)*50px); height:calc(var(--k)*50px); position:relative; }
+.canvas .kt .bx svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.canvas .kt p { font:500 calc(var(--k)*33px)/1.3 var(--f-body); }
+.canvas .kt.done p { color:var(--muted); text-decoration:line-through; text-decoration-color:var(--line); text-decoration-thickness:2px; }
+.canvas .kt.flag p::after { content:" — check"; font:700 calc(var(--k)*34px) var(--f-hand); color:var(--acc); }
+
+/* cta */
+.canvas .btn { display:inline-flex; align-items:center; gap:16px; background:var(--ink); color:var(--bg); font:500 calc(var(--k)*24px) var(--f-mono); letter-spacing:.14em; text-transform:uppercase; padding:calc(var(--k)*26px) calc(var(--k)*40px); }
+.canvas .btn svg { width:calc(var(--k)*28px); height:calc(var(--k)*28px); }
+.canvas .sign { margin-top:calc(var(--k)*56px); display:flex; flex-direction:column; align-items:flex-start; }
+.canvas .sign .t-hand { font-size:calc(var(--k)*56px); transform:rotate(-3deg); color:var(--ink); }
+.canvas .sign .t-mono { color:var(--muted); margin-top:calc(var(--k)*14px); border-top:1.5px solid var(--line); padding-top:calc(var(--k)*12px); }
+
+.canvas .err { border:2px dashed var(--acc); padding:32px; font:500 26px var(--f-mono); color:var(--acc); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side">
+    <div>
+      <h1>The Field <i>Notes</i></h1>
+      <p class="sub">Edit the JSON and press Apply (Ctrl/⌘+Enter). Click any page to open the 1080 × 1350 export view. *word* = highlighter · "scribble" = margin note.</p>
+    </div>
+    <div class="row">
+      <label for="theme">Paper</label>
+      <select id="theme">
+        <option value="kraft">Kraft</option>
+        <option value="ledger">Ledger</option>
+        <option value="campfire">Campfire (dark)</option>
+      </select>
+      <select id="sample" aria-label="Load sample">
+        <option value="">Load sample…</option>
+        <option value="full">All 17 layouts</option>
+        <option value="short">Short deck (deep work)</option>
+      </select>
+    </div>
+    <label for="json">Content (JSON)</label>
+    <textarea id="json" spellcheck="false"></textarea>
+    <div class="msg" id="msg" aria-live="polite"></div>
+    <div class="row">
+      <button type="button" class="pri" id="apply">Apply</button>
+      <button type="button" id="download">Download JSON</button>
+      <button type="button" id="importBtn">Import JSON</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="main-head"><span id="count"></span><span>Click a page to export</span></div>
+    <div class="stage" id="stage"></div>
+  </main>
+</div>
+
+<div class="export">
+  <div id="single"></div>
+  <div class="tool">
+    <div class="row"><button type="button" id="prev" aria-label="Previous page">◀ Prev</button><button type="button" id="next" aria-label="Next page">Next ▶</button></div>
+    <button type="button" class="pri" id="back">← Back to editor</button>
+    <div id="pos" aria-live="polite"></div>
+    <p>The page sits at exactly 1080 × 1350, top-left. ←/→ to switch, Esc to go back.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const DEFAULT = JSON.parse(document.getElementById('deck').textContent);
+  const SHORT = {
+    brand: { series: "Notes on Focus", handle: "@yourhandle", location: "Week 12 · home office" },
+    theme: "ledger",
+    slides: [
+      { type: "cover", kicker: "Entry 07 · An experiment", title: "One week without *meetings* before noon.", subtitle: "What happened when I protected my mornings for deep work.", meta: ["5 days", "1 rule", "2 min read"] },
+      { type: "measure", value: "3.5", unit: "hours", label: "Focus per day", title: "of *uninterrupted* design time.", text: "Up from roughly 50 minutes the week before." },
+      { type: "log", title: "A typical *morning.*", items: [
+        { time: "08:30", title: "Phone in a drawer", text: "Notifications off until lunch." },
+        { time: "09:00", title: "One hard problem", text: "Picked the night before." },
+        { time: "11:45", title: "Inbox, finally", text: "Nothing was on fire.", now: true } ] },
+      { type: "compare", title: "Before vs. *after.*",
+        left: { label: "Before", items: ["Six context switches", "Work after hours", "Shallow reviews"] },
+        right: { label: "After", items: ["One focus block", "Done by five", "Better critiques"] } },
+      { type: "cta", title: "Guard your *mornings.*", text: "Try it for one week and write down what changes.", button: "Save this page", sign: "good luck" }
+    ]
+  };
+
+  const KEY = 'fieldnotes-deck-v1';
+  const params = new URLSearchParams(location.search);
+  const $ = id => document.getElementById(id);
+  let deck = DEFAULT, current = 0;
+
+  // ---------- helpers ----------
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const md = s => esc(s).replace(/\*(.+?)\*/g, '<mark>$1</mark>').replace(/\\n|\n/g, '<br>');
+  const plain = s => esc(String(s ?? '').replace(/\*/g, ''));
+  const pad = n => String(n).padStart(2, '0');
+  const arr = a => Array.isArray(a) ? a : [];
+  const isNum = v => /\d/.test(String(v)) && /^[\s\d.,%×x+\-−–$€£:]+$/.test(String(v));
+
+  // Hand-drawn primitives (inline SVG, theme-aware)
+  const squig = (cls = '') => `<svg class="squig ${cls}" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 22 2, 38 2, 58 11 S 98 21, 118 11 S 158 1, 178 11 S 218 21, 238 9" fill="none" style="stroke:var(--acc)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
+  const circ = n => `<div class="cn"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M34 5 C51 6 60 19 59 34 C58 50 45 60 30 59 C14 58 4 46 5 31 C6 16 17 7 38 8" fill="none" style="stroke:var(--acc)" stroke-width="2.4" stroke-linecap="round"/></svg>${n}</div>`;
+  const arrow = `<svg viewBox="0 0 80 56" aria-hidden="true"><path d="M76 6 C 60 40, 30 52, 6 44" fill="none" style="stroke:var(--acc)" stroke-width="3" stroke-linecap="round"/><path d="M18 34 L5 44 L20 51" fill="none" style="stroke:var(--acc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const xMark = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 12 C 28 28, 38 38, 52 54 M52 10 C 38 26, 26 40, 12 54" fill="none" style="stroke:var(--acc)" stroke-width="5" stroke-linecap="round"/></svg>`;
+  const box = state => `<svg viewBox="0 0 50 50" aria-hidden="true">
+      <path d="M5 6 C 18 4, 32 5, 45 5 C 46 18, 45 32, 46 45 C 32 46, 18 45, 4 46 C 5 32, 4 18, 5 6 Z" fill="none" style="stroke:var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+      ${state === 'done' ? `<path d="M10 25 L21 37 L50 -2" fill="none" style="stroke:var(--acc)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+      ${state === 'flag' ? `<path d="M25 11 V30 M25 38 V39" fill="none" style="stroke:var(--acc)" stroke-width="5" stroke-linecap="round"/>` : ''}</svg>`;
+  const title = s => s.title ? `<div class="ttl"><h2 class="t-h1">${md(s.title)}</h2>${squig()}</div>` : '';
+  const note = s => s.note ? `<p class="t-note">* ${md(s.note)}</p>` : '';
+
+  const LABELS = { cover: 'Field notes', statement: 'Observation', list: 'Observations', specimen: 'Specimen', measure: 'Measurement', tally: 'Tally', route: 'Route', log: 'Log', compare: 'Comparison', table: 'Survey', chart: 'Readings', map: 'Map', quote: 'Overheard', entry: 'Journal', qa: 'Question', kit: 'Kit list', cta: 'End of entry' };
+
+  // ---------- layouts ----------
+  const R = {
+    cover: s => `
+      ${s.kicker ? `<div class="t-mono acc">${md(s.kicker)}</div>` : ''}
+      <h1 class="t-hero mt-m">${md(s.title)}</h1>
+      ${squig()}
+      ${s.subtitle ? `<p class="t-lead it muted">${md(s.subtitle)}</p>` : ''}
+      ${arr(s.meta).length ? `<div class="cover-meta">${arr(s.meta).slice(0, 3).map(m => `<span>${esc(m)}</span>`).join('')}</div>` : ''}`,
+
+    statement: s => `
+      <p class="t-disp">${md(s.text)}</p>
+      ${s.note ? `${squig()}<p class="t-lead it muted">${md(s.note)}</p>` : ''}`,
+
+    list: s => `${title(s)}<div>${arr(s.items).slice(0, 5).map((it, j) => `
+      <div class="li">${circ(j + 1)}<div><h3 class="t-h3">${md(it.title)}</h3>${it.text ? `<p class="t-body">${md(it.text)}</p>` : ''}</div></div>`).join('')}</div>${note(s)}`,
+
+    specimen: (s, i) => `
+      <div class="spec"><span class="tape"></span>
+        <div class="top"><span class="t-mono">Specimen no. ${pad(i + 1)}</span><span class="t-mono muted">${esc(s.pos || '')}</span></div>
+        <div class="term">${md(s.term)}</div>
+        ${s.pron ? `<div class="pron">${esc(s.pron)}</div>` : ''}
+        <p class="t-lead">${md(s.text)}</p>
+        ${s.found ? `<div class="found"><span class="t-mono muted">Found in</span><span class="t-hand">${esc(s.found)}</span></div>` : ''}
+      </div>`,
+
+    measure: s => `
+      <div class="big"><span class="v">${esc(s.value)}</span>${s.unit ? `<span class="u">${esc(s.unit)}</span>` : ''}</div>
+      <div class="ruler">${s.label ? `<span>${esc(s.label)}</span>` : ''}</div>
+      ${s.title ? `<h2 class="t-h2">${md(s.title)}</h2>` : ''}
+      ${s.text ? `<p class="t-body mt-s">${md(s.text)}</p>` : ''}`,
+
+    tally: s => {
+      const items = arr(s.items).slice(0, 4), rows = items.length !== 4;
+      return `${title(s)}<div class="tal ${rows ? 'rows' : ''}">${items.map(it => `
+        <div class="tc"><div class="v">${esc(it.value)}${it.unit ? `<span class="u">${esc(it.unit)}</span>` : ''}</div>
+          ${squig()}<div><h3>${md(it.label)}</h3>${it.text ? `<p class="t-body">${md(it.text)}</p>` : ''}</div></div>`).join('')}</div>${note(s)}`;
+    },
+
+    route: s => {
+      const items = arr(s.items).slice(0, 5);
+      return `${title(s)}<div>${items.map((it, j) => {
+        const end = j === items.length - 1 && items.length > 1;
+        return `<div class="rt ${end ? 'end' : ''}"><div class="wp">${end ? xMark : j + 1}</div>
+          <div><h3 class="t-h3">${md(it.title)}</h3>${it.text ? `<p class="t-body">${md(it.text)}</p>` : ''}</div></div>`;
+      }).join('')}</div>${note(s)}`;
+    },
+
+    log: s => {
+      const items = arr(s.items).slice(0, 4);
+      const hasNow = items.some(x => x.now);
+      return `${title(s)}<div>${items.map((it, j) => {
+        const now = it.now || (!hasNow && j === items.length - 1);
+        return `<div class="lg ${now ? 'now' : ''}"><div class="tm">${esc(it.time)}</div>
+          <div><h3 class="t-h3">${md(it.title)}${now ? `<span class="nowtag">← here</span>` : ''}</h3>${it.text ? `<p class="t-body">${md(it.text)}</p>` : ''}</div></div>`;
+      }).join('')}</div>${note(s)}`;
+    },
+
+    compare: s => {
+      const col = (c = {}, k) => `<div class="${k}"><div class="hdr">${esc(c.label)}</div><ul>${arr(c.items).slice(0, 6).map(x => `<li>${md(x)}</li>`).join('')}</ul></div>`;
+      return `${title(s)}<div class="cmp">${col(s.left, 'a')}
+        <div class="divi"><svg viewBox="0 0 18 600" preserveAspectRatio="none" aria-hidden="true"><path d="M9 2 C 3 120, 15 240, 8 360 S 12 520, 9 598" fill="none" style="stroke:var(--line)" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></div>
+        ${col(s.right, 'b')}</div>${note(s)}`;
+    },
+
+    table: s => {
+      const cols = arr(s.columns), rows = arr(s.rows).slice(0, 7);
+      const numCol = cols.map((_, c) => c > 0 && rows.length && rows.every(r => r[c] === '' || r[c] == null || isNum(r[c])));
+      return `${title(s)}<table class="tb"><thead><tr>${cols.map((h, c) => `<th class="${numCol[c] ? 'n' : ''}">${esc(h)}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map((r, i) => `<tr class="${s.total && i === rows.length - 1 ? 'total' : ''}">${cols.map((_, c) => `<td class="${numCol[c] ? 'n' : ''}">${md(r[c])}</td>`).join('')}</tr>`).join('')}</tbody></table>${note(s)}`;
+    },
+
+    chart: s => {
+      const data = arr(s.data).slice(0, 8).map(d => ({ label: d.label, value: Math.max(0, Number(d.value) || 0) }));
+      if (!data.length) return `${title(s)}<div class="err">chart: add data:[{label,value}]</div>`;
+      const tgt = s.target && isFinite(Number(s.target.value)) ? Number(s.target.value) : null;
+      const max = Math.max(...data.map(d => d.value), tgt ?? 0, 1) * 1.08;
+      const hi = Number.isInteger(s.highlight) ? s.highlight : data.reduce((m, d, i) => d.value > data[m].value ? i : m, 0);
+      const W = 834, LW = 230, rowH = 92, top = tgt != null ? 56 : 10, H = top + data.length * rowH + 10;
+      const x = v => LW + (v / max) * (W - LW - 70);
+      const u = esc(s.unit || '');
+      const bars = data.map((d, i) => {
+        const y = top + i * rowH, on = i === hi, bw = Math.max(x(d.value) - LW, 3);
+        return `<text x="0" y="${y + 50}" font-size="31" style="fill:var(--ink);font-family:var(--f-head);font-weight:500">${esc(d.label)}</text>
+          <path d="M${LW} ${y + 18} h${bw} l2 ${42} h${-bw - 2} z" style="fill:${on ? 'var(--acc)' : 'var(--hl)'};stroke:${on ? 'var(--acc)' : 'var(--ink)'}" stroke-width="2" stroke-linejoin="round"/>
+          <text x="${LW + bw + 16}" y="${y + 54}" font-size="44" style="fill:${on ? 'var(--acc)' : 'var(--ink)'};font-family:var(--f-hand);font-weight:700">${+d.value.toFixed(1)}${u}</text>
+          <line x1="0" y1="${y + rowH - 6}" x2="${W}" y2="${y + rowH - 6}" style="stroke:var(--faint)" stroke-width="1.5" stroke-dasharray="6 6"/>`;
+      }).join('');
+      const target = tgt != null ? `<line x1="${x(tgt)}" y1="${top - 6}" x2="${x(tgt)}" y2="${H - 10}" style="stroke:var(--acc)" stroke-width="2.5" stroke-dasharray="3 9" stroke-linecap="round"/>
+          <text x="${x(tgt)}" y="${top - 18}" text-anchor="middle" font-size="36" style="fill:var(--acc);font-family:var(--f-hand);font-weight:700">${esc(s.target.label || 'Target')} · ${tgt}${u}</text>` : '';
+      return `${title(s)}<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="Bar chart">
+        <defs><pattern id="pencil" style="color:var(--line)" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="4.5" y1="0" x2="4.5" y2="9" stroke="currentColor" stroke-width="2.6"/></pattern></defs>
+        ${bars}${target}</svg>${note(s)}`;
+    },
+
+    map: s => {
+      const pts = arr(s.points).slice(0, 6), n = pts.length;
+      if (n < 2) return `${title(s)}<div class="err">map: add at least 2 points</div>`;
+      const W = 834, H = 430, ys = [330, 140, 290, 90, 250, 70];
+      const P = pts.map((_, i) => [60 + (W - 120) * (i / (n - 1)), ys[i % ys.length]]);
+      let d = `M${P[0][0]} ${P[0][1]}`;
+      for (let i = 1; i < n; i++) { const [x0, y0] = P[i - 1], [x1, y1] = P[i], mx = (x0 + x1) / 2; d += ` C${mx} ${y0}, ${mx} ${y1}, ${x1} ${y1}`; }
+      const topo = [[250, 300, 230, 95], [250, 300, 160, 62], [250, 300, 90, 34], [640, 170, 200, 80], [640, 170, 120, 46]]
+        .map(([cx, cy, rx, ry], j) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${j < 3 ? -8 : 10} ${cx} ${cy})" fill="none" style="stroke:var(--faint)" stroke-width="2"/>`).join('');
+      const marks = P.map(([x, y], i) => i === n - 1
+        ? `<g transform="translate(${x - 26} ${y - 26}) scale(.82)">${xMark.replace('<svg viewBox="0 0 64 64" aria-hidden="true">', '').replace('</svg>', '')}</g>`
+        : `<circle cx="${x}" cy="${y}" r="24" style="fill:var(--bg);stroke:var(--ink)" stroke-width="2.4"/>
+           <text x="${x}" y="${y + 11}" text-anchor="middle" font-size="32" style="fill:var(--ink);font-family:var(--f-hand);font-weight:700">${i + 1}</text>`).join('');
+      const compass = `<g transform="translate(${W - 34} ${H - 40})"><path d="M0 -30 L9 4 L0 -2 L-9 4 Z" style="fill:var(--ink)"/><path d="M0 30 L9 -4 L0 2 L-9 -4 Z" fill="none" style="stroke:var(--ink)" stroke-width="1.6"/>
+        <text x="0" y="-38" text-anchor="middle" font-size="22" style="fill:var(--ink);font-family:var(--f-mono)">N</text></g>`;
+      const scale = s.scale ? `<g transform="translate(0 ${H - 6})"><path d="M0 0 h120 M0 -8 v16 M60 -6 v12 M120 -8 v16" style="stroke:var(--ink)" stroke-width="2"/>
+        <text x="136" y="7" font-size="18" letter-spacing="3" style="fill:var(--muted);font-family:var(--f-mono)">${esc(String(s.scale).toUpperCase())}</text></g>` : '';
+      return `${title(s)}<svg class="fig" viewBox="0 0 ${W} ${H + 10}" role="img" aria-label="Journey map">
+        ${topo}<path d="${d}" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>${marks}${compass}${scale}</svg>
+        <div class="legend">${pts.map((p, i) => `<div class="it2">${i === n - 1 ? `<div class="cn">${xMark}</div>` : circ(i + 1)}<div><h3>${md(p.name)}</h3>${p.note ? `<div class="t-hand">${esc(p.note)}</div>` : ''}</div></div>`).join('')}</div>${note(s)}`;
+    },
+
+    quote: s => `
+      <div class="qm">“</div>
+      <blockquote class="t-disp">${md(s.text)}</blockquote>
+      ${s.author ? `<div class="by"><span class="t-hand">— ${esc(s.author)}</span>${s.role ? `<span class="t-mono muted">${esc(s.role)}</span>` : ''}</div>` : ''}`,
+
+    entry: s => `<div class="entry">
+      <h2 class="t-h1">${md(s.title)}</h2>
+      ${s.date ? `<div class="date">${esc(s.date)}</div>` : ''}
+      <p>${plain(s.text)}</p></div>`,
+
+    qa: s => `
+      <div class="qa"><div class="k">Q.</div><h2 class="t-h2">${md(s.question)}</h2></div>
+      <div class="qa"><div class="k">A.</div><div><p class="t-lead">${md(s.answer)}</p>${s.by ? `<p class="t-hand mt-m" style="color:var(--ink)">— ${esc(s.by)}</p>` : ''}</div></div>`,
+
+    kit: s => {
+      const items = arr(s.items).slice(0, 6);
+      return `${title(s)}<div>${items.map(it => {
+        const st = ['done', 'flag', 'open'].includes(it.state) ? it.state : 'open';
+        return `<div class="kt ${st}"><div class="bx">${box(st)}</div><p>${md(it.text)}</p></div>`;
+      }).join('')}</div>${note(s)}`;
+    },
+
+    cta: s => `
+      <h1 class="t-hero">${md(s.title)}</h1>
+      ${squig()}
+      ${s.text ? `<p class="t-lead it muted">${md(s.text)}</p>` : ''}
+      ${s.button ? `<div class="mt-l"><span class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-5-6 5z"/></svg>${esc(s.button)}</span></div>` : ''}
+      <div class="sign">${s.sign ? `<span class="t-hand">${esc(s.sign)}</span>` : ''}<span class="t-mono">${esc(deck.brand?.handle)}</span></div>`
+  };
+
+  // ---------- page frame ----------
+  function frame(s, i, n) {
+    const b = deck.brand || {};
+    const r = R[s.type];
+    let inner = r ? r(s, i) : `<div class="err">Unknown type “${esc(s.type)}”. Use: ${Object.keys(R).join(', ')}</div>`;
+    if (s.scribble) inner += `<div class="scribble">${arrow}<span>${esc(s.scribble)}</span></div>`;
+    const dots = n <= 20 ? Array.from({ length: n }, (_, j) => `<i class="${j === i ? 'cur' : j < i ? 'on' : ''}"></i>`).join('') : '';
+    const style = deck.accent ? ` style="--acc:${esc(deck.accent)};--margin:${esc(deck.accent)}88"` : '';
+    const tape = s.type === 'cover' ? `<span class="tape" style="top:-16px;left:50%;margin-left:-125px;transform:rotate(-3deg)"></span>` : '';
+    return `<div class="canvas" data-theme="${esc(deck.theme || 'kraft')}"${style}>
+      <div class="holes">${'<i></i>'.repeat(9)}</div><div class="margin"></div>${tape}
+      <header class="hd"><div class="l"><span class="no">№ ${pad(i + 1)}</span><span>${esc(s.label || LABELS[s.type] || '')}</span></div><span class="r">${esc(b.location || b.series || '')}</span></header>
+      <div class="body"><div class="content">${inner}</div></div>
+      <footer class="ft"><span class="h">${esc(b.handle || '')}</span><div class="dots">${dots}</div><span>p. ${pad(i + 1)}/${pad(n)}</span></footer>
+    </div>`;
+  }
+
+  function fit(canvas) {
+    const body = canvas.querySelector('.body');
+    let k = 1;
+    canvas.style.setProperty('--k', k);
+    while ((body.scrollHeight > body.clientHeight + 1 || body.scrollWidth > body.clientWidth + 12) && k > 0.55) {
+      k = +(k - 0.03).toFixed(2);
+      canvas.style.setProperty('--k', k);
+    }
+    return k;
+  }
+
+  function msg(t, type = '') { $('msg').textContent = t; $('msg').className = 'msg ' + type; }
+
+  function renderStage() {
+    const n = deck.slides.length;
+    $('stage').innerHTML = deck.slides.map((s, i) => `
+      <button type="button" class="thumb" data-i="${i}" aria-label="Open page ${i + 1}">
+        <div class="clip">${frame(s, i, n)}</div><span class="cap">p.${pad(i + 1)} · ${esc(s.type)}</span></button>`).join('');
+    const warn = [];
+    $('stage').querySelectorAll('.canvas').forEach((c, i) => { if (fit(c) <= 0.56) warn.push(i + 1); });
+    $('count').textContent = `${n} page${n === 1 ? '' : 's'}`;
+    if (n > 20) msg(`Instagram allows max 20 slides — you have ${n}.`, 'warn');
+    else if (warn.length) msg(`Too much text on page ${warn.join(', ')} — consider shortening.`, 'warn');
+  }
+
+  function renderSingle() {
+    const n = deck.slides.length;
+    current = Math.min(Math.max(current, 0), n - 1);
+    $('single').innerHTML = frame(deck.slides[current], current, n);
+    fit($('single').querySelector('.canvas'));
+    $('pos').textContent = `Page ${current + 1} of ${n}`;
+  }
+
+  function load(d, persist = true) {
+    if (!d || !Array.isArray(d.slides) || !d.slides.length) throw new Error('JSON needs a non-empty "slides" array.');
+    d.brand = d.brand || {};
+    deck = d;
+    $('theme').value = deck.theme || 'kraft';
+    $('json').value = JSON.stringify(deck, null, 2);
+    if (persist) try { localStorage.setItem(KEY, JSON.stringify(deck)); } catch (e) {}
+    renderStage();
+    if (document.body.classList.contains('mode-export')) renderSingle();
+  }
+
+  function apply() {
+    try { msg(''); load(JSON.parse($('json').value)); if (!$('msg').classList.contains('warn')) msg('Applied ✓', 'ok'); }
+    catch (e) { msg(e.message, 'err'); }
+  }
+  const openExport = i => { current = i; document.body.classList.add('mode-export'); renderSingle(); window.scrollTo(0, 0); };
+  const closeExport = () => document.body.classList.remove('mode-export');
+
+  $('apply').addEventListener('click', apply);
+  $('json').addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); apply(); } });
+  $('theme').addEventListener('change', e => { deck.theme = e.target.value; msg(''); load(deck); });
+  $('sample').addEventListener('change', e => {
+    const v = e.target.value; e.target.value = '';
+    if (!v) return;
+    msg(''); load(JSON.parse(JSON.stringify(v === 'full' ? DEFAULT : SHORT)));
+    if (!$('msg').classList.contains('warn')) msg('Sample loaded', 'ok');
+  });
+  $('stage').addEventListener('click', e => { const t = e.target.closest('.thumb'); if (t) openExport(+t.dataset.i); });
+  $('prev').addEventListener('click', () => { current--; renderSingle(); });
+  $('next').addEventListener('click', () => { current++; renderSingle(); });
+  $('back').addEventListener('click', closeExport);
+  document.addEventListener('keydown', e => {
+    if (!document.body.classList.contains('mode-export')) return;
+    if (e.key === 'ArrowRight') { current++; renderSingle(); }
+    if (e.key === 'ArrowLeft') { current--; renderSingle(); }
+    if (e.key === 'Escape') closeExport();
+  });
+  $('download').addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(deck, null, 2)], { type: 'application/json' }));
+    a.download = (deck.brand.series || 'field-notes').replace(/\W+/g, '-').toLowerCase() + '.json';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+  $('importBtn').addEventListener('click', () => $('importFile').click());
+  $('importFile').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { msg(''); load(JSON.parse(await f.text())); msg('Imported ✓', 'ok'); } catch (err) { msg('Import failed: ' + err.message, 'err'); }
+    e.target.value = '';
+  });
+
+  const exportOnly = params.get('export') === '1';
+  let start = DEFAULT;
+  if (!exportOnly) { try { const saved = localStorage.getItem(KEY); if (saved) start = JSON.parse(saved); } catch (e) {} }
+  if (params.get('theme')) start.theme = params.get('theme');
+  const boot = () => {
+    try { load(start, !exportOnly); } catch (e) { load(DEFAULT, false); }
+    if (exportOnly) { document.body.classList.add('clean'); openExport((parseInt(params.get('slide'), 10) || 1) - 1); }
+  };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(boot);
+})();
+</script>
+</body>
+</html>

@@ -63,6 +63,7 @@ export const TEMPLATE_KEYS = [
   'the-curator',
   'the-academic',
   'the-signal',
+  'the-field-notes',
 ] as const;
 export type TemplateId = (typeof TEMPLATE_KEYS)[number];
 

@@ -15,6 +15,7 @@ export const TEMPLATE_LABELS: Record<string, string> = {
   'the-curator': 'The Curator (Minimalist Gallery)',
   'the-academic': 'The Academic (Research Paper)',
   'the-signal': 'The Signal (Modern B2B / Tech)',
+  'the-field-notes': 'The Field Notes (Notebook Journal)',
 };
 
 export const STATUS_FLOW = [

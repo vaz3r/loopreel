@@ -53,6 +53,14 @@ const TEMPLATE_CHARACTERISTICS: Record<TemplateId, { name: string; keywords: str
     ],
     description: 'Modern B2B tech briefing, startup playbooks, product strategy, and engineering frameworks.',
   },
+  'the-field-notes': {
+    name: 'The Field Notes',
+    keywords: [
+      'field notes', 'interviews', 'user research', 'notebook', 'observations', 'ux research',
+      'user study', 'diary', 'ethnography', 'journal', 'participant', 'anecdote', 'behavioral'
+    ],
+    description: 'User interviews, qualitative research observations, field studies, and reflective personal notebooks.',
+  },
 };
 
 /**
@@ -66,6 +74,7 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
     'the-curator': 0,
     'the-academic': 0,
     'the-signal': 0,
+    'the-field-notes': 0,
   };
 
   for (const [tid, char] of Object.entries(TEMPLATE_CHARACTERISTICS) as Array<[TemplateId, typeof TEMPLATE_CHARACTERISTICS[TemplateId]]>) {

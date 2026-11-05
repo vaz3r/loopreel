@@ -15,6 +15,9 @@ import { TheAcademicContract } from './the-academic/schema';
 import theSignalSlides from './the-signal/sample-slides';
 import { TheSignalContract } from './the-signal/schema';
 
+import theFieldNotesSlides from './the-field-notes/sample-slides';
+import { TheFieldNotesContract } from './the-field-notes/schema';
+
 export interface DeckEntry {
   id: string;
   name: string;
@@ -31,6 +34,7 @@ const DECKS: DeckEntry[] = [
   { id: 'the-curator', name: 'The Curator', schemeId: 'curator_gallery', templateId: 'the-curator', description: 'Avant-garde gallery editorial', sampleSlides: theCuratorSlides, schema: TheCuratorContract },
   { id: 'the-academic', name: 'The Academic', schemeId: 'academic_research', templateId: 'the-academic', description: 'Research & whitepapers editorial', sampleSlides: theAcademicSlides, schema: TheAcademicContract },
   { id: 'the-signal', name: 'The Signal', schemeId: 'custom_brand', templateId: 'the-signal', description: 'Modern B2B tech briefing & playbooks', sampleSlides: theSignalSlides, schema: TheSignalContract },
+  { id: 'the-field-notes', name: 'The Field Notes', schemeId: 'custom_brand', templateId: 'the-field-notes', description: 'Researcher pocket notebook & field observations', sampleSlides: theFieldNotesSlides, schema: TheFieldNotesContract },
 ];
 
 export function getAllDecks(): DeckEntry[] {
