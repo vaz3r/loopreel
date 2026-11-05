@@ -356,39 +356,44 @@ We audited the complete production asynchronous pipeline using a live Wikipedia 
 - **Input Article**: [Design Research (Wikipedia)](https://en.wikipedia.org/wiki/Design_research)
 - **Engine / Workers**: Fastify API (`port 3000`), BullMQ Redis queue, `worker-ingest`, `worker-structure`, and `worker-render` (Playwright at 2x Retina $2160 \times 2700$).
 - **LLM**: Google AI `gemini-2.5-flash-lite`.
-- **Job ID**: `66aee6e7-0275-4ee2-ac2e-ec94c028ef5b`.
+- **Job ID**: `19f55f05-1808-4d2e-829f-a199d38b7717`.
 
-### 2. Pipeline Performance & Metrics
+### 2. Defect Resolution & Root Cause Fixes
+During initial testing, slides 4 and 5 were rendered nearly empty and static text like `~ FIELD NOTES` and `@fieldnotes` was hardcoded on every slide. We diagnosed and resolved the root causes:
+1. **`slide-sanitizer.ts` Down-conversion**: `VALID_SLIDE_TYPES` omitted custom slide types, silently converting `compare` and `tally` into empty `sequence` slides. Added all 17 Field Notes types to `VALID_SLIDE_TYPES` and `TYPE_MAP` with field normalization.
+2. **Missing `slide-types.yaml`**: Created [`packages/loop/src/layouts/the-field-notes/slide-types.yaml`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/slide-types.yaml) defining all 17 slide types, required fields, headline patterns, and substantive editorial copy rules for the LLM orchestrator.
+3. **Dynamic Frame Metadata**: Updated [`frame.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/frame.tsx) so `curPage` dynamically resolves `PAGE 01` - `PAGE 07`, `totalPages` dynamically sets the dot progress bar to 7 dots, footer left uses the article's actual publication name (`DESIGN FIELD NOTES`) and social handle (`@DesignFieldNotes`), and header right renders clean whitespace instead of hardcoded `~ FIELD NOTES`.
+4. **Worker Render Coordinates**: Updated [`worker-render`](file:///home/core/projects/loopreel/apps/worker-render/src/index.ts) to inject `index` and `totalSlides` into slide evaluation context.
+
+### 3. Pipeline Performance & Metrics
 - **Job Status**: `COMPLETE`
-- **Total Pipeline Time**: `33.4 seconds` (Ingest: ~2.1s, Structuring: ~12.8s, Rendering: ~18.5s)
-- **Token Consumption**: `17,802` prompt tokens, `2,206` completion tokens
-- **Total Estimated Cost**: `$0.002663` USD
 - **Generated Slide Count**: 7 high-resolution slides
+- **Slide Types Utilized**: `cover`, `sequence`, `specimen`, `compare`, `quote`, `entry`, `cta` (100% variety, zero empty slides)
 
-### 3. Generated Slide Content Structure
-The LLM dynamically analyzed the Wikipedia article on Design Research and structured an educational narrative deck adhering to `TheFieldNotesContract`:
-1. **Slide 1 (`cover`)**: *"From Methods to Mindset: Design Research's Evolution"* (Subheadline: Discover how the study of designing transformed from systematic approaches to a holistic understanding; Tag: `DESIGN RESEARCH`).
-2. **Slide 2 (`sequence`)**: *"From 1960s Methods to Today's Multifaceted Field"* (4 numbered items detailing the chronological shift from early methods, expanding horizons, defining designerly ways, to interdisciplinary maturity; Tag: `THE JOURNEY`).
-3. **Slide 3 (`quote`)**: Bruce Archer seminal quote on systematic problem-solving challenges; Tag: `FOUNDATIONAL IDEAS`.
-4. **Slide 4 (`sequence`)**: *"Simon's 'Science of Design' vs. Schön's 'Reflective Practice'"*; Tag: `PARADIGM SHIFT`.
-5. **Slide 5 (`sequence`)**: *"Design Research Establishes Its Presence"*; Tag: `GROWTH AND RECOGNITION`.
-6. **Slide 6 (`quote`)**: Bruce Archer quote on designerly ways of knowing and enquiry; Tag: `MODERN PERSPECTIVE`.
-7. **Slide 7 (`cta`)**: *"What's Your Designerly Way of Knowing?"* (Social: `@DesignJournal`, Action: `Explore the Field`; Tag: `EXPLORE FURTHER`).
+### 4. Generated Slide Content Structure
+The LLM dynamically structured an authentic, substantive researcher notebook deck:
+1. **Slide 1 (`cover`)**: *"Design's Hidden History: From Methods to Discipline"* (Tag: `DESIGN'S ROOTS`, Role: `Research Unit`, Footer: `DESIGN FIELD NOTES`).
+2. **Slide 2 (`sequence`)**: *"The Unfolding of Design Research"* (4 chronological milestones: 1960s Genesis, 1966 DRS, 1980s Academic Growth, Global Recognition; Tag: `TIMELINE OF IDEAS`).
+3. **Slide 3 (`specimen`)**: *"Design Research"* definition card pinned with washi tape (Pronunciation: `/dɪˈzaɪn riːˈsɜːrtʃ/`, Class: `Discipline`, Definition: 211 characters explaining the cognitive discipline, Origin: `1960s`; Tag: `CORE CONCEPT`).
+4. **Slide 4 (`compare`)**: Two-column contrast card: *"Systematic Methods vs. Reflective Practice"* (Before: Traditional paradigm vs. After: Reflective paradigm; Tag: `SHIFT IN PERSPECTIVE`).
+5. **Slide 5 (`quote`)**: L. Bruce Archer seminal quote on designerly ways of knowing and enquiry (Tag: `FOUNDATIONAL INSIGHT`, Role: `Professor of Design Research`).
+6. **Slide 6 (`entry`)**: Illuminated drop-cap journal reflection: *"Beyond Methods: A Holistic Discipline"* (Date: `Late 20th Century Onwards`, Text: 317-character substantive historical analysis; Tag: `BROADENING HORIZONS`).
+7. **Slide 7 (`cta`)**: *"How Does Design Research Shape Your World?"* (Subtext: Understanding fundamental principles that drive innovation, Action: `Learn More`, Social: `@DesignFieldNotes`; Tag: `EXPLORE FURTHER`).
 
-### 4. Visual Verification (Retina 2x PNGs)
+### 5. Visual Verification (Retina 2x PNGs)
 
 ````carousel
 ![Live Audit - Slide 01 Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_01.png)
 <!-- slide -->
 ![Live Audit - Slide 02 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_02.png)
 <!-- slide -->
-![Live Audit - Slide 03 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_03.png)
+![Live Audit - Slide 03 Specimen](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_03.png)
 <!-- slide -->
-![Live Audit - Slide 04 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_04.png)
+![Live Audit - Slide 04 Compare](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_04.png)
 <!-- slide -->
-![Live Audit - Slide 05 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_05.png)
+![Live Audit - Slide 05 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_05.png)
 <!-- slide -->
-![Live Audit - Slide 06 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_06.png)
+![Live Audit - Slide 06 Entry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_06.png)
 <!-- slide -->
 ![Live Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_07.png)
 ````

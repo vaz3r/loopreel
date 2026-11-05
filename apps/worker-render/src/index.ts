@@ -127,7 +127,11 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
         // Inject slide data, wait for render, and screenshot all tabs in parallel
         screenshots = await Promise.all(
           pages.map(async (page, idx) => {
-            const slide = batch[idx];
+            const slide = {
+              ...(batch[idx] as Record<string, unknown>),
+              index: batchStart + idx,
+              totalSlides,
+            };
             const slideId = (slide as any).id;
 
             await page.evaluate(

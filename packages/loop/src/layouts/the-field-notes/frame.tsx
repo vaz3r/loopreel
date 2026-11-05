@@ -37,14 +37,32 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
   }, []);
 
   const s = slide as Record<string, unknown>;
-  const handle = (brandKit?.handle || defaultBrandKit.handle || '@fieldnotes') as string;
-  const wordmark = (brandKit?.wordmark || defaultBrandKit.wordmark || 'FIELD NOTES') as string;
 
   // Slide indexing & totals
   const footerRight = (s['footerRight'] as string) || '';
-  const match = footerRight.match(/(\d+)\s*\/\s*(\d+)/);
-  const curPage = match ? parseInt(match[1], 10) : typeof s['index'] === 'number' ? (s['index'] as number) + 1 : 1;
-  const totalPages = match ? parseInt(match[2], 10) : 5;
+  const pageSlashMatch = footerRight.match(/(\d+)\s*\/\s*(\d+)/);
+  const pageNumMatch = footerRight.match(/(?:PAGE\s*|№\s*|p\.\s*)?(\d+)/i);
+  const slideIdMatch = typeof s['id'] === 'string' ? (s['id'] as string).match(/slide-(\d+)/i) : null;
+
+  let curPage = 1;
+  if (typeof s['index'] === 'number') {
+    curPage = (s['index'] as number) + 1;
+  } else if (pageSlashMatch) {
+    curPage = parseInt(pageSlashMatch[1], 10);
+  } else if (pageNumMatch && pageNumMatch[1]) {
+    curPage = parseInt(pageNumMatch[1], 10);
+  } else if (slideIdMatch && slideIdMatch[1]) {
+    curPage = parseInt(slideIdMatch[1], 10);
+  }
+
+  let totalPages = 7;
+  if (pageSlashMatch) {
+    totalPages = parseInt(pageSlashMatch[2], 10);
+  } else if (typeof s['totalSlides'] === 'number') {
+    totalPages = s['totalSlides'] as number;
+  } else if (curPage > 7) {
+    totalPages = curPage;
+  }
 
   const bg = brandKit?.bg || defaultBrandKit.bg;
   const bg2 = defaultBrandKit.bg2;
@@ -53,10 +71,15 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
   const surface = brandKit?.surface || defaultBrandKit.surface;
 
   const slideType = (s['type'] as string) || 'cover';
-  const labelText = (s['label'] as string) || (s['tag'] as string) || DEFAULT_LABELS[slideType] || 'Field notes';
-  const headerRightText = (s['headerRight'] as string) || (s['authorRole'] as string) || wordmark;
-
+  const labelText = (s['label'] as string) || (s['tag'] as string) || DEFAULT_LABELS[slideType] || '';
   const isCover = slideType === 'cover';
+
+  // Dynamic header right: use explicit headerRight or authorRole; only fallback to wordmark on cover
+  const headerRightText = (s['headerRight'] as string) || (s['authorRole'] as string) || (isCover ? (brandKit?.wordmark || defaultBrandKit.wordmark || '') : '');
+
+  // Dynamic footer handle: prefer LLM socialHandle or footerLeft before falling back to brandKit handle
+  const footerHandle = (s['socialHandle'] as string) || (s['footerLeft'] as string) || brandKit?.handle || defaultBrandKit.handle || '';
+
   const showTape = s['tape'] !== false && isCover;
 
   return (
@@ -110,7 +133,7 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
           <span className={styles.headerTitle}>{labelText}</span>
         </div>
         <div className={styles.headerRight}>
-          ~ {headerRightText}
+          {headerRightText ? `~ ${headerRightText}` : ''}
         </div>
       </header>
 
@@ -121,7 +144,7 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
 
       {/* Bottom Footer */}
       <footer className={styles.footer}>
-        <span style={{ color: 'var(--ink-color, #2B2219)' }}>{handle}</span>
+        <span style={{ color: 'var(--ink-color, #2B2219)' }}>{footerHandle}</span>
         <div className={styles.dots}>
           {Array.from({ length: totalPages }).map((_, i) => {
             const pageNum = i + 1;

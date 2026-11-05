@@ -98,6 +98,8 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         'the-globalist': { name: 'The Globalist', aesthetics: 'Economist/Monocle-style global affairs magazine. Macro-economic, geopolitical, sophisticated. Best for business, markets, and global trends.' },
         'the-curator': { name: 'The Curator', aesthetics: 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual.' },
         'the-academic': { name: 'The Academic', aesthetics: 'Harvard Business Review / MIT research paper. Academic, evidence-based, quantitative, structured.' },
+        'the-signal': { name: 'The Signal', aesthetics: 'Modern B2B tech briefing and startup playbook. Sharp, punchy, high-velocity insights.' },
+        'the-field-notes': { name: 'The Field Notes', aesthetics: 'Researcher pocket notebook & field observations on dot-grid kraft paper with ruled margins, hand-drawn annotations, specimen definition cards, telemetry tallies, and reflective entries. Every slide must be rich with substance.' },
       };
 
       const templates: TemplateInfo[] = Object.entries(TEMPLATES).map(([id, entry]) => ({

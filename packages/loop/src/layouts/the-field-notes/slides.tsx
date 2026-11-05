@@ -339,6 +339,23 @@ export function List({ slide }: LayoutProps) {
             </div>
           </div>
         ))}
+
+        {items.length === 0 && (s.text || s.subheadline || s.desc || s.bodyText) && (
+          <p
+            style={{
+              fontFamily: 'var(--font-body, Newsreader, Georgia, serif)',
+              fontSize: 32,
+              lineHeight: 1.5,
+              color: 'var(--ink-color, #2B2219)',
+              margin: '20px 0 0 0',
+              padding: '24px',
+              borderLeft: '3px solid var(--accent-color, #B8432A)',
+              background: 'rgba(43, 34, 25, 0.03)',
+            }}
+          >
+            {renderMarkedText(s.text || s.subheadline || s.desc || s.bodyText)}
+          </p>
+        )}
       </div>
     </SlideWrapper>
   );
@@ -1530,7 +1547,7 @@ export function Kit({ slide }: LayoutProps) {
 export function Cta({ slide }: LayoutProps) {
   const s = slide as any;
   const actionText = s.action || s.actionLabel || s.button || 'Save this entry';
-  const signText = s.sign || s.author || 'see you in the field';
+  const signText = s.sign || s.author || '';
   const handleText = s.socialHandle || s.handle;
 
   return (
@@ -1594,17 +1611,19 @@ export function Cta({ slide }: LayoutProps) {
       </div>
 
       <div style={{ marginTop: 44, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <span
-          style={{
-            fontFamily: 'var(--font-hand, Caveat, cursive)',
-            fontSize: 44,
-            fontWeight: 700,
-            color: 'var(--ink-color, #2B2219)',
-            transform: 'rotate(-3deg)',
-          }}
-        >
-          ~ {signText}
-        </span>
+        {signText && (
+          <span
+            style={{
+              fontFamily: 'var(--font-hand, Caveat, cursive)',
+              fontSize: 44,
+              fontWeight: 700,
+              color: 'var(--ink-color, #2B2219)',
+              transform: 'rotate(-3deg)',
+            }}
+          >
+            ~ {signText}
+          </span>
+        )}
         {handleText && (
           <span
             style={{

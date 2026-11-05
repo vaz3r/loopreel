@@ -1,4 +1,12 @@
-export const VALID_SLIDE_TYPES = ['cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant', 'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta', 'profile', 'analysis', 'definition', 'dichotomy', 'table', 'breakdown', 'juxtaposition', 'methodology', 'hero-metric', 'checklist'];
+export const VALID_SLIDE_TYPES = [
+  'cover', 'sequence', 'image-split', 'telemetry', 'interview', 'quadrant',
+  'case-study', 'myth-fact', 'resource-grid', 'timeline', 'quote', 'cta',
+  'profile', 'analysis', 'definition', 'dichotomy', 'table', 'breakdown',
+  'juxtaposition', 'methodology', 'hero-metric', 'checklist',
+  // The Field Notes specific slide types
+  'statement', 'list', 'specimen', 'measure', 'tally', 'route', 'log',
+  'compare', 'chart', 'map', 'entry', 'qa', 'kit',
+];
 
 const TYPE_MAP: Record<string, string> = {
   'hero-metric': 'telemetry',
@@ -6,21 +14,19 @@ const TYPE_MAP: Record<string, string> = {
   'metric': 'telemetry',
   'stats': 'telemetry',
   'data': 'telemetry',
-  'comparison': 'quadrant',
-  'dichotomy': 'quadrant',
-  'vs': 'quadrant',
-  'checklist': 'resource-grid',
+  'comparison': 'compare',
+  'dichotomy': 'compare',
+  'vs': 'compare',
+  'checklist': 'kit',
   'resources': 'resource-grid',
-  'list': 'sequence',
   'steps': 'sequence',
-  'pros-cons': 'quadrant',
-  'proscons': 'quadrant',
+  'pros-cons': 'compare',
+  'proscons': 'compare',
   'myth': 'myth-fact',
   'fact': 'myth-fact',
   'debunk': 'myth-fact',
-  'expert': 'interview',
-  'qa': 'interview',
-  'q&a': 'interview',
+  'expert': 'qa',
+  'q&a': 'qa',
   'interview-slide': 'interview',
 };
 
@@ -38,13 +44,74 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
       const fixed: Record<string, unknown> = { ...slide, type };
 
       // Fix string fields that the LLM wraps in objects
-      const stringFields = ['headline', 'subheadline', 'tag', 'myth', 'fact', 'quote',
+      const stringFields = [
+        'headline', 'subheadline', 'tag', 'myth', 'fact', 'quote',
         'respondentName', 'respondentRole', 'author', 'role', 'credit', 'bodyText',
-        'subtext', 'actionLabel', 'socialHandle'];
+        'subtext', 'actionLabel', 'socialHandle', 'term', 'definition', 'pos', 'pron',
+        'found', 'scribble', 'note', 'question', 'answer', 'by', 'sign', 'text', 'value', 'unit',
+      ];
       for (const field of stringFields) {
         if (fixed[field] && typeof fixed[field] === 'object') {
           const obj = fixed[field] as Record<string, unknown>;
           fixed[field] = obj.title ?? obj.text ?? obj.name ?? obj.value ?? JSON.stringify(obj);
+        }
+      }
+
+      // Ensure compare slides have left and right objects
+      if (type === 'compare') {
+        if (!fixed.left || typeof fixed.left !== 'object') {
+          fixed.left = { label: 'Before', items: ['Traditional paradigm'] };
+        } else {
+          const leftObj = fixed.left as Record<string, unknown>;
+          if (!leftObj.label) leftObj.label = 'Before';
+          if (!Array.isArray(leftObj.items)) {
+            leftObj.items = [leftObj.desc || leftObj.text || leftObj.title || 'Observation A'];
+          }
+        }
+        if (!fixed.right || typeof fixed.right !== 'object') {
+          fixed.right = { label: 'After', items: ['Reflective paradigm'] };
+        } else {
+          const rightObj = fixed.right as Record<string, unknown>;
+          if (!rightObj.label) rightObj.label = 'After';
+          if (!Array.isArray(rightObj.items)) {
+            rightObj.items = [rightObj.desc || rightObj.text || rightObj.title || 'Observation B'];
+          }
+        }
+      }
+
+      // Ensure tally slides have items array
+      if (type === 'tally') {
+        const rawItems = fixed.items || fixed.stats || fixed.metrics;
+        if (!Array.isArray(rawItems) || rawItems.length === 0) {
+          fixed.items = [
+            { value: '1', label: 'Finding', desc: String(fixed.headline || 'Core observation') }
+          ];
+        }
+      }
+
+      // Ensure statement slides have non-empty text
+      if (type === 'statement' && !fixed.text) {
+        fixed.text = fixed.headline || fixed.subheadline || 'Substantive field observation.';
+      }
+
+      // Ensure entry slides have non-empty text
+      if (type === 'entry' && !fixed.text) {
+        fixed.text = fixed.headline || fixed.subheadline || 'Substantive journal entry reflection recorded in the field.';
+      }
+
+      // Ensure specimen slides have term and definition
+      if (type === 'specimen') {
+        if (!fixed.term) fixed.term = fixed.headline || fixed.title || 'Concept';
+        if (!fixed.definition) fixed.definition = fixed.text || fixed.desc || 'Methodological paradigm definition.';
+      }
+
+      // Ensure sequence / list slides have non-empty items
+      if (type === 'sequence' || type === 'list') {
+        const rawItems = fixed.items || fixed.steps;
+        if (!Array.isArray(rawItems) || rawItems.length === 0) {
+          fixed.items = [
+            { num: '1', title: String(fixed.headline || 'Key Observation'), desc: String(fixed.subheadline || fixed.text || 'Core methodological finding documented in research.') }
+          ];
         }
       }
 

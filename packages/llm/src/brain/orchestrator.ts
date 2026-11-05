@@ -410,7 +410,13 @@ export async function generateSlides(
       slides.push(unwrapChildWrappers(slideData as Record<string, unknown>));
     }
 
-    const BARE_TYPE_TAGS = ['telemetry', 'myth-fact', 'case-study', 'resource-grid', 'timeline', 'quadrant', 'interview', 'image-split', 'image-cover'];
+    const BARE_TYPE_TAGS = [
+      'telemetry', 'myth-fact', 'case-study', 'resource-grid', 'timeline',
+      'quadrant', 'interview', 'image-split', 'image-cover',
+      // Field Notes bare tags
+      'statement', 'specimen', 'measure', 'tally', 'route', 'log',
+      'compare', 'table', 'chart', 'map', 'entry', 'qa', 'kit',
+    ];
     for (const tag of BARE_TYPE_TAGS) {
       const bareData = rootObj[tag];
       if (bareData && typeof bareData === 'object' && !Array.isArray(bareData)) {
