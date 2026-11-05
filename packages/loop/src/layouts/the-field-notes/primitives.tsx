@@ -60,8 +60,9 @@ export function CircNumber({ n }: { n: string | number }) {
 export function Arrow() {
   return (
     <svg viewBox="0 0 80 56" style={{ width: 70, height: 48, flexShrink: 0, overflow: 'visible' }} aria-hidden="true">
-      <path d="M76 6 C 60 40, 30 52, 6 44" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" />
-      <path d="M18 34 L5 44 L20 51" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Hand-drawn directional arrow curving UP and LEFT toward annotated content */}
+      <path d="M72 46 C 52 42, 28 30, 10 10" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" />
+      <path d="M10 24 L10 10 L24 12" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

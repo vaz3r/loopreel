@@ -6,7 +6,7 @@ export interface AutoFitProps {
   maxScale?: number;
   /** Minimum scale factor to prevent micro-text (default: 0.50) */
   minScale?: number;
-  /** Safety margin in pixels (default: 8) */
+  /** Safety margin in pixels (default: 24) */
   paddingBuffer?: number;
   /** Vertical alignment strategy for scaled or unscaled content */
   verticalAlign?: 'center' | 'flex-start';
@@ -28,7 +28,7 @@ export function AutoFit({
   children,
   maxScale = 1.0,
   minScale = 0.5,
-  paddingBuffer = 8,
+  paddingBuffer = 24,
   verticalAlign = 'center',
   className = '',
   style = {},
@@ -36,69 +36,99 @@ export function AutoFit({
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [fitState, setFitState] = useState<{ scale: number; offsetY: number }>({ scale: 1.0, offsetY: 0 });
+  const isCalculatingRef = useRef(false);
 
   const calculateFit = useCallback(() => {
+    if (isCalculatingRef.current) return;
     const container = containerRef.current;
     const content = contentRef.current;
     if (!container || !content) return;
 
-    // Reset styles temporarily to measure unconstrained natural dimensions
-    content.style.transform = 'none';
-    content.style.width = '100%';
-    content.style.position = 'relative';
-
-    const containerH = container.clientHeight;
-    const containerW = container.clientWidth;
-    const rawH = content.scrollHeight;
-    const rawW = content.scrollWidth;
-
-    if (containerH <= 0 || containerW <= 0 || rawH <= 0 || rawW <= 0) return;
-
-    const availableH = Math.max(10, containerH - paddingBuffer);
-    const availableW = Math.max(10, containerW - paddingBuffer);
-
-    const scaleH = availableH / rawH;
-    const scaleW = availableW / rawW;
-
-    let targetScale = Math.min(maxScale, scaleH, scaleW);
-
-    if (targetScale >= 0.985) {
-      targetScale = 1.0;
-    } else if (targetScale < minScale) {
-      targetScale = minScale;
-    }
-
-    if (targetScale < 1.0) {
-      const scaledH = rawH * targetScale;
-      const offsetY = verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
-
-      // Compensate width so text does not narrow horizontally
-      content.style.width = `${100 / targetScale}%`;
-      content.style.transformOrigin = 'top left';
-      content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
-
-      container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));
-      container.setAttribute('data-autofit-overflow', 'true');
-      setFitState({ scale: targetScale, offsetY });
-    } else {
-      content.style.width = '100%';
+    isCalculatingRef.current = true;
+    try {
+      // Reset styles temporarily to measure unconstrained natural dimensions
       content.style.transform = 'none';
-      container.removeAttribute('data-autofit-scaled');
-      container.removeAttribute('data-autofit-overflow');
-      setFitState({ scale: 1.0, offsetY: 0 });
+      content.style.width = '100%';
+      content.style.position = 'relative';
+
+      const containerH = container.clientHeight;
+      const containerW = container.clientWidth;
+      const rawH = content.scrollHeight;
+      const rawW = content.scrollWidth;
+
+      if (containerH <= 0 || containerW <= 0 || rawH <= 0 || rawW <= 0) return;
+
+      const availableH = Math.max(10, containerH - paddingBuffer);
+      const availableW = Math.max(10, containerW - paddingBuffer);
+
+      const scaleH = availableH / rawH;
+      const scaleW = availableW / rawW;
+
+      let targetScale = Math.min(maxScale, scaleH, scaleW);
+
+      if (targetScale >= 1.0) {
+        targetScale = 1.0;
+      } else if (targetScale < minScale) {
+        targetScale = minScale;
+      }
+
+      if (targetScale < 1.0) {
+        const scaledH = rawH * targetScale;
+        const offsetY = verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
+
+        // Compensate width so text does not narrow horizontally
+        content.style.width = `${100 / targetScale}%`;
+        content.style.transformOrigin = 'top left';
+        content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
+
+        container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));
+        container.setAttribute('data-autofit-overflow', 'true');
+        setFitState({ scale: targetScale, offsetY });
+      } else {
+        content.style.width = '100%';
+        content.style.transform = 'none';
+        container.removeAttribute('data-autofit-scaled');
+        container.removeAttribute('data-autofit-overflow');
+        setFitState({ scale: 1.0, offsetY: 0 });
+      }
+    } finally {
+      isCalculatingRef.current = false;
     }
   }, [maxScale, minScale, paddingBuffer, verticalAlign]);
 
   useLayoutEffect(() => {
     calculateFit();
 
+    // Re-calculate when web fonts are ready (e.g. Google Fonts Fraunces, DM Mono, Newsreader)
+    if (typeof document !== 'undefined' && document.fonts) {
+      document.fonts.ready.then(() => calculateFit());
+      document.fonts.addEventListener('loadingdone', calculateFit);
+    }
+
     const handleResize = () => calculateFit();
     window.addEventListener('resize', handleResize);
     window.addEventListener('slide-update', handleResize);
 
+    // ResizeObserver on container to handle dynamic resizing
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      observer = new ResizeObserver(() => {
+        if (!isCalculatingRef.current) {
+          calculateFit();
+        }
+      });
+      observer.observe(containerRef.current);
+    }
+
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('slide-update', handleResize);
+      if (typeof document !== 'undefined' && document.fonts) {
+        document.fonts.removeEventListener('loadingdone', calculateFit);
+      }
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, [calculateFit]);
 

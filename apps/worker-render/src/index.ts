@@ -157,10 +157,13 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
               await page.waitForSelector(`[data-slide-id="${slideId}"]`, { timeout: 5000 }).catch(() => {});
             }
 
-            await page.evaluate(
-              () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
-            );
-            await page.evaluate(() => document.fonts.ready);
+            await page.evaluate(async () => {
+              if (document.fonts) {
+                await document.fonts.ready;
+              }
+              window.dispatchEvent(new Event('slide-update'));
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+            });
             const buffer = await page.screenshot({ type: 'png' });
             return { buffer, slideIndex: batchStart + idx };
           }),
