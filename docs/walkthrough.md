@@ -347,5 +347,52 @@ Successfully ingested single-file HTML design reference `packages/loop/design-re
 ![The Field Notes - 17 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cta.png)
 ````
 
+---
+
+## 11. Live End-to-End Audit & Verification (Real Article + LLM)
+
+### 1. Verification Scope
+We audited the complete production asynchronous pipeline using a live Wikipedia article and genuine Gemini AI generation:
+- **Input Article**: [Design Research (Wikipedia)](https://en.wikipedia.org/wiki/Design_research)
+- **Engine / Workers**: Fastify API (`port 3000`), BullMQ Redis queue, `worker-ingest`, `worker-structure`, and `worker-render` (Playwright at 2x Retina $2160 \times 2700$).
+- **LLM**: Google AI `gemini-2.5-flash-lite`.
+- **Job ID**: `66aee6e7-0275-4ee2-ac2e-ec94c028ef5b`.
+
+### 2. Pipeline Performance & Metrics
+- **Job Status**: `COMPLETE`
+- **Total Pipeline Time**: `33.4 seconds` (Ingest: ~2.1s, Structuring: ~12.8s, Rendering: ~18.5s)
+- **Token Consumption**: `17,802` prompt tokens, `2,206` completion tokens
+- **Total Estimated Cost**: `$0.002663` USD
+- **Generated Slide Count**: 7 high-resolution slides
+
+### 3. Generated Slide Content Structure
+The LLM dynamically analyzed the Wikipedia article on Design Research and structured an educational narrative deck adhering to `TheFieldNotesContract`:
+1. **Slide 1 (`cover`)**: *"From Methods to Mindset: Design Research's Evolution"* (Subheadline: Discover how the study of designing transformed from systematic approaches to a holistic understanding; Tag: `DESIGN RESEARCH`).
+2. **Slide 2 (`sequence`)**: *"From 1960s Methods to Today's Multifaceted Field"* (4 numbered items detailing the chronological shift from early methods, expanding horizons, defining designerly ways, to interdisciplinary maturity; Tag: `THE JOURNEY`).
+3. **Slide 3 (`quote`)**: Bruce Archer seminal quote on systematic problem-solving challenges; Tag: `FOUNDATIONAL IDEAS`.
+4. **Slide 4 (`sequence`)**: *"Simon's 'Science of Design' vs. Schön's 'Reflective Practice'"*; Tag: `PARADIGM SHIFT`.
+5. **Slide 5 (`sequence`)**: *"Design Research Establishes Its Presence"*; Tag: `GROWTH AND RECOGNITION`.
+6. **Slide 6 (`quote`)**: Bruce Archer quote on designerly ways of knowing and enquiry; Tag: `MODERN PERSPECTIVE`.
+7. **Slide 7 (`cta`)**: *"What's Your Designerly Way of Knowing?"* (Social: `@DesignJournal`, Action: `Explore the Field`; Tag: `EXPLORE FURTHER`).
+
+### 4. Visual Verification (Retina 2x PNGs)
+
+````carousel
+![Live Audit - Slide 01 Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_01.png)
+<!-- slide -->
+![Live Audit - Slide 02 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_02.png)
+<!-- slide -->
+![Live Audit - Slide 03 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_03.png)
+<!-- slide -->
+![Live Audit - Slide 04 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_04.png)
+<!-- slide -->
+![Live Audit - Slide 05 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_05.png)
+<!-- slide -->
+![Live Audit - Slide 06 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_06.png)
+<!-- slide -->
+![Live Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_07.png)
+````
+
+
 
 

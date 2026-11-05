@@ -6,7 +6,7 @@ const localEnv = {
   DATABASE_URL: 'postgresql://loopreel:loopreel@localhost:5432/loopreel',
   REDIS_URL: 'redis://localhost:6379',
   LLM_PROVIDER: process.env.LLM_PROVIDER || 'google',
-  LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash',
+  LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash-lite',
   LLM_GOOGLE_API_KEY: process.env.LLM_GOOGLE_API_KEY,
   LLM_MULTI_PHASE: process.env.LLM_MULTI_PHASE || 'true',
   LOG_LEVEL: 'info',
