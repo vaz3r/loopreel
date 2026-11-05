@@ -51,6 +51,31 @@ export function stripFences(text: string): string {
 export function unwrapChildWrappers(obj: Record<string, unknown>): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
+    if ((key === 'left' || key === 'right') && value && typeof value === 'object' && !Array.isArray(value)) {
+      const sideObj = value as Record<string, unknown>;
+      const rawItems = sideObj['items'] ?? sideObj['item'];
+      const itemsArr: string[] = [];
+      if (Array.isArray(rawItems)) {
+        for (const it of rawItems) {
+          if (typeof it === 'string') itemsArr.push(it);
+          else if (it && typeof it === 'object') {
+            const o = it as Record<string, unknown>;
+            itemsArr.push(String(o['text'] || o['desc'] || o['title'] || o['value'] || JSON.stringify(o)));
+          }
+        }
+      } else if (typeof rawItems === 'string') {
+        itemsArr.push(rawItems);
+      } else if (rawItems && typeof rawItems === 'object') {
+        const o = rawItems as Record<string, unknown>;
+        itemsArr.push(String(o['text'] || o['desc'] || o['title'] || o['value'] || ''));
+      }
+      result[key] = {
+        label: String(sideObj['label'] || (key === 'left' ? 'Before' : 'After')),
+        items: itemsArr,
+      };
+      continue;
+    }
+
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       const inner = value as Record<string, unknown>;
       const keys = Object.keys(inner);

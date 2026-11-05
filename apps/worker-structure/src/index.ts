@@ -221,7 +221,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       await writeDebug(jobId, '05-paginated.json', JSON.stringify({ slides: withImages }, null, 2));
 
       await JobRepository.updateStatus(jobId, 'rendering', {
-        contentPayload: { slides: withImages },
+        contentPayload: { slides: withImages, meta: { brandKit } },
         slideCount: withImages.length,
       });
 

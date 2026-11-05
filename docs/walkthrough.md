@@ -493,6 +493,51 @@ The LLM dynamically structured an authentic archaeological / mechanical field jo
 ![Antikythera Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_07.png)
 ````
 
+---
+
+## 14. Static Template Text Elimination & BrandKit Propagation Verification
+
+### 1. Issues Identified & Root Causes
+1. **Footer BrandKit Masked by LLM Fallback**: `frame.tsx` evaluated `s.socialHandle || s.footerLeft || brandKit?.handle`. Because LLM prompts frequently populate `footerLeft` with generic labels (`THE FIELD NOTES` or `THE CHRONICLE`), `s.footerLeft` masked the custom user brand handle.
+2. **Dropped BrandKit in Worker Pipeline**: `worker-structure` omitted `meta: { brandKit }` when updating `generation_jobs.content_payload`. `worker-render` only checked `payload.meta?.brandKit` and bypassed `existing.brand_kit`.
+3. **Hardcoded Compare Fallback**: Compare slides with `<left><item text="..." /></left>` XML were not flattened by `unwrapChildWrappers`, leaving `left.items` undefined and triggering `slide-sanitizer.ts` fallbacks (`"Traditional paradigm"` vs `"Reflective paradigm"`).
+4. **Duplicate CTA Handle**: The CTA component rendered an extra social handle pill directly above the Frame's standard footer handle.
+
+### 2. Solutions Implemented
+- [`frame.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/frame.tsx): Updated `footerHandle` to prioritize `brandKit?.handle || (s['socialHandle'] as string) || defaultBrandKit.handle || ''`. Completely removed `s['footerLeft']` from the handle position.
+- [`cta/index.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/cta/index.tsx): Removed the duplicate inline handle rendering block.
+- [`cover/index.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/cover/index.tsx): Replaced the fallback author role `'Field Notes'` with `'Special Report'`.
+- [`worker-structure/src/index.ts`](file:///home/core/projects/loopreel/apps/worker-structure/src/index.ts): Persisted `meta: { brandKit }` into `contentPayload` when writing to the database.
+- [`worker-render/src/index.ts`](file:///home/core/projects/loopreel/apps/worker-render/src/index.ts): Extracted `brandKitVal` from either `payload.meta?.brandKit` or `existing.brand_kit`.
+- [`packages/llm/src/brain/xml-helpers.ts`](file:///home/core/projects/loopreel/packages/llm/src/brain/xml-helpers.ts): Added normalization for `left` / `right` child item arrays (`item.text`).
+- [`apps/worker-structure/src/slide-sanitizer.ts`](file:///home/core/projects/loopreel/apps/worker-structure/src/slide-sanitizer.ts): Eliminated hardcoded Design Research comparison strings, replacing them with dynamic headline-derived contrasts.
+
+### 3. Live Pipeline Audit (Job ID `ee6c87b9-65a8-4adb-83a1-1cbd790d589f`)
+- **CLI Command Executed**:
+  ```bash
+  pnpm tsx scripts/submit-api-job.ts \
+    --url "https://en.wikipedia.org/wiki/Antikythera_mechanism" \
+    --template the-field-notes \
+    --platform instagram-feed \
+    --wordmark "ARCHAEO FIELD LOG" \
+    --handle "@ArchaeoFieldNotes" \
+    --outDir output/the-field-notes-antikythera
+  ```
+- **Execution Duration**: 51.5s (Status: `COMPLETE`, 7 slides generated).
+- **Verified Rendered Slides**:
+  - Slide 1 (`cover`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 01/07` | Role: `HISTORICAL UNIT`
+  - Slide 2 (`specimen`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 02/07` | Subject: `Antikythera Mechanism`
+  - Slide 3 (`sequence`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 03/07` | Steps: `Celestial Tracking`, `Eclipse Prediction`, `Lunar Anomaly`, `Olympic Cycles`
+  - Slide 4 (`compare`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 04/07` | Left: `The Mechanism` (30 gears, differential gearing) vs Right: `Prevailing Technology` (simpler, no known device of comparable complexity)
+  - Slide 5 (`quote`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 05/07` | Author: `Derek J. de Solla Price`, Role: `SCIENCE HISTORIAN`
+  - Slide 6 (`entry`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 06/07` | Headline: `Unraveling Its Origin`
+  - Slide 7 (`cta`): Header: `~ ARCHAEO FIELD LOG` | Footer: `@ARCHAEOFIELDNOTES P. 07/07` | Action: `DISCOVER ANCIENT WONDERS` | Single clean footer handle (0 duplicate pills)
+- **Zero Static Leaks**:
+  - `"THE FIELD NOTES"` occurrences in rendered DOM: **0**
+  - `"Traditional paradigm"` / `"Reflective paradigm"` occurrences: **0**
+  - All brandKit values (`ARCHAEO FIELD LOG` and `@ArchaeoFieldNotes`) fully propagated.
+
+
 
 
 

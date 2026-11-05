@@ -149,7 +149,7 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
                 schemeId: template.schemeId,
                 templateIdVal: templateId,
                 renderSize: { width, height },
-                brandKitVal: payload.meta?.brandKit as Record<string, string | undefined> | undefined,
+                brandKitVal: (payload.meta?.brandKit || (existing as any).brand_kit) as Record<string, string | undefined> | undefined,
               },
             );
 

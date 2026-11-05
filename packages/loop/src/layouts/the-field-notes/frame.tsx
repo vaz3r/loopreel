@@ -74,11 +74,11 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
   const labelText = (s['label'] as string) || (s['tag'] as string) || DEFAULT_LABELS[slideType] || '';
   const isCover = slideType === 'cover';
 
-  // Dynamic header right: use explicit headerRight or authorRole; only fallback to wordmark on cover
-  const headerRightText = (s['headerRight'] as string) || (s['authorRole'] as string) || (isCover ? (brandKit?.wordmark || defaultBrandKit.wordmark || '') : '');
+  // Dynamic header right: prefer explicit headerRight, then brandKit wordmark, then authorRole on cover
+  const headerRightText = (s['headerRight'] as string) || brandKit?.wordmark || (isCover ? (s['authorRole'] as string || '') : '');
 
-  // Dynamic footer handle: prefer LLM socialHandle or footerLeft before falling back to brandKit handle
-  const footerHandle = (s['socialHandle'] as string) || (s['footerLeft'] as string) || brandKit?.handle || defaultBrandKit.handle || '';
+  // Dynamic footer handle: prefer brandKit handle, then slide socialHandle, then defaultBrandKit handle
+  const footerHandle = brandKit?.handle || (s['socialHandle'] as string) || defaultBrandKit.handle || '';
 
   const showTape = s['tape'] !== false && isCover;
 

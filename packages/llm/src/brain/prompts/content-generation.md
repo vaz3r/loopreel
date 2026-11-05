@@ -47,6 +47,18 @@ For arrays (stats, items), use nested child elements:
   </items>
 </slide>
 
+For compare slides, use <left> and <right> child elements with items:
+<slide type="compare" id="slide-04" tag="CONTRAST" headline="Historical Era vs Modern Assumption" footerLeft="ANALYSIS" footerRight="PAGE 04">
+  <left label="Historical Reality">
+    <item text="Over 30 precision bronze gears calculating celestial cycles" />
+    <item text="Differential gearing predating Renaissance clocks by 1,400 years" />
+  </left>
+  <right label="Modern Assumption">
+    <item text="Assumption that classical Greeks avoided practical mechanics" />
+    <item text="Ancient technology presumed primitive and purely theoretical" />
+  </right>
+</slide>
+
 ## FIELD CHARACTER LIMITS (CRITICAL — violating these causes schema validation failures)
 
 {{{fieldLimits}}}

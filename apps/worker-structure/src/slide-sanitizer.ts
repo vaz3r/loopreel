@@ -59,24 +59,41 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
 
       // Ensure compare slides have left and right objects
       if (type === 'compare') {
-        if (!fixed.left || typeof fixed.left !== 'object') {
-          fixed.left = { label: 'Before', items: ['Traditional paradigm'] };
-        } else {
-          const leftObj = fixed.left as Record<string, unknown>;
-          if (!leftObj.label) leftObj.label = 'Before';
-          if (!Array.isArray(leftObj.items)) {
-            leftObj.items = [leftObj.desc || leftObj.text || leftObj.title || 'Observation A'];
+        const headlineSubject = String(fixed.headline || fixed.title || 'Core Observation');
+        const normalizeSide = (sideVal: unknown, defaultLabel: string, defaultContrast: string) => {
+          if (!sideVal || typeof sideVal !== 'object') {
+            return { label: defaultLabel, items: [defaultContrast] };
           }
-        }
-        if (!fixed.right || typeof fixed.right !== 'object') {
-          fixed.right = { label: 'After', items: ['Reflective paradigm'] };
-        } else {
-          const rightObj = fixed.right as Record<string, unknown>;
-          if (!rightObj.label) rightObj.label = 'After';
-          if (!Array.isArray(rightObj.items)) {
-            rightObj.items = [rightObj.desc || rightObj.text || rightObj.title || 'Observation B'];
+          const sideObj = sideVal as Record<string, unknown>;
+          const label = String(sideObj.label || sideObj.title || defaultLabel);
+          const rawItems = sideObj.items ?? sideObj.item ?? sideObj.points;
+          let items: string[] = [];
+          if (Array.isArray(rawItems)) {
+            items = rawItems.map(it => {
+              if (typeof it === 'string') return it;
+              if (it && typeof it === 'object') {
+                const o = it as Record<string, unknown>;
+                return String(o.text || o.desc || o.title || o.value || JSON.stringify(o));
+              }
+              return String(it);
+            }).filter(Boolean);
+          } else if (typeof rawItems === 'string') {
+            items = [rawItems];
+          } else if (rawItems && typeof rawItems === 'object') {
+            const o = rawItems as Record<string, unknown>;
+            items = [String(o.text || o.desc || o.title || o.value || defaultContrast)];
+          } else if (sideObj.desc || sideObj.text || sideObj.title) {
+            items = [String(sideObj.desc || sideObj.text || sideObj.title)];
           }
-        }
+
+          if (items.length === 0) {
+            items = [defaultContrast];
+          }
+          return { label, items };
+        };
+
+        fixed.left = normalizeSide(fixed.left, 'Before', `Original perspective: ${headlineSubject}`);
+        fixed.right = normalizeSide(fixed.right, 'After', `Modern analysis: ${headlineSubject}`);
       }
 
       // Ensure tally slides have items array
@@ -100,18 +117,18 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
 
       // Ensure statement slides have non-empty text
       if (type === 'statement' && !fixed.text) {
-        fixed.text = fixed.headline || fixed.subheadline || 'Substantive field observation.';
+        fixed.text = fixed.headline || fixed.subheadline || 'Key analytical finding documented in the field.';
       }
 
       // Ensure entry slides have non-empty text
       if (type === 'entry' && !fixed.text) {
-        fixed.text = fixed.headline || fixed.subheadline || 'Substantive journal entry reflection recorded in the field.';
+        fixed.text = fixed.headline || fixed.subheadline || 'Primary archival finding and observation.';
       }
 
       // Ensure specimen slides have term and definition
       if (type === 'specimen') {
         if (!fixed.term) fixed.term = fixed.headline || fixed.title || 'Concept';
-        if (!fixed.definition) fixed.definition = fixed.text || fixed.desc || 'Methodological paradigm definition.';
+        if (!fixed.definition) fixed.definition = fixed.text || fixed.desc || 'Foundational concept definition.';
       }
 
       // Ensure quote slides have quote and author

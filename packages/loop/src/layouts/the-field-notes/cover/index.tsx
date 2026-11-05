@@ -4,7 +4,7 @@ import { Squiggle, renderMarkedText, SlideWrapper } from '../primitives.js';
 
 export default function Cover({ slide }: LayoutProps) {
   const s = slide as any;
-  const meta: string[] = s.meta || (s.authorName ? [s.authorName, s.authorRole || 'Field Notes'] : []);
+  const meta: string[] = s.meta || (s.authorName ? [s.authorName, s.authorRole || 'Special Report'] : []);
 
   return (
     <SlideWrapper slide={s}>

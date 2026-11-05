@@ -82,22 +82,6 @@ export default function Cta({ slide }: LayoutProps) {
             ~ {signText}
           </span>
         )}
-        {handleText && (
-          <span
-            style={{
-              fontFamily: 'var(--font-mono, "DM Mono", monospace)',
-              fontSize: 18,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--muted-color, rgba(43, 34, 25, 0.68))',
-              marginTop: 12,
-              paddingTop: 10,
-              borderTop: '1.5px solid var(--border-color, rgba(43, 34, 25, 0.42))',
-            }}
-          >
-            {handleText}
-          </span>
-        )}
       </div>
     </SlideWrapper>
   );
