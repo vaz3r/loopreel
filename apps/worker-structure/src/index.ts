@@ -152,12 +152,16 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       }, 'Multi-phase pipeline completed');
 
       // Write per-phase LLM usage to llm_usage table
-      const model = process.env['LLM_MODEL'] ?? 'gemini-2.5-flash-lite';
+      const activeProvider = process.env['LLM_PROVIDER'] ?? 'google';
+      const model = (activeProvider === 'copilot' || activeProvider === 'copilot-studio' || activeProvider === 'directline')
+        ? (process.env['COPILOT_MODEL'] ?? 'copilot-studio')
+        : (process.env['LLM_MODEL'] ?? 'gemini-2.5-flash-lite');
+
       for (const usage of result.phaseUsages) {
         await JobRepository.insertLlmUsage({
           jobId,
           phase: usage.phase,
-          provider: process.env['LLM_PROVIDER'] ?? 'google',
+          provider: activeProvider,
           model,
           promptTokens: usage.promptTokens,
           completionTokens: usage.completionTokens,

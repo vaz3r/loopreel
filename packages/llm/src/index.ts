@@ -1,5 +1,12 @@
 export { createLLMClient } from './client.js';
-export type { LLMClient } from './client.js';
+export type { LLMClient, LLMResponse, LLMUsage } from './client.js';
+export {
+  DynamicLLMClient,
+  OpenRouterClient,
+  GoogleAIStudioClient,
+  MockLLMClient,
+  CopilotStudioClient,
+} from './providers/index.js';
 export { parseLlmXmlOutput, parseXml, xmlElementToObjects } from './xml-parser.js';
 export { generateSlides } from './brain/index.js';
 export type { BrainResult, TemplateInfo } from './brain/index.js';

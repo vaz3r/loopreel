@@ -8,6 +8,8 @@ export const MODEL_PRICING: Record<string, { inputPerMillion: number; outputPerM
   'gemini-3.1-flash-lite': { inputPerMillion: 0.25, outputPerMillion: 1.50 },
   'gemini-3-flash': { inputPerMillion: 0.50, outputPerMillion: 3.00 },
   'gemini-3.5-flash': { inputPerMillion: 1.50, outputPerMillion: 9.00 },
+  'copilot': { inputPerMillion: 0.0, outputPerMillion: 0.0 },
+  'copilot-studio': { inputPerMillion: 0.0, outputPerMillion: 0.0 },
 };
 
 export function calculateCost(model: string, promptTokens: number, completionTokens: number): number {

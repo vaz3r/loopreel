@@ -8,6 +8,8 @@ const localEnv = {
   LLM_PROVIDER: process.env.LLM_PROVIDER || 'google',
   LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash-lite',
   LLM_GOOGLE_API_KEY: process.env.LLM_GOOGLE_API_KEY,
+  DIRECT_LINE_SECRET: process.env.DIRECT_LINE_SECRET,
+  DIRECT_LINE_BASE_URL: process.env.DIRECT_LINE_BASE_URL,
   LLM_MULTI_PHASE: process.env.LLM_MULTI_PHASE || 'true',
   LOG_LEVEL: 'info',
   LOOP_DIST_DIR: resolve(__dirname, 'packages/loop/dist'),

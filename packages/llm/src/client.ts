@@ -14,6 +14,6 @@ export interface LLMClient {
   generateJSON(systemPrompt: string, userText: string, temperature?: number): Promise<LLMResponse>;
 }
 
-export function createLLMClient(): LLMClient {
-  return new DynamicLLMClient();
+export function createLLMClient(provider?: string): LLMClient {
+  return new DynamicLLMClient(provider);
 }
