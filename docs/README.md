@@ -45,7 +45,13 @@ The official workspace Antigravity Skill (`.agents/skills/template-converter/SKI
 - **Golden Prompt Recipe** ([`template-prompt-recipe.md`](./template-prompt-recipe.md)): Copy-paste prompt for ChatGPT/Claude generating standard $1080 \times 1350$ single-file HTML mocks.
 - **Conversion Checklist**: Automated verification for isolation, dynamic wordmark compliance, and visual fidelity.
 
-### 6. [Design Reference Evaluation & Golden Prompt Fix](./design-reference-evaluation-and-prompt-fix.md)
+### 6. [Architectural Analysis: Layout-Owned Schemas vs. System Schemas](./layout-schemas-vs-system-schemas.md)
+Detailed examination of the two schema layers:
+- **Layer 1: System Transport Schemas (`packages/schemas`)**: Fastify HTTP validation, PostgreSQL status enums, and BullMQ queue message envelopes for microservices.
+- **Layer 2: Layout Content Schemas (`packages/loop/src/layouts/`)**: Slide definitions and Zod contracts (`CoverSlide`, `SequenceSlide`, `CtaSlide`).
+- **Standardization Plan**: Ensuring every layout (including `_starter` and `the-signal`) owns its dedicated `schema.ts`.
+
+### 7. [Design Reference Evaluation & Golden Prompt Fix](./design-reference-evaluation-and-prompt-fix.md)
 Strategic review of `ARCHIVIO.html` and `casa-forma-carousel-reference.html`:
 - **Diagnosis**: Why these mocks duplicate `paper-of-record` and `the-curator`, and why the LLM copied the prompt example.
 - **Fixes**: Removing prompt leakage, eliminating viewer shell bloat, and introducing dedicated presets for SaaS and Swiss brutalism.
