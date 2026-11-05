@@ -1,25 +1,21 @@
 import Frame from './frame.js';
-import {
-  Cover,
-  Statement,
-  List,
-  Specimen,
-  Measure,
-  Tally,
-  Route,
-  Log,
-  Compare,
-  Table,
-  Chart,
-  MapSlide,
-  Quote,
-  Entry,
-  Qa,
-  Kit,
-  Cta,
-  Sequence,
-  Telemetry,
-} from './slides.js';
+import Cover from './cover/index.js';
+import Statement from './statement/index.js';
+import List from './list/index.js';
+import Specimen from './specimen/index.js';
+import Measure from './measure/index.js';
+import Tally from './tally/index.js';
+import Route from './route/index.js';
+import Log from './log/index.js';
+import Compare from './compare/index.js';
+import Table from './table/index.js';
+import Chart from './chart/index.js';
+import MapSlide from './map/index.js';
+import Quote from './quote/index.js';
+import Entry from './entry/index.js';
+import Qa from './qa/index.js';
+import Kit from './kit/index.js';
+import Cta from './cta/index.js';
 
 export const templateMeta = {
   id: 'the-field-notes',

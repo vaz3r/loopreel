@@ -398,6 +398,42 @@ The LLM dynamically structured an authentic, substantive researcher notebook dec
 ![Live Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-live-audit/slide_07.png)
 ````
 
+---
 
+## 12. Modularized Component Architecture
+
+To align with Loopreel's core architectural standards (demonstrated by `paper-of-record`, `the-academic`, and `the-curator`), **The Field Notes** template ([`packages/loop/src/layouts/the-field-notes/`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/)) was refactored from a single monolithic `slides.tsx` into an isolated, folder-per-component structure.
+
+### 1. Directory Structure
+
+```
+packages/loop/src/layouts/the-field-notes/
+├── primitives.tsx          # Shared hand-drawn SVGs (Squiggle, Arrow, Box, etc.) & SlideWrapper
+├── layout.tsx              # Template definition & slide mapping
+├── slides.tsx              # Clean re-export barrel (100% backward compatibility)
+├── frame.tsx               # Grid frame, researcher tags, page numbering
+├── slide-types.yaml        # LLM orchestrator specifications
+├── styles.module.css       # Layout styles
+├── chart/index.tsx         # Bar/Line research chart
+├── compare/index.tsx       # Contrast matrix card
+├── cover/index.tsx         # Field study cover slide
+├── cta/index.tsx           # Call to action & social handles
+├── entry/index.tsx         # Illuminated drop-cap journal entry
+├── kit/index.tsx           # Research equipment / tool inventory
+├── list/index.tsx          # Systematic observation lists & sequences
+├── log/index.tsx           # Chronological field observation entries
+├── map/index.tsx           # Geographic/spatial plot with compass rose
+├── measure/index.tsx       # Field gauge / metric cards
+├── qa/index.tsx            # Inquiry & findings Q&A
+├── quote/index.tsx         # Research authority quote
+├── route/index.tsx         # Expedition route / waypoints
+├── specimen/index.tsx      # Pinned specimen definition card
+├── statement/index.tsx     # Bold thesis statement
+├── table/index.tsx         # Research data matrix
+└── tally/index.tsx         # Quantitative tallies & telemetry metrics
+```
+
+### 2. Backward Compatibility
+[`slides.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/slides.tsx) was refactored into a re-export barrel that exposes all slide components and types identically, ensuring zero disruption to any external scripts, tests, or render workers importing from `slides.js`.
 
 
