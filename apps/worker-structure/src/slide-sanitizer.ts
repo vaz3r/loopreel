@@ -89,6 +89,15 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
         }
       }
 
+      // Ensure measure slides have non-empty value
+      if (type === 'measure') {
+        if (!fixed.value) {
+          const statsArr = fixed.stats as any[];
+          const itemsArr = fixed.items as any[];
+          fixed.value = String(fixed.stat || fixed.number || fixed.val || (Array.isArray(statsArr) && statsArr[0]?.value) || (Array.isArray(itemsArr) && itemsArr[0]?.value) || '100%');
+        }
+      }
+
       // Ensure statement slides have non-empty text
       if (type === 'statement' && !fixed.text) {
         fixed.text = fixed.headline || fixed.subheadline || 'Substantive field observation.';
@@ -103,6 +112,65 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
       if (type === 'specimen') {
         if (!fixed.term) fixed.term = fixed.headline || fixed.title || 'Concept';
         if (!fixed.definition) fixed.definition = fixed.text || fixed.desc || 'Methodological paradigm definition.';
+      }
+
+      // Ensure quote slides have quote and author
+      if (type === 'quote') {
+        if (!fixed.quote) fixed.quote = String(fixed.text || fixed.desc || fixed.headline || 'Foundational observation documented in the field.');
+        if (!fixed.author) fixed.author = String(fixed.speaker || fixed.source || fixed.by || 'Field Researcher');
+      }
+
+      // Ensure qa slides have question and answer
+      if (type === 'qa') {
+        if (!fixed.question) fixed.question = String(fixed.headline || fixed.title || 'Core Research Inquiry?');
+        if (!fixed.answer) fixed.answer = String(fixed.text || fixed.desc || fixed.subheadline || 'Key analytical finding.');
+      }
+
+      // Ensure kit slides have items
+      if (type === 'kit') {
+        if (!Array.isArray(fixed.items) || (fixed.items as any[]).length === 0) {
+          fixed.items = [{ name: 'Field Apparatus', desc: 'Primary expedition observation tool' }];
+        }
+      }
+
+      // Ensure route slides have waypoints
+      if (type === 'route') {
+        const rawWaypoints = fixed.waypoints || fixed.stops || fixed.items;
+        if (!Array.isArray(rawWaypoints) || (rawWaypoints as any[]).length === 0) {
+          fixed.waypoints = [{ name: 'Base Camp', desc: 'Initial research point' }];
+        } else {
+          fixed.waypoints = rawWaypoints;
+        }
+      }
+
+      // Ensure log slides have entries
+      if (type === 'log') {
+        const rawEntries = fixed.entries || fixed.items || fixed.logs;
+        if (!Array.isArray(rawEntries) || (rawEntries as any[]).length === 0) {
+          fixed.entries = [{ date: 'Log 01', text: String(fixed.text || fixed.desc || 'Observation recorded.') }];
+        } else {
+          fixed.entries = rawEntries;
+        }
+      }
+
+      // Ensure table slides have columns and rows
+      if (type === 'table') {
+        if (!Array.isArray(fixed.columns) || (fixed.columns as any[]).length === 0) fixed.columns = ['Observation', 'Measurement'];
+        if (!Array.isArray(fixed.rows) || (fixed.rows as any[]).length === 0) fixed.rows = [['Primary Site', 'Recorded']];
+      }
+
+      // Ensure chart slides have series
+      if (type === 'chart') {
+        if (!Array.isArray(fixed.series) || (fixed.series as any[]).length === 0) {
+          fixed.series = [{ name: 'Metric Trend', values: [15, 30, 60, 95] }];
+        }
+      }
+
+      // Ensure map slides have pins
+      if (type === 'map') {
+        if (!Array.isArray(fixed.pins) || (fixed.pins as any[]).length === 0) {
+          fixed.pins = [{ label: 'Site 01', x: 50, y: 50 }];
+        }
       }
 
       // Ensure sequence / list slides have non-empty items

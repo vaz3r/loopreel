@@ -1,10 +1,10 @@
 import Frame from './frame.js';
 import Cover from './cover/index.js';
 import Statement from './statement/index.js';
-import List from './list/index.js';
+import List, { Sequence } from './list/index.js';
 import Specimen from './specimen/index.js';
 import Measure from './measure/index.js';
-import Tally from './tally/index.js';
+import Tally, { Telemetry } from './tally/index.js';
 import Route from './route/index.js';
 import Log from './log/index.js';
 import Compare from './compare/index.js';

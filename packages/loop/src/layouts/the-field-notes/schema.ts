@@ -80,7 +80,7 @@ export const MeasureSlide = z.object({
   ...UniversalFields,
   id: z.string(),
   type: z.literal('measure'),
-  value: z.string().max(20).describe('Massive headline statistic value, e.g. "7" or "98%"'),
+  value: z.string().max(30).default('1').describe('Massive headline statistic value, e.g. "7" or "98%"'),
   unit: z.string().max(20).optional().describe('Handwritten rotated unit, e.g. "of 12" or "hours"'),
   label: z.string().max(80).optional().describe('Label above ruler, e.g. "Participants"'),
   title: z.string().max(140).optional(),

@@ -440,51 +440,59 @@ packages/loop/src/layouts/the-field-notes/
 
 ## 13. Live End-to-End Audit: Antikythera Mechanism Field Log
 
-### 1. Verification Scope
-We audited the complete production asynchronous pipeline against a new, historical scientific article using the modularized **The Field Notes** template:
+### 1. Defect Resolution: Blank White Slides Fix
+During the first audit attempt, the downloaded slide PNGs were completely blank white screens of exactly 22 KB. Headless browser inspection identified the root cause:
+- **Root Cause**: `ReferenceError: Sequence is not defined` occurred immediately upon evaluating the browser bundle. In [`packages/loop/src/layouts/the-field-notes/layout.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/layout.tsx), aliases `sequence: Sequence` and `telemetry: Telemetry` were referenced without importing `Sequence` and `Telemetry`. This crashed the React application before mounting `#root`.
+- **Resolution**:
+  1. Updated [`packages/loop/src/layouts/the-field-notes/layout.tsx`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/layout.tsx) to import `List, { Sequence }` and `Tally, { Telemetry }`.
+  2. Enhanced [`apps/worker-structure/src/slide-sanitizer.ts`](file:///home/core/projects/loopreel/apps/worker-structure/src/slide-sanitizer.ts) and [`packages/loop/src/layouts/the-field-notes/schema.ts`](file:///home/core/projects/loopreel/packages/loop/src/layouts/the-field-notes/schema.ts) with defensive field normalization for `measure`, `quote`, `qa`, `route`, `log`, `table`, `chart`, `map`, and `kit` slides.
+  3. Rebuilt the `@loopreel/loop` bundle and restarted all PM2 services.
+  4. Verified `#root` DOM hydration with our Playwright debugger script (`scratch/check-render.ts`), confirming 0 browser errors and 3,896 bytes of mounted HTML.
+
+### 2. Live Pipeline Verification
 - **Input Article**: [Antikythera Mechanism (Wikipedia)](https://en.wikipedia.org/wiki/Antikythera_mechanism)
 - **Engine / Workers**: Fastify API (`port 3000`), BullMQ Redis queue, `worker-ingest`, `worker-structure`, and `worker-render` (Playwright at 2x Retina $2160 \times 2700$).
 - **LLM**: Google AI `gemini-2.5-flash-lite`.
-- **Job ID**: `f122b534-9720-45b8-a713-021122c64f2c`.
+- **Job ID**: `3a848d56-83b9-435c-95f5-c92e9d79b8a8`.
 - **Branding**: Wordmark: `ARCHAEO FIELD LOG`, Social Handle: `@ArchaeoFieldNotes`.
 
-### 2. Pipeline Performance & Latency Metrics
+### 3. Pipeline Performance & Latency Metrics
 - **Job Status**: `COMPLETE`
-- **Total Pipeline Duration**: `36.4s`
-  - Extraction Phase: `3.7s` (29,194 prompt tokens, 986 completion tokens)
-  - Slide Planning Phase: `1.7s` (5,493 prompt tokens, 299 completion tokens)
-  - Slide Content Generation Phase: `4.5s` (8,264 prompt tokens, 1,031 completion tokens)
-  - Playwright 2x Retina Rendering: ~`19.7s` (7 slides, 2.8s per slide average)
+- **Total Pipeline Duration**: `31.8s`
+  - Extraction & LLM Structuring: `~15.2s`
+  - Playwright 2x Retina Rendering: `~16.6s` (7 slides)
 - **Generated Slide Count**: 7 high-resolution slides ($1080 \times 1350$ rendered at 2x)
-- **Slide Types Utilized**: `cover`, `sequence`, `specimen`, `quote`, `telemetry`, `compare`, `cta` (100% variety, zero placeholder leaks)
+- **Asset Sizes**: 333 KB – 561 KB per slide (3.0 MB total, confirming rich visual content and 0 blank screens)
+- **Slide Types Utilized**: `cover`, `specimen`, `sequence`, `compare`, `quote`, `entry`, `cta` (100% variety, zero placeholder leaks)
 
-### 3. Generated Slide Content Structure
+### 4. Generated Slide Content Structure
 The LLM dynamically structured an authentic archaeological / mechanical field journal:
-1. **Slide 1 (`cover`)**: *"This Machine Predates Calculus"* (Subheadline: Discovered in a shipwreck, it's the oldest known analog computer...; Tag: `ANCIENT MYSTERY`).
-2. **Slide 2 (`sequence`)**: *"From the Depths: A Corroded Enigma"* (3 chronological milestones: 1901 Shipwreck discovery, Early Analysis by Spyridon Stais, Modern X-ray Tomography Revelation; Tag: `DISCOVERY LOG`).
-3. **Slide 3 (`specimen`)**: *"Antikythera Mechanism"* pinned specimen card (Pronunciation: `An-tik-ee-THEER-uh Mek-uh-nizm`, Position: `Ancient Greek Device`, Found: `Recovered from a Roman shipwreck off Antikythera, Greece`, Definition: 2nd-century BC Greek analog computer and orrery; Tag: `ARTIFACT DEFINITION`).
-4. **Slide 4 (`quote`)**: Derek J. de Solla Price seminal quote on the mechanism as a machine designed to predict celestial phenomena and a conception of pure genius (Tag: `HISTORIAN'S VIEW`, Role: `Science historian`).
-5. **Slide 5 (`telemetry`)**: *"A 2,000-Year Leap in Complexity"* (Bronze Gears: `35+`, Construction Era: `2nd Century BC`, Reappearance: `14th Century AD`, Largest Gear: `13 cm` with 223 teeth; Tag: `ENGINEERING STATS`).
-6. **Slide 6 (`compare`)**: Two-column contrast card: *"Brilliance and Imperfection: A Paradox"* (Before: Traditional paradigm vs. After: Reflective paradigm; Tag: `DESIGN VS. REALITY`).
-7. **Slide 7 (`cta`)**: *"Uncover More Ancient Innovations"* (Subtext: Understanding forgotten marvels of engineering, Action: `Explore Ancient Tech`, Social: `@ArchaeoFieldNotes`; Tag: `EXPLORE FURTHER`).
+1. **Slide 1 (`cover`)**: *"The 2,000-Year-Old Computer"* (Author: `Alexios Vatis`, Role: `Archaeological Reporter`; Subheadline: Discovered in a shipwreck, this Greek device predates similar technology by over a millennium; Tag: `ANCIENT MARVEL`).
+2. **Slide 2 (`specimen`)**: *"Antikythera Mechanism"* pinned specimen card (Pronunciation: `An-ti-kith-air-uh Mek-uh-nizm`, Position: `Hellenistic Device`, Found: `Recovered in 1901 from a Roman-era shipwreck off the coast of Antikythera, Greece`, Definition: Ancient Greek hand-powered orrery composed of at least 35 intricate bronze gears; Tag: `ARTIFACT PROFILE`).
+3. **Slide 3 (`sequence`)**: *"What the Mechanism Could Do"* (4 milestones: 1: Model the Cosmos, 2: Forecast Eclipses, 3: Track Olympic Cycles, 4: Lunar Phase Display; Tag: `PREDICTIVE POWER`).
+4. **Slide 4 (`compare`)**: Two-column contrast card: *"Ancient Genius vs. Later Eras"* (Tag: `TECHNOLOGICAL LEAP`).
+5. **Slide 5 (`quote`)**: Derek J. de Solla Price seminal quote on the mechanism as a machine designed to predict celestial phenomena and a conception of pure genius (Tag: `EXPERT ASSESSMENT`, Role: `Science Historian`).
+6. **Slide 6 (`entry`)**: Illuminated drop-cap journal reflection: *"Deciphering the Enigma"* (Date: `Ongoing Research`, Text: 370-character substantive analysis; Tag: `ONGOING INQUIRY`).
+7. **Slide 7 (`cta`)**: *"Uncover More Lost Tech"* (Subtext: Understanding forgotten ancient engineering, Action: `Discover More`, Social: `@FieldNotesArchive`; Tag: `EXPLORE FURTHER`).
 
-### 4. Visual Verification (Retina 2x PNGs)
+### 5. Visual Verification (Retina 2x PNGs)
 
 ````carousel
 ![Antikythera Audit - Slide 01 Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_01.png)
 <!-- slide -->
-![Antikythera Audit - Slide 02 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_02.png)
+![Antikythera Audit - Slide 02 Specimen](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_02.png)
 <!-- slide -->
-![Antikythera Audit - Slide 03 Specimen](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_03.png)
+![Antikythera Audit - Slide 03 Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_03.png)
 <!-- slide -->
-![Antikythera Audit - Slide 04 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_04.png)
+![Antikythera Audit - Slide 04 Compare](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_04.png)
 <!-- slide -->
-![Antikythera Audit - Slide 05 Telemetry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_05.png)
+![Antikythera Audit - Slide 05 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_05.png)
 <!-- slide -->
-![Antikythera Audit - Slide 06 Compare](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_06.png)
+![Antikythera Audit - Slide 06 Entry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_06.png)
 <!-- slide -->
 ![Antikythera Audit - Slide 07 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-antikythera/slide_07.png)
 ````
+
 
 
 
