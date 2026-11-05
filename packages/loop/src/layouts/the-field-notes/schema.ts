@@ -261,7 +261,12 @@ export const KitSlide = z.object({
   items: z.array(z.object({
     text: z.string().max(160).optional(),
     title: z.string().max(160).optional(),
-    state: z.enum(['done', 'open', 'flag']).default('open'),
+    state: z.preprocess((val) => {
+      const s = String(val || '').toLowerCase().trim();
+      if (s === 'done' || s === 'checked' || s === 'complete' || s === 'completed' || s === 'true' || s === 'yes') return 'done';
+      if (s === 'flag' || s === 'flagged' || s === 'warning' || s === 'alert') return 'flag';
+      return 'open';
+    }, z.enum(['done', 'open', 'flag'])).default('open'),
   })).min(1).max(8),
 });
 

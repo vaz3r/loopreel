@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import type { FrameProps } from '../shared/types.js';
+import { AutoFit } from '../shared/AutoFit.js';
 import { defaultBrandKit, googleFontsUrl } from './brandkit.js';
 import styles from './frame.module.css';
 
@@ -23,7 +24,7 @@ const DEFAULT_LABELS: Record<string, string> = {
   cta: 'End of entry',
 };
 
-export function Frame({ slide, children, brandKit, size = { width: 1080, height: 1350 } }: FrameProps) {
+export function Frame({ slide, children, brandKit, size = { width: 1080, height: 1350 }, density }: FrameProps) {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const linkId = 'field-notes-fonts';
@@ -139,7 +140,9 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
 
       {/* Slide Content Body */}
       <main className={styles.body}>
-        <div className={styles.content}>{children}</div>
+        <AutoFit verticalAlign={density?.mode === 'compact' ? 'flex-start' : 'center'}>
+          <div className={styles.content}>{children}</div>
+        </AutoFit>
       </main>
 
       {/* Bottom Footer */}

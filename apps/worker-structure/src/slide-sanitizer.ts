@@ -143,10 +143,26 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
         if (!fixed.answer) fixed.answer = String(fixed.text || fixed.desc || fixed.subheadline || 'Key analytical finding.');
       }
 
-      // Ensure kit slides have items
+      // Ensure kit slides have items with normalized states ('done' | 'open' | 'flag')
       if (type === 'kit') {
         if (!Array.isArray(fixed.items) || (fixed.items as any[]).length === 0) {
-          fixed.items = [{ name: 'Field Apparatus', desc: 'Primary expedition observation tool' }];
+          fixed.items = [{ text: 'Field Apparatus', state: 'open' }];
+        } else {
+          fixed.items = (fixed.items as any[]).map((it) => {
+            if (!it || typeof it !== 'object') return { text: String(it), state: 'open' };
+            const rawState = String(it.state || '').toLowerCase().trim();
+            let state: 'done' | 'open' | 'flag' = 'open';
+            if (rawState === 'done' || rawState === 'checked' || rawState === 'complete' || rawState === 'completed' || rawState === 'true') {
+              state = 'done';
+            } else if (rawState === 'flag' || rawState === 'flagged' || rawState === 'warning' || rawState === 'alert') {
+              state = 'flag';
+            }
+            return {
+              ...it,
+              state,
+              text: it.text || it.name || it.title || it.desc || 'Observation check',
+            };
+          });
         }
       }
 

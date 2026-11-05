@@ -1,8 +1,9 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import { AutoFit } from '../shared/AutoFit';
 import type { TheGlobalistBrandKit } from './brandkit';
 
-export default function TheGlobalistFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
+export default function TheGlobalistFrame({ slide, scheme, children, size, brandKit, density }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'MACRO-ECONOMICS';
   const bk = brandKit as TheGlobalistBrandKit | undefined;
@@ -53,8 +54,10 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
       </div>
 
       {/* Content area */}
-      <div style={{ position: 'absolute', top: contentTop, bottom: contentBottom, left: side, right: side, zIndex: 30, display: 'flex', flexDirection: 'column' }}>
-        {children}
+      <div style={{ position: 'absolute', top: contentTop, bottom: contentBottom, left: side, right: side, zIndex: 30, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <AutoFit verticalAlign={density?.mode === 'compact' ? 'flex-start' : 'center'}>
+          {children}
+        </AutoFit>
       </div>
     </div>
   );

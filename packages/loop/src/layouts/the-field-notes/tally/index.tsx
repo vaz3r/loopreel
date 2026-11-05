@@ -14,7 +14,7 @@ export default function Tally({ slide }: LayoutProps) {
           <h2
             style={{
               fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-              fontSize: 54,
+              fontSize: 'var(--density-headline-size, 54px)',
               fontWeight: 700,
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
@@ -32,27 +32,27 @@ export default function Tally({ slide }: LayoutProps) {
         style={{
           display: 'grid',
           gridTemplateColumns: isRows ? '1fr' : '1fr 1fr',
-          gap: isRows ? 24 : 28,
+          gap: 'var(--density-item-gap, 20px)',
         }}
       >
         {items.slice(0, 4).map((it: any, idx: number) => (
           <div
             key={idx}
             style={{
-              padding: 24,
+              padding: isRows ? '16px 20px' : '20px',
               background: 'var(--surface-color, #F6F0E2)',
               border: '1.5px solid rgba(43, 34, 25, 0.18)',
               display: isRows ? 'grid' : 'block',
-              gridTemplateColumns: isRows ? '240px 1fr' : undefined,
+              gridTemplateColumns: isRows ? '220px 1fr' : undefined,
               alignItems: isRows ? 'center' : undefined,
-              gap: isRows ? 24 : undefined,
+              gap: isRows ? 20 : undefined,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
               <span
                 style={{
                   fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-                  fontSize: isRows ? 72 : 64,
+                  fontSize: isRows ? 'var(--density-stat-value-size, 64px)' : 56,
                   fontWeight: 700,
                   color: 'var(--ink-color, #2B2219)',
                   lineHeight: 0.95,
@@ -65,7 +65,7 @@ export default function Tally({ slide }: LayoutProps) {
                 <span
                   style={{
                     fontFamily: 'var(--font-hand, Caveat, cursive)',
-                    fontSize: 34,
+                    fontSize: 30,
                     fontWeight: 700,
                     color: 'var(--accent-color, #B8432A)',
                   }}
@@ -81,7 +81,7 @@ export default function Tally({ slide }: LayoutProps) {
               <h3
                 style={{
                   fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-                  fontSize: 26,
+                  fontSize: 24,
                   fontWeight: 600,
                   lineHeight: 1.15,
                   margin: 0,
@@ -94,9 +94,9 @@ export default function Tally({ slide }: LayoutProps) {
                 <p
                   style={{
                     fontFamily: 'var(--font-body, Newsreader, Georgia, serif)',
-                    fontSize: 20,
-                    lineHeight: 1.4,
-                    margin: '6px 0 0 0',
+                    fontSize: 'var(--density-body-size, 19px)',
+                    lineHeight: 1.35,
+                    margin: '4px 0 0 0',
                     color: 'var(--muted-color, rgba(43, 34, 25, 0.68))',
                   }}
                 >

@@ -1,8 +1,9 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import { AutoFit } from '../shared/AutoFit';
 import type { TheAcademicBrandKit } from './brandkit';
 
-export default function TheAcademicFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
+export default function TheAcademicFrame({ slide, scheme, children, size, brandKit, density }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'STRATEGY';
   const pageNum = s.footerRight?.replace('PAGE ', '').padStart(2, '0') || '01';
@@ -76,9 +77,11 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
       {/* Content area */}
       <div style={{
         position: 'absolute', top: contentTop, bottom: contentBottom, left: side, right: side,
-        zIndex: 30, display: 'flex', flexDirection: 'column',
+        zIndex: 30, display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
-        {children}
+        <AutoFit verticalAlign={density?.mode === 'compact' ? 'flex-start' : 'center'}>
+          {children}
+        </AutoFit>
       </div>
     </div>
   );

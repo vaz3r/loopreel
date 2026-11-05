@@ -131,7 +131,7 @@ export function SlideWrapper({ slide, children }: { slide: any; children: React.
   const note = slide.note as string | undefined;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', position: 'relative' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100%', height: 'auto', position: 'relative' }}>
       {children}
       {scribble && (
         <div className={styles.scribble}>

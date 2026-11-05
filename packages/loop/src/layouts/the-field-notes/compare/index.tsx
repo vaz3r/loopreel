@@ -15,7 +15,7 @@ export default function Compare({ slide }: LayoutProps) {
           <h2
             style={{
               fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-              fontSize: 54,
+              fontSize: 'var(--density-headline-size, 54px)',
               fontWeight: 700,
               lineHeight: 1.08,
               letterSpacing: '-0.025em',

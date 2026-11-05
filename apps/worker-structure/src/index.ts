@@ -128,11 +128,13 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         },
       });
 
-      // Handle needs_review terminal state
+      // Handle needs_review state: only block if explicitly configured to block
       if (result.needsReview) {
-        jobLogger.warn('Label detection failed after retries, flagging for review');
-        await JobRepository.markNeedsReview(jobId, 'label_detection_failed');
-        return;
+        jobLogger.warn('Quality validator flagged for review — proceeding with best-effort render');
+        if (process.env['BLOCK_ON_REVIEW'] === 'true') {
+          await JobRepository.markNeedsReview(jobId, 'label_detection_failed');
+          return;
+        }
       }
 
       jobLogger.info({

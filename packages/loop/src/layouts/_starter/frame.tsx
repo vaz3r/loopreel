@@ -1,9 +1,10 @@
 import React from 'react';
 import type { FrameProps } from '../shared/types';
+import { AutoFit } from '../shared/AutoFit';
 import type { StarterBrandKit } from './brandkit';
 import styles from './frame.module.css';
 
-export default function StarterFrame({ slide, scheme, children, size, brandKit }: FrameProps) {
+export default function StarterFrame({ slide, scheme, children, size, brandKit, density }: FrameProps) {
   const s = slide as any;
   const tag = s.tag || 'BRIEFING';
   const bk = brandKit as StarterBrandKit | undefined;
@@ -39,7 +40,11 @@ export default function StarterFrame({ slide, scheme, children, size, brandKit }
         <span className={styles.tag}>{tag}</span>
       </div>
 
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>
+        <AutoFit verticalAlign={density?.mode === 'compact' ? 'flex-start' : 'center'}>
+          {children}
+        </AutoFit>
+      </div>
 
       <div className={styles.footer}>
         <span className={styles.handle}>{handle}</span>

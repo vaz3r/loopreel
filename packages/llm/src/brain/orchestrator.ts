@@ -149,6 +149,26 @@ function buildCreativeDirectorPrompt(
   return { system, user: '' };
 }
 
+function prepareExtractionText(rawText: string, maxChars = 18000): string {
+  if (!rawText || rawText.length <= maxChars) return rawText;
+
+  // Strip trailing bibliography, references, and external links common in Wikipedia & long research
+  let cleaned = rawText
+    .replace(/\n={2,}\s*(?:References|External links|Further reading|Notes|See also)\s*={2,}[\s\S]*$/i, '')
+    .trim();
+
+  if (cleaned.length <= maxChars) return cleaned;
+
+  // Split lead/core content and conclusion
+  const headSize = Math.floor(maxChars * 0.72); // ~13,000 chars
+  const tailSize = maxChars - headSize - 100;    // ~4,900 chars
+
+  const head = cleaned.slice(0, headSize);
+  const tail = cleaned.slice(-tailSize);
+
+  return `${head}\n\n[... content condensed for carousel extraction ...]\n\n${tail}`;
+}
+
 export async function generateSlides(
   rawText: string,
   templates: TemplateInfo[],
@@ -190,12 +210,13 @@ export async function generateSlides(
   if (!briefXml) {
     onProgress?.('extraction', 'Phase 1: Extracting content brief...');
     const extractionPrompt = renderPrompt('extraction', {});
-    onDebug?.('01-prompt-phase1-extraction.md', `## System\n\n${extractionPrompt}\n\n## User\n\n${rawText}`);
+    const extractionInput = prepareExtractionText(rawText);
+    onDebug?.('01-prompt-phase1-extraction.md', `## System\n\n${extractionPrompt}\n\n## User\n\n${extractionInput}`);
 
     const phase1Start = Date.now();
     briefXml = await withPhaseRetry(
       async () => {
-        const raw = await usageTracker.callLLM(llm, 'extraction', extractionPrompt, rawText, 0.3);
+        const raw = await usageTracker.callLLM(llm, 'extraction', extractionPrompt, extractionInput, 0.3);
         return stripFences(raw);
       },
       'extraction',
@@ -491,13 +512,18 @@ export async function generateSlides(
       }
     }
 
-    // Handle fidelity/coherence failures — retry generation with feedback
-    const fidelityFailed = sourceFidelityResult?.verdict === 'fail';
-    const coherenceRetry = coherenceResult?.verdict === 'retry';
+    // Handle critical fidelity/coherence failures — retry generation with feedback
+    // Only trigger full 7-slide re-generation if there is a fatal topic mismatch,
+    // self-referential hallucinations, or severe repetitive failure (>= 3 duplicate slides)
     const coherenceNeedsReview = coherenceResult?.verdict === 'needs_review';
+    const fatalFidelityMismatch =
+      sourceFidelityResult?.selfReference.detected === true ||
+      sourceFidelityResult?.topicAlignment.match === false;
+    const severeRepetition = (coherenceResult?.repetitions.length ?? 0) >= 3;
+    const shouldRetryFullGeneration = fatalFidelityMismatch || severeRepetition;
 
-    if (fidelityFailed || coherenceRetry) {
-      onProgress?.('content-validation', 'Content validation failed — retrying generation with feedback...');
+    if (shouldRetryFullGeneration) {
+      onProgress?.('content-validation', 'Critical content validation failure — retrying generation with feedback...');
 
       let retryFeedback = '\n\n## PREVIOUS ATTEMPT FAILED CONTENT VALIDATION\n';
       if (sourceFidelityResult?.selfReference.detected) {
@@ -553,7 +579,7 @@ export async function generateSlides(
       }
     }
 
-    if (coherenceNeedsReview || (fidelityFailed && coherenceResult?.verdict !== 'retry')) {
+    if (coherenceNeedsReview && fatalFidelityMismatch) {
       needsReview = true;
     }
   }
