@@ -1,5 +1,25 @@
-import StarterFrame from './frame';
-import { Cover, Sequence, Telemetry, Quote, Cta } from './slides';
+import Frame from './frame.js';
+import {
+  Cover,
+  Statement,
+  List,
+  Specimen,
+  Measure,
+  Tally,
+  Route,
+  Log,
+  Compare,
+  Table,
+  Chart,
+  MapSlide,
+  Quote,
+  Entry,
+  Qa,
+  Kit,
+  Cta,
+  Sequence,
+  Telemetry,
+} from './slides.js';
 
 export const templateMeta = {
   id: 'the-field-notes',
@@ -8,18 +28,33 @@ export const templateMeta = {
   visualDescription: 'Researcher pocket-notebook aesthetic on dot-grid kraft paper with ruled margins, spiral binding holes, serif headlines, and handwriting annotations.',
 };
 
-export { default as frame } from './frame';
+export { default as frame } from './frame.js';
 
 export const slides: Record<string, any> = {
   cover: Cover,
+  statement: Statement,
+  list: List,
+  specimen: Specimen,
+  measure: Measure,
+  tally: Tally,
+  route: Route,
+  log: Log,
+  compare: Compare,
+  table: Table,
+  chart: Chart,
+  map: MapSlide,
+  quote: Quote,
+  entry: Entry,
+  qa: Qa,
+  kit: Kit,
+  cta: Cta,
+
+  // Graceful aliases for standard pipeline contracts
   sequence: Sequence,
   telemetry: Telemetry,
-  quote: Quote,
-  cta: Cta,
-  // Graceful aliases for other slide types
-  'myth-fact': Sequence,
-  timeline: Sequence,
-  'case-study': Sequence,
+  'myth-fact': Compare,
+  timeline: Log,
+  'case-study': Specimen,
   'image-split': Cover,
 };
 

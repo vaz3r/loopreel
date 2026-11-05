@@ -17,6 +17,10 @@ function getTemplateStyle(templateId: string): string {
       return 'MoMA gallery / avant-garde design publication. Minimal, artistic, conceptual. Heavy use of negative space.';
     case 'the-academic':
       return 'Harvard Business Review / MIT research paper. Academic, evidence-based, structured. Citation-heavy, methodical.';
+    case 'the-signal':
+      return 'Modern B2B tech briefing and startup playbook. Sharp, punchy, high-velocity insights.';
+    case 'the-field-notes':
+      return 'Researcher pocket notebook & field observations. Qualitative user studies, interviews, and reflective field notes with hand-drawn annotations. Supports 17 expressive slide types: cover, statement, list, specimen, measure, tally, route, log, compare, table, chart, map, quote, entry, qa, kit, cta.';
     default:
       return '';
   }

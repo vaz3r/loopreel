@@ -254,49 +254,98 @@ To establish a zero-manual-effort pipeline where you simply ask the AI agent to 
 
 ---
 
-## 10. The Field Notes Template Conversion
+## 10. The Field Notes Template Conversion (Full 17-Slide Architecture)
 
-Successfully ingested single-file HTML design reference `packages/loop/design-references/The Field Notes.html` and turned it into a 100% isolated, production-grade template (`the-field-notes`).
+Successfully ingested single-file HTML design reference `packages/loop/design-references/The Field Notes.html` and turned it into a 100% isolated, production-grade template (`the-field-notes`) with **all 17 distinct slide types fully ported and modifiable by LLMs**.
 
 ### 1. Aesthetic & Design System Translation
-- **Paper & Textures**: Dot-grid kraft paper (`#EEE5D0`) with a double-line red margin rule (`rgba(184, 67, 42, 0.5)`) and bound-edge spiral punch holes.
+- **Paper & Textures**: Dot-grid kraft paper (`#EEE5D0`) with a double-line red margin rule (`rgba(184, 67, 42, 0.5)`), 9 spiral punch holes, and optional washi tape top header.
 - **Typography Stack**:
   - **Headlines & Big Serifs**: `Fraunces` (variable optical size serif, 400–700 weights).
   - **Body & Captions**: `Newsreader` (editorial serif, italic emphasis).
   - **Metadata, Counters, & Tags**: `DM Mono` (monospaced data labels).
   - **Handwriting Annotations**: `Caveat` (organic handwritten notes, margins, and signature).
 - **Amber Highlighter Engine**: `renderMarkedText()` parses `*text*` into linear-gradient simulated yellow highlighter tags (`rgba(236, 182, 62, 0.55)`).
-- **Notebook Primitives**: Hand-drawn SVG `Squiggle` divider and hand-drawn SVG `CircNumber` badge.
+- **Hand-Drawn Vector Primitives**:
+  - `Squiggle`: Wavy separator rule.
+  - `CircNumber`: Handwritten circled number badge.
+  - `Arrow`: Curved directional pointer for margin notes.
+  - `XMark`: Hand-drawn terminal cross node.
+  - `Box`: Hand-drawn checkboxes supporting `open`, `done` (checkmark + strike), and `flag` (exclamation) states.
+  - `Compass`: Field compass rose with cardinal direction indicator.
+- **Universal Annotation Mechanics**:
+  - `label`: Custom header category label override.
+  - `scribble`: Handwritten margin note with curved directional arrow on any slide.
+  - `note`: Asterisk footnote at the bottom of any slide.
 
-### 2. File Structure (`packages/loop/src/layouts/the-field-notes/`)
+### 2. Complete 17 Slide Types Ported
+1. `cover`: Kicker, headline, subtitle, metadata chips, washi tape.
+2. `statement`: Giant display observation statement (`t-disp`).
+3. `list`: Numbered observations with hand-drawn circled numbers and dashed dividers.
+4. `specimen`: Dictionary/specimen definition card with washi tape, outline-offset border, phonetic pronunciation, and "Found in" handwriting note.
+5. `measure`: Massive 400px headline statistic, handwritten rotated unit, custom tickmark ruler with label, title, and body.
+6. `tally`: Metric cards (2x2 grid or single-row format) with values, handwritten units, squiggles, and descriptions.
+7. `route`: Process journey with vertical dotted connector line, numbered waypoint nodes, and final red X-mark node.
+8. `log`: Field session log with monospaced timestamp column, title, body, and handwritten `← here` indicator.
+9. `compare`: Side-by-side contrast with hand-drawn wavy vertical divider SVG, strikethrough red items on the left, bold items on the right.
+10. `table`: Field survey data table with monospaced headers, right-aligned numeric data, and double-underlined total row.
+11. `chart`: Horizontal SVG bar chart with hand-drawn pencil/highlighter fills, value callouts, and dashed target benchmark line.
+12. `map`: Visual journey map SVG with topographic contour loops, curved dashed bezier path, numbered nodes, compass rose, scale bar, and 2-column legend.
+13. `quote`: Massive 260px opening quotation mark, italic serif text, handwritten author signature, and monospaced role.
+14. `entry`: Field journal reflection with 4-line drop-cap first letter, handwritten date, and justified narrative prose.
+15. `qa`: Q&A interview format with handwritten `Q.` and `A.` callouts and dashed separator.
+16. `kit`: Checklist with hand-drawn checkable boxes (done checkmark, flag exclamation mark, open box, strikethrough text).
+17. `cta`: Closing call-to-action with bookmark icon button, subtitle, and handwritten signature.
+
+### 3. File Structure (`packages/loop/src/layouts/the-field-notes/`)
 - `brandkit.ts`: Isolated BrandKit tokens (`bg`, `accent`, fonts, wordmark).
-- `frame.module.css`: CSS module containing canvas dimensions, dot grid, double margin line, spiral holes, and header/footer rules.
-- `frame.tsx`: Isolated notebook frame with dynamic slide index counter (`No. 01`), scribble header, and dot progress bar.
-- `slides.tsx`: Complete slide components (`Cover`, `Sequence`, `Telemetry`, `Quote`, `Cta`).
-- `schema.ts`: 100% isolated `TheFieldNotesContract` schema with strict Zod types.
-- `sample-slides.ts`: Rich sample data reflecting field research observations.
-- `layout.tsx`: Slide dictionary and metadata mapping.
+- `frame.module.css`: CSS module containing canvas dimensions, dot grid, double margin line, 9 spiral holes, washi tape, tickmark ruler, and typography rules.
+- `frame.tsx`: Isolated notebook frame with dynamic slide index counter (`№ 01`), scribble header, category label, washi tape on cover, and dot progress bar.
+- `slides.tsx`: All 17 slide components + hand-drawn SVG primitives (`Squiggle`, `CircNumber`, `Arrow`, `XMark`, `Box`).
+- `schema.ts`: Comprehensive `TheFieldNotesContract` Zod schema with full documentation and types for all 17 slide types, ready for LLM structured output.
+- `sample-slides.ts`: Complete 17-slide deck populated with authentic field observation content.
+- `layout.tsx`: Slide dictionary mapping all 17 types plus standard pipeline aliases.
 - `index.ts`: Public module exports.
-
-### 3. Monorepo Integration
-- **`packages/schemas`**: Registered `the-field-notes` in `TEMPLATE_KEYS`.
-- **`packages/loop/src/bridge/registry.ts`**: Registered in `TEMPLATES` with editorial keywords.
-- **`packages/loop/src/bridge/classifier.ts`**: Added qualitative research heuristic keywords (`user study`, `observations`, `interviews`).
-- **`packages/loop/src/layouts/registry.ts`**: Added `the-field-notes` deck entry to `DECKS`.
-- **`apps/admin`**: Added `the-field-notes` label to template selector dropdown.
 
 ### 4. Verification & Visual Audit
 - **Monorepo Build & Typecheck**: `23/23 tasks successful, 0 errors`.
-- **Multi-Template Visual Audit**: `24/24 slides rendered across all 6 templates` ($1080 \times 1350$ PNGs at 2x DPR).
+- **Multi-Template Visual Audit**: `37/37 slides rendered across all 6 templates` ($1080 \times 1350$ PNGs at 2x Retina).
 
 ````carousel
-![The Field Notes - Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cover.png)
+![The Field Notes - 01 Cover](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cover.png)
 <!-- slide -->
-![The Field Notes - Sequence](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/sequence.png)
+![The Field Notes - 02 Statement](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/statement.png)
 <!-- slide -->
-![The Field Notes - Telemetry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/telemetry.png)
+![The Field Notes - 03 List](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/list.png)
 <!-- slide -->
-![The Field Notes - CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cta.png)
+![The Field Notes - 04 Specimen](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/specimen.png)
+<!-- slide -->
+![The Field Notes - 05 Measure](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/measure.png)
+<!-- slide -->
+![The Field Notes - 06 Tally](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/tally.png)
+<!-- slide -->
+![The Field Notes - 07 Route](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/route.png)
+<!-- slide -->
+![The Field Notes - 08 Log](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/log.png)
+<!-- slide -->
+![The Field Notes - 09 Compare](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/compare.png)
+<!-- slide -->
+![The Field Notes - 10 Table](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/table.png)
+<!-- slide -->
+![The Field Notes - 11 Chart](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/chart.png)
+<!-- slide -->
+![The Field Notes - 12 Map](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/map.png)
+<!-- slide -->
+![The Field Notes - 13 Quote](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/quote.png)
+<!-- slide -->
+![The Field Notes - 14 Entry](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/entry.png)
+<!-- slide -->
+![The Field Notes - 15 QA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/qa.png)
+<!-- slide -->
+![The Field Notes - 16 Kit](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/kit.png)
+<!-- slide -->
+![The Field Notes - 17 CTA](/home/core/.gemini/antigravity-cli/brain/da27b3cb-1b2b-4f17-868f-3f236e8a90bd/the-field-notes-run/cta.png)
 ````
+
 
 

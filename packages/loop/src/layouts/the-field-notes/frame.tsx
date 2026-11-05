@@ -1,8 +1,27 @@
 import React, { useEffect } from 'react';
 import type { FrameProps } from '../shared/types.js';
-import { TypographicWordmark } from '../shared/TypographicWordmark.js';
 import { defaultBrandKit, googleFontsUrl } from './brandkit.js';
 import styles from './frame.module.css';
+
+const DEFAULT_LABELS: Record<string, string> = {
+  cover: 'Field notes',
+  statement: 'Observation',
+  list: 'Observations',
+  specimen: 'Specimen',
+  measure: 'Measurement',
+  tally: 'Tally',
+  route: 'Route',
+  log: 'Log',
+  compare: 'Comparison',
+  table: 'Survey',
+  chart: 'Readings',
+  map: 'Map',
+  quote: 'Overheard',
+  entry: 'Journal',
+  qa: 'Question',
+  kit: 'Kit list',
+  cta: 'End of entry',
+};
 
 export function Frame({ slide, children, brandKit, size = { width: 1080, height: 1350 } }: FrameProps) {
   useEffect(() => {
@@ -18,14 +37,13 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
   }, []);
 
   const s = slide as Record<string, unknown>;
-  const wordmark = brandKit?.wordmark || defaultBrandKit.wordmark || 'FIELD NOTES';
-  const handle = brandKit?.handle || defaultBrandKit.handle || '@fieldnotes';
-  const wordmarkStyle = brandKit?.wordmarkStyle || defaultBrandKit.wordmarkStyle || 'mono';
+  const handle = (brandKit?.handle || defaultBrandKit.handle || '@fieldnotes') as string;
+  const wordmark = (brandKit?.wordmark || defaultBrandKit.wordmark || 'FIELD NOTES') as string;
 
-  // Parse slide number/index if provided (e.g. from footerRight "01/05" or index)
+  // Slide indexing & totals
   const footerRight = (s['footerRight'] as string) || '';
   const match = footerRight.match(/(\d+)\s*\/\s*(\d+)/);
-  const curPage = match ? parseInt(match[1], 10) : (typeof s['index'] === 'number' ? (s['index'] as number) + 1 : 1);
+  const curPage = match ? parseInt(match[1], 10) : typeof s['index'] === 'number' ? (s['index'] as number) + 1 : 1;
   const totalPages = match ? parseInt(match[2], 10) : 5;
 
   const bg = brandKit?.bg || defaultBrandKit.bg;
@@ -34,7 +52,12 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
   const accent = brandKit?.accent || defaultBrandKit.accent;
   const surface = brandKit?.surface || defaultBrandKit.surface;
 
-  const scribble = (s['scribble'] as string) || (s['tag'] as string) || 'field notes';
+  const slideType = (s['type'] as string) || 'cover';
+  const labelText = (s['label'] as string) || (s['tag'] as string) || DEFAULT_LABELS[slideType] || 'Field notes';
+  const headerRightText = (s['headerRight'] as string) || (s['authorRole'] as string) || wordmark;
+
+  const isCover = slideType === 'cover';
+  const showTape = s['tape'] !== false && isCover;
 
   return (
     <div
@@ -55,6 +78,7 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
         ['--margin-color' as any]: defaultBrandKit.margin,
         ['--highlighter-color' as any]: defaultBrandKit.highlighter,
         ['--muted-color' as any]: defaultBrandKit.muted,
+        ['--border-color' as any]: 'rgba(43, 34, 25, 0.42)',
         ['--font-headline' as any]: defaultBrandKit.fontHeadline,
         ['--font-body' as any]: defaultBrandKit.fontBody,
         ['--font-mono' as any]: defaultBrandKit.fontMono,
@@ -64,39 +88,40 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
       {/* Notebook margin rule */}
       <div className={styles.marginLine} />
 
-      {/* Spiral binding punch holes */}
+      {/* Bound-edge spiral punch holes (9 holes) */}
       <div className={styles.holes}>
-        {Array.from({ length: 7 }).map((_, i) => (
+        {Array.from({ length: 9 }).map((_, i) => (
           <i key={i} className={styles.hole} />
         ))}
       </div>
 
+      {/* Optional top washi-tape banner */}
+      {showTape && (
+        <span
+          className={styles.tape}
+          style={{ top: -16, left: '50%', marginLeft: -125, transform: 'rotate(-3deg)' }}
+        />
+      )}
+
       {/* Top Header */}
       <header className={styles.header}>
         <div className={styles.headerLeft}>
-          <span className={styles.entryNo}>No. {String(curPage).padStart(2, '0')}</span>
-          <TypographicWordmark
-            wordmark={wordmark}
-            style={wordmarkStyle}
-            color="var(--muted-color)"
-            size={18}
-          />
+          <span className={styles.entryNo}>№ {String(curPage).padStart(2, '0')}</span>
+          <span className={styles.headerTitle}>{labelText}</span>
         </div>
         <div className={styles.headerRight}>
-          ~ {scribble}
+          ~ {headerRightText}
         </div>
       </header>
 
-      {/* Slide Content */}
+      {/* Slide Content Body */}
       <main className={styles.body}>
-        <div className={styles.content}>
-          {children}
-        </div>
+        <div className={styles.content}>{children}</div>
       </main>
 
       {/* Bottom Footer */}
       <footer className={styles.footer}>
-        <div>{handle}</div>
+        <span style={{ color: 'var(--ink-color, #2B2219)' }}>{handle}</span>
         <div className={styles.dots}>
           {Array.from({ length: totalPages }).map((_, i) => {
             const pageNum = i + 1;
@@ -110,10 +135,10 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
             );
           })}
         </div>
+        <span>p. {String(curPage).padStart(2, '0')}/{String(totalPages).padStart(2, '0')}</span>
       </footer>
     </div>
   );
 }
 
 export default Frame;
-

@@ -39,7 +39,9 @@ async function run() {
     fs.mkdirSync(templateDir, { recursive: true });
 
     const slides = (deck.sampleSlides.slides || deck.sampleSlides) as Record<string, any>[];
-    const targetTypes = ['cover', 'sequence', 'telemetry', 'cta'];
+    const targetTypes = deck.templateId === 'the-field-notes'
+      ? slides.map((s) => s.type)
+      : ['cover', 'sequence', 'telemetry', 'cta'];
 
     for (const targetType of targetTypes) {
       const slide = slides.find((s) => s.type === targetType);
