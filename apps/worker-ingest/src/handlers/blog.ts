@@ -3,7 +3,27 @@ import { JobRepository } from '@loopreel/db';
 import { createQueue } from '@loopreel/queue';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import type pino from 'pino';
+
+const execFileAsync = promisify(execFile);
+
+async function resolveGoogleNewsUrl(url: string, logger: pino.Logger): Promise<string> {
+  if (!url.includes('news.google.com')) return url;
+  try {
+    const pythonCode = `from googlenewsdecoder import gnewsdecoder\nimport sys\nres = gnewsdecoder(sys.argv[1])\nif res.get("success") or res.get("status"):\n    print(res.get("decoded_url") or "")\n`;
+    const { stdout } = await execFileAsync('python3', ['-c', pythonCode, url], { timeout: 15_000 });
+    const decoded = stdout.trim();
+    if (decoded.startsWith('http')) {
+      logger.info({ from: url, to: decoded }, 'Resolved Google News redirect to canonical article URL');
+      return decoded;
+    }
+  } catch (err) {
+    logger.warn({ err }, 'Failed to decode Google News URL, proceeding with original');
+  }
+  return url;
+}
 
 const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
 const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
@@ -78,6 +98,7 @@ async function scrapeWithPuppeteer(url: string, logger: pino.Logger): Promise<st
 
   try {
     const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30_000 });
     const html = await page.content();
     const content = await scrapeWithCheerioHtml(html);
@@ -93,15 +114,17 @@ export async function handleBlog(
   sourceUrl: string,
   logger: pino.Logger,
 ): Promise<void> {
-  logger.info({ sourceUrl }, 'Scraping blog/article content');
+  const targetUrl = await resolveGoogleNewsUrl(sourceUrl, logger);
+  logger.info({ sourceUrl, targetUrl }, 'Scraping blog/article content');
 
   let rawText = '';
 
   try {
-    const response = await fetch(sourceUrl, {
+    const response = await fetch(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; LoopreelBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
       },
       signal: AbortSignal.timeout(30_000),
     });
@@ -122,7 +145,7 @@ export async function handleBlog(
   if (rawText.length < 200) {
     logger.info('Falling back to Puppeteer for JS-rendered content');
     try {
-      rawText = await scrapeWithPuppeteer(sourceUrl, logger);
+      rawText = await scrapeWithPuppeteer(targetUrl, logger);
     } catch (err) {
       logger.error({ err }, 'Puppeteer scrape also failed');
       throw new Error('Failed to scrape content with both cheerio and Puppeteer');
