@@ -8,7 +8,16 @@ export {
   CopilotStudioClient,
 } from './providers/index.js';
 export { parseLlmXmlOutput, parseXml, xmlElementToObjects } from './xml-parser.js';
-export { generateSlides } from './brain/index.js';
-export type { BrainResult, TemplateInfo } from './brain/index.js';
+export { generateSlides, generateChameleonSlides } from './brain/index.js';
+export type {
+  BrainResult,
+  TemplateInfo,
+  ChameleonResult,
+  ChameleonOptions,
+  ChameleonThemeSpec,
+  ChameleonThemePalette,
+  ChameleonThemeTypography,
+  ChameleonThemeDecorations,
+} from './brain/index.js';
 export { calculateCost, MODEL_PRICING } from './pricing.js';
 export { validateInput } from './brain/input-validator.js';

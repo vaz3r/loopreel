@@ -1,13 +1,13 @@
-import type { TemplateId } from '@loopreel/schemas';
+import type { ClassicTemplateId } from '@loopreel/schemas';
 import { createLLMClient } from '@loopreel/llm';
 
 export interface ClassificationResult {
-  templateId: TemplateId;
+  templateId: ClassicTemplateId;
   rationale: string;
   confidence: number;
 }
 
-const TEMPLATE_CHARACTERISTICS: Record<TemplateId, { name: string; keywords: string[]; description: string }> = {
+const TEMPLATE_CHARACTERISTICS: Record<ClassicTemplateId, { name: string; keywords: string[]; description: string }> = {
   'the-academic': {
     name: 'The Academic',
     keywords: [
@@ -68,7 +68,7 @@ const TEMPLATE_CHARACTERISTICS: Record<TemplateId, { name: string; keywords: str
  */
 export function classifyByHeuristics(rawText: string): ClassificationResult {
   const text = rawText.toLowerCase();
-  const scores: Record<TemplateId, number> = {
+  const scores: Record<ClassicTemplateId, number> = {
     'paper-of-record': 1, // base default score
     'the-globalist': 0,
     'the-curator': 0,
@@ -77,7 +77,7 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
     'the-field-notes': 0,
   };
 
-  for (const [tid, char] of Object.entries(TEMPLATE_CHARACTERISTICS) as Array<[TemplateId, typeof TEMPLATE_CHARACTERISTICS[TemplateId]]>) {
+  for (const [tid, char] of Object.entries(TEMPLATE_CHARACTERISTICS) as Array<[ClassicTemplateId, typeof TEMPLATE_CHARACTERISTICS[ClassicTemplateId]]>) {
     for (const kw of char.keywords) {
       if (text.includes(kw)) {
         scores[tid] += 1;
@@ -85,10 +85,10 @@ export function classifyByHeuristics(rawText: string): ClassificationResult {
     }
   }
 
-  let bestTemplate: TemplateId = 'paper-of-record';
+  let bestTemplate: ClassicTemplateId = 'paper-of-record';
   let maxScore = scores['paper-of-record'];
 
-  for (const [tid, score] of Object.entries(scores) as Array<[TemplateId, number]>) {
+  for (const [tid, score] of Object.entries(scores) as Array<[ClassicTemplateId, number]>) {
     if (score > maxScore) {
       maxScore = score;
       bestTemplate = tid;
@@ -137,7 +137,7 @@ Respond ONLY with a JSON object in the following format:
 
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]) as { selectedTemplate?: string; rationale?: string };
-      const selected = parsed.selectedTemplate as TemplateId;
+      const selected = parsed.selectedTemplate as ClassicTemplateId;
 
       if (TEMPLATE_CHARACTERISTICS[selected]) {
         return {

@@ -25,14 +25,10 @@ function resolveLoopDistDir(): string {
   }
 
   const candidates = [
-    // Relative from apps/worker-render (PM2 / dev)
     path.resolve(process.cwd(), '../../packages/loop/dist'),
-    // Next to app root in monorepo
     path.resolve(process.cwd(), 'packages/loop/dist'),
-    // Relative to source or compiled file location
     path.resolve(import.meta.dirname ?? '.', '../../../packages/loop/dist'),
     path.resolve(import.meta.dirname ?? '.', '../../../../packages/loop/dist'),
-    // In Docker container
     '/app/packages/loop/dist',
   ];
 
@@ -45,14 +41,34 @@ function resolveLoopDistDir(): string {
   return candidates[0]!;
 }
 
-export function startStaticServer(port: number): void {
-  const distDir = resolveLoopDistDir();
-
-  if (!fs.existsSync(distDir) || !fs.existsSync(path.join(distDir, 'index.html'))) {
-    logger.warn({ distDir }, 'Loop static dist not found, render will fail');
+function resolveChameleonDistDir(): string {
+  if (process.env['LOOP_CHAMELEON_DIST_DIR'] && fs.existsSync(process.env['LOOP_CHAMELEON_DIST_DIR'])) {
+    return process.env['LOOP_CHAMELEON_DIST_DIR'];
   }
 
-  http.createServer((req, res) => {
+  const candidates = [
+    path.resolve(process.cwd(), '../../packages/loop-chameleon/dist'),
+    path.resolve(process.cwd(), 'packages/loop-chameleon/dist'),
+    path.resolve(import.meta.dirname ?? '.', '../../../packages/loop-chameleon/dist'),
+    path.resolve(import.meta.dirname ?? '.', '../../../../packages/loop-chameleon/dist'),
+    '/app/packages/loop-chameleon/dist',
+  ];
+
+  for (const dir of candidates) {
+    if (fs.existsSync(dir) && fs.existsSync(path.join(dir, 'index.html'))) {
+      return dir;
+    }
+  }
+
+  return candidates[0]!;
+}
+
+function createDistServer(distDir: string, label: string) {
+  if (!fs.existsSync(distDir) || !fs.existsSync(path.join(distDir, 'index.html'))) {
+    logger.warn({ distDir, label }, `${label} static dist not found, render may fail`);
+  }
+
+  return http.createServer((req, res) => {
     const parsedUrl = new URL(req.url ?? '/', 'http://localhost');
     const pathname = parsedUrl.pathname === '/' ? '/index.html' : parsedUrl.pathname;
     let filePath = path.join(distDir, pathname);
@@ -71,7 +87,18 @@ export function startStaticServer(port: number): void {
       res.writeHead(200, { 'Content-Type': MIME[ext] ?? 'application/octet-stream' });
       res.end(data);
     });
-  }).listen(port, () => {
-    logger.info({ port, distDir }, 'Static render server started');
+  });
+}
+
+export function startStaticServer(port: number, chameleonPort: number = 3002): void {
+  const classicDistDir = resolveLoopDistDir();
+  const chameleonDistDir = resolveChameleonDistDir();
+
+  createDistServer(classicDistDir, 'Classic Loop').listen(port, () => {
+    logger.info({ port, distDir: classicDistDir }, 'Static render server (Classic Loop) started');
+  });
+
+  createDistServer(chameleonDistDir, 'Chameleon').listen(chameleonPort, () => {
+    logger.info({ port: chameleonPort, distDir: chameleonDistDir }, 'Static render server (Chameleon) started');
   });
 }

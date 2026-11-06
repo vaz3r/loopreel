@@ -57,13 +57,19 @@ export const BrandKitSchema = z.object({
 });
 export type BrandKit = z.infer<typeof BrandKitSchema>;
 
-export const TEMPLATE_KEYS = [
+export const CLASSIC_TEMPLATE_KEYS = [
   'paper-of-record',
   'the-globalist',
   'the-curator',
   'the-academic',
   'the-signal',
   'the-field-notes',
+] as const;
+export type ClassicTemplateId = (typeof CLASSIC_TEMPLATE_KEYS)[number];
+
+export const TEMPLATE_KEYS = [
+  ...CLASSIC_TEMPLATE_KEYS,
+  'chameleon',
 ] as const;
 export type TemplateId = (typeof TEMPLATE_KEYS)[number];
 

@@ -119,7 +119,9 @@ export class BrowserPool {
     const pooled = this.pages.find((p) => p.page === page);
     if (!pooled) throw new Error('Unknown page');
     const isDev = process.env['NODE_ENV'] !== 'production';
-    if (pooled.loaded && !forceReload && !isDev) return;
+    const currentUrl = page.url();
+    const needsReload = forceReload || isDev || !pooled.loaded || !currentUrl.startsWith(url);
+    if (!needsReload) return;
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
     pooled.loaded = true;
   }

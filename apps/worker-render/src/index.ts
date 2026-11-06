@@ -21,7 +21,9 @@ const logger = pino({
 });
 
 const STATIC_PORT = 3001;
+const CHAMELEON_STATIC_PORT = 3002;
 const VITE_SERVER_URL = process.env['VITE_SERVER_URL'] ?? `http://localhost:${STATIC_PORT}`;
+const CHAMELEON_SERVER_URL = process.env['CHAMELEON_SERVER_URL'] ?? `http://localhost:${CHAMELEON_STATIC_PORT}`;
 let pool: Awaited<ReturnType<typeof getPool>> | null = null;
 
 async function ensurePool() {
@@ -42,7 +44,7 @@ async function writeDebug(jobId: string, filename: string, content: string): Pro
   }
 }
 
-startStaticServer(STATIC_PORT);
+startStaticServer(STATIC_PORT, CHAMELEON_STATIC_PORT);
 startMetricsServer(() => pool?.getMetrics() ?? { poolSize: 0, inUse: 0, waiting: 0, totalUses: 0 });
 
 const RENDER_CONCURRENCY = 4;
@@ -76,19 +78,25 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
   const width = platformConfig?.width ?? 1080;
   const height = platformConfig?.height ?? 1080;
 
-  let template;
-  try {
-    template = getTemplate(templateId);
-  } catch {
-    await JobRepository.markFailed(jobId, {
-      stage: 'rendering',
-      reason: 'unknown_template',
-      details: `Template "${templateId}" not found`,
-    });
-    return;
+  const payload = existing.content_payload as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
+  const isChameleon = templateId === 'chameleon' || payload.meta?.engine === 'chameleon';
+  const targetEngineUrl = isChameleon ? CHAMELEON_SERVER_URL : VITE_SERVER_URL;
+
+  let template: ReturnType<typeof getTemplate> | undefined;
+  if (!isChameleon) {
+    try {
+      template = getTemplate(templateId);
+    } catch {
+      await JobRepository.markFailed(jobId, {
+        stage: 'rendering',
+        reason: 'unknown_template',
+        details: `Template "${templateId}" not found`,
+      });
+      return;
+    }
   }
 
-  jobLogger.info({ slideCount: existing.slide_count, platform, template: templateId }, 'Starting render');
+  jobLogger.info({ slideCount: existing.slide_count, platform, template: templateId, isChameleon }, 'Starting render');
 
   try {
     const currentPool = await ensurePool();
@@ -100,7 +108,6 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       contentText?: string;
     }> = [];
 
-    const payload = existing.content_payload as { slides: Record<string, unknown>[]; meta?: Record<string, unknown> };
     const totalSlides = payload.slides.length;
     const poolSize = Number(process.env['PLAYWRIGHT_POOL_SIZE'] ?? '5');
 
@@ -116,11 +123,11 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
       let screenshots: { buffer: Buffer; slideIndex: number }[] = [];
 
       try {
-        // Warm up the React app in each tab (goto only on first use)
+        // Warm up the React app in each tab (goto only on first use or URL change)
         await Promise.all(
           pages.map(async (page) => {
             await page.setViewportSize({ width, height });
-            await currentPool.warmup(page, VITE_SERVER_URL);
+            await currentPool.warmup(page, targetEngineUrl);
           }),
         );
 
@@ -135,21 +142,29 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
             const slideId = (slide as any).id;
 
             await page.evaluate(
-              ({ slideData, schemeId, templateIdVal, renderSize, brandKitVal }) => {
+              ({ slideData, schemeId, templateIdVal, renderSize, brandKitVal, isCham, chamTheme }) => {
                 const w = window as any;
-                w.__SLIDE_DATA = slideData;
-                w.__SLIDE_SCHEME_ID = schemeId;
-                w.__SLIDE_TEMPLATE_ID = templateIdVal;
-                w.__SLIDE_SIZE = renderSize;
-                if (brandKitVal) w.__BRAND_KIT = brandKitVal;
+                if (isCham) {
+                  w.__SLIDE_DATA = slideData;
+                  w.__CHAMELEON_THEME = chamTheme;
+                  w.__SLIDE_SIZE = renderSize;
+                } else {
+                  w.__SLIDE_DATA = slideData;
+                  w.__SLIDE_SCHEME_ID = schemeId;
+                  w.__SLIDE_TEMPLATE_ID = templateIdVal;
+                  w.__SLIDE_SIZE = renderSize;
+                  if (brandKitVal) w.__BRAND_KIT = brandKitVal;
+                }
                 w.dispatchEvent(new Event('slide-update'));
               },
               {
                 slideData: slide,
-                schemeId: template.schemeId,
+                schemeId: template?.schemeId,
                 templateIdVal: templateId,
                 renderSize: { width, height },
                 brandKitVal: (payload.meta?.brandKit || (existing as any).brand_kit) as Record<string, string | undefined> | undefined,
+                isCham: isChameleon,
+                chamTheme: payload.meta?.theme,
               },
             );
 

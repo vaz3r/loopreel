@@ -10,6 +10,7 @@ export const PLATFORM_LABELS: Record<string, string> = {
 
 export const TEMPLATE_LABELS: Record<string, string> = {
   auto: 'Auto (AI Dynamic Classifier)',
+  chameleon: 'Chameleon (Dynamic AI Parametric Engine)',
   'paper-of-record': 'The Paper of Record (Broadsheet)',
   'the-globalist': 'The Globalist (Newsprint Digest)',
   'the-curator': 'The Curator (Minimalist Gallery)',

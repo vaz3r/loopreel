@@ -2,7 +2,8 @@ import { JobRepository } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import { classifyError, type StructurePayload } from '@loopreel/schemas';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop/bridge';
-import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
+import { createLLMClient, parseLlmXmlOutput, generateSlides, generateChameleonSlides, calculateCost } from '@loopreel/llm';
+import { ChameleonCarouselSchema } from '@loopreel/loop-chameleon/bridge';
 import type { TemplateInfo } from '@loopreel/llm';
 import { validateInput } from '@loopreel/llm';
 import { sanitizeSlides } from './slide-sanitizer.js';
@@ -74,8 +75,99 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
   }
 
   try {
-    const isFixedTemplate = Boolean(existing.template_id && existing.template_id !== 'auto');
+    const defaultEngine = process.env['DEFAULT_LOOP_ENGINE'] ?? 'classic';
+    const isExplicitChameleon = existing.template_id === 'chameleon';
+    const isAutoChameleon = (!existing.template_id || existing.template_id === 'auto') && defaultEngine === 'chameleon';
+    const isChameleon = isExplicitChameleon || isAutoChameleon;
     let targetTemplateId = existing.template_id;
+
+    if (isChameleon) {
+      targetTemplateId = 'chameleon';
+      await JobRepository.updateTemplate(jobId, 'chameleon');
+      jobLogger.info('Executing Chameleon Dynamic Parametric Engine pipeline');
+
+      const brandKit = (existing.brand_kit as Record<string, string | undefined>) ?? {};
+      const result = await generateChameleonSlides(rawText, {
+        llm,
+        brandKit,
+        onProgress: (phase, detail) => {
+          jobLogger.info({ phase, detail }, 'Chameleon pipeline progress');
+        },
+        onDebug: (filename, content) => {
+          void writeDebug(jobId, filename, content);
+        },
+        retriesUsed: await JobRepository.getRetriesUsed(jobId),
+      });
+
+      // Write per-phase LLM usage
+      const activeProvider = process.env['LLM_PROVIDER'] ?? 'google';
+      const model = (activeProvider === 'copilot' || activeProvider === 'copilot-studio' || activeProvider === 'directline')
+        ? (process.env['COPILOT_MODEL'] ?? 'copilot-studio')
+        : (process.env['LLM_MODEL'] ?? 'gemini-2.5-flash-lite');
+
+      for (const usage of result.phaseUsages) {
+        await JobRepository.insertLlmUsage({
+          jobId,
+          phase: usage.phase,
+          provider: activeProvider,
+          model,
+          promptTokens: usage.promptTokens,
+          completionTokens: usage.completionTokens,
+          latencyMs: usage.latencyMs,
+          estimatedCostUsd: calculateCost(model, usage.promptTokens, usage.completionTokens),
+        });
+      }
+
+      await JobRepository.updateCostColumns(jobId, {
+        domainId: 'chameleon-dynamic',
+        totalPromptTokens: result.totalTokens.input,
+        totalCompletionTokens: result.totalTokens.output,
+        totalCostUsd: calculateCost(model, result.totalTokens.input, result.totalTokens.output),
+      });
+
+      const sanitizedSlides = sanitizeSlides(result.slides);
+      const validationResult = ChameleonCarouselSchema.safeParse({ theme: result.theme, slides: sanitizedSlides });
+      if (!validationResult.success) {
+        jobLogger.warn({ errors: validationResult.error.issues }, 'Chameleon schema warning — continuing with sanitized slides');
+      }
+
+      const withImages = await fetchImagesForSlides(sanitizedSlides, jobId);
+
+      for (let i = 0; i < withImages.length; i++) {
+        const slide = withImages[i];
+        if (slide) {
+          await JobRepository.insertSlideData({
+            jobId,
+            phase: 'chameleon',
+            slideIndex: i,
+            slideType: String(slide.type ?? 'cover'),
+            headline: String(slide.headline ?? null),
+            content: slide,
+          });
+        }
+      }
+
+      await writeDebug(jobId, '05-chameleon-slides.json', JSON.stringify({ theme: result.theme, slides: withImages }, null, 2));
+
+      await JobRepository.updateStatus(jobId, 'rendering', {
+        contentPayload: {
+          slides: withImages,
+          meta: {
+            engine: 'chameleon',
+            theme: result.theme,
+            brandKit,
+          },
+        },
+        slideCount: withImages.length,
+      });
+
+      await renderQueue.add('render-slide', { jobId });
+      await JobRepository.clearCheckpoint(jobId);
+      jobLogger.info({ slideCount: withImages.length, engine: 'chameleon' }, 'Dispatched to render queue (chameleon)');
+      return;
+    }
+
+    const isFixedTemplate = Boolean(existing.template_id && existing.template_id !== 'auto');
 
     if (!targetTemplateId || targetTemplateId === 'auto') {
       jobLogger.info('Auto-selecting optimal template via Dynamic LLM Classifier...');
