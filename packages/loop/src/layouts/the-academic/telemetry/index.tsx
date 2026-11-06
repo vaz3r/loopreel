@@ -4,13 +4,16 @@ import styles from './styles.module.css';
 
 export default function Telemetry({ slide }: LayoutProps) {
   const s = slide as any;
+  const count = s.stats?.length ?? 0;
+  const gridClass = count === 1 ? styles.oneStat : count === 2 ? styles.twoStats : count === 3 ? styles.threeStats : '';
+
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
         <h2 className={styles.headline}>{s.headline}</h2>
         <span className={styles.subtitle}>Dataset Alpha</span>
       </div>
-      <div className={styles.grid}>
+      <div className={`${styles.grid} ${gridClass}`.trim()}>
         {s.stats?.map((stat: any, idx: number) => {
           const barColor = stat.color === 'crimson' ? '#A31F34' : stat.color === 'graphite' ? '#475569' : '#0F172A';
           return (

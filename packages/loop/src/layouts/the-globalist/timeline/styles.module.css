@@ -1,16 +1,16 @@
-.wrap { display: flex; flex-direction: column; height: 100%; }
-.header { padding-bottom: 24px; margin-bottom: 48px; border-bottom: 4px solid #111111; flex-shrink: 0; }
-.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
+.wrap { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.header { padding-bottom: 20px; margin-bottom: 36px; border-bottom: 4px solid #111111; flex-shrink: 0; }
+.headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: var(--density-headline-size, 64px); line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
 
-.track { flex: 1; display: flex; flex-direction: column; gap: 0; position: relative; margin-left: 180px; padding-left: 40px; border-left: 2px solid #111111; }
+.track { flex: 1; display: flex; flex-direction: column; justify-content: space-between; position: relative; margin-left: 180px; padding-left: 40px; border-left: 2px solid #111111; padding-bottom: 16px; min-height: 0; }
 
-.event { position: relative; display: flex; flex-direction: column; padding-bottom: 40px; }
+.event { position: relative; display: flex; flex-direction: column; flex: 1; justify-content: center; padding: 16px 0; }
 
-.date { position: absolute; left: -230px; top: 0; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px; width: 180px; text-align: right; }
+.date { position: absolute; left: -230px; top: 16px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px; width: 180px; text-align: right; }
 .dateNormal { color: #3A4249; }
 .dateAccent { color: #E3120B; }
 
-.dot { position: absolute; left: -31px; top: 6px; border-radius: 50%; }
+.dot { position: absolute; left: -31px; top: 22px; border-radius: 50%; }
 .dotNormal { width: 12px; height: 12px; background: #3A4249; }
 .dotAccent { width: 14px; height: 14px; background: #E3120B; }
 

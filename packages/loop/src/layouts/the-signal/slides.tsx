@@ -4,24 +4,24 @@ import type { LayoutProps } from '../shared/types';
 export function Cover({ slide }: LayoutProps) {
   const s = slide as any;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 24 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 32 }}>
       {s.tag && (
-        <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-color, #38bdf8)' }}>
+        <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-color, #38bdf8)' }}>
           {s.tag}
         </span>
       )}
-      <h1 style={{ fontSize: 64, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', margin: 0 }}>
+      <h1 style={{ fontSize: 'clamp(72px, 8.5vw, 96px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0, textWrap: 'balance' }}>
         {s.headline}
       </h1>
       {s.subheadline && (
-        <h2 style={{ fontSize: 24, fontWeight: 400, opacity: 0.8, lineHeight: 1.4, margin: 0 }}>
+        <h2 style={{ fontSize: 'clamp(26px, 3.2vw, 34px)', fontWeight: 400, opacity: 0.85, lineHeight: 1.4, margin: 0, maxWidth: '90%' }}>
           {s.subheadline}
         </h2>
       )}
       {(s.authorName || s.authorRole) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16 }}>
-          {s.authorName && <span style={{ fontWeight: 600, fontSize: 18 }}>{s.authorName}</span>}
-          {s.authorRole && <span style={{ opacity: 0.6, fontSize: 16 }}>• {s.authorRole}</span>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 24, paddingTop: 24, borderTop: '1px solid rgba(255, 255, 255, 0.15)', width: '70%' }}>
+          {s.authorName && <span style={{ fontWeight: 700, fontSize: 20 }}>{s.authorName}</span>}
+          {s.authorRole && <span style={{ opacity: 0.65, fontSize: 18 }}>• {s.authorRole}</span>}
         </div>
       )}
     </div>
@@ -34,24 +34,25 @@ export function Sequence({ slide }: LayoutProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 32 }}>
       <div>
-        <h2 style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
+        <h2 style={{ fontSize: 52, fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
           {s.title || s.headline}
         </h2>
         {s.description && (
-          <p style={{ fontSize: 20, opacity: 0.75, marginTop: 8, margin: 0 }}>{s.description}</p>
+          <p style={{ fontSize: 24, opacity: 0.75, marginTop: 10, margin: 0 }}>{s.description}</p>
         )}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1, justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, flex: 1, justifyContent: 'space-between' }}>
         {steps.map((step: any, idx: number) => (
           <div
             key={idx}
             style={{
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: 20,
-              padding: '20px 24px',
-              borderRadius: 12,
+              alignItems: 'center',
+              gap: 24,
+              padding: '24px 28px',
+              borderRadius: 14,
               background: 'var(--surface-color, rgba(255, 255, 255, 0.05))',
+              flex: 1,
             }}
           >
             <span
@@ -59,21 +60,22 @@ export function Sequence({ slide }: LayoutProps) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 36,
-                height: 36,
-                borderRadius: 8,
+                width: 44,
+                height: 44,
+                borderRadius: 10,
                 background: 'var(--accent-color, #38bdf8)',
                 color: '#000',
                 fontWeight: 800,
-                fontSize: 16,
+                fontSize: 18,
                 flexShrink: 0,
               }}
             >
               {idx + 1}
             </span>
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 700 }}>{step.label || step.title || step}</div>
-              {step.detail && <div style={{ fontSize: 16, opacity: 0.75, marginTop: 4 }}>{step.detail}</div>}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 24, fontWeight: 700 }}>{step.label || step.title || step}</div>
+              {step.detail && <div style={{ fontSize: 18, opacity: 0.75, marginTop: 4 }}>{step.detail}</div>}
+              {step.desc && <div style={{ fontSize: 18, opacity: 0.75, marginTop: 4 }}>{step.desc}</div>}
             </div>
           </div>
         ))}
@@ -84,34 +86,39 @@ export function Sequence({ slide }: LayoutProps) {
 
 export function Telemetry({ slide }: LayoutProps) {
   const s = slide as any;
-  const metrics = s.metrics || s.variables || [
+  const metrics = s.stats?.map((st: any) => ({
+    label: st.label,
+    value: st.unit ? `${st.value} ${st.unit}` : st.value,
+  })) || s.metrics || s.variables || [
     { label: s.variableA_label || 'Metric 1', value: s.variableA_value || '94%' },
     { label: s.variableB_label || 'Metric 2', value: s.variableB_value || '3.2x' },
     { label: s.variableC_label || 'Metric 3', value: s.variableC_value || '$10M' },
   ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 32 }}>
       <div>
-        <h2 style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
+        <h2 style={{ fontSize: 52, fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
           {s.headline || s.title}
         </h2>
-        {s.subheadline && <p style={{ fontSize: 20, opacity: 0.75, marginTop: 8, margin: 0 }}>{s.subheadline}</p>}
+        {s.subheadline && <p style={{ fontSize: 24, opacity: 0.75, marginTop: 10, margin: 0 }}>{s.subheadline}</p>}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, flex: 1, justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, flex: 1, justifyContent: 'space-between' }}>
         {metrics.map((m: any, idx: number) => (
           <div
             key={idx}
             style={{
-              padding: '28px 32px',
+              padding: metrics.length <= 2 ? '40px 48px' : '28px 36px',
               borderRadius: 16,
               background: 'var(--surface-color, rgba(255, 255, 255, 0.05))',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              flex: 1,
             }}
           >
-            <span style={{ fontSize: 20, fontWeight: 600, opacity: 0.85 }}>{m.label}</span>
-            <span style={{ fontSize: 48, fontWeight: 800, color: 'var(--accent-color, #38bdf8)', letterSpacing: '-0.03em' }}>
+            <span style={{ fontSize: metrics.length <= 2 ? 28 : 22, fontWeight: 600, opacity: 0.9, maxWidth: '65%' }}>{m.label}</span>
+            <span style={{ fontSize: metrics.length <= 2 ? 72 : 54, fontWeight: 800, color: 'var(--accent-color, #38bdf8)', letterSpacing: '-0.03em' }}>
               {m.value}
             </span>
           </div>
@@ -124,17 +131,17 @@ export function Telemetry({ slide }: LayoutProps) {
 export function Quote({ slide }: LayoutProps) {
   const s = slide as any;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 32 }}>
-      <span style={{ fontSize: 72, fontWeight: 900, color: 'var(--accent-color, #38bdf8)', lineHeight: 0.5 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 36 }}>
+      <span style={{ fontSize: 96, fontWeight: 900, color: 'var(--accent-color, #38bdf8)', lineHeight: 0.5 }}>
         &ldquo;
       </span>
-      <blockquote style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.35, margin: 0 }}>
+      <blockquote style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', fontWeight: 700, lineHeight: 1.3, margin: 0 }}>
         {s.quote || s.headline}
       </blockquote>
-      <div style={{ borderTop: '2px solid var(--accent-color, #38bdf8)', paddingTop: 16, width: 80 }} />
+      <div style={{ borderTop: '3px solid var(--accent-color, #38bdf8)', paddingTop: 20, width: 100 }} />
       <div>
-        <div style={{ fontSize: 20, fontWeight: 700 }}>{s.author || s.attribution}</div>
-        {s.role && <div style={{ fontSize: 16, opacity: 0.65, marginTop: 4 }}>{s.role}</div>}
+        <div style={{ fontSize: 24, fontWeight: 700 }}>{s.author || s.attribution}</div>
+        {s.role && <div style={{ fontSize: 18, opacity: 0.65, marginTop: 6 }}>{s.role}</div>}
       </div>
     </div>
   );
@@ -143,42 +150,42 @@ export function Quote({ slide }: LayoutProps) {
 export function Cta({ slide }: LayoutProps) {
   const s = slide as any;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', gap: 24 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', gap: 32 }}>
       <div
         style={{
-          width: 64,
-          height: 64,
-          borderRadius: 32,
+          width: 72,
+          height: 72,
+          borderRadius: 36,
           background: 'var(--accent-color, #38bdf8)',
           color: '#000',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: 28,
+          fontSize: 32,
           fontWeight: 800,
         }}
       >
         ✦
       </div>
-      <h2 style={{ fontSize: 44, fontWeight: 800, letterSpacing: '-0.02em', margin: 0, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 'clamp(52px, 6.5vw, 68px)', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, maxWidth: 880, textWrap: 'balance' }}>
         {s.headline || 'Ready to Dive Deeper?'}
       </h2>
-      <p style={{ fontSize: 22, opacity: 0.8, margin: 0, maxWidth: 650, lineHeight: 1.4 }}>
+      <p style={{ fontSize: 26, opacity: 0.85, margin: 0, maxWidth: 720, lineHeight: 1.45 }}>
         {s.subtext || s.description || 'Follow for daily insights and frameworks.'}
       </p>
-      {s.action && (
+      {(s.action || s.actionLabel) && (
         <div
           style={{
-            marginTop: 12,
-            padding: '16px 36px',
-            borderRadius: 30,
+            marginTop: 16,
+            padding: '20px 52px',
+            borderRadius: 36,
             background: 'var(--accent-color, #38bdf8)',
             color: '#000',
-            fontWeight: 700,
-            fontSize: 18,
+            fontWeight: 800,
+            fontSize: 22,
           }}
         >
-          {s.action}
+          {s.action || s.actionLabel}
         </div>
       )}
     </div>
@@ -195,24 +202,24 @@ export function MythFact({ slide }: LayoutProps) {
             {s.tag}
           </span>
         )}
-        <h2 style={{ fontSize: 44, fontWeight: 800, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
+        <h2 style={{ fontSize: 50, fontWeight: 800, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
           {s.headline}
         </h2>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, flex: 1, justifyContent: 'center' }}>
-        <div style={{ padding: '24px 28px', borderRadius: 16, background: 'rgba(239, 68, 68, 0.1)', borderLeft: '4px solid #ef4444' }}>
-          <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ef4444', marginBottom: 8 }}>
-            Myth
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, flex: 1, justifyContent: 'space-between' }}>
+        <div style={{ padding: '36px 40px', borderRadius: 18, background: 'rgba(239, 68, 68, 0.1)', borderLeft: '6px solid #ef4444', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#ef4444', marginBottom: 12 }}>
+            The Common Myth
           </div>
-          <div style={{ fontSize: 22, opacity: 0.9, lineHeight: 1.4 }}>
+          <div style={{ fontSize: 26, opacity: 0.9, lineHeight: 1.45 }}>
             {s.myth}
           </div>
         </div>
-        <div style={{ padding: '24px 28px', borderRadius: 16, background: 'rgba(56, 189, 248, 0.1)', borderLeft: '4px solid var(--accent-color, #38bdf8)' }}>
-          <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-color, #38bdf8)', marginBottom: 8 }}>
-            Reality
+        <div style={{ padding: '36px 40px', borderRadius: 18, background: 'rgba(56, 189, 248, 0.12)', borderLeft: '6px solid var(--accent-color, #38bdf8)', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-color, #38bdf8)', marginBottom: 12 }}>
+            The Reality
           </div>
-          <div style={{ fontSize: 22, fontWeight: 600, lineHeight: 1.4 }}>
+          <div style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.45 }}>
             {s.fact}
           </div>
         </div>
@@ -224,37 +231,44 @@ export function MythFact({ slide }: LayoutProps) {
 export function Timeline({ slide }: LayoutProps) {
   const s = slide as any;
   const events = s.events || [];
+  const isSingle = events.length === 1;
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 28 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: isSingle ? 'center' : 'flex-start', gap: isSingle ? 40 : 28 }}>
       <div>
         {s.tag && (
           <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-color, #38bdf8)' }}>
             {s.tag}
           </span>
         )}
-        <h2 style={{ fontSize: 44, fontWeight: 800, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
+        <h2 style={{ fontSize: isSingle ? 58 : 50, fontWeight: 800, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
           {s.headline}
         </h2>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1, justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, flex: isSingle ? '0 0 auto' : 1, justifyContent: 'space-between' }}>
         {events.map((evt: any, idx: number) => (
           <div
             key={idx}
             style={{
               display: 'flex',
-              gap: 20,
-              padding: '16px 20px',
-              borderRadius: 12,
+              flexDirection: isSingle ? 'column' : 'row',
+              justifyContent: 'center',
+              gap: isSingle ? 24 : 28,
+              padding: isSingle ? '52px 48px' : '24px 28px',
+              borderRadius: 18,
               background: evt.highlight ? 'rgba(56, 189, 248, 0.12)' : 'var(--surface-color, rgba(255, 255, 255, 0.05))',
-              borderLeft: evt.highlight ? '4px solid var(--accent-color, #38bdf8)' : '4px solid transparent',
+              borderLeft: evt.highlight ? '8px solid var(--accent-color, #38bdf8)' : '8px solid transparent',
+              alignItems: isSingle ? 'flex-start' : 'center',
             }}
           >
-            <div style={{ width: 90, flexShrink: 0, fontWeight: 800, fontSize: 16, color: 'var(--accent-color, #38bdf8)' }}>
-              {evt.date}
-            </div>
+            {(evt.date || evt.time || evt.phase) && (
+              <span style={{ fontSize: isSingle ? 26 : 16, fontWeight: 800, color: 'var(--accent-color, #38bdf8)', minWidth: isSingle ? 'auto' : 100 }}>
+                {evt.date || evt.time || evt.phase}
+              </span>
+            )}
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 18, fontWeight: 700 }}>{evt.title}</div>
-              <div style={{ fontSize: 16, opacity: 0.75, marginTop: 4 }}>{evt.desc}</div>
+              <div style={{ fontSize: isSingle ? 36 : 22, fontWeight: 700, lineHeight: 1.25 }}>{evt.title || evt.label}</div>
+              {evt.desc && <div style={{ fontSize: isSingle ? 26 : 18, opacity: 0.85, marginTop: 14, lineHeight: 1.5 }}>{evt.desc}</div>}
             </div>
           </div>
         ))}

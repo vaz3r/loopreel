@@ -1,9 +1,112 @@
 .wrap { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-.header { padding-bottom: 24px; margin-bottom: var(--density-item-gap, 48px); border-bottom: 4px solid #111111; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
+.header { padding-bottom: 20px; margin-bottom: var(--density-item-gap, 36px); border-bottom: 4px solid #111111; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; }
 .headline { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: var(--density-headline-size, 64px); line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; }
 .tag { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #E3120B; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; }
-.grid { flex: 1; display: grid; grid-template-columns: var(--density-stat-grid-cols, 1fr 1fr); grid-template-rows: var(--density-stat-grid-rows, 1fr 1fr); gap: var(--density-stat-gap, 64px); align-content: stretch; min-height: 0; }
-.stat { display: flex; flex-direction: column; border-top: 2px solid #E3120B; padding-top: 20px; justify-content: flex-start; height: 100%; min-width: 0; }
-.value { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: var(--density-stat-value-size, 110px); line-height: 1; margin-bottom: 8px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; word-break: break-word; }
-.unit { font-size: var(--density-stat-unit-size, 50px); color: #E3120B; display: var(--density-stat-unit-display, inline-block); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-.label { font-family: 'Crimson Pro', serif; font-size: var(--density-stat-label-size, 26px); line-height: var(--density-line-height, 1.4); color: #3A4249; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--density-stat-grid-cols, 1fr 1fr);
+  grid-template-rows: var(--density-stat-grid-rows, 1fr 1fr);
+  gap: var(--density-stat-gap, 36px);
+  align-content: stretch;
+  min-height: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid #E3120B;
+  padding-top: 24px;
+  justify-content: center;
+  height: 100%;
+  min-width: 0;
+}
+
+.value {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: var(--density-stat-value-size, 110px);
+  line-height: 1;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  word-break: break-word;
+}
+
+.unit {
+  font-size: var(--density-stat-unit-size, 50px);
+  color: #E3120B;
+  display: var(--density-stat-unit-display, inline-block);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.label {
+  font-family: 'Crimson Pro', serif;
+  font-size: var(--density-stat-label-size, 26px);
+  line-height: var(--density-line-height, 1.4);
+  color: #3A4249;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 1-over-2 hero layout for 3 stats */
+.threeStats {
+  grid-template-rows: 1fr 1fr;
+}
+.threeStats .stat:first-child {
+  grid-column: 1 / -1;
+  border-top: 4px solid #111111;
+  padding-bottom: 8px;
+}
+.threeStats .stat:first-child .value {
+  font-size: clamp(100px, 12vw, 130px);
+}
+
+/* 2 stacked cards layout for 2 stats in portrait */
+.twoStats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 36px;
+}
+.twoStats .stat {
+  flex: 1;
+  justify-content: center;
+  padding-top: 24px;
+}
+.twoStats .stat .value {
+  font-size: clamp(110px, 13vw, 135px);
+}
+.twoStats .stat .label {
+  font-size: 28px;
+}
+
+/* 1 hero stat */
+.oneStat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.oneStat .stat {
+  border-top: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.oneStat .stat .value {
+  font-size: clamp(140px, 16vw, 180px);
+  justify-content: center;
+}
+.oneStat .stat .label {
+  font-size: 32px;
+  max-width: 800px;
+}

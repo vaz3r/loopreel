@@ -46,9 +46,11 @@ export function AutoFit({
 
     isCalculatingRef.current = true;
     try {
-      // Reset styles temporarily to measure unconstrained natural dimensions
+      // Temporarily unconstrain height and transform to measure true natural dimensions
       content.style.transform = 'none';
       content.style.width = '100%';
+      content.style.height = 'auto';
+      content.style.minHeight = 'auto';
       content.style.position = 'relative';
 
       const containerH = container.clientHeight;
@@ -58,30 +60,32 @@ export function AutoFit({
 
       if (containerH <= 0 || containerW <= 0 || rawH <= 0 || rawW <= 0) return;
 
-      const availableH = Math.max(10, containerH - paddingBuffer);
-      const availableW = Math.max(10, containerW - paddingBuffer);
+      // Content only overflows if its natural unconstrained size strictly exceeds the container
+      const overflowsH = rawH > containerH;
+      const overflowsW = rawW > containerW;
 
-      const scaleH = availableH / rawH;
-      const scaleW = availableW / rawW;
+      let targetScale = 1.0;
 
-      let targetScale = Math.min(maxScale, scaleH, scaleW);
-
-      if (targetScale >= 1.0) {
-        targetScale = 1.0;
-      } else if (targetScale < minScale) {
-        targetScale = minScale;
+      if (overflowsH || overflowsW) {
+        const availableH = Math.max(10, containerH - paddingBuffer);
+        const availableW = Math.max(10, containerW - paddingBuffer);
+        const scaleH = overflowsH ? availableH / rawH : 1.0;
+        const scaleW = overflowsW ? availableW / rawW : 1.0;
+        targetScale = Math.max(minScale, Math.min(maxScale, scaleH, scaleW));
       }
 
       if (targetScale < 1.0) {
         // Compensate width so text does not narrow horizontally
         content.style.width = `${100 / targetScale}%`;
+        content.style.height = 'auto';
+        content.style.minHeight = 'auto';
 
         // Measure reflowed height after width compensation to get true optical height
         const reflowedH = content.scrollHeight;
         const scaledH = reflowedH * targetScale;
         const offsetY = verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
 
-        content.style.transformOrigin = 'top left';
+        content.style.transformOrigin = 'top center';
         content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
 
         container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));
@@ -90,6 +94,8 @@ export function AutoFit({
         setFitState({ scale: targetScale, offsetY });
       } else {
         content.style.width = '100%';
+        content.style.height = '100%';
+        content.style.minHeight = '100%';
         content.style.transform = 'none';
         container.removeAttribute('data-autofit-scaled');
         container.removeAttribute('data-autofit-overflow');
@@ -158,10 +164,12 @@ export function AutoFit({
         className="loop-autofit-content"
         style={{
           width: '100%',
+          height: fitState.scale < 1.0 ? 'auto' : '100%',
+          minHeight: fitState.scale < 1.0 ? 'auto' : '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: fitState.scale < 1.0 ? 'flex-start' : verticalAlign,
-          minHeight: '100%',
+          alignItems: 'stretch',
         }}
       >
         {children}

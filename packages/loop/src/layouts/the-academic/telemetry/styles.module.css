@@ -46,6 +46,55 @@
   min-height: 0;
 }
 
+/* 1-over-2 layout for 3 stats */
+.threeStats .card:first-child {
+  grid-column: 1 / -1;
+  padding: 32px 36px;
+}
+.threeStats .card:first-child .statValue {
+  font-size: clamp(80px, 10vw, 110px);
+}
+
+/* 2 stacked cards layout for 2 stats */
+.twoStats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 28px;
+}
+.twoStats .card {
+  flex: 1;
+  padding: 36px 40px;
+}
+.twoStats .card .statValue {
+  font-size: clamp(90px, 11vw, 120px);
+}
+.twoStats .card .statLabel {
+  font-size: 24px;
+}
+
+/* 1 hero stat */
+.oneStat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.oneStat .card {
+  width: 100%;
+  padding: 56px 48px;
+  align-items: center;
+  text-align: center;
+}
+.oneStat .card .statValue {
+  font-size: clamp(120px, 15vw, 160px);
+  justify-content: center;
+}
+.oneStat .card .statLabel {
+  font-size: 28px;
+  max-width: 800px;
+}
+
 .card {
   display: flex;
   flex-direction: column;
