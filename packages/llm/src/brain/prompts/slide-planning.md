@@ -28,9 +28,18 @@ When writing slide purposes, ensure the hook strategy aligns with these domain p
 {{domainPrinciples}}
 {{/if}}
 
+## JOURNALISTIC HOOK FRAMEWORKS (Choose the single best framework for this story)
+1. **The Contrarian Reality**: The market/consensus believes X, but verified data reveals the exact opposite.
+2. **The Hidden Vulnerability**: A massive, celebrated boom (AI, trade, policy) is colliding with a fatal physical or legal bottleneck.
+3. **The Collision Course**: Two powerful institutional or economic forces have collided, and one is about to break.
+4. **The Asymmetric Shift**: A quiet regulatory, technological, or structural change that will reshape winners and losers.
+
 ## Task
 
-Plan 5-7 slides. The example below shows 5 slides — you MUST plan at least 5 and at most 7. For each slide, choose a type from the supported list above and describe what content goes in it.
+Plan 5-7 slides. For each slide, choose a type from the supported list above and describe what content goes in it.
+- **Slide 1 (Cover)**: Frame the central tension or high-stakes consequence using one of the 4 hook frameworks above.
+- **Middle Slides (2 to N-1)**: Deliver concrete evidence, mechanisms, numbers, and contrasts. Alternate between data (telemetry, timeline) and analytical contrast (myth-fact, sequence, quote, breakdown).
+- **Final Slide (CTA)**: Deliver a high-status strategic implication or concrete watchlist of what to monitor next (never write vague homework like "consider your investments").
 
 ## Output Format
 

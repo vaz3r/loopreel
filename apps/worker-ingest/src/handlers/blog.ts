@@ -99,7 +99,12 @@ async function scrapeWithPuppeteer(url: string, logger: pino.Logger): Promise<st
   try {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30_000 });
+    try {
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25_000 });
+      await new Promise(r => setTimeout(r, 2000));
+    } catch (navErr) {
+      logger.warn({ navErr }, 'Puppeteer navigation reached timeout, proceeding with current DOM');
+    }
     const html = await page.content();
     const content = await scrapeWithCheerioHtml(html);
     logger.info({ textLength: content.length }, 'Puppeteer scrape complete');

@@ -47,7 +47,16 @@ export function getLayout(templateId: string, slideType: string): React.Componen
   if (targetLayout) {
     return targetLayout;
   }
-  const fallbackLayout = templateIndex['paper-of-record'].slides[slideType] ?? templateIndex['paper-of-record'].slides.cover;
+  // Universal multi-archetype fallback order: preserve layout semantic structure
+  const fallbackCandidates = [
+    templateIndex['the-globalist']?.slides[slideType],
+    templateIndex['the-academic']?.slides[slideType],
+    templateIndex['paper-of-record']?.slides[slideType],
+    templateIndex['the-curator']?.slides[slideType],
+    templateIndex['the-signal']?.slides[slideType],
+  ];
+  const candidate = fallbackCandidates.find(Boolean);
+  const fallbackLayout = candidate ?? templateIndex[templateId]?.slides.cover ?? templateIndex['paper-of-record'].slides.cover;
   return createThemeFallback(fallbackLayout);
 }
 

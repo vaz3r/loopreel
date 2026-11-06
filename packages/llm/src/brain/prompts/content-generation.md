@@ -93,21 +93,23 @@ For compare slides, use <left> and <right> child elements with items:
 - Every slide MUST have: id, type, tag, footerLeft, footerRight.
 - footerRight: "PAGE 01", "PAGE 02", etc. (sequential)
 
-## VARIETY RULES (CRITICAL)
-- NEVER use the same headline structure twice in one carousel. If your cover uses "[Number]. [Event].", your telemetry MUST use a different structure like "The [Noun]: [Number]" or "[Number] [Unit] — and [Contrast]".
+## VARIETY & HOOK RULES (CRITICAL)
+- NEVER use generic, robotic formulas like "[Number]. [Event]." or "[Number] [Unit] — and [Contrast]".
+- NEVER write passive, boring label headlines (e.g. "AI Data Centers in Texas: An Overview" or "6,400 megawatts. Demand protection for your bill.").
+- Cover headlines MUST be arresting, high-status hooks with clear tension or consequence (e.g. "Texas Bet Everything on AI. Now the Grid is Breaking." or "The Hidden Bottleneck of the Trillion-Dollar AI Boom").
+- Telemetry headlines MUST articulate the *meaning* of the numbers (e.g. "Data Centers Threaten to Double Peak Grid Demand"), NOT just repeat the raw number.
+- CTA slides MUST deliver a high-status strategic conclusion or a concrete watchlist of upcoming catalysts. NEVER write vague homework like "Consider what this means: your investments" or "Save this post".
 - NEVER start two consecutive slides with the same word.
-- VARY emotional angles across slides. Use these 7 angles — each at most once per carousel: curiosity, urgency, fear, surprise, empathy, concern, challenge.
-- Each carousel must feel like a DIFFERENT editorial voice — not the same template with different numbers plugged in.
+- VARY emotional angles across slides: curiosity, urgency, surprise, strategic caution, breakthrough insight.
 
 ## HEADLINE RULES
 
 <headlineRules>
-  <rule>Headlines MUST be a CLAIM, QUESTION, COMMAND, or PATTERN-INTERRUPT — never a noun phrase. Reference a specific detail from the brief: a number, name, or action.</rule>
-  <rule>Max 7 words. Fragments preferred. Active voice. Use contractions when natural.</rule>
-  <rule>Vary emotional angles across slides. Available angles: curiosity, urgency, fear, surprise, empathy, concern, challenge. Each angle at most once per carousel.</rule>
-  <rule>Use power words sparingly. Combined budget: each power word may appear at most ONCE per carousel.</rule>
-  <rule>The few-shot example demonstrates STRUCTURE and QUALITY LEVEL only. Your headlines must be ORIGINAL and SPECIFIC to the new content — do NOT replicate the few-shot's headlines, tags, or CTAs.</rule>
-  <rule>Myth-fact slides: Check the brief's counterpoint section. If it says views were consistent or scientists were divided, do NOT invent a contradiction. Frame the myth as a common assumption and the fact as what the evidence actually shows.</rule>
+  <rule>Headlines MUST be an ARRESTING CLAIM, SHOCKING CONTRAST, or POWERFUL QUESTION — never a dry label. Write with the authoritative punch of a front-page New York Times or Economist lead.</rule>
+  <rule>Length: 4 to 8 words. Tight, balanced fragments or concise claims. Active voice only.</rule>
+  <rule>Banned Clichés: NEVER use phrases like "In this report", "A deep dive", "Explore", "Consider your options", "The key takeaway", or "Here is what you need to know".</rule>
+  <rule>Cover Slide: Subheadline must be an authoritative 15-25 word summary explaining the underlying stakes or conflict.</rule>
+  <rule>Myth-Fact slides: The myth must state a plausible consensus belief that leaders get wrong; the fact must explain the exact mechanism or data that disproves it.</rule>
 </headlineRules>
 
 ## ANTI-SELF-REFERENCE RULES (CRITICAL)

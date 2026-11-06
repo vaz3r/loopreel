@@ -1,5 +1,19 @@
 import StarterFrame from './frame';
-import { Cover, Sequence, Telemetry, Quote, Cta } from './slides';
+import {
+  Cover,
+  Sequence,
+  Telemetry,
+  Quote,
+  Cta,
+  Timeline,
+  ImageSplit,
+  MythFact,
+  Quadrant,
+  CaseStudy,
+  Interview,
+  ResourceGrid,
+  HeroMetric,
+} from './slides';
 
 export const templateMeta = {
   id: 'the-signal',
@@ -16,11 +30,14 @@ export const slides: Record<string, any> = {
   telemetry: Telemetry,
   quote: Quote,
   cta: Cta,
-  // Graceful aliases for other slide types
-  'myth-fact': Sequence,
-  timeline: Sequence,
-  'case-study': Sequence,
-  'image-split': Cover,
+  timeline: Timeline,
+  'image-split': ImageSplit,
+  'myth-fact': MythFact,
+  quadrant: Quadrant,
+  'case-study': CaseStudy,
+  interview: Interview,
+  'resource-grid': ResourceGrid,
+  'hero-metric': HeroMetric,
 };
 
 export function getLayout(type: string) {

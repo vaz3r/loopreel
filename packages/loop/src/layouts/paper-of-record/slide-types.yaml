@@ -1,4 +1,4 @@
-# Paper of Record - inherits 8 shared + adds 5 unique types
+# Paper of Record - inherits 12 shared + adds 5 unique types
 inherits:
   - cover
   - cta
@@ -8,6 +8,10 @@ inherits:
   - quote
   - timeline
   - image-split
+  - interview
+  - quadrant
+  - case-study
+  - resource-grid
 
 types:
   definition:

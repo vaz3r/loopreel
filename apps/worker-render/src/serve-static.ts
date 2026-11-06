@@ -41,28 +41,6 @@ function resolveLoopDistDir(): string {
   return candidates[0]!;
 }
 
-function resolveChameleonDistDir(): string {
-  if (process.env['LOOP_CHAMELEON_DIST_DIR'] && fs.existsSync(process.env['LOOP_CHAMELEON_DIST_DIR'])) {
-    return process.env['LOOP_CHAMELEON_DIST_DIR'];
-  }
-
-  const candidates = [
-    path.resolve(process.cwd(), '../../packages/loop-chameleon/dist'),
-    path.resolve(process.cwd(), 'packages/loop-chameleon/dist'),
-    path.resolve(import.meta.dirname ?? '.', '../../../packages/loop-chameleon/dist'),
-    path.resolve(import.meta.dirname ?? '.', '../../../../packages/loop-chameleon/dist'),
-    '/app/packages/loop-chameleon/dist',
-  ];
-
-  for (const dir of candidates) {
-    if (fs.existsSync(dir) && fs.existsSync(path.join(dir, 'index.html'))) {
-      return dir;
-    }
-  }
-
-  return candidates[0]!;
-}
-
 function createDistServer(distDir: string, label: string) {
   if (!fs.existsSync(distDir) || !fs.existsSync(path.join(distDir, 'index.html'))) {
     logger.warn({ distDir, label }, `${label} static dist not found, render may fail`);
@@ -90,15 +68,10 @@ function createDistServer(distDir: string, label: string) {
   });
 }
 
-export function startStaticServer(port: number, chameleonPort: number = 3002): void {
+export function startStaticServer(port: number): void {
   const classicDistDir = resolveLoopDistDir();
-  const chameleonDistDir = resolveChameleonDistDir();
 
   createDistServer(classicDistDir, 'Classic Loop').listen(port, () => {
     logger.info({ port, distDir: classicDistDir }, 'Static render server (Classic Loop) started');
-  });
-
-  createDistServer(chameleonDistDir, 'Chameleon').listen(chameleonPort, () => {
-    logger.info({ port: chameleonPort, distDir: chameleonDistDir }, 'Static render server (Chameleon) started');
   });
 }

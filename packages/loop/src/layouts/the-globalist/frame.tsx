@@ -36,6 +36,14 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
       background: paper, color: ink, position: 'relative', overflow: 'hidden',
       fontFamily: `'${fontSerif}', serif`,
       ['--k' as any]: density?.k ?? 1.0,
+      ['--brand-bg' as any]: paper,
+      ['--brand-text' as any]: ink,
+      ['--brand-accent' as any]: accent,
+      ['--brand-secondary' as any]: slate,
+      ['--brand-hairline' as any]: hairline,
+      ['--brand-font-serif' as any]: `'${fontSerif}', serif`,
+      ['--brand-font-headline' as any]: `'${fontCondensed}', sans-serif`,
+      ['--brand-font-sans' as any]: "'Inter', sans-serif",
     }}>
       {/* Red top rule */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isWide ? 4 : 8, background: accent }} />

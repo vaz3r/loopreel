@@ -11,10 +11,13 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
 
   const bg = bk?.bg || '#FFFFFF';
   const ink = bk?.text || '#0F172A';
-  const crimson = '#A31F34';
+  const crimson = bk?.accent || '#A31F34';
   const graphite = '#475569';
   const hairline = '#CBD5E1';
   const panel = '#F8FAFC';
+  const fontSerif = bk?.fontSerif || 'Merriweather';
+  const fontSans = bk?.fontSans || 'Source Sans 3';
+  const fontMono = bk?.fontMono || 'IBM Plex Mono';
 
   const w = size?.width ?? 1080;
   const h = size?.height ?? 1350;
@@ -35,10 +38,20 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
     <div style={{
       width: w, height: h,
       background: bg, color: ink, position: 'relative', overflow: 'hidden',
-      fontFamily: "'Source Sans 3', sans-serif",
+      fontFamily: `'${fontSans}', sans-serif`,
       backgroundImage: `linear-gradient(${panel} 1px, transparent 1px), linear-gradient(90deg, ${panel} 1px, transparent 1px)`,
       backgroundSize: '40px 40px',
       ['--k' as any]: density?.k ?? 1.0,
+      ['--brand-bg' as any]: bg,
+      ['--brand-text' as any]: ink,
+      ['--brand-accent' as any]: crimson,
+      ['--brand-secondary' as any]: graphite,
+      ['--brand-surface' as any]: panel,
+      ['--brand-hairline' as any]: hairline,
+      ['--brand-font-serif' as any]: `'${fontSerif}', serif`,
+      ['--brand-font-headline' as any]: `'${fontSerif}', serif`,
+      ['--brand-font-sans' as any]: `'${fontSans}', sans-serif`,
+      ['--brand-font-mono' as any]: `'${fontMono}', monospace`,
     }}>
       {/* Header */}
       <div style={{

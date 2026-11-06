@@ -1,0 +1,133 @@
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  margin-bottom: 24px;
+  border-bottom: 4px solid var(--brand-text, #111827);
+  padding-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.headline {
+  font-family: var(--brand-font-serif, 'Playfair Display', serif);
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--brand-text, #111827);
+  margin: 0;
+}
+
+.tag {
+  font-family: var(--brand-font-sans, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand-accent, #B91C1C);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.diagram {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--brand-text, #111827);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.hLine {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  top: 50%;
+  height: 0;
+  border-top: 1px dashed var(--brand-text, #111827);
+  transform: translateY(-50%);
+}
+
+.vLine {
+  position: absolute;
+  top: 32px;
+  bottom: 32px;
+  left: 50%;
+  width: 0;
+  border-left: 1px dashed var(--brand-text, #111827);
+  transform: translateX(-50%);
+}
+
+.center {
+  background: var(--brand-bg, #F9F8F6);
+  border: 2px solid var(--brand-text, #111827);
+  padding: 20px 32px;
+  font-family: var(--brand-font-serif, 'Playfair Display', serif);
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--brand-accent, #B91C1C);
+  position: relative;
+  z-index: 10;
+}
+
+.card {
+  position: absolute;
+  width: 320px;
+  background: var(--brand-bg, #F9F8F6);
+  padding: 20px;
+  border: 1px solid var(--brand-text, #111827);
+  z-index: 5;
+}
+
+.topLeft {
+  top: 32px;
+  left: 32px;
+  text-align: left;
+}
+
+.topRight {
+  top: 32px;
+  right: 32px;
+  text-align: right;
+}
+
+.bottomLeft {
+  bottom: 32px;
+  left: 32px;
+  text-align: left;
+}
+
+.bottomRight {
+  bottom: 32px;
+  right: 32px;
+  text-align: right;
+}
+
+.cardTitle {
+  font-family: var(--brand-font-sans, 'Inter', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand-text, #111827);
+  margin: 0 0 8px 0;
+}
+
+.cardTitleAccent {
+  color: var(--brand-accent, #B91C1C);
+}
+
+.cardDesc {
+  font-family: var(--brand-font-serif, 'Source Serif 4', serif);
+  font-size: 20px;
+  color: var(--brand-secondary, #4B5563);
+  line-height: 1.4;
+  margin: 0;
+}

@@ -150,9 +150,70 @@ const CtaSlide = z.object({
   type: z.literal('cta'),
   tag: z.string().max(30).optional(),
   headline: z.string().min(3).max(100),
-  subtext: z.string().max(200).optional(),
+  subtext: z.string().max(250).optional(),
   actionLabel: z.string().max(40).optional(),
   socialHandle: z.string().max(40).optional(),
+  ...FooterFields,
+});
+
+const HeroMetricSlide = z.object({
+  id: z.string(),
+  type: z.literal('hero-metric'),
+  tag: z.string().max(30).optional(),
+  value: z.string().max(20),
+  unit: z.string().max(20).optional(),
+  headline: z.string().min(3).max(80),
+  bodyText: z.string().max(300).optional(),
+  ...FooterFields,
+});
+
+const MethodologySlide = z.object({
+  id: z.string(),
+  type: z.literal('methodology'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  steps: z.array(z.object({
+    num: z.string().max(10),
+    title: z.string().max(60),
+    desc: z.string().max(200),
+    highlighted: booleanFromString,
+  })).min(1).max(5),
+  ...FooterFields,
+});
+
+const JuxtapositionSlide = z.object({
+  id: z.string(),
+  type: z.literal('juxtaposition'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  donts: z.array(z.string().max(120)).min(1).max(5),
+  dos: z.array(z.string().max(120)).min(1).max(5),
+  ...FooterFields,
+});
+
+const ChecklistSlide = z.object({
+  id: z.string(),
+  type: z.literal('checklist'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  items: z.array(z.object({
+    text: z.string().max(150),
+    checked: booleanFromString,
+  })).min(1).max(6),
+  ...FooterFields,
+});
+
+const BreakdownSlide = z.object({
+  id: z.string(),
+  type: z.literal('breakdown'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  centerLabel: z.string().max(40),
+  items: z.array(z.object({
+    num: z.string().max(10),
+    title: z.string().max(60),
+    desc: z.string().max(150),
+  })).min(1).max(4),
   ...FooterFields,
 });
 
@@ -160,6 +221,8 @@ const TheGlobalistSlideSchema = z.discriminatedUnion('type', [
   CoverSlide, SequenceSlide, ImageSplitSlide, TelemetrySlide,
   InterviewSlide, QuadrantSlide, CaseStudySlide, MythFactSlide,
   ResourceGridSlide, TimelineSlide, QuoteSlide, CtaSlide,
+  HeroMetricSlide, MethodologySlide, JuxtapositionSlide,
+  ChecklistSlide, BreakdownSlide,
 ]);
 
 export const TheGlobalistContract = z.object({

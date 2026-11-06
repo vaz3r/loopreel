@@ -56,6 +56,23 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
         }
       }
 
+      // Defensive length clamping for common metadata fields to prevent minor LLM overage failures
+      if (typeof fixed.subtext === 'string' && fixed.subtext.length > 250) {
+        fixed.subtext = fixed.subtext.slice(0, 247).trimEnd() + '...';
+      }
+      if (typeof fixed.actionLabel === 'string' && fixed.actionLabel.length > 40) {
+        fixed.actionLabel = fixed.actionLabel.slice(0, 40).trimEnd();
+      }
+      if (typeof fixed.tag === 'string' && fixed.tag.length > 30) {
+        fixed.tag = fixed.tag.slice(0, 30).trimEnd();
+      }
+      if (typeof fixed.value === 'string' && fixed.value.length > 20) {
+        fixed.value = fixed.value.slice(0, 20).trimEnd();
+      }
+      if (typeof fixed.unit === 'string' && fixed.unit.length > 20) {
+        fixed.unit = fixed.unit.slice(0, 20).trimEnd();
+      }
+
       // Ensure compare slides have left and right objects
       if (type === 'compare') {
         const headlineSubject = String(fixed.headline || fixed.title || 'Core Observation');

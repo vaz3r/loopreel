@@ -12,6 +12,14 @@ import Table from './table';
 import Analysis from './analysis';
 import Profile from './profile';
 import Cta from './cta';
+import Quadrant from './quadrant';
+import CaseStudy from './case-study';
+import Interview from './interview';
+import ResourceGrid from './resource-grid';
+import HeroMetric from './hero-metric';
+import Checklist from './checklist';
+import Breakdown from './breakdown';
+import Methodology from './methodology';
 
 export const templateMeta = {
   id: 'paper-of-record',
@@ -36,6 +44,14 @@ export const slides: Record<string, any> = {
   analysis: Analysis,
   profile: Profile,
   cta: Cta,
+  quadrant: Quadrant,
+  'case-study': CaseStudy,
+  interview: Interview,
+  'resource-grid': ResourceGrid,
+  'hero-metric': HeroMetric,
+  checklist: Checklist,
+  breakdown: Breakdown,
+  methodology: Methodology,
 };
 
 export function getLayout(type: string) {

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { booleanFromString } from '../shared/types.js';
 
 const FooterFields = {
   footerLeft: z.string().max(40).default(''),
@@ -23,12 +24,12 @@ const SequenceSlide = z.object({
   headline: z.string().min(3).max(80),
   description: z.string().max(200).optional(),
   items: z.array(z.object({
-    num: z.string().max(4),
+    num: z.string().max(4).optional(),
     title: z.string().max(60),
     desc: z.string().max(250),
   })).min(1).max(6).optional(),
   steps: z.array(z.object({
-    num: z.string().max(4),
+    num: z.string().max(4).optional(),
     title: z.string().max(60),
     desc: z.string().max(250),
   })).min(1).max(6).optional(),
@@ -70,7 +71,111 @@ const CtaSlide = z.object({
   headline: z.string().min(3).max(80),
   subtext: z.string().max(250).optional(),
   actionLabel: z.string().max(40).optional(),
+  action: z.string().max(40).optional(),
   socialHandle: z.string().max(40).optional(),
+  ...FooterFields,
+});
+
+const TimelineSlide = z.object({
+  id: z.string(),
+  type: z.literal('timeline'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  events: z.array(z.object({
+    date: z.string().max(20),
+    title: z.string().max(60),
+    desc: z.string().max(200),
+    highlight: booleanFromString,
+  })).min(1).max(5),
+  ...FooterFields,
+});
+
+const ImageSplitSlide = z.object({
+  id: z.string(),
+  type: z.literal('image-split'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  bodyText: z.string().max(400).optional(),
+  imageUrl: z.string().url(),
+  credit: z.string().max(60).optional(),
+  ...FooterFields,
+});
+
+const MythFactSlide = z.object({
+  id: z.string(),
+  type: z.literal('myth-fact'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  myth: z.string().min(5).max(300),
+  fact: z.string().min(5).max(300),
+  ...FooterFields,
+});
+
+const QuadrantSlide = z.object({
+  id: z.string(),
+  type: z.literal('quadrant'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  topLeft: z.object({ title: z.string().max(60), desc: z.string().max(200) }),
+  topRight: z.object({ title: z.string().max(60), desc: z.string().max(200) }),
+  bottomLeft: z.object({ title: z.string().max(60), desc: z.string().max(200) }),
+  bottomRight: z.object({ title: z.string().max(60), desc: z.string().max(200) }),
+  topLabel: z.string().max(30).optional(),
+  bottomLabel: z.string().max(30).optional(),
+  leftLabel: z.string().max(30).optional(),
+  rightLabel: z.string().max(30).optional(),
+  highlight: z.enum(['topLeft', 'topRight', 'bottomLeft', 'bottomRight']).optional(),
+  ...FooterFields,
+});
+
+const CaseStudySlide = z.object({
+  id: z.string(),
+  type: z.literal('case-study'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  stages: z.array(z.object({
+    label: z.string().max(30),
+    title: z.string().max(60),
+    desc: z.string().max(200),
+    highlighted: booleanFromString,
+  })).min(2).max(4),
+  ...FooterFields,
+});
+
+const InterviewSlide = z.object({
+  id: z.string(),
+  type: z.literal('interview'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  question: z.string().min(10).max(500),
+  answer: z.string().min(10).max(1000),
+  respondentName: z.string().max(60),
+  respondentRole: z.string().max(80),
+  ...FooterFields,
+});
+
+const ResourceGridSlide = z.object({
+  id: z.string(),
+  type: z.literal('resource-grid'),
+  tag: z.string().max(30).optional(),
+  headline: z.string().min(3).max(80),
+  items: z.array(z.object({
+    num: z.string().max(10).optional(),
+    title: z.string().max(60),
+    desc: z.string().max(200),
+    tag: z.string().max(30).optional(),
+  })).min(1).max(4),
+  ...FooterFields,
+});
+
+const HeroMetricSlide = z.object({
+  id: z.string(),
+  type: z.literal('hero-metric'),
+  tag: z.string().max(30).optional(),
+  value: z.string().max(20),
+  unit: z.string().max(20).optional(),
+  headline: z.string().min(3).max(80),
+  bodyText: z.string().max(300).optional(),
   ...FooterFields,
 });
 
@@ -80,6 +185,14 @@ const TheSignalSlideSchema = z.discriminatedUnion('type', [
   TelemetrySlide,
   QuoteSlide,
   CtaSlide,
+  TimelineSlide,
+  ImageSplitSlide,
+  MythFactSlide,
+  QuadrantSlide,
+  CaseStudySlide,
+  InterviewSlide,
+  ResourceGridSlide,
+  HeroMetricSlide,
 ]);
 
 export const TheSignalContract = z.object({

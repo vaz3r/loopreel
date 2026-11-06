@@ -47,10 +47,15 @@
   line-height: 1;
   color: var(--ink);
   margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .statUnit {
   font-size: var(--density-stat-unit-size, 60px);
+  display: var(--density-stat-unit-display, inline-block);
 }
 
 .statBar {

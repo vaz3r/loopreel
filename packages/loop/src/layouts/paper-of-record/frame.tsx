@@ -15,22 +15,36 @@ export default function PaperOfRecordFrame({ slide, scheme, children, size, bran
     '--charcoal': bk.text || '#333333',
     '--steel': `${bk.text}33` || '#dfdfdf',
     '--crimson': bk.accent || '#cc0000',
+    '--brand-bg': bk.bg || '#f7f7f5',
+    '--brand-text': bk.text || '#121212',
+    '--brand-secondary': '#4B5563',
+    '--brand-accent': bk.accent || '#cc0000',
   } : {
     '--paper': '#f7f7f5',
     '--ink': '#121212',
     '--charcoal': '#333333',
     '--steel': '#dfdfdf',
     '--crimson': '#cc0000',
+    '--brand-bg': '#f7f7f5',
+    '--brand-text': '#121212',
+    '--brand-secondary': '#4B5563',
+    '--brand-accent': '#cc0000',
   };
 
   const fonts = bk ? {
     '--font-headline': `'${bk.fontSerif || 'Playfair Display'}', serif`,
-    '--font-body': `'Source Serif 4', serif`,
+    '--font-body': `'${bk.fontSerif || 'Source Serif 4'}', serif`,
     '--font-sans': `'${bk.fontSans || 'Inter'}', sans-serif`,
+    '--brand-font-serif': `'${bk.fontSerif || 'Playfair Display'}', serif`,
+    '--brand-font-headline': `'${bk.fontSerif || 'Playfair Display'}', serif`,
+    '--brand-font-sans': `'${bk.fontSans || 'Inter'}', sans-serif`,
   } : {
     '--font-headline': "'Playfair Display', serif",
     '--font-body': "'Source Serif 4', serif",
     '--font-sans': "'Inter', sans-serif",
+    '--brand-font-serif': "'Playfair Display', serif",
+    '--brand-font-headline': "'Playfair Display', serif",
+    '--brand-font-sans': "'Inter', sans-serif",
   };
 
   return (

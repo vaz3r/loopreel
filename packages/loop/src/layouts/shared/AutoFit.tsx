@@ -73,11 +73,14 @@ export function AutoFit({
       }
 
       if (targetScale < 1.0) {
-        const scaledH = rawH * targetScale;
-        const offsetY = verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
-
         // Compensate width so text does not narrow horizontally
         content.style.width = `${100 / targetScale}%`;
+
+        // Measure reflowed height after width compensation to get true optical height
+        const reflowedH = content.scrollHeight;
+        const scaledH = reflowedH * targetScale;
+        const offsetY = verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
+
         content.style.transformOrigin = 'top left';
         content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
 

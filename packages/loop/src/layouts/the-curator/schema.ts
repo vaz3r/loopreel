@@ -118,7 +118,7 @@ const CtaSlideSchema = z.object({
   id: z.string(), type: z.literal('cta'),
   tag: z.string().optional(),
   headline: z.string().max(60),
-  subtext: z.string().max(200).optional(),
+  subtext: z.string().max(250).optional(),
   actionLabel: z.string().optional(),
   socialHandle: z.string().optional(),
   footerLeft: z.string().optional(), footerRight: z.string().optional(),

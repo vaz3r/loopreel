@@ -1,0 +1,102 @@
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  margin-bottom: 32px;
+  border-bottom: 4px solid var(--brand-text, #111827);
+  padding-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.headline {
+  font-family: var(--brand-font-serif, 'Playfair Display', serif);
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--brand-text, #111827);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: var(--brand-font-sans, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand-accent, #B91C1C);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 24px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+  position: relative;
+}
+
+.itemChecked {
+  border-color: var(--brand-text, #111827);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.checkedBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--brand-accent, #B91C1C);
+}
+
+.checkbox {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--brand-text, #111827);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkboxChecked {
+  border-color: var(--brand-accent, #B91C1C);
+  background: var(--brand-accent, #B91C1C);
+}
+
+.checkmark {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.itemText {
+  font-family: var(--brand-font-serif, 'Source Serif 4', serif);
+  font-size: 24px;
+  line-height: 1.35;
+  color: var(--brand-secondary, #4B5563);
+  margin: 0;
+}
+
+.itemTextBold {
+  color: var(--brand-text, #111827);
+  font-weight: 700;
+}

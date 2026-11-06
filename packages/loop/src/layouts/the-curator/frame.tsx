@@ -10,8 +10,11 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
 
   const bg = bk?.bg || '#FFFFFF';
   const ink = bk?.text || '#000000';
+  const accent = bk?.accent || '#000000';
   const graphite = '#4A4A4A';
   const hairline = '#E5E5E5';
+  const fontSerif = bk?.fontSerif || 'Cormorant Garamond';
+  const fontSans = bk?.fontSans || 'Inter';
 
   const w = size?.width ?? 1080;
   const h = size?.height ?? 1350;
@@ -31,8 +34,16 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
     <div style={{
       width: w, height: h,
       background: bg, color: ink, position: 'relative', overflow: 'hidden',
-      fontFamily: "'Cormorant Garamond', serif",
+      fontFamily: `'${fontSerif}', serif`,
       ['--k' as any]: density?.k ?? 1.0,
+      ['--brand-bg' as any]: bg,
+      ['--brand-text' as any]: ink,
+      ['--brand-accent' as any]: accent,
+      ['--brand-secondary' as any]: graphite,
+      ['--brand-hairline' as any]: hairline,
+      ['--brand-font-serif' as any]: `'${fontSerif}', serif`,
+      ['--brand-font-headline' as any]: `'${fontSerif}', serif`,
+      ['--brand-font-sans' as any]: `'${fontSans}', sans-serif`,
     }}>
       {/* Header */}
       <div style={{

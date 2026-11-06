@@ -13,7 +13,6 @@ const localEnv = {
   LLM_MULTI_PHASE: process.env.LLM_MULTI_PHASE || 'true',
   LOG_LEVEL: 'info',
   LOOP_DIST_DIR: resolve(__dirname, 'packages/loop/dist'),
-  LOOP_CHAMELEON_DIST_DIR: resolve(__dirname, 'packages/loop-chameleon/dist'),
 };
 
 module.exports = {
@@ -28,19 +27,6 @@ module.exports = {
       max_restarts: 10,
       error_file: resolve(LOG_DIR, 'loop-engine-error.log'),
       out_file: resolve(LOG_DIR, 'loop-engine-out.log'),
-      log_date_format: 'YYYY-MM-DD HH:mm:ss',
-      env: { NODE_ENV: 'development', ...localEnv },
-    },
-    {
-      name: 'loop-chameleon',
-      script: 'npx',
-      args: 'vite --host --port 5174',
-      cwd: resolve(__dirname, 'packages/loop-chameleon'),
-      watch: false,
-      autorestart: true,
-      max_restarts: 10,
-      error_file: resolve(LOG_DIR, 'loop-chameleon-error.log'),
-      out_file: resolve(LOG_DIR, 'loop-chameleon-out.log'),
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       env: { NODE_ENV: 'development', ...localEnv },
     },

@@ -10,6 +10,11 @@ import ResourceGrid from './resource-grid';
 import Timeline from './timeline';
 import Quote from './quote';
 import Cta from './cta';
+import HeroMetric from './hero-metric';
+import Methodology from './methodology';
+import Juxtaposition from './juxtaposition';
+import Checklist from './checklist';
+import Breakdown from './breakdown';
 
 export const templateMeta = {
   id: 'the-globalist',
@@ -33,6 +38,11 @@ export const slides: Record<string, any> = {
   timeline: Timeline,
   quote: Quote,
   cta: Cta,
+  'hero-metric': HeroMetric,
+  methodology: Methodology,
+  juxtaposition: Juxtaposition,
+  checklist: Checklist,
+  breakdown: Breakdown,
 };
 
 export function getLayout(type: string) {
