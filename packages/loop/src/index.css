@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --loop-k: 1;
+  --loop-scale: 1;
+  --loop-font-hero: 110px;
+  --loop-font-display: 78px;
+  --loop-font-title: 58px;
+  --loop-font-h1: 52px;
+  --loop-font-h2: 38px;
+  --loop-font-h3: 28px;
+  --loop-font-lead: 30px;
+  --loop-font-body: 22px;
+  --loop-font-caption: 18px;
+  --loop-font-note: 17px;
+
+  --loop-gap-xl: 48px;
+  --loop-gap-lg: 36px;
+  --loop-gap-md: 24px;
+  --loop-gap-sm: 16px;
+  --loop-gap-xs: 10px;
+
+  --loop-pad-card: 48px;
+  --loop-pad-item-v: 20px;
+  --loop-pad-item-h: 24px;
+  --loop-margin-section: 32px;
+}
+
 * {
   margin: 0;
   padding: 0;

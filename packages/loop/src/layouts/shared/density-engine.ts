@@ -1,7 +1,10 @@
+import { computeScaleFactor, generateSemanticTokens } from './tokens.js';
+
 export type DensityMode = 'spacious' | 'balanced' | 'compact';
 
 export interface DensityProfile {
   mode: DensityMode;
+  k: number;
   itemCount: number;
   wordCount: number;
   aspectRatio: number;
@@ -108,11 +111,23 @@ export function computeSlideDensity(
   const wordCount = extractSlideWordCount(slide);
   const mode = determineDensityMode(slide, itemCount, wordCount);
 
-  // Dynamic CSS custom variables
-  const cssVariables: Record<string, string> = {};
-
-  const headlineText = String(slide.headline || '');
+  const headlineText = String(slide.headline || slide.title || '');
   const hasLongHeadline = headlineText.length > 40;
+
+  // Master scale factor k
+  const k = computeScaleFactor({
+    aspectRatio,
+    viewportWidth: width,
+    viewportHeight: height,
+    itemCount,
+    wordCount,
+    headlineLength: headlineText.length,
+  });
+
+  // Dynamic CSS custom variables
+  const cssVariables: Record<string, string> = {
+    ...generateSemanticTokens(k),
+  };
 
   const maxValLength = Math.max(
     ...((slide.stats || []).map((st: any) => String(st.value || '').length)),
@@ -197,6 +212,7 @@ export function computeSlideDensity(
 
   return {
     mode,
+    k,
     itemCount,
     wordCount,
     aspectRatio,

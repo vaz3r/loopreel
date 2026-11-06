@@ -10,7 +10,7 @@ export default function Statement({ slide }: LayoutProps) {
       <p
         style={{
           fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-          fontSize: 66,
+          fontSize: 'calc(var(--k, 1) * 66px)',
           fontWeight: 500,
           lineHeight: 1.15,
           letterSpacing: '-0.03em',

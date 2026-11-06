@@ -181,11 +181,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  gap: 12px;
-  margin-top: 28px;
+  gap: calc(var(--k, 1) * 12px);
+  margin-top: calc(var(--k, 1) * 24px);
   font-family: var(--font-hand, Caveat, cursive);
   font-weight: 600;
-  font-size: 40px;
+  font-size: calc(var(--k, 1) * 40px);
   line-height: 1.05;
   color: var(--accent-color, #B8432A);
   transform: rotate(-3deg);
@@ -196,12 +196,12 @@
 .note {
   font-family: var(--font-mono, "DM Mono", monospace);
   font-weight: 500;
-  font-size: 18px;
+  font-size: calc(var(--k, 1) * 18px);
   line-height: 1.35;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted-color, rgba(43, 34, 25, 0.68));
-  margin-top: 28px;
+  margin-top: calc(var(--k, 1) * 24px);
   margin-bottom: 0;
 }
 

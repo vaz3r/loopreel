@@ -20,13 +20,14 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
   const h = size?.height ?? 1350;
   const ratio = w / h;
   const isWide = ratio > 1;
+  const isSquare = ratio > 0.9 && ratio <= 1.15;
   const isUltraWide = ratio > 2;
   const side = isUltraWide ? 40 : isWide ? 60 : 80;
-  const headerTop = isUltraWide ? 24 : isWide ? 40 : 60;
-  const footerBottom = isUltraWide ? 24 : isWide ? 40 : 60;
-  const contentTop = isUltraWide ? 70 : isWide ? 100 : 160;
-  const contentBottom = isUltraWide ? 50 : isWide ? 70 : 120;
-  const headerTitleSize = isWide ? 20 : 28;
+  const headerTop = isUltraWide ? 24 : isWide ? 40 : isSquare ? 42 : 60;
+  const footerBottom = isUltraWide ? 24 : isWide ? 40 : isSquare ? 42 : 60;
+  const contentTop = isUltraWide ? 70 : isWide ? 100 : isSquare ? 125 : 160;
+  const contentBottom = isUltraWide ? 50 : isWide ? 70 : isSquare ? 95 : 120;
+  const headerTitleSize = isWide ? 20 : isSquare ? 24 : 28;
   const headerSubtitleSize = isWide ? 10 : 14;
   const footerFontSize = isWide ? 10 : 14;
 
@@ -37,6 +38,7 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
       fontFamily: "'Source Sans 3', sans-serif",
       backgroundImage: `linear-gradient(${panel} 1px, transparent 1px), linear-gradient(90deg, ${panel} 1px, transparent 1px)`,
       backgroundSize: '40px 40px',
+      ['--k' as any]: density?.k ?? 1.0,
     }}>
       {/* Header */}
       <div style={{

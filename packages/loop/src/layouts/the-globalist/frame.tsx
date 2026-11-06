@@ -20,20 +20,22 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
   const h = size?.height ?? 1350;
   const ratio = w / h;
   const isWide = ratio > 1;
+  const isSquare = ratio > 0.9 && ratio <= 1.15;
   const isUltraWide = ratio > 2;
   const side = isUltraWide ? 40 : isWide ? 60 : 80;
   const headerTop = isUltraWide ? 4 : isWide ? 6 : 8;
-  const headerPadV = isUltraWide ? 12 : isWide ? 16 : 24;
+  const headerPadV = isUltraWide ? 12 : isWide ? 16 : isSquare ? 16 : 24;
   const headerPadH = side;
-  const contentTop = isUltraWide ? 60 : isWide ? 90 : 160;
-  const contentBottom = isUltraWide ? 50 : isWide ? 70 : 140;
-  const footerBottom = isUltraWide ? 16 : isWide ? 30 : 60;
+  const contentTop = isUltraWide ? 60 : isWide ? 90 : isSquare ? 120 : 160;
+  const contentBottom = isUltraWide ? 50 : isWide ? 70 : isSquare ? 100 : 140;
+  const footerBottom = isUltraWide ? 16 : isWide ? 30 : isSquare ? 40 : 60;
 
   return (
     <div style={{
       width: w, height: h,
       background: paper, color: ink, position: 'relative', overflow: 'hidden',
       fontFamily: `'${fontSerif}', serif`,
+      ['--k' as any]: density?.k ?? 1.0,
     }}>
       {/* Red top rule */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isWide ? 4 : 8, background: accent }} />

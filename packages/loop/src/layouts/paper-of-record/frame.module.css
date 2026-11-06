@@ -67,8 +67,8 @@
 
 .content {
   position: absolute;
-  top: 180px;
-  bottom: 140px;
+  top: calc(var(--k, 1) * 180px);
+  bottom: calc(var(--k, 1) * 140px);
   left: 80px;
   right: 80px;
   z-index: 30;

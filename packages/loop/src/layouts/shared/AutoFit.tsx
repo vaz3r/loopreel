@@ -83,12 +83,14 @@ export function AutoFit({
 
         container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));
         container.setAttribute('data-autofit-overflow', 'true');
+        container.setAttribute('data-layout-health', targetScale >= 0.95 ? 'optimal' : targetScale >= 0.82 ? 'compressed' : 'scaled');
         setFitState({ scale: targetScale, offsetY });
       } else {
         content.style.width = '100%';
         content.style.transform = 'none';
         container.removeAttribute('data-autofit-scaled');
         container.removeAttribute('data-autofit-overflow');
+        container.setAttribute('data-layout-health', 'optimal');
         setFitState({ scale: 1.0, offsetY: 0 });
       }
     } finally {

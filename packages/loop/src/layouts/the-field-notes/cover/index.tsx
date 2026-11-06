@@ -12,12 +12,12 @@ export default function Cover({ slide }: LayoutProps) {
         <div
           style={{
             fontFamily: 'var(--font-mono, "DM Mono", monospace)',
-            fontSize: 20,
+            fontSize: 'calc(var(--k, 1) * 20px)',
             fontWeight: 500,
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
             color: 'var(--accent-color, #B8432A)',
-            marginBottom: 20,
+            marginBottom: 'calc(var(--k, 1) * 20px)',
           }}
         >
           {renderMarkedText(s.kicker)}
@@ -27,7 +27,7 @@ export default function Cover({ slide }: LayoutProps) {
       <h1
         style={{
           fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-          fontSize: 84,
+          fontSize: 'calc(var(--k, 1) * 84px)',
           fontWeight: 700,
           lineHeight: 1.02,
           letterSpacing: '-0.035em',
@@ -44,7 +44,7 @@ export default function Cover({ slide }: LayoutProps) {
         <p
           style={{
             fontFamily: 'var(--font-body, Newsreader, Georgia, serif)',
-            fontSize: 34,
+            fontSize: 'calc(var(--k, 1) * 34px)',
             fontStyle: 'italic',
             lineHeight: 1.4,
             margin: 0,
@@ -61,7 +61,7 @@ export default function Cover({ slide }: LayoutProps) {
             display: 'flex',
             flexWrap: 'wrap',
             gap: 0,
-            marginTop: 48,
+            marginTop: 'calc(var(--k, 1) * 48px)',
             borderTop: '1.5px solid var(--border-color, rgba(43, 34, 25, 0.42))',
           }}
         >
@@ -69,11 +69,11 @@ export default function Cover({ slide }: LayoutProps) {
             <span
               key={idx}
               style={{
-                padding: '18px 24px 0 0',
-                marginRight: 24,
+                padding: 'calc(var(--k, 1) * 18px) calc(var(--k, 1) * 24px) 0 0',
+                marginRight: 'calc(var(--k, 1) * 24px)',
                 borderRight: idx < meta.length - 1 ? '1.5px solid rgba(43, 34, 25, 0.15)' : 'none',
                 fontFamily: 'var(--font-mono, "DM Mono", monospace)',
-                fontSize: 18,
+                fontSize: 'calc(var(--k, 1) * 18px)',
                 fontWeight: 500,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',

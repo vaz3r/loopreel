@@ -107,6 +107,7 @@ export function Frame({ slide, children, brandKit, size = { width: 1080, height:
         ['--font-body' as any]: defaultBrandKit.fontBody,
         ['--font-mono' as any]: defaultBrandKit.fontMono,
         ['--font-hand' as any]: defaultBrandKit.fontHand,
+        ['--k' as any]: density?.k ?? 1.0,
       }}
     >
       {/* Notebook margin rule */}

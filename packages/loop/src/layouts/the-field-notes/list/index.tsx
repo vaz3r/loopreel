@@ -9,11 +9,11 @@ export default function List({ slide }: LayoutProps) {
   return (
     <SlideWrapper slide={s}>
       {(s.title || s.headline) && (
-        <div style={{ marginBottom: 28 }}>
+        <div style={{ marginBottom: 'calc(var(--k, 1) * 28px)' }}>
           <h2
             style={{
               fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-              fontSize: 54,
+              fontSize: 'calc(var(--k, 1) * 54px)',
               fontWeight: 700,
               lineHeight: 1.08,
               letterSpacing: '-0.025em',
@@ -30,15 +30,15 @@ export default function List({ slide }: LayoutProps) {
       <div>
         {items.slice(0, 5).map((it: any, idx: number) => {
           const itemCount = Math.min(items.length, 5);
-          const itemPadding = itemCount >= 5 ? '14px 0' : itemCount === 4 ? '18px 0' : '22px 0';
-          const itemGap = itemCount >= 5 ? 18 : 24;
+          const itemPadding = itemCount >= 5 ? 'calc(var(--k, 1) * 14px) 0' : itemCount === 4 ? 'calc(var(--k, 1) * 18px) 0' : 'calc(var(--k, 1) * 22px) 0';
+          const itemGap = itemCount >= 5 ? 'calc(var(--k, 1) * 16px)' : 'calc(var(--k, 1) * 24px)';
 
           return (
             <div
               key={idx}
               style={{
                 display: 'grid',
-                gridTemplateColumns: '48px 1fr',
+                gridTemplateColumns: 'calc(var(--k, 1) * 48px) 1fr',
                 gap: itemGap,
                 padding: itemPadding,
                 borderTop: '1.5px dashed var(--border-color, rgba(43, 34, 25, 0.42))',
@@ -50,7 +50,7 @@ export default function List({ slide }: LayoutProps) {
                 <h3
                   style={{
                     fontFamily: 'var(--font-headline, Fraunces, Georgia, serif)',
-                    fontSize: 32,
+                    fontSize: 'calc(var(--k, 1) * 32px)',
                     fontWeight: 600,
                     lineHeight: 1.15,
                     letterSpacing: '-0.015em',
@@ -64,7 +64,7 @@ export default function List({ slide }: LayoutProps) {
                   <p
                     style={{
                       fontFamily: 'var(--font-body, Newsreader, Georgia, serif)',
-                      fontSize: 24,
+                      fontSize: 'calc(var(--k, 1) * 24px)',
                       lineHeight: 1.45,
                       margin: '8px 0 0 0',
                       color: 'var(--muted-color, rgba(43, 34, 25, 0.68))',

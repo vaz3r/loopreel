@@ -164,6 +164,15 @@ const worker = createWorker<RenderPayload>('render', async (job) => {
               window.dispatchEvent(new Event('slide-update'));
               await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             });
+            const layoutHealth = await page.evaluate(() => {
+              const el = document.querySelector('.loop-autofit-container');
+              return {
+                scale: el?.getAttribute('data-autofit-scaled') || '1.000',
+                health: el?.getAttribute('data-layout-health') || 'optimal',
+              };
+            });
+            console.log(`[worker-render] Rendered slide ${slideId || idx} (${templateId}) scale=${layoutHealth.scale} health=${layoutHealth.health}`);
+
             const buffer = await page.screenshot({ type: 'png' });
             return { buffer, slideIndex: batchStart + idx };
           }),

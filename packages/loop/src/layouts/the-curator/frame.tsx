@@ -17,12 +17,13 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
   const h = size?.height ?? 1350;
   const ratio = w / h;
   const isWide = ratio > 1;
+  const isSquare = ratio > 0.9 && ratio <= 1.15;
   const isUltraWide = ratio > 2;
   const side = isUltraWide ? 30 : isWide ? 50 : 60;
-  const headerTop = isUltraWide ? 20 : isWide ? 30 : 50;
-  const footerBottom = isUltraWide ? 20 : isWide ? 30 : 50;
-  const contentTop = isUltraWide ? 60 : isWide ? 90 : 140;
-  const contentBottom = isUltraWide ? 50 : isWide ? 70 : 140;
+  const headerTop = isUltraWide ? 20 : isWide ? 30 : isSquare ? 36 : 50;
+  const footerBottom = isUltraWide ? 20 : isWide ? 30 : isSquare ? 36 : 50;
+  const contentTop = isUltraWide ? 60 : isWide ? 90 : isSquare ? 105 : 140;
+  const contentBottom = isUltraWide ? 50 : isWide ? 70 : isSquare ? 105 : 140;
   const headerFontSize = isWide ? 12 : 16;
   const footerFontSize = isWide ? 12 : 16;
 
@@ -31,6 +32,7 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
       width: w, height: h,
       background: bg, color: ink, position: 'relative', overflow: 'hidden',
       fontFamily: "'Cormorant Garamond', serif",
+      ['--k' as any]: density?.k ?? 1.0,
     }}>
       {/* Header */}
       <div style={{

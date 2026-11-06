@@ -31,15 +31,15 @@ export function CircNumber({ n }: { n: string | number }) {
     <div
       style={{
         position: 'relative',
-        width: 48,
-        height: 48,
+        width: 'calc(var(--k, 1) * 48px)',
+        height: 'calc(var(--k, 1) * 48px)',
         flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'var(--font-hand, Caveat, cursive)',
         fontWeight: 700,
-        fontSize: 30,
+        fontSize: 'calc(var(--k, 1) * 30px)',
         color: 'var(--accent-color, #B8432A)',
       }}
     >
@@ -59,7 +59,7 @@ export function CircNumber({ n }: { n: string | number }) {
 
 export function Arrow() {
   return (
-    <svg viewBox="0 0 80 56" style={{ width: 70, height: 48, flexShrink: 0, overflow: 'visible' }} aria-hidden="true">
+    <svg viewBox="0 0 80 56" style={{ width: 'calc(var(--k, 1) * 70px)', height: 'calc(var(--k, 1) * 48px)', flexShrink: 0, overflow: 'visible' }} aria-hidden="true">
       {/* Hand-drawn directional arrow curving UP and LEFT toward annotated content */}
       <path d="M72 46 C 52 42, 28 30, 10 10" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" />
       <path d="M10 24 L10 10 L24 12" fill="none" stroke="var(--accent-color, #B8432A)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />

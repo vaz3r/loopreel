@@ -39,8 +39,8 @@
 
 .content {
   position: absolute;
-  top: 140px;
-  bottom: 120px;
+  top: calc(var(--k, 1) * 140px);
+  bottom: calc(var(--k, 1) * 120px);
   left: 60px;
   right: 60px;
   display: flex;
