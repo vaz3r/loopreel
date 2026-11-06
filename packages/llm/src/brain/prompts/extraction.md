@@ -50,7 +50,8 @@ Return a single <contentBrief> element:
 
 ## Edge Cases
 
-- If the article content is empty, garbled, incomplete, or appears to be an error page (e.g., "404 Not Found", "Page does not exist", "Access Denied", or very short fragments), return this minimal brief WITHOUT inventing any content:
+- For news articles, live coverage, breaking news, or articles with timestamps and section headers (e.g., liveblogs, multi-reporter dispatches), extract the main news events, key developments, and core facts into the brief. Do NOT classify live reporting or news updates as unreadable or boilerplate.
+- ONLY if the source content is completely empty, an HTTP error page (e.g., "404 Not Found", "Page does not exist", "Access Denied"), or contains only cookie/bot challenge notices with zero substantive text, return this minimal brief:
 
 <contentBrief>
   <title>UNABLE TO EXTRACT</title>
@@ -67,4 +68,3 @@ Return a single <contentBrief> element:
 
 - Do NOT invent content to fill the brief when the source is empty or unreadable. An empty brief is better than a fabricated one.
 - Do NOT hallucinate article titles, insights, quotes, or data that do not appear in the provided text.
-- If the text appears to be navigation menus, cookie notices, or page boilerplate rather than article content, return the empty brief above.

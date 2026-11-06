@@ -15,7 +15,6 @@ const TYPE_MAP: Record<string, string> = {
   'stats': 'telemetry',
   'data': 'telemetry',
   'comparison': 'compare',
-  'dichotomy': 'compare',
   'vs': 'compare',
   'checklist': 'kit',
   'resources': 'resource-grid',
@@ -94,6 +93,46 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
 
         fixed.left = normalizeSide(fixed.left, 'Before', `Original perspective: ${headlineSubject}`);
         fixed.right = normalizeSide(fixed.right, 'After', `Modern analysis: ${headlineSubject}`);
+      }
+
+      // Ensure dichotomy slides have left and right objects with title and desc
+      if (type === 'dichotomy') {
+        const headlineSubject = String(fixed.headline || fixed.title || 'Perspective');
+        const normalizeDichotomySide = (sideVal: unknown, defaultTitle: string) => {
+          if (!sideVal || typeof sideVal !== 'object') {
+            return { title: defaultTitle, desc: `Analysis for ${headlineSubject}` };
+          }
+          const o = sideVal as Record<string, unknown>;
+          return {
+            title: String(o.title || o.label || defaultTitle).slice(0, 60),
+            desc: String(o.desc || o.text || o.description || (Array.isArray(o.items) ? (o.items as string[]).join(' ') : `Analysis for ${headlineSubject}`)).slice(0, 400),
+          };
+        };
+        fixed.left = normalizeDichotomySide(fixed.left, 'Perspective A');
+        fixed.right = normalizeDichotomySide(fixed.right, 'Perspective B');
+      }
+
+      // Ensure telemetry slides have stats array
+      if (type === 'telemetry') {
+        let stats = fixed.stats ?? fixed.items;
+        if (stats && typeof stats === 'object' && !Array.isArray(stats)) {
+          const sObj = stats as Record<string, unknown>;
+          stats = sObj.stat ?? sObj.stats ?? sObj.item ?? sObj.items ?? Object.values(sObj);
+        }
+        if (Array.isArray(stats)) {
+          fixed.stats = stats.map((st: any) => {
+            if (st && typeof st === 'object') {
+              return {
+                value: String(st.value ?? st.val ?? st.num ?? '0').slice(0, 20),
+                label: String(st.label ?? st.desc ?? st.title ?? st.text ?? '').slice(0, 120),
+                ...(st.unit ? { unit: String(st.unit).slice(0, 10) } : {}),
+              };
+            }
+            return { value: String(st).slice(0, 20), label: '' };
+          }).slice(0, 4);
+        } else {
+          fixed.stats = [{ value: '0', label: 'Metric' }];
+        }
       }
 
       // Ensure tally slides have items array
@@ -186,10 +225,41 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
         }
       }
 
-      // Ensure table slides have columns and rows
+      // Ensure table slides have valid headers/columns and rows
       if (type === 'table') {
-        if (!Array.isArray(fixed.columns) || (fixed.columns as any[]).length === 0) fixed.columns = ['Observation', 'Measurement'];
-        if (!Array.isArray(fixed.rows) || (fixed.rows as any[]).length === 0) fixed.rows = [['Primary Site', 'Recorded']];
+        let headers = fixed.headers ?? fixed.columns;
+        if (headers && typeof headers === 'object' && !Array.isArray(headers)) {
+          const hObj = headers as Record<string, unknown>;
+          headers = hObj.header ?? hObj.headers ?? hObj.col ?? hObj.cols ?? Object.values(hObj);
+        }
+        const cleanHeaders = Array.isArray(headers)
+          ? headers.map(h => String(typeof h === 'object' ? ((h as any).title ?? (h as any).text ?? h) : h).slice(0, 30))
+          : ['Observation', 'Measurement'];
+
+        fixed.headers = cleanHeaders;
+        fixed.columns = cleanHeaders;
+
+        let rows = fixed.rows;
+        if (rows && typeof rows === 'object' && !Array.isArray(rows)) {
+          const rObj = rows as Record<string, unknown>;
+          rows = rObj.row ?? rObj.rows ?? Object.values(rObj);
+        }
+        if (Array.isArray(rows)) {
+          fixed.rows = rows.map((r: any) => {
+            if (Array.isArray(r)) {
+              return r.map(c => String(typeof c === 'object' ? ((c as any).text ?? (c as any).value ?? JSON.stringify(c)) : c).slice(0, 60));
+            }
+            if (r && typeof r === 'object') {
+              const cells = r.cell ?? r.cells ?? r.values ?? r.items ?? Object.values(r);
+              if (Array.isArray(cells)) {
+                return cells.map(c => String(typeof c === 'object' ? ((c as any).text ?? (c as any).value ?? JSON.stringify(c)) : c).slice(0, 60));
+              }
+            }
+            return [String(r).slice(0, 60)];
+          }).slice(0, 10);
+        } else {
+          fixed.rows = [['Primary Site', 'Recorded']];
+        }
       }
 
       // Ensure chart slides have series

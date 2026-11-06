@@ -10,10 +10,33 @@ const DEBUG_DIR = process.env['DEBUG_DIR'] ?? '/app/debug';
 const MAX_TEXT_LENGTH = 100_000;
 const structureQueue = createQueue('structure');
 
+const BOILERPLATE_LINE_PATTERNS = [
+  /^advertisement$/i,
+  /^share full article$/i,
+  /^give this article$/i,
+  /^read in app$/i,
+  /^supported by$/i,
+  /^sign up for/i,
+  /^subscribed to/i,
+  /^send any friend a story/i,
+  /^live reporting has ended/i,
+];
+
+function isBoilerplateLine(text: string): boolean {
+  const trimmed = text.trim();
+  return BOILERPLATE_LINE_PATTERNS.some(pattern => pattern.test(trimmed));
+}
+
 async function scrapeWithCheerioHtml(html: string): Promise<string> {
   const $ = cheerio.load(html);
 
-  $('script, style, nav, header, footer, iframe, noscript').remove();
+  // Extract article title from meta tags or main h1 before removing headers
+  const metaTitle = $('meta[property="og:title"]').attr('content')?.trim()
+    || $('meta[name="twitter:title"]').attr('content')?.trim();
+  const mainH1 = $('h1').first().text().trim();
+  const headline = metaTitle || (mainH1.length > 5 ? mainH1 : null);
+
+  $('script, style, nav, header, footer, iframe, noscript, aside, [aria-hidden="true"], .advertisement, [data-testid*="ad"], .story-ad, [class*="advertis"], [id*="advertis"]').remove();
 
   const article = $('article').length > 0
     ? $('article')
@@ -25,7 +48,7 @@ async function scrapeWithCheerioHtml(html: string): Promise<string> {
   article.find('h1, h2, h3, h4, p, li, blockquote').each((_i, el) => {
     const tag = $(el).prop('tagName')?.toLowerCase() ?? '';
     const text = $(el).text().trim();
-    if (text.length === 0) return;
+    if (text.length === 0 || isBoilerplateLine(text)) return;
 
     if (tag.startsWith('h')) {
       textParts.push(`\n## ${text}\n`);
@@ -38,7 +61,12 @@ async function scrapeWithCheerioHtml(html: string): Promise<string> {
     }
   });
 
-  return textParts.join('\n\n').trim();
+  let content = textParts.join('\n\n').trim();
+  if (headline && !content.toLowerCase().startsWith(`# ${headline.toLowerCase()}`)) {
+    content = `# ${headline}\n\n${content}`;
+  }
+
+  return content;
 }
 
 async function scrapeWithPuppeteer(url: string, logger: pino.Logger): Promise<string> {

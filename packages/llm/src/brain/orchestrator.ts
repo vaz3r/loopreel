@@ -149,11 +149,34 @@ function buildCreativeDirectorPrompt(
   return { system, user: '' };
 }
 
+function validateBrief(briefXml: string): { valid: boolean; reason?: string } {
+  if (!briefXml || briefXml.length < 50) {
+    return { valid: false, reason: 'Brief XML is empty or too short (< 50 chars)' };
+  }
+  if (/<title>\s*UNABLE TO EXTRACT\s*<\/title>/i.test(briefXml)) {
+    return { valid: false, reason: 'LLM returned UNABLE TO EXTRACT sentinel' };
+  }
+  const pointMatches = briefXml.match(/<point>/gi);
+  if (!pointMatches || pointMatches.length < 2) {
+    return { valid: false, reason: `Brief contains insufficient key insights (${pointMatches?.length ?? 0} found, minimum 2 required)` };
+  }
+  return { valid: true };
+}
+
 function prepareExtractionText(rawText: string, maxChars = 18000): string {
-  if (!rawText || rawText.length <= maxChars) return rawText;
+  if (!rawText) return rawText;
+
+  // Clean common noise lines from scraped web content
+  let cleaned = rawText
+    .split('\n')
+    .filter(line => {
+      const trimmed = line.trim();
+      return !/^(advertisement|share full article|give this article|read in app|supported by|sign up for.*newsletter|live reporting has ended)$/i.test(trimmed);
+    })
+    .join('\n');
 
   // Strip trailing bibliography, references, and external links common in Wikipedia & long research
-  let cleaned = rawText
+  cleaned = cleaned
     .replace(/\n={2,}\s*(?:References|External links|Further reading|Notes|See also)\s*={2,}[\s\S]*$/i, '')
     .trim();
 
@@ -224,8 +247,29 @@ export async function generateSlides(
     );
     extractionLatencyMs = Date.now() - phase1Start;
 
-    if (!briefXml || briefXml.length < 50) {
-      throw new Error('Extraction produced empty or invalid brief');
+    let briefValidation = validateBrief(briefXml);
+
+    // If initial extraction failed or returned fallback sentinel, attempt recovery if content is substantial
+    if (!briefValidation.valid && rawText.length >= 500) {
+      onProgress?.('extraction', `Phase 1 extraction warning (${briefValidation.reason}), attempting recovery prompt...`);
+      const recoveryPrompt = `${extractionPrompt}\n\nIMPORTANT: The source content contains substantive reporting/article content. Even if it includes timestamps, live updates, or multiple sections, extract the core facts and main developments. You MUST return a populated <contentBrief> with at least 5 key insights, not an empty or UNABLE TO EXTRACT brief.`;
+
+      try {
+        const recoveryRaw = await usageTracker.callLLM(llm, 'extraction', recoveryPrompt, extractionInput, 0.4);
+        const candidateXml = stripFences(recoveryRaw);
+        const recoveryValidation = validateBrief(candidateXml);
+        if (recoveryValidation.valid) {
+          briefXml = candidateXml;
+          briefValidation = recoveryValidation;
+          onProgress?.('extraction', 'Phase 1 recovery succeeded');
+        }
+      } catch (err) {
+        onProgress?.('extraction', `Phase 1 recovery failed: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+
+    if (!briefValidation.valid) {
+      throw new Error(`Extraction failed: ${briefValidation.reason}`);
     }
 
     onProgress?.('extraction', `Phase 1 complete: ${extractionLatencyMs}ms`);

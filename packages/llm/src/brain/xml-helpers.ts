@@ -53,6 +53,14 @@ export function unwrapChildWrappers(obj: Record<string, unknown>): Record<string
   for (const [key, value] of Object.entries(obj)) {
     if ((key === 'left' || key === 'right') && value && typeof value === 'object' && !Array.isArray(value)) {
       const sideObj = value as Record<string, unknown>;
+      // If it is a dichotomy slide with title or desc, preserve them!
+      if (sideObj['title'] || sideObj['desc']) {
+        result[key] = {
+          title: String(sideObj['title'] || ''),
+          desc: String(sideObj['desc'] || ''),
+        };
+        continue;
+      }
       const rawItems = sideObj['items'] ?? sideObj['item'];
       const itemsArr: string[] = [];
       if (Array.isArray(rawItems)) {
