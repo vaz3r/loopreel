@@ -17,7 +17,7 @@ export default function PaperOfRecordTelemetry({ slide, scheme, density }: Layou
           const itemStyle = getStatItemStyle(idx, stats.length, density?.isLandscape);
           return (
             <div key={idx} className={styles.stat} style={itemStyle as React.CSSProperties}>
-              <div className={styles.statValue}>
+              <div className={`${styles.statValue} ${String(stat.value || '').startsWith('+') ? styles.gain : String(stat.value || '').startsWith('-') ? styles.loss : ''}`}>
                 {stat.value}{stat.unit && <span className={styles.statUnit}>{stat.unit}</span>}
               </div>
               <div className={styles.statBar} />

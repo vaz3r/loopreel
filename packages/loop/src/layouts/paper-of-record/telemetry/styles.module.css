@@ -50,7 +50,15 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  flex-wrap: wrap;
+  white-space: nowrap;
+}
+
+.gain {
+  color: #15803d;
+}
+
+.loss {
+  color: var(--crimson, #cc0000);
 }
 
 .statUnit {

@@ -37,7 +37,7 @@ When writing slide purposes, ensure the hook strategy aligns with these domain p
 ## Task
 
 Plan 5-7 slides. For each slide, choose a type from the supported list above and describe what content goes in it.
-- **Slide 1 (Cover)**: Frame the central tension or high-stakes consequence using one of the 4 hook frameworks above.
+- **Slide 1 (Cover)**: Frame the central tension or high-stakes consequence using one of the 4 hook frameworks above. Use declarative journalistic framing (no rhetorical question headlines).
 - **Middle Slides (2 to N-1)**: Deliver concrete evidence, mechanisms, numbers, and contrasts. Alternate between data (telemetry, timeline) and analytical contrast (myth-fact, sequence, quote, breakdown).
 - **Final Slide (CTA)**: Deliver a high-status strategic implication or concrete watchlist of what to monitor next (never write vague homework like "consider your investments").
 

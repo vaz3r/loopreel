@@ -29,6 +29,87 @@ const TYPE_MAP: Record<string, string> = {
   'interview-slide': 'interview',
 };
 
+export function cleanEditorialText(text: string): string {
+  if (!text || typeof text !== 'string') return text;
+  return text
+    .replace(/,?\s*attributed to [^;.,]+ initially and [^;.,]+ later;?\s*/gi, ', ')
+    .replace(/;?\s*the later section says\s+/gi, ' — ')
+    .replace(/\baccording to the article\b/gi, '')
+    .replace(/\bthe article reports that\b/gi, '')
+    .replace(/,\s*—\s*/g, ' — ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+,/g, ',')
+    .replace(/,\s*,/g, ',')
+    .trim();
+}
+
+export function cleanCoverHeadline(headline: string): string {
+  if (!headline || typeof headline !== 'string') return headline;
+  let h = headline.trim();
+  const doesReverseMatch = h.match(/^Does\s+(.*?)\s+Reverse\s+(.*?)\??$/i);
+  if (doesReverseMatch) {
+    return `${doesReverseMatch[1]} Fails to Reverse ${doesReverseMatch[2]}`.trim();
+  }
+  const doesMatch = h.match(/^Does\s+(.*?)\??$/i);
+  if (doesMatch && doesMatch[1]) {
+    return doesMatch[1].trim();
+  }
+  const isMatch = h.match(/^Is\s+(.*?)\??$/i);
+  if (isMatch && isMatch[1]) {
+    return isMatch[1].trim();
+  }
+  return h;
+}
+
+export function cleanTelemetryStats(stats: any[]): any[] {
+  if (!Array.isArray(stats)) return stats;
+  return stats.map(st => {
+    if (!st || typeof st !== 'object') return st;
+    let val = String(st.value ?? '').trim();
+    let unit = String(st.unit ?? '').trim();
+    let label = String(st.label ?? '').trim();
+
+    // 1. Extract conversational qualifiers from value into label
+    const qualifierMatch = val.match(/^(about|more than|over|nearly|approximately|around|less than|up to)\s+(.+)$/i);
+    if (qualifierMatch) {
+      const qualifier = qualifierMatch[1].charAt(0).toUpperCase() + qualifierMatch[1].slice(1).toLowerCase();
+      val = qualifierMatch[2].trim();
+      if (!label.toLowerCase().includes(qualifierMatch[1].toLowerCase())) {
+        label = `${qualifier} ${val}: ${label}`;
+      }
+    }
+
+    // 2. Normalize directional words in unit into signed value
+    const lowerUnit = unit.toLowerCase();
+    if (['rise', 'rose', 'gain', 'gains', 'higher', 'growth', 'up'].includes(lowerUnit)) {
+      if (!val.startsWith('+') && !val.startsWith('-')) {
+        val = `+${val}`;
+      }
+      unit = '';
+    } else if (['fall', 'fell', 'drop', 'drops', 'loss', 'losses', 'lower', 'down', 'plunge', 'plunged'].includes(lowerUnit)) {
+      if (!val.startsWith('-')) {
+        val = `-${val}`;
+      }
+      unit = '';
+    }
+
+    // 3. Deduplicate unit if already present in value
+    if (val.includes('%') && (unit === '%' || unit === 'percent')) {
+      unit = '';
+    }
+    if (val.startsWith('$') && (unit === '$' || unit === 'USD')) {
+      unit = '';
+    }
+
+    return {
+      ...st,
+      value: val,
+      unit,
+      label,
+    };
+  });
+}
+
 export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string, unknown>[] {
   return slides
     .filter((s) => typeof s === 'object' && s !== null)
@@ -71,6 +152,23 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
       }
       if (typeof fixed.unit === 'string' && fixed.unit.length > 20) {
         fixed.unit = fixed.unit.slice(0, 20).trimEnd();
+      }
+
+      // Editorial copy and telemetry sanitization
+      if (type === 'cover' && typeof fixed.headline === 'string') {
+        fixed.headline = cleanCoverHeadline(fixed.headline);
+      }
+      if (typeof fixed.subheadline === 'string') {
+        fixed.subheadline = cleanEditorialText(fixed.subheadline.replace(/^For you,\s*/i, ''));
+      }
+      if (typeof fixed.fact === 'string') {
+        fixed.fact = cleanEditorialText(fixed.fact);
+      }
+      if (typeof fixed.myth === 'string') {
+        fixed.myth = cleanEditorialText(fixed.myth);
+      }
+      if (Array.isArray(fixed.stats)) {
+        fixed.stats = cleanTelemetryStats(fixed.stats);
       }
 
       // Ensure compare slides have left and right objects

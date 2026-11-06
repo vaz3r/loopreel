@@ -79,7 +79,11 @@ For compare slides, use <left> and <right> child elements with items:
   <rule>Social media carousel slides require high visual completeness. Empty, barren slides with 3-word bullet points look amateur and unfinished. Write substantive, high-value editorial copy.</rule>
   <rule>For sequence items: Each item description (`desc`) MUST be an informative, well-crafted 1-2 sentence explanation (15–25 words, staying under 180 chars). Explain the mechanism, significance, or impact — never write just a 3-word stub.</rule>
   <rule>For sequence slides: Generate 3 to 4 items whenever supported by the brief.</rule>
-  <rule>For telemetry stats: Generate 3 to 4 statistics whenever supported by the brief (or at least 2 strong stats). Each stat label MUST provide analytical context (6–14 words, staying under 100 chars) explaining what the number signifies in reality, not just a 2-word title like "Total Users".</rule>
+  <rule>For telemetry stats: Generate 3 to 4 statistics whenever supported by the brief (or at least 2 strong stats).
+    - The `value` field MUST be strictly numerical or a signed badge: e.g. `+12%`, `-5.5%`, `$1.2T`, `44/45`, `165K`, `4.1%`.
+    - NEVER put qualifier words like "about", "more than", "nearly", "estimated" inside `value`. Those belong in the `label`!
+    - The `unit` field must be a real unit symbol or metric (`%`, `$`, `MWh`, `x`, `pts`, `users`), NEVER trend direction words (`rise`, `fall`, `gain`, `loss`, `up`, `down`). Trend direction MUST be indicated as a plus or minus sign directly in `value` (e.g. `+12%` or `-17%`).
+    - Each stat label MUST provide analytical context (6–14 words, staying under 100 chars) explaining what the number signifies in reality, not just a 2-word title like "Total Users".</rule>
   <rule>For cover slides: Provide an insightful subheadline (15–28 words) that frames the central tension, breakthrough, or question of the story.</rule>
   <rule>For quote slides: Use the most profound, complete quote available in the brief (15–40 words), and include the speaker's authoritative title or institution.</rule>
 </editorialDensity>
@@ -105,16 +109,18 @@ For compare slides, use <left> and <right> child elements with items:
 ## HEADLINE RULES
 
 <headlineRules>
-  <rule>Headlines MUST be an ARRESTING CLAIM, SHOCKING CONTRAST, or POWERFUL QUESTION — never a dry label. Write with the authoritative punch of a front-page New York Times or Economist lead.</rule>
+  <rule>Headlines MUST be an ARRESTING CLAIM, SHOCKING CONTRAST, or POWERFUL PARADOX — never a dry label. Write with the authoritative punch of a front-page New York Times or Economist lead.</rule>
+  <rule>COVER HEADLINES: MUST be a definitive, declarative statement. NEVER use rhetorical question headlines ending in "?" (e.g. NEVER write "Does X Reverse Y?" or "Is AI Slowing Down?"). State the tension directly: "A 1.7% Relief Rally Won't Undo Tech's $1 Trillion Rout".</rule>
   <rule>Length: 4 to 8 words. Tight, balanced fragments or concise claims. Active voice only.</rule>
   <rule>Banned Clichés: NEVER use phrases like "In this report", "A deep dive", "Explore", "Consider your options", "The key takeaway", or "Here is what you need to know".</rule>
-  <rule>Cover Slide: Subheadline must be an authoritative 15-25 word summary explaining the underlying stakes or conflict.</rule>
+  <rule>Cover Slide: Subheadline must be an authoritative 15-25 word summary explaining the underlying stakes or conflict. Avoid preachy second-person ("For you, ...").</rule>
   <rule>Myth-Fact slides: The myth must state a plausible consensus belief that leaders get wrong; the fact must explain the exact mechanism or data that disproves it.</rule>
 </headlineRules>
 
-## ANTI-SELF-REFERENCE RULES (CRITICAL)
+## ANTI-SELF-REFERENCE & SOURCE FIDELITY RULES (CRITICAL)
 
 <antiSelfReference>
+  <rule>SCRAPER & SOURCE META-COMMENTARY STRICTLY FORBIDDEN: NEVER echo raw article contradictions or scraper reading artifacts (e.g. "attributed to September initially and October later; the later section says...", "the article states", "paragraph 3 reports", "according to the text above"). Synthesize verified facts directly into clean, authoritative journalism.</rule>
   <rule>NEVER write slides about the carousel tool, the generation process, or limitations of AI/technology. The slides MUST contain the ARTICLE'S content — not commentary about the tool that generated them.</rule>
   <rule>NEVER write slides with tags like "Editor's Note", "Source Integrity", "Editorial Standard", "Reliability Check" that are about the publication process itself rather than the article's topic.</rule>
   <rule>Every slide must teach, inform, or persuade the READER about the ARTICLE'S topic — not about the carousel tool or how content is generated.</rule>
