@@ -1,14 +1,113 @@
-.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
-.header { flex-shrink: 0; margin-bottom: 64px; text-align: center; }
-.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
-.diagram { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; border: 1px solid #E5E5E5; background: #F4F4F4; margin-top: 48px; }
-.hLine { position: absolute; left: 80px; right: 80px; top: 50%; height: 1px; background: #000; transform: translateY(-50%); }
-.vLine { position: absolute; top: 80px; bottom: 80px; left: 50%; width: 1px; background: #000; transform: translateX(-50%); }
-.center { background: #000; color: #FFF; padding: 24px 48px; font-family: 'Cormorant Garamond', serif; font-size: 46px; font-style: italic; position: relative; z-index: 10; letter-spacing: -0.02em; }
-.card { position: absolute; width: 320px; background: #FFF; padding: 24px; border: 1px solid #E5E5E5; z-index: 5; }
-.topLeft { top: 48px; left: 48px; text-align: left; }
-.topRight { top: 48px; right: 48px; text-align: right; }
-.bottomLeft { bottom: 48px; left: 48px; text-align: left; }
-.bottomRight { bottom: 48px; right: 48px; text-align: right; }
-.cardTitle { font-family: 'Inter', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em; color: #000; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid #E5E5E5; padding-bottom: 8px; }
-.cardDesc { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #4A4A4A; line-height: 1.4; }
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0 24px 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kicker {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: #4A4A4A;
+  font-weight: 600;
+}
+
+.centerBadge {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #000;
+  background: #F4F4F4;
+  border: 1px solid #E5E5E5;
+  padding: 4px 12px;
+  font-weight: 600;
+}
+
+.headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 60px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #000;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  min-height: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 24px 28px;
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.cardIndex {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 600;
+  color: #000;
+}
+
+.cardTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #000;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.cardDesc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: #333333;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 400;
+}

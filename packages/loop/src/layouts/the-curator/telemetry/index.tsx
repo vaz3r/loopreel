@@ -1,23 +1,35 @@
 import React from 'react';
 import type { LayoutProps } from '../../shared/types';
-import { getStatItemStyle } from '../../shared/density-engine';
 import styles from './styles.module.css';
 
-export default function Telemetry({ slide, density }: LayoutProps) {
+export default function Telemetry({ slide }: LayoutProps) {
   const s = slide as any;
-  const stats = s.stats || [];
+  const stats: any[] = s.stats || [];
+  const count = stats.length;
 
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
+        <div className={styles.kicker}>KEY METRICS</div>
         <h2 className={styles.headline}>{s.headline}</h2>
       </div>
-      <div className={styles.grid}>
+
+      <div className={`${styles.statsContainer} ${styles[`count_${Math.min(count, 4)}`]}`}>
         {stats.map((stat: any, idx: number) => {
-          const itemStyle = getStatItemStyle(idx, stats.length, density?.isLandscape);
+          const valStr = String(stat.value ?? '');
+          const isNegative = valStr.startsWith('-');
+          const isPositive = valStr.startsWith('+');
+
           return (
-            <div key={idx} className={styles.cell} style={itemStyle as React.CSSProperties}>
-              <div className={styles.value}>{stat.value}<span className={styles.unit}>{stat.unit}</span></div>
+            <div key={idx} className={styles.statCard}>
+              <div className={styles.metricRow}>
+                <span
+                  className={`${styles.value} ${isNegative ? styles.negative : isPositive ? styles.positive : ''}`}
+                >
+                  {stat.value}
+                </span>
+                {stat.unit && <span className={styles.unit}>{stat.unit}</span>}
+              </div>
               <div className={styles.label}>{stat.label}</div>
               {stat.note && <div className={styles.note}>{stat.note}</div>}
             </div>

@@ -44,6 +44,7 @@ export default function TheGlobalistFrame({ slide, scheme, children, size, brand
       ['--brand-font-serif' as any]: `'${fontSerif}', serif`,
       ['--brand-font-headline' as any]: `'${fontCondensed}', sans-serif`,
       ['--brand-font-sans' as any]: "'Inter', sans-serif",
+      ...(density?.cssVariables || {}),
     }}>
       {/* Red top rule */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isWide ? 4 : 8, background: accent }} />

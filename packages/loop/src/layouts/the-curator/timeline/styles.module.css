@@ -1,13 +1,146 @@
-.wrap { flex: 1; display: flex; flex-direction: column; padding: 32px 0; }
-.header { flex-shrink: 0; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid #E5E5E5; }
-.headline { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: #000; }
-.track { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin-left: 140px; padding-left: 48px; border-left: 1px solid #E5E5E5; }
-.event { position: relative; padding-bottom: 56px; }
-.event:last-child { padding-bottom: 0; }
-.dateLabel { position: absolute; left: -192px; top: 4px; font-family: 'Inter', sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.3em; color: #4A4A4A; width: 128px; text-align: right; font-weight: 500; }
-.dot { position: absolute; left: -53px; top: 8px; width: 9px; height: 9px; background: #4A4A4A; }
-.dotHighlight { background: #000; width: 11px; height: 11px; left: -54px; top: 7px; }
-.eventTitle { font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #000; margin-bottom: 12px; line-height: 1; }
-.eventTitleItalic { font-style: italic; }
-.eventDesc { font-family: 'Inter', sans-serif; font-size: 20px; color: #4A4A4A; font-weight: 300; }
-.eventDescHighlight { color: #000; font-weight: 500; }
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0 24px 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+.kicker {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: #4A4A4A;
+  font-weight: 600;
+}
+
+.headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #000;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.timelineList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+}
+
+.eventRow {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.dateCol {
+  width: 170px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 28px;
+  padding-top: 4px;
+}
+
+.dateBadge {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #4A4A4A;
+  font-weight: 600;
+  white-space: normal;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.trackCol {
+  width: 24px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 100%;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  background: #737373;
+  margin-top: 8px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.dotHighlight {
+  width: 11px;
+  height: 11px;
+  background: #000;
+  outline: 3px solid #E5E5E5;
+}
+
+.stem {
+  width: 1px;
+  background: #E5E5E5;
+  flex: 1;
+  margin-top: 6px;
+  margin-bottom: -4px;
+}
+
+.contentCol {
+  flex: 1;
+  padding-left: 32px;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.eventTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  color: #000;
+  margin: 0 0 10px 0;
+  line-height: 1.15;
+  font-weight: 400;
+}
+
+.eventTitleHighlight {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.eventDesc {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #4A4A4A;
+  font-weight: 300;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.eventDescHighlight {
+  color: #171717;
+  font-weight: 400;
+}

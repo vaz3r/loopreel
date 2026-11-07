@@ -54,6 +54,7 @@ export default function PaperOfRecordFrame({ slide, scheme, children, size, bran
         ...colors,
         ...fonts,
         '--k': density?.k ?? 1.0,
+        ...(density?.cssVariables || {}),
       } as React.CSSProperties}>
 
       <div className={styles.masthead}>

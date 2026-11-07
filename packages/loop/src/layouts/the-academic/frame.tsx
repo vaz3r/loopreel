@@ -52,6 +52,7 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
       ['--brand-font-headline' as any]: `'${fontSerif}', serif`,
       ['--brand-font-sans' as any]: `'${fontSans}', sans-serif`,
       ['--brand-font-mono' as any]: `'${fontMono}', monospace`,
+      ...(density?.cssVariables || {}),
     }}>
       {/* Header */}
       <div style={{

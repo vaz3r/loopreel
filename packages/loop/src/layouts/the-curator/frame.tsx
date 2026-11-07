@@ -44,6 +44,7 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
       ['--brand-font-serif' as any]: `'${fontSerif}', serif`,
       ['--brand-font-headline' as any]: `'${fontSerif}', serif`,
       ['--brand-font-sans' as any]: `'${fontSans}', sans-serif`,
+      ...(density?.cssVariables || {}),
     }}>
       {/* Header */}
       <div style={{
