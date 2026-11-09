@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, Smartphone, Monitor } from 'lucide-react';
 import type { JobDetail } from '@/api/client';
 
 export function SlidePreview({ job }: { job: JobDetail }) {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'fit' | 'mobile'>('fit');
 
   const slides = job.assets
     .filter((a) => a.formatType === 'carousel_slide')
@@ -78,21 +79,93 @@ export function SlidePreview({ job }: { job: JobDetail }) {
       </div>
 
       <Dialog open={selectedIdx !== null} onOpenChange={() => setSelectedIdx(null)}>
-        <DialogContent className="max-w-3xl p-0 bg-background border-border">
+        <DialogContent className={`${viewMode === 'mobile' ? 'max-w-md' : 'max-w-3xl'} p-0 bg-background border-border transition-all duration-200 overflow-hidden`}>
           {currentSlide && (
-            <div className="relative">
-              <img
-                src={`/api/slides/${currentSlide.storageUrl}`}
-                alt={`Slide ${(currentSlide.slideIndex ?? 0) + 1}`}
-                className="w-full rounded-lg"
-              />
+            <div className="relative flex flex-col items-center p-4">
+              {/* Header Toolbar */}
+              <div className="w-full flex items-center justify-between pb-3 mb-2 border-b border-border">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-semibold text-text-primary">
+                    Slide {(currentSlide.slideIndex ?? 0) + 1} of {slides.length}
+                  </span>
+                  <span className="text-[10px] text-text-quaternary">
+                    ({job.templateId || 'carousel'})
+                  </span>
+                </div>
 
+                <div className="flex items-center gap-1 bg-surface-2 rounded-lg p-0.5 border border-border">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('fit')}
+                    className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-md font-medium transition-colors ${
+                      viewMode === 'fit'
+                        ? 'bg-surface-4 text-text-primary shadow-xs'
+                        : 'text-text-tertiary hover:text-text-primary'
+                    }`}
+                  >
+                    <Monitor className="h-3 w-3" />
+                    Full
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('mobile')}
+                    className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-md font-medium transition-colors ${
+                      viewMode === 'mobile'
+                        ? 'bg-surface-4 text-text-primary shadow-xs'
+                        : 'text-text-tertiary hover:text-text-primary'
+                    }`}
+                  >
+                    <Smartphone className="h-3 w-3" />
+                    Mobile (390px)
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-7 w-7 text-text-tertiary hover:text-text-primary"
+                    asChild
+                  >
+                    <a href={`/api/slides/${currentSlide.storageUrl}`} download title="Download slide">
+                      <Download className="h-3.5 w-3.5" />
+                    </a>
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-7 w-7 text-text-tertiary hover:text-text-primary"
+                    onClick={() => setSelectedIdx(null)}
+                    title="Close"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Viewport Container */}
+              <div className={`relative ${viewMode === 'mobile' ? 'w-[390px] border-4 border-neutral-800 rounded-3xl shadow-2xl overflow-hidden bg-black' : 'w-full'}`}>
+                {viewMode === 'mobile' && (
+                  <div className="bg-neutral-900 text-neutral-400 text-[10px] font-mono px-3 py-1 flex items-center justify-between border-b border-neutral-800">
+                    <span>9:41</span>
+                    <span className="font-semibold text-neutral-300">Instagram Viewport (390×488pt)</span>
+                    <span>100%</span>
+                  </div>
+                )}
+                <img
+                  src={`/api/slides/${currentSlide.storageUrl}`}
+                  alt={`Slide ${(currentSlide.slideIndex ?? 0) + 1}`}
+                  className="w-full h-auto block"
+                />
+              </div>
+
+              {/* Navigation Arrows */}
               {slides.length > 1 && (
                 <>
                   <Button
                     size="icon"
                     variant="secondary"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4"
+                    className="absolute left-6 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4 shadow-md"
                     disabled={selectedIdx === 0}
                     onClick={() => setSelectedIdx((i) => i !== null ? Math.max(0, i - 1) : null)}
                   >
@@ -101,7 +174,7 @@ export function SlidePreview({ job }: { job: JobDetail }) {
                   <Button
                     size="icon"
                     variant="secondary"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4"
+                    className="absolute right-6 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4 shadow-md"
                     disabled={selectedIdx === slides.length - 1}
                     onClick={() => setSelectedIdx((i) => i !== null ? Math.min(slides.length - 1, i + 1) : null)}
                   >
@@ -109,33 +182,6 @@ export function SlidePreview({ job }: { job: JobDetail }) {
                   </Button>
                 </>
               )}
-
-              <div className="absolute top-3 right-3 flex gap-1.5">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-7 w-7 rounded-md bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4"
-                  onClick={() => setSelectedIdx(null)}
-                >
-                  <X className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-7 w-7 rounded-md bg-surface-3/80 backdrop-blur-sm border-border hover:bg-surface-4"
-                  asChild
-                >
-                  <a href={`/api/slides/${currentSlide.storageUrl}`} download>
-                    <Download className="h-3.5 w-3.5" />
-                  </a>
-                </Button>
-              </div>
-
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
-                <span className="text-[11px] font-medium text-text-secondary bg-surface-3/80 backdrop-blur-sm rounded-md px-2.5 py-1 border border-border">
-                  {(currentSlide.slideIndex ?? 0) + 1} / {slides.length}
-                </span>
-              </div>
             </div>
           )}
         </DialogContent>

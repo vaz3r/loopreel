@@ -1,8 +1,8 @@
 .wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; position: relative; }
 .kickerRule { width: 56px; height: 3px; background: #E3120B; margin-bottom: 28px; }
 .kicker { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #E3120B; margin-bottom: 16px; display: block; }
-.headline { font-family: 'Crimson Pro', serif; font-weight: 700; font-size: var(--density-cover-headline-size, 105px); line-height: 0.96; letter-spacing: -0.02em; margin-bottom: 36px; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.headline { font-family: 'Crimson Pro', serif; font-weight: 700; font-size: clamp(64px, var(--density-cover-headline-size, 88px), 94px); line-height: 0.98; letter-spacing: -0.02em; margin-bottom: 36px; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .subheadline { font-family: 'Crimson Pro', serif; font-size: var(--density-cover-subheadline-size, 34px); line-height: 1.35; color: #3A4249; text-wrap: pretty; margin-bottom: 56px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .byline { display: flex; align-items: center; gap: 24px; padding-top: 24px; border-top: 1px solid #D1D1CD; width: 66%; }
-.authorName { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
-.authorRole { font-family: 'Inter', sans-serif; font-size: 13px; color: #3A4249; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 4px; }
+.authorName { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.authorRole { font-family: 'Inter', sans-serif; font-size: 18px; color: #4B5563; text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px; }

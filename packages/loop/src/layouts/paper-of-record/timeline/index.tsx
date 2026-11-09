@@ -2,24 +2,46 @@ import React from 'react';
 import type { LayoutProps } from '../../shared/types';
 import styles from './styles.module.css';
 
-export default function PaperOfRecordTimeline({ slide, scheme }: LayoutProps) {
+export default function PaperOfRecordTimeline({ slide }: LayoutProps) {
   const s = slide as any;
+  const events: any[] = s.events || [];
+
   return (
     <div className={styles.timeline}>
       <div className={styles.header}>
+        <div className={styles.kicker}>{s.tag || 'CHRONOLOGY OF EVENTS'}</div>
         <h2 className={styles.headline}>{s.headline}</h2>
       </div>
-      <div className={styles.events}>
-        {(s.events || []).map((event: any, idx: number) => (
-          <div key={idx} className={styles.event}>
-            <div className={`${styles.eventYear} ${event.highlight ? styles.eventYearHighlight : ''}`}>
-              {event.date}
+
+      <div className={styles.timelineList}>
+        {events.map((event: any, idx: number) => {
+          const isHighlight = Boolean(event.highlight);
+          const isLast = idx === events.length - 1;
+
+          return (
+            <div key={idx} className={styles.eventRow}>
+              <div className={styles.dateCol}>
+                <span className={`${styles.dateBadge} ${isHighlight ? styles.dateHighlight : ''}`}>
+                  {event.date}
+                </span>
+              </div>
+
+              <div className={styles.trackCol}>
+                <div className={`${styles.dot} ${isHighlight ? styles.dotHighlight : ''}`} />
+                {!isLast && <div className={styles.stem} />}
+              </div>
+
+              <div className={styles.contentCol}>
+                <h3 className={`${styles.eventTitle} ${isHighlight ? styles.eventTitleHighlight : ''}`}>
+                  {event.title}
+                </h3>
+                <p className={`${styles.eventDesc} ${isHighlight ? styles.eventDescHighlight : ''}`}>
+                  {event.desc}
+                </p>
+              </div>
             </div>
-            <div className={`${styles.eventDot} ${event.highlight ? styles.eventDotHighlight : ''}`} />
-            <h3 className={styles.eventTitle}>{event.title}</h3>
-            <p className={styles.eventDesc}>{event.desc}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

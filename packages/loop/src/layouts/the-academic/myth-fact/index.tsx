@@ -11,12 +11,18 @@ export default function MythFact({ slide }: LayoutProps) {
       </div>
       <div className={styles.container}>
         <div className={styles.mythSection}>
-          <span className={styles.label}>Null Hypothesis (H0)</span>
+          <div className={styles.badgeRow}>
+            <span className={styles.badgeLabel}>HYPOTHESIS H₀</span>
+            <span className={styles.badgeStatus}>REJECTED</span>
+          </div>
           <p className={styles.mythText}>{s.myth}</p>
         </div>
+
         <div className={styles.factSection}>
-          <div className={styles.factTopBar} />
-          <span className={styles.labelFact}>Validated Finding (H1)</span>
+          <div className={styles.badgeRow}>
+            <span className={styles.badgeLabelFact}>EMPIRICAL FINDING H₁</span>
+            <span className={styles.badgeStatusFact}>DOCUMENTED</span>
+          </div>
           <p className={styles.factText}>{s.fact}</p>
         </div>
       </div>

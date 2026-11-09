@@ -27,8 +27,8 @@ export default function TheCuratorFrame({ slide, scheme, children, size, brandKi
   const footerBottom = isUltraWide ? 20 : isWide ? 30 : isSquare ? 36 : 50;
   const contentTop = isUltraWide ? 60 : isWide ? 90 : isSquare ? 105 : 140;
   const contentBottom = isUltraWide ? 50 : isWide ? 70 : isSquare ? 105 : 140;
-  const headerFontSize = isWide ? 12 : 16;
-  const footerFontSize = isWide ? 12 : 16;
+  const headerFontSize = isWide ? 16 : 20;
+  const footerFontSize = isWide ? 16 : 20;
 
   return (
     <div style={{

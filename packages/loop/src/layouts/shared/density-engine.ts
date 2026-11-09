@@ -163,47 +163,47 @@ export function computeSlideDensity(
   cssVariables['--density-content-justify'] = mode === 'compact' ? 'flex-start' : 'space-between';
   cssVariables['--density-item-flex'] = mode === 'compact' ? '0 0 auto' : '1 1 0%';
 
-  // 2. Typography
+  // 2. Typography with strict optical mobile scale floors (>= 20px on canvas)
   cssVariables['--density-headline-size'] = headlineText.length > 55
-    ? '44px'
+    ? '54px'
     : hasLongHeadline
-    ? '52px'
-    : mode === 'spacious' ? '68px' : mode === 'compact' ? '52px' : '62px';
-  cssVariables['--density-body-size'] = mode === 'spacious' ? '25px' : mode === 'compact' ? '20px' : '22px';
+    ? '58px'
+    : mode === 'spacious' ? '68px' : mode === 'compact' ? '56px' : '62px';
+  cssVariables['--density-body-size'] = mode === 'spacious' ? '28px' : mode === 'compact' ? '24px' : '26px';
   cssVariables['--density-line-height'] = mode === 'spacious' ? '1.45' : mode === 'compact' ? '1.3' : '1.38';
 
   // 3. Telemetry Stats
   if (itemCount <= 1) {
-    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '110px' : '160px';
-    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '36px' : '64px';
+    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '110px' : '150px';
+    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '36px' : '60px';
     cssVariables['--density-stat-unit-display'] = hasLongUnits ? 'block' : 'inline-block';
     cssVariables['--density-stat-grid-cols'] = '1fr';
     cssVariables['--density-stat-grid-rows'] = '1fr';
-    cssVariables['--density-stat-label-size'] = '32px';
+    cssVariables['--density-stat-label-size'] = '30px';
   } else if (itemCount === 2) {
-    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '90px' : isLandscape ? '100px' : '125px';
-    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '28px' : '48px';
+    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '90px' : isLandscape ? '100px' : '115px';
+    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '28px' : '44px';
     cssVariables['--density-stat-unit-display'] = hasLongUnits ? 'block' : 'inline-block';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? '1fr 1fr' : '1fr';
     cssVariables['--density-stat-grid-rows'] = isLandscape ? '1fr' : '1fr 1fr';
-    cssVariables['--density-stat-label-size'] = '28px';
+    cssVariables['--density-stat-label-size'] = '26px';
   } else if (itemCount === 3) {
-    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '76px' : '100px';
-    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '24px' : '40px';
+    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '80px' : '96px';
+    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '26px' : '38px';
     cssVariables['--density-stat-unit-display'] = hasLongUnits ? 'block' : 'inline-block';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(3, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = isLandscape ? '1fr' : '1fr 1fr';
     cssVariables['--density-stat-label-size'] = '24px';
   } else if (itemCount === 4) {
-    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '68px' : isLandscape ? '74px' : '88px';
-    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '22px' : '34px';
+    cssVariables['--density-stat-value-size'] = hasHeavyStats ? '72px' : isLandscape ? '76px' : '84px';
+    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '24px' : '32px';
     cssVariables['--density-stat-unit-display'] = hasLongUnits ? 'block' : 'inline-block';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(4, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = isLandscape ? '1fr' : '1fr 1fr';
     cssVariables['--density-stat-label-size'] = '22px';
   } else {
-    cssVariables['--density-stat-value-size'] = '60px';
-    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '18px' : '24px';
+    cssVariables['--density-stat-value-size'] = '68px';
+    cssVariables['--density-stat-unit-size'] = hasLongUnits ? '20px' : '26px';
     cssVariables['--density-stat-unit-display'] = hasLongUnits ? 'block' : 'inline-block';
     cssVariables['--density-stat-grid-cols'] = isLandscape ? 'repeat(3, 1fr)' : '1fr 1fr';
     cssVariables['--density-stat-grid-rows'] = 'repeat(3, 1fr)';

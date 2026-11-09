@@ -30,9 +30,9 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
   const footerBottom = isUltraWide ? 24 : isWide ? 40 : isSquare ? 42 : 60;
   const contentTop = isUltraWide ? 70 : isWide ? 100 : isSquare ? 125 : 160;
   const contentBottom = isUltraWide ? 50 : isWide ? 70 : isSquare ? 95 : 120;
-  const headerTitleSize = isWide ? 20 : isSquare ? 24 : 28;
-  const headerSubtitleSize = isWide ? 10 : 14;
-  const footerFontSize = isWide ? 10 : 14;
+  const headerTitleSize = isWide ? 22 : isSquare ? 26 : 30;
+  const headerSubtitleSize = isWide ? 14 : 18;
+  const footerFontSize = isWide ? 14 : 18;
 
   return (
     <div style={{
@@ -68,7 +68,7 @@ export default function TheAcademicFrame({ slide, scheme, children, size, brandK
             <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: headerSubtitleSize, color: graphite, marginTop: isWide ? 2 : 4, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Working Paper Series</span>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontWeight: 700, fontSize: isWide ? 12 : 16, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: crimson }}>{tag}</span>
+            <span style={{ fontWeight: 700, fontSize: isWide ? 14 : 18, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: crimson }}>{tag}</span>
           </div>
         </div>
       </div>

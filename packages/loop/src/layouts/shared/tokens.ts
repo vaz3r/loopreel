@@ -78,17 +78,17 @@ export function generateSemanticTokens(k: number): Record<string, string> {
     '--loop-k': kStr,
     '--loop-scale': kStr,
 
-    // Typographic scale
-    '--loop-font-hero': `calc(${kStr} * 110px)`,
-    '--loop-font-display': `calc(${kStr} * 78px)`,
-    '--loop-font-title': `calc(${kStr} * 58px)`,
-    '--loop-font-h1': `calc(${kStr} * 52px)`,
-    '--loop-font-h2': `calc(${kStr} * 38px)`,
-    '--loop-font-h3': `calc(${kStr} * 28px)`,
-    '--loop-font-lead': `calc(${kStr} * 30px)`,
-    '--loop-font-body': `calc(${kStr} * 22px)`,
-    '--loop-font-caption': `calc(${kStr} * 18px)`,
-    '--loop-font-note': `calc(${kStr} * 17px)`,
+    // Typographic scale with optical mobile scale floors (guarantees >= 7.2px on mobile screens)
+    '--loop-font-hero': `max(84px, calc(${kStr} * 110px))`,
+    '--loop-font-display': `max(64px, calc(${kStr} * 78px))`,
+    '--loop-font-title': `max(52px, calc(${kStr} * 58px))`,
+    '--loop-font-h1': `max(48px, calc(${kStr} * 52px))`,
+    '--loop-font-h2': `max(36px, calc(${kStr} * 38px))`,
+    '--loop-font-h3': `max(28px, calc(${kStr} * 30px))`,
+    '--loop-font-lead': `max(30px, calc(${kStr} * 32px))`,
+    '--loop-font-body': `max(24px, calc(${kStr} * 26px))`,
+    '--loop-font-caption': `max(20px, calc(${kStr} * 22px))`,
+    '--loop-font-note': `max(20px, calc(${kStr} * 20px))`,
 
     // Spacing & rhythm
     '--loop-gap-xl': `calc(${kStr} * 48px)`,

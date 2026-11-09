@@ -42,6 +42,7 @@ export default function StarterFrame({ slide, scheme, children, size, brandKit, 
         '--brand-font-sans': `'${fontSans}', sans-serif`,
         '--brand-font-serif': `'${fontHeadline}', sans-serif`,
         '--k': density?.k ?? 1.0,
+        ...(density?.cssVariables || {}),
       } as React.CSSProperties}
     >
       <div className={styles.header}>

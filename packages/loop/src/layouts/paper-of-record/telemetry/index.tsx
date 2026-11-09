@@ -1,27 +1,38 @@
 import React from 'react';
 import type { LayoutProps } from '../../shared/types';
-import { getStatItemStyle } from '../../shared/density-engine';
 import styles from './styles.module.css';
 
-export default function PaperOfRecordTelemetry({ slide, scheme, density }: LayoutProps) {
+export default function PaperOfRecordTelemetry({ slide }: LayoutProps) {
   const s = slide as any;
-  const stats = s.stats || [];
+  const stats: any[] = s.stats || [];
+  const count = stats.length;
 
   return (
     <div className={styles.telemetry}>
       <div className={styles.header}>
+        <div className={styles.kicker}>{s.tag || 'MARKET TELEMETRY'}</div>
         <h2 className={styles.headline}>{s.headline}</h2>
       </div>
-      <div className={styles.grid}>
+
+      <div className={`${styles.statsContainer} ${styles[`count_${Math.min(count, 4)}`]}`}>
         {stats.map((stat: any, idx: number) => {
-          const itemStyle = getStatItemStyle(idx, stats.length, density?.isLandscape);
+          const valStr = String(stat.value ?? '');
+          const isNegative = valStr.startsWith('-');
+          const isPositive = valStr.startsWith('+');
+
           return (
-            <div key={idx} className={styles.stat} style={itemStyle as React.CSSProperties}>
-              <div className={`${styles.statValue} ${String(stat.value || '').startsWith('+') ? styles.gain : String(stat.value || '').startsWith('-') ? styles.loss : ''}`}>
-                {stat.value}{stat.unit && <span className={styles.statUnit}>{stat.unit}</span>}
+            <div key={idx} className={styles.statCard}>
+              <div className={styles.metricRow}>
+                <span
+                  className={`${styles.statValue} ${isNegative ? styles.loss : isPositive ? styles.gain : ''}`}
+                >
+                  {stat.value}
+                </span>
+                {stat.unit && <span className={styles.statUnit}>{stat.unit}</span>}
               </div>
               <div className={styles.statBar} />
               <div className={styles.statLabel}>{stat.label}</div>
+              {stat.note && <div className={styles.statNote}>{stat.note}</div>}
             </div>
           );
         })}

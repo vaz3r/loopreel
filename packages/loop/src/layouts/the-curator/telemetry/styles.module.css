@@ -162,9 +162,9 @@
 
 .label {
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: var(--density-stat-label-size, 20px);
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.22em;
   color: #4A4A4A;
   font-weight: 600;
   line-height: 1.4;
@@ -173,7 +173,7 @@
 
 .note {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1.35;
   color: #4A4A4A;
   font-style: italic;

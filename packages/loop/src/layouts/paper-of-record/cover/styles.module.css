@@ -16,7 +16,7 @@
 
 .headline {
   font-family: var(--font-headline);
-  font-size: var(--density-cover-headline-size, 105px);
+  font-size: clamp(68px, var(--density-cover-headline-size, 88px), 94px);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.03em;
@@ -27,8 +27,8 @@
 
 .subheadline {
   font-family: var(--font-body);
-  font-size: var(--density-cover-subheadline-size, 36px);
-  line-height: 1.3;
+  font-size: var(--density-cover-subheadline-size, 34px);
+  line-height: 1.35;
   font-style: italic;
   color: var(--charcoal);
   margin-bottom: 0;
@@ -47,7 +47,7 @@
 
 .authorName {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -59,8 +59,8 @@
 
 .authorRole {
   font-family: var(--font-sans);
-  font-size: 14px;
-  color: #999999;
+  font-size: 20px;
+  color: #71717A;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   padding-left: 32px;

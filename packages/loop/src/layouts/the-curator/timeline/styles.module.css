@@ -64,9 +64,9 @@
 
 .dateBadge {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 18px;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   color: #4A4A4A;
   font-weight: 600;
   white-space: normal;

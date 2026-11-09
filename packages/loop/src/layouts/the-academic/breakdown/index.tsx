@@ -4,25 +4,28 @@ import styles from './styles.module.css';
 
 export default function Breakdown({ slide }: LayoutProps) {
   const s = slide as any;
+  const items = s.items || [];
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
         <h2 className={styles.headline}>{s.headline}</h2>
+        {s.centerLabel && (
+          <div className={styles.centerBadge}>
+            <span className={styles.centerLabel}>{s.centerLabel}</span>
+          </div>
+        )}
       </div>
-      <div className={styles.diagram}>
-        <div className={styles.hLine} />
-        <div className={styles.vLine} />
-        <div className={styles.center}>{s.centerLabel}</div>
-        {s.items?.map((item: any, idx: number) => {
-          const positions = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
-          const pos = positions[idx] || 'topLeft';
-          return (
-            <div key={idx} className={`${styles.card} ${styles[pos]}`}>
-              <h3 className={`${styles.cardTitle} ${idx === 1 ? styles.cardTitleRight : ''}`}>{item.num}. {item.title}</h3>
-              <p className={`${styles.cardDesc} ${idx === 1 ? styles.cardDescRight : ''}`}>{item.desc}</p>
+
+      <div className={styles.grid}>
+        {items.map((item: any, idx: number) => (
+          <div key={idx} className={styles.card}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardNum}>{item.num || `0${idx + 1}`}</span>
+              <h3 className={styles.cardTitle}>{item.title}</h3>
             </div>
-          );
-        })}
+            <p className={styles.cardDesc}>{item.desc}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
