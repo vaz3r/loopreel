@@ -3,741 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Zurich Typographer - Editorial Carousel Template</title>
+    <title>The Zurich Typographer - Editorial Carousel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Syne:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for finer control */
+        .clamp-4 {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .balance-text {
+            text-wrap: balance;
+        }
+        .border-hairline {
+            border-color: #E2E8F0; /* Default hairline color, can be overridden by Tailwind config */
+        }
+        .bg-paper {
+            background-color: #FFFFFF; /* Default paper color */
+        }
+        .text-ink {
+            color: #0A0A0A; /* Default ink color */
+        }
+        .text-graphite {
+            color: #475569; /* Default graphite color */
+        }
+        .text-accent {
+            color: #E11D48; /* Default accent color */
+        }
+        .border-accent {
+            border-color: #E11D48; /* Default accent color */
+        }
+        .bg-surface {
+            background-color: #F8FAFC; /* Default surface color */
+        }
+        .font-display {
+            font-family: 'Syne', serif;
+        }
+        .font-sans {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+        #export-canvas {
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+            transform-origin: top left; /* For scaling */
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Subtle shadow for preview */
+        }
+        .slide-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            visibility: hidden;
+        }
+        .slide-layer.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #control-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        #preview-scale-display {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 700;
+        }
+    </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        paper: '#F8F8F8',
+                        paper: '#FFFFFF',
                         ink: '#0A0A0A',
-                        charcoal: '#333333',
-                        graphite: '#666666',
-                        accent: '#E32E2E', // Vermilion Red
-                        border: '#AAAAAA',
-                        surface: '#FFFFFF',
+                        graphite: '#475569',
+                        accent: '#E11D48',
+                        hairline: '#E2E8F0',
+                        surface: '#F8FAFC',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Syne', 'sans-serif'],
-                    },
-                    spacing: {
-                        '1080': '1080px',
-                        '1350': '1350px',
-                    },
-                    boxShadow: {
-                        'editorial-card': '0 0 0 1.5px #0A0A0A',
+                        display: ['Syne', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
                     }
                 }
             }
-        }
+        };
     </script>
-    <style>
-        body {
-            background-color: #E0E0E0; /* A subtle grey for the editor background */
-            font-family: 'Inter', sans-serif;
-            color: #0A0A0A;
-        }
-        .canvas-container {
-            width: 1080px;
-            height: 1350px;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-            box-sizing: border-box;
-            background-color: theme('colors.paper');
-            border: 1.5px solid theme('colors.border');
-        }
-        .mode-preview .canvas-container {
-            transform: scale(0.45);
-            transform-origin: top center;
-            margin-bottom: -740px;
-        }
-        .mode-export .canvas-container {
-            transform: scale(1);
-            margin: 0 auto;
-        }
-        .slide-layer {
-            display: none;
-            width: 1080px;
-            height: 1350px;
-            position: absolute;
-            inset: 0;
-            flex-direction: column;
-            box-sizing: border-box;
-            padding: 72px 96px; /* Consistent padding for content */
-        }
-        .slide-layer.active {
-            display: flex;
-        }
-        .control-bar {
-            background-color: theme('colors.ink');
-            color: theme('colors.paper');
-            padding: 16px 24px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Syne', sans-serif;
-        }
-        .control-bar select,
-        .control-bar button {
-            padding: 8px 12px;
-            border: 1.5px solid theme('colors.paper');
-            background-color: theme('colors.ink');
-            color: theme('colors.paper');
-            font-family: 'Syne', sans-serif;
-            cursor: pointer;
-            margin-left: 12px;
-        }
-        .control-bar button:hover {
-            background-color: theme('colors.accent');
-            border-color: theme('colors.accent');
-        }
-        .control-bar select:hover {
-             border-color: theme('colors.accent');
-        }
-        .headline {
-            font-family: 'Syne', sans-serif;
-            font-size: 72px;
-            line-height: 1.1;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 24px;
-        }
-        .subheadline {
-            font-size: 36px;
-            line-height: 1.3;
-            color: theme('colors.charcoal');
-            margin-bottom: 48px;
-        }
-        .kicker {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: theme('colors.accent');
-            margin-bottom: 16px;
-        }
-        .byline-rule {
-            height: 1.5px;
-            width: 120px;
-            background-color: theme('colors.ink');
-            margin-bottom: 32px;
-        }
-        .stat-card {
-            background-color: theme('colors.surface');
-            border: 1.5px solid theme('colors.border');
-            padding: 40px 48px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        .stat-value {
-            font-family: 'Syne', sans-serif;
-            font-size: 96px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            line-height: 1;
-        }
-        .stat-label {
-            font-size: 28px;
-            font-weight: 700;
-            color: theme('colors.charcoal');
-            margin-top: 16px;
-        }
-        .gain-loss {
-            font-size: 20px;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 4px;
-            margin-top: 12px;
-        }
-        .gain { background-color: theme('colors.accent'); color: theme('colors.surface'); }
-        .loss { background-color: theme('colors.charcoal'); color: theme('colors.surface'); }
-
-        .breakdown-num {
-            font-family: 'Syne', sans-serif;
-            font-size: 48px;
-            font-weight: 700;
-            color: theme('colors.accent');
-            margin-bottom: 12px;
-        }
-        .breakdown-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 16px;
-        }
-        .breakdown-text {
-            font-size: 24px;
-            line-height: 1.4;
-            color: theme('colors.charcoal');
-        }
-        .timeline-date {
-            font-size: 24px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            width: 170px;
-            text-align: right;
-            padding-right: 32px;
-            margin-top: -12px; /* Optical alignment */
-        }
-        .timeline-stem {
-            width: 1.5px;
-            background-color: theme('colors.border');
-            height: 100%;
-            margin: 0 48px;
-        }
-        .timeline-node {
-            width: 16px;
-            height: 16px;
-            background-color: theme('colors.accent');
-            border-radius: 50%;
-            border: 2px solid theme('colors.ink');
-            position: absolute;
-            left: calc(170px + 48px - 8px); /* Align with stem center */
-            transform: translateX(-50%);
-        }
-        .timeline-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 12px;
-        }
-        .timeline-body {
-            font-size: 24px;
-            line-height: 1.4;
-            color: theme('colors.charcoal');
-        }
-        .myth-fact-card {
-            border: 1.5px solid theme('colors.border');
-            padding: 48px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .myth-fact-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 40px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 16px;
-        }
-        .myth-fact-subtitle {
-            font-size: 24px;
-            font-weight: 700;
-            color: theme('colors.graphite');
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 24px;
-        }
-        .myth-fact-text {
-            font-size: 24px;
-            line-height: 1.4;
-            color: theme('colors.charcoal');
-        }
-        .myth-card {
-            background-color: theme('colors.paper');
-        }
-        .fact-card {
-            background-color: theme('colors.surface');
-            border-left: 6px solid theme('colors.accent');
-            padding-left: 42px; /* Adjust for border */
-        }
-        .pullquote-text {
-            font-family: 'Syne', sans-serif;
-            font-size: 96px;
-            font-weight: 700;
-            line-height: 1.05;
-            color: theme('colors.ink');
-            margin-bottom: 24px;
-            text-align: center;
-        }
-        .pullquote-author {
-            font-size: 24px;
-            font-weight: 700;
-            color: theme('colors.charcoal');
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        .pullquote-role {
-            font-size: 18px;
-            color: theme('colors.graphite');
-            text-align: center;
-        }
-        .hero-metric-placard {
-            background-color: theme('colors.surface');
-            border: 1.5px solid theme('colors.border');
-            padding: 60px 72px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            flex-grow: 1; /* Allow it to fill space */
-            justify-content: center;
-        }
-        .hero-metric-value {
-            font-family: 'Syne', sans-serif;
-            font-size: 180px;
-            font-weight: 700;
-            color: theme('colors.accent');
-            line-height: 1;
-            margin-bottom: 36px;
-        }
-        .hero-metric-headline {
-            font-family: 'Syne', sans-serif;
-            font-size: 56px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 24px;
-        }
-        .hero-metric-analysis {
-            font-size: 24px;
-            line-height: 1.4;
-            color: theme('colors.charcoal');
-        }
-        .directive-card {
-            background-color: theme('colors.surface');
-            border: 1.5px solid theme('colors.border');
-            padding: 60px 72px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            flex-grow: 1;
-            justify-content: center;
-        }
-        .directive-headline {
-            font-family: 'Syne', sans-serif;
-            font-size: 56px;
-            font-weight: 700;
-            color: theme('colors.ink');
-            margin-bottom: 24px;
-        }
-        .directive-text {
-            font-size: 24px;
-            line-height: 1.4;
-            color: theme('colors.charcoal');
-            margin-bottom: 48px;
-        }
-        .cta-button {
-            display: inline-block;
-            padding: 20px 48px;
-            font-size: 28px;
-            font-weight: 700;
-            font-family: 'Syne', sans-serif;
-            background-color: theme('colors.accent');
-            color: theme('colors.surface');
-            border: 1.5px solid theme('colors.accent');
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .cta-button:hover {
-            background-color: theme('colors.ink');
-            border-color: theme('colors.ink');
-        }
-        .social-handle {
-            font-size: 20px;
-            color: theme('colors.graphite');
-            margin-top: 48px;
-        }
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 36px;
-            width: 100%;
-            height: 100%;
-        }
-        .grid-2x2 > * {
-            min-height: 0; /* Prevent flexbox overflow issues */
-        }
-        .grid-1-over-2 {
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 36px;
-            width: 100%;
-            height: 100%;
-        }
-        .grid-1-over-2 > *:nth-child(1) { /* Top element */
-            min-height: 0;
-        }
-        .grid-1-over-2 > *:nth-child(2) { /* Bottom row */
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 36px;
-            min-height: 0;
-        }
-        .grid-1-over-2 > *:nth-child(2) > * {
-            min-height: 0;
-        }
-        .full-width-row {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .timeline-container {
-            position: relative;
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            padding-top: 48px; /* Space for the first node */
-        }
-        .timeline-content {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* Align content to the left */
-        }
-        .timeline-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 72px; /* Space between items */
-            width: 100%;
-            position: relative;
-        }
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-        .timeline-item-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: calc(100% - 170px - 32px - 48px - 48px); /* Date column + padding + stem + padding */
-            padding-left: 48px; /* Space from stem */
-        }
-        .myth-fact-split {
-            display: flex;
-            gap: 36px;
-            width: 100%;
-            height: 100%;
-        }
-        .myth-fact-split > * {
-            flex: 1;
-            min-height: 0;
-        }
-        .center-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .font-syne { font-family: 'Syne', sans-serif; }
-        .font-inter { font-family: 'Inter', sans-serif; }
-        .font-bold { font-weight: 700; }
-        .text-ink { color: theme('colors.ink'); }
-        .text-charcoal { color: theme('colors.charcoal'); }
-        .text-graphite { color: theme('colors.graphite'); }
-        .text-accent { color: theme('colors.accent'); }
-        .text-paper { color: theme('colors.paper'); }
-        .bg-paper { background-color: theme('colors.paper'); }
-        .bg-surface { background-color: theme('colors.surface'); }
-        .bg-ink { background-color: theme('colors.ink'); }
-        .bg-accent { background-color: theme('colors.accent'); }
-        .border-ink { border-color: theme('colors.ink'); }
-        .border-accent { border-color: theme('colors.accent'); }
-        .border-default { border-color: theme('colors.border'); }
-        .border-2px { border-width: 2px; }
-        .border-1_5px { border-width: 1.5px; }
-        .line-h-tight { line-height: 1.1; }
-        .line-h-normal { line-height: 1.35; }
-        .letter-spacing-tight { letter-spacing: 0.02em; }
-        .w-full { width: 100%; }
-        .h-full { height: 100%; }
-        .flex-col { flex-direction: column; }
-        .flex-row { flex-direction: row; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .justify-between { justify-content: space-between; }
-        .gap-xs { gap: 12px; }
-        .gap-sm { gap: 24px; }
-        .gap-md { gap: 36px; }
-        .gap-lg { gap: 48px; }
-        .p-md { padding: 36px; }
-        .p-lg { padding: 48px; }
-        .pt-xl { padding-top: 72px; }
-        .pb-xl { padding-bottom: 72px; }
-        .px-xl { padding-left: 72px; padding-right: 72px; }
-        .mb-sm { margin-bottom: 24px; }
-        .mb-md { margin-bottom: 36px; }
-        .mb-lg { margin-bottom: 48px; }
-        .mt-md { margin-top: 36px; }
-        .mt-lg { margin-top: 48px; }
-        .mt-xl { margin-top: 72px; }
-
-    </style>
 </head>
-<body class="bg-charcoal flex flex-col items-center pt-16">
+<body class="bg-gray-100 p-8">
 
-    <div class="control-bar w-full">
-        <div class="flex items-center">
-            <span class="text-xl font-bold mr-4">The Zurich Typographer</span>
-            <span class="text-lg font-normal mr-8">Graphic Design & Systems Engineering</span>
-            <select id="slideSelector">
-                <option value="0">Slide 1: Cover</option>
-                <option value="1">Slide 2: Telemetry</option>
-                <option value="2">Slide 3: Breakdown</option>
-                <option value="3">Slide 4: Chronology</option>
-                <option value="4">Slide 5: Myth-Fact</option>
-                <option value="5">Slide 6: Pullquote</option>
-                <option value="6">Slide 7: Hero Metric</option>
-                <option value="7">Slide 8: Final Directive</option>
+    <div id="control-bar" class="w-full bg-white p-4 mb-8 rounded-lg shadow-lg flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <h1 class="font-bold font-mono text-xl text-ink">The Zurich Typographer</h1>
+            <span class="font-mono text-sm text-graphite">Graphic Design & Systems Engineering</span>
+            <select id="slideSelector" class="p-2 border rounded font-mono text-sm">
+                <option value="slide-1">1. Front Cover</option>
+                <option value="slide-2">2. The Catalog</option>
+                <option value="slide-3">3. Telemetry</option>
+                <option value="slide-4">4. The Framework</option>
+                <option value="slide-5">5. Chronology</option>
+                <option value="slide-6">6. Debunk</option>
+                <option value="slide-7">7. The Monolith</option>
+                <option value="slide-8">8. Hero Metric</option>
             </select>
         </div>
-        <div>
-            <button id="toggleMode">45% Preview</button>
-            <button id="prevSlide">Prev</button>
-            <button id="nextSlide">Next</button>
+        <div class="flex items-center space-x-4">
+            <button id="toggleExportMode" class="px-4 py-2 bg-accent text-white font-bold rounded font-mono text-sm hover:bg-red-600">45% Preview</button>
+            <span id="preview-scale-display" class="text-graphite">Scale: 1.00</span>
+            <button id="prevSlide" class="px-4 py-2 bg-gray-200 font-bold rounded font-mono text-sm hover:bg-gray-300">&lt; Prev</button>
+            <button id="nextSlide" class="px-4 py-2 bg-gray-200 font-bold rounded font-mono text-sm hover:bg-gray-300">Next &gt;</button>
         </div>
     </div>
 
-    <div class="canvas-container mt-8">
-        <!-- Slide 1: Cover -->
-        <div class="slide-layer active" data-slide="0">
-            <div class="flex flex-col h-full justify-center items-center text-center pt-xl pb-xl px-xl">
-                <div class="kicker">SYSTEMS THEORY</div>
-                <h1 class="headline line-h-tight text-ink">THE RIGOR OF FORM</h1>
-                <div class="subheadline font-inter text-charcoal mb-md">Unpacking the Swiss International Typographic Style and its enduring impact on visual communication and engineering principles.</div>
-                <div class="byline-rule w-32 bg-ink mb-lg"></div>
-                <div class="font-inter font-bold text-ink text-24px">BY DR. ELARA VANCE</div>
+    <div id="export-canvas" class="canvas-container font-sans text-ink bg-paper mx-auto">
+        <!-- Pinned Global Masthead Placard (HEADER) -->
+        <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
+            <div class="flex flex-col">
+                <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">The Zurich Typographer</span>
+                <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Graphic Design & Systems</span>
+            </div>
+            <div class="text-right">
+                <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">Editorial Systems</span>
             </div>
         </div>
 
-        <!-- Slide 2: Telemetry / Key Metrics -->
-        <div class="slide-layer" data-slide="1">
-            <div class="flex flex-col h-full justify-center items-center text-center p-md">
-                <div class="kicker mb-sm">METRIC ANALYSIS</div>
-                <h1 class="headline line-h-tight text-ink mb-lg">DESIGN SYSTEM ADOPTION</h1>
-                <div class="grid-2x2 w-full h-full">
-                    <div class="stat-card">
-                        <div class="stat-value text-accent">92%</div>
-                        <div class="stat-label text-charcoal">Component Reuse</div>
-                        <div class="gain-loss gain">+15% QoQ</div>
+        <!-- Content Safe Area -->
+        <div class="absolute top-[150px] bottom-[130px] left-[70px] right-[70px] z-30 flex flex-col justify-center">
+
+            <!-- SLIDE 1: FRONT COVER -->
+            <div id="slide-1" class="slide-layer active">
+                <div class="absolute top-[20%] left-[70px] w-[80px] h-1 bg-accent mb-6"></div>
+                <h1 class="font-display font-bold text-[130px] leading-[0.9] clamp-4 balance-text text-ink">
+                    SYSTEMIC<br>
+                    VISUAL<br>
+                    ORDER
+                </h1>
+                <div class="absolute bottom-0 left-[70px] w-px h-[70%] bg-hairline mr-6"></div>
+                <div class="absolute bottom-[10%] left-[150px] right-[70px] flex justify-between">
+                    <div class="w-[35%] pr-8">
+                        <p class="font-sans text-[26px] leading-[1.4] text-graphite">
+                            A rigorous examination of grid-based design principles and their application in complex information architectures. Exploring the intersection of aesthetic clarity and functional robustness.
+                        </p>
+                        <div class="mt-8 pt-4 border-t border-hairline">
+                            <p class="font-mono text-[16px] uppercase tracking-wide text-graphite">By Prof. Elias Thorne<br>Zurich School of Design</p>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value text-ink">78</div>
-                        <div class="stat-label text-charcoal">Active Contributors</div>
-                        <div class="gain-loss loss">-2% QoQ</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value text-accent">12</div>
-                        <div class="stat-label text-charcoal">Months to Full Integration</div>
-                        <div class="gain-loss gain">On Track</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value text-ink">88%</div>
-                        <div class="stat-label text-charcoal">Cross-Platform Consistency</div>
-                        <div class="gain-loss gain">+8% QoQ</div>
+                    <div class="w-[65%] pl-8">
+                        <p class="font-sans italic text-[40px] leading-[1.25] text-ink">
+                            "The pursuit of order is not merely aesthetic; it is a fundamental requirement for comprehension in a chaotic world. Typography is the architect of that order."
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Slide 3: Breakdown / Anatomy -->
-        <div class="slide-layer" data-slide="2">
-            <div class="flex flex-col h-full justify-center items-center text-center p-md">
-                 <div class="kicker mb-sm">CORE PRINCIPLES</div>
-                 <h1 class="headline line-h-tight text-ink mb-lg">THE GRID'S ARCHITECTURE</h1>
-                <div class="grid-1-over-2 w-full h-full">
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="breakdown-num text-accent">01</div>
-                        <div class="breakdown-title text-ink">MODULARITY</div>
-                        <div class="breakdown-text text-charcoal">Decomposition into repeatable, interchangeable units that form larger wholes.</div>
+            <!-- SLIDE 2: THE CATALOG / CURATED LIST -->
+            <div id="slide-2" class="slide-layer">
+                <h2 class="font-display font-bold text-[72px] leading-[1] mb-12 text-ink">Core Typographic Systems</h2>
+                <div class="border-t border-b border-hairline py-8 mb-8">
+                    <div class="flex items-start gap-8">
+                        <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">I.</span>
+                        <div>
+                            <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-3 block">The Grid as Foundation</span>
+                            <p class="font-sans text-[28px] text-graphite leading-[1.35]">Establishing the underlying structure for visual communication. Principles of modularity, hierarchy, and spatial relationships.</p>
+                        </div>
                     </div>
-                    <div class="grid-2x2 w-full h-full">
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="breakdown-num text-accent">02</div>
-                            <div class="breakdown-title text-ink">HIERARCHY</div>
-                            <div class="breakdown-text text-charcoal">Clear visual order establishing relationships between elements.</div>
+                </div>
+                <div class="border-t border-b border-hairline py-8 mb-8">
+                    <div class="flex items-start gap-8">
+                        <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">II.</span>
+                        <div>
+                            <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-3 block">Hierarchy & Flow</span>
+                            <p class="font-sans text-[28px] text-graphite leading-[1.35]">Guiding the reader's eye through information. The deliberate use of scale, weight, and spacing to define importance.</p>
                         </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="breakdown-num text-accent">03</div>
-                            <div class="breakdown-title text-ink">ASYMMETRY</div>
-                            <div class="breakdown-text text-charcoal">Dynamic balance achieved through deliberate unequal distribution.</div>
-                        </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="breakdown-num text-accent">04</div>
-                            <div class="breakdown-title text-ink">CLARITY</div>
-                            <div class="breakdown-text text-charcoal">Unambiguous communication through precise typography and spacing.</div>
-                        </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="breakdown-num text-accent">05</div>
-                            <div class="breakdown-title text-ink">OBJECTIVITY</div>
-                            <div class="breakdown-text text-charcoal">Rational design choices prioritizing function over ornamentation.</div>
+                    </div>
+                </div>
+                <div class="border-t border-b border-hairline py-8">
+                    <div class="flex items-start gap-8">
+                        <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">III.</span>
+                        <div>
+                            <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-3 block">Systemic Consistency</span>
+                            <p class="font-sans text-[28px] text-graphite leading-[1.35]">Maintaining a cohesive visual language across diverse applications. The power of established rules.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Slide 4: Chronology / Timeline -->
-        <div class="slide-layer" data-slide="3">
-            <div class="flex flex-col h-full justify-center items-center text-center pt-xl pb-xl px-xl">
-                <div class="kicker mb-sm">HISTORICAL CONTEXT</div>
-                <h1 class="headline line-h-tight text-ink mb-lg">EVOLUTION OF THE SYSTEM</h1>
-                <div class="timeline-container">
-                    <div class="timeline-content">
-                        <div class="timeline-item">
-                            <div class="timeline-date font-inter font-bold text-ink">1945</div>
-                            <div class="timeline-stem bg-border w-1.5px"></div>
-                            <div class="timeline-node"></div>
-                            <div class="timeline-item-content">
-                                <div class="timeline-title text-left text-ink">POST-WAR RECONSTRUCTION</div>
-                                <div class="timeline-body text-left text-charcoal">Emergence of Swiss design principles focused on order, legibility, and international communication.</div>
-                            </div>
+            <!-- SLIDE 3: TELEMETRY / MACRO DATA -->
+            <div id="slide-3" class="slide-layer">
+                <h2 class="font-display font-bold text-[72px] leading-[1] mb-12 text-ink">Projected System Efficiency</h2>
+                <div class="grid grid-cols-2 gap-16 h-3/4">
+                    <div class="flex flex-col justify-end pb-8 pl-8 border-l-4 border-accent">
+                        <span class="font-display font-bold text-[120px] leading-none text-ink">88<span class="text-[55px]">.7</span></span>
+                        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Core System Uptime</span>
+                        <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Achieved through rigorous modular design and fault tolerance.</p>
+                    </div>
+                    <div class="flex flex-col justify-end pb-8 pl-8 border-l-4 border-accent">
+                        <span class="font-display font-bold text-[120px] leading-none text-ink">95<span class="text-[55px]">.2</span></span>
+                        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Data Integrity Rate</span>
+                        <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Ensured by checksum verification and redundant storage protocols.</p>
+                    </div>
+                    <div class="flex flex-col justify-end pb-8 pl-8 border-l-4 border-accent">
+                        <span class="font-display font-bold text-[110px] leading-none text-ink">7.3<span class="text-[55px]">s</span></span>
+                        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Avg. Query Response</span>
+                        <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Optimized through algorithmic efficiency and indexed databases.</p>
+                    </div>
+                    <div class="flex flex-col justify-end pb-8 pl-8 border-l-4 border-accent">
+                        <span class="font-display font-bold text-[110px] leading-none text-ink">3<span class="text-[55px]">x</span></span>
+                        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Scalability Factor</span>
+                        <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Designed for seamless expansion of user base and data volume.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: THE FRAMEWORK / ANATOMY -->
+            <div id="slide-4" class="slide-layer">
+                <h2 class="font-display font-bold text-[72px] leading-[1] mb-12 text-ink">Anatomy of a Typographic System</h2>
+                <div class="grid grid-cols-3 gap-8 h-3/4">
+                    <div class="border-r border-hairline pr-8 flex flex-col justify-between">
+                        <div>
+                            <span class="font-mono text-[24px] text-graphite mb-4 block">[01]</span>
+                            <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Structural Modularity</h3>
+                            <p class="font-sans text-[26px] leading-[1.4] text-graphite">The base grid and rhythmic units that define spatial boundaries.</p>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date font-inter font-bold text-ink">1960</div>
-                             <div class="timeline-stem bg-border w-1.5px"></div>
-                            <div class="timeline-node"></div>
-                            <div class="timeline-item-content">
-                                <div class="timeline-title text-left text-ink">THE INTERNATIONAL TYPOGRAPHIC STYLE</div>
-                                <div class="timeline-body text-left text-charcoal">Codification of sans-serif typefaces, grid systems, and asymmetric layouts.</div>
-                            </div>
+                        <div class="w-16 h-1 bg-accent mt-8"></div>
+                    </div>
+                    <div class="border-r border-hairline pr-8 pl-8 flex flex-col justify-between">
+                        <div>
+                            <span class="font-mono text-[24px] text-graphite mb-4 block">[02]</span>
+                            <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Typographic Hierarchy</h3>
+                            <p class="font-sans text-[26px] leading-[1.4] text-graphite">Establishing clear visual precedence for different information types.</p>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date font-inter font-bold text-ink">1984</div>
-                             <div class="timeline-stem bg-border w-1.5px"></div>
-                            <div class="timeline-node"></div>
-                            <div class="timeline-item-content">
-                                <div class="timeline-title text-left text-ink">DIGITAL REVOLUTION</div>
-                                <div class="timeline-body text-left text-charcoal">Adaptation of strict typographic rules to early digital interfaces and desktop publishing.</div>
-                            </div>
+                        <div class="w-16 h-1 bg-accent mt-8"></div>
+                    </div>
+                    <div class="pl-8 flex flex-col justify-between">
+                        <div>
+                            <span class="font-mono text-[24px] text-graphite mb-4 block">[03]</span>
+                            <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Systemic Interaction</h3>
+                            <p class="font-sans text-[26px] leading-[1.4] text-graphite">How components relate and communicate to form a cohesive whole.</p>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date font-inter font-bold text-ink">2010</div>
-                             <div class="timeline-stem bg-border w-1.5px"></div>
-                            <div class="timeline-node"></div>
-                            <div class="timeline-item-content">
-                                <div class="timeline-title text-left text-ink">DESIGN SYSTEMS ERA</div>
-                                <div class="timeline-body text-left text-charcoal">Modern design systems inherit Swiss principles for scalability, consistency, and efficiency in complex digital products.</div>
-                            </div>
+                        <div class="w-16 h-1 bg-accent mt-8"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: CHRONOLOGY / METHODOLOGY -->
+            <div id="slide-5" class="slide-layer">
+                <h2 class="font-display font-bold text-[72px] leading-[1] mb-12 text-ink">Development Timeline</h2>
+                <div class="relative pl-10">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 border-l-2 border-hairline"></div>
+                    <div class="mb-16 relative">
+                        <div class="absolute left-[-5px] top-1 w-3 h-3 bg-accent rounded-full z-10"></div>
+                        <span class="font-mono text-[34px] text-accent absolute left-[-70px] top-0">2018</span>
+                        <h3 class="font-display font-bold text-[36px] leading-[1.1] text-ink mb-2">Conceptualization & Research</h3>
+                        <p class="font-sans text-[26px] text-graphite leading-[1.4]">Initial phase defining the core principles and aesthetic direction of the system.</p>
+                    </div>
+                    <div class="mb-16 relative">
+                        <div class="absolute left-[-5px] top-1 w-3 h-3 bg-accent rounded-full z-10"></div>
+                        <span class="font-mono text-[34px] text-accent absolute left-[-70px] top-0">2019</span>
+                        <h3 class="font-display font-bold text-[36px] leading-[1.1] text-ink mb-2">System Architecture Design</h3>
+                        <p class="font-sans text-[26px] text-graphite leading-[1.4]">Detailed breakdown of grid structures, typographic scales, and functional components.</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute left-[-5px] top-1 w-3 h-3 bg-accent rounded-full z-10"></div>
+                        <span class="font-mono text-[34px] text-accent absolute left-[-70px] top-0">2020</span>
+                        <h3 class="font-display font-bold text-[36px] leading-[1.1] text-ink mb-2">Implementation & Iteration</h3>
+                        <p class="font-sans text-[26px] text-graphite leading-[1.4]">Prototyping, testing, and refining the system across diverse applications.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: DEBUNK / JUXTAPOSITION -->
+            <div id="slide-6" class="slide-layer">
+                <div class="flex h-full w-full">
+                    <div class="w-1/2 flex flex-col justify-center pr-16 text-right">
+                        <p class="font-mono text-[20px] uppercase tracking-widest text-graphite mb-4">THE CLAIM [UNVERIFIED]</p>
+                        <p class="font-sans italic text-[30px] leading-[1.3] text-graphite">
+                            "A rigid system stifles creativity, leading to predictable and uninspired design outcomes."
+                        </p>
+                    </div>
+                    <div class="w-1/2 flex items-center pl-16">
+                        <div class="border-l-4 border-accent pl-8 w-full">
+                            <p class="font-mono text-[20px] uppercase tracking-widest text-accent mb-4">THE RECORD [DOCUMENTED]</p>
+                            <h3 class="font-display font-bold text-[44px] leading-[1.2] text-ink mb-6">Systemic Frameworks Enable, Not Constrain</h3>
+                            <p class="font-sans text-[26px] leading-[1.4] text-graphite">
+                                Rigorous systems provide a foundation of clarity and efficiency, freeing designers to explore creative solutions within defined parameters. The constraint is the catalyst for innovation.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Slide 5: Debunk / Myth-Fact -->
-        <div class="slide-layer" data-slide="4">
-            <div class="flex flex-col h-full justify-center items-center text-center p-md">
-                <div class="kicker mb-sm">DESIGN DISCOURSE</div>
-                <h1 class="headline line-h-tight text-ink mb-lg">MYTH VS. RECORD</h1>
-                <div class="myth-fact-split w-full h-full">
-                    <div class="myth-fact-card myth-card text-left">
-                        <div class="myth-fact-subtitle">THE CLAIM</div>
-                        <div class="myth-fact-title text-ink">SWISS STYLE IS RIGID</div>
-                        <div class="myth-fact-text text-charcoal">This perspective suggests the adherence to grids and rules stifles creativity, leading to monotonous outcomes. It's often perceived as overly prescriptive and lacking in expressive freedom.</div>
+            <!-- SLIDE 7: THE MONOLITH / PULLQUOTE -->
+            <div id="slide-7" class="slide-layer">
+                <div class="flex flex-col items-center justify-center h-full text-center px-16">
+                    <span class="font-display text-[80px] text-accent leading-none">“</span>
+                    <h2 class="font-display font-bold text-[70px] leading-[1.15] text-ink mt-4 mb-8 max-w-[900px] balance-text">
+                        Design is not the application of a style, but the logic of a system made visible.
+                    </h2>
+                    <p class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">Josef Müller-Brockmann</p>
+                    <p class="font-mono text-[18px] uppercase tracking-widest text-graphite mt-2">Pioneer of Swiss Graphic Design</p>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: HERO METRIC & FINAL DIRECTIVE -->
+            <div id="slide-8" class="slide-layer">
+                <div class="flex flex-col items-center justify-center h-full text-center">
+                    <span class="font-display font-bold text-[200px] leading-none text-accent">100%</span>
+                    <h2 class="font-display font-bold text-[52px] text-ink mb-6">Systemic Cohesion Achieved</h2>
+                    <div class="bg-surface p-12 rounded-lg max-w-[850px]">
+                        <p class="font-sans text-[28px] text-graphite leading-[1.4]">
+                            The successful implementation of a robust typographic system demonstrates that order and clarity are not limitations, but essential tools for effective communication. Adherence to these principles ensures scalability, usability, and lasting impact.
+                        </p>
                     </div>
-                    <div class="myth-fact-card fact-card text-left">
-                        <div class="myth-fact-subtitle">THE RECORD</div>
-                        <div class="myth-fact-title text-ink">SWISS STYLE IS FLEXIBLE</div>
-                        <div class="myth-fact-text text-charcoal">The rigorous structure of Swiss design provides a robust framework, not a constraint. It empowers designers by automating complex decisions, freeing cognitive load for creative problem-solving within defined parameters. The system's strength lies in its adaptability and scalability.</div>
-                    </div>
+                    <a href="#" class="mt-12 px-10 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[26px] hover:bg-gray-800 transition-colors">
+                        Explore the System
+                    </a>
+                    <p class="mt-8 font-mono text-[16px] uppercase tracking-widest text-graphite">@ZurichDesignSystems</p>
                 </div>
             </div>
+
         </div>
 
-        <!-- Slide 6: Pullquote / Monolith -->
-        <div class="slide-layer" data-slide="5">
-            <div class="flex flex-col h-full justify-center items-center text-center pt-xl pb-xl px-xl">
-                <div class="pullquote-text font-syne text-ink">"THE SYSTEM IS THE CREATIVITY."</div>
-                <div class="pullquote-author font-inter font-bold text-charcoal">MAX BILL</div>
-                <div class="pullquote-role font-inter text-graphite">PIONEERING SWISS DESIGNER</div>
-            </div>
-        </div>
-
-        <!-- Slide 7: Hero Metric / Centerpiece -->
-        <div class="slide-layer" data-slide="6">
-            <div class="flex flex-col h-full justify-center items-center text-center p-md">
-                <div class="kicker mb-sm">IMPACT ASSESSMENT</div>
-                <div class="hero-metric-placard w-full h-full">
-                    <div class="hero-metric-value text-accent">85%</div>
-                    <div class="hero-metric-headline font-syne text-ink">REDUCED DEVELOPMENT TIME</div>
-                    <div class="hero-metric-analysis font-inter text-charcoal">Implementing a standardized design system, directly influenced by Swiss typographic and grid principles, has demonstrably streamlined our product development cycles. The clarity of components and predictable system logic allows engineering teams to build faster and more consistently, reducing ambiguity and rework.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 8: Final Directive / CTA -->
-        <div class="slide-layer" data-slide="7">
-            <div class="flex flex-col h-full justify-center items-center text-center pt-xl pb-xl px-xl">
-                 <div class="kicker mb-sm">STRATEGIC IMPERATIVE</div>
-                <div class="directive-card w-full h-full">
-                    <div class="directive-headline font-syne text-ink">EMBRACE SYSTEMIC RIGOR</div>
-                    <div class="directive-text font-inter text-charcoal">Adopt and adapt the principles of rigorous typographic and grid-based design. A well-defined system is not a limitation but an enabler of scalable, clear, and impactful design solutions.</div>
-                    <a href="#" class="cta-button">IMPLEMENT SYSTEM</a>
-                    <div class="social-handle font-inter">Follow @ZurichDesignLab</div>
-                </div>
+        <!-- Pinned Global Footer Placard (FOOTER) -->
+        <div class="absolute bottom-[50px] left-[70px] right-[70px] z-50 flex justify-between items-center border-t border-hairline pt-4 font-mono text-[14px] uppercase tracking-widest text-graphite">
+            <span>Zurich Typographer Archive</span>
+            <div class="flex items-center gap-4">
+                <span>FOLIO</span>
+                <span id="page-num" class="font-bold text-ink text-[18px]">01</span>
             </div>
         </div>
     </div>
 
     <script>
+        const canvas = document.getElementById('export-canvas');
         const slideSelector = document.getElementById('slideSelector');
-        const prevSlideBtn = document.getElementById('prevSlide');
-        const nextSlideBtn = document.getElementById('nextSlide');
-        const toggleModeBtn = document.getElementById('toggleMode');
-        const canvasContainer = document.querySelector('.canvas-container');
-        const slides = document.querySelectorAll('.slide-layer');
-        let currentSlideIndex = 0;
-        let isPreviewMode = true;
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const toggleExportButton = document.getElementById('toggleExportMode');
+        const previewScaleDisplay = document.getElementById('preview-scale-display');
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle('active', i === index);
+        let currentSlideIndex = 0;
+        const slides = Array.from(canvas.querySelectorAll('.slide-layer'));
+        const totalSlides = slides.length;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
             });
-            slideSelector.value = index;
-            currentSlideIndex = index;
+            slideSelector.value = slides[currentSlideIndex].id;
+            document.getElementById('page-num').textContent = (currentSlideIndex + 1).toString().padStart(2, '0');
         }
 
+        function goToSlide(index) {
+            currentSlideIndex = (index + totalSlides) % totalSlides;
+            updateSlide();
+        }
+
+        prevButton.addEventListener('click', () => goToSlide(currentSlideIndex - 1));
+        nextButton.addEventListener('click', () => goToSlide(currentSlideIndex + 1));
+
         slideSelector.addEventListener('change', (event) => {
-            showSlide(parseInt(event.target.value));
-        });
-
-        prevSlideBtn.addEventListener('click', () => {
-            const newIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-            showSlide(newIndex);
-        });
-
-        nextSlideBtn.addEventListener('click', () => {
-            const newIndex = (currentSlideIndex + 1) % slides.length;
-            showSlide(newIndex);
+            currentSlideIndex = slides.findIndex(slide => slide.id === event.target.value);
+            updateSlide();
         });
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft') {
-                prevSlideBtn.click();
+                goToSlide(currentSlideIndex - 1);
             } else if (event.key === 'ArrowRight') {
-                nextSlideBtn.click();
+                goToSlide(currentSlideIndex + 1);
             }
         });
 
-        toggleModeBtn.addEventListener('click', () => {
-            isPreviewMode = !isPreviewMode;
-            document.body.classList.toggle('mode-preview', isPreviewMode);
-            document.body.classList.toggle('mode-export', !isPreviewMode);
-            toggleModeBtn.textContent = isPreviewMode ? '45% Preview' : '100% Full Canvas';
+        let isExportMode = false;
+        const baseScale = 1;
+        const previewScale = 0.45;
+
+        toggleExportButton.addEventListener('click', () => {
+            isExportMode = !isExportMode;
+            const scale = isExportMode ? previewScale : baseScale;
+            canvas.style.transform = `scale(${scale})`;
+            canvas.style.width = isExportMode ? `${1080 * scale}px` : '1080px';
+            canvas.style.height = isExportMode ? `${1350 * scale}px` : '1350px';
+            canvas.style.marginLeft = isExportMode ? '20px' : '0'; // Adjust margin for better preview visibility
+            canvas.style.marginTop = isExportMode ? '20px' : '0';
+            toggleExportButton.textContent = isExportMode ? 'Export Mode' : '45% Preview';
+            previewScaleDisplay.textContent = `Scale: ${scale.toFixed(2)}`;
+            if (isExportMode) {
+                canvas.style.boxShadow = 'none';
+            } else {
+                canvas.style.boxShadow = '0 0 20px rgba(0,0,0,0.1)';
+            }
         });
 
-        // Initialize the first slide
-        showSlide(currentSlideIndex);
-        document.body.classList.add('mode-preview'); // Start in preview mode
+        // Initialize
+        updateSlide();
     </script>
-
 </body>
 </html>
