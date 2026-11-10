@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px 0 24px 0;
+  padding: 8px 0 16px 0;
   height: 100%;
   min-height: 0;
 }
@@ -11,7 +11,7 @@
 .header {
   border-bottom: 4px solid var(--ink, #111);
   padding-bottom: 20px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -48,16 +48,23 @@
 .count_1 {
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  border-left: 4px solid var(--ink, #111);
-  padding-left: 48px;
+}
+
+.count_1 .statCard {
+  border-top: 4px solid var(--ink, #111);
+  border-bottom: 4px solid var(--ink, #111);
+  padding: 48px 0;
 }
 
 .count_1 .statValue {
-  font-size: 140px;
+  font-size: 130px;
 }
 
-/* 2 Stats: 2 stacked broadsheet rows spanning full height */
+.count_1 .statLabel {
+  font-size: 32px;
+}
+
+/* 2 Stats: 2 stacked broadsheet rows spanning full width */
 .count_2 {
   flex-direction: column;
   justify-content: stretch;
@@ -68,20 +75,23 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top: 2px solid var(--steel, #dfdfdf);
-  border-left: 4px solid var(--ink, #111);
-  padding: 28px 0 28px 36px;
+  border-top: 2px solid var(--ink, #111);
+  padding: 32px 0;
 }
 
 .count_2 .statCard:last-child {
-  border-bottom: 2px solid var(--steel, #dfdfdf);
+  border-bottom: 2px solid var(--ink, #111);
 }
 
 .count_2 .statValue {
-  font-size: 100px;
+  font-size: 96px;
 }
 
-/* 3 Stats: 3 stacked broadsheet rows */
+.count_2 .statLabel {
+  font-size: 28px;
+}
+
+/* 3 Stats: 3 stacked full-width broadsheet rows spanning all 880px */
 .count_3 {
   flex-direction: column;
   justify-content: stretch;
@@ -92,49 +102,61 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top: 1px solid var(--steel, #dfdfdf);
-  border-left: 4px solid var(--ink, #111);
-  padding: 18px 0 18px 32px;
+  border-top: 2px solid var(--ink, #111);
+  padding: 18px 0;
 }
 
 .count_3 .statCard:last-child {
-  border-bottom: 1px solid var(--steel, #dfdfdf);
+  border-bottom: 2px solid var(--ink, #111);
 }
 
 .count_3 .statValue {
-  font-size: 82px;
+  font-size: clamp(56px, 6.5vw, 76px);
 }
 
-/* 4 Stats: Balanced 2x2 broadsheet grid */
+.count_3 .statLabel {
+  font-size: 26px;
+}
+
+/* 4 Stats: Balanced 2x2 broadsheet table */
 .count_4 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 32px 44px;
-  align-items: stretch;
+  gap: 20px;
 }
 
 .count_4 .statCard {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  border-left: 3px solid var(--ink, #111);
-  padding-left: 28px;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1.5px solid var(--steel, #dfdfdf);
+  border-top: 4px solid var(--ink, #111);
+  padding: 24px 26px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.04);
 }
 
 .count_4 .statValue {
-  font-size: 76px;
+  font-size: 64px;
 }
 
+.count_4 .statLabel {
+  font-size: 22px;
+}
+
+/* Common Styles */
 .statCard {
   min-height: 0;
+  box-sizing: border-box;
 }
 
 .metricRow {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .statValue {
@@ -142,8 +164,7 @@
   font-weight: 900;
   line-height: 1;
   color: var(--ink, #111);
-  white-space: nowrap;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .gain {
@@ -156,7 +177,7 @@
 
 .statUnit {
   font-family: var(--font-headline, 'Playfair Display', serif);
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 700;
   color: #4B5563;
 }
@@ -165,12 +186,11 @@
   width: 48px;
   height: 3px;
   background-color: var(--crimson, #cc0000);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .statLabel {
   font-family: var(--font-body, 'Source Serif 4', serif);
-  font-size: 24px;
   line-height: 1.35;
   color: var(--charcoal, #333);
   font-weight: 600;

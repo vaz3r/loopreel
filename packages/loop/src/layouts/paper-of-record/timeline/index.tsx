@@ -6,10 +6,14 @@ export default function PaperOfRecordTimeline({ slide }: LayoutProps) {
   const s = slide as any;
   const events: any[] = s.events || [];
 
+  const kicker = (s.kicker && s.kicker.toLowerCase() !== (s.tag || '').toLowerCase())
+    ? s.kicker
+    : 'CHRONOLOGY OF EVENTS';
+
   return (
     <div className={styles.timeline}>
       <div className={styles.header}>
-        <div className={styles.kicker}>{s.tag || 'CHRONOLOGY OF EVENTS'}</div>
+        <div className={styles.kicker}>{kicker}</div>
         <h2 className={styles.headline}>{s.headline}</h2>
       </div>
 

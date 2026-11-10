@@ -4,56 +4,81 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  padding: 64px 48px;
-  border: 8px solid #111111;
+  padding: 24px 16px;
   height: 100%;
   min-height: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
+.placard {
+  width: 100%;
+  max-width: 900px;
+  background: #FFFFFF;
+  border: 2px solid #111111;
+  border-top: 6px solid #E3120B;
+  padding: 56px 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.kicker {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #E3120B;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
+}
+
 .headline {
   font-family: 'Crimson Pro', serif;
   font-weight: 700;
-  font-size: var(--density-headline-size, 85px);
+  font-size: clamp(54px, 6.2vw, 68px);
   line-height: 1.1;
   letter-spacing: -0.02em;
+  color: #111111;
   text-wrap: balance;
-  margin-bottom: 24px;
+  margin: 0 0 20px 0;
 }
 
 .subtext {
   font-family: 'Crimson Pro', serif;
-  font-size: var(--density-body-size, 34px);
-  color: #3A4249;
-  margin-bottom: 44px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: var(--density-line-height, 1.4);
+  font-size: 28px;
+  line-height: 1.45;
+  color: #334155;
+  margin: 0 0 36px 0;
+  max-width: 90%;
 }
 
 .button {
   background: #E3120B;
   color: white;
-  padding: 22px 64px;
+  padding: 20px 60px;
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 24px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(227, 18, 11, 0.2);
 }
 
 .handle {
-  margin-top: 40px;
+  margin-top: 36px;
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  color: #3A4249;
+  font-size: 16px;
+  color: #64748B;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  padding-top: 20px;
+  font-weight: 600;
+  padding-top: 18px;
   width: 45%;
   border-top: 1px solid #D1D1CD;
 }

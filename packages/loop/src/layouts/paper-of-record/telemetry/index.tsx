@@ -6,11 +6,14 @@ export default function PaperOfRecordTelemetry({ slide }: LayoutProps) {
   const s = slide as any;
   const stats: any[] = s.stats || [];
   const count = stats.length;
+  const kicker = (s.kicker && s.kicker.toLowerCase() !== (s.tag || '').toLowerCase())
+    ? s.kicker
+    : 'FINANCIAL TELEMETRY';
 
   return (
     <div className={styles.telemetry}>
       <div className={styles.header}>
-        <div className={styles.kicker}>{s.tag || 'MARKET TELEMETRY'}</div>
+        <div className={styles.kicker}>{kicker}</div>
         <h2 className={styles.headline}>{s.headline}</h2>
       </div>
 

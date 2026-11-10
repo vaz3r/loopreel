@@ -6,11 +6,15 @@ export default function Breakdown({ slide }: LayoutProps) {
   const s = slide as any;
   const items: any[] = s.items || [];
 
+  const kicker = (s.kicker && s.kicker.toLowerCase() !== (s.tag || '').toLowerCase())
+    ? s.kicker
+    : 'SYSTEMIC BREAKDOWN';
+
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
         <div className={styles.headerTop}>
-          <span className={styles.kicker}>{s.tag || 'SYSTEMIC BREAKDOWN'}</span>
+          <span className={styles.kicker}>{kicker}</span>
           {s.centerLabel && <span className={styles.centerBadge}>{s.centerLabel}</span>}
         </div>
         <h2 className={styles.headline}>{s.headline}</h2>

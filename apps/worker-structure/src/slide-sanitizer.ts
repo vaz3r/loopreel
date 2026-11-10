@@ -71,10 +71,11 @@ export function cleanTelemetryStats(stats: any[]): any[] {
 
     // 1. Extract conversational qualifiers from value into label
     const qualifierMatch = val.match(/^(about|more than|over|nearly|approximately|around|less than|up to)\s+(.+)$/i);
-    if (qualifierMatch) {
-      const qualifier = qualifierMatch[1].charAt(0).toUpperCase() + qualifierMatch[1].slice(1).toLowerCase();
+    if (qualifierMatch && qualifierMatch[1] && qualifierMatch[2]) {
+      const q = qualifierMatch[1];
+      const qualifier = q.charAt(0).toUpperCase() + q.slice(1).toLowerCase();
       val = qualifierMatch[2].trim();
-      if (!label.toLowerCase().includes(qualifierMatch[1].toLowerCase())) {
+      if (!label.toLowerCase().includes(q.toLowerCase())) {
         label = `${qualifier} ${val}: ${label}`;
       }
     }
@@ -168,7 +169,13 @@ export function sanitizeSlides(slides: Record<string, unknown>[]): Record<string
         fixed.myth = cleanEditorialText(fixed.myth);
       }
       if (Array.isArray(fixed.stats)) {
-        fixed.stats = cleanTelemetryStats(fixed.stats);
+        fixed.stats = cleanTelemetryStats(fixed.stats).slice(0, 4);
+      }
+      if (Array.isArray(fixed.items) && fixed.items.length > 4) {
+        fixed.items = fixed.items.slice(0, 4);
+      }
+      if (Array.isArray(fixed.events) && fixed.events.length > 5) {
+        fixed.events = fixed.events.slice(0, 5);
       }
 
       // Ensure compare slides have left and right objects

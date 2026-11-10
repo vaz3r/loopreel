@@ -22,8 +22,8 @@
 
 .headline {
   font-family: var(--font-headline);
-  font-size: var(--density-headline-size, 80px);
-  font-weight: 700;
+  font-size: clamp(60px, var(--density-headline-size, 72px), 78px);
+  font-weight: 900;
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -33,12 +33,12 @@
 
 .subtext {
   font-family: var(--font-body);
-  font-size: var(--density-body-size, 30px);
+  font-size: var(--density-body-size, 32px);
   line-height: var(--density-line-height, 1.4);
   font-style: italic;
   color: var(--charcoal);
   margin-bottom: 44px;
-  max-width: 85%;
+  max-width: 90%;
 }
 
 .button {
@@ -63,9 +63,9 @@
 
 .handleText {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #999999;
+  color: #6B7280;
   font-weight: 600;
 }
