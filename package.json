@@ -16,6 +16,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "create-template": "tsx scripts/create-template.ts",
+    "generate-template": "pnpm --filter @loopreel/generator generate",
     "db:migrate": "pnpm --filter @loopreel/db run migrate",
     "db:generate": "pnpm --filter @loopreel/db run generate"
   },

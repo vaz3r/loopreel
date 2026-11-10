@@ -31,7 +31,7 @@ export class GoogleAIStudioClient implements LLMClient {
             ],
             generationConfig: {
               temperature: temperature ?? 0.7,
-              maxOutputTokens: 4096,
+              maxOutputTokens: Number(process.env['LLM_MAX_OUTPUT_TOKENS'] ?? '16384'),
             },
           }),
         });

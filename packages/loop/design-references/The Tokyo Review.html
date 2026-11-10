@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Tokyo Review - Editorial Carousel Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f0; /* Paper */
+            color: #1a1a1a; /* Ink */
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .canvas-container {
+            width: 1080px;
+            height: 1350px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            background-color: var(--paper);
+            border: 1.5px solid var(--border); /* Hairline border */
+            box-shadow: 0 0 0 1.5px var(--border); /* Subtle depth */
+        }
+        .mode-preview .canvas-container {
+            transform: scale(0.45);
+            transform-origin: top center;
+            margin-bottom: -740px; /* Adjust to keep canvas visible */
+            border: 1.5px solid var(--border);
+        }
+        .mode-export .canvas-container {
+            transform: scale(1);
+            margin: 0 auto;
+        }
+        .slide-layer {
+            display: none;
+            width: 1080px;
+            height: 1350px;
+            position: absolute;
+            inset: 0;
+            flex-direction: column;
+            padding: 80px; /* Base padding for content */
+            box-sizing: border-box;
+            justify-content: center; /* Default centering */
+            align-items: center;
+            text-align: center;
+        }
+        .slide-layer.active {
+            display: flex;
+        }
+        /* Typography */
+        .headline-serif { font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: -0.5px; }
+        .subhead-serif { font-family: 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: -0.3px; }
+        .body-sans { font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.45; }
+        .meta-sans { font-family: 'Inter', sans-serif; font-weight: 400; line-height: 1.4; }
+        .kicker-sans { font-family: 'Inter', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 22px; }
+        .byline-sans { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 24px; }
+        .stat-num { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 120px; line-height: 1; }
+        .stat-label { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 36px; letter-spacing: 0.5px; }
+        .card-num { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 48px; color: var(--accent); }
+        .card-title { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 42px; }
+        .card-body { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.4; color: var(--charcoal); }
+        .date-col-num { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 36px; color: var(--accent); }
+        .date-col-title { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 38px; }
+        .date-col-body { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 26px; line-height: 1.4; color: var(--charcoal); }
+        .myth-fact-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 44px; text-transform: uppercase; letter-spacing: 1px; }
+        .myth-fact-label { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: 1.5px; }
+        .quote-text { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 72px; line-height: 1.15; color: var(--ink); }
+        .quote-author { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 24px; color: var(--charcoal); }
+        .quote-role { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 18px; color: var(--charcoal); letter-spacing: 0.5px; }
+        .hero-metric-num { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 200px; line-height: 1; color: var(--accent); }
+        .hero-metric-label { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 56px; letter-spacing: 1px; color: var(--ink); }
+        .hero-metric-body { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 32px; line-height: 1.4; color: var(--charcoal); max-width: 700px; }
+        .cta-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 52px; letter-spacing: 0.5px; color: var(--ink); }
+        .cta-body { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 30px; line-height: 1.4; color: var(--charcoal); max-width: 600px; }
+        .cta-button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            letter-spacing: 1px;
+            background-color: var(--accent);
+            color: var(--paper);
+            padding: 25px 50px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #e08a00; /* Darker accent */
+        }
+        .cta-social { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 28px; color: var(--charcoal); }
+
+        /* Colors */
+        :root {
+            --paper: #f5f5f0; /* Warm Washi Paper */
+            --ink: #1a1a1a; /* Sumi-e Black */
+            --charcoal: #4a4a4a; /* Deep Grey Text */
+            --graphite: #6a6a6a; /* Lighter Grey Narrative */
+            --accent: #d97706; /* Mustard/Amber Accent */
+            --border: #c0c0c0; /* Refined Stone Grey */
+            --surface: #f0f0eb; /* Lighter Stone Grey for Cards */
+        }
+
+        /* Layout Helpers */
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+        .grid-1-over-2 { display: grid; grid-template-rows: auto 1fr; gap: 40px; }
+        .full-width-row { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .text-balance { max-width: 800px; margin: 0 auto; }
+        .content-vertical-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            padding-top: 10%; /* Optical centering */
+            padding-bottom: 10%;
+            box-sizing: border-box;
+        }
+        .h-full { height: 100%; }
+        .w-full { width: 100%; }
+        .absolute-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .border-b-1\.5 { border-bottom-width: 1.5px; }
+        .border-t-1\.5 { border-top-width: 1.5px; }
+        .border-l-1\.5 { border-left-width: 1.5px; }
+        .border-r-1\.5 { border-right-width: 1.5px; }
+        .border-accent { border-color: var(--accent); }
+        .bg-surface { background-color: var(--surface); }
+        .text-ink { color: var(--ink); }
+        .text-charcoal { color: var(--charcoal); }
+        .text-graphite { color: var(--graphite); }
+    </style>
+</head>
+<body>
+
+    <div class="control-bar fixed top-0 left-0 right-0 bg-paper p-4 shadow-md z-50 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <h1 class="text-2xl font-bold text-ink">The Tokyo Review</h1>
+            <h2 class="text-lg text-charcoal">Architecture & Industrial Design</h2>
+            <select id="slideSelector" class="p-2 border border-border rounded bg-paper text-ink">
+                <option value="0">Cover</option>
+                <option value="1">Telemetry</option>
+                <option value="2">Breakdown</option>
+                <option value="3">Chronology</option>
+                <option value="4">Debunk</option>
+                <option value="5">Pullquote</option>
+                <option value="6">Hero Metric</option>
+                <option value="7">Final Directive</option>
+            </select>
+            <button id="toggleMode" class="px-4 py-2 border border-border rounded bg-paper text-ink hover:bg-surface">45% Preview</button>
+        </div>
+        <div class="flex space-x-4">
+            <button id="prevSlide" class="px-4 py-2 border border-border rounded bg-paper text-ink hover:bg-surface">&lt; Prev</button>
+            <button id="nextSlide" class="px-4 py-2 border border-border rounded bg-paper text-ink hover:bg-surface">Next &gt;</button>
+        </div>
+    </div>
+
+    <div class="canvas-container mt-[80px] shadow-lg">
+
+        <!-- Slide 1: Cover -->
+        <div id="slide-0" class="slide-layer active">
+            <div class="content-vertical-center w-full">
+                <div class="kicker-sans mb-4 text-accent">EDITOR'S CHOICE</div>
+                <h1 class="headline-serif text-ink text-7xl leading-tight mb-6 text-balance">
+                    Metropolis Reimagined:<br>The Future of Urban Living
+                </h1>
+                <h2 class="subhead-serif text-charcoal text-4xl mb-8 text-balance">
+                    Exploring innovative architectural paradigms that blend sustainability, technology, and human-centric design.
+                </h2>
+                <div class="byline-sans text-ink mt-auto pt-8">By Kenji Tanaka</div>
+                <div class="w-full h-[1.5px] bg-border mt-2"></div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Telemetry -->
+        <div id="slide-1" class="slide-layer">
+            <div class="full-width-row">
+                <div class="grid-2x2 w-full h-full">
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="stat-num">85%</div>
+                        <div class="stat-label text-charcoal mt-2">Renewable Energy Integration</div>
+                        <div class="text-graphite text-24px mt-4">+15% YoY Growth</div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="stat-num">70%</div>
+                        <div class="stat-label text-charcoal mt-2">Green Space Ratio</div>
+                        <div class="text-graphite text-24px mt-4">+8% YoY Growth</div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="stat-num">92%</div>
+                        <div class="stat-label text-charcoal mt-2">Water Recycling Efficiency</div>
+                        <div class="text-graphite text-24px mt-4">+12% YoY Growth</div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="stat-num">60%</div>
+                        <div class="stat-label text-charcoal mt-2">Smart Mobility Adoption</div>
+                        <div class="text-graphite text-24px mt-4">+20% YoY Growth</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Breakdown -->
+        <div id="slide-2" class="slide-layer">
+            <div class="grid-1-over-2 h-full w-full gap-10">
+                <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                    <div class="card-num">01</div>
+                    <div class="card-title text-ink mt-4">Modular Construction</div>
+                    <div class="card-body text-charcoal mt-6 text-balance">
+                        Prefabricated, adaptable modules ensure rapid deployment and future scalability, reducing on-site disruption and waste.
+                    </div>
+                </div>
+                <div class="grid-2x2 gap-10">
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="card-num">02</div>
+                        <div class="card-title text-ink mt-4">Biophilic Integration</div>
+                        <div class="card-body text-charcoal mt-6 text-balance">
+                            Seamless incorporation of natural elements and systems to enhance occupant well-being and ecological balance.
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="card-num">03</div>
+                        <div class="card-title text-ink mt-4">Energy Harvesting Facades</div>
+                        <div class="card-body text-charcoal mt-6 text-balance">
+                            Advanced building skins that generate electricity through integrated photovoltaic and kinetic energy systems.
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="card-num">04</div>
+                        <div class="card-title text-ink mt-4">Intelligent Climate Control</div>
+                        <div class="card-body text-charcoal mt-6 text-balance">
+                            AI-driven systems that dynamically optimize internal environments for comfort, efficiency, and resource conservation.
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center p-8 bg-surface border border-border">
+                        <div class="card-num">05</div>
+                        <div class="card-title text-ink mt-4">Circular Material Flows</div>
+                        <div class="card-body text-charcoal mt-6 text-balance">
+                            Design strategies prioritizing the use of recycled, recyclable, and biodegradable materials for a closed-loop lifecycle.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Chronology -->
+        <div id="slide-3" class="slide-layer">
+            <div class="w-full h-full flex items-start pt-20">
+                <div class="w-[170px] flex-shrink-0 text-center pr-10">
+                    <div class="date-col-num">2015</div>
+                </div>
+                <div class="flex-grow border-l-1.5 border-border pl-10 relative">
+                    <div class="absolute -top-[10px] -left-[1.5px] w-[3px] h-[3px] bg-accent rounded-full"></div>
+                    <div class="mb-16">
+                        <div class="date-col-title text-ink">Concept Genesis</div>
+                        <div class="date-col-body text-graphite mt-4">
+                            Initial research phase exploring the potential of adaptive architecture in high-density urban environments.
+                        </div>
+                    </div>
+                    <div class="absolute -top-[10px] -left-[1.5px] w-[3px] h-[3px] bg-accent rounded-full translate-y-[180px]"></div>
+                    <div class="mb-16">
+                        <div class="date-col-title text-ink">Pilot Project Launch</div>
+                        <div class="date-col-body text-graphite mt-4">
+                            First prototype constructed, demonstrating novel material applications and energy-saving techniques.
+                        </div>
+                    </div>
+                    <div class="absolute -top-[10px] -left-[1.5px] w-[3px] h-[3px] bg-accent rounded-full translate-y-[430px]"></div>
+                    <div>
+                        <div class="date-col-title text-ink">Global Rollout</div>
+                        <div class="date-col-body text-graphite mt-4">
+                            Adoption of the architectural model in key international cities, setting new benchmarks for sustainable urbanism.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Debunk / Myth-Fact -->
+        <div id="slide-4" class="slide-layer">
+            <div class="w-full h-full flex items-center justify-around">
+                <div class="w-[45%] flex flex-col items-center">
+                    <div class="myth-fact-title text-graphite mb-4">THE CLAIM</div>
+                    <div class="myth-fact-label text-accent mb-6">[UNVERIFIED]</div>
+                    <div class="text-center text-3xl text-charcoal font-light leading-relaxed">
+                        "Sustainable architecture is inherently more expensive and less aesthetically pleasing."
+                    </div>
+                </div>
+                <div class="w-[1.5px] h-[60%] bg-border mx-10"></div>
+                <div class="w-[45%] flex flex-col items-center border-1.5 border-accent p-10 bg-surface">
+                    <div class="myth-fact-title text-ink mb-4">THE RECORD</div>
+                    <div class="myth-fact-label text-accent mb-6">[DOCUMENTED]</div>
+                    <div class="text-center text-3xl text-ink font-normal leading-relaxed">
+                        Life-cycle cost analysis demonstrates long-term savings. Innovative design achieves superior aesthetic and functional outcomes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Pullquote -->
+        <div id="slide-5" class="slide-layer">
+            <div class="flex flex-col justify-center items-center h-full text-center px-10">
+                <div class="text-6xl text-accent mb-8">“</div>
+                <blockquote class="quote-text text-ink mb-8 text-balance">
+                    We are not just building structures, we are cultivating ecosystems for human flourishing.
+                </blockquote>
+                <div class="quote-author text-ink mb-2">Dr. Aris Thorne</div>
+                <div class="quote-role text-graphite">Chief Urban Futurist</div>
+                 <div class="text-6xl text-accent mt-8">”</div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Hero Metric -->
+        <div id="slide-6" class="slide-layer">
+            <div class="flex flex-col justify-center items-center h-full text-center">
+                <div class="bg-surface p-16 border border-border w-[85%] max-w-[700px] flex flex-col items-center">
+                    <div class="hero-metric-num">90%</div>
+                    <div class="hero-metric-label text-ink mt-4 mb-8">Energy Autonomy Achieved</div>
+                    <div class="hero-metric-body text-charcoal text-balance">
+                        Through integrated solar, geothermal, and advanced battery storage, this model city generates more energy than it consumes annually, setting a new standard for urban self-sufficiency.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Final Directive -->
+        <div id="slide-7" class="slide-layer">
+            <div class="content-vertical-center w-full">
+                 <div class="bg-surface p-12 border border-border w-full max-w-[700px] flex flex-col items-center text-center">
+                    <div class="cta-title mb-6">Shape Tomorrow's Cities</div>
+                    <div class="cta-body text-graphite mb-10">
+                        Discover how pioneering architectural principles can transform urban landscapes for a sustainable future.
+                    </div>
+                    <a href="#" class="cta-button shadow-lg hover:shadow-xl transition-shadow duration-300">EXPLORE THE BLUEPRINTS</a>
+                </div>
+                <div class="cta-social text-ink mt-16">Follow us: @TheTokyoReview</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slideSelector = document.getElementById('slideSelector');
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+        const toggleModeButton = document.getElementById('toggleMode');
+        const canvasContainer = document.querySelector('.canvas-container');
+        const slides = document.querySelectorAll('.slide-layer');
+        let currentSlideIndex = 0;
+
+        function setActiveSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            slideSelector.value = index;
+            currentSlideIndex = index;
+        }
+
+        function goToNextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            setActiveSlide(currentSlideIndex);
+        }
+
+        function goToPrevSlide() {
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            setActiveSlide(currentSlideIndex);
+        }
+
+        slideSelector.addEventListener('change', (event) => {
+            setActiveSlide(parseInt(event.target.value, 10));
+        });
+
+        prevButton.addEventListener('click', goToPrevSlide);
+        nextButton.addEventListener('click', goToNextSlide);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                goToNextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                goToPrevSlide();
+            }
+        });
+
+        let isPreviewMode = true;
+        toggleModeButton.addEventListener('click', () => {
+            isPreviewMode = !isPreviewMode;
+            document.body.classList.toggle('mode-preview', isPreviewMode);
+            document.body.classList.toggle('mode-export', !isPreviewMode);
+            toggleModeButton.textContent = isPreviewMode ? "45% Preview" : "100% Full Canvas";
+        });
+
+        // Initialize first slide
+        setActiveSlide(0);
+        document.body.classList.add('mode-preview'); // Start in preview mode
+    </script>
+
+</body>
+</html>
