@@ -48,31 +48,64 @@ export function cleanAndValidateHtml(rawText: string): ValidationResult {
     warnings.push('Missing dynamic folio indicator (#page-num) in global frame.');
   }
 
-  // 5. Ensure Mandatory Slide Layer CSS exists
-  if (!html.includes('.slide-layer {') || !html.includes('inset: 0')) {
-    const slideLayerCss = `
-    <style>
-      .slide-layer {
-        display: none;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        inset: 0;
-      }
-      .slide-layer.active {
-        display: flex;
-        flex-direction: column;
-      }
-    </style>
-    `;
+  // 5. Ensure Tailwind v3 CDN Script
+  if (!html.includes('cdn.tailwindcss.com')) {
+    warnings.push('Missing Tailwind CSS v3 CDN script; injecting.');
+    // Remove outdated tailwind links if present
+    html = html.replace(/<link[^>]*tailwindcss[^>]*>/gi, '');
+    const tailwindScript = '<script src="https://cdn.tailwindcss.com"></script>';
     if (html.includes('</head>')) {
-      html = html.replace('</head>', `${slideLayerCss}\n</head>`);
+      html = html.replace('</head>', `${tailwindScript}\n</head>`);
     } else {
-      html = `${slideLayerCss}\n${html}`;
+      html = `${tailwindScript}\n${html}`;
     }
   }
 
-  // 6. Count slide layers
+  // 6. Ensure Mandatory Canvas & Slide Layer CSS & Color Tokens exist
+  const tokens = ['ink', 'paper', 'accent', 'surface', 'graphite', 'hairline'];
+  let colorRules = '';
+  for (const token of tokens) {
+    const match = html.match(
+      new RegExp(`(?:\\.bg-|\\.text-|\\.border-)${token}\\s*\\{\\s*(?:background-color|color|border-color):\\s*([^;\\}]+)[;\\}]`, 'i')
+    );
+    if (match && match[1]) {
+      const val = match[1].trim();
+      if (!html.includes(`.bg-${token}`)) colorRules += `    .bg-${token} { background-color: ${val} !important; }\n`;
+      if (!html.includes(`.text-${token}`)) colorRules += `    .text-${token} { color: ${val} !important; }\n`;
+      if (!html.includes(`.border-${token}`)) colorRules += `    .border-${token} { border-color: ${val} !important; }\n`;
+    }
+  }
+
+  const mandatoryCss = `
+  <style>
+    .canvas-container, #export-canvas {
+      width: 1080px !important;
+      height: 1350px !important;
+      position: relative !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      flex-shrink: 0 !important;
+    }
+    .slide-layer {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+    .slide-layer.active {
+      display: flex;
+      flex-direction: column;
+    }
+${colorRules}  </style>
+  `;
+  if (html.includes('</head>')) {
+    html = html.replace('</head>', `${mandatoryCss}\n</head>`);
+  } else {
+    html = `${mandatoryCss}\n${html}`;
+  }
+
+  // 7. Count slide layers
   const slideLayerMatches = html.match(/class=["'][^"']*slide-layer[^"']*["']/gi) || [];
   const slideIdMatches = html.match(/id=["']slide-\d+["']/gi) || [];
   const slideCount = Math.max(slideLayerMatches.length, slideIdMatches.length);

@@ -84,9 +84,21 @@ export async function auditTemplateHtml(
 
       let screenshotPath: string | undefined;
       if (options?.screenshotDir) {
-        const canvasEl = page.locator('#export-canvas');
         screenshotPath = path.join(options.screenshotDir, `slide-${i + 1}.png`);
-        await canvasEl.screenshot({ path: screenshotPath });
+        try {
+          const canvasEl = page.locator('#export-canvas');
+          await canvasEl.screenshot({ path: screenshotPath, timeout: 5000 });
+        } catch {
+          const box = await page.evaluate(() => {
+            const el = document.getElementById('export-canvas') || document.querySelector('.canvas-container');
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            return { x: Math.max(0, r.x), y: Math.max(0, r.y), width: r.width || 1080, height: r.height || 1350 };
+          });
+          if (box) {
+            await page.screenshot({ path: screenshotPath, clip: box });
+          }
+        }
       }
 
       // Audit DOM geometry inside current active slide
@@ -125,9 +137,25 @@ export async function auditTemplateHtml(
         const contentHeight = maxBottom > minTop ? maxBottom - minTop : 0;
         const fillRatio = Math.min(1, Math.max(0, contentHeight / safeHeight));
 
-        // 3. Collision detection between non-nested elements
+        // 3. Collision and overflow detection
         const collisions: Array<{ elementA: string; elementB: string; overlapArea: number }> = [];
 
+        // 3a. Check for horizontal overflow (unintended spill outside bounding boxes)
+        elements.forEach((el) => {
+          const style = window.getComputedStyle(el);
+          // If the element has intentional line-clamp or overflow clipping, it's not a layout leak
+          const isClamped = el.classList.contains('clamp-3') || el.classList.contains('clamp-4') || style.overflow === 'hidden';
+          if (!isClamped && el.scrollWidth > el.clientWidth + 8) {
+            const label = `${el.tagName.toLowerCase()}: "${(el.textContent || '').trim().slice(0, 30)}"`;
+            collisions.push({
+              elementA: label,
+              elementB: `Element Box (scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth})`,
+              overlapArea: (el.scrollWidth - el.clientWidth) * 20,
+            });
+          }
+        });
+
+        // 3b. Collision detection between non-nested sibling elements
         for (let a = 0; a < elements.length; a++) {
           for (let b = a + 1; b < elements.length; b++) {
             const elA = elements[a]!;

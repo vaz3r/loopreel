@@ -1,387 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tokyo Review - Editorial Carousel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom styles for balance-text and specific elements if needed */
-        .balance-text {
-            text-wrap: balance;
-        }
-        .clamp-4 {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            -webkit-line-clamp: 4;
-        }
-        .clamp-3 {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            -webkit-line-clamp: 3;
-        }
-        .shrink-0 {
-            flex-shrink: 0;
-        }
-        /* Slide Visibility & Full Safe Area Stretch */
-        .slide-layer {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            inset: 0;
-        }
-        .slide-layer.active {
-            display: flex;
-            flex-direction: column;
-        }
-        .text-ink { color: #1A1A1A; }
-        .bg-paper { background-color: #F5F5F0; }
-        .text-graphite { color: #475569; }
-        .text-accent { color: #D97706; }
-        .border-hairline { border-color: #E2E8F0; }
-        .bg-surface { background-color: #F8FAFC; }
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        paper: '#F5F5F0',
-                        ink: '#1A1A1A',
-                        graphite: '#475569',
-                        accent: '#D97706',
-                        hairline: '#E2E8F0',
-                        surface: '#F8FAFC',
-                    },
-                    fontFamily: {
-                        display: ['Cormorant Garamond', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['IBM Plex Mono', 'monospace'],
-                    }
-                }
-            }
-        };
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Tokyo Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap">
+  <style>
+    .canvas-container, #export-canvas {
+      width: 1080px;
+      height: 1350px;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .slide-layer {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+    .slide-layer.active {
+      display: flex;
+      flex-direction: column;
+    }
+    /* Utility for text wrapping */
+    .balance-text {
+        text-wrap: balance;
+    }
+    /* Clamp utility for older browsers or specific needs */
+    .clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .clamp-4 {
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+  </style>
+
+  <style>
+    .canvas-container, #export-canvas {
+      width: 1080px !important;
+      height: 1350px !important;
+      position: relative !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      flex-shrink: 0 !important;
+    }
+    .slide-layer {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+    .slide-layer.active {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+  
 </head>
 <body>
+  <div id="export-canvas" class="canvas-container font-sans text-ink bg-paper w-[1080px] h-[1350px] relative overflow-hidden shadow-2xl mx-auto mt-[60px]">
 
-    <div id="control-bar" class="fixed top-0 left-0 right-0 z-50 bg-surface p-4 shadow-md flex items-center justify-between font-sans text-sm">
-        <div class="flex items-center space-x-4">
-            <span class="font-bold text-lg text-ink">The Tokyo Review</span>
-            <span class="text-graphite">Architecture & Spatial Philosophy</span>
-            <select id="slideSelector" class="p-2 border border-hairline rounded text-graphite">
-                <option value="1">Slide 1: Front Cover</option>
-                <option value="2">Slide 2: The Catalog</option>
-                <option value="3">Slide 3: Telemetry</option>
-                <option value="4">Slide 4: The Framework</option>
-                <option value="5">Slide 5: Chronology</option>
-                <option value="6">Slide 6: Debunk</option>
-                <option value="7">Slide 7: The Monolith</option>
-                <option value="8">Slide 8: Hero Metric</option>
-            </select>
-        </div>
-        <div class="flex items-center space-x-4">
-            <button id="mode-toggle" class="px-3 py-2 bg-graphite text-paper rounded hover:bg-ink transition-colors">45% Preview</button>
-            <button id="prev-slide" class="px-3 py-2 bg-ink text-paper rounded hover:bg-graphite transition-colors">&lt; Prev</button>
-            <button id="next-slide" class="px-3 py-2 bg-ink text-paper rounded hover:bg-graphite transition-colors">Next &gt;</button>
-        </div>
+    <!-- Pinned Global Masthead Placard -->
+    <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
+      <div class="flex flex-col">
+        <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">The Tokyo Review</span>
+        <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Architecture & Spatial Philosophy</span>
+      </div>
+      <div class="text-right">
+        <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">ESSAY / REPORT</span>
+      </div>
     </div>
 
-    <div id="export-canvas" class="canvas-container font-sans text-ink bg-paper w-[1080px] h-[1350px] relative overflow-hidden shadow-2xl mt-16">
-        <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
-            <div class="flex flex-col">
-                <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">The Tokyo Review</span>
-                <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Architecture & Spatial Philosophy</span>
-            </div>
-            <div class="text-right">
-                <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">FEATURE</span>
-            </div>
-        </div>
-
-        <div class="absolute bottom-[50px] left-[70px] right-[70px] z-50 flex justify-between items-center border-t border-hairline pt-4 font-mono text-[14px] uppercase tracking-widest text-graphite">
-            <span>The Tokyo Review</span>
-            <div class="flex items-center gap-4">
-                <span>FOLIO</span>
-                <span id="page-num" class="font-bold text-ink text-[18px]">01</span>
-            </div>
-        </div>
-
-        <div class="absolute top-[150px] bottom-[130px] left-[70px] right-[70px] z-30">
-            <!-- SLIDE 1: FRONT COVER -->
-            <div id="slide-1" class="slide-layer active">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="pt-4">
-                        <div class="w-16 h-1 bg-accent mb-8"></div>
-                        <h1 class="font-display font-bold text-[120px] leading-[0.92] tracking-tight balance-text text-ink clamp-4">
-                            The Poetics of Space
-                        </h1>
-                        <p class="font-sans text-[32px] leading-[1.3] text-graphite mt-8 max-w-[850px] clamp-3">
-                            Exploring the profound connection between built environments and the human psyche, drawing parallels from traditional Japanese aesthetics to contemporary urban design.
-                        </p>
-                    </div>
-                    <div class="flex gap-12 items-end pt-8 border-t border-hairline pb-4">
-                        <div class="w-[35%] font-mono text-[16px] uppercase tracking-widest text-graphite">
-                            By Kenji Tanaka<br>Chief Curator
-                        </div>
-                        <div class="w-[65%] font-display italic text-[36px] leading-[1.3] text-ink pl-8 border-l border-hairline">
-                            "Where silence speaks volumes and emptiness defines form."
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 2: THE CATALOG / CURATED LIST -->
-            <div id="slide-2" class="slide-layer">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-                        <h2 class="font-display font-bold text-[72px] leading-none text-ink">Essential Forms</h2>
-                    </div>
-                    <div class="flex-1 flex flex-col justify-around border-b border-hairline">
-                        <div class="flex items-start gap-8 py-4 border-t border-hairline">
-                            <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">I.</span>
-                            <div>
-                                <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-2 block">Ma (間)</span>
-                                <p class="font-sans text-[28px] text-graphite leading-[1.35]">The concept of negative space, or interval, as an active element in design, defining relationships and creating presence through absence.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-8 py-4 border-t border-hairline">
-                            <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">II.</span>
-                            <div>
-                                <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-2 block">Wabi-Sabi (侘寂)</span>
-                                <p class="font-sans text-[28px] text-graphite leading-[1.35]">Embracing imperfection, transience, and the beauty of natural processes, influencing material choices and design longevity.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-8 py-4 border-t border-hairline">
-                            <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">III.</span>
-                            <div>
-                                <span class="font-mono text-[20px] uppercase tracking-widest text-ink mb-2 block">Shokunin (職人)</span>
-                                <p class="font-sans text-[28px] text-graphite leading-[1.35]">The artisan's spirit: dedication to craftsmanship, mastery of materials, and the pursuit of perfection in every detail.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 3: TELEMETRY / MACRO DATA -->
-            <div id="slide-3" class="slide-layer">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-                        <h2 class="font-display font-bold text-[72px] leading-none text-ink">Urban Metrics</h2>
-                    </div>
-                    <div class="flex-1 grid grid-cols-2 gap-x-16 gap-y-12 items-center content-center">
-                        <div class="flex flex-col justify-end pl-8 border-l-4 border-accent">
-                            <span class="font-display font-bold text-[115px] leading-none text-ink">75<span class="text-[55px] font-sans font-normal">%</span></span>
-                            <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Public Green Space Ratio</span>
-                            <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Average across Tokyo's 23 wards.</p>
-                        </div>
-                        <div class="flex flex-col justify-end pl-8 border-l-4 border-accent">
-                            <span class="font-display font-bold text-[115px] leading-none text-ink">12<span class="text-[55px] font-sans font-normal">m</span></span>
-                            <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Average Building Height</span>
-                            <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Excluding skyscrapers in business districts.</p>
-                        </div>
-                        <div class="flex flex-col justify-end pl-8 border-l-4 border-accent">
-                            <span class="font-display font-bold text-[115px] leading-none text-ink">8<span class="text-[55px] font-sans font-normal">.2</span></span>
-                            <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Walkability Score</span>
-                            <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Composite index for central districts.</p>
-                        </div>
-                        <div class="flex flex-col justify-end pl-8 border-l-4 border-accent">
-                            <span class="font-display font-bold text-[115px] leading-none text-ink">1<span class="text-[55px] font-sans font-normal">.1</span></span>
-                            <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">Population Density</span>
-                            <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">Per square kilometer in core areas.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 4: THE FRAMEWORK / ANATOMY -->
-            <div id="slide-4" class="slide-layer">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-                        <h2 class="font-display font-bold text-[72px] leading-none text-ink">Design Pillars</h2>
-                    </div>
-                    <div class="flex-1 grid grid-cols-3 gap-8 items-stretch content-center my-auto">
-                        <div class="border-r border-hairline pr-8 flex flex-col justify-between">
-                            <div>
-                                <span class="font-mono text-[24px] text-accent mb-4 block">[01]</span>
-                                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Harmony</h3>
-                                <p class="font-sans text-[26px] leading-[1.4] text-graphite">Balancing elements to create a sense of unity and equilibrium, respecting the surrounding context.</p>
-                            </div>
-                            <div class="w-16 h-1 bg-accent mt-8"></div>
-                        </div>
-                        <div class="border-r border-hairline pr-8 pl-4 flex flex-col justify-between">
-                            <div>
-                                <span class="font-mono text-[24px] text-accent mb-4 block">[02]</span>
-                                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Simplicity</h3>
-                                <p class="font-sans text-[26px] leading-[1.4] text-graphite">Eliminating the superfluous, focusing on essential forms and honest material expression.</p>
-                            </div>
-                            <div class="w-16 h-1 bg-accent mt-8"></div>
-                        </div>
-                        <div class="pl-4 flex flex-col justify-between">
-                            <div>
-                                <span class="font-mono text-[24px] text-accent mb-4 block">[03]</span>
-                                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">Flow</h3>
-                                <p class="font-sans text-[26px] leading-[1.4] text-graphite">Designing intuitive circulation and spatial transitions that guide movement and experience.</p>
-                            </div>
-                            <div class="w-16 h-1 bg-accent mt-8"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 5: CHRONOLOGY / METHODOLOGY -->
-            <div id="slide-5" class="slide-layer">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-                        <h2 class="font-display font-bold text-[72px] leading-none text-ink">Evolution of Form</h2>
-                    </div>
-                    <div class="flex-1 flex flex-col justify-around pl-16 border-l-2 border-hairline ml-8 my-4">
-                        <div class="relative flex flex-col gap-2">
-                            <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
-                            <span class="font-mono text-[32px] text-accent font-bold">1950s</span>
-                            <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">Post-War Rebuilding</h3>
-                            <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">Focus on functional, modular housing and efficient urban planning, laying groundwork for future growth.</p>
-                        </div>
-                        <div class="relative flex flex-col gap-2">
-                            <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
-                            <span class="font-mono text-[32px] text-accent font-bold">1980s</span>
-                            <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">Metropolitan Expansion</h3>
-                            <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">Rapid urbanization, introduction of high-rise architecture, and the emergence of distinct urban districts.</p>
-                        </div>
-                        <div class="relative flex flex-col gap-2">
-                            <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
-                            <span class="font-mono text-[32px] text-accent font-bold">2010s-Present</span>
-                            <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">Sustainable Integration</h3>
-                            <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">Emphasis on green building, smart city initiatives, and rethinking human-centric spatial design.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 6: DEBUNK / JUXTAPOSITION -->
-            <div id="slide-6" class="slide-layer">
-                <div class="flex flex-col h-full justify-between py-6">
-                    <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-                        <h2 class="font-display font-bold text-[72px] leading-none text-ink">Myth vs. Reality</h2>
-                    </div>
-                    <div class="flex-1 flex items-stretch gap-12 my-auto">
-                        <div class="w-1/2 flex flex-col justify-center pr-8 text-right bg-surface p-10">
-                            <span class="font-mono text-[20px] uppercase tracking-widest text-graphite mb-4 block">THE MYTH [POPULAR BELIEF]</span>
-                            <p class="font-sans italic text-[30px] leading-[1.35] text-graphite">"Japanese homes are all small and cramped."</p>
-                        </div>
-                        <div class="w-[2px] bg-hairline self-stretch"></div>
-                        <div class="w-1/2 flex flex-col justify-center pl-8 bg-surface p-10 border-l-4 border-accent">
-                            <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-4 block">THE REALITY [DESIGN PRINCIPLE]</span>
-                            <h3 class="font-display font-bold text-[40px] leading-[1.2] text-ink mb-4">Efficient Spatial Utilization</h3>
-                            <p class="font-sans text-[26px] leading-[1.4] text-graphite">Designs maximize perceived space through clever layouts, multi-functional furniture, and the strategic use of light and mirrors.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 7: THE MONOLITH / PULLQUOTE -->
-            <div id="slide-7" class="slide-layer">
-                <div class="flex flex-col h-full justify-center items-center text-center px-12">
-                    <span class="font-display text-[96px] text-accent leading-none mb-6">“</span>
-                    <blockquote class="font-display font-bold text-[68px] leading-[1.18] text-ink mb-12 max-w-[900px] balance-text">
-                        The true measure of architecture is not its grand facade, but the quiet harmony it fosters within the lives of those who inhabit it.
-                    </blockquote>
-                    <div class="pt-8 border-t border-hairline w-1/2 flex flex-col items-center">
-                        <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">Tadao Ando</span>
-                        <span class="font-mono text-[18px] uppercase tracking-widest text-graphite mt-2">Architect</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SLIDE 8: HERO METRIC & DIRECTIVE CTA -->
-            <div id="slide-8" class="slide-layer">
-                <div class="flex flex-col h-full justify-between items-center text-center py-6">
-                    <div class="flex flex-col items-center pt-4">
-                        <span class="font-display font-bold text-[180px] leading-none text-accent">4.8</span>
-                        <h2 class="font-display font-bold text-[52px] text-ink mt-2 mb-4">Citizen Satisfaction Score</h2>
-                        <div class="bg-surface p-8 max-w-[850px] border-t-2 border-b-2 border-ink">
-                            <p class="font-sans text-[28px] text-graphite leading-[1.4]">Residents consistently rate the city's spatial planning, accessibility, and sense of community as exceptionally high, reflecting a successful integration of modern needs with traditional values.</p>
-                        </div>
-                    </div>
-                    <div class="pb-4 flex flex-col items-center">
-                        <a href="#" class="px-12 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[24px] hover:bg-graphite transition-colors inline-block">
-                            Explore Further
-                        </a>
-                        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6">@TokyoReviewOfficial</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Pinned Global Footer Placard -->
+    <div class="absolute bottom-[50px] left-[70px] right-[70px] z-50 flex justify-between items-center border-t border-hairline pt-4 font-mono text-[14px] uppercase tracking-widest text-graphite">
+      <span>The Tokyo Review</span>
+      <div class="flex items-center gap-4">
+        <span>FOLIO</span>
+        <span id="page-num" class="font-bold text-ink text-[18px]">01</span>
+      </div>
     </div>
 
-    <script>
-        const slides = document.querySelectorAll('.slide-layer');
-        const slideSelector = document.getElementById('slideSelector');
-        const pageNumSpan = document.getElementById('page-num');
-        const canvas = document.getElementById('export-canvas');
-        const modeToggle = document.getElementById('mode-toggle');
-        const prevSlideBtn = document.getElementById('prev-slide');
-        const nextSlideBtn = document.getElementById('next-slide');
+    <!-- Content Safe Area -->
+    <div class="absolute top-[150px] bottom-[130px] left-[70px] right-[70px] z-30">
 
-        let currentSlideIndex = 0;
-        let isPreviewMode = true;
+      <!-- Slide 1: Cover -->
+      <div id="slide-1" class="slide-layer active">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="pt-4">
+            <div class="w-16 h-1 bg-accent mb-8"></div>
+            <h1 class="font-display font-bold text-[115px] leading-[0.92] tracking-tight balance-text text-ink clamp-4">
+              The Unseen Foundation of Space
+            </h1>
+            <p class="font-sans text-[30px] leading-[1.3] text-graphite mt-8 max-w-[850px] clamp-3">
+              Introducing 'The Tokyo Review,' an exploration into the profound architectural and spatial philosophy that posits intentional absence—the carefully sculpted void—as a fundamental element, equal in power to physical form. This is where silence shapes experience.
+            </p>
+          </div>
+          <div class="flex gap-12 items-end pt-8 border-t-2 border-ink pb-4">
+            <div class="w-[35%] font-mono text-[16px] uppercase tracking-widest text-graphite">
+              By The Editors
+            </div>
+            <div class="w-[65%] font-display italic text-[36px] leading-[1.3] text-ink pl-8 border-l-2 border-accent">
+              "Presence is defined by absence."
+            </div>
+          </div>
+        </div>
+      </div>
 
-        function updateSlideDisplay() {
-            slides.forEach((slide, index) => {
-                slide.classList.toggle('active', index === currentSlideIndex);
-            });
-            slideSelector.value = currentSlideIndex + 1;
-            pageNumSpan.textContent = (currentSlideIndex + 1).toString().padStart(2, '0');
+      <!-- Slide 2: Catalog / List -->
+      <div id="slide-2" class="slide-layer">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
+            <h2 class="font-display font-bold text-[72px] leading-none text-ink">Foundations of Emptiness</h2>
+          </div>
+          <div class="flex-1 flex flex-col justify-around border-b border-hairline">
+            <!-- 3 Items -->
+            <div class="flex items-start gap-8 py-6 border-t border-hairline">
+              <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">I.</span>
+              <div>
+                <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-2 block">MA PRINCIPLE</span>
+                <p class="font-sans text-[28px] text-graphite leading-[1.35]">The traditional Japanese concept of 'ma'—the interval, the pause, the negative space—is not merely an aesthetic choice but a critical determinant of perception and emotional resonance in built environments.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-8 py-6 border-t border-hairline">
+              <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">II.</span>
+              <div>
+                <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-2 block">KATSURA VILLA</span>
+                <p class="font-sans text-[28px] text-graphite leading-[1.35]">This 17th-century imperial retreat exemplifies the masterful use of interstitial spaces, blurring boundaries between interior and exterior, and fostering a dynamic interplay of light, shadow, and natural elements.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-8 py-6 border-t border-hairline">
+              <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none">III.</span>
+              <div>
+                <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-2 block">MINIMALIST DWELLINGS</span>
+                <p class="font-sans text-[28px] text-graphite leading-[1.35]">Contemporary residential architecture that strips away the superfluous, revealing how uncluttered forms and strategic voids can amplify perceived spaciousness, tranquility, and the sensory experience of materials.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Telemetry / 2x2 Metrics -->
+      <div id="slide-3" class="slide-layer">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
+            <h2 class="font-display font-bold text-[72px] leading-none text-ink">Metrics of Presence & Absence</h2>
+          </div>
+          <div class="flex-1 grid grid-cols-2 gap-x-16 gap-y-12 items-center content-center my-auto">
+            <!-- 4 Stats -->
+            <div class="flex flex-col justify-end pl-8 border-l-4 border-accent bg-surface p-6 border-y border-r border-hairline">
+              <span class="font-display font-bold text-[115px] leading-none text-ink">85<span class="text-[50px] font-sans font-normal">%</span></span>
+              <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">PERCEIVED VOLUME</span>
+              <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">_This metric quantifies how subjective spatial expansion is influenced by unobstructed sightlines and the strategic deployment of negative space._</p>
+            </div>
+            <div class="flex flex-col justify-end pl-8 border-l-4 border-accent bg-surface p-6 border-y border-r border-hairline">
+              <span class="font-display font-bold text-[115px] leading-none text-ink">1.7<span class="text-[50px] font-sans font-normal">m/s</span></span>
+              <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">CIRCULATION FLOW</span>
+              <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">_Measured average pedestrian velocity, indicating how efficiently and intuitively users navigate a space, often enhanced by clear spatial sequencing and open areas._</p>
+            </div>
+            <div class="flex flex-col justify-end pl-8 border-l-4 border-accent bg-surface p-6 border-y border-r border-hairline">
+              <span class="font-display font-bold text-[115px] leading-none text-ink">0.65</span>
+              <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">LIGHT DIFFUSION</span>
+              <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">_A coefficient representing the evenness of ambient light distribution, with higher values indicating softer, more diffused illumination achieved through considered fenestration and open layouts._</p>
+            </div>
+            <div class="flex flex-col justify-end pl-8 border-l-4 border-accent bg-surface p-6 border-y border-r border-hairline">
+              <span class="font-display font-bold text-[115px] leading-none text-ink">7.2<span class="text-[50px] font-sans font-normal">/10</span></span>
+              <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3">SENSORY QUIETUDE</span>
+              <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2">_An index derived from acoustic dampening, visual clutter reduction, and material texture, measuring the perceived level of calm and mental repose within an environment._</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Framework / System Anatomy -->
+      <div id="slide-4" class="slide-layer">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
+            <h2 class="font-display font-bold text-[72px] leading-none text-ink">Anatomy of Spatial Harmony</h2>
+          </div>
+          <div class="flex-1 grid grid-cols-3 gap-8 items-stretch content-center my-auto">
+            <!-- 3 Pillars -->
+            <div class="p-8 bg-surface border border-hairline flex flex-col justify-between">
+              <div>
+                <span class="font-mono text-[24px] font-bold text-accent mb-4 block">[01]</span>
+                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">FORM AS DELIMITER</h3>
+                <p class="font-sans text-[24px] leading-[1.4] text-graphite">The physical boundaries and massing of architecture, designed not just to enclose but to define, frame, and direct the perception of the space beyond. Form's role is to sculpt the void.</p>
+              </div>
+              <div class="w-16 h-1 bg-accent mt-8"></div>
+            </div>
+            <div class="p-8 bg-surface border border-hairline flex flex-col justify-between">
+              <div>
+                <span class="font-mono text-[24px] font-bold text-accent mb-4 block">[02]</span>
+                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">FUNCTION AS FLOW</h3>
+                <p class="font-sans text-[24px] leading-[1.4] text-graphite">The dynamic arrangement of activities and circulation paths within a spatial envelope. Optimized function leverages negative space to facilitate movement, interaction, and a sense of effortless occupation.</p>
+              </div>
+              <div class="w-16 h-1 bg-accent mt-8"></div>
+            </div>
+            <div class="p-8 bg-surface border border-hairline flex flex-col justify-between">
+              <div>
+                <span class="font-mono text-[24px] font-bold text-accent mb-4 block">[03]</span>
+                <h3 class="font-display font-bold text-[36px] leading-[1.2] text-ink mb-4">EXPERIENCE AS EMPTINESS</h3>
+                <p class="font-sans text-[24px] leading-[1.4] text-graphite">The subjective, phenomenological engagement with a space, where the absence of distraction, the clarity of sightlines, and the presence of calm contribute most profoundly to user well-being and cognitive engagement.</p>
+              </div>
+              <div class="w-16 h-1 bg-accent mt-8"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: Chronology / Stem Timeline -->
+      <div id="slide-5" class="slide-layer">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
+            <h2 class="font-display font-bold text-[72px] leading-none text-ink">Evolution of the Empty Room</h2>
+          </div>
+          <div class="flex-1 flex flex-col justify-around pl-16 border-l-2 border-hairline ml-8 my-4 relative">
+            <!-- 3 Timeline Events -->
+            <div class="relative flex flex-col gap-2">
+              <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
+              <span class="font-mono text-[32px] text-accent font-bold">1500s</span>
+              <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">EARLY ZEN GARDENS</h3>
+              <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">The intentional use of raked gravel, strategically placed rocks, and surrounding emptiness in Japanese Zen gardens established early precedents for 'ma' as a spiritual and aesthetic principle in landscape design.</p>
+            </div>
+            <div class="relative flex flex-col gap-2">
+              <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
+              <span class="font-mono text-[32px] text-accent font-bold">1920s</span>
+              <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">BAUHAUS MINIMALISM</h3>
+              <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">The Bauhaus movement championed functionalism and simplicity, leading to architectural forms and interior designs that prioritized clean lines and uncluttered spaces, emphasizing the inherent beauty of form and material.</p>
+            </div>
+            <div class="relative flex flex-col gap-2">
+              <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
+              <span class="font-mono text-[32px] text-accent font-bold">2000s</span>
+              <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink">CONTEMPORARY SPACES</h3>
+              <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]">Modern architecture increasingly leverages negative space for its psychological benefits, creating adaptable, serene environments that respond to the human need for calm, focus, and a connection to elemental form.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Debunk / Juxtaposition -->
+      <div id="slide-6" class="slide-layer">
+        <div class="flex flex-col h-full justify-between py-6">
+          <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
+            <h2 class="font-display font-bold text-[72px] leading-none text-ink">Challenging Spatial Misconceptions</h2>
+          </div>
+          <div class="flex-1 flex items-stretch gap-12 my-auto">
+            <div class="w-1/2 flex flex-col justify-center pr-8 text-right bg-surface p-10 border border-hairline">
+              <span class="font-mono text-[20px] uppercase tracking-widest text-graphite mb-4 block">THE CLAIM [UNVERIFIED]</span>
+              <p class="font-sans italic text-[30px] leading-[1.35] text-graphite">"Minimalism is simply about having empty rooms."</p>
+            </div>
+            <div class="w-[2px] bg-hairline self-stretch"></div>
+            <div class="w-1/2 flex flex-col justify-center pl-8 bg-surface p-10 border-l-4 border-accent border-y border-r border-hairline">
+              <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-4 block">THE RECORD [DOCUMENTED]</span>
+              <h3 class="font-display font-bold text-[40px] leading-[1.2] text-ink mb-4">The Record: Intentional Curation</h3>
+              <p class="font-sans text-[26px] leading-[1.4] text-graphite">The true essence of minimalism lies not in mere emptiness, but in the deliberate selection and arrangement of elements, where every object and void serves a precise purpose, contributing to clarity, focus, and an elevated user experience.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 7: Pullquote / Monolith -->
+      <div id="slide-7" class="slide-layer">
+        <div class="flex flex-col h-full justify-center items-center text-center px-12">
+          <span class="font-display text-[96px] text-accent leading-none mb-4">“</span>
+          <blockquote class="font-display font-bold text-[52px] leading-[1.2] text-ink mb-10 max-w-[900px] clamp-4 balance-text italic">
+            It is not the walls that define a room, but the air between them. The true architecture of experience resides in the intentionality of what is left unsaid, unseen, and unfurnished.
+          </blockquote>
+          <div class="pt-8 border-t-2 border-ink w-1/2 flex flex-col items-center">
+            <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">Akira Kurosawa</span>
+            <span class="font-mono text-[18px] uppercase tracking-widest text-graphite mt-2">Filmmaker and Master Storyteller</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: Hero Metric & Direct CTA -->
+      <div id="slide-8" class="slide-layer">
+        <div class="flex flex-col h-full justify-between items-center text-center py-6">
+          <div class="flex flex-col items-center pt-4">
+            <span class="font-display font-bold text-[180px] leading-none text-accent">80<span class="text-[90px] font-sans font-normal">%</span></span>
+            <h2 class="font-display font-bold text-[52px] text-ink mt-2 mb-4">PERCEIVED SPACE</h2>
+            <div class="bg-surface p-8 max-w-[850px] border-t-2 border-b-2 border-ink">
+              <p class="font-sans text-[28px] text-graphite leading-[1.4]">is defined by its boundaries and the intentional voids they create.</p>
+            </div>
+            <p class="font-sans text-[28px] text-graphite leading-[1.4] mt-8 max-w-[850px]">
+              Understanding the symbiotic relationship between presence and absence unlocks new dimensions in design. 'The Tokyo Review' offers a deeper appreciation for how 'ma' cultivates tranquility, enhances focus, and enriches human experience, proving that thoughtful emptiness is an active, powerful design tool.
+            </p>
+          </div>
+          <div class="pb-4 flex flex-col items-center">
+            <a href="#" class="px-12 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[24px] hover:bg-graphite transition-colors inline-block rounded-none shadow-md">
+              Explore the Void
+            </a>
+            <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6">@TokyoReviewArch</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('export-canvas');
+    const slides = canvas.querySelectorAll('.slide-layer');
+    const pageNumDisplay = document.getElementById('page-num');
+    let activeSlideIndex = 0;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (i === index) {
+          slide.classList.add('active');
         }
+      });
+      pageNumDisplay.textContent = String(index + 1).padStart(2, '0');
+      activeSlideIndex = index;
+    }
 
-        function goToSlide(index) {
-            if (index < 0) index = slides.length - 1;
-            if (index >= slides.length) index = 0;
-            currentSlideIndex = index;
-            updateSlideDisplay();
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        if (activeSlideIndex < slides.length - 1) {
+          showSlide(activeSlideIndex + 1);
         }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        if (activeSlideIndex > 0) {
+          showSlide(activeSlideIndex - 1);
+        }
+      }
+    });
 
-        slideSelector.addEventListener('change', (event) => {
-            goToSlide(parseInt(event.target.value) - 1);
-        });
-
-        prevSlideBtn.addEventListener('click', () => {
-            goToSlide(currentSlideIndex - 1);
-        });
-
-        nextSlideBtn.addEventListener('click', () => {
-            goToSlide(currentSlideIndex + 1);
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowLeft') {
-                goToSlide(currentSlideIndex - 1);
-            } else if (event.key === 'ArrowRight') {
-                goToSlide(currentSlideIndex + 1);
-            }
-        });
-
-        modeToggle.addEventListener('click', () => {
-            isPreviewMode = !isPreviewMode;
-            if (isPreviewMode) {
-                canvas.style.transform = 'scale(0.45)';
-                canvas.style.transformOrigin = 'top left';
-                canvas.style.marginTop = '16px'; // Adjust margin to account for control bar
-                modeToggle.textContent = '45% Preview';
-            } else {
-                canvas.style.transform = 'scale(1)';
-                canvas.style.marginTop = '64px'; // Reset margin
-                modeToggle.textContent = '100% Export';
-            }
-        });
-
-        // Initial setup
-        updateSlideDisplay();
-    </script>
+    // Initialize the first slide
+    showSlide(0);
+  </script>
 </body>
 </html>
