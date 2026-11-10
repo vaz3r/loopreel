@@ -110,17 +110,25 @@ ${colorRules}  </style>
   const slideIdMatches = html.match(/id=["']slide-\d+["']/gi) || [];
   const slideCount = Math.max(slideLayerMatches.length, slideIdMatches.length);
 
-  if (slideCount < 8) {
-    warnings.push(`Found ${slideCount} slide layers (expected 8 core archetypes).`);
+  if (slideCount < 17) {
+    warnings.push(`Found ${slideCount} slide layers (expected 17 canonical archetypes).`);
   }
 
-  // 6. Check Monumental Typographic Scale
+  // 8. Check Interactive Navigation Controls
+  if (!html.includes('id="slideSelector"')) {
+    warnings.push('Missing interactive #slideSelector dropdown for preview navigation.');
+  }
+  if (!html.includes('id="modeToggle"')) {
+    warnings.push('Missing interactive #modeToggle button for preview/export scaling.');
+  }
+
+  // 9. Check Monumental Typographic Scale
   const hasMonumentalHeading = /text-\[(?:1[1-9]\d|[2-9]\d{2})px\]/.test(html);
   if (!hasMonumentalHeading) {
     warnings.push('No headline >= 110px detected; verify typographic scale contrast on 1080x1350 canvas.');
   }
 
-  // 7. Check Tailwind and Google Fonts
+  // 10. Check Tailwind and Google Fonts
   if (!html.includes('cdn.tailwindcss.com')) {
     warnings.push('Missing Tailwind CSS CDN script tag.');
   }

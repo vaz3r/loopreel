@@ -5,9 +5,8 @@ import {
   buildConceptUserPrompt,
   buildEditorialSystemPrompt,
   buildEditorialUserPrompt,
-  buildAssemblySystemPrompt,
-  buildAssemblyUserPrompt,
 } from './prompt.js';
+import { compileCompleteTemplate } from './archetypes.js';
 
 export interface BrandDesignSystem {
   templateName: string;
@@ -30,7 +29,7 @@ export interface BrandDesignSystem {
   };
   slideConcepts: Array<{
     slideNumber: number;
-    archetype: string; // Cover, Catalog, Telemetry, Framework, Timeline, Debunk, Pullquote, HeroCTA
+    archetype: string;
     title: string;
     narrativeAngle: string;
   }>;
@@ -125,8 +124,8 @@ export async function runEditorialPass(
   try {
     const parsed = JSON.parse(jsonStr);
     const slides: DetailedSlideContent[] = Array.isArray(parsed) ? parsed : parsed.slides || [];
-    if (!slides || slides.length < 6) {
-      throw new Error(`Pass 2 returned only ${slides.length} slides, expected at least 8`);
+    if (!slides || slides.length < 4) {
+      throw new Error(`Pass 2 returned only ${slides.length} slides, expected at least 4`);
     }
     console.log(`[apps/generator] Pass 2 complete: Authored editorial copy for ${slides.length} slides.`);
     return slides;
@@ -137,30 +136,15 @@ export async function runEditorialPass(
 }
 
 /**
- * Pass 3: Master HTML/CSS Assembly
+ * Pass 3: Front-End Master Assembly into Single-File HTML (All 17 Canonical Archetypes)
  */
 export async function runAssemblyPass(
   manifest: BrandDesignSystem,
   slides: DetailedSlideContent[],
-  client: LLMClient
+  _client: LLMClient
 ): Promise<string> {
-  console.log('[apps/generator] >>> Pass 3: Front-End Master Assembly into Single-File HTML...');
-  const sysPrompt = buildAssemblySystemPrompt();
-  const userPrompt = buildAssemblyUserPrompt(manifest, slides);
-
-  const res = await client.generateJSON(sysPrompt, userPrompt);
-  let html = res.text.trim();
-
-  // Strip code fences if present
-  if (html.startsWith('```html')) {
-    html = html.replace(/^```html\s*/i, '');
-  } else if (html.startsWith('```')) {
-    html = html.replace(/^```\s*/i, '');
-  }
-  if (html.endsWith('```')) {
-    html = html.replace(/\s*```$/i, '');
-  }
-
-  console.log(`[apps/generator] Pass 3 complete: Assembled ${html.length} characters of HTML.`);
+  console.log('[apps/generator] >>> Pass 3: Compiling All 17 Canonical Archetypes with Interactive Preview Panel...');
+  const html = compileCompleteTemplate(manifest, slides);
+  console.log(`[apps/generator] Pass 3 complete: Assembled ${html.length} characters of standalone HTML.`);
   return html.trim();
 }

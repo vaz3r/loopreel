@@ -29,15 +29,24 @@ You must design:
    - monoFont: Technical data & indexer font (e.g. IBM Plex Mono, Space Mono, Oswald)
    - googleFontsUrl: Complete Google Fonts <link> URL importing all 3 families with appropriate weights.
 
-3. Thematic Narrative & 8 Slide Concepts:
-   - Slide 1: Cover (introductory masthead, commanding headline, thesis)
-   - Slide 2: Catalog (3-part curated list with Roman numerals I, II, III)
-   - Slide 3: Telemetry (4 macro metrics in 2x2 with vertical spines)
-   - Slide 4: Framework (3-pillar architectural system anatomy)
-   - Slide 5: Chronology (3-phase timeline with continuous vertical stem)
-   - Slide 6: Debunk (The Claim [Unverified] vs The Record [Documented])
-   - Slide 7: Pullquote (Monumental monolith quote with oversized quote mark)
-   - Slide 8: Hero Metric & CTA (Monumental stat centerpiece + analytical placard + action directive)
+3. Thematic Narrative & 17 Canonical Slide Archetypes:
+   - Slide 1: Cover (introductory masthead, commanding headline, abstract deck)
+   - Slide 2: Exec Summary (3-part curated list with index numbers)
+   - Slide 3: Observation (split architectural diagram/photo container + deep critique)
+   - Slide 4: Empirical Data (4 macro metrics in 2x2 with vertical spines)
+   - Slide 5: Analytical Inquiry (conversational Q&A card with distinct Q/A badges)
+   - Slide 6: The Value Matrix (2x2 Quadrant with X/Y axes and hero quadrant highlight)
+   - Slide 7: Clinical Study (3-stage case study: Hypothesis -> Intervention -> Result)
+   - Slide 8: Theoretical Correction (Null hypothesis vs Validated finding)
+   - Slide 9: Literature Review (4 architectural pillars / resources with accent tabs)
+   - Slide 10: Research Methodology (STEM timeline spine with phase nodes)
+   - Slide 11: Citation (oversized quote mark, italic pullquote, centered attribution)
+   - Slide 12: Acquisition (closing acquisition placard with monogram, headline, button)
+   - Slide 13: Focal Metric (massive 220px percentage with analytical summary)
+   - Slide 14: Experimental Design (3-step vertical protocol with variable indicators)
+   - Slide 15: Comparative Paradigm (side-by-side legacy vs proposed with ✕ and ✓ indicators)
+   - Slide 16: Implementation Audit (4-point evaluation checklist with styled checkboxes)
+   - Slide 17: System Architecture (diagrammatic 4-corner component breakdown with central node)
 
 CRITICAL: Return ONLY a valid JSON object matching the BrandDesignSystem interface. Do NOT wrap in markdown code blocks.`;
 }
@@ -72,12 +81,21 @@ Output JSON schema:
   "slideConcepts": [
     { "slideNumber": 1, "archetype": "Cover", "title": "...", "narrativeAngle": "..." },
     { "slideNumber": 2, "archetype": "Catalog", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 3, "archetype": "Telemetry", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 4, "archetype": "Framework", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 5, "archetype": "Timeline", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 6, "archetype": "Debunk", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 7, "archetype": "Pullquote", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 8, "archetype": "HeroCTA", "title": "...", "narrativeAngle": "..." }
+    { "slideNumber": 3, "archetype": "ImageSplit", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 4, "archetype": "Telemetry", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 5, "archetype": "Dialogue", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 6, "archetype": "Quadrant", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 7, "archetype": "CaseStudy", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 8, "archetype": "Debunk", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 9, "archetype": "Grid", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 10, "archetype": "Timeline", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 11, "archetype": "Pullquote", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 12, "archetype": "HeroCTA", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 13, "archetype": "HeroStat", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 14, "archetype": "StepByStep", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 15, "archetype": "DosAndDonts", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 16, "archetype": "Checklist", "title": "...", "narrativeAngle": "..." },
+    { "slideNumber": 17, "archetype": "Anatomy", "title": "...", "narrativeAngle": "..." }
   ]
 }`;
 }
@@ -89,30 +107,28 @@ Output JSON schema:
 export function buildEditorialSystemPrompt(): string {
   return `You are an Executive Editor and Master Editorial Copywriter (The New Yorker, Monocle, Harvard Business Review, Wired).
 
-Your task is to write handcrafted, publication-grade editorial copy for each of the 8 slide concepts in the provided Design Manifest.
+Your task is to write handcrafted, publication-grade editorial copy for the 6 core anchor slides (Slide 1 Cover, Slide 2 Catalog, Slide 4 Telemetry, Slide 8 Debunk, Slide 11 Pullquote, Slide 12 HeroCTA) based on the provided Design Manifest.
 
 QUALITY REQUIREMENTS:
 1. NEVER use generic placeholder bullets ("Item 1", "Lorem Ipsum", "Fast growth").
 2. Write deep, intelligent, domain-specific journalism.
 3. Every metric must have believable, specific signed numerical values, units, and analytical context.
-4. Provide all required structural fields for each archetype:
-   - Cover: headline (commanding, max 8 words), subhead (deep narrative), authorOrAttribution, thesisQuote.
-   - Catalog: 3 items, each with index ("I.", "II.", "III."), kicker (uppercase, 2-3 words), and rich body text (25-35 words).
-   - Telemetry: 4 stats, each with value, optional unit, uppercase label, and italic context sentence.
-   - Framework: 3 pillars ([01], [02], [03]) with title and deep description.
-   - Timeline: 3 milestones with year/phase, title, and detailed event description.
-   - Debunk: claim (popular unverified belief) vs recordTitle and recordBody (authoritative documented reality).
-   - Pullquote: monumental statement (15-25 words), author, professional credential.
-   - HeroCTA: heroNumber, heroTitle, analytical narrative summary (40-50 words), CTA button text, social handle.
+4. Provide all required structural fields:
+   - Cover (slide 1): headline (commanding, max 8 words), subhead (deep narrative), authorOrAttribution.
+   - Catalog (slide 2): 3 items, each with index ("01", "02", "03"), kicker (uppercase), and rich body text.
+   - Telemetry (slide 4): 4 stats, each with value, optional unit, uppercase label, and context sentence.
+   - Debunk (slide 8): claim vs recordTitle and recordBody.
+   - Pullquote (slide 11): monumental statement (15-25 words), author, credential.
+   - HeroCTA (slide 12): headline, bodyText, cta with buttonText and socialHandle.
 
-CRITICAL: Return ONLY a valid JSON array of 8 slide objects matching DetailedSlideContent[]. Do NOT wrap in markdown code blocks.`;
+CRITICAL: Return ONLY a valid JSON array of the 6 slide objects matching DetailedSlideContent[]. Do NOT wrap in markdown code blocks.`;
 }
 
 export function buildEditorialUserPrompt(manifest: any): string {
-  return `Write the complete publication-grade editorial copy for all 8 slides based on this Design Manifest:
+  return `Write the complete publication-grade editorial copy for the slides based on this Design Manifest:
 ${JSON.stringify(manifest, null, 2)}
 
-Return a JSON array of 8 slide objects:
+Return a JSON array of slide objects:
 [
   {
     "slideNumber": 1,
@@ -120,8 +136,7 @@ Return a JSON array of 8 slide objects:
     "kicker": "ESSAY / REPORT",
     "headline": "...",
     "subhead": "...",
-    "authorOrAttribution": "By ...",
-    "thesisQuote": "..."
+    "authorOrAttribution": "By ..."
   },
   {
     "slideNumber": 2,
@@ -129,49 +144,27 @@ Return a JSON array of 8 slide objects:
     "kicker": "CURATED SYSTEMS",
     "headline": "...",
     "items": [
-      { "index": "I.", "kicker": "...", "body": "..." },
-      { "index": "II.", "kicker": "...", "body": "..." },
-      { "index": "III.", "kicker": "...", "body": "..." }
-    ]
-  },
-  {
-    "slideNumber": 3,
-    "archetype": "Telemetry",
-    "kicker": "MACRO METRICS",
-    "headline": "...",
-    "stats": [
-      { "value": "...", "unit": "...", "label": "...", "context": "..." },
-      { "value": "...", "unit": "...", "label": "...", "context": "..." },
-      { "value": "...", "unit": "...", "label": "...", "context": "..." },
-      { "value": "...", "unit": "...", "label": "...", "context": "..." }
+      { "index": "01", "kicker": "...", "body": "..." },
+      { "index": "02", "kicker": "...", "body": "..." },
+      { "index": "03", "kicker": "...", "body": "..." }
     ]
   },
   {
     "slideNumber": 4,
-    "archetype": "Framework",
-    "kicker": "SYSTEM ANATOMY",
+    "archetype": "Telemetry",
+    "kicker": "MACRO METRICS",
     "headline": "...",
-    "items": [
-      { "index": "[01]", "kicker": "...", "body": "..." },
-      { "index": "[02]", "kicker": "...", "body": "..." },
-      { "index": "[03]", "kicker": "...", "body": "..." }
+    "stats": [
+      { "value": "...", "unit": "%", "label": "...", "context": "..." },
+      { "value": "...", "unit": "x", "label": "...", "context": "..." },
+      { "value": "...", "unit": "%", "label": "...", "context": "..." },
+      { "value": "...", "unit": "%", "label": "...", "context": "..." }
     ]
   },
   {
-    "slideNumber": 5,
-    "archetype": "Timeline",
-    "kicker": "CHRONOLOGY",
-    "headline": "...",
-    "items": [
-      { "index": "...", "kicker": "...", "body": "..." },
-      { "index": "...", "kicker": "...", "body": "..." },
-      { "index": "...", "kicker": "...", "body": "..." }
-    ]
-  },
-  {
-    "slideNumber": 6,
+    "slideNumber": 8,
     "archetype": "Debunk",
-    "kicker": "ANALYSIS",
+    "kicker": "CORRECTION",
     "headline": "...",
     "claimVsRecord": {
       "claim": "...",
@@ -180,20 +173,16 @@ Return a JSON array of 8 slide objects:
     }
   },
   {
-    "slideNumber": 7,
+    "slideNumber": 11,
     "archetype": "Pullquote",
-    "kicker": "PERSPECTIVE",
-    "headline": "...",
     "thesisQuote": "...",
     "authorOrAttribution": "...",
     "subhead": "..."
   },
   {
-    "slideNumber": 8,
+    "slideNumber": 12,
     "archetype": "HeroCTA",
-    "kicker": "CONCLUSION",
     "headline": "...",
-    "stats": [{ "value": "...", "label": "...", "context": "..." }],
     "bodyText": "...",
     "cta": {
       "buttonText": "...",
