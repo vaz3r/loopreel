@@ -138,6 +138,12 @@ async function main() {
     if (result.usage) {
       console.log(`Tokens:     Input: ${result.usage.promptTokens} | Output: ${result.usage.completionTokens}`);
     }
+    if (result.audit) {
+      console.log(`Audit:      Collisions: ${result.audit.totalCollisions} | Passed: ${result.audit.passed ? 'YES' : 'NO'}`);
+      if (result.audit.errors.length > 0) {
+        console.log(`Errors:     ${result.audit.errors.join('; ')}`);
+      }
+    }
     if (result.validation.warnings.length > 0) {
       console.log(`Warnings:   ${result.validation.warnings.join('; ')}`);
     }

@@ -48,7 +48,31 @@ export function cleanAndValidateHtml(rawText: string): ValidationResult {
     warnings.push('Missing dynamic folio indicator (#page-num) in global frame.');
   }
 
-  // 5. Count slide layers
+  // 5. Ensure Mandatory Slide Layer CSS exists
+  if (!html.includes('.slide-layer {') || !html.includes('inset: 0')) {
+    const slideLayerCss = `
+    <style>
+      .slide-layer {
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+      }
+      .slide-layer.active {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+    `;
+    if (html.includes('</head>')) {
+      html = html.replace('</head>', `${slideLayerCss}\n</head>`);
+    } else {
+      html = `${slideLayerCss}\n${html}`;
+    }
+  }
+
+  // 6. Count slide layers
   const slideLayerMatches = html.match(/class=["'][^"']*slide-layer[^"']*["']/gi) || [];
   const slideIdMatches = html.match(/id=["']slide-\d+["']/gi) || [];
   const slideCount = Math.max(slideLayerMatches.length, slideIdMatches.length);

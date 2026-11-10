@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createLLMClient } from '@loopreel/llm';
 import { buildSystemPrompt, buildUserPrompt, type TemplateBrief } from './prompt.js';
 import { cleanAndValidateHtml, type ValidationResult } from './validator.js';
+import { auditTemplateHtml, type AuditReport } from './visual-auditor.js';
 
 function findRepoRoot(): string {
   let dir = path.dirname(fileURLToPath(import.meta.url));
@@ -20,12 +21,13 @@ export interface GenerationResult {
   filePath: string;
   templateName: string;
   validation: ValidationResult;
+  audit?: AuditReport;
   usage?: { promptTokens: number; completionTokens: number };
 }
 
 export async function generateTemplateReference(
   brief: TemplateBrief,
-  options?: { outputDir?: string; provider?: string }
+  options?: { outputDir?: string; provider?: string; skipAudit?: boolean }
 ): Promise<GenerationResult> {
   const rootDir = findRepoRoot();
   const targetDir = options?.outputDir || path.resolve(rootDir, 'packages/loop/design-references');
@@ -58,7 +60,7 @@ export async function generateTemplateReference(
     }
   }
 
-  console.log(`[apps/generator] Response received (${response.text.length} characters). Validating...`);
+  console.log(`[apps/generator] Response received (${response.text.length} characters). Validating structure...`);
   const validation = cleanAndValidateHtml(response.text);
 
   if (!validation.valid) {
@@ -71,12 +73,35 @@ export async function generateTemplateReference(
   const filePath = path.join(targetDir, fileName);
 
   fs.writeFileSync(filePath, validation.html, 'utf8');
-  console.log(`[apps/generator] Successfully saved design reference: ${filePath}`);
+  console.log(`[apps/generator] Saved design reference: ${filePath}`);
+
+  // Run automated Playwright visual audit
+  let audit: AuditReport | undefined;
+  if (!options?.skipAudit) {
+    console.log(`[apps/generator] Running automated visual collision & balance audit...`);
+    const screenshotDir = path.resolve(
+      rootDir,
+      `node_modules/.cache/generator/${cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+    );
+    audit = await auditTemplateHtml(filePath, { screenshotDir });
+
+    if (audit.totalCollisions > 0) {
+      console.warn(`[apps/generator] WARNING: Visual auditor detected ${audit.totalCollisions} text collision(s)!`);
+      audit.errors.forEach((err) => console.warn(`  - ${err}`));
+    } else {
+      console.log(`[apps/generator] Visual audit PASSED: 0 collisions detected across all ${audit.slideCount} slides.`);
+    }
+
+    if (audit.warnings.length > 0) {
+      audit.warnings.forEach((warn) => console.warn(`  - ${warn}`));
+    }
+  }
 
   return {
     filePath,
     templateName: brief.name,
     validation,
+    audit,
     usage: response.usage,
   };
 }

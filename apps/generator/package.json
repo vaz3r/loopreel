@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@loopreel/llm": "workspace:*",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "playwright": "^1.49.0"
   },
   "devDependencies": {
     "tsx": "^4.19.0",
