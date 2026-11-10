@@ -78,6 +78,12 @@ Output JSON schema:
     "monoFont": "FontName",
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=..."
   },
+  "visualMetaphor": {
+    "texturePattern": "washi",
+    "signatureMotif": "seal",
+    "motifText": "印",
+    "borderStyle": "architectural"
+  },
   "slideConcepts": [
     { "slideNumber": 1, "archetype": "Cover", "title": "...", "narrativeAngle": "..." },
     { "slideNumber": 2, "archetype": "Catalog", "title": "...", "narrativeAngle": "..." },
@@ -101,93 +107,231 @@ Output JSON schema:
 }
 
 // ======================================================================
-// PASS 2: EDITORIAL COPYWRITING & SPATIAL COMPOSITION
+// PASS 2: EDITORIAL COPYWRITING & SPATIAL COMPOSITION (BATCH 1 & BATCH 2)
 // ======================================================================
 
 export function buildEditorialSystemPrompt(): string {
   return `You are an Executive Editor and Master Editorial Copywriter (The New Yorker, Monocle, Harvard Business Review, Wired).
 
-Your task is to write handcrafted, publication-grade editorial copy for the 6 core anchor slides (Slide 1 Cover, Slide 2 Catalog, Slide 4 Telemetry, Slide 8 Debunk, Slide 11 Pullquote, Slide 12 HeroCTA) based on the provided Design Manifest.
+Your task is to write handcrafted, publication-grade editorial journalism for the provided Brand Design Manifest.
 
-QUALITY REQUIREMENTS:
-1. NEVER use generic placeholder bullets ("Item 1", "Lorem Ipsum", "Fast growth").
-2. Write deep, intelligent, domain-specific journalism.
-3. Every metric must have believable, specific signed numerical values, units, and analytical context.
-4. Provide all required structural fields:
-   - Cover (slide 1): headline (commanding, max 8 words), subhead (deep narrative), authorOrAttribution.
-   - Catalog (slide 2): 3 items, each with index ("01", "02", "03"), kicker (uppercase), and rich body text.
-   - Telemetry (slide 4): 4 stats, each with value, optional unit, uppercase label, and context sentence.
-   - Debunk (slide 8): claim vs recordTitle and recordBody.
-   - Pullquote (slide 11): monumental statement (15-25 words), author, credential.
-   - HeroCTA (slide 12): headline, bodyText, cta with buttonText and socialHandle.
+STRICT EDITORIAL STANDARDS:
+1. NEVER use generic placeholder bullets or robotic corporate fluff ("synergy", "paradigm", "scrutinizes", "fosters", "actionable").
+2. Write deep, intelligent, provocative, human journalism specifically about the provided Domain and Aesthetic.
+3. Every metric MUST be strictly numerical or a signed badge (+12%, -17%, $1.2T, 94.2). NEVER output text phrases like "To be measured" in metric values.
+4. Craft captivating headlines (punchy, commanding, no rhetorical questions).
 
-CRITICAL: Return ONLY a valid JSON array of the 6 slide objects matching DetailedSlideContent[]. Do NOT wrap in markdown code blocks.`;
+CRITICAL: Return ONLY a valid JSON array of slide objects. Do NOT wrap in markdown code blocks.`;
 }
 
-export function buildEditorialUserPrompt(manifest: any): string {
-  return `Write the complete publication-grade editorial copy for the slides based on this Design Manifest:
+export function buildEditorialBatch1UserPrompt(manifest: any): string {
+  return `Write bespoke editorial copy for Slides 1 through 9 based on this Brand Design Manifest:
 ${JSON.stringify(manifest, null, 2)}
 
-Return a JSON array of slide objects:
+Return a JSON array of 9 slide objects:
 [
   {
     "slideNumber": 1,
     "archetype": "Cover",
     "kicker": "ESSAY / REPORT",
-    "headline": "...",
-    "subhead": "...",
-    "authorOrAttribution": "By ..."
+    "headline": "Commanding title (max 7 words)",
+    "subhead": "Deep narrative deck (2 sentences)",
+    "authorOrAttribution": "Byline / Editorial Board"
   },
   {
     "slideNumber": 2,
     "archetype": "Catalog",
-    "kicker": "CURATED SYSTEMS",
-    "headline": "...",
+    "kicker": "CORE POSTULATES",
+    "headline": "Section title",
     "items": [
-      { "index": "01", "kicker": "...", "body": "..." },
-      { "index": "02", "kicker": "...", "body": "..." },
-      { "index": "03", "kicker": "...", "body": "..." }
+      { "index": "01", "kicker": "TITLE 1", "body": "25-30 words of domain journalism." },
+      { "index": "02", "kicker": "TITLE 2", "body": "25-30 words of domain journalism." },
+      { "index": "03", "kicker": "TITLE 3", "body": "25-30 words of domain journalism." }
     ]
+  },
+  {
+    "slideNumber": 3,
+    "archetype": "ImageSplit",
+    "kicker": "SPATIAL ANALYSIS",
+    "headline": "Observation title",
+    "bodyText": "Deep analytical critique explaining the visual exhibit (40-50 words).",
+    "authorOrAttribution": "FIG. 01 — ARCHITECTURAL ELEVATION"
   },
   {
     "slideNumber": 4,
     "archetype": "Telemetry",
-    "kicker": "MACRO METRICS",
-    "headline": "...",
+    "kicker": "EMPIRICAL DATA",
+    "headline": "Metrics title",
     "stats": [
-      { "value": "...", "unit": "%", "label": "...", "context": "..." },
-      { "value": "...", "unit": "x", "label": "...", "context": "..." },
-      { "value": "...", "unit": "%", "label": "...", "context": "..." },
-      { "value": "...", "unit": "%", "label": "...", "context": "..." }
+      { "value": "88.4", "unit": "%", "label": "METRIC A", "context": "One-line context sentence." },
+      { "value": "3.8", "unit": "x", "label": "METRIC B", "context": "One-line context sentence." },
+      { "value": "-45", "unit": "%", "label": "METRIC C", "context": "One-line context sentence." },
+      { "value": "99.2", "unit": "%", "label": "METRIC D", "context": "One-line context sentence." }
     ]
+  },
+  {
+    "slideNumber": 5,
+    "archetype": "Dialogue",
+    "kicker": "ANALYTICAL INQUIRY",
+    "headline": "Inquiry title",
+    "claimVsRecord": {
+      "claim": "Provocative question being investigated?",
+      "recordTitle": "REVIEW BOARD COMMENTARY",
+      "recordBody": "Definitive analytical verdict (40-50 words)."
+    }
+  },
+  {
+    "slideNumber": 6,
+    "archetype": "Quadrant",
+    "kicker": "THE VALUE MATRIX",
+    "headline": "Matrix title",
+    "quadrants": [
+      { "quadrantNumber": "I", "title": "Quadrant Name", "body": "20-word description.", "isHero": false },
+      { "quadrantNumber": "II", "title": "Target Hero Quadrant", "body": "20-word description.", "isHero": true },
+      { "quadrantNumber": "III", "title": "Legacy Trap", "body": "20-word description.", "isHero": false },
+      { "quadrantNumber": "IV", "title": "Alternative Model", "body": "20-word description.", "isHero": false }
+    ]
+  },
+  {
+    "slideNumber": 7,
+    "archetype": "CaseStudy",
+    "kicker": "LONGITUDINAL STUDY",
+    "headline": "Case study title",
+    "caseStudy": {
+      "hypothesis": "Initial observation or baseline limitation.",
+      "intervention": "Strategic structural or architectural shift enacted.",
+      "result": "Empirically validated outcome and compounding benefit."
+    }
   },
   {
     "slideNumber": 8,
     "archetype": "Debunk",
     "kicker": "CORRECTION",
-    "headline": "...",
+    "headline": "Myth vs Record title",
     "claimVsRecord": {
-      "claim": "...",
-      "recordTitle": "...",
-      "recordBody": "..."
+      "claim": "The common unverified myth or flawed assumption.",
+      "recordTitle": "THE DOCUMENTED RECORD",
+      "recordBody": "Authoritative reality backed by empirical observation (35-45 words)."
     }
+  },
+  {
+    "slideNumber": 9,
+    "archetype": "Grid",
+    "kicker": "TAXONOMY",
+    "headline": "Pillars or components title",
+    "items": [
+      { "index": "01", "kicker": "PILLAR 1", "body": "20-word analysis." },
+      { "index": "02", "kicker": "PILLAR 2", "body": "20-word analysis." },
+      { "index": "03", "kicker": "PILLAR 3", "body": "20-word analysis." },
+      { "index": "04", "kicker": "PILLAR 4", "body": "20-word analysis." }
+    ]
+  }
+]`;
+}
+
+export function buildEditorialBatch2UserPrompt(manifest: any): string {
+  return `Write bespoke editorial copy for Slides 10 through 17 based on this Brand Design Manifest:
+${JSON.stringify(manifest, null, 2)}
+
+Return a JSON array of 8 slide objects:
+[
+  {
+    "slideNumber": 10,
+    "archetype": "Timeline",
+    "kicker": "CHRONOLOGY",
+    "headline": "Methodology or evolution title",
+    "milestones": [
+      { "phase": "1920s", "title": "ERA OR STAGE 1", "body": "25-word historical context." },
+      { "phase": "1980s", "title": "ERA OR STAGE 2", "body": "25-word transitional shift." },
+      { "phase": "PRESENT", "title": "CONTEMPORARY SYNTHESIS", "body": "25-word modern resolution." }
+    ]
   },
   {
     "slideNumber": 11,
     "archetype": "Pullquote",
-    "thesisQuote": "...",
-    "authorOrAttribution": "...",
-    "subhead": "..."
+    "kicker": "CITATION",
+    "headline": "Insight title",
+    "thesisQuote": "A profound, memorable statement (15-25 words) that crystallizes the domain thesis.",
+    "authorOrAttribution": "Key Luminary / Thinker Name",
+    "subhead": "Professional Title / Historic Affiliation"
   },
   {
     "slideNumber": 12,
     "archetype": "HeroCTA",
-    "headline": "...",
-    "bodyText": "...",
+    "kicker": "DISPATCH ARCHIVE",
+    "headline": "Direct action headline",
+    "bodyText": "Closing mandate explaining why the reader must engage or subscribe (35 words).",
     "cta": {
-      "buttonText": "...",
-      "socialHandle": "..."
+      "buttonText": "EXPLORE THE MANIFESTO",
+      "socialHandle": "@BRANDHANDLE"
     }
+  },
+  {
+    "slideNumber": 13,
+    "archetype": "HeroStat",
+    "kicker": "CRITICAL FINDING",
+    "headline": "Significance title",
+    "stats": [
+      {
+        "value": "84",
+        "unit": "%",
+        "label": "CORE METRIC NAME",
+        "context": "Contextual explanation of why this singular statistic is transformative (30 words)."
+      }
+    ]
+  },
+  {
+    "slideNumber": 14,
+    "archetype": "StepByStep",
+    "kicker": "PROTOCOL",
+    "headline": "Methodological flow title",
+    "steps": [
+      { "stepNumber": "PHASE 01", "title": "Step 1 Title", "body": "20-word instruction." },
+      { "stepNumber": "PHASE 02", "title": "Step 2 Title", "body": "20-word instruction." },
+      { "stepNumber": "PHASE 03", "title": "Step 3 Title", "body": "20-word instruction." }
+    ]
+  },
+  {
+    "slideNumber": 15,
+    "archetype": "DosAndDonts",
+    "kicker": "PARADIGM",
+    "headline": "Comparative standards title",
+    "dosAndDonts": {
+      "legacyItems": [
+        "First outdated or flawed behavior to reject.",
+        "Second habit that drains resources or clarity.",
+        "Third misconception to discard."
+      ],
+      "proposedItems": [
+        "First disciplined principle to adopt.",
+        "Second high-leverage practice that compounds value.",
+        "Third non-negotiable operational standard."
+      ]
+    }
+  },
+  {
+    "slideNumber": 16,
+    "archetype": "Checklist",
+    "kicker": "AUDIT",
+    "headline": "Diagnostic checklist title",
+    "checklist": [
+      { "text": "First rigorous diagnostic evaluation question?", "checked": true },
+      { "text": "Second diagnostic evaluation question?", "checked": false },
+      { "text": "Third diagnostic evaluation question?", "checked": true },
+      { "text": "Fourth diagnostic evaluation question?", "checked": true }
+    ]
+  },
+  {
+    "slideNumber": 17,
+    "archetype": "Anatomy",
+    "kicker": "SYSTEM TOPOLOGY",
+    "headline": "Anatomy breakdown title",
+    "callouts": [
+      { "tag": "01. SUBSYSTEM", "title": "Component One", "body": "15-word breakdown." },
+      { "tag": "02. SUBSYSTEM", "title": "Component Two", "body": "15-word breakdown." },
+      { "tag": "03. SUBSYSTEM", "title": "Component Three", "body": "15-word breakdown." },
+      { "tag": "04. SUBSYSTEM", "title": "Component Four", "body": "15-word breakdown." }
+    ]
   }
 ]`;
 }

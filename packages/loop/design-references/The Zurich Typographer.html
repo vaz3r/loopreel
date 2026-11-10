@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Zurich Typographer</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap">
   <style>
     /* Font Families */
     .font-display { font-family: 'Syne', serif, sans-serif; }
@@ -29,6 +29,8 @@
     .border-graphite { border-color: #475569 !important; }
     .bg-hairline { background-color: #CBD5E1 !important; }
     .border-hairline { border-color: #CBD5E1 !important; }
+
+    
 
     /* UI Scaling Modes */
     .mode-preview .canvas-container {
@@ -103,7 +105,7 @@
   <div class="fixed top-0 left-0 w-full bg-[#0F172A] border-b border-[#1E293B] p-4 z-[100] flex justify-between items-center shadow-lg font-sans">
     <div>
       <h1 class="font-display font-bold text-xl tracking-tight text-white uppercase">The Zurich Typographer</h1>
-      <p class="font-mono text-[11px] text-slate-400 uppercase tracking-widest mt-0.5">Design Systems &amp; Engineering (1080x1350 — 17 Canonical Archetypes)</p>
+      <p class="font-mono text-[11px] text-slate-400 uppercase tracking-widest mt-0.5">Graphic Design &amp; Systems Engineering (1080x1350 — 17 Canonical Archetypes)</p>
     </div>
     <div class="flex gap-3 items-center">
       <button id="prevBtn" class="bg-slate-800 text-white font-mono font-bold text-xs px-3.5 py-2 border border-slate-700 hover:bg-slate-700 transition-colors">
@@ -140,15 +142,15 @@
   <!-- Main Workspace -->
   <div class="pt-[120px] pb-[80px] flex justify-center w-full min-h-screen">
     
-    <div id="export-canvas" class="canvas-container text-ink bg-paper shadow-2xl">
+    <div id="export-canvas" class="canvas-container text-ink bg-paper bg-pattern shadow-2xl">
       
       <!-- GLOBAL MASTHEAD PLACARD (HEADER) -->
       <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
         <div class="flex flex-col">
           <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">The Zurich Typographer</span>
-          <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Design Systems &amp; Engineering</span>
+          <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Graphic Design &amp; Systems Engineering</span>
         </div>
-        <div class="text-right">
+        <div class="text-right flex items-center gap-4">
           <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">ABSTRACT</span>
         </div>
       </div>
@@ -169,22 +171,25 @@
   <div id="slide-1" class="slide-layer active">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="pt-4">
-        <div class="w-16 h-1 bg-accent mb-8"></div>
-        <span class="font-mono text-[18px] uppercase tracking-widest text-accent font-bold mb-4 block">SYSTEMS / ENGINEERING</span>
-        <h1 class="font-display font-bold text-[100px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
-          Precision Is a Shared Language.
+        <div class="flex justify-between items-center mb-8">
+          <div class="w-20 h-1 bg-accent"></div>
+          <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
+        </div>
+        <span class="font-mono text-[18px] uppercase tracking-widest text-accent font-bold mb-4 block">THE ZURICH TYPOGRAPHER / FIELD NOTES 01</span>
+        <h1 class="font-display font-bold text-[95px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
+          Order Is Designed.
         </h1>
-        <div class="mt-10 p-8 bg-surface border border-hairline relative">
-          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract</span>
+        <div class="mt-10 p-8 bg-surface border-l-4 border-accent border-y border-r border-hairline relative shadow-sm">
+          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract / Thesis</span>
           <p class="font-sans text-[26px] leading-[1.55] text-graphite clamp-4">
-            An interface is where decisions become visible. A design system should make those decisions traceable: from visual intention to semantic token, from component behavior to release criteria. The ambition is not identical screens. It is a shared grammar precise enough to implement—and explicit enough to challenge.
+            A visual inquiry into grids, rules, and the systems that make complexity legible. Between dense black ink and the crimson registration mark lies an editorial responsibility: to decide what commands attention, what supplies context, and what deserves the discipline of empty space.
           </p>
         </div>
       </div>
       <div class="flex justify-between items-end pt-8 border-t-2 border-ink pb-4">
         <div class="flex flex-col">
           <span class="font-mono text-[14px] uppercase tracking-widest text-graphite">BYLINE</span>
-          <span class="font-sans font-bold text-[22px] text-ink uppercase tracking-wide mt-1">The Zurich Typographer — an editorial on design systems and engineering</span>
+          <span class="font-sans font-bold text-[22px] text-ink uppercase tracking-wide mt-1">THE ZURICH TYPOGRAPHER / EDITORIAL BOARD</span>
         </div>
         <div class="font-mono text-[15px] font-bold uppercase tracking-widest text-accent">
           PEER REVIEWED
@@ -197,32 +202,32 @@
   <div id="slide-2" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Define. Encode. Verify.</h2>
-        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">THREE COMMITMENTS</span>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Three Rules. One System.</h2>
+        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">CORE POSTULATES</span>
       </div>
       <div class="flex-1 flex flex-col justify-around border-t border-hairline">
         
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">01</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">DEFINE THE LANGUAGE</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Name the intention, not merely the appearance. A crimson value describes a color; a semantic token declares its purpose. Establish a vocabulary for roles, states, and relationships so that design and engineering can discuss the same decision without translating it from a screenshot.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">STRUCTURE</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Establish shared coordinates before composing individual pages. Columns, baselines, and spacing units become a common language, allowing each element to belong without demanding that every composition repeat.</p>
       </div>
     </div>
   
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">02</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">ENCODE THE DECISIONS</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Treat each component as a versioned agreement. Specify its states, interaction behavior, accessibility requirements, and permitted variation. Give exceptions an owner and a review date: a departure should be a conscious decision, not an undocumented inheritance.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">HIERARCHY</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Direct attention deliberately. A monumental headline and a quiet caption perform different editorial duties; treating them equally mistakes visual tidiness for a considered account of what matters.</p>
       </div>
     </div>
   
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">03</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">VERIFY THE OUTCOMES</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Separate a persuasive system from a demonstrated improvement. Establish the baseline, instrument a bounded pilot, and compare equivalent work. Measure adoption alongside divergence, change time, and accessibility regressions. Publication of the library is a delivery milestone—not evidence that the system works.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">VERIFICATION</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Test whether the rules survive use. Introduce an unwieldy title, a crowded schedule, an awkward crop; record where the system bends and where its promises break.</p>
       </div>
     </div>
   
@@ -233,41 +238,42 @@
   <!-- 03. OBSERVATION (IMAGE SPLIT) -->
   <div id="slide-3" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Spatial Observation</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">The Grid Is Not the Design.</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
       </div>
       <div class="flex-1 flex gap-10 items-stretch bg-surface border border-hairline p-8 my-auto">
-        <!-- Visual Container / Architectural SVG Diagram -->
-        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden">
-          <div class="absolute inset-0 opacity-10 flex items-center justify-center">
+        <!-- Visual Container / Diagrammatic Line Art -->
+        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden shadow-sm">
+          <div class="absolute inset-0 opacity-15 flex items-center justify-center">
             <svg class="w-full h-full text-ink" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
-              <line x1="0" y1="0" x2="100" y2="100" />
-              <line x1="100" y1="0" x2="0" y2="100" />
-              <circle cx="50" cy="50" r="40" />
+              <line x1="10" y1="10" x2="90" y2="90" />
+              <line x1="90" y1="10" x2="10" y2="90" />
+              <circle cx="50" cy="50" r="35" />
               <rect x="25" y="25" width="50" height="50" />
             </svg>
           </div>
           <div class="relative z-10 flex justify-between items-center">
             <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent">EXHIBIT A</span>
-            <span class="font-mono text-[12px] text-graphite">1080 x 1350</span>
+            <span class="font-mono text-[12px] text-graphite">GRAPHIC DESIGN & SYSTEMS ENGINEERING</span>
           </div>
           <div class="relative z-10 flex flex-col items-center justify-center py-20 text-center">
             <div class="w-20 h-20 border-2 border-accent rounded-full flex items-center justify-center mb-4">
               <div class="w-3 h-3 bg-accent rounded-full"></div>
             </div>
-            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Spatial Axis</span>
+            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Primary Axis</span>
           </div>
           <div class="relative z-10 bg-paper/90 border border-hairline p-3 font-mono text-[12px] font-bold uppercase tracking-widest text-ink">
-            FIG. 01 — SYSTEM ARCHITECTURE
+            FIG. 01 — PROPOSED ARCHITECTURAL ELEVATION
           </div>
         </div>
         <!-- Copy Column -->
         <div class="w-1/2 flex flex-col justify-center pr-4">
-          <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent mb-3 block">CASE STUDY</span>
-          <h3 class="font-display font-bold text-[38px] leading-[1.15] text-ink mb-6">Structural Integrity & Balance</h3>
+          <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent mb-3 block">SPATIAL ANALYSIS / ILLUSTRATIVE INTERFACE</span>
+          <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink mb-6">Structural Composition</h3>
           <div class="w-16 h-1 bg-accent mb-6"></div>
           <p class="font-sans text-[24px] leading-[1.5] text-graphite clamp-6">
-            Through direct empirical observation, rigorous spatial systems demonstrate measurable improvements in user comprehension and perceived brand authority.
+            In this fictional interface, the column overlay can certify alignment while exposing a deeper omission: nothing establishes priority. Baselines agree; competing headings still demand equal attention. Dimension ticks describe distances, not importance. The grid supplies relationships. An editor must decide which relationship carries the argument.
           </p>
         </div>
       </div>
@@ -278,41 +284,41 @@
   <div id="slide-4" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Make Consistency Observable.</h2>
-        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">MEASUREMENT / PENDING BASELINE</span>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Make the Rules Inspectable.</h2>
+        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">SYSTEM SPECIFICATION</span>
       </div>
       <div class="flex-1 grid grid-cols-2 gap-8 items-center content-center my-auto">
         
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        —<span class="text-[44px] font-sans font-normal text-accent">%</span>
+        12<span class="text-[44px] font-sans font-normal text-accent"></span>
       </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">TOKEN ADOPTION</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Proposed measure: eligible style declarations using approved tokens divided by all audited eligible declarations, multiplied by 100. Record scope, exclusions, and audit date before reporting.</p>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">GRID COLUMNS</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">G / 01 — A shared coordinate field governs placement, not a compulsory arrangement of content.</p>
     </div>
   
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        —<span class="text-[44px] font-sans font-normal text-accent">%</span>
+        8<span class="text-[44px] font-sans font-normal text-accent">px</span>
       </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">COMPONENT REUSE</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Proposed measure: eligible interface instances implemented with approved shared components divided by all audited eligible instances, multiplied by 100. Declare eligibility and component versions before counting.</p>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">SPACING UNIT</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">S / 02 — Declare intervals against this base unit so departures become explicit decisions.</p>
     </div>
   
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        —<span class="text-[44px] font-sans font-normal text-accent">days</span>
+        3<span class="text-[44px] font-sans font-normal text-accent"></span>
       </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">MEDIAN CHANGE LEAD TIME</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Proposed measure: median elapsed calendar days from an accepted change request to production deployment. Compare equivalent task scopes; report the observation window and completed-change sample.</p>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">TYPE FAMILIES</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">T / 03 — Syne commands; Plus Jakarta Sans explains; Space Mono identifies coordinates and annotations.</p>
     </div>
   
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        —<span class="text-[44px] font-sans font-normal text-accent">regressions / release</span>
+        1<span class="text-[44px] font-sans font-normal text-accent">px</span>
       </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">ACCESSIBILITY REGRESSIONS</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Proposed measure: newly introduced, confirmed accessibility defects in each audited release. Hold test coverage and severity definitions constant; an unmeasured release is not a zero-defect release.</p>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">STRUCTURAL RULE</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">R / 04 — The architectural hairline marks divisions without competing with the argument.</p>
     </div>
   
       </div>
@@ -322,8 +328,9 @@
   <!-- 05. DIALOGUE (Q&A) -->
   <div id="slide-5" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Analytical Inquiry</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Freedom Begins with Clear Relationships.</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
       </div>
       <div class="flex-1 flex flex-col justify-center gap-8 bg-surface border border-hairline p-12 my-auto shadow-sm">
         <!-- Question -->
@@ -331,7 +338,7 @@
           <span class="font-display font-bold italic text-[52px] text-accent w-16 leading-none shrink-0">Q.</span>
           <div>
             <h3 class="font-display font-bold text-[34px] text-ink leading-[1.25] clamp-4">
-              "Does uncompromising typographic discipline limit creative expression in commercial applications?"
+              "Does a rigorous system make every outcome look the same?"
             </h3>
           </div>
         </div>
@@ -340,10 +347,10 @@
           <span class="font-display font-bold italic text-[52px] text-graphite w-16 leading-none shrink-0">A.</span>
           <div>
             <p class="font-sans text-[26px] text-graphite leading-[1.55] clamp-5 mb-6">
-              "Rigid discipline is the catalyst for expression, not its enemy. By constraining structural variables, visual tension becomes deliberate rather than accidental, elevating both clarity and emotional impact."
+              "Keep spacing units, reading order, and semantic roles invariant. Let scale, image crop, and composition change with the argument. Syne can interrupt the measured field without abolishing it. Freedom begins where a designer can distinguish a deliberate departure from a rule nobody bothered to define."
             </p>
             <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent block">
-              EDITORIAL INQUIRY BOARD
+              FIX THE RELATIONSHIPS; VARY THE EXPRESSION.
             </span>
           </div>
         </div>
@@ -355,40 +362,43 @@
   <div id="slide-6" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">The Value Matrix</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Locate the Useful Freedom.</h2>
       </div>
-      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto">
+      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto shadow-sm">
         <!-- Axes -->
         <div class="absolute top-1/2 left-0 w-full h-[2px] bg-ink -translate-y-1/2 z-20"></div>
         <div class="absolute left-1/2 top-0 h-full w-[2px] bg-ink -translate-x-1/2 z-20"></div>
 
         <!-- Axis Labels -->
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Precision</div>
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Precision</div>
-        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Commodity</div>
-        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Authoritative</div>
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Rigor</div>
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Rigor</div>
+        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Ephemeral</div>
+        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Enduring</div>
 
-        <!-- Quadrants -->
+        <!-- Quadrant I -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-b border-hairline">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT I</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Artisan</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High tactile craft with manual overhead. Beautiful but difficult to scale without systemization.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">IMPROVISATION</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Upper left: expressive range is high, rule clarity low. Each composition invents its own logic; continuity depends on individual judgment.</p>
         </div>
+        <!-- Quadrant II (Hero) -->
         <div class="p-8 flex flex-col justify-center text-center bg-ink text-paper relative z-10">
           <div class="absolute top-3 right-3 w-3 h-3 bg-accent rounded-full"></div>
-          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">TARGET POSITION</span>
-          <h3 class="font-display font-bold text-[30px] text-paper mb-2">The Standard</h3>
-          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">Mathematically resolved design systems. Maximum authority, zero friction, compounding brand equity.</p>
+          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">OPTIMAL ARCHETYPE</span>
+          <h3 class="font-display font-bold text-[30px] text-paper mb-2">COHERENT FREEDOM</h3>
+          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">Upper right: rule clarity and expressive range are high. Stable relationships support different compositions without requiring each to resemble another.</p>
         </div>
+        <!-- Quadrant III -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-hairline">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT III</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Commodity</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Generic templates and race-to-the-bottom pricing. Minimal differentiation and high churn.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">DRIFT</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Lower left: rule clarity and expressive range are low. Habit governs placement, while inherited arrangements persist without an articulated purpose.</p>
         </div>
+        <!-- Quadrant IV -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT IV</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Scaler</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High volume execution without editorial polish. Functional but easily superseded by automated rivals.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">RIGIDITY</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Lower right: rule clarity is high, expressive range low. The template dictates composition even when the content demands another emphasis.</p>
         </div>
       </div>
     </div>
@@ -398,26 +408,26 @@
   <div id="slide-7" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Clinical Case Study</h2>
-        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">LONGITUDINAL ANALYSIS</span>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">One Brief. A Controlled Change.</h2>
+        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">ILLUSTRATIVE REDESIGN / NOT A USER STUDY</span>
       </div>
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <!-- Stage 1 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-graphite"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-graphite"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-graphite tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Hypothesis</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Fragmented Visual Identity</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Inconsistent layouts and typography across departments diluted brand credibility and increased production cycle times by 40%.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Baseline Friction</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">In a fictional exhibition schedule, inconsistent alignment may obscure priority: dates float between titles, venue details compete with descriptions, and booking receives no distinct emphasis.</p>
           </div>
         </div>
         <!-- Stage 2 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-ink"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-ink"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-ink tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Intervention</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Unification</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Enacted strict 8-point spatial constraints, standardized token sets, and automated Playwright layout verification audits.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Resolution</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Preserve the exhibition content. Rebuild its arrangement on shared columns, anchor dates and venues to a fixed metadata rail, and reserve a single crimson action cue for booking.</p>
           </div>
         </div>
         <!-- Stage 3 -->
@@ -425,8 +435,8 @@
           <div class="absolute left-0 top-0 bottom-0 w-2 bg-accent"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-accent tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Validated Result</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Measurable Authority Expansion</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">Content engagement multiplied by 3.8x, brand recall reached 91%, and zero layout regressions were logged over 12 months.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Compounding Authority</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">The proposed before-and-after artifacts would make the intended changes inspectable: aligned dates, anchored metadata, and a distinct booking action. Annotate those differences directly; no improvement in booking speed, comprehension, or conversion has been measured.</p>
           </div>
         </div>
       </div>
@@ -444,15 +454,15 @@
         <div class="flex-1 p-10 flex flex-col justify-center text-center border-b border-hairline relative bg-surface">
           <span class="absolute top-5 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-graphite uppercase tracking-widest">THE COMMON CLAIM [UNVERIFIED]</span>
           <p class="font-sans text-[30px] text-graphite leading-[1.35] line-through decoration-graphite decoration-2 max-w-[850px] mx-auto clamp-3">
-            "Null hypothesis: shared foundations do not reduce implementation divergence."
+            "Consistency requires identical layouts."
           </p>
         </div>
         <!-- Validated Finding / The Record -->
         <div class="flex-1 p-10 flex flex-col justify-center text-center relative bg-paper border-t-4 border-accent">
           <span class="absolute top-5 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-accent uppercase tracking-widest">THE DOCUMENTED RECORD</span>
-          <h3 class="font-display font-bold text-[34px] text-ink leading-tight mb-3 mt-4">Pending pilot evidence.</h3>
+          <h3 class="font-display font-bold text-[34px] text-ink leading-tight mb-3 mt-4">ARTIFACT-LEVEL FINDING / PENDING DEMONSTRATION</h3>
           <p class="font-sans text-[24px] text-graphite leading-[1.4] max-w-[850px] mx-auto clamp-3">
-            Coherent variety is the editorial ambition, not an established result. Test semantic tokens in one proposed button-system pilot while retaining a comparable baseline. Before implementation, define divergence as departures from the agreed component contract and specify the comparison method and rejection criterion. Keep task scope, acceptance criteria, and test environment comparable. Reject the null only if the measured difference meets that criterion; assess implementation time and accessibility defects separately for trade-offs. No completed pilot or measured outcome is supplied.
+            Different layouts can preserve the same rules. Demonstrate this with 3 miniature compositions: a typographic cover, an image spread, and a schedule sharing spacing units, typography roles, and coordinate rails. Their agreement would establish structural consistency, not prove usability.
           </p>
         </div>
       </div>
@@ -462,8 +472,9 @@
   <!-- 09. LITERATURE REVIEW (GRID) -->
   <div id="slide-9" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Architecture Pillars</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Read the System from Four Directions.</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
       </div>
       <div class="flex-1 grid grid-cols-2 gap-7 my-auto">
         
@@ -471,8 +482,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 01</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">PROPORTIONAL SCALE</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Modular typographical scales establish rhythmic harmony across display and body tiers.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">GRID / SPATIAL RELATIONSHIPS</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Read the intervals before the objects. Columns and rails declare relationships; empty space reveals which relationships the composition considers essential.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -481,8 +492,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 02</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">NEGATIVE SPACE</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Deliberate void ratios (75%–90% fill) focus viewer perception on key empirical findings.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">TYPE / READING HIERARCHY</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Read typography as an allocation of attention. Display, body, and annotation must perform distinct duties before their personalities earn consideration.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -491,8 +502,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 03</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">CHROMATIC RESTRAINT</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Limited 3-color palettes prevent cognitive sensory overload and anchor attention.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">INFORMATION / SEMANTIC ORGANIZATION</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Read labels, groups, and sequences as editorial decisions. Meaning depends on what belongs together, what separates, and what comes first.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -501,8 +512,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 04</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">OPTICAL FLOORS</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Enforcing strict minimum font thresholds ensures accessibility across all device viewports.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">ENGINEERING / REPEATABLE IMPLEMENTATION</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Read implementation for repeatability. Tokens encode decisions, components carry relationships, and documented exceptions distinguish a maintained system from accumulated improvisation.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -515,29 +526,29 @@
   <div id="slide-10" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Chronological Evolution</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">From Constraint to Evidence.</h2>
       </div>
       <div class="flex-1 flex flex-col justify-center border-l-2 border-hairline ml-[160px] my-auto">
         
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">1950s</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">01</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-ink"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">INTERNATIONAL TYPOGRAPHIC STYLE</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Pioneered by Swiss typographers, establishing grid-based mathematical rigor and universal objective clarity.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">FRAME</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Name the decision this design must clarify, the audience making it, and the constraints it cannot escape. Output: a problem statement, not a style preference.</p>
     </div>
   
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">1990s</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">02</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-ink"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">DIGITAL FRAGMENTATION</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Desktop publishing disrupted traditional typesetting rules, introducing experimental layouts before web standards emerged.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">INVENTORY</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Account for headings, actions, dates, captions, and exceptions before arranging them. Output: a content map that exposes competing priorities and information stranded outside the hierarchy.</p>
     </div>
   
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">2020s+</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">03</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-accent bg-accent"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">SYSTEMS-DRIVEN SYNTHESIS</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Modern design token architecture marries Swiss editorial perfection with programmatic front-end automation.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">MODEL</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Translate priorities into spatial relationships, typographic roles, and semantic signals. Output: a rule set precise enough to implement and explicit enough to challenge during review.</p>
     </div>
   
       </div>
@@ -547,18 +558,21 @@
   <!-- 11. CITATION (PULLQUOTE) -->
   <div id="slide-11" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-8 py-8">
-      <div class="w-24 h-1 bg-accent"></div>
+      <div class="flex justify-between items-center w-full">
+        <div class="w-24 h-1 bg-accent"></div>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
+      </div>
       <div class="p-12 bg-surface border border-hairline relative max-w-[940px] my-auto shadow-sm">
         <span class="font-display text-[110px] text-accent leading-[0.5] mb-4 block">“</span>
-        <blockquote class="font-display font-bold text-[48px] leading-[1.3] text-ink mb-8 balance-text italic">
-          Standardize the decisions that should not need to be made twice. Leave room for the ones that deserve to be questioned.
+        <blockquote class="font-display font-bold text-[46px] leading-[1.3] text-ink mb-8 balance-text italic">
+          A system earns its place when it makes the important thing unmistakable.
         </blockquote>
         <div class="pt-8 border-t-2 border-ink w-3/4 mx-auto flex flex-col items-center">
-          <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">The Zurich Typographer — editorial principle</span>
-          <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-2">A proposed operating principle: govern the foundations, permit expressive composition, and make exceptions accountable.</span>
+          <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">THE ZURICH TYPOGRAPHER</span>
+          <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-2">EDITORIAL PRINCIPLE</span>
         </div>
       </div>
-      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">MONOLITH INSIGHT</span>
+      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">SIGNATURE THESIS</span>
     </div>
   </div>
 
@@ -566,21 +580,21 @@
   <div id="slide-12" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center py-6">
       <div class="flex flex-col items-center pt-8">
-        <div class="w-16 h-16 border-2 border-ink flex items-center justify-center mb-6">
-          <div class="w-4 h-4 bg-accent"></div>
+        <div class="mb-6">
+          <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
         </div>
         <h2 class="font-display font-bold text-[72px] leading-[1.05] tracking-tight text-ink mb-6 max-w-[850px]">
-          Put Precision into Practice.
+          Build your next argument on a better system.
         </h2>
-        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px]">
+        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px] shadow-sm">
           <p class="font-sans text-[26px] text-graphite leading-[1.4]">
-            Make the agreement executable. The proposed System Kit brings together token specifications, component contracts, governance templates, and audit worksheets: a working structure for defining decisions, assigning ownership, and testing whether the implementation keeps its promises.
+            Acquire a framework that makes judgment visible, not a template that makes decisions disappear. The proposed package contains 17 slide archetypes, 6 color tokens, 3 font families, and 1 shared grid specification. Make every placement deliberate.
           </p>
         </div>
       </div>
       <div class="pb-6 flex flex-col items-center">
         <a href="#" class="px-12 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[22px] hover:bg-graphite transition-colors inline-block rounded-none shadow-md">
-          Request the System Kit
+          ACQUIRE THE SYSTEM
         </a>
         <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6">@THEZURICHTYPOGRAPHER</span>
       </div>
@@ -591,16 +605,16 @@
   <div id="slide-13" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-12 py-8">
       <div class="pt-6 flex flex-col items-center">
-        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL STATISTICAL FINDING</span>
+        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL QUANTITATIVE FINDING</span>
         <div class="font-display font-black text-[220px] leading-none text-ink flex items-baseline tracking-tighter">
-          85<span class="text-[90px] font-sans font-normal text-accent">%</span>
+          100<span class="text-[90px] font-sans font-normal text-accent">%</span>
         </div>
         <div class="w-32 h-1 bg-accent my-6"></div>
-        <h3 class="font-display font-bold text-[36px] text-ink uppercase tracking-wide mb-4">RETENTION EFFICIENCY</h3>
+        <h3 class="font-display font-bold text-[36px] text-ink uppercase tracking-wide mb-4">TOKEN COVERAGE TARGET</h3>
       </div>
-      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6">
+      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6 shadow-sm">
         <p class="font-sans text-[26px] leading-[1.45] text-graphite">
-          Observed increase in sustained reader attention when editorial structure replaces chaotic layout.
+          An undocumented value is a decision without an address. This target demands traceability across the declared audit scope; it does not certify usability, accessibility, or the quality of judgment itself.
         </p>
       </div>
     </div>
@@ -609,29 +623,30 @@
   <!-- 14. METHODOLOGY (STEP-BY-STEP FLOW) -->
   <div id="slide-14" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Methodological Protocol</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Test the Hierarchy.</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">+ ZH / 01</div>
       </div>
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 01</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">01</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Grid Derivation</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Calculate baseline typographic rhythms and column margins relative to the aspect ratio.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">HOLD</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">Keep content, viewport, and task constant across treatments. Otherwise, the comparison cannot isolate hierarchy from changes elsewhere in the experience.</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 02</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">02</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Hierarchy Stratification</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Assign strictly bounded font scales across display, meta, kicker, and body layers.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">VARY</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">Change only the hierarchy treatment. Document the altered emphasis and reading order, leaving wording, available actions, and information inventory untouched.</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-accent pl-8 bg-paper border-y border-r border-hairline p-6 shadow-sm">
-          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">STEP 03</div>
+          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">03</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-1">Empirical Verification</h3>
-            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">Execute headless Chromium audits to certify zero collision geometry and 80%+ frame fill.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-1">OBSERVE</h3>
+            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">Record task completion time, selection errors, and participant rationale. Report observations against predefined thresholds, including failures that contradict the preferred treatment.</p>
           </div>
         </div>
       </div>
@@ -642,7 +657,7 @@
   <div id="slide-15" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Comparative Standards</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Replace Exceptions with Rules.</h2>
       </div>
       <div class="flex-1 flex gap-8 border border-hairline shadow-sm my-auto">
         <!-- Avoid -->
@@ -650,13 +665,13 @@
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-graphite border-b border-hairline pb-4 mb-6">LEGACY MODEL (AVOID)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Cluttered ornamental gradients and visual noise.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ ARBITRARY SPACING — Each gap is negotiated locally; no declared unit explains the relationships.
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Fragile absolute positioning causing text collisions.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ COMPETING ACCENTS — Several highlights claim priority, leaving the reader to settle the argument.
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Rhetorical question headlines without substance.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ AMBIGUOUS LABELS — Headings, descriptions, and actions receive indistinguishable treatment despite their different jobs.
             </li>
           </ul>
         </div>
@@ -666,13 +681,13 @@
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent border-b border-hairline pb-4 mb-6">PROPOSED MODEL (ADOPT)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Pure Flexbox vertical flow with 75%–90% frame fill.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ SPACING-UNIT MULTIPLES — Build intervals from the 8px unit; document departures rather than hiding them.
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Handcrafted editorial prose and verified telemetry.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ ONE SEMANTIC ACCENT — Reserve crimson #E11D48 for the declared emphasis role; retain a non-color cue.
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Architectural cards, spines, and Swiss hairlines.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ EXPLICIT HIERARCHY — Give the unchanged headings, descriptions, and actions distinct, repeatable typographic roles.
             </li>
           </ul>
         </div>
@@ -684,44 +699,44 @@
   <div id="slide-16" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Quality Audit</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Release Only What Holds.</h2>
         <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">4-POINT AUDIT</span>
       </div>
       <div class="flex-1 flex flex-col gap-5 justify-center my-auto">
         
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Are all telemetry values strictly numerical with signed badges?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        STRUCTURE / Confirm the declared 12-column grid and 8px spacing unit; document every grid or spacing exception.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Does every slide layer fill 75%–90% of vertical canvas height?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        TYPOGRAPHY / Map every text role to a family and weight within Syne, Plus Jakarta Sans, and Space Mono.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Has all position:absolute jitter been eliminated from slide content?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        SEMANTICS / Confirm that priority, action, and status remain understandable without color alone.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Are mobile optical thresholds adhered to (≥20px meta, ≥24px body)?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        ROBUSTNESS / Test long titles, dense tables, and alternate image crops against the declared layout rules.
       </p>
     </div>
   
@@ -733,7 +748,7 @@
   <div id="slide-17" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Architecture</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">One Grammar. Many Outputs.</h2>
       </div>
       <div class="flex-1 relative flex items-center justify-center border border-hairline bg-surface my-auto">
         <!-- Connecting Crosshairs -->
@@ -742,25 +757,25 @@
 
         <!-- Central Node -->
         <div class="bg-paper border-2 border-ink px-10 py-6 font-display font-bold text-[32px] text-ink relative z-10 shadow-md">
-          CORE KERNEL
+          THE ZURICH TYPOGRAPHER
         </div>
 
         <!-- 4 Callout Boxes -->
         <div class="absolute top-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">01. TOKEN SYSTEM</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Standardized typography, spacing, and color hex constants.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">01. TOKENS</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Named values make color, spacing, and typography inspectable; revision begins with a reference, not guesswork.</p>
         </div>
         <div class="absolute top-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">02. COMPONENT RECIPES</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">17 production-grade layout archetypes with pure Flexbox flow.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">02. GRID</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">The 12-column grid establishes relationships without deciding emphasis; composition remains an editorial responsibility, not automation.</p>
         </div>
         <div class="absolute bottom-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">03. COMPILATION ENGINE</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Deterministic rendering of editorial intelligence into HTML.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">03. COMPONENTS</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Reusable structures carry recurring information while allowing scale, crop, and arrangement to answer each brief.</p>
         </div>
         <div class="absolute bottom-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">04. PLAYWRIGHT AUDIT</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Headless Chromium DOM collision and vertical fill validation.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">04. GOVERNANCE</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Document ownership, exceptions, and release evidence so changes remain accountable after the original designers leave.</p>
         </div>
       </div>
     </div>

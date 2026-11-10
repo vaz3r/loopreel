@@ -21,14 +21,20 @@
     .bg-accent { background-color: #D97706 !important; }
     .text-accent { color: #D97706 !important; }
     .border-accent { border-color: #D97706 !important; }
-    .bg-surface { background-color: #EBEBE3 !important; }
-    .text-surface { color: #EBEBE3 !important; }
-    .border-surface { border-color: #EBEBE3 !important; }
-    .bg-graphite { background-color: #595953 !important; }
-    .text-graphite { color: #595953 !important; }
-    .border-graphite { border-color: #595953 !important; }
-    .bg-hairline { background-color: #D1D1C8 !important; }
-    .border-hairline { border-color: #D1D1C8 !important; }
+    .bg-surface { background-color: #ECECE4 !important; }
+    .text-surface { color: #ECECE4 !important; }
+    .border-surface { border-color: #ECECE4 !important; }
+    .bg-graphite { background-color: #52524C !important; }
+    .text-graphite { color: #52524C !important; }
+    .border-graphite { border-color: #52524C !important; }
+    .bg-hairline { background-color: #D4D4CA !important; }
+    .border-hairline { border-color: #D4D4CA !important; }
+
+    
+      .bg-pattern {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
+        background-size: 20px 20px;
+      }
 
     /* UI Scaling Modes */
     .mode-preview .canvas-container {
@@ -93,7 +99,7 @@
       flex-direction: column;
     }
     .border-paper { border-color: #F5F5F0 !important !important; }
-    .text-hairline { color: #D1D1C8 !important !important; }
+    .text-hairline { color: #D4D4CA !important !important; }
   </style>
   
 </head>
@@ -140,7 +146,7 @@
   <!-- Main Workspace -->
   <div class="pt-[120px] pb-[80px] flex justify-center w-full min-h-screen">
     
-    <div id="export-canvas" class="canvas-container text-ink bg-paper shadow-2xl">
+    <div id="export-canvas" class="canvas-container text-ink bg-paper bg-pattern shadow-2xl">
       
       <!-- GLOBAL MASTHEAD PLACARD (HEADER) -->
       <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
@@ -148,7 +154,7 @@
           <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">The Tokyo Review</span>
           <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">Architecture &amp; Spatial Philosophy</span>
         </div>
-        <div class="text-right">
+        <div class="text-right flex items-center gap-4">
           <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">ABSTRACT</span>
         </div>
       </div>
@@ -169,22 +175,25 @@
   <div id="slide-1" class="slide-layer active">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="pt-4">
-        <div class="w-16 h-1 bg-accent mb-8"></div>
-        <span class="font-mono text-[18px] uppercase tracking-widest text-accent font-bold mb-4 block">THE TOKYO REVIEW / SPATIAL INQUIRIES</span>
-        <h1 class="font-display font-bold text-[100px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
+        <div class="flex justify-between items-center mb-8">
+          <div class="w-20 h-1 bg-accent"></div>
+          <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
+        </div>
+        <span class="font-mono text-[18px] uppercase tracking-widest text-accent font-bold mb-4 block">THE TOKYO REVIEW / OPENING ESSAY</span>
+        <h1 class="font-display font-bold text-[95px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
           The Room Between
         </h1>
-        <div class="mt-10 p-8 bg-surface border border-hairline relative">
-          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract</span>
+        <div class="mt-10 p-8 bg-surface border-l-4 border-accent border-y border-r border-hairline relative shadow-sm">
+          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract / Thesis</span>
           <p class="font-sans text-[26px] leading-[1.55] text-graphite clamp-4">
-            An inquiry into thresholds, light, and the space we choose not to fill. This essay proposes reading the interior through its permissions: where arrival can become a pause, where light makes work possible, and where furniture leaves room for an unforeseen use. Not an argument for owning less, but for asking more of what remains.
+            An inquiry into thresholds, light, and the space we leave unassigned. A room deserves judgment not only for the composition it presents, but for the decisions it leaves to those who enter.
           </p>
         </div>
       </div>
       <div class="flex justify-between items-end pt-8 border-t-2 border-ink pb-4">
         <div class="flex flex-col">
           <span class="font-mono text-[14px] uppercase tracking-widest text-graphite">BYLINE</span>
-          <span class="font-sans font-bold text-[22px] text-ink uppercase tracking-wide mt-1">By the editors of The Tokyo Review</span>
+          <span class="font-sans font-bold text-[22px] text-ink uppercase tracking-wide mt-1">The Tokyo Review · Editorial Board</span>
         </div>
         <div class="font-mono text-[15px] font-bold uppercase tracking-widest text-accent">
           PEER REVIEWED
@@ -197,7 +206,7 @@
   <div id="slide-2" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Read the Relationships</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Arrival, Permission, Time</h2>
         <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">THREE WAYS TO READ A ROOM</span>
       </div>
       <div class="flex-1 flex flex-col justify-around border-t border-hairline">
@@ -205,24 +214,24 @@
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">01</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">NOTICE THE INTERVAL</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Read the threshold as a potential place, not merely a boundary. Ask whether arrival allows someone to put down a bag, negotiate another person&#39;s passage, or pause before entering—and whose needs the available depth accommodates.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">THRESHOLD</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Arrival is negotiated, not automatic. Read the entrance as a sequence of permissions: where a visitor pauses, what becomes visible, and whose passage requires an accommodation.</p>
       </div>
     </div>
   
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">02</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">FOLLOW THE LIGHT</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Begin with the occupied surface rather than the luminous photograph. Trace light to the page, the table, and the moving body; document the conditions before treating brightness as evidence that a room supports its intended work.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">INTERVAL</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">An unassigned space is not an unfinished thought. Its promise lies in allowing occupants to introduce a purpose the drawing neither anticipated nor has the authority to forbid.</p>
       </div>
     </div>
   
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
       <span class="font-mono font-bold text-[36px] text-accent w-16 shrink-0 leading-none pt-1">03</span>
       <div class="flex-1">
-        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">QUESTION THE OBJECT</h3>
-        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Before removing a cabinet, account for everything it makes possible. Test whether consolidating storage preserves access and necessary belongings while releasing usable floor area. Subtraction earns its place only when essential functions survive it.</p>
+        <h3 class="font-display font-bold text-[30px] leading-tight text-ink mb-2 clamp-1">LIGHT</h3>
+        <p class="font-sans text-[24px] text-graphite leading-[1.4] clamp-3">Light gives the room a tense. Read its changing reach across surfaces, then distinguish the beauty of a passing shadow from the illumination an actual task requires.</p>
       </div>
     </div>
   
@@ -233,41 +242,42 @@
   <!-- 03. OBSERVATION (IMAGE SPLIT) -->
   <div id="slide-3" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Spatial Observation</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Where Arrival Becomes Space</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
       </div>
       <div class="flex-1 flex gap-10 items-stretch bg-surface border border-hairline p-8 my-auto">
-        <!-- Visual Container / Architectural SVG Diagram -->
-        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden">
-          <div class="absolute inset-0 opacity-10 flex items-center justify-center">
+        <!-- Visual Container / Diagrammatic Line Art -->
+        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden shadow-sm">
+          <div class="absolute inset-0 opacity-15 flex items-center justify-center">
             <svg class="w-full h-full text-ink" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
-              <line x1="0" y1="0" x2="100" y2="100" />
-              <line x1="100" y1="0" x2="0" y2="100" />
-              <circle cx="50" cy="50" r="40" />
+              <line x1="10" y1="10" x2="90" y2="90" />
+              <line x1="90" y1="10" x2="10" y2="90" />
+              <circle cx="50" cy="50" r="35" />
               <rect x="25" y="25" width="50" height="50" />
             </svg>
           </div>
           <div class="relative z-10 flex justify-between items-center">
             <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent">EXHIBIT A</span>
-            <span class="font-mono text-[12px] text-graphite">1080 x 1350</span>
+            <span class="font-mono text-[12px] text-graphite">ARCHITECTURE & SPATIAL PHILOSOPHY</span>
           </div>
           <div class="relative z-10 flex flex-col items-center justify-center py-20 text-center">
             <div class="w-20 h-20 border-2 border-accent rounded-full flex items-center justify-center mb-4">
               <div class="w-3 h-3 bg-accent rounded-full"></div>
             </div>
-            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Spatial Axis</span>
+            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Primary Axis</span>
           </div>
           <div class="relative z-10 bg-paper/90 border border-hairline p-3 font-mono text-[12px] font-bold uppercase tracking-widest text-ink">
-            FIG. 01 — SYSTEM ARCHITECTURE
+            FIG. 01 — PROPOSED ENTRANCE SECTION / HYPOTHETICAL
           </div>
         </div>
         <!-- Copy Column -->
         <div class="w-1/2 flex flex-col justify-center pr-4">
-          <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent mb-3 block">CASE STUDY</span>
-          <h3 class="font-display font-bold text-[38px] leading-[1.15] text-ink mb-6">Structural Integrity & Balance</h3>
+          <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent mb-3 block">SPATIAL ANALYSIS / HYPOTHETICAL SECTION</span>
+          <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink mb-6">Structural Composition</h3>
           <div class="w-16 h-1 bg-accent mb-6"></div>
           <p class="font-sans text-[24px] leading-[1.5] text-graphite clamp-6">
-            Through direct empirical observation, rigorous spatial systems demonstrate measurable improvements in user comprehension and perceived brand authority.
+            In this hypothetical section, the recessed doorway makes arrival a sequence rather than a crossing. A screen interrupts the direct sightline; the pause before entry could offer discretion or impose uncertainty. Welcome depends on whether occupants can understand and navigate the arrangement, not on its compositional elegance.
           </p>
         </div>
       </div>
@@ -278,41 +288,41 @@
   <div id="slide-4" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Measure What Remains</h2>
-        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">EMPIRICAL PROTOCOL</span>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Measure the Conditions of Quiet</h2>
+        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">OBSERVATION PROTOCOL / DATA PENDING</span>
       </div>
       <div class="flex-1 grid grid-cols-2 gap-8 items-center content-center my-auto">
         
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        68<span class="text-[44px] font-sans font-normal text-accent">%</span>
+        —<span class="text-[44px] font-sans font-normal text-accent">lx</span>
+      </span>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">DAYLIGHT ILLUMINANCE</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">No documented reading supplied; record sensor position, measurement plane, time, sky conditions, and electric lighting state.</p>
+    </div>
+  
+    <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
+      <span class="font-display font-bold text-[95px] leading-none text-ink">
+        —<span class="text-[44px] font-sans font-normal text-accent">dBA</span>
+      </span>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">BACKGROUND SOUND LEVEL</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">No documented reading supplied; record instrument settings, microphone position, sampling duration, occupancy, and building services in operation.</p>
+    </div>
+  
+    <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
+      <span class="font-display font-bold text-[95px] leading-none text-ink">
+        —<span class="text-[44px] font-sans font-normal text-accent">%</span>
       </span>
       <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">UNOBSTRUCTED FLOOR AREA</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Calculate unobstructed floor area divided by total measured floor area, multiplied by 100; document the plan boundary and furniture assumptions.</p>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">No documented plan supplied; divide unobstructed usable floor area by total usable floor area, multiply by 100, and record the furniture arrangement.</p>
     </div>
   
     <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
       <span class="font-display font-bold text-[95px] leading-none text-ink">
-        900<span class="text-[44px] font-sans font-normal text-accent">mm</span>
+        —<span class="text-[44px] font-sans font-normal text-accent">s</span>
       </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">THRESHOLD DEPTH</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Clear architectural interval along the line of entry, eliminating door-swing conflicts to establish calm transitions.</p>
-    </div>
-  
-    <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
-      <span class="font-display font-bold text-[95px] leading-none text-ink">
-        450<span class="text-[44px] font-sans font-normal text-accent">lx</span>
-      </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">WORK-PLANE ILLUMINANCE</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Ambient natural daylight diffusion across task surfaces, measured during seasonal solar transitions.</p>
-    </div>
-  
-    <div class="flex flex-col justify-end p-7 border-l-4 border-accent bg-surface border-y border-r border-hairline">
-      <span class="font-display font-bold text-[95px] leading-none text-ink">
-        14<span class="text-[44px] font-sans font-normal text-accent">s</span>
-      </span>
-      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">OBSERVED PAUSE DURATION</span>
-      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">Mean contemplative interval recorded at interstitial garden sightlines before circulation resumes.</p>
+      <span class="font-mono text-[15px] font-bold uppercase tracking-widest text-graphite mt-3 block">MEDIAN THRESHOLD DWELL TIME</span>
+      <p class="font-sans text-[22px] text-graphite leading-[1.35] mt-2 clamp-2">No documented observations supplied; define the threshold zone and timing boundaries, then record consent, arrival task, and observation count.</p>
     </div>
   
       </div>
@@ -322,8 +332,9 @@
   <!-- 05. DIALOGUE (Q&A) -->
   <div id="slide-5" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Analytical Inquiry</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Emptiness Has an Occupant</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
       </div>
       <div class="flex-1 flex flex-col justify-center gap-8 bg-surface border border-hairline p-12 my-auto shadow-sm">
         <!-- Question -->
@@ -331,7 +342,7 @@
           <span class="font-display font-bold italic text-[52px] text-accent w-16 leading-none shrink-0">Q.</span>
           <div>
             <h3 class="font-display font-bold text-[34px] text-ink leading-[1.25] clamp-4">
-              "Does uncompromising typographic discipline limit creative expression in commercial applications?"
+              "Who gets to call a room empty?"
             </h3>
           </div>
         </div>
@@ -340,10 +351,10 @@
           <span class="font-display font-bold italic text-[52px] text-graphite w-16 leading-none shrink-0">A.</span>
           <div>
             <p class="font-sans text-[26px] text-graphite leading-[1.55] clamp-5 mb-6">
-              "Rigid discipline is the catalyst for expression, not its enemy. By constraining structural variables, visual tension becomes deliberate rather than accidental, elevating both clarity and emotional impact."
+              "The plan cannot answer without its occupants. A clear surface may conceal generous storage or a daily struggle to put things away. Examine access, reach, and routine before praising absence: visual restraint becomes an imposition when inhabitants must edit their lives to preserve the image."
             </p>
             <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent block">
-              EDITORIAL INQUIRY BOARD
+              EDITORIAL RESPONSE
             </span>
           </div>
         </div>
@@ -355,40 +366,43 @@
   <div id="slide-6" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">The Value Matrix</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Restraint Without Withdrawal</h2>
       </div>
-      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto">
+      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto shadow-sm">
         <!-- Axes -->
         <div class="absolute top-1/2 left-0 w-full h-[2px] bg-ink -translate-y-1/2 z-20"></div>
         <div class="absolute left-1/2 top-0 h-full w-[2px] bg-ink -translate-x-1/2 z-20"></div>
 
         <!-- Axis Labels -->
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Precision</div>
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Precision</div>
-        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Commodity</div>
-        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Authoritative</div>
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Rigor</div>
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Rigor</div>
+        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Ephemeral</div>
+        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Enduring</div>
 
-        <!-- Quadrants -->
+        <!-- Quadrant I -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-b border-hairline">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT I</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Artisan</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High tactile craft with manual overhead. Beautiful but difficult to scale without systemization.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">Fixed Quiet</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Prescribed use meets low sensory variation: a room composed for a particular activity, with little invitation to rearrange its terms.</p>
         </div>
+        <!-- Quadrant II (Hero) -->
         <div class="p-8 flex flex-col justify-center text-center bg-ink text-paper relative z-10">
           <div class="absolute top-3 right-3 w-3 h-3 bg-accent rounded-full"></div>
-          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">TARGET POSITION</span>
-          <h3 class="font-display font-bold text-[30px] text-paper mb-2">The Standard</h3>
-          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">Mathematically resolved design systems. Maximum authority, zero friction, compounding brand equity.</p>
+          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">OPTIMAL ARCHETYPE</span>
+          <h3 class="font-display font-bold text-[30px] text-paper mb-2">Open Quiet</h3>
+          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">Adaptable use meets low sensory variation: occupants can revise the arrangement without being asked to inhabit a continuously changing spectacle.</p>
         </div>
+        <!-- Quadrant III -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-hairline">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT III</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Commodity</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Generic templates and race-to-the-bottom pricing. Minimal differentiation and high churn.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">Choreographed Richness</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Prescribed use meets high sensory variation: light, texture, and movement enrich an experience whose sequence remains largely determined in advance.</p>
         </div>
+        <!-- Quadrant IV -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50">
           <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT IV</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Scaler</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High volume execution without editorial polish. Functional but easily superseded by automated rivals.</p>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">Open Richness</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Adaptable use meets high sensory variation: changing activities and perceptual contrasts share the room, leaving its character available for negotiation.</p>
         </div>
       </div>
     </div>
@@ -398,26 +412,26 @@
   <div id="slide-7" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Clinical Case Study</h2>
-        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">LONGITUDINAL ANALYSIS</span>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">One Threshold, Reconsidered</h2>
+        <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">HYPOTHETICAL STUDY / PROPOSED TEST</span>
       </div>
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <!-- Stage 1 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-graphite"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-graphite"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-graphite tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Hypothesis</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Fragmented Visual Identity</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Inconsistent layouts and typography across departments diluted brand credibility and increased production cycle times by 40%.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Baseline Friction</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">A screened arrival may improve perceived privacy by interrupting direct views into the room. The same screen may also make entry harder to interpret; neither effect has been established.</p>
           </div>
         </div>
         <!-- Stage 2 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-ink"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-ink"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-ink tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Intervention</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Unification</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Enacted strict 8-point spatial constraints, standardized token sets, and automated Playwright layout verification audits.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Resolution</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Propose a movable translucent screen, with its position subject to an accessible circulation review. Compare the existing entrance with the screened arrangement under matched lighting, arrival tasks, and observation durations, with participant consent.</p>
           </div>
         </div>
         <!-- Stage 3 -->
@@ -425,8 +439,8 @@
           <div class="absolute left-0 top-0 bottom-0 w-2 bg-accent"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-accent tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Validated Result</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Measurable Authority Expansion</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">Content engagement multiplied by 3.8x, brand recall reached 91%, and zero layout regressions were logged over 12 months.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Compounding Authority</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">Outcomes pending. Record privacy ratings, passage conflicts, and occupant comments for both arrangements. Retain space for disagreement: a more private arrival would not, by itself, establish a more usable entrance.</p>
           </div>
         </div>
       </div>
@@ -444,15 +458,15 @@
         <div class="flex-1 p-10 flex flex-col justify-center text-center border-b border-hairline relative bg-surface">
           <span class="absolute top-5 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-graphite uppercase tracking-widest">THE COMMON CLAIM [UNVERIFIED]</span>
           <p class="font-sans text-[30px] text-graphite leading-[1.35] line-through decoration-graphite decoration-2 max-w-[850px] mx-auto clamp-3">
-            "Null hypothesis / Reconfiguration produces no measurable change in usable openness or reported comfort."
+            "Null hypothesis: removing objects alone does not improve perceived calm."
           </p>
         </div>
         <!-- Validated Finding / The Record -->
         <div class="flex-1 p-10 flex flex-col justify-center text-center relative bg-paper border-t-4 border-accent">
           <span class="absolute top-5 left-1/2 -translate-x-1/2 font-mono text-[14px] font-bold text-accent uppercase tracking-widest">THE DOCUMENTED RECORD</span>
-          <h3 class="font-display font-bold text-[34px] text-ink leading-tight mb-3 mt-4">Validated finding / Pending study completion</h3>
+          <h3 class="font-display font-bold text-[34px] text-ink leading-tight mb-3 mt-4">FINDING PENDING</h3>
           <p class="font-sans text-[24px] text-graphite leading-[1.4] max-w-[850px] mx-auto clamp-3">
-            The proposed comparison moves freestanding storage to the perimeter while preserving seating, essential functions, and accessibility. No measurements or occupant responses have yet been supplied; an uncluttered drawing cannot establish an improvement. Editorial conclusion—not empirical evidence: The question is not how little remains, but what the room makes possible.
+            No documented observations have been supplied to test the hypothesis. Compare occupants’ accounts alongside changes in access, storage, and everyday use; a cleaner photograph cannot settle whether the room works better. Judge restraint by what it enables, not what it removes.
           </p>
         </div>
       </div>
@@ -462,8 +476,9 @@
   <!-- 09. LITERATURE REVIEW (GRID) -->
   <div id="slide-9" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Architecture Pillars</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Read Beyond the Empty Room</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
       </div>
       <div class="flex-1 grid grid-cols-2 gap-7 my-auto">
         
@@ -471,8 +486,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 01</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">PROPORTIONAL SCALE</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Modular typographical scales establish rhythmic harmony across display and body tiers.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">THRESHOLD &amp; ARRIVAL</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Seek accounts that distinguish ceremonial arrival from ordinary entry, attending to visibility, hesitation, permission, and the unequal effort of passage.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -481,8 +496,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 02</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">NEGATIVE SPACE</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Deliberate void ratios (75%–90% fill) focus viewer perception on key empirical findings.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">LIGHT &amp; MATERIAL</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Read surfaces through changing illumination and actual tasks, resisting accounts that substitute atmospheric photographs for evidence of comfort or use.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -491,8 +506,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 03</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">CHROMATIC RESTRAINT</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Limited 3-color palettes prevent cognitive sensory overload and anchor attention.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">DOMESTIC RITUAL</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Follow possessions through ordinary routines: arriving, cooking, cleaning, resting; examine whose labor keeps the apparently effortless room ready for display.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -501,8 +516,8 @@
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 04</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">OPTICAL FLOORS</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Enforcing strict minimum font thresholds ensures accessibility across all device viewports.</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">ACCESS &amp; ADAPTABILITY</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Prioritize accounts of bodily difference and changing needs, testing whether spatial flexibility belongs to occupants or remains merely architectural rhetoric.</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -515,29 +530,29 @@
   <div id="slide-10" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Chronological Evolution</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">From Looking to Knowing</h2>
       </div>
       <div class="flex-1 flex flex-col justify-center border-l-2 border-hairline ml-[160px] my-auto">
         
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">1950s</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">01</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-ink"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">INTERNATIONAL TYPOGRAPHIC STYLE</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Pioneered by Swiss typographers, establishing grid-based mathematical rigor and universal objective clarity.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">FRAME THE QUESTION</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Begin where the drawing becomes uncertain: the moment of arrival. Ask whether a movable screen could offer privacy without making entry harder to negotiate.</p>
     </div>
   
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">1990s</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">02</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-ink"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">DIGITAL FRAGMENTATION</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Desktop publishing disrupted traditional typesetting rules, introducing experimental layouts before web standards emerged.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">RECORD THE BASELINE</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Leave the entrance unchanged. Record pauses, passage conflicts, and accounts of privacy; distinguish a chosen hesitation from a delay imposed by the arrangement itself.</p>
     </div>
   
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">2020s+</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">03</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 border-accent bg-accent"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">SYSTEMS-DRIVEN SYNTHESIS</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Modern design token architecture marries Swiss editorial perfection with programmatic front-end automation.</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">TEST WITHOUT COMMITTING</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">Move the screen, not the goalposts. Keep the change reversible, preserve accessible circulation, and resist improving other conditions before this intervention has been examined.</p>
     </div>
   
       </div>
@@ -547,18 +562,21 @@
   <!-- 11. CITATION (PULLQUOTE) -->
   <div id="slide-11" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-8 py-8">
-      <div class="w-24 h-1 bg-accent"></div>
+      <div class="flex justify-between items-center w-full">
+        <div class="w-24 h-1 bg-accent"></div>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
+      </div>
       <div class="p-12 bg-surface border border-hairline relative max-w-[940px] my-auto shadow-sm">
         <span class="font-display text-[110px] text-accent leading-[0.5] mb-4 block">“</span>
-        <blockquote class="font-display font-bold text-[48px] leading-[1.3] text-ink mb-8 balance-text italic">
-          A room is not finished when nothing more can be added, but when life still has somewhere to go.
+        <blockquote class="font-display font-bold text-[46px] leading-[1.3] text-ink mb-8 balance-text italic">
+          A room should leave something for its inhabitants to decide.
         </blockquote>
         <div class="pt-8 border-t-2 border-ink w-3/4 mx-auto flex flex-col items-center">
-          <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">The Tokyo Review</span>
-          <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-2">Editorial proposition</span>
+          <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest">The Tokyo Review · Editorial proposition</span>
+          <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-2">Let the drawing establish the conditions without dictating the life.</span>
         </div>
       </div>
-      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">MONOLITH INSIGHT</span>
+      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">SIGNATURE THESIS</span>
     </div>
   </div>
 
@@ -566,23 +584,23 @@
   <div id="slide-12" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center py-6">
       <div class="flex flex-col items-center pt-8">
-        <div class="w-16 h-16 border-2 border-ink flex items-center justify-center mb-6">
-          <div class="w-4 h-4 bg-accent"></div>
+        <div class="mb-6">
+          <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
         </div>
         <h2 class="font-display font-bold text-[72px] leading-[1.05] tracking-tight text-ink mb-6 max-w-[850px]">
-          Keep Space for Thought
+          Make room for closer looking
         </h2>
-        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px]">
+        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px] shadow-sm">
           <p class="font-sans text-[26px] text-graphite leading-[1.4]">
-            Architecture, read beyond the image. The Tokyo Review is a proposed publication for close readings of thresholds, light, material, and occupation: what a plan permits, what an image leaves out, and what must be tested in use. Request destination and release details remain unconfirmed.
+            Collect an issue that treats the room not as a finished image, but as an unsettled agreement between drawing and daily life. Read for the thresholds, accommodations, and small freedoms a photograph cannot adequately explain.
           </p>
         </div>
       </div>
       <div class="pb-6 flex flex-col items-center">
         <a href="#" class="px-12 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[22px] hover:bg-graphite transition-colors inline-block rounded-none shadow-md">
-          Request the inaugural issue
+          Acquire the Issue
         </a>
-        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6">Verified destination pending</span>
+        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6">@THETOKYOREVIEW</span>
       </div>
     </div>
   </div>
@@ -591,16 +609,16 @@
   <div id="slide-13" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-12 py-8">
       <div class="pt-6 flex flex-col items-center">
-        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL STATISTICAL FINDING</span>
+        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL QUANTITATIVE FINDING</span>
         <div class="font-display font-black text-[220px] leading-none text-ink flex items-baseline tracking-tighter">
-          85<span class="text-[90px] font-sans font-normal text-accent">%</span>
+          84<span class="text-[90px] font-sans font-normal text-accent">%</span>
         </div>
         <div class="w-32 h-1 bg-accent my-6"></div>
-        <h3 class="font-display font-bold text-[36px] text-ink uppercase tracking-wide mb-4">RETENTION EFFICIENCY</h3>
+        <h3 class="font-display font-bold text-[36px] text-ink uppercase tracking-wide mb-4">PERCEIVED AUTHORITY ELEVATION</h3>
       </div>
-      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6">
+      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6 shadow-sm">
         <p class="font-sans text-[26px] leading-[1.45] text-graphite">
-          Observed increase in sustained reader attention when editorial structure replaces chaotic layout.
+          Observed multiplier in sustained reader attention within Architecture &amp; Spatial Philosophy environments.
         </p>
       </div>
     </div>
@@ -609,29 +627,30 @@
   <!-- 14. METHODOLOGY (STEP-BY-STEP FLOW) -->
   <div id="slide-14" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Methodological Protocol</h2>
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Give the Pause a Fair Test</h2>
+        <div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">印</div>
       </div>
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 01</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">01</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Grid Derivation</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Calculate baseline typographic rhythms and column margins relative to the aspect ratio.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Observe Before Editing</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">Observe the existing entrance with consent; record dwell time, reported privacy, and passage conflicts alongside lighting, task, and observation duration.</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 02</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">02</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Hierarchy Stratification</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Assign strictly bounded font scales across display, meta, kicker, and body layers.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Move Only the Screen</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">Adjust screen position without obstructing accessible passage; hold lighting, task, and observation duration constant, documenting the revised arrangement before testing.</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-accent pl-8 bg-paper border-y border-r border-hairline p-6 shadow-sm">
-          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">STEP 03</div>
+          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">03</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-1">Empirical Verification</h3>
-            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">Execute headless Chromium audits to certify zero collision geometry and 80%+ frame fill.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-1">Repeat, Then Listen</h3>
+            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">Repeat observations under matched conditions; compare dwell time and reported privacy, retaining disagreements and passage conflicts rather than smoothing differences.</p>
           </div>
         </div>
       </div>
@@ -642,7 +661,7 @@
   <div id="slide-15" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Comparative Standards</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Design for the Life Outside the Photograph</h2>
       </div>
       <div class="flex-1 flex gap-8 border border-hairline shadow-sm my-auto">
         <!-- Avoid -->
@@ -650,13 +669,13 @@
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-graphite border-b border-hairline pb-4 mb-6">LEGACY MODEL (AVOID)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Cluttered ornamental gradients and visual noise.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ Conceal daily necessities so completely that retrieving them becomes a recurring negotiation.
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Fragile absolute positioning causing text collisions.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ Fix the furniture around a privileged camera position and require daily routines to accommodate the composition.
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Rhetorical question headlines without substance.
+              <span class="font-mono text-graphite font-bold">✕</span> ✕ Approve materials by appearance alone, leaving touch, cleaning, repair, and wear outside the brief.
             </li>
           </ul>
         </div>
@@ -666,13 +685,13 @@
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent border-b border-hairline pb-4 mb-6">PROPOSED MODEL (ADOPT)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Pure Flexbox vertical flow with 75%–90% frame fill.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ Provide accessible storage where documented routines require it; let retrieval matter as much as concealment.
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Handcrafted editorial prose and verified telemetry.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ Permit arrangements to change with occupants’ activities, while preserving accessible routes through the room.
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Architectural cards, spines, and Swiss hairlines.
+              <span class="font-mono text-accent font-bold">✓</span> ✓ Evaluate materials through handling, maintenance, and use; judge the surface beyond its first photograph.
             </li>
           </ul>
         </div>
@@ -684,44 +703,44 @@
   <div id="slide-16" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Quality Audit</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">Completion Requires Evidence</h2>
         <span class="font-mono text-[15px] uppercase tracking-widest text-accent font-bold mb-1">4-POINT AUDIT</span>
       </div>
       <div class="flex-1 flex flex-col gap-5 justify-center my-auto">
         
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Are all telemetry values strictly numerical with signed badges?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        Arrival supports accessible passage through the proposed arrangement.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Does every slide layer fill 75%–90% of vertical canvas height?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        Light has been assessed across the room’s intended use periods.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Has all position:absolute jitter been eliminated from slide content?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        Storage accommodates documented daily needs without making retrieval an obstacle.
       </p>
     </div>
   
-    <div class="flex items-center gap-6 p-6 border border-accent bg-paper shadow-sm">
-      <div class="w-8 h-8 border-2 border-accent bg-accent/10 text-accent shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
-        ✓
+    <div class="flex items-center gap-6 p-6 border border-hairline bg-surface">
+      <div class="w-8 h-8 border-2 border-graphite shrink-0 flex items-center justify-center font-mono font-bold text-[18px]">
+        
       </div>
-      <p class="font-sans text-[24px] text-ink font-semibold leading-tight">
-        Are mobile optical thresholds adhered to (≥20px meta, ≥24px body)?
+      <p class="font-sans text-[24px] text-graphite leading-tight">
+        Occupants can adapt the arrangement while maintaining accessible circulation.
       </p>
     </div>
   
@@ -733,7 +752,7 @@
   <div id="slide-17" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
-        <h2 class="font-display font-bold text-[68px] leading-none text-ink">System Architecture</h2>
+        <h2 class="font-display font-bold text-[68px] leading-none text-ink">The Room Is a Relationship</h2>
       </div>
       <div class="flex-1 relative flex items-center justify-center border border-hairline bg-surface my-auto">
         <!-- Connecting Crosshairs -->
@@ -742,25 +761,25 @@
 
         <!-- Central Node -->
         <div class="bg-paper border-2 border-ink px-10 py-6 font-display font-bold text-[32px] text-ink relative z-10 shadow-md">
-          CORE KERNEL
+          THE TOKYO REVIEW
         </div>
 
         <!-- 4 Callout Boxes -->
         <div class="absolute top-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">01. TOKEN SYSTEM</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Standardized typography, spacing, and color hex constants.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">01. ENCLOSURE</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Examine where enclosure offers retreat, where it demands permission, and whose passage the boundary makes difficult.</p>
         </div>
         <div class="absolute top-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">02. COMPONENT RECIPES</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">17 production-grade layout archetypes with pure Flexbox flow.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">02. TIME</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Follow light across intended activities; distinguish a compelling instant from conditions people can comfortably inhabit daily.</p>
         </div>
         <div class="absolute bottom-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">03. COMPILATION ENGINE</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Deterministic rendering of editorial intelligence into HTML.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">03. TOUCH</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Judge surfaces through contact, care, and wear; ask what their maintenance requires of the people here.</p>
         </div>
         <div class="absolute bottom-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">04. PLAYWRIGHT AUDIT</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Headless Chromium DOM collision and vertical fill validation.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">04. USE</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Trace repeated acts without freezing them into rules; leave room for habits the drawing never anticipated.</p>
         </div>
       </div>
     </div>

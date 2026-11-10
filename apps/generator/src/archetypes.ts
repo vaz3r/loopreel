@@ -13,15 +13,37 @@ function esc(str?: string): string {
     .replace(/'/g, '&#39;');
 }
 
+/**
+ * Renders the theme-appropriate signature motif badge.
+ */
+export function renderBrandSignatureMotif(manifest: BrandDesignSystem): string {
+  const motif = manifest.visualMetaphor?.signatureMotif || 'seal';
+  const text = esc(manifest.visualMetaphor?.motifText || '印');
+
+  switch (motif) {
+    case 'crosshair':
+      return `<div class="flex items-center gap-1.5 font-mono text-[13px] text-accent font-bold tracking-widest"><span class="text-[18px] leading-none">+</span> <span>${text}</span></div>`;
+    case 'coordinate':
+      return `<div class="px-2.5 py-1 border border-ink/40 font-mono text-[11px] font-bold tracking-widest uppercase text-ink">${text}</div>`;
+    case 'bracket':
+      return `<div class="font-mono text-[13px] text-accent font-bold tracking-widest">[ ${text} ]</div>`;
+    case 'medallion':
+      return `<div class="w-8 h-8 rounded-full border-2 border-accent flex items-center justify-center font-display font-bold text-[13px] text-accent shadow-sm">${text}</div>`;
+    case 'seal':
+    default:
+      return `<div class="w-9 h-9 border-2 border-accent flex items-center justify-center font-display font-bold text-[16px] text-accent select-none shadow-sm">${text}</div>`;
+  }
+}
+
 // ======================================================================
-// 17 CANONICAL EDITORIAL ARCHETYPE RENDERERS
+// 17 BESPOKE EDITORIAL ARCHETYPE RENDERERS (ZERO BOILERPLATE LEAKS)
 // ======================================================================
 
 /**
  * 01. Cover / Front Page (Abstract / Introduction)
  */
 export function renderCoverSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
-  const kicker = esc(slide.kicker || manifest.domain || 'EDITORIAL ESSAY');
+  const kicker = esc(slide.kicker || manifest.domain.toUpperCase() || 'EDITORIAL ESSAY');
   const headline = esc(slide.headline || manifest.templateName);
   const subhead = esc(slide.subhead || manifest.tagline || manifest.aestheticManifesto);
   const byline = esc(slide.authorOrAttribution || manifest.templateName + ' Editorial Board');
@@ -31,13 +53,16 @@ export function renderCoverSlide(slide: DetailedSlideContent, manifest: BrandDes
   <div id="slide-1" class="slide-layer active">
     <div class="flex flex-col h-full justify-between py-6">
       <div class="pt-4">
-        <div class="w-16 h-1 bg-accent mb-8"></div>
+        <div class="flex justify-between items-center mb-8">
+          <div class="w-20 h-1 bg-accent"></div>
+          ${renderBrandSignatureMotif(manifest)}
+        </div>
         <span class="font-mono text-[18px] uppercase tracking-widest text-accent font-bold mb-4 block">${kicker}</span>
-        <h1 class="font-display font-bold text-[100px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
+        <h1 class="font-display font-bold text-[95px] leading-[0.95] tracking-tight balance-text text-ink clamp-4">
           ${headline}
         </h1>
-        <div class="mt-10 p-8 bg-surface border border-hairline relative">
-          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract</span>
+        <div class="mt-10 p-8 bg-surface border-l-4 border-accent border-y border-r border-hairline relative shadow-sm">
+          <span class="absolute -top-3 left-6 bg-paper px-3 font-mono text-[13px] font-bold uppercase tracking-widest text-accent">Abstract / Thesis</span>
           <p class="font-sans text-[26px] leading-[1.55] text-graphite clamp-4">
             ${subhead}
           </p>
@@ -59,14 +84,15 @@ export function renderCoverSlide(slide: DetailedSlideContent, manifest: BrandDes
 /**
  * 02. Executive Summary / The Catalog (List)
  */
-export function renderListSlide(slide: DetailedSlideContent): string {
-  const headline = esc(slide.headline || 'Executive Summary');
-  const kicker = esc(slide.kicker || 'Key Findings');
-  const items = slide.items && slide.items.length > 0 ? slide.items.slice(0, 3) : [
-    { index: '01', kicker: 'STRUCTURAL DISCIPLINE', body: 'Rigorous layout architecture establishes an authoritative visual foundation across all communication touchpoints.' },
-    { index: '02', kicker: 'TYPOGRAPHIC PRECISION', body: 'Hierarchical scale contrast decouples essential signal from secondary operational context.' },
-    { index: '03', kicker: 'ASYMMETRIC LEVERAGE', body: 'Eliminating decorative clutter increases cognitive retention and elevates perceived baseline value.' }
+export function renderListSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
+  const headline = esc(slide.headline || 'Executive Postulates');
+  const kicker = esc(slide.kicker || manifest.domain.toUpperCase());
+  const defaultItems = [
+    { index: '01', kicker: 'STRUCTURAL DISCIPLINE', body: `Foundational methodology establishing core principles across ${manifest.domain}.` },
+    { index: '02', kicker: 'MEASURABLE SIGNAL', body: 'Decoupling primary qualitative insights from secondary observational noise.' },
+    { index: '03', kicker: 'ASYMMETRIC CLARITY', body: 'Eliminating decorative clutter increases cognitive retention and authority.' }
   ];
+  const items = slide.items && slide.items.length >= 3 ? slide.items.slice(0, 3) : defaultItems;
 
   const itemsHtml = items.map((item, idx) => `
     <div class="flex items-start gap-8 py-7 border-b border-hairline">
@@ -96,39 +122,40 @@ export function renderListSlide(slide: DetailedSlideContent): string {
 /**
  * 03. Observation / The Gallery (Image Split)
  */
-export function renderImageSplitSlide(slide: DetailedSlideContent): string {
+export function renderImageSplitSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Spatial Observation');
-  const kicker = esc(slide.kicker || 'CASE STUDY');
-  const body = esc(slide.bodyText || slide.subhead || 'Through direct empirical observation, rigorous spatial systems demonstrate measurable improvements in user comprehension and perceived brand authority.');
-  const caption = esc(slide.authorOrAttribution || 'FIG. 01 — SYSTEM ARCHITECTURE');
+  const kicker = esc(slide.kicker || 'FIELD ANALYSIS');
+  const body = esc(slide.bodyText || slide.subhead || `Through rigorous observation within ${manifest.domain}, disciplined structural constraints demonstrate compounding clarity.`);
+  const caption = esc(slide.authorOrAttribution || 'FIG. 01 — SCHEMATIC OVERVIEW');
 
   return `
   <!-- 03. OBSERVATION (IMAGE SPLIT) -->
   <div id="slide-3" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
         <h2 class="font-display font-bold text-[68px] leading-none text-ink">${headline}</h2>
+        ${renderBrandSignatureMotif(manifest)}
       </div>
       <div class="flex-1 flex gap-10 items-stretch bg-surface border border-hairline p-8 my-auto">
-        <!-- Visual Container / Architectural SVG Diagram -->
-        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden">
-          <div class="absolute inset-0 opacity-10 flex items-center justify-center">
+        <!-- Visual Container / Diagrammatic Line Art -->
+        <div class="w-1/2 bg-paper border border-hairline relative flex flex-col justify-between p-6 overflow-hidden shadow-sm">
+          <div class="absolute inset-0 opacity-15 flex items-center justify-center">
             <svg class="w-full h-full text-ink" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
-              <line x1="0" y1="0" x2="100" y2="100" />
-              <line x1="100" y1="0" x2="0" y2="100" />
-              <circle cx="50" cy="50" r="40" />
+              <line x1="10" y1="10" x2="90" y2="90" />
+              <line x1="90" y1="10" x2="10" y2="90" />
+              <circle cx="50" cy="50" r="35" />
               <rect x="25" y="25" width="50" height="50" />
             </svg>
           </div>
           <div class="relative z-10 flex justify-between items-center">
             <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent">EXHIBIT A</span>
-            <span class="font-mono text-[12px] text-graphite">1080 x 1350</span>
+            <span class="font-mono text-[12px] text-graphite">${manifest.domain.toUpperCase()}</span>
           </div>
           <div class="relative z-10 flex flex-col items-center justify-center py-20 text-center">
             <div class="w-20 h-20 border-2 border-accent rounded-full flex items-center justify-center mb-4">
               <div class="w-3 h-3 bg-accent rounded-full"></div>
             </div>
-            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Spatial Axis</span>
+            <span class="font-display font-bold text-[28px] text-ink uppercase tracking-wide">Primary Axis</span>
           </div>
           <div class="relative z-10 bg-paper/90 border border-hairline p-3 font-mono text-[12px] font-bold uppercase tracking-widest text-ink">
             ${caption}
@@ -137,7 +164,7 @@ export function renderImageSplitSlide(slide: DetailedSlideContent): string {
         <!-- Copy Column -->
         <div class="w-1/2 flex flex-col justify-center pr-4">
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent mb-3 block">${kicker}</span>
-          <h3 class="font-display font-bold text-[38px] leading-[1.15] text-ink mb-6">Structural Integrity & Balance</h3>
+          <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink mb-6">Structural Composition</h3>
           <div class="w-16 h-1 bg-accent mb-6"></div>
           <p class="font-sans text-[24px] leading-[1.5] text-graphite clamp-6">
             ${body}
@@ -151,20 +178,19 @@ export function renderImageSplitSlide(slide: DetailedSlideContent): string {
 /**
  * 04. Empirical Data / Statistics (2x2 Telemetry Grid)
  */
-export function renderTelemetrySlide(slide: DetailedSlideContent): string {
-  const headline = esc(slide.headline || 'Empirical Metrics');
+export function renderTelemetrySlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
+  const headline = esc(slide.headline || 'Empirical Telemetry');
   const kicker = esc(slide.kicker || 'DATA DESK');
   const defaultStats = [
-    { value: '94.2', unit: '%', label: 'ACCURACY SCORE', context: 'Reduction in layout deviations across cross-functional reviews.' },
-    { value: '4.8', unit: 'x', label: 'THROUGHPUT MULTIPLIER', context: 'Observed speed improvement from standardized design tokens.' },
-    { value: '-65', unit: '%', label: 'REVISION CYCLES', context: 'Decrease in subjective design feedback loops and rework.' },
-    { value: '99.1', unit: '%', label: 'BRAND FIDELITY', context: 'Audit consistency measured across digital and print touchpoints.' }
+    { value: '88.4', unit: '%', label: 'ACCURACY COEFFICIENT', context: `Observed fidelity rate across audited ${manifest.domain} environments.` },
+    { value: '3.6', unit: 'x', label: 'THROUGHPUT MULTIPLIER', context: 'Measured velocity gain after implementing standardized guidelines.' },
+    { value: '-52', unit: '%', label: 'VARIANCE REDUCTION', context: 'Documented decrease in subjective deviations and rework.' },
+    { value: '98.7', unit: '%', label: 'SYSTEM RETENTION', context: 'Longitudinal adherence rate measured over a 12-month period.' }
   ];
   const stats = slide.stats && slide.stats.length >= 4 ? slide.stats.slice(0, 4) : defaultStats;
 
   const statsHtml = stats.map((st, i) => {
     let cleanVal = st.value?.trim() || defaultStats[i]!.value;
-    // Disqualify verbose textual phrases like "To be measured"
     if (cleanVal.length > 6 || /[a-zA-Z\s]{3,}/.test(cleanVal)) {
       cleanVal = defaultStats[i]!.value;
     }
@@ -199,18 +225,19 @@ export function renderTelemetrySlide(slide: DetailedSlideContent): string {
 /**
  * 05. Analytical Inquiry / The Dialogue (Q&A)
  */
-export function renderDialogueSlide(slide: DetailedSlideContent): string {
+export function renderDialogueSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Analytical Inquiry');
-  const question = esc(slide.claimVsRecord?.claim || slide.thesisQuote || 'Does uncompromising typographic discipline limit creative expression in commercial applications?');
-  const answer = esc(slide.claimVsRecord?.recordBody || slide.bodyText || 'Rigid discipline is the catalyst for expression, not its enemy. By constraining structural variables, visual tension becomes deliberate rather than accidental, elevating both clarity and emotional impact.');
-  const commentary = esc(slide.authorOrAttribution || 'EDITORIAL INQUIRY BOARD');
+  const question = esc(slide.claimVsRecord?.claim || `Does strict discipline within ${manifest.domain} inhibit organic innovation?`);
+  const answer = esc(slide.claimVsRecord?.recordBody || `Rigorous constraint acts as a catalyst, not a cage. By systematically bounding structural noise, the core signal achieves effortless resonance.`);
+  const commentary = esc(slide.claimVsRecord?.recordTitle || 'REVIEW BOARD VERDICT');
 
   return `
   <!-- 05. DIALOGUE (Q&A) -->
   <div id="slide-5" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
         <h2 class="font-display font-bold text-[68px] leading-none text-ink">${headline}</h2>
+        ${renderBrandSignatureMotif(manifest)}
       </div>
       <div class="flex-1 flex flex-col justify-center gap-8 bg-surface border border-hairline p-12 my-auto shadow-sm">
         <!-- Question -->
@@ -242,8 +269,15 @@ export function renderDialogueSlide(slide: DetailedSlideContent): string {
 /**
  * 06. The Value Matrix / The Framework (2x2 Quadrant)
  */
-export function renderQuadrantSlide(slide: DetailedSlideContent): string {
+export function renderQuadrantSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'The Value Matrix');
+  const defaultQuadrants = [
+    { quadrantNumber: 'I', title: 'The Unstructured', body: `Ad-hoc execution in ${manifest.domain} with high friction and unpredictable quality.`, isHero: false },
+    { quadrantNumber: 'II', title: 'The Canonical Standard', body: `Mathematically resolved architecture yielding compounding authority and effortless leverage.`, isHero: true },
+    { quadrantNumber: 'III', title: 'The Commodity', body: 'Superficial execution with zero differentiation and high churn.', isHero: false },
+    { quadrantNumber: 'IV', title: 'The Over-Engineered', body: 'Excessive complexity obscuring the core value proposition.', isHero: false }
+  ];
+  const quads = slide.quadrants && slide.quadrants.length === 4 ? slide.quadrants : defaultQuadrants;
 
   return `
   <!-- 06. THE FRAMEWORK (2x2 QUADRANT) -->
@@ -252,38 +286,41 @@ export function renderQuadrantSlide(slide: DetailedSlideContent): string {
       <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 text-center">
         <h2 class="font-display font-bold text-[68px] leading-none text-ink">${headline}</h2>
       </div>
-      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto">
+      <div class="flex-1 grid grid-cols-2 grid-rows-2 relative border-2 border-ink bg-paper my-auto shadow-sm">
         <!-- Axes -->
         <div class="absolute top-1/2 left-0 w-full h-[2px] bg-ink -translate-y-1/2 z-20"></div>
         <div class="absolute left-1/2 top-0 h-full w-[2px] bg-ink -translate-x-1/2 z-20"></div>
 
         <!-- Axis Labels -->
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Precision</div>
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Precision</div>
-        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Commodity</div>
-        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Authoritative</div>
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">High Rigor</div>
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-paper px-4 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Low Rigor</div>
+        <div class="absolute top-1/2 -left-14 -translate-y-1/2 -rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-graphite z-30">Ephemeral</div>
+        <div class="absolute top-1/2 -right-14 -translate-y-1/2 rotate-90 bg-paper px-3 font-mono text-[12px] font-bold uppercase tracking-widest text-accent z-30">Enduring</div>
 
-        <!-- Quadrants -->
+        <!-- Quadrant I -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-b border-hairline">
-          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT I</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Artisan</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High tactile craft with manual overhead. Beautiful but difficult to scale without systemization.</p>
+          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT ${esc(quads[0]!.quadrantNumber)}</span>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">${esc(quads[0]!.title)}</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">${esc(quads[0]!.body)}</p>
         </div>
+        <!-- Quadrant II (Hero) -->
         <div class="p-8 flex flex-col justify-center text-center bg-ink text-paper relative z-10">
           <div class="absolute top-3 right-3 w-3 h-3 bg-accent rounded-full"></div>
-          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">TARGET POSITION</span>
-          <h3 class="font-display font-bold text-[30px] text-paper mb-2">The Standard</h3>
-          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">Mathematically resolved design systems. Maximum authority, zero friction, compounding brand equity.</p>
+          <span class="font-mono text-[14px] uppercase text-accent tracking-widest mb-2 font-bold">OPTIMAL ARCHETYPE</span>
+          <h3 class="font-display font-bold text-[30px] text-paper mb-2">${esc(quads[1]!.title)}</h3>
+          <p class="font-sans text-[20px] text-paper/85 leading-[1.35] clamp-3">${esc(quads[1]!.body)}</p>
         </div>
+        <!-- Quadrant III -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50 border-r border-hairline">
-          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT III</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Commodity</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">Generic templates and race-to-the-bottom pricing. Minimal differentiation and high churn.</p>
+          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT ${esc(quads[2]!.quadrantNumber)}</span>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">${esc(quads[2]!.title)}</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">${esc(quads[2]!.body)}</p>
         </div>
+        <!-- Quadrant IV -->
         <div class="p-8 flex flex-col justify-center text-center bg-surface/50">
-          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT IV</span>
-          <h3 class="font-display font-bold text-[30px] text-ink mb-2">The Scaler</h3>
-          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">High volume execution without editorial polish. Functional but easily superseded by automated rivals.</p>
+          <span class="font-mono text-[14px] uppercase text-graphite tracking-widest mb-2 font-bold">QUADRANT ${esc(quads[3]!.quadrantNumber)}</span>
+          <h3 class="font-display font-bold text-[30px] text-ink mb-2">${esc(quads[3]!.title)}</h3>
+          <p class="font-sans text-[20px] text-graphite leading-[1.35] clamp-3">${esc(quads[3]!.body)}</p>
         </div>
       </div>
     </div>
@@ -293,9 +330,14 @@ export function renderQuadrantSlide(slide: DetailedSlideContent): string {
 /**
  * 07. Clinical Study / Provenance (3-Stage Case Study)
  */
-export function renderCaseStudySlide(slide: DetailedSlideContent): string {
-  const headline = esc(slide.headline || 'Clinical Case Study');
-  const kicker = esc(slide.kicker || 'LONGITUDINAL ANALYSIS');
+export function renderCaseStudySlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
+  const headline = esc(slide.headline || 'Longitudinal Case Study');
+  const kicker = esc(slide.kicker || manifest.domain.toUpperCase());
+  const caseStudy = slide.caseStudy || {
+    hypothesis: `Uncontrolled variance in ${manifest.domain} diluted overall impact and increased operational friction.`,
+    intervention: 'Introduced strict mathematical hierarchy, standardized tokens, and rigorous verification checkpoints.',
+    result: 'Achieved a 3.8x expansion in audience retention, zero regressions, and lasting authority.'
+  };
 
   return `
   <!-- 07. CLINICAL STUDY (3-STAGE CASE STUDY) -->
@@ -308,20 +350,20 @@ export function renderCaseStudySlide(slide: DetailedSlideContent): string {
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <!-- Stage 1 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-graphite"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-graphite"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-graphite tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Hypothesis</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Fragmented Visual Identity</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Inconsistent layouts and typography across departments diluted brand credibility and increased production cycle times by 40%.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Baseline Friction</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">${esc(caseStudy.hypothesis)}</p>
           </div>
         </div>
         <!-- Stage 2 -->
         <div class="border border-hairline bg-surface p-7 flex gap-8 items-start relative shadow-sm">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-ink"></div>
+          <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-ink"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-ink tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Intervention</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Unification</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">Enacted strict 8-point spatial constraints, standardized token sets, and automated Playwright layout verification audits.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-2">Systemic Resolution</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-graphite clamp-2">${esc(caseStudy.intervention)}</p>
           </div>
         </div>
         <!-- Stage 3 -->
@@ -329,8 +371,8 @@ export function renderCaseStudySlide(slide: DetailedSlideContent): string {
           <div class="absolute left-0 top-0 bottom-0 w-2 bg-accent"></div>
           <div class="font-mono font-bold text-[14px] uppercase text-accent tracking-widest w-32 shrink-0 pt-1 text-right border-r border-hairline pr-6 mr-2">Validated Result</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Measurable Authority Expansion</h3>
-            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">Content engagement multiplied by 3.8x, brand recall reached 91%, and zero layout regressions were logged over 12 months.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-2">Compounding Authority</h3>
+            <p class="font-sans text-[22px] leading-[1.45] text-ink font-semibold clamp-2">${esc(caseStudy.result)}</p>
           </div>
         </div>
       </div>
@@ -341,11 +383,11 @@ export function renderCaseStudySlide(slide: DetailedSlideContent): string {
 /**
  * 08. Theoretical Correction / Illusion vs Reality (Debunk)
  */
-export function renderDebunkSlide(slide: DetailedSlideContent): string {
+export function renderDebunkSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Myth vs. Method');
-  const claim = esc(slide.claimVsRecord?.claim || 'Design quality is inherently subjective and cannot be measured with empirical precision.');
-  const recordTitle = esc(slide.claimVsRecord?.recordTitle || 'The Objective Physics of Layout');
-  const recordBody = esc(slide.claimVsRecord?.recordBody || 'Eye-tracking telemetry and cognitive load studies demonstrate that mathematically structured typography directly reduces cognitive drag, accelerating information retention by over 70%.');
+  const claim = esc(slide.claimVsRecord?.claim || `Quality in ${manifest.domain} is subjective and defies empirical formulation.`);
+  const recordTitle = esc(slide.claimVsRecord?.recordTitle || 'The Documented Physics of Layout');
+  const recordBody = esc(slide.claimVsRecord?.recordBody || `Empirical testing proves that deliberate structural bounds lower cognitive drag, enabling viewers to synthesize complex insights effortlessly.`);
 
   return `
   <!-- 08. DEBUNK (MYTH VS RECORD) -->
@@ -378,22 +420,23 @@ export function renderDebunkSlide(slide: DetailedSlideContent): string {
 /**
  * 09. Literature Review / The Collection (Grid)
  */
-export function renderGridSlide(slide: DetailedSlideContent): string {
+export function renderGridSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'System Architecture Pillars');
-  const items = [
-    { title: 'PROPORTIONAL SCALE', desc: 'Modular typographical scales establish rhythmic harmony across display and body tiers.' },
-    { title: 'NEGATIVE SPACE', desc: 'Deliberate void ratios (75%–90% fill) focus viewer perception on key empirical findings.' },
-    { title: 'CHROMATIC RESTRAINT', desc: 'Limited 3-color palettes prevent cognitive sensory overload and anchor attention.' },
-    { title: 'OPTICAL FLOORS', desc: 'Enforcing strict minimum font thresholds ensures accessibility across all device viewports.' }
+  const defaultItems = [
+    { index: '01', kicker: 'PROPORTIONAL SCALE', body: `Harmonic ratios defining spatial hierarchy across all ${manifest.domain} compositions.` },
+    { index: '02', kicker: 'NEGATIVE SPACE', body: 'The intentional sculpted void that grants breathing room and elevated focus.' },
+    { index: '03', kicker: 'CHROMATIC RESTRAINT', body: 'Restricted 3-color palette eliminating sensory fatigue and establishing instant recognition.' },
+    { index: '04', kicker: 'TACTILE FIDELITY', body: 'Honoring physical paper traditions through subtle texture and disciplined typography.' }
   ];
+  const items = slide.items && slide.items.length >= 4 ? slide.items.slice(0, 4) : defaultItems;
 
   const cardsHtml = items.map((it, idx) => `
     <div class="border border-hairline p-7 flex flex-col justify-between bg-surface shadow-sm relative">
       <div class="absolute top-0 left-0 w-8 h-1 bg-accent"></div>
       <div>
         <span class="font-mono text-[14px] font-bold uppercase tracking-widest text-accent mb-2 block">PILLAR 0${idx + 1}</span>
-        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">${it.title}</h3>
-        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">${it.desc}</p>
+        <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">${esc(it.kicker || '')}</h3>
+        <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">${esc(it.body || '')}</p>
       </div>
       <div class="w-12 h-1 bg-hairline mt-4"></div>
     </div>
@@ -403,8 +446,9 @@ export function renderGridSlide(slide: DetailedSlideContent): string {
   <!-- 09. LITERATURE REVIEW (GRID) -->
   <div id="slide-9" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
         <h2 class="font-display font-bold text-[68px] leading-none text-ink">${headline}</h2>
+        ${renderBrandSignatureMotif(manifest)}
       </div>
       <div class="flex-1 grid grid-cols-2 gap-7 my-auto">
         ${cardsHtml}
@@ -416,20 +460,21 @@ export function renderGridSlide(slide: DetailedSlideContent): string {
 /**
  * 10. Research Methodology / STEM Timeline
  */
-export function renderTimelineSlide(slide: DetailedSlideContent): string {
+export function renderTimelineSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Chronological Evolution');
-  const milestones = [
-    { phase: '1950s', title: 'INTERNATIONAL TYPOGRAPHIC STYLE', desc: 'Pioneered by Swiss typographers, establishing grid-based mathematical rigor and universal objective clarity.' },
-    { phase: '1990s', title: 'DIGITAL FRAGMENTATION', desc: 'Desktop publishing disrupted traditional typesetting rules, introducing experimental layouts before web standards emerged.' },
-    { phase: '2020s+', title: 'SYSTEMS-DRIVEN SYNTHESIS', desc: 'Modern design token architecture marries Swiss editorial perfection with programmatic front-end automation.' }
+  const defaultMilestones = [
+    { phase: 'ORIGINS', title: 'FOUNDATIONAL TRADITION', body: `Early organic practices and intuitive rules governing ${manifest.domain}.` },
+    { phase: 'TRANSITION', title: 'DISRUPTIVE SHIFT', body: 'Emergence of mechanical reproduction and experimental modernism.' },
+    { phase: 'CONTEMPORARY', title: 'CANONICAL SYNTHESIS', body: 'The marriage of ancient physical craft with programmatic rigor.' }
   ];
+  const milestones = slide.milestones && slide.milestones.length >= 3 ? slide.milestones.slice(0, 3) : defaultMilestones;
 
   const milestonesHtml = milestones.map((m, idx) => `
     <div class="relative pl-12 pb-10">
-      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">${m.phase}</div>
+      <div class="absolute left-[-160px] top-1 font-mono font-bold text-[18px] text-accent w-32 text-right">${esc(m.phase)}</div>
       <div class="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-paper border-2 ${idx === 2 ? 'border-accent bg-accent' : 'border-ink'}"></div>
-      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">${m.title}</h3>
-      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">${m.desc}</p>
+      <h3 class="font-display font-bold text-[28px] text-ink mb-2 leading-tight">${esc(m.title)}</h3>
+      <p class="font-sans text-[22px] text-graphite leading-[1.4] clamp-3">${esc(m.body)}</p>
     </div>
   `).join('');
 
@@ -450,19 +495,22 @@ export function renderTimelineSlide(slide: DetailedSlideContent): string {
 /**
  * 11. Citation / The Monolith (Pullquote)
  */
-export function renderPullquoteSlide(slide: DetailedSlideContent): string {
-  const quote = esc(slide.thesisQuote || 'The most profound beauty lies not in ornamentation, but in the elegant efficiency of a perfectly resolved structure.');
-  const author = esc(slide.authorOrAttribution || 'Josef Müller-Brockmann');
-  const title = esc(slide.subhead || 'Graphic Artist and Typographer (1914–1996)');
+export function renderPullquoteSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
+  const quote = esc(slide.thesisQuote || manifest.aestheticManifesto || 'Beauty lies not in ornamentation, but in the elegant efficiency of a resolved structure.');
+  const author = esc(slide.authorOrAttribution || manifest.templateName + ' Thesis');
+  const title = esc(slide.subhead || manifest.domain);
 
   return `
   <!-- 11. CITATION (PULLQUOTE) -->
   <div id="slide-11" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-8 py-8">
-      <div class="w-24 h-1 bg-accent"></div>
+      <div class="flex justify-between items-center w-full">
+        <div class="w-24 h-1 bg-accent"></div>
+        ${renderBrandSignatureMotif(manifest)}
+      </div>
       <div class="p-12 bg-surface border border-hairline relative max-w-[940px] my-auto shadow-sm">
         <span class="font-display text-[110px] text-accent leading-[0.5] mb-4 block">“</span>
-        <blockquote class="font-display font-bold text-[48px] leading-[1.3] text-ink mb-8 balance-text italic">
+        <blockquote class="font-display font-bold text-[46px] leading-[1.3] text-ink mb-8 balance-text italic">
           ${quote}
         </blockquote>
         <div class="pt-8 border-t-2 border-ink w-3/4 mx-auto flex flex-col items-center">
@@ -470,7 +518,7 @@ export function renderPullquoteSlide(slide: DetailedSlideContent): string {
           <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-2">${title}</span>
         </div>
       </div>
-      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">MONOLITH INSIGHT</span>
+      <span class="font-mono text-[13px] uppercase tracking-widest text-graphite">SIGNATURE THESIS</span>
     </div>
   </div>`;
 }
@@ -480,7 +528,7 @@ export function renderPullquoteSlide(slide: DetailedSlideContent): string {
  */
 export function renderCtaSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Implement the Standard.');
-  const body = esc(slide.bodyText || 'Access the complete design specification, vector token packages, and production guidelines.');
+  const body = esc(slide.bodyText || `Access the complete field guide and editorial publication archive for ${manifest.domain}.`);
   const buttonText = esc(slide.cta?.buttonText || 'EXPLORE THE SPECIFICATION');
   const handle = esc(slide.cta?.socialHandle || '@' + manifest.templateName.replace(/\s+/g, '').toUpperCase());
 
@@ -489,13 +537,13 @@ export function renderCtaSlide(slide: DetailedSlideContent, manifest: BrandDesig
   <div id="slide-12" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center py-6">
       <div class="flex flex-col items-center pt-8">
-        <div class="w-16 h-16 border-2 border-ink flex items-center justify-center mb-6">
-          <div class="w-4 h-4 bg-accent"></div>
+        <div class="mb-6">
+          ${renderBrandSignatureMotif(manifest)}
         </div>
         <h2 class="font-display font-bold text-[72px] leading-[1.05] tracking-tight text-ink mb-6 max-w-[850px]">
           ${headline}
         </h2>
-        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px]">
+        <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[800px] shadow-sm">
           <p class="font-sans text-[26px] text-graphite leading-[1.4]">
             ${body}
           </p>
@@ -514,22 +562,27 @@ export function renderCtaSlide(slide: DetailedSlideContent, manifest: BrandDesig
 /**
  * 13. Focal Metric / Hero Stat
  */
-export function renderHeroStatSlide(slide: DetailedSlideContent): string {
-  const stat = slide.stats?.[0] || { value: '85', unit: '%', label: 'RETENTION EFFICIENCY', context: 'Observed increase in sustained reader attention when editorial structure replaces chaotic layout.' };
+export function renderHeroStatSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
+  const stat = slide.stats?.[0] || {
+    value: '84',
+    unit: '%',
+    label: 'PERCEIVED AUTHORITY ELEVATION',
+    context: `Observed multiplier in sustained reader attention within ${manifest.domain} environments.`
+  };
 
   return `
   <!-- 13. FOCAL METRIC (HERO STAT) -->
   <div id="slide-13" class="slide-layer">
     <div class="flex flex-col h-full justify-between items-center text-center px-12 py-8">
       <div class="pt-6 flex flex-col items-center">
-        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL STATISTICAL FINDING</span>
+        <span class="font-mono text-[16px] text-accent uppercase tracking-widest font-bold mb-4">CRITICAL QUANTITATIVE FINDING</span>
         <div class="font-display font-black text-[220px] leading-none text-ink flex items-baseline tracking-tighter">
           ${esc(stat.value)}<span class="text-[90px] font-sans font-normal text-accent">${esc(stat.unit || '%')}</span>
         </div>
         <div class="w-32 h-1 bg-accent my-6"></div>
         <h3 class="font-display font-bold text-[36px] text-ink uppercase tracking-wide mb-4">${esc(stat.label)}</h3>
       </div>
-      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6">
+      <div class="p-8 bg-surface border-t-2 border-b-2 border-ink max-w-[850px] mb-6 shadow-sm">
         <p class="font-sans text-[26px] leading-[1.45] text-graphite">
           ${esc(stat.context)}
         </p>
@@ -541,36 +594,43 @@ export function renderHeroStatSlide(slide: DetailedSlideContent): string {
 /**
  * 14. Experimental Design / Methodology (Step-by-Step Flow)
  */
-export function renderStepByStepSlide(slide: DetailedSlideContent): string {
+export function renderStepByStepSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Methodological Protocol');
+  const defaultSteps = [
+    { stepNumber: 'PHASE 01', title: 'Subtractive Audit', body: `Audit every element in ${manifest.domain}. Eliminate any form that does not serve an essential purpose.` },
+    { stepNumber: 'PHASE 02', title: 'Proportional Calibration', body: 'Enforce strict modular scale hierarchy between primary display elements and secondary body text.' },
+    { stepNumber: 'PHASE 03', title: 'Empirical Verification', body: 'Execute rigorous visual testing to confirm seamless optical balance and frame fill.' }
+  ];
+  const steps = slide.steps && slide.steps.length >= 3 ? slide.steps.slice(0, 3) : defaultSteps;
 
   return `
   <!-- 14. METHODOLOGY (STEP-BY-STEP FLOW) -->
   <div id="slide-14" class="slide-layer">
     <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4">
+      <div class="shrink-0 mb-6 border-b-2 border-ink pb-4 flex justify-between items-end">
         <h2 class="font-display font-bold text-[68px] leading-none text-ink">${headline}</h2>
+        ${renderBrandSignatureMotif(manifest)}
       </div>
       <div class="flex-1 flex flex-col gap-6 justify-center my-auto">
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 01</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">${esc(steps[0]!.stepNumber)}</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Grid Derivation</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Calculate baseline typographic rhythms and column margins relative to the aspect ratio.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">${esc(steps[0]!.title)}</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">${esc(steps[0]!.body)}</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-ink pl-8 bg-surface p-6">
-          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">STEP 02</div>
+          <div class="font-mono text-[22px] font-bold text-graphite shrink-0 mt-1">${esc(steps[1]!.stepNumber)}</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-ink mb-1">Hierarchy Stratification</h3>
-            <p class="font-sans text-[22px] text-graphite clamp-2">Assign strictly bounded font scales across display, meta, kicker, and body layers.</p>
+            <h3 class="font-display font-bold text-[28px] text-ink mb-1">${esc(steps[1]!.title)}</h3>
+            <p class="font-sans text-[22px] text-graphite clamp-2">${esc(steps[1]!.body)}</p>
           </div>
         </div>
         <div class="flex gap-8 items-start border-l-4 border-accent pl-8 bg-paper border-y border-r border-hairline p-6 shadow-sm">
-          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">STEP 03</div>
+          <div class="font-mono text-[22px] font-bold text-accent shrink-0 mt-1">${esc(steps[2]!.stepNumber)}</div>
           <div>
-            <h3 class="font-display font-bold text-[28px] text-accent mb-1">Empirical Verification</h3>
-            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">Execute headless Chromium audits to certify zero collision geometry and 80%+ frame fill.</p>
+            <h3 class="font-display font-bold text-[28px] text-accent mb-1">${esc(steps[2]!.title)}</h3>
+            <p class="font-sans text-[22px] text-ink font-semibold clamp-2">${esc(steps[2]!.body)}</p>
           </div>
         </div>
       </div>
@@ -581,8 +641,20 @@ export function renderStepByStepSlide(slide: DetailedSlideContent): string {
 /**
  * 15. Comparative Paradigm (Do's & Don'ts)
  */
-export function renderDosAndDontsSlide(slide: DetailedSlideContent): string {
+export function renderDosAndDontsSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'Comparative Standards');
+  const defaultLegacy = [
+    `Cluttered visual noise and unmotivated ornamentation in ${manifest.domain}.`,
+    'Chaotic arbitrary positioning leading to cognitive friction.',
+    'Generic placeholder statements lacking verified substance.'
+  ];
+  const defaultProposed = [
+    'Disciplined structural flow with 75%–90% balanced frame fill.',
+    'Bespoke domain-authentic editorial copy and verified telemetry.',
+    'Architectural card geometry anchored by Swiss hairlines.'
+  ];
+  const legacy = slide.dosAndDonts?.legacyItems || defaultLegacy;
+  const proposed = slide.dosAndDonts?.proposedItems || defaultProposed;
 
   return `
   <!-- 15. COMPARATIVE PARADIGM (DO'S & DON'TS) -->
@@ -597,13 +669,13 @@ export function renderDosAndDontsSlide(slide: DetailedSlideContent): string {
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-graphite border-b border-hairline pb-4 mb-6">LEGACY MODEL (AVOID)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Cluttered ornamental gradients and visual noise.
+              <span class="font-mono text-graphite font-bold">✕</span> ${esc(legacy[0] || defaultLegacy[0])}
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Fragile absolute positioning causing text collisions.
+              <span class="font-mono text-graphite font-bold">✕</span> ${esc(legacy[1] || defaultLegacy[1])}
             </li>
             <li class="flex gap-4 items-start font-sans text-[22px] text-graphite leading-[1.35]">
-              <span class="font-mono text-graphite font-bold">✕</span> Rhetorical question headlines without substance.
+              <span class="font-mono text-graphite font-bold">✕</span> ${esc(legacy[2] || defaultLegacy[2])}
             </li>
           </ul>
         </div>
@@ -613,13 +685,13 @@ export function renderDosAndDontsSlide(slide: DetailedSlideContent): string {
           <span class="font-mono text-[16px] font-bold uppercase tracking-widest text-accent border-b border-hairline pb-4 mb-6">PROPOSED MODEL (ADOPT)</span>
           <ul class="space-y-6">
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Pure Flexbox vertical flow with 75%–90% frame fill.
+              <span class="font-mono text-accent font-bold">✓</span> ${esc(proposed[0] || defaultProposed[0])}
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Handcrafted editorial prose and verified telemetry.
+              <span class="font-mono text-accent font-bold">✓</span> ${esc(proposed[1] || defaultProposed[1])}
             </li>
             <li class="flex gap-4 items-start font-sans font-medium text-[22px] text-ink leading-[1.35]">
-              <span class="font-mono text-accent font-bold">✓</span> Architectural cards, spines, and Swiss hairlines.
+              <span class="font-mono text-accent font-bold">✓</span> ${esc(proposed[2] || defaultProposed[2])}
             </li>
           </ul>
         </div>
@@ -631,14 +703,15 @@ export function renderDosAndDontsSlide(slide: DetailedSlideContent): string {
 /**
  * 16. Implementation Audit / The Inventory (Checklist)
  */
-export function renderChecklistSlide(slide: DetailedSlideContent): string {
+export function renderChecklistSlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'System Quality Audit');
-  const items = [
-    { text: 'Are all telemetry values strictly numerical with signed badges?', checked: true },
-    { text: 'Does every slide layer fill 75%–90% of vertical canvas height?', checked: true },
-    { text: 'Has all position:absolute jitter been eliminated from slide content?', checked: true },
-    { text: 'Are mobile optical thresholds adhered to (≥20px meta, ≥24px body)?', checked: true }
+  const defaultChecklist = [
+    { text: `Are all telemetry metrics within ${manifest.domain} strictly numerical with signed badges?`, checked: true },
+    { text: 'Does every slide layer fill 75%–90% of vertical canvas height without dead voids?', checked: true },
+    { text: 'Has all position:absolute text jitter been eliminated in favor of clean Flexbox?', checked: true },
+    { text: 'Are mobile optical thresholds strictly adhered to (≥20px meta, ≥24px body)?', checked: true }
   ];
+  const items = slide.checklist && slide.checklist.length === 4 ? slide.checklist : defaultChecklist;
 
   const itemsHtml = items.map((it) => `
     <div class="flex items-center gap-6 p-6 border ${it.checked ? 'border-accent bg-paper shadow-sm' : 'border-hairline bg-surface'}">
@@ -646,7 +719,7 @@ export function renderChecklistSlide(slide: DetailedSlideContent): string {
         ${it.checked ? '✓' : ''}
       </div>
       <p class="font-sans text-[24px] ${it.checked ? 'text-ink font-semibold' : 'text-graphite'} leading-tight">
-        ${it.text}
+        ${esc(it.text)}
       </p>
     </div>
   `).join('');
@@ -669,8 +742,15 @@ export function renderChecklistSlide(slide: DetailedSlideContent): string {
 /**
  * 17. System Architecture / Component Anatomy
  */
-export function renderAnatomySlide(slide: DetailedSlideContent): string {
+export function renderAnatomySlide(slide: DetailedSlideContent, manifest: BrandDesignSystem): string {
   const headline = esc(slide.headline || 'System Architecture');
+  const defaultCallouts = [
+    { tag: `01. ${manifest.domain.toUpperCase()} CORE`, title: 'Foundational Kernel', body: `The primary structural tenets defining ${manifest.domain}.` },
+    { tag: '02. HARMONIC SCALE', title: 'Modular Rhythm', body: 'Geometric scaling bounding headlines, kickers, and body prose.' },
+    { tag: '03. TACTILE SURFACE', title: 'Material Authenticity', body: 'Physical print textures evoking heritage print craftsmanship.' },
+    { tag: '04. VERIFIED RIGOR', title: 'Empirical Telemetry', body: 'Objective standards eliminating layout collisions and dead space.' }
+  ];
+  const callouts = slide.callouts && slide.callouts.length === 4 ? slide.callouts : defaultCallouts;
 
   return `
   <!-- 17. SYSTEM ARCHITECTURE (ANATOMY) -->
@@ -686,25 +766,25 @@ export function renderAnatomySlide(slide: DetailedSlideContent): string {
 
         <!-- Central Node -->
         <div class="bg-paper border-2 border-ink px-10 py-6 font-display font-bold text-[32px] text-ink relative z-10 shadow-md">
-          CORE KERNEL
+          ${esc(manifest.templateName.toUpperCase())}
         </div>
 
         <!-- 4 Callout Boxes -->
         <div class="absolute top-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">01. TOKEN SYSTEM</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Standardized typography, spacing, and color hex constants.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">${esc(callouts[0]!.tag)}</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">${esc(callouts[0]!.body)}</p>
         </div>
         <div class="absolute top-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">02. COMPONENT RECIPES</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">17 production-grade layout archetypes with pure Flexbox flow.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-accent mb-1 block">${esc(callouts[1]!.tag)}</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">${esc(callouts[1]!.body)}</p>
         </div>
         <div class="absolute bottom-8 left-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">03. COMPILATION ENGINE</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Deterministic rendering of editorial intelligence into HTML.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">${esc(callouts[2]!.tag)}</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">${esc(callouts[2]!.body)}</p>
         </div>
         <div class="absolute bottom-8 right-8 w-[320px] bg-paper p-5 border border-hairline shadow-sm text-right">
-          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">04. PLAYWRIGHT AUDIT</span>
-          <p class="font-sans text-[18px] text-graphite leading-[1.3]">Headless Chromium DOM collision and vertical fill validation.</p>
+          <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink mb-1 block">${esc(callouts[3]!.tag)}</span>
+          <p class="font-sans text-[18px] text-graphite leading-[1.3]">${esc(callouts[3]!.body)}</p>
         </div>
       </div>
     </div>
@@ -712,7 +792,7 @@ export function renderAnatomySlide(slide: DetailedSlideContent): string {
 }
 
 // ======================================================================
-// MASTER COMPILER: ALL 17 SLIDES + INTERACTIVE PREVIEW CONTROLS
+// MASTER COMPILER: ALL 17 SLIDES + TACTILE TEXTURES + INTERACTIVE BAR
 // ======================================================================
 
 export const ARCHETYPE_NAMES = [
@@ -735,39 +815,74 @@ export const ARCHETYPE_NAMES = [
   '17. System Architecture (Anatomy)'
 ];
 
+function getPatternCss(pattern?: string): string {
+  switch (pattern) {
+    case 'washi':
+      return `
+      .bg-pattern {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
+        background-size: 20px 20px;
+      }`;
+    case 'grid':
+      return `
+      .bg-pattern {
+        background-image: 
+          linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+        background-size: 32px 32px;
+      }`;
+    case 'dots':
+      return `
+      .bg-pattern {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1.5px, transparent 0);
+        background-size: 26px 26px;
+      }`;
+    case 'blueprint':
+      return `
+      .bg-pattern {
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }`;
+    case 'clean':
+    default:
+      return '';
+  }
+}
+
 export function compileCompleteTemplate(
   manifest: BrandDesignSystem,
   slides: DetailedSlideContent[]
 ): string {
-  // Ensure we have 17 slide objects
   const slideMap = new Map<number, DetailedSlideContent>();
   slides.forEach((s) => slideMap.set(s.slideNumber, s));
 
-  // Build array of 17 rendered slides
   const renderedSlides: string[] = [
     renderCoverSlide(slideMap.get(1) || { slideNumber: 1, archetype: 'Cover', kicker: '', headline: '' }, manifest),
-    renderListSlide(slideMap.get(2) || { slideNumber: 2, archetype: 'List', kicker: '', headline: '' }),
-    renderImageSplitSlide(slideMap.get(3) || { slideNumber: 3, archetype: 'ImageSplit', kicker: '', headline: '' }),
-    renderTelemetrySlide(slideMap.get(4) || { slideNumber: 4, archetype: 'Telemetry', kicker: '', headline: '' }),
-    renderDialogueSlide(slideMap.get(5) || { slideNumber: 5, archetype: 'Dialogue', kicker: '', headline: '' }),
-    renderQuadrantSlide(slideMap.get(6) || { slideNumber: 6, archetype: 'Quadrant', kicker: '', headline: '' }),
-    renderCaseStudySlide(slideMap.get(7) || { slideNumber: 7, archetype: 'CaseStudy', kicker: '', headline: '' }),
-    renderDebunkSlide(slideMap.get(8) || { slideNumber: 8, archetype: 'Debunk', kicker: '', headline: '' }),
-    renderGridSlide(slideMap.get(9) || { slideNumber: 9, archetype: 'Grid', kicker: '', headline: '' }),
-    renderTimelineSlide(slideMap.get(10) || { slideNumber: 10, archetype: 'Timeline', kicker: '', headline: '' }),
-    renderPullquoteSlide(slideMap.get(11) || { slideNumber: 11, archetype: 'Pullquote', kicker: '', headline: '' }),
+    renderListSlide(slideMap.get(2) || { slideNumber: 2, archetype: 'List', kicker: '', headline: '' }, manifest),
+    renderImageSplitSlide(slideMap.get(3) || { slideNumber: 3, archetype: 'ImageSplit', kicker: '', headline: '' }, manifest),
+    renderTelemetrySlide(slideMap.get(4) || { slideNumber: 4, archetype: 'Telemetry', kicker: '', headline: '' }, manifest),
+    renderDialogueSlide(slideMap.get(5) || { slideNumber: 5, archetype: 'Dialogue', kicker: '', headline: '' }, manifest),
+    renderQuadrantSlide(slideMap.get(6) || { slideNumber: 6, archetype: 'Quadrant', kicker: '', headline: '' }, manifest),
+    renderCaseStudySlide(slideMap.get(7) || { slideNumber: 7, archetype: 'CaseStudy', kicker: '', headline: '' }, manifest),
+    renderDebunkSlide(slideMap.get(8) || { slideNumber: 8, archetype: 'Debunk', kicker: '', headline: '' }, manifest),
+    renderGridSlide(slideMap.get(9) || { slideNumber: 9, archetype: 'Grid', kicker: '', headline: '' }, manifest),
+    renderTimelineSlide(slideMap.get(10) || { slideNumber: 10, archetype: 'Timeline', kicker: '', headline: '' }, manifest),
+    renderPullquoteSlide(slideMap.get(11) || { slideNumber: 11, archetype: 'Pullquote', kicker: '', headline: '' }, manifest),
     renderCtaSlide(slideMap.get(12) || { slideNumber: 12, archetype: 'HeroCTA', kicker: '', headline: '' }, manifest),
-    renderHeroStatSlide(slideMap.get(13) || { slideNumber: 13, archetype: 'HeroStat', kicker: '', headline: '' }),
-    renderStepByStepSlide(slideMap.get(14) || { slideNumber: 14, archetype: 'StepByStep', kicker: '', headline: '' }),
-    renderDosAndDontsSlide(slideMap.get(15) || { slideNumber: 15, archetype: 'DosAndDonts', kicker: '', headline: '' }),
-    renderChecklistSlide(slideMap.get(16) || { slideNumber: 16, archetype: 'Checklist', kicker: '', headline: '' }),
-    renderAnatomySlide(slideMap.get(17) || { slideNumber: 17, archetype: 'Anatomy', kicker: '', headline: '' })
+    renderHeroStatSlide(slideMap.get(13) || { slideNumber: 13, archetype: 'HeroStat', kicker: '', headline: '' }, manifest),
+    renderStepByStepSlide(slideMap.get(14) || { slideNumber: 14, archetype: 'StepByStep', kicker: '', headline: '' }, manifest),
+    renderDosAndDontsSlide(slideMap.get(15) || { slideNumber: 15, archetype: 'DosAndDonts', kicker: '', headline: '' }, manifest),
+    renderChecklistSlide(slideMap.get(16) || { slideNumber: 16, archetype: 'Checklist', kicker: '', headline: '' }, manifest),
+    renderAnatomySlide(slideMap.get(17) || { slideNumber: 17, archetype: 'Anatomy', kicker: '', headline: '' }, manifest)
   ];
 
-  // Build select options
   const selectOptions = ARCHETYPE_NAMES.map((name, i) =>
     `<option value="${i + 1}">${name}</option>`
   ).join('\n        ');
+
+  const patternCss = getPatternCss(manifest.visualMetaphor?.texturePattern);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -800,6 +915,8 @@ export function compileCompleteTemplate(
     .border-graphite { border-color: ${manifest.colors.graphite} !important; }
     .bg-hairline { background-color: ${manifest.colors.hairline} !important; }
     .border-hairline { border-color: ${manifest.colors.hairline} !important; }
+
+    ${patternCss}
 
     /* UI Scaling Modes */
     .mode-preview .canvas-container {
@@ -870,7 +987,7 @@ export function compileCompleteTemplate(
   <!-- Main Workspace -->
   <div class="pt-[120px] pb-[80px] flex justify-center w-full min-h-screen">
     
-    <div id="export-canvas" class="canvas-container text-ink bg-paper shadow-2xl">
+    <div id="export-canvas" class="canvas-container text-ink bg-paper bg-pattern shadow-2xl">
       
       <!-- GLOBAL MASTHEAD PLACARD (HEADER) -->
       <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
@@ -878,7 +995,7 @@ export function compileCompleteTemplate(
           <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">${esc(manifest.templateName)}</span>
           <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">${esc(manifest.domain)}</span>
         </div>
-        <div class="text-right">
+        <div class="text-right flex items-center gap-4">
           <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">ABSTRACT</span>
         </div>
       </div>
