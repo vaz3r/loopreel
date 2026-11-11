@@ -69,7 +69,7 @@ Return JSON matching:
 }
 
 export function buildArticleBrandUserPrompt(article: ArticleIntel, brief?: TemplateBrief): string {
-  return `Analyze this news reporting and establish a BESPOKE, highly tailored Publication Identity and Brand Tokens:
+  return `Analyze this journalism reporting and autonomously establish a 100% BESPOKE Publication Identity and Brand Tokens:
 
 Article Title: "${article.title}"
 Publisher / Source: "${article.publisher}"
@@ -77,19 +77,30 @@ Author: "${article.byline || 'Staff Bureau'}"
 Summary Snippet:
 ${article.summary}
 
-Creative Direction Guidance:
+Creative Direction Guidance (AUTHENTIC CONTENT-DRIVEN DESIGN):
 1. Publication Name ("name" and "wordmark"):
-   Invent an evocative, art-directed editorial masthead suited to this exact story (e.g. if Apple Silicon/Hardware: "The Cupertino Ledger", "The Benchmark", "Silicon Quarterly"; if Aerospace: "Orbital Dispatch"; if Science: "The Empirical Review"). Do NOT just repeat the raw generic news scraper domain!
+   Invent an evocative, art-directed editorial masthead suited to this exact beat (e.g. if Aerospace & Military: "The Orbital Dispatch", "Flight & Fleet", "The Launch Ledger"; if Mathematics: "The Mathematical Monograph"; if Energy/Climate: "The Global Commons", "Carbon & Capital"). Never repeat the generic news scraper domain.
 2. Palette ("palette"):
-   Derive a bespoke palette matching the physical materials of the subject:
-   - For Apple/Consumer Hardware: Consider sophisticated titanium/aluminum paper (#F5F5F7 or #121316), contrast ink (#1D1D1F or #F5F5F7), and a distinctive signature accent (e.g. Apple sapphire #0071E3, international orange #FF6700, or emerald #10B981).
-   - DO NOT repeat the obsidian (#0A0E17) / cyan (#38BDF8) palette used in past tech stories! Give this story its own distinct visual soul.
+   Autonomously derive the palette from the physical and emotional atmosphere of THIS content:
+   - Aerospace / Defense / Military / Space: Deep mission-control stealth navy or space graphite paper (#0A1118, #0B1320, #0F172A), contrast ink (#F1F5F9), with high-visibility radar amber (#F59E0B) or signal gold/orange (#EA580C) accent, slate console surface (#162232), and titanium border (#334155).
+   - Consumer Hardware / Gadgets: Frosted aluminum or anodized black (#F5F5F7, #121316), contrast ink (#1D1D1F, #F5F5F7), international orange (#C74416) or sapphire accent.
+   - Pure Science / Mathematics: Archival parchment or blackboard slate (#FAF8F5, #18181B), deep ink, proof cobalt (#2563EB) or cinnabar (#DC2626) accent.
+   - Global Energy / Macroeconomics: Financial salmon/sand (#F4E8D7) or deep slate, forest green (#059669) or crude oil black accent.
+   CRITICAL ANTI-CLONING RULE: DO NOT default to off-white (#F5F5F7 or #F3F2EC) or safety orange (#C74416 or #BD401F) unless the story is literally consumer aluminum hardware!
 3. Typography ("typography"):
-   Choose a Google Fonts pairing with high editorial personality:
-   - e.g. 'Plus Jakarta Sans' + 'Inter' + 'JetBrains Mono', or 'Syne' + 'DM Sans' + 'Space Mono', or 'Outfit' + 'Inter' + 'IBM Plex Mono'.
+   Choose a distinctive Google Fonts pairing with high editorial personality:
+   - For Aerospace/Defense: 'Barlow Condensed' or 'Chivo' + 'Public Sans' or 'Inter' + 'IBM Plex Mono'.
+   - For Science/Math: 'Newsreader' or 'Playfair Display' + 'Source Serif 4' + 'Space Mono'.
+   - For Modern Tech: 'Plus Jakarta Sans' + 'Inter' + 'JetBrains Mono'.
    Provide a valid googleFontsUrl.
-4. Slug ("slug"):
-   Short, clean slug (e.g. "cupertino-ledger" or "m6-macbook-pro-benchmark").
+4. Motif ("motif") & Texture ("texture"):
+   Choose a visual motif that symbolizes the subject:
+   - "crosshair" for aerospace, defense, military targeting, satellite tracking.
+   - "coord" for global geopolitics, latitude/longitude, maritime trade.
+   - "seal" for academic proofs, official treaties, cultural monographs.
+   - "bracket" for industrial dimensions, engineering tolerances.
+   Texture: "blueprint" | "grid" | "dots" | "washi" | "none".
+5. Wordmark Style: "serif" | "sans" | "mono" | "small-caps".
 
 Return strictly valid JSON matching BrandTokens without markdown outside the json code block:
 {
@@ -115,7 +126,7 @@ Return strictly valid JSON matching BrandTokens without markdown outside the jso
   "wordmarkStyle": "sans",
   "handle": "@handle",
   "texture": "blueprint",
-  "motif": "bracket"
+  "motif": "crosshair"
 }`;
 }
 
@@ -273,55 +284,48 @@ Output strictly the StoryStrategy JSON.`;
 }
 
 // ============================================================================
-// STAGE 4: SENIOR COPY EDITOR (LOCKED STORYBOARD WITH HARD WORD BUDGETS)
+// STAGE 4: SENIOR COPY EDITOR & LAYOUT ARCHITECT (LOCKED STORYBOARD + VISUAL STYLES)
 // ============================================================================
 
 export function buildStoryDeckSystemPrompt(): string {
-  return `You are a Senior Copy Editor and Master Storyteller at Wired, Bloomberg Businessweek, and The New York Times Magazine.
-You author high-signal editorial carousel content with STRICT word budgets to guarantee zero visual overflow.
+  return `You are a Senior Copy Editor and Visual Layout Architect at Wired, Bloomberg Businessweek, and The New York Times Graphics Desk.
+You author high-signal editorial carousel content with STRICT word budgets and AUTONOMOUSLY CHOOSE THE VISUAL STYLE & SVG BLUEPRINT FOR EACH SLIDE.
 
-CRITICAL CONTENT & ANTI-OVERFLOW RULES:
-1. ZERO HALLUCINATION: All content must be derived strictly from the provided GroundTruthDossier.
-2. DYNAMIC ARCHETYPE SELECTION (Tailored to the Story):
-   Do NOT force every story into the same cookie-cutter template! Select 8 to 10 archetypes that best dramatize THIS specific story:
-   - For Hardware / Consumer Tech Reviews:
-     * Slide 1: 'cover' (Scroll-stopping hook headline, kicker, and subheadline)
-     * Slide 2: 'hardware-specs' (Silicon die, active cooling vs fanless, ports, dimensions)
-     * Slide 3: 'pricing-ladder' (The tier creep: entry vs mid vs high with price deltas)
-     * Slide 4: 'benchmark-telemetry' (Single-core vs multi-core vs GPU gains with numerical badges)
-     * Slide 5: 'hardware-split' (Head-to-head hardware comparison, e.g. Pro vs Air displays/thermals)
-     * Slide 6: 'the-catch' (The mandatory storage upsell, missing OLED or missing redesign)
-     * Slide 7: 'monumental-quote' (Hard-hitting reviewer statement or controversy)
-     * Slide 8: 'upgrade-verdict' (Who should upgrade vs who should hold)
-     * Slide 9: 'future-implications' (What this signals for the product ecosystem)
-     * Slide 10: 'hero-cta' (Final verdict takeaway and reader prompt)
-   - For Policy, Science, or Enterprise, adapt the archetypes accordingly (e.g. 'investigative-timeline', 'policy-dilemma', 'unit-economics').
-
-3. RULE OF 3 ANTI-CRAMMING (Prevent Overcrowding):
+CRITICAL CONTENT, LAYOUT & ANTI-OVERFLOW RULES:
+1. ZERO HALLUCINATION: All copy and numerical data must derive strictly from the provided GroundTruthDossier.
+2. CONTENT-DRIVEN VISUAL STYLE PER SLIDE:
+   For EACH slide, you MUST choose a bespoke visual style and spatial topology directly reflecting what that slide communicates:
+   - "visualStyle": e.g. "orbital-trajectory-hero", "asymmetric-capital-split", "horizontal-cadence-gantt", "hud-radar-reticle", "monumental-editorial-split", "stepped-ladder-matrix".
+   - "layoutTopology": Spatial architecture (e.g. "hero-diagram-with-callouts", "left-metric-placard-right-stack", "horizontal-timeline-cadence", "hud-sensor-split", "full-height-editorial-split").
+   - "svgBlueprint": Detailed instruction for the custom inline vector SVG diagram to render on this slide.
+   CRITICAL TOPOLOGY DIVERSITY MANDATE: You MUST use at least 5 different layout topologies across the 10 slides. Strictly ban repeating the same 2-card layout across multiple slides!
+3. DYNAMIC ARCHETYPE SELECTION (Tailored to the Story):
+   Dramatize this specific journalistic story across 10 slides (e.g. cover, procurement-split, demand-curve, transition-timeline, vehicle-matrix, infrastructure-map, unit-economics, critical-bottleneck, leadership-debrief, strategic-cta).
+4. RULE OF 3 ANTI-CRAMMING (Prevent Overcrowding):
    - MAXIMUM 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
-   - Telemetry slides: Exactly 3 key metrics (e.g. $1,999 base price, +$400 increase over M5, +$700 over M1). Never list 5 rows!
-   - Hardware/Specs slides: Exactly 2 to 3 primary callouts (e.g. 12-core M6 Silicon + Dual Fan Cooling).
-   - Trade-off / The Catch: Exactly 2 sharp contrast cards (e.g. Mandatory 1TB Lock-in vs Missing OLED & Touch). Never stack 3 full-sized articles!
-   - Upgrade Verdict: Exactly 2 distinct guidance groups (Who Should Upgrade vs Who Should Hold).
-
-4. STRICT WORD LIMITS (Anti-Overflow Guardrail):
+   - Telemetry: Exactly 2 or 3 key metrics with signed numerical badges (e.g. "$5.6B", "2028", "2033", "+35%").
+   - Comparisons: Exactly 2 contrasting entities.
+5. STRICT WORD LIMITS (Anti-Overflow Guardrail):
    - Headlines: Maximum 6–8 words.
    - Subheadlines: Maximum 12–14 words.
    - Cards / Points: Maximum 10–13 words per item! Every word must be punchy and high-signal.
-   - Telemetry Values: MUST be strictly numerical or signed badge (e.g. "$1,999", "+15%", "+30%", "1,600 NITS", "+$700"). Never put sentence fragments in value.
+   - Telemetry Values: MUST be strictly numerical or signed badge.
 
-5. Return strictly a JSON array of slide objects:
-   [
-     {
-       "id": "slide-1",
-       "index": 0,
-       "type": "cover",
-       "kicker": "...",
-       "headline": "...",
-       "subheadline": "..."
-     },
-     ...
-   ]`;
+Return strictly a JSON array of 10 slide objects:
+[
+  {
+    "id": "slide-1",
+    "index": 0,
+    "type": "cover",
+    "kicker": "...",
+    "headline": "...",
+    "subheadline": "...",
+    "visualStyle": "full-bleed-trajectory-hero",
+    "layoutTopology": "hero-diagram-with-callouts",
+    "svgBlueprint": "Elliptical orbital trajectory arc with dashed apogee burns and coordinate markers"
+  },
+  ...
+]`;
 }
 
 export function buildStoryDeckUserPrompt(
@@ -329,8 +333,10 @@ export function buildStoryDeckUserPrompt(
   dossier: GroundTruthDossier,
   brand: BrandTokens
 ): string {
-  return `Author the 10-slide narrative storyboard using this strategy and verified dossier:
+  return `Author the 10-slide narrative storyboard AND choose the distinct visual style, layout topology, and SVG blueprint for each slide:
 
+Publication: "${brand.name}" (${brand.domain})
+Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
 Hook Headline: "${strategy.hookHeadline}"
 Value Promise: "${strategy.valuePromise}"
 Kicker: "${strategy.kicker}"
@@ -345,7 +351,7 @@ Quotes: ${JSON.stringify(dossier.verifiedQuotes)}
 Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
 Verdict Advice: ${JSON.stringify(dossier.editorialVerdict)}
 
-Output strictly the JSON array of 10 slide objects. Remember: MAX 18 WORDS PER CARD BODY!`;
+Output strictly the JSON array of 10 slide objects. Remember: MAX 18 WORDS PER CARD BODY, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
 }
 
 // Fallback for non-article briefs
@@ -378,14 +384,14 @@ export interface SlideDesignBlueprint {
   svgConcept?: {
     description: string;
     type: 'floorplan' | 'schematic' | 'telemetry-bars' | 'contrast-icons' | 'spatial-glyphs' | 'none';
-    elements: string[];
+    elements?: string[];
   };
-  typographyScale: {
+  typographyScale?: {
     headlineSize: string;
     subtitleSize?: string;
   };
-  accentPlacement: string;
-  spatialBalanceGuidance: string;
+  accentPlacement?: string;
+  spatialBalanceGuidance?: string;
 }
 
 export function buildVisualBlueprintSystemPrompt(): string {
@@ -439,10 +445,10 @@ CRITICAL DESIGN & CODING RULES:
      return ( ... );
    }
 
-2. Creative Freedom & Architectural Excellence:
-   - You have 100% creative freedom to write bespoke JSX, custom vector SVGs, and responsive layouts.
-   - Author rich inline SVGs with crisp viewBoxes (e.g. floor plans with dashed patrol routes, elevation cross-sections, spatial markers, comparison glyphs).
-   - Use purposeful, asymmetric layouts (e.g. 'grid grid-cols-[0.82fr_1.18fr] gap-8', stacked full-width rows with hairline borders, or optically centered monumental layouts).
+2. Creative Freedom & Architectural Topology:
+   - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
+   - STRICT BAN ON REPETITIVE 2-CARD LAYOUTS: Do NOT just render two rounded rectangles with text. If the layout topology says "hero-diagram-with-callouts", render a prominent custom inline vector SVG taking 40%-60% of the space with callout pointers. If it says "horizontal-timeline-cadence", render a multi-year horizontal Gantt timeline. If it says "hud-sensor-split", render a radar/target crosshair overlay.
+   - Author rich inline SVGs with crisp viewBoxes (e.g. orbital paths, launch trajectories, pad coordinates, timeline milestones, HUD reticles).
 
 3. Theme & Token Integration:
    - Use Tailwind utility classes with CSS variables:
@@ -487,14 +493,21 @@ export function buildSingleSlideUserPrompt(
   blueprint: SlideDesignBlueprint | undefined,
   brand: BrandTokens
 ): string {
+  const chosenStyle = slideData.visualStyle || blueprint?.layoutStructure || 'bespoke-editorial';
+  const chosenTopology = slideData.layoutTopology || blueprint?.layoutStructure || 'hero-diagram-with-callouts';
+  const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Custom inline vector SVG matching topic';
+
   return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
 Archetype: "${slideData.type}"
 
 Slide Data (Locked Copy):
 ${JSON.stringify(slideData, null, 2)}
 
-Visual Blueprint:
-${blueprint ? JSON.stringify(blueprint, null, 2) : 'Design a bespoke editorial layout with custom SVG vector graphics.'}
+CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
+- Visual Style: "${chosenStyle}"
+- Layout Topology: "${chosenTopology}"
+- Bespoke Vector SVG: "${chosenSvg}"
+Follow this layout topology strictly! Do NOT revert to generic rounded cards.
 
 Brand Context:
 - Publication: "${brand.name}"

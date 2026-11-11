@@ -1,177 +1,224 @@
 {
-  "templateName": "The Launch Reserve",
+  "templateName": "Launch Reserve",
   "templateSlug": "launch-reserve",
-  "domain": "Aerospace / Defense / Launch Economics",
+  "domain": "Aerospace / Defense / Strategic Capital",
   "slides": [
     {
       "id": "slide-1",
       "index": 0,
       "type": "cover",
-      "kicker": "NATIONAL SECURITY",
-      "headline": "The Pentagon Wants More Launch Options",
-      "subheadline": "Conditional loans back SpaceX competitors. Operational readiness remains the harder test."
+      "kicker": "LAUNCH RESERVE",
+      "headline": "The Pentagon Backs More Launch Capacity",
+      "subheadline": "Conditional loans target two SpaceX competitors as military launch requirements grow.",
+      "visualStyle": "diverging-trajectory-hero",
+      "layoutTopology": "central-origin-with-two-orbital-branches",
+      "palette": {
+        "paper": "#0C1621",
+        "ink": "#EDF2F5",
+        "accent": "#E9B44C",
+        "surface": "#192A38"
+      },
+      "points": [
+        {
+          "title": "Stoke Space",
+          "body": "Additional launch infrastructure for Nova Block 2."
+        },
+        {
+          "title": "Rocket Lab",
+          "body": "Production, recovery, and processing upgrades for Neutron."
+        }
+      ],
+      "svgBlueprint": "Use the publication palette throughout all slides. Below the headline, split one abstract capital-flow line into two rising trajectories, terminating at the two company labels. Use dashed accent paths to indicate conditional commitments, not completed transfers. Keep both callouts outside the trajectories; avoid literal rocket silhouettes or implied orbital specifications."
     },
     {
       "id": "slide-2",
       "index": 1,
-      "type": "funding-split",
-      "headline": "Two Competitors, Two Conditional Loans",
-      "subheadline": "The Office of Strategic Capital targets launch infrastructure and flight rates.",
-      "cards": [
+      "type": "capital-allocation",
+      "kicker": "TWO CONDITIONAL COMMITMENTS",
+      "headline": "Equal Loans, Different Capacity Targets",
+      "subheadline": "OSC backs a second launch pad and efforts to increase Neutron’s flight rate.",
+      "visualStyle": "mirrored-capital-ledger",
+      "layoutTopology": "bilateral-ledger-with-central-divider",
+      "comparison": [
         {
-          "title": "Stoke Space",
-          "value": "$150 million",
-          "body": "October 26 commitment supports its second launch pad at Cape Canaveral."
+          "entity": "Stoke Space",
+          "amount": "$150 million",
+          "body": "Second launch pad at Cape Canaveral Space Force Station, Florida."
         },
         {
-          "title": "Rocket Lab",
-          "value": "$150 million",
-          "body": "Tuesday announcement targets a higher flight rate for Neutron."
+          "entity": "Rocket Lab",
+          "amount": "$150 million",
+          "body": "Increase Neutron’s flight rate through production, recovery, and processing upgrades."
         }
-      ]
+      ],
+      "svgBlueprint": "Create two equal-width ledger columns separated by a thin vertical rule. Set each exact loan amount prominently above its purpose. Beneath Stoke, draw an abstract launch-pad platform; beneath Rocket Lab, draw a circular processing arrow. Give both columns dashed borders labeled conditional. Equal geometry represents equal commitments, not equal readiness."
     },
     {
       "id": "slide-3",
       "index": 2,
-      "type": "demand-pressure",
-      "headline": "Military Launch Demand Is Climbing",
-      "cards": [
+      "type": "demand-reset",
+      "kicker": "MILITARY LAUNCH DEMAND",
+      "headline": "The Requirement Has More Than Doubled",
+      "subheadline": "Space Systems Command forecasts up to 249 military medium-to-heavy-lift launches.",
+      "visualStyle": "monumental-demand-typography",
+      "layoutTopology": "oversized-stat-above-baseline-ribbon",
+      "points": [
         {
-          "title": "The forecast",
-          "body": "Up to 249 medium-to-heavy-lift launches forecast through the early 2030s."
+          "title": "up to 249",
+          "body": "Forecast military medium-to-heavy-lift launches through the early 2030s."
         },
         {
-          "title": "The acceleration",
-          "body": "Requirements are more than double expectations from just two years ago."
-        },
-        {
-          "title": "The longstanding policy",
-          "body": "Since the 1990s, Pentagon policy supports at least two US rocket programs."
+          "title": "more than double",
+          "body": "Compared with Space Systems Command’s expectation just two years ago."
         }
-      ]
+      ],
+      "svgBlueprint": "Place the exact phrase up to above an oversized 249 occupying the upper diagram field. Underline it with a broad accent rule. Put the comparison statement in a narrow bottom ribbon connected by an upward arrow. Do not draw proportional bars, invent a baseline count, or convert the forecast into an annual rate."
     },
     {
       "id": "slide-4",
       "index": 3,
       "type": "transition-timeline",
-      "headline": "Falcon's Commercial Cutoff Isn't Its End",
-      "subheadline": "Military orders and launches extend beyond the commercial booking cutoff.",
+      "kicker": "FALCON TRANSITION",
+      "headline": "An Ordering Cutoff, Not Immediate Retirement",
+      "subheadline": "Commercial restrictions and military contract windows describe different milestones.",
       "milestones": [
         {
-          "value": "2028",
-          "label": "SpaceX stopped accepting commercial Falcon 9 launch orders for after 2028."
+          "date": "after 2028",
+          "title": "Commercial Falcon 9",
+          "body": "SpaceX has stopped taking commercial orders for launches after 2028."
         },
         {
-          "value": "2029",
-          "label": "Space Force can order Falcon 9 and Falcon Heavy through 2029."
+          "date": "through 2029",
+          "title": "Military ordering",
+          "body": "Space Force can order Falcon 9 and Falcon Heavy missions."
         },
         {
-          "value": "2033",
-          "label": "Actual launches under the Space Force contract extend through 2033."
+          "date": "through 2033",
+          "title": "Military launches",
+          "body": "Actual launches under the Space Force contract can extend through 2033."
         }
-      ]
+      ],
+      "svgBlueprint": "Draw three vertically separated horizontal timeline lanes with exact date phrases at their endpoints. Differentiate commercial orders, military orders, and military launches using line patterns. Use schematic rather than proportional spacing. Never add a Falcon retirement marker; the dossier supplies no fixed retirement date."
     },
     {
       "id": "slide-5",
       "index": 4,
-      "type": "vehicle-split",
-      "headline": "Different Rockets, Different Readiness Questions",
-      "cards": [
+      "type": "assured-access",
+      "kicker": "RESILIENCE UNDER PRESSURE",
+      "headline": "Assured Access Needs Multiple Working Rockets",
+      "subheadline": "Vulcan’s groundings pushed several national security missions to SpaceX.",
+      "points": [
         {
-          "title": "Nova Block 2",
-          "body": "Upgrades fully reusable Nova Pathfinder, whose debut is expected sometime next year."
+          "title": "at least two",
+          "body": "US rocket programs supported under assured-access policy since the 1990s."
         },
         {
-          "title": "Neutron",
-          "body": "Partially reusable, medium-class, still-unproven; Rocket Lab schedules its first launch next year."
+          "title": "twice in the last two years",
+          "body": "Solid rocket booster problems grounded Vulcan."
         }
-      ]
+      ],
+      "svgBlueprint": "Build an abstract network with a national-security payload node above two schematic launch routes. Label the diagram policy schematic so route count is not mistaken for an inventory. Place an interruption symbol on a separate Vulcan annotation and redirect its dashed mission arrow toward SpaceX. Anchor the two factual callouts on opposite margins."
     },
     {
       "id": "slide-6",
       "index": 5,
-      "type": "capacity-buildout",
-      "headline": "Neutron's Loan Targets Repeat Launches",
-      "subheadline": "The proposed financing reaches beyond the rocket itself.",
-      "cards": [
+      "type": "vehicle-distinction",
+      "kicker": "STOKE SPACE",
+      "headline": "Do Not Confuse The Nova Milestones",
+      "subheadline": "The loan supports Block 2 infrastructure; the stated debut timing concerns Pathfinder.",
+      "comparison": [
         {
-          "title": "Recovery fleet",
-          "body": "Expand maritime vessels and equipment for Neutron recovery and transport."
+          "entity": "Nova Pathfinder",
+          "body": "Described as fully reusable; debut set for sometime next year."
         },
         {
-          "title": "Manufacturing",
-          "body": "Increase production of composite structures and engines."
-        },
-        {
-          "title": "Launch turnaround",
-          "body": "Accelerate vehicle delivery, processing, and turnaround after operational debut."
+          "entity": "Nova Block 2",
+          "body": "Upgraded Pathfinder; planned second launch site supports flights. No debut date stated."
         }
-      ]
+      ],
+      "svgBlueprint": "Arrange two labeled vehicle-name bands diagonally as a development lineage, linked by an arrow labeled upgraded version. Use abstract capsule outlines, not technical vehicle drawings. Attach the relative debut phrase only to Pathfinder and a launch-pad icon only to Block 2. Do not translate next year into a calendar year."
     },
     {
       "id": "slide-7",
       "index": 6,
-      "type": "unit-economics",
-      "headline": "Neutron's Price Rises Before Its Debut",
-      "subheadline": "Rocket Lab attributes the increase to a surge in bookings.",
-      "metrics": [
+      "type": "flight-rate-infrastructure",
+      "kicker": "NEUTRON CAPACITY",
+      "headline": "The Loan Targets The Turnaround",
+      "subheadline": "Neutron is medium-class and partially reusable; proposed funding targets its operational support infrastructure.",
+      "points": [
         {
-          "value": "$55 million",
-          "label": "Previous Neutron price per launch"
+          "title": "Delivery and processing",
+          "body": "Support faster vehicle delivery and processing."
         },
         {
-          "value": "$70 million",
-          "label": "New Neutron price per launch"
+          "title": "Recovery and transport",
+          "body": "Expand maritime vessels and equipment for Neutron recovery and transport."
         },
         {
-          "value": "117",
-          "label": "Contracted launches across Neutron and Electron—not Neutron alone"
+          "title": "Production and turnaround",
+          "body": "Increase composite-structure and engine production; add infrastructure to reduce launch turnaround."
         }
-      ]
+      ],
+      "svgBlueprint": "Draw a triangular process loop with exactly three broad nodes: processing, maritime recovery, and manufacturing. Use abstract handling, vessel, and engine icons. Connect nodes with dashed accent arrows indicating intended operational improvements. Keep all explanatory text outside the loop; show no invented throughput, turnaround duration, or completed operational cycle."
     },
     {
       "id": "slide-8",
       "index": 7,
-      "type": "the-catch",
-      "headline": "Commitments Aren't Cash. Eligibility Isn't Readiness.",
-      "cards": [
+      "type": "pricing-shift",
+      "kicker": "NEUTRON PRICING",
+      "headline": "A Higher Price Before Flight",
+      "subheadline": "Rocket Lab attributes the increase to surging bookings for the still-unproven vehicle.",
+      "comparison": [
         {
-          "title": "Conditional financing",
-          "body": "Both loans retain financial, legal, technical, investment, due diligence, and other requirements."
+          "entity": "Previous price",
+          "amount": "$55 million",
+          "body": "Previously announced Neutron launch price."
         },
         {
-          "title": "Unproven readiness",
-          "body": "Eligibility to compete for national security launches does not establish operational readiness."
+          "entity": "New price",
+          "amount": "$70 million per launch",
+          "body": "Raised while Neutron remained unproven."
         }
-      ]
+      ],
+      "svgBlueprint": "Create a single ascending price bridge: place the previous amount at lower left and the new amount at upper right, joined by an accent step. Treat positions as editorial hierarchy rather than a quantitative axis. Keep exact price strings visible; do not add a calculated percentage, margin, or revenue projection."
     },
     {
       "id": "slide-9",
       "index": 8,
-      "type": "monumental-quote",
-      "headline": "The Business Case Is Constrained Supply",
-      "quote": "Launch is extremely constrained, and that is exactly the situation we predicted,",
-      "attribution": "Peter Beck",
-      "role": "Rocket Lab’s founder and CEO",
-      "subheadline": "His assessment follows higher Neutron pricing and Rocket Lab’s launch backlog."
+      "type": "backlog-reality-check",
+      "kicker": "BOOKINGS VERSUS READINESS",
+      "headline": "The Backlog Is Not Neutron Alone",
+      "subheadline": "Rocket Lab’s combined orders and Neutron’s scheduled debut describe different things.",
+      "points": [
+        {
+          "title": "117 launches",
+          "body": "Contracted backlog combines Neutron and Electron orders; no split is provided."
+        },
+        {
+          "title": "next year",
+          "body": "Rocket Lab’s stated Neutron first-launch schedule, not a completed milestone."
+        }
+      ],
+      "svgBlueprint": "Draw one undivided backlog container labeled 117 launches, with Neutron and Electron named beneath a shared brace. Do not segment the container or imply either vehicle’s share. Below it, place a separate dashed launch milestone labeled next year, disconnected from backlog quantities. Maintain a wide visual gap between orders and readiness."
     },
     {
       "id": "slide-10",
       "index": 9,
-      "type": "hero-cta",
-      "kicker": "THE TAKEAWAY",
-      "headline": "Finance Capacity. Verify Flight Readiness.",
-      "subheadline": "These commitments target resilience; neither establishes operational readiness.",
-      "cards": [
+      "type": "conditional-capital-verdict",
+      "kicker": "THE LAUNCH RESERVE VERDICT",
+      "headline": "Capital Support Is Not Launch Readiness",
+      "subheadline": "Both loans remain conditional; the article does not establish completed disbursement.",
+      "points": [
         {
-          "title": "The opportunity",
-          "body": "Additional infrastructure could expand launch capacity and strengthen alternatives to SpaceX."
+          "title": "Funding conditions",
+          "body": "Financial, legal, technical, investment, due diligence, and other requirements apply."
         },
         {
-          "title": "The test",
-          "body": "Can these competitors turn conditional financing into dependable launches?"
+          "title": "Flight milestones",
+          "body": "Pathfinder and Neutron debuts remain scheduled; Block 2 has no stated date."
         }
-      ]
+      ],
+      "svgBlueprint": "Use a full-height editorial gate: a dashed capital arrow approaches a narrow vertical threshold labeled conditional. Place funding requirements above the threshold and flight milestones below it as two distinct annotations. Stop the arrow before an abstract launch horizon. Do not depict funds as disbursed or vehicles as operational."
     }
   ]
 }

@@ -4,30 +4,30 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_Fundingsplit from './slides/Slide02_Fundingsplit';
-import Slide03_Demandpressure from './slides/Slide03_Demandpressure';
+import Slide02_Capitalallocation from './slides/Slide02_Capitalallocation';
+import Slide03_Demandreset from './slides/Slide03_Demandreset';
 import Slide04_Transitiontimeline from './slides/Slide04_Transitiontimeline';
-import Slide05_Vehiclesplit from './slides/Slide05_Vehiclesplit';
-import Slide06_Capacitybuildout from './slides/Slide06_Capacitybuildout';
-import Slide07_Uniteconomics from './slides/Slide07_Uniteconomics';
-import Slide08_Thecatch from './slides/Slide08_Thecatch';
-import Slide09_Monumentalquote from './slides/Slide09_Monumentalquote';
-import Slide10_Herocta from './slides/Slide10_Herocta';
+import Slide05_Assuredaccess from './slides/Slide05_Assuredaccess';
+import Slide06_Vehicledistinction from './slides/Slide06_Vehicledistinction';
+import Slide07_Flightrateinfrastructure from './slides/Slide07_Flightrateinfrastructure';
+import Slide08_Pricingshift from './slides/Slide08_Pricingshift';
+import Slide09_Backlogrealitycheck from './slides/Slide09_Backlogrealitycheck';
+import Slide10_Conditionalcapitalverdict from './slides/Slide10_Conditionalcapitalverdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_Fundingsplit,
-  Slide03_Demandpressure,
+  Slide02_Capitalallocation,
+  Slide03_Demandreset,
   Slide04_Transitiontimeline,
-  Slide05_Vehiclesplit,
-  Slide06_Capacitybuildout,
-  Slide07_Uniteconomics,
-  Slide08_Thecatch,
-  Slide09_Monumentalquote,
-  Slide10_Herocta,
+  Slide05_Assuredaccess,
+  Slide06_Vehicledistinction,
+  Slide07_Flightrateinfrastructure,
+  Slide08_Pricingshift,
+  Slide09_Backlogrealitycheck,
+  Slide10_Conditionalcapitalverdict,
   ],
 };
 

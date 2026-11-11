@@ -281,16 +281,29 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   options.onProgress?.('Designing Visual Blueprints', 5, 15);
 
   let blueprints: SlideDesignBlueprint[] = [];
-  try {
-    const blueprintResponse = await llm.generateJSON(
-      buildVisualBlueprintSystemPrompt(),
-      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
-      0.7
-    );
-    blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
-    console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide visual blueprints generated.`);
-  } catch (err: any) {
-    console.warn(`[Pipeline] Visual blueprint generation fallback: ${err.message}`);
+  if (deck.slides.some((s) => s.svgBlueprint || s.layoutTopology)) {
+    console.log('[Pipeline] Pass 5: Using per-slide visual styles and SVG blueprints determined from content.');
+    blueprints = deck.slides.map((s) => ({
+      slideId: s.id,
+      type: s.type,
+      layoutStructure: s.layoutTopology || s.visualStyle || 'hero-diagram-with-callouts',
+      svgConcept: {
+        description: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
+        type: 'schematic',
+      },
+    }));
+  } else {
+    try {
+      const blueprintResponse = await llm.generateJSON(
+        buildVisualBlueprintSystemPrompt(),
+        buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
+        0.7
+      );
+      blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
+      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide visual blueprints generated.`);
+    } catch (err: any) {
+      console.warn(`[Pipeline] Visual blueprint generation fallback: ${err.message}`);
+    }
   }
 
   // ==========================================================================

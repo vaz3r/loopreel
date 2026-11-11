@@ -186,12 +186,12 @@ export default function Slide07({
           <div className="absolute inset-y-0 left-0 w-[3px] bg-[var(--accent)]" />
 
           <h2 className="font-[var(--font-headline)] text-[29px] font-medium leading-none tracking-[-0.025em]">
-            {content.cards?.title ?? lockedCopy.cards.title}
+            {(content.cards as any)?.title ?? (lockedCopy.cards as any)?.title}
           </h2>
 
           <p className="mt-4 font-[var(--font-mono)] text-[27px] leading-[1.3] tracking-[-0.055em]">
-            {content.cards?.body === lockedCopy.cards.body ||
-            !content.cards?.body ? (
+            {(content.cards as any)?.body === (lockedCopy.cards as any)?.body ||
+            !(content.cards as any)?.body ? (
               <>
                 671B total parameters;{' '}
                 <span className="text-[var(--accent)]">
@@ -199,7 +199,7 @@ export default function Slide07({
                 </span>
               </>
             ) : (
-              content.cards.body
+              (content.cards as any).body
             )}
           </p>
 

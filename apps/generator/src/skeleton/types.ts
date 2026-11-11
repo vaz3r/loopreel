@@ -37,6 +37,9 @@ export interface SlideData {
   kicker?: string;
   authorName?: string;
   authorRole?: string;
+  visualStyle?: string;
+  layoutTopology?: string;
+  svgBlueprint?: string;
   [key: string]: any;
 }
 
