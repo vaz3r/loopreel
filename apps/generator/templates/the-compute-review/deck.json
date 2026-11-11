@@ -1,0 +1,253 @@
+{
+  "templateName": "The Compute Review",
+  "templateSlug": "the-compute-review",
+  "domain": "Artificial Intelligence / Open Weights / Frontier Compute",
+  "slides": [
+    {
+      "slide": 1,
+      "archetype": "cover",
+      "publication": "The Compute Review",
+      "eyebrow": "BATCH 1 · ARTIFICIAL INTELLIGENCE",
+      "title": "Open weights. Counted compute.",
+      "body": "Read the license. Inspect the architecture. Audit the denominator."
+    },
+    {
+      "slide": 2,
+      "archetype": "list",
+      "title": "Open means more than downloadable",
+      "body": "OSI’s Open Source AI Definition 1.0 requires these components under OSI-approved terms or licenses.",
+      "cards": [
+        {
+          "title": "01 · Data information",
+          "body": "Training-data descriptions, provenance, processing methods, and locations of public and third-party datasets."
+        },
+        {
+          "title": "02 · Code",
+          "body": "Complete training and inference source, including processing, filtering, settings, validation, testing, supporting libraries, and architecture."
+        },
+        {
+          "title": "03 · Parameters",
+          "body": "Model weights and other configuration settings—not merely access to an endpoint."
+        }
+      ]
+    },
+    {
+      "slide": 3,
+      "archetype": "image-split",
+      "title": "The rack is the unit",
+      "body": "NVIDIA’s GB200 NVL72 combines 72 Blackwell GPUs and 36 Grace CPUs in a liquid-cooled rack.",
+      "image_direction": "Original rack schematic; highlight GPU interconnects and cooling paths.",
+      "cards": [
+        {
+          "title": "GPU memory",
+          "body": "13.4 TB HBM3E; 576 TB/s memory bandwidth."
+        },
+        {
+          "title": "NVLink",
+          "body": "130 TB/s bandwidth across the rack-scale interconnect."
+        }
+      ]
+    },
+    {
+      "slide": 4,
+      "archetype": "telemetry",
+      "title": "DeepSeek-V3: the training ledger",
+      "body": "Reported official training costs assume H800 rental at $2 per GPU hour; prior research and ablations are excluded.",
+      "cards": [
+        {
+          "title": "Pre-training",
+          "body": "2664K H800 GPU hours · $5.328M."
+        },
+        {
+          "title": "Context extension",
+          "body": "119K H800 GPU hours · $0.238M."
+        },
+        {
+          "title": "Post-training",
+          "body": "5K H800 GPU hours · $0.01M."
+        },
+        {
+          "title": "Total",
+          "body": "2788K H800 GPU hours · $5.576M."
+        }
+      ]
+    },
+    {
+      "slide": 5,
+      "archetype": "dialogue",
+      "title": "The download is not the definition",
+      "label": "ILLUSTRATIVE EXCHANGE",
+      "cards": [
+        {
+          "speaker": "Reader",
+          "body": "I can download the weights. Is that enough?"
+        },
+        {
+          "speaker": "Editor",
+          "body": "Not under OSI’s Definition 1.0: data information and derivation code must accompany the parameters."
+        },
+        {
+          "speaker": "Reader",
+          "body": "Which freedoms should I check?"
+        },
+        {
+          "speaker": "Editor",
+          "body": "Use, study, modify, and share—including use and modification for any purpose."
+        }
+      ]
+    },
+    {
+      "slide": 6,
+      "archetype": "quadrant",
+      "title": "Separate access from operation",
+      "body": "Editorial framework: evaluate weight access and deployment location independently.",
+      "axes": {
+        "horizontal": [
+          "Weights unavailable",
+          "Weights available"
+        ],
+        "vertical": [
+          "Provider-hosted",
+          "Self-hosted"
+        ]
+      },
+      "cards": [
+        {
+          "position": "top-left",
+          "title": "Unavailable · Provider-hosted",
+          "body": "Ask about retention, portability, pricing, and service limits."
+        },
+        {
+          "position": "top-right",
+          "title": "Available · Provider-hosted",
+          "body": "Check license rights separately from hosting terms."
+        },
+        {
+          "position": "bottom-left",
+          "title": "Unavailable · Self-hosted",
+          "body": "Inspect appliance restrictions, update control, and audit access."
+        },
+        {
+          "position": "bottom-right",
+          "title": "Available · Self-hosted",
+          "body": "Budget infrastructure; verify modification and redistribution rights."
+        }
+      ]
+    },
+    {
+      "slide": 7,
+      "archetype": "case-study",
+      "title": "DeepSeek-V3: sparsity, not smallness",
+      "body": "The architecture separates total model capacity from parameters activated for each token.",
+      "cards": [
+        {
+          "title": "Capacity",
+          "body": "671B total parameters; 37B activated per token."
+        },
+        {
+          "title": "Training",
+          "body": "14.8T pre-training tokens; FP8 mixed precision."
+        },
+        {
+          "title": "Context extension",
+          "body": "Two stages: first 32K, then 128K maximum context length."
+        }
+      ]
+    },
+    {
+      "slide": 8,
+      "archetype": "debunk",
+      "title": "A training bill is not an R&D bill",
+      "cards": [
+        {
+          "title": "Misreading",
+          "body": "The reported $5.576M covers all DeepSeek-V3 development."
+        },
+        {
+          "title": "Correction",
+          "body": "$5.576M estimates official training at $2 per H800 GPU hour; prior research and ablation experiments are excluded."
+        },
+        {
+          "title": "Editorial rule",
+          "body": "Attach the accounting boundary to every cost headline."
+        }
+      ]
+    },
+    {
+      "slide": 9,
+      "archetype": "grid",
+      "title": "The Compute Review audit grid",
+      "body": "Before publishing a comparison, require these fields.",
+      "cards": [
+        {
+          "title": "Access",
+          "body": "License version; weight availability; training-code availability; data documentation."
+        },
+        {
+          "title": "Architecture",
+          "body": "Total parameters; active parameters per token; context length in tokens."
+        },
+        {
+          "title": "Compute",
+          "body": "Accelerator model; accelerator count; GPU hours; numerical precision."
+        },
+        {
+          "title": "Economics",
+          "body": "Currency; hourly rate; included stages; excluded experiments; measurement date."
+        }
+      ]
+    },
+    {
+      "slide": 10,
+      "archetype": "timeline",
+      "headline": "DeepSeek-V3: the training ledger",
+      "unit": "H800 GPU-hours / USD",
+      "body": "Pre-training: 2664K / $5.328M → Context extension: 119K / $0.238M → Post-training: 5K / $0.01M."
+    },
+    {
+      "slide": 11,
+      "archetype": "pullquote",
+      "headline": "Access is not infrastructure",
+      "body": "“Open weights change who can deploy. They do not erase the compute bill.”",
+      "attribution": "The Compute Review — editorial"
+    },
+    {
+      "slide": 12,
+      "archetype": "hero-cta",
+      "headline": "Benchmark before you buy",
+      "body": "OpenAI reports gpt-oss-120b runs on one 80 GB GPU; gpt-oss-20b needs 16 GB memory.",
+      "cta": "Test your workload"
+    },
+    {
+      "slide": 13,
+      "archetype": "hero-stat",
+      "headline": "$5.576M",
+      "body": "DeepSeek-V3 official training: 2788K H800 GPU-hours at $2 per GPU-hour; excludes prior research and ablation experiments."
+    },
+    {
+      "slide": 14,
+      "archetype": "step-by-step",
+      "headline": "Test all three reasoning settings",
+      "body": "1. Low → 2. Medium → 3. High: gpt-oss reasoning settings. Measure accuracy, latency, and cost at each."
+    },
+    {
+      "slide": 15,
+      "archetype": "dos-and-donts",
+      "headline": "Read beyond the model name",
+      "body": "DO distinguish gpt-oss-120b’s 117B total parameters from 5.1B active per token. DON'T treat them as interchangeable."
+    },
+    {
+      "slide": 16,
+      "archetype": "checklist",
+      "headline": "Demand deployment telemetry",
+      "body": "□ Task accuracy (%)\n□ p95 latency (ms)\n□ Throughput (tokens/s)\n□ Peak memory (GB)\n□ Cost per successful task ($)",
+      "label": "Editorial measurement checklist"
+    },
+    {
+      "slide": 17,
+      "archetype": "anatomy",
+      "headline": "Inside gpt-oss-120b",
+      "body": "36 layers; 117B total parameters; 5.1B active parameters/token; 128 experts; 4 active experts/token; 128k context length."
+    }
+  ]
+}

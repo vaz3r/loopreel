@@ -1,0 +1,27 @@
+{
+  "articleTitle": "The Compute Review",
+  "publisher": "The Compute Review",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "Obsidian dark mode, electric cyan and mint accents, monospace telemetry placards, the open-weights revolution and DeepSeek-R1 reasoning models collapsing proprietary AI moats",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Standard",
+      "specs": [],
+      "price": "N/A",
+      "availability": "N/A"
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "",
+    "criticismOrAlarm": "",
+    "regulatoryOrHistoricalPrecedent": ""
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

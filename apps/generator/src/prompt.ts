@@ -185,6 +185,28 @@ ${article.cleanText.slice(0, 14000)}
 Output strictly the GroundTruthDossier JSON.`;
 }
 
+export function buildTopicResearchSystemPrompt(): string {
+  return `You are a Lead AI Research Analyst at SemiAnalysis, Epoch AI, and MIT Technology Review.
+Your task is to compile a verified, highly accurate GroundTruthDossier for an in-depth editorial topic.
+
+CRITICAL RULES:
+1. Grounded Technical Reality: Use real, verified technical facts, actual model names, verified benchmark scores (e.g. MMLU, GSM8K, MATH), exact hardware specs (H100/H800 cluster sizes, active vs total parameters), and published research innovations (Multi-head Latent Attention, DeepSeekMoE, GRPO).
+2. Exact Metrics: Training cost figures, parameter counts, context window sizes, and API pricing per million tokens.
+3. Real Industry Context: Real companies, researchers, and market reactions (OpenAI, DeepSeek, Meta Llama, US export controls).
+
+Return strictly valid JSON matching GroundTruthDossier without markdown outside the json block.`;
+}
+
+export function buildTopicResearchUserPrompt(brief: TemplateBrief): string {
+  return `Compile the GroundTruthDossier for this editorial exploration:
+Topic/Name: "${brief.name || 'AI Frontier & Open Weights'}"
+Domain: "${brief.domain || 'Artificial Intelligence / Open Weights / Frontier Compute'}"
+Vibe/Angle: "${brief.vibe || 'The open-source revolution, reasoning models (DeepSeek-R1), and the collapse of proprietary AI moats'}"
+Inspiration: "${brief.inspiration || 'SemiAnalysis, Epoch AI, MIT Technology Review, Wired'}"
+
+Output strictly the GroundTruthDossier JSON.`;
+}
+
 // ============================================================================
 // STAGE 3: EDITORIAL STRATEGY & HOOK FORMULATION
 // ============================================================================

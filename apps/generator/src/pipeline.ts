@@ -12,6 +12,8 @@ import {
   type SlideDesignBlueprint,
   buildFactExtractionSystemPrompt,
   buildFactExtractionUserPrompt,
+  buildTopicResearchSystemPrompt,
+  buildTopicResearchUserPrompt,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
   buildArticleBrandUserPrompt,
@@ -127,19 +129,37 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       `[Pipeline] Dossier Extracted: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
     );
   } else {
+    console.log('[Pipeline] >>> Pass 1: Lead AI Research Analyst Compiling GroundTruthDossier from Brief...');
+    options.onProgress?.('Compiling Verified Topic Dossier', 1, 15);
+
+    const factResponse = await llm.generateJSON(
+      buildTopicResearchSystemPrompt(),
+      buildTopicResearchUserPrompt(brief),
+      0.2
+    );
+    const rawDossier = extractJson<any>(factResponse.text);
     dossier = {
-      articleTitle: brief.name || 'Editorial Deck',
-      publisher: 'Loopreel Editorial',
-      byline: 'Staff Bureau',
-      summary: brief.vibe || 'Curated editorial exploration',
-      entities: [],
-      verifiedMetrics: [],
-      verifiedQuotes: [],
-      hardwareSpecs: { deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' } },
-      coreControversy: { corporateClaim: '', criticismOrAlarm: '', regulatoryOrHistoricalPrecedent: '' },
-      hiddenCatchesAndLimits: [],
-      editorialVerdict: { avoidAdvice: [], fitAdvice: [] },
+      articleTitle: rawDossier.articleTitle || brief.name || 'AI Frontier & Open Weights',
+      publisher: rawDossier.publisher || brief.name || 'The Compute Review',
+      byline: rawDossier.byline || 'Staff Intelligence Bureau',
+      summary: rawDossier.summary || brief.vibe || 'Curated editorial exploration',
+      entities: rawDossier.entities || [],
+      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
+      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
+      hardwareSpecs: rawDossier.hardwareSpecs || {
+        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
+      },
+      coreControversy: rawDossier.coreControversy || {
+        corporateClaim: '',
+        criticismOrAlarm: '',
+        regulatoryOrHistoricalPrecedent: '',
+      },
+      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
+      editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
     };
+    console.log(
+      `[Pipeline] Topic Dossier Compiled: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
+    );
   }
 
   // ==========================================================================

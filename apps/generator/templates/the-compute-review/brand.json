@@ -1,0 +1,25 @@
+{
+  "name": "The Compute Review",
+  "slug": "the-compute-review",
+  "vibe": "Obsidian dark mode, electric cyan and mint accents, monospace telemetry placards, the open-weights revolution and DeepSeek-R1 reasoning models collapsing proprietary AI moats",
+  "domain": "Artificial Intelligence / Open Weights / Frontier Compute",
+  "palette": {
+    "paper": "#090D10",
+    "ink": "#EDF2EF",
+    "accent": "#32DEEF",
+    "surface": "#131C22",
+    "border": "#2C3D46",
+    "subtle": "#9CDDC4"
+  },
+  "typography": {
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Inter",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+  },
+  "wordmark": "THE COMPUTE REVIEW",
+  "wordmarkStyle": "sans",
+  "handle": "@thecomputereview",
+  "texture": "grid",
+  "motif": "coord"
+}
