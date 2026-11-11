@@ -1,0 +1,228 @@
+{
+  "templateName": "The Aluminum Standard",
+  "templateSlug": "aluminum-standard",
+  "domain": "Apple Silicon / Industrial Design / Hardware Criticism",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "M6 MACBOOK PRO",
+      "headline": "$1,999 Still Doesn’t Buy Apple’s Best",
+      "subheadline": "Faster silicon, familiar hardware, and a mandatory storage upgrade complicate the entry-level Pro."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "hardware-specs",
+      "headline": "New Silicon Inside A Familiar Shell",
+      "subheadline": "The design dates to 2021. The M6 brings more cores and active cooling.",
+      "cards": [
+        {
+          "title": "12 CPU cores",
+          "body": "Two top-performance super cores, four performance cores, and six high-efficiency cores."
+        },
+        {
+          "title": "Graphics and neural processing",
+          "body": "12 GPU cores and 32 NPU cores."
+        },
+        {
+          "title": "Ports, both sides",
+          "body": "Three Thunderbolt 4 ports, MagSafe, HDMI, headphone jack, and SD card reader."
+        },
+        {
+          "title": "Sustained workloads",
+          "body": "Active cooling fans; USB-C charging from either side."
+        }
+      ]
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "pricing-ladder",
+      "headline": "The Entry Price Keeps Climbing",
+      "subheadline": "Historical comparisons expose the creep. The optional matte display costs extra.",
+      "tiers": [
+        {
+          "label": "M6 starting price",
+          "value": "$1,999",
+          "body": "Includes 16GB RAM and mandatory 1TB storage."
+        },
+        {
+          "label": "Increase over M5’s original starting price",
+          "value": "+$400",
+          "body": "Compared with the starting price from a year ago."
+        },
+        {
+          "label": "Increase over basic M1 MacBook Pro",
+          "value": "+$700",
+          "body": "Compared with the basic model from 2020."
+        },
+        {
+          "label": "Optional nano-texture matte finish",
+          "value": "+$150",
+          "body": "Not included in the $1,999 starting price."
+        }
+      ]
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "benchmark-telemetry",
+      "headline": "Graphics Gains Outrun The CPU Bump",
+      "subheadline": "The reviewed 16GB M6 model improves on M5, with larger gains over M3.",
+      "metrics": [
+        {
+          "label": "Single-core versus M5, around",
+          "value": "+7%"
+        },
+        {
+          "label": "Multi-core versus M5, around",
+          "value": "+15%"
+        },
+        {
+          "label": "GPU versus M5, depending on test",
+          "value": "+20–30%"
+        },
+        {
+          "label": "Single-core versus M3, around",
+          "value": "+30%"
+        },
+        {
+          "label": "Multi-core and graphics versus M3",
+          "value": "+40–60%"
+        }
+      ]
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "hardware-split",
+      "headline": "The Pro’s Case Against The Air",
+      "subheadline": "Display, connectivity, and cooling distinguish the Pro—not a dramatically different keyboard or trackpad.",
+      "sides": [
+        {
+          "title": "M6 MacBook Pro",
+          "points": [
+            "14.2 inches; Mini LED with local dimming; 120 Hz ProMotion.",
+            "Maximum SDR brightness: 1,000 nits. HDR brightness: up to 1,600 nits.",
+            "Active cooling, more ports, and a thicker, heavier chassis."
+          ]
+        },
+        {
+          "title": "13- and 15-inch MacBook Air",
+          "points": [
+            "13.6- and 15.3-inch displays; 60 Hz IPS screens.",
+            "Fanless, thinner, and lighter, with fewer ports.",
+            "Historically throttles sooner; keyboard and trackpad are broadly comparable."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "the-catch",
+      "headline": "Mandatory Storage, Conditional Memory Bandwidth",
+      "subheadline": "Storage is fixed at entry. Memory capacity determines bandwidth, while flagship display features remain absent.",
+      "cards": [
+        {
+          "title": "Storage you cannot decline",
+          "body": "The mandatory 1TB allotment applies even when you do not need it."
+        },
+        {
+          "title": "Base memory",
+          "body": "16GB RAM receives 153 GB/s memory bandwidth."
+        },
+        {
+          "title": "Memory upgrades",
+          "body": "24GB and 32GB configurations receive 170 GB/s memory bandwidth."
+        },
+        {
+          "title": "Missing flagship features",
+          "body": "The retained 2021 design offers neither an OLED panel nor a touchscreen."
+        }
+      ]
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "monumental-quote",
+      "headline": "Good Laptop. Awkward Position.",
+      "quote": "this isn’t a bad laptop, but it is an awkwardly positioned one.",
+      "attribution": "Staff Bureau",
+      "attributionRole": "Review author",
+      "isExcerpt": true,
+      "subheadline": "The reviewer questions whether the Pro delivers $500 to $700 more value than the Air."
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "upgrade-verdict",
+      "headline": "Your Current Mac Changes The Verdict",
+      "subheadline": "Older machines strengthen the upgrade case. Recent owners face a less compelling performance jump.",
+      "cards": [
+        {
+          "title": "Consider: M1 or M2 owners",
+          "body": "Air or Pro users should notice a sizable day-to-day upgrade, according to the reviewer."
+        },
+        {
+          "title": "Hold: M4 or M5 owners",
+          "body": "The reviewer expects noticeable gains, but nothing staggeringly large."
+        },
+        {
+          "title": "Consider: sustained workloads",
+          "body": "Active cooling and additional ports strengthen the case against a fanless Air."
+        },
+        {
+          "title": "Reconsider: flagship-screen shoppers",
+          "body": "At $1,999, this model still lacks OLED and touch."
+        }
+      ]
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "future-implications",
+      "headline": "Don’t Buy On An Unconfirmed Roadmap",
+      "subheadline": "The review’s future-facing claims are conditional, rumored, or explicitly speculative—not Apple commitments.",
+      "cards": [
+        {
+          "title": "M6 MacBook Air",
+          "body": "Discussed conditionally, not as a confirmed release."
+        },
+        {
+          "title": "M6 chip family",
+          "body": "The absence of Pro, Max, or Ultra configurations is presented as rumor."
+        },
+        {
+          "title": "OLED touchscreen timing",
+          "body": "The reviewer speculates a wait of at least two years; Apple has not committed."
+        },
+        {
+          "title": "Component constraints",
+          "body": "The reviewer cites ongoing RAM and storage shortages as reasons normal progression is uncertain."
+        }
+      ]
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "hero-cta",
+      "kicker": "THE BUYING TEST",
+      "headline": "Buy The Benefits, Not The Badge",
+      "subheadline": "Choose this Pro for its display, ports, and sustained performance—not for Apple’s newest design.",
+      "cards": [
+        {
+          "title": "The strongest fit",
+          "body": "Buyers seeking Apple’s cheapest laptop with 120 Hz ProMotion or optional $150 nano-texture."
+        },
+        {
+          "title": "The weakest fit",
+          "body": "Buyers who do not need mandatory 1TB storage or expect OLED and touch."
+        }
+      ],
+      "cta": "Are those Pro benefits worth $1,999 to you?"
+    }
+  ]
+}

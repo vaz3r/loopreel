@@ -15,14 +15,21 @@ export interface TemplateBrief {
 
 export function buildBrandSystemPrompt(): string {
   return `You are a legendary Creative Director at a premier editorial design agency (Pentagram, Wolff Olins, Monocle, Wired).
-Your job is to establish the design identity and visual tokens for a publication-grade carousel template.
+Your job is to establish a distinctive, bespoke design identity and visual tokens for a publication-grade carousel template.
 
 CRITICAL RULES:
-1. Palette must be sophisticated and editorial (e.g. sumi-e charcoal, washi cream, vermilion accent, or Swiss black/white/crimson).
-2. Typography: Select authentic Google Fonts pairings (one distinctive headline font, one ultra-clean body font, and one technical monospace font). Provide a valid Google Fonts embed URL.
-3. Wordmark Style: Choose 'serif' | 'sans' | 'mono' | 'small-caps'.
-4. Texture: Choose 'washi' | 'grid' | 'dots' | 'blueprint' | 'none'.
-5. Motif: Choose 'seal' (Japanese cinnabar seal) | 'crosshair' (Swiss modernist registration) | 'coord' (technical coordinate badge) | 'bracket' | 'none'.
+1. Palette must be unique and tailored to the topic. NEVER default to the same obsidian/cyan palette for every technology story!
+   - Hardware / Industrial: Frosted aluminum (#F5F5F7), space graphite (#111318), sapphire blue (#0071E3) or international orange (#FF6700), crisp borders.
+   - Investigative Broadsheet: Crisp paper (#FAF9F6), carbon ink (#18181B), vermilion (#E11D48), warm surfaces.
+   - Clean Modernist: Pure white newsprint (#FFFFFF), deep midnight ink (#09090B), cadmium yellow (#EAB308) or emerald (#059669).
+   - Cyber / Deep Infrastructure: Basalt black (#0B0F19), warm amber (#F59E0B) or electric violet (#8B5CF6).
+2. Publication Name: Invent an art-directed editorial imprint name fitting the subject (e.g. "The Cupertino Ledger", "Silicon Index", "The Benchmark", "Hardware Quarterly", "The Dispatch"), NOT just the raw generic news scraper domain.
+3. Typography: Select distinctive Google Fonts pairings from diverse families:
+   - Modern Tech: 'Plus Jakarta Sans', 'Outfit', 'Cabinet Grotesk', 'Syne', 'Inter'
+   - Broadsheet: 'Playfair Display', 'Instrument Serif', 'Newsreader', 'Fraunces'
+   - Telemetry/Mono: 'JetBrains Mono', 'IBM Plex Mono', 'Space Mono', 'DM Mono'
+4. Texture: 'washi' | 'grid' | 'dots' | 'blueprint' | 'none'.
+5. Motif: 'seal' | 'crosshair' | 'coord' | 'bracket' | 'none'.
 6. Return strictly valid JSON matching the BrandTokens schema without preamble or markdown formatting outside the json code block.`;
 }
 
@@ -62,24 +69,32 @@ Return JSON matching:
 }
 
 export function buildArticleBrandUserPrompt(article: ArticleIntel, brief?: TemplateBrief): string {
-  return `Analyze this real news article and establish the ideal Publication Identity and Brand Tokens to art-direct this story:
+  return `Analyze this news reporting and establish a BESPOKE, highly tailored Publication Identity and Brand Tokens:
 
 Article Title: "${article.title}"
 Publisher / Source: "${article.publisher}"
-Author: "${article.byline || 'Staff'}"
+Author: "${article.byline || 'Staff Bureau'}"
 Summary Snippet:
 ${article.summary}
 
 Creative Direction Guidance:
-- If high-tech, AI, or consumer robotics: obsidian black (#0A0E17), electric cyan (#38BDF8), slate cards (#141D2B), Space Grotesk / Inter / IBM Plex Mono.
-- If macroeconomics, business, or geopolitics: broadsheet newsprint (#F8F9FA), deep ink (#111827), crimson accents (#E11D48), Playfair or Syne display.
-- If design, architecture, or spatial philosophy: warm washi (#F5F2EB), sumi-e ink (#1A1918), cinnabar vermilion (#E85A3C), elegant serif.
-- Custom vibe requested: "${brief?.vibe || 'High-end investigative technology editorial'}"
+1. Publication Name ("name" and "wordmark"):
+   Invent an evocative, art-directed editorial masthead suited to this exact story (e.g. if Apple Silicon/Hardware: "The Cupertino Ledger", "The Benchmark", "Silicon Quarterly"; if Aerospace: "Orbital Dispatch"; if Science: "The Empirical Review"). Do NOT just repeat the raw generic news scraper domain!
+2. Palette ("palette"):
+   Derive a bespoke palette matching the physical materials of the subject:
+   - For Apple/Consumer Hardware: Consider sophisticated titanium/aluminum paper (#F5F5F7 or #121316), contrast ink (#1D1D1F or #F5F5F7), and a distinctive signature accent (e.g. Apple sapphire #0071E3, international orange #FF6700, or emerald #10B981).
+   - DO NOT repeat the obsidian (#0A0E17) / cyan (#38BDF8) palette used in past tech stories! Give this story its own distinct visual soul.
+3. Typography ("typography"):
+   Choose a Google Fonts pairing with high editorial personality:
+   - e.g. 'Plus Jakarta Sans' + 'Inter' + 'JetBrains Mono', or 'Syne' + 'DM Sans' + 'Space Mono', or 'Outfit' + 'Inter' + 'IBM Plex Mono'.
+   Provide a valid googleFontsUrl.
+4. Slug ("slug"):
+   Short, clean slug (e.g. "cupertino-ledger" or "m6-macbook-pro-benchmark").
 
-Return strictly valid JSON matching BrandTokens:
+Return strictly valid JSON matching BrandTokens without markdown outside the json code block:
 {
-  "name": "${article.publisher || 'The Daily Briefing'}",
-  "slug": "${(article.title || 'story').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 32).replace(/(^-|-$)/g, '')}",
+  "name": "Bespoke Publication Name",
+  "slug": "bespoke-slug",
   "vibe": "Concise aesthetic description",
   "domain": "Topic / Category Domain",
   "palette": {
@@ -91,16 +106,16 @@ Return strictly valid JSON matching BrandTokens:
     "subtle": "#HEX"
   },
   "typography": {
-    "headlineFont": "Space Grotesk",
-    "bodyFont": "Inter",
-    "monoFont": "IBM Plex Mono",
+    "headlineFont": "Font Name",
+    "bodyFont": "Font Name",
+    "monoFont": "Font Name",
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=...&display=swap"
   },
-  "wordmark": "${(article.publisher || 'THE REPORT').toUpperCase()}",
+  "wordmark": "PUBLICATION NAME",
   "wordmarkStyle": "sans",
-  "handle": "@${(article.publisher || 'loopreel').toLowerCase().replace(/[^a-z0-9]/g, '')}",
-  "texture": "grid",
-  "motif": "crosshair"
+  "handle": "@handle",
+  "texture": "blueprint",
+  "motif": "bracket"
 }`;
 }
 
@@ -262,29 +277,44 @@ Output strictly the StoryStrategy JSON.`;
 // ============================================================================
 
 export function buildStoryDeckSystemPrompt(): string {
-  return `You are a Senior Copy Editor at The New York Times and The Economist.
-You author high-signal editorial carousel content with STRICT word budgets to prevent visual overflow.
+  return `You are a Senior Copy Editor and Master Storyteller at Wired, Bloomberg Businessweek, and The New York Times Magazine.
+You author high-signal editorial carousel content with STRICT word budgets to guarantee zero visual overflow.
 
 CRITICAL CONTENT & ANTI-OVERFLOW RULES:
 1. ZERO HALLUCINATION: All content must be derived strictly from the provided GroundTruthDossier.
-2. STRICT WORD LIMITS:
-   - Headlines: Maximum 8–10 words.
-   - Subheadlines: Maximum 15–18 words.
-   - Bullets / Cards: Maximum 15–18 words per item! Never write long paragraph blocks.
-3. Telemetry values MUST be strictly numerical or signed badge (e.g. "$249.99", "$999.99", "180 DAYS"). Never put sentence fragments in value.
-4. 10-Slide Narrative Arc & JSON Data Structure:
-   1. cover: { "id": "slide-1", "type": "cover", "kicker": "SURVEILLANCE / IN FOCUS", "headline": "...", "subheadline": "..." }
-   2. brief: { "id": "slide-2", "type": "brief", "headline": "...", "items": [{ "index": 1, "tag": "AI", "title": "...", "body": "..." }, ...] }
-   3. mechanism: { "id": "slide-3", "type": "mechanism", "headline": "...", "left": { "tag": "DRONE CAM", "title": "...", "description": "..." }, "right": { "tag": "ROVER CAM", "title": "...", "description": "..." } }
-   4. telemetry: { "id": "slide-4", "type": "telemetry", "headline": "...", "metrics": [{ "value": "$249.99", "label": "DRONE CAM", "context": "...", "tag": "PENDING FCC" }, { "value": "$999.99", "label": "ROVER CAM", "context": "...", "tag": "ENTERPRISE" }, { "value": "180 DAYS", "label": "CLOUD RETENTION", "context": "...", "tag": "SUBSCRIPTION" }] }
-   5. controversy: { "id": "slide-5", "type": "controversy", "quote": "...", "attribution": "...", "role": "...", "context": "..." }
-   6. catch: { "id": "slide-6", "type": "catch", "headline": "...", "items": [{ "index": 1, "tag": "KEY DELETION", "title": "...", "body": "..." }, ...] }
-   7. debunk: { "id": "slide-7", "type": "debunk", "headline": "...", "left": { "tag": "THE MYTH", "title": "...", "description": "..." }, "right": { "tag": "THE REALITY", "title": "...", "description": "..." } }
-   8. verdict: { "id": "slide-8", "type": "verdict", "headline": "...", "avoid": { "tag": "WHO SHOULD SKIP", "title": "...", "points": ["...", "..."] }, "fit": { "tag": "POTENTIAL FIT", "title": "...", "points": ["...", "..."] } }
-   9. future: { "id": "slide-9", "type": "future", "headline": "...", "items": [{ "index": 1, "tag": "PATROL FLEETS", "title": "...", "body": "..." }, ...] }
-   10. hero-cta: { "id": "slide-10", "type": "hero-cta", "headline": "...", "verdict": "...", "question": "...", "actionText": "Where do you draw the line?" }
+2. DYNAMIC ARCHETYPE SELECTION (Tailored to the Story):
+   Do NOT force every story into the same cookie-cutter template! Select 8 to 10 archetypes that best dramatize THIS specific story:
+   - For Hardware / Consumer Tech Reviews:
+     * Slide 1: 'cover' (Scroll-stopping hook headline, kicker, and subheadline)
+     * Slide 2: 'hardware-specs' (Silicon die, active cooling vs fanless, ports, dimensions)
+     * Slide 3: 'pricing-ladder' (The tier creep: entry vs mid vs high with price deltas)
+     * Slide 4: 'benchmark-telemetry' (Single-core vs multi-core vs GPU gains with numerical badges)
+     * Slide 5: 'hardware-split' (Head-to-head hardware comparison, e.g. Pro vs Air displays/thermals)
+     * Slide 6: 'the-catch' (The mandatory storage upsell, missing OLED or missing redesign)
+     * Slide 7: 'monumental-quote' (Hard-hitting reviewer statement or controversy)
+     * Slide 8: 'upgrade-verdict' (Who should upgrade vs who should hold)
+     * Slide 9: 'future-implications' (What this signals for the product ecosystem)
+     * Slide 10: 'hero-cta' (Final verdict takeaway and reader prompt)
+   - For Policy, Science, or Enterprise, adapt the archetypes accordingly (e.g. 'investigative-timeline', 'policy-dilemma', 'unit-economics').
 
-Return strictly a JSON array of 10 slide objects: [ { "id": "slide-1", ... }, ... ]`;
+3. STRICT WORD LIMITS (Anti-Overflow Guardrail):
+   - Headlines: Maximum 7–9 words.
+   - Subheadlines: Maximum 14–16 words.
+   - Cards / Points: Maximum 12–15 words per item! Never write long, dense paragraphs.
+   - Telemetry Values: MUST be strictly numerical or signed badge (e.g. "$1,999", "+15%", "+30%", "1,600 NITS", "+$700"). Never put sentence fragments in value.
+
+4. Return strictly a JSON array of slide objects:
+   [
+     {
+       "id": "slide-1",
+       "index": 0,
+       "type": "cover",
+       "kicker": "...",
+       "headline": "...",
+       "subheadline": "..."
+     },
+     ...
+   ]`;
 }
 
 export function buildStoryDeckUserPrompt(
@@ -417,10 +447,17 @@ CRITICAL DESIGN & CODING RULES:
      * font-[var(--font-body)] for body copy and descriptions
      * font-[var(--font-mono)] for metrics, tags, numbers
 
-4. Spatial Balance & Zero-Overflow Rule:
-   - Fill 75%–90% of the vertical space organically.
-   - If content is short (Cover, Quote, CTA), center it optically with 'my-auto' or 'justify-center min-h-0' and generous font scales (text-6xl to text-7xl). NEVER use 'justify-between' across a 1000px height when there are only 2 items!
-   - If content is dense (List, Telemetry, Breakdown), use 'flex-1' or 'grid' with equal height distribution so items fill the frame without empty voids.
+4. Spatial Balance & Strict Zero-Overflow Sizing:
+   - The interior safe area is strictly 952px wide by 1028px high.
+   - HEADLINE SIZING DISCIPLINE:
+     * If slide has 2 or 3 cards below the headline: Headline MUST be compact (text-4xl or text-5xl, max 48px). NEVER use text-[76px] or text-[86px] on a multi-card slide!
+     * Monumental headlines (text-6xl to text-7xl / 72px+) are ONLY allowed when there is NO heavy card grid below (e.g. Cover, Quote, or Hero CTA).
+   - HERO TELEMETRY DISCIPLINE:
+     * If a slide features a monumental hero metric (e.g. text-[96px] to text-[120px]), you may only place ONE compact supporting row or 2 concise bullet points below it. Never stack a 120px number on top of 3 full-sized cards!
+   - CARD PADDING & GAP BUDGET:
+     * Multi-card grids: Use 'gap-4' or 'gap-5', card padding 'py-4 px-6' or 'py-5 px-6' (avoid py-8 or py-10 which bloat the height).
+     * Body copy inside cards: Use 'text-base' (16px) or 'text-lg' (18px) with leading-snug or leading-normal (avoid text-2xl inside dense cards).
+   - AutoFit is a safety net only: The content MUST fit naturally without forcing AutoFit to scale below 0.98.
    - Always respect the locked text provided—do not invent new text or exceed word counts.
 
 5. Technical Constraints:
