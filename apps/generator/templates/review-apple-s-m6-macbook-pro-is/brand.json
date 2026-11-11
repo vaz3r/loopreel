@@ -1,0 +1,25 @@
+{
+  "name": "Ars Technica",
+  "slug": "review-apple-s-m6-macbook-pro-is",
+  "vibe": "High-end investigative technology editorial: obsidian fields, precise cyan annotations, restrained grids, and assertive typography. Analytical rather than promotional.",
+  "domain": "Consumer Technology / Hardware Reviews",
+  "palette": {
+    "paper": "#0A0E17",
+    "ink": "#F1F5F9",
+    "accent": "#38BDF8",
+    "surface": "#141D2B",
+    "border": "#334155",
+    "subtle": "#94A3B8"
+  },
+  "typography": {
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Inter",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+  },
+  "wordmark": "ARS TECHNICA",
+  "wordmarkStyle": "sans",
+  "handle": "@arstechnica",
+  "texture": "grid",
+  "motif": "crosshair"
+}
