@@ -1,0 +1,313 @@
+{
+  "articleTitle": "The US military seems to be getting nervous about the launch supply crunch",
+  "publisher": "Ars Technica",
+  "byline": "Staff Bureau",
+  "summary": "The Pentagon’s Office of Strategic Capital announced conditional loan commitments of $150 million each to Stoke Space and Rocket Lab to expand launch capacity as SpaceX moves toward retiring its Falcon rocket program. The article describes rising military launch requirements, problems with United Launch Alliance’s Vulcan rocket, and uncertainty surrounding replacement launch vehicles.",
+  "entities": [
+    {
+      "name": "Office of Strategic Capital",
+      "type": "Government organization",
+      "role": "Pentagon organization established in 2022 to provide capital to companies developing national security technologies; announced conditional loans for Stoke Space and Rocket Lab."
+    },
+    {
+      "name": "SpaceX",
+      "type": "Company",
+      "role": "The Pentagon’s leading launch provider; shifting focus from its Falcon rocket program to Starship."
+    },
+    {
+      "name": "Stoke Space",
+      "type": "Company",
+      "role": "Recipient of a $150 million conditional loan commitment supporting its second launch pad at Cape Canaveral Space Force Station."
+    },
+    {
+      "name": "Rocket Lab",
+      "type": "Company",
+      "role": "Recipient of a $150 million conditional Pentagon loan supporting increased Neutron launch capacity; also operates Electron."
+    },
+    {
+      "name": "LeoLabs",
+      "type": "Company",
+      "role": "Commercial satellite tracking company receiving a $150 million OSC loan for production and deployment of radar units."
+    },
+    {
+      "name": "US Space Force",
+      "type": "Military service",
+      "role": "Government launch customer whose SpaceX contract permits Falcon 9 and Falcon Heavy orders through 2029, with launches extending through 2033."
+    },
+    {
+      "name": "NASA",
+      "type": "Government agency",
+      "role": "Government customer expected to continue using Falcon launches beyond the commercial-order cutoff."
+    },
+    {
+      "name": "Space Systems Command",
+      "type": "Military organization",
+      "role": "Oversees Space Force launch procurement and forecasts up to 249 medium-to-heavy-lift launches through the early 2030s."
+    },
+    {
+      "name": "United Launch Alliance",
+      "type": "Company",
+      "role": "Provider of the Vulcan rocket, which has been grounded twice in the last two years because of solid rocket booster problems."
+    },
+    {
+      "name": "Blue Origin",
+      "type": "Company",
+      "role": "Eligible to compete for some national security launches; the only company among the five additionally named contenders that has flown a rocket that could meet Space Force requirements."
+    },
+    {
+      "name": "Relativity Space",
+      "type": "Company",
+      "role": "Developing a launch vehicle and eligible to compete for some national security launches."
+    },
+    {
+      "name": "Impulse Space",
+      "type": "Company",
+      "role": "Developing in-space propulsion and eligible to compete for some national security launches."
+    },
+    {
+      "name": "Jordan Sebold",
+      "type": "Person",
+      "role": "Senior managing director of investments at OSC."
+    },
+    {
+      "name": "Adam Spice",
+      "type": "Person",
+      "role": "Rocket Lab’s chief financial officer."
+    },
+    {
+      "name": "Peter Beck",
+      "type": "Person",
+      "role": "Rocket Lab’s founder and CEO."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "twice in the last two weeks",
+      "label": "OSC launch-company funding announcements",
+      "context": "The office announced funding for two SpaceX competitors."
+    },
+    {
+      "value": "October 26",
+      "label": "Stoke Space loan announcement",
+      "context": "OSC announced a $150 million conditional loan commitment."
+    },
+    {
+      "value": "$150 million",
+      "label": "Stoke Space conditional loan commitment",
+      "context": "Supports the buildout of the company’s second launch pad at Cape Canaveral Space Force Station, Florida."
+    },
+    {
+      "value": "Tuesday",
+      "label": "Rocket Lab loan announcement",
+      "context": "Military officials revealed a second $150 million Pentagon loan."
+    },
+    {
+      "value": "$150 million",
+      "label": "Rocket Lab conditional loan",
+      "context": "Supports efforts to increase the flight rate of the partially reusable Neutron rocket."
+    },
+    {
+      "value": "first two",
+      "label": "Launch companies receiving significant OSC support",
+      "context": "Stoke Space and Rocket Lab."
+    },
+    {
+      "value": "2022",
+      "label": "OSC establishment",
+      "context": "The organization was established to infuse companies developing national security technologies with capital."
+    },
+    {
+      "value": "hundreds of millions of dollars",
+      "label": "Recent OSC commitments",
+      "context": "Committed in recent weeks to companies specializing in batteries, drones, and semiconductors."
+    },
+    {
+      "value": "$150 million",
+      "label": "LeoLabs loan",
+      "context": "Funds production and deployment of radar units."
+    },
+    {
+      "value": "after 2028",
+      "label": "Falcon 9 commercial launch booking cutoff",
+      "context": "SpaceX has stopped taking commercial orders for Falcon 9 launches after 2028."
+    },
+    {
+      "value": "through 2029",
+      "label": "Military Falcon order window",
+      "context": "The Space Force contract allows Falcon 9 and Falcon Heavy orders through 2029."
+    },
+    {
+      "value": "through 2033",
+      "label": "Military Falcon launch horizon",
+      "context": "Actual launches under the Space Force contract extend through 2033."
+    },
+    {
+      "value": "since the 1990s",
+      "label": "Assured access to space policy",
+      "context": "Military space officials have maintained this policy since the 1990s."
+    },
+    {
+      "value": "at least two",
+      "label": "Supported US rocket programs",
+      "context": "The Pentagon pays to support at least two US rocket programs capable of launching national security satellites."
+    },
+    {
+      "value": "twice in the last two years",
+      "label": "Vulcan groundings",
+      "context": "Problems with solid rocket boosters grounded Vulcan and forced the Space Force to shift several missions to SpaceX."
+    },
+    {
+      "value": "up to 249",
+      "label": "Forecast military medium-to-heavy-lift launches",
+      "context": "Space Systems Command forecasts this requirement through the early 2030s."
+    },
+    {
+      "value": "through the early 2030s",
+      "label": "Launch-demand forecast horizon",
+      "context": "Applies to the forecast of up to 249 medium-to-heavy-lift launches."
+    },
+    {
+      "value": "more than double",
+      "label": "Increase in forecast launch requirements",
+      "context": "Compared with Space Systems Command’s expectation just two years ago."
+    },
+    {
+      "value": "second launch pad",
+      "label": "Stoke Space infrastructure expansion",
+      "context": "The conditional loan supports construction at Cape Canaveral Space Force Station, Florida, for Nova Block 2 flights."
+    },
+    {
+      "value": "sometime next year",
+      "label": "Nova Pathfinder expected debut",
+      "context": "The fully reusable predecessor to Nova Block 2 is set to debut sometime next year."
+    },
+    {
+      "value": "next year",
+      "label": "Neutron scheduled first launch",
+      "context": "Rocket Lab says the rocket is scheduled to make its first launch next year."
+    },
+    {
+      "value": "Monday",
+      "label": "Adam Spice loan comments",
+      "context": "Rocket Lab’s chief financial officer discussed the Pentagon loan in a quarterly earnings call."
+    },
+    {
+      "value": "$55 million",
+      "label": "Previous Neutron launch price",
+      "context": "Rocket Lab announced an increase from $55 million to $70 million per launch."
+    },
+    {
+      "value": "$70 million per launch",
+      "label": "New Neutron launch price",
+      "context": "Rocket Lab attributed the increase to a surge in bookings for the still-unproven launch vehicle."
+    },
+    {
+      "value": "117 launches",
+      "label": "Rocket Lab contracted backlog",
+      "context": "Includes both Neutron missions and the smaller Electron rocket."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "By supporting the construction of additional launch infrastructure, this commitment would enhance the overall capacity and resilience of the commercial space industrial base,",
+      "speaker": "Jordan Sebold",
+      "role": "Senior managing director of investments at OSC",
+      "context": "Discussing the conditional commitment supporting Stoke Space’s additional launch infrastructure."
+    },
+    {
+      "quote": "The proposed loan would support faster vehicle delivery and processing and allow Rocket Lab to expand its fleet of maritime vessels with additional equipment for Neutron recovery and transport,",
+      "speaker": "OSC",
+      "role": "Pentagon’s Office of Strategic Capital",
+      "context": "Statement describing the proposed Rocket Lab loan."
+    },
+    {
+      "quote": "It would also enable manufacturing upgrades to increase the production of composite structures and engines, and support infrastructure that would reduce turnaround time between launches once the reusable rocket makes its operational debut.",
+      "speaker": "OSC",
+      "role": "Pentagon’s Office of Strategic Capital",
+      "context": "Additional intended uses of the proposed Rocket Lab loan."
+    },
+    {
+      "quote": "various financial, legal, technical, investment, due diligence, and other requirements,",
+      "speaker": "OSC",
+      "role": "Pentagon’s Office of Strategic Capital",
+      "context": "Requirements to which both conditional loans remain subject."
+    },
+    {
+      "quote": "very attractive terms",
+      "speaker": "Adam Spice",
+      "role": "Rocket Lab’s chief financial officer",
+      "context": "Description of the Pentagon loan on Monday."
+    },
+    {
+      "quote": "underscores the importance",
+      "speaker": "Adam Spice",
+      "role": "Rocket Lab’s chief financial officer",
+      "context": "Quoted phrase concerning the military’s appetite for launch capacity."
+    },
+    {
+      "quote": "We always take it when we can get it,",
+      "speaker": "Adam Spice",
+      "role": "Rocket Lab’s chief financial officer",
+      "context": "Discussing additional capital during a quarterly earnings call."
+    },
+    {
+      "quote": "It gives us additional capital to scale key parts of our business, Neutron in particular … I think this is a helpful indicator, a very positive indicator, about where everyone sees the demand constraint and how it can be unlocked, and capital is certainly a part of that.",
+      "speaker": "Adam Spice",
+      "role": "Rocket Lab’s chief financial officer",
+      "context": "Explaining how financing could support Neutron expansion and address constrained launch capacity."
+    },
+    {
+      "quote": "Launch is extremely constrained, and that is exactly the situation we predicted,",
+      "speaker": "Peter Beck",
+      "role": "Rocket Lab’s founder and CEO",
+      "context": "Comment following discussion of higher Neutron pricing and Rocket Lab’s launch backlog."
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Nova Block 2",
+      "specs": [
+        "An upgraded version of Stoke Space’s fully reusable Nova Pathfinder.",
+        "Flights would be supported by the company’s second launch site at Cape Canaveral Space Force Station, Florida."
+      ],
+      "price": null,
+      "availability": null
+    },
+    "deviceB": {
+      "name": "Neutron",
+      "specs": [
+        "Rocket Lab’s partially reusable rocket.",
+        "Described as a new medium-class rocket.",
+        "Still-unproven launch vehicle.",
+        "Proposed loan supports faster vehicle delivery and processing.",
+        "Proposed loan supports maritime fleet expansion and additional equipment for recovery and transport.",
+        "Proposed loan supports increased production of composite structures and engines.",
+        "Proposed loan supports infrastructure intended to reduce turnaround time between launches after operational debut."
+      ],
+      "price": "$70 million per launch",
+      "availability": "Rocket Lab says it is scheduled to make its first launch next year."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "SpaceX plans to retire Falcon if Starship is fulfilling its promise. Rocket Lab says Neutron is scheduled to make its first launch next year and attributes its price increase from $55 million to $70 million per launch to a surge in bookings.",
+    "criticismOrAlarm": "The article interprets Pentagon support for competing launch companies as suggesting defense officials view Falcon retirement as a potential national security risk. Space Systems Command forecasts up to 249 medium-to-heavy-lift launches through the early 2030s, more than double its expectation just two years ago, while Vulcan has been grounded twice in the last two years and competing launch vehicles remain in development.",
+    "regulatoryOrHistoricalPrecedent": "Since the 1990s, the Pentagon’s assured-access-to-space policy has supported at least two US rocket programs capable of launching national security satellites. Previous support included direct subsidies, development funding, and launch contracts at premium prices, providing technical and financial insight, schedule priority, and in some cases keeping providers in business."
+  },
+  "hiddenCatchesAndLimits": [
+    "Both launch-company loans are conditional and subject to various financial, legal, technical, investment, due diligence, and other requirements; the article does not establish that these conditions have been satisfied.",
+    "SpaceX’s commercial Falcon 9 cutoff applies to launches after 2028, not an immediate end to government launches: the Space Force can place Falcon 9 and Falcon Heavy orders through 2029, with actual launches extending through 2033.",
+    "Falcon’s eventual retirement is conditional on Starship fulfilling its promise.",
+    "Starship may eventually launch national security payloads, but SpaceX’s near-term priority is its own Starlink Internet satellites and Starmind orbital data centers.",
+    "Vulcan’s solid rocket booster problems have caused two groundings in the last two years and prompted transfers of several national security missions to SpaceX.",
+    "Eligibility to compete for national security launches does not establish operational readiness: among Blue Origin, Rocket Lab, Stoke Space, Relativity Space, and Impulse Space, only Blue Origin has flown a rocket that could meet Space Force requirements.",
+    "Rocket Lab, Stoke Space, and Relativity Space are developing medium- and heavy-lift launch vehicles; Impulse Space is working on in-space propulsion.",
+    "The stated debut sometime next year applies to Nova Pathfinder, not Nova Block 2.",
+    "Neutron’s first launch next year is a Rocket Lab schedule claim, and the article describes the vehicle as still-unproven.",
+    "Rocket Lab’s backlog of 117 launches includes both Neutron and Electron orders; it is not a Neutron-only backlog.",
+    "The article does not provide dimensions, payload capacities, flight durations, battery life, camera specifications, coverage areas, floor restrictions, subscription requirements, cloud dependencies, key-retention policies, or FCC approval statuses for the rockets."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

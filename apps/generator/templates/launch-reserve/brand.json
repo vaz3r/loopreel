@@ -1,0 +1,25 @@
+{
+  "name": "The Launch Reserve",
+  "slug": "launch-reserve",
+  "vibe": "Aerospace procurement journal: ceramic-white thermal shielding, gantry-green ink, and burnt-orange warning marks. Condensed headlines meet precise flight-manifest typography.",
+  "domain": "Aerospace / Defense / Launch Economics",
+  "palette": {
+    "paper": "#F3F2EC",
+    "ink": "#23332E",
+    "accent": "#BD401F",
+    "surface": "#E4E8E0",
+    "border": "#A9B5AB",
+    "subtle": "#596A60"
+  },
+  "typography": {
+    "headlineFont": "Barlow Condensed",
+    "bodyFont": "Public Sans",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  "wordmark": "THE LAUNCH RESERVE",
+  "wordmarkStyle": "sans",
+  "handle": "@launchreserve",
+  "texture": "blueprint",
+  "motif": "bracket"
+}

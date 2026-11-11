@@ -1,0 +1,177 @@
+{
+  "templateName": "The Launch Reserve",
+  "templateSlug": "launch-reserve",
+  "domain": "Aerospace / Defense / Launch Economics",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "NATIONAL SECURITY",
+      "headline": "The Pentagon Wants More Launch Options",
+      "subheadline": "Conditional loans back SpaceX competitors. Operational readiness remains the harder test."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "funding-split",
+      "headline": "Two Competitors, Two Conditional Loans",
+      "subheadline": "The Office of Strategic Capital targets launch infrastructure and flight rates.",
+      "cards": [
+        {
+          "title": "Stoke Space",
+          "value": "$150 million",
+          "body": "October 26 commitment supports its second launch pad at Cape Canaveral."
+        },
+        {
+          "title": "Rocket Lab",
+          "value": "$150 million",
+          "body": "Tuesday announcement targets a higher flight rate for Neutron."
+        }
+      ]
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "demand-pressure",
+      "headline": "Military Launch Demand Is Climbing",
+      "cards": [
+        {
+          "title": "The forecast",
+          "body": "Up to 249 medium-to-heavy-lift launches forecast through the early 2030s."
+        },
+        {
+          "title": "The acceleration",
+          "body": "Requirements are more than double expectations from just two years ago."
+        },
+        {
+          "title": "The longstanding policy",
+          "body": "Since the 1990s, Pentagon policy supports at least two US rocket programs."
+        }
+      ]
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "transition-timeline",
+      "headline": "Falcon's Commercial Cutoff Isn't Its End",
+      "subheadline": "Military orders and launches extend beyond the commercial booking cutoff.",
+      "milestones": [
+        {
+          "value": "2028",
+          "label": "SpaceX stopped accepting commercial Falcon 9 launch orders for after 2028."
+        },
+        {
+          "value": "2029",
+          "label": "Space Force can order Falcon 9 and Falcon Heavy through 2029."
+        },
+        {
+          "value": "2033",
+          "label": "Actual launches under the Space Force contract extend through 2033."
+        }
+      ]
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "vehicle-split",
+      "headline": "Different Rockets, Different Readiness Questions",
+      "cards": [
+        {
+          "title": "Nova Block 2",
+          "body": "Upgrades fully reusable Nova Pathfinder, whose debut is expected sometime next year."
+        },
+        {
+          "title": "Neutron",
+          "body": "Partially reusable, medium-class, still-unproven; Rocket Lab schedules its first launch next year."
+        }
+      ]
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "capacity-buildout",
+      "headline": "Neutron's Loan Targets Repeat Launches",
+      "subheadline": "The proposed financing reaches beyond the rocket itself.",
+      "cards": [
+        {
+          "title": "Recovery fleet",
+          "body": "Expand maritime vessels and equipment for Neutron recovery and transport."
+        },
+        {
+          "title": "Manufacturing",
+          "body": "Increase production of composite structures and engines."
+        },
+        {
+          "title": "Launch turnaround",
+          "body": "Accelerate vehicle delivery, processing, and turnaround after operational debut."
+        }
+      ]
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "unit-economics",
+      "headline": "Neutron's Price Rises Before Its Debut",
+      "subheadline": "Rocket Lab attributes the increase to a surge in bookings.",
+      "metrics": [
+        {
+          "value": "$55 million",
+          "label": "Previous Neutron price per launch"
+        },
+        {
+          "value": "$70 million",
+          "label": "New Neutron price per launch"
+        },
+        {
+          "value": "117",
+          "label": "Contracted launches across Neutron and Electron—not Neutron alone"
+        }
+      ]
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "the-catch",
+      "headline": "Commitments Aren't Cash. Eligibility Isn't Readiness.",
+      "cards": [
+        {
+          "title": "Conditional financing",
+          "body": "Both loans retain financial, legal, technical, investment, due diligence, and other requirements."
+        },
+        {
+          "title": "Unproven readiness",
+          "body": "Eligibility to compete for national security launches does not establish operational readiness."
+        }
+      ]
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "monumental-quote",
+      "headline": "The Business Case Is Constrained Supply",
+      "quote": "Launch is extremely constrained, and that is exactly the situation we predicted,",
+      "attribution": "Peter Beck",
+      "role": "Rocket Lab’s founder and CEO",
+      "subheadline": "His assessment follows higher Neutron pricing and Rocket Lab’s launch backlog."
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "hero-cta",
+      "kicker": "THE TAKEAWAY",
+      "headline": "Finance Capacity. Verify Flight Readiness.",
+      "subheadline": "These commitments target resilience; neither establishes operational readiness.",
+      "cards": [
+        {
+          "title": "The opportunity",
+          "body": "Additional infrastructure could expand launch capacity and strengthen alternatives to SpaceX."
+        },
+        {
+          "title": "The test",
+          "body": "Can these competitors turn conditional financing into dependable launches?"
+        }
+      ]
+    }
+  ]
+}
