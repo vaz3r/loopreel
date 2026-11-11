@@ -3,8 +3,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import readline from 'node:readline';
-import { generateTemplateReference } from './engine.js';
-import type { TemplateBrief } from './prompt.js';
+import { generateTemplateReference } from './engine';
+import type { TemplateBrief } from './prompt';
 
 // Robustly locate and load root .env
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -21,37 +21,38 @@ while (envDir !== path.dirname(envDir)) {
 const PRESET_ARCHETYPES: Record<string, TemplateBrief> = {
   '1': {
     name: 'The Tokyo Review',
-    vibe: 'Minimalist Japanese architecture & industrial design. Warm washi paper canvas, warm stone grey panels, deep sumi-e black ink, refined serif headlines paired with subtle geometric sans.',
+    vibe: 'Minimalist Japanese architecture & spatial design. Washi paper canvas (#F5F2EB), sumi-e charcoal (#1A1918), cinnabar vermilion accent (#E85A3C), refined serif paired with clean geometric sans.',
     domain: 'Architecture, Industrial Design & Spatial Philosophy',
-    inspiration: 'Muji monographs, Monocle Tokyo Bureau, Kenzo Tange design philosophy',
+    inspiration: 'Muji monographs, Monocle Tokyo Bureau, Kenzo Tange spatial philosophy',
   },
   '2': {
     name: 'The Zurich Typographer',
-    vibe: 'Swiss International Typographic Style. Stark white newsprint, absolute black ink, sharp vermilion red accents, rigorous asymmetric grid, high-contrast grotesque typography.',
+    vibe: 'Swiss International Typographic Style. Stark white newsprint (#FFFFFF), absolute black ink (#0A0A0A), sharp crimson red (#E11D48), cool surface (#F8FAFC), rigorous asymmetric grid with registration crosshairs.',
     domain: 'Graphic Design, Product Engineering & Systems Thinking',
     inspiration: 'Josef Müller-Brockmann, Wim Crouwel, Neue Grafik magazine',
   },
   '3': {
     name: 'The Nordic Diplomat',
-    vibe: 'Scandinavian diplomacy, sustainable infrastructure & macroeconomics. Cool fjord blue accents, warm oat-milk paper background, deep charcoal ink, structured editorial typography.',
+    vibe: 'Scandinavian diplomacy, sustainable infrastructure & macroeconomics. Cool fjord blue (#0284C7), oat-milk canvas (#FBF9F5), deep charcoal ink (#1E293B), structured editorial typography.',
     domain: 'Geopolitics, Macroeconomics & Renewable Energy',
     inspiration: 'Monocle Nordic reports, Danish design review, Copenhagen climate summits',
   },
   '4': {
     name: 'The Silicon Architect',
-    vibe: 'Deep technology, AI compute infrastructure & systems architecture. Muted dark-slate paper, electric cobalt blue highlights, crisp monospace telemetry badges, dense engineering placards.',
+    vibe: 'Deep technology, AI compute infrastructure & systems architecture. Dark slate paper (#0B0F17), electric cobalt highlights (#38BDF8), crisp monospace telemetry badges, dense engineering placards.',
     domain: 'Artificial Intelligence, Distributed Systems & Compute Infrastructure',
     inspiration: 'MIT Technology Review, Bell Labs research monographs, Stripe Press',
   },
 };
 
-function parseArgs(): { brief: TemplateBrief | null; provider?: string } {
+function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit?: boolean } {
   const args = process.argv.slice(2);
   let name = '';
   let vibe = '';
   let domain = '';
   let inspiration = '';
   let provider = '';
+  let runAudit = false;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -60,16 +61,18 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string } {
     else if (arg === '--domain' && args[i + 1]) domain = args[++i]!;
     else if (arg === '--inspiration' && args[i + 1]) inspiration = args[++i]!;
     else if (arg === '--provider' && args[i + 1]) provider = args[++i]!;
+    else if (arg === '--audit') runAudit = true;
   }
 
   if (name && vibe) {
     return {
       brief: { name, vibe, domain: domain || undefined, inspiration: inspiration || undefined },
       provider: provider || undefined,
+      runAudit,
     };
   }
 
-  return { brief: null, provider: provider || undefined };
+  return { brief: null, provider: provider || undefined, runAudit };
 }
 
 async function promptUser(): Promise<TemplateBrief> {
@@ -82,7 +85,7 @@ async function promptUser(): Promise<TemplateBrief> {
     new Promise((resolve) => rl.question(q, (ans) => resolve(ans.trim())));
 
   console.log('\n======================================================');
-  console.log('   Loopreel Template Generator (@loopreel/generator)   ');
+  console.log('   Loopreel React Template Generator (@loopreel/generator)   ');
   console.log('======================================================\n');
   console.log('Select a pre-engineered archetype, or enter custom details:\n');
   console.log('  [1] The Tokyo Review      — Japanese architecture, warm washi & sumi-e ink');
@@ -99,7 +102,6 @@ async function promptUser(): Promise<TemplateBrief> {
     return PRESET_ARCHETYPES[selectedKey]!;
   }
 
-  // Custom prompt
   const rlCustom = readline.createInterface({ input: process.stdin, output: process.stdout });
   const qCustom = (q: string): Promise<string> =>
     new Promise((resolve) => rlCustom.question(q, (ans) => resolve(ans.trim())));
@@ -118,45 +120,41 @@ async function promptUser(): Promise<TemplateBrief> {
 
 async function main() {
   try {
-    const { brief: cliBrief, provider } = parseArgs();
+    const { brief: cliBrief, provider, runAudit } = parseArgs();
     const brief = cliBrief || (await promptUser());
 
-    console.log(`\nStarting design reference generation for: "${brief.name}"...`);
-    console.log(`Vibe: ${brief.vibe}`);
+    console.log(`\nStarting React template generation for: "${brief.name}"...`);
+    console.log(`Vibe:   ${brief.vibe}`);
     if (brief.domain) console.log(`Domain: ${brief.domain}`);
 
     const startTime = Date.now();
-    const result = await generateTemplateReference(brief, { provider });
+    const result = await generateTemplateReference(brief, { provider, runAudit });
     const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
 
     console.log('\n======================================================');
-    console.log('   Design Reference Generated Successfully!          ');
+    console.log('   React Template Generated Successfully!             ');
     console.log('======================================================');
-    console.log(`File:       ${result.filePath}`);
-    console.log(`Slides:     ${result.validation.slideCount}`);
+    console.log(`Template:   ${result.brand.name} (${result.templateSlug})`);
+    console.log(`Directory:  ${result.templateDir}`);
+    console.log(`Slides:     ${result.slideCount} bespoke React + Tailwind components`);
     console.log(`Time:       ${elapsedSec}s`);
-    if (result.usage) {
-      console.log(`Tokens:     Input: ${result.usage.promptTokens} | Output: ${result.usage.completionTokens}`);
-    }
+
     if (result.audit) {
       console.log(`Audit:      Collisions: ${result.audit.totalCollisions} | Passed: ${result.audit.passed ? 'YES' : 'NO'}`);
       if (result.audit.errors.length > 0) {
         console.log(`Errors:     ${result.audit.errors.join('; ')}`);
       }
     }
-    if (result.validation.warnings.length > 0) {
-      console.log(`Warnings:   ${result.validation.warnings.join('; ')}`);
-    }
 
-    console.log('\nPreview in your browser:');
-    console.log(`  file://${result.filePath}`);
+    console.log('\nPreview in Interactive Studio:');
+    console.log(`  http://localhost:5174/?template=${result.templateSlug}`);
+    console.log('  (Make sure the studio dev server is running: pnpm --filter @loopreel/generator dev)\n');
 
-    console.log('\nNext step when ready to convert to a production React template:');
-    const slug = brief.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    console.log(`  pnpm run create-template ${slug} "${brief.name}"`);
+    console.log('Convert to Loopreel Production Layout when approved:');
+    console.log(`  pnpm --filter @loopreel/generator convert ${result.templateSlug}`);
     console.log('======================================================\n');
   } catch (err) {
-    console.error('\n[Error] Failed to generate template reference:', err instanceof Error ? err.message : err);
+    console.error('\n[Error] Failed to generate template:', err instanceof Error ? err.message : err);
     process.exit(1);
   }
 }

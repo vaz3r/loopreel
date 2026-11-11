@@ -1,3 +1,5 @@
+import type { BrandTokens, SlideData } from './skeleton/types';
+
 export interface TemplateBrief {
   name: string;
   vibe: string;
@@ -5,592 +7,202 @@ export interface TemplateBrief {
   inspiration?: string;
 }
 
-// ======================================================================
-// PASS 1: CONCEPT & DESIGN SYSTEM
-// ======================================================================
+// ============================================================================
+// PASS 1: BRAND CONCEPT & DESIGN TOKENS
+// ============================================================================
 
-export function buildConceptSystemPrompt(): string {
-  return `You are an elite Creative Director and Brand Identity Architect specializing in luxury editorial publications (The New York Times Magazine, Monocle, The Economist, MoMA Exhibition Monographs, Phaidon Art Books).
+export function buildBrandSystemPrompt(): string {
+  return `You are a legendary Creative Director at a premier editorial design agency (Pentagram, Wolff Olins, Monocle, Wired).
+Your job is to establish the design identity and visual tokens for a new publication-grade carousel template.
 
-Your task is to conceptualize a comprehensive, sellable, publication-grade Brand Design System and an 8-slide thematic narrative based on the user's brief.
-
-You must design:
-1. Exact Color Palette (Authentic editorial hex colors):
-   - paper: Canvas background (e.g. #F5F5F0 warm washi, #FFFFFF stark white newsprint, #F8FAFC slate paper, #FDFBF7 creamy gallery folio)
-   - ink: Primary text contrast (e.g. #111111, #0A0A0A, #1A1A1A sumi-e black)
-   - graphite: Secondary reading & meta text (e.g. #4A4A4A, #475569)
-   - accent: Distinctive signature brand color (e.g. #D97706 warm amber, #E11D48 vermilion, #A31F34 crimson, #2563EB cobalt, #059669 forest)
-   - hairline: Crisp structural framing borders (e.g. #D1D1CD, #E2E8F0, #CBD5E1)
-   - surface: Subtle placard/panel contrast (e.g. #EFEFEA, #F8FAFC, #F1F5F9)
-
-2. Distinctive Typography Trio:
-   - displayFont: Monumental headline font (e.g. Cormorant Garamond, Syne, Crimson Pro, Merriweather, Playfair Display)
-   - bodyFont: Pristine reading sans (e.g. Inter, Plus Jakarta Sans, Source Sans 3)
-   - monoFont: Technical data & indexer font (e.g. IBM Plex Mono, Space Mono, Oswald)
-   - googleFontsUrl: Complete Google Fonts <link> URL importing all 3 families with appropriate weights.
-
-3. Thematic Narrative & 17 Canonical Slide Archetypes:
-   - Slide 1: Cover (introductory masthead, commanding headline, abstract deck)
-   - Slide 2: Exec Summary (3-part curated list with index numbers)
-   - Slide 3: Observation (split architectural diagram/photo container + deep critique)
-   - Slide 4: Empirical Data (4 macro metrics in 2x2 with vertical spines)
-   - Slide 5: Analytical Inquiry (conversational Q&A card with distinct Q/A badges)
-   - Slide 6: The Value Matrix (2x2 Quadrant with X/Y axes and hero quadrant highlight)
-   - Slide 7: Clinical Study (3-stage case study: Hypothesis -> Intervention -> Result)
-   - Slide 8: Theoretical Correction (Null hypothesis vs Validated finding)
-   - Slide 9: Literature Review (4 architectural pillars / resources with accent tabs)
-   - Slide 10: Research Methodology (STEM timeline spine with phase nodes)
-   - Slide 11: Citation (oversized quote mark, italic pullquote, centered attribution)
-   - Slide 12: Acquisition (closing acquisition placard with monogram, headline, button)
-   - Slide 13: Focal Metric (massive 220px percentage with analytical summary)
-   - Slide 14: Experimental Design (3-step vertical protocol with variable indicators)
-   - Slide 15: Comparative Paradigm (side-by-side legacy vs proposed with ✕ and ✓ indicators)
-   - Slide 16: Implementation Audit (4-point evaluation checklist with styled checkboxes)
-   - Slide 17: System Architecture (diagrammatic 4-corner component breakdown with central node)
-
-CRITICAL: Return ONLY a valid JSON object matching the BrandDesignSystem interface. Do NOT wrap in markdown code blocks.`;
+CRITICAL RULES:
+1. Palette must be sophisticated and editorial (e.g. sumi-e charcoal, washi cream, vermilion accent, or Swiss black/white/crimson).
+2. Typography: Select authentic Google Fonts pairings (one distinctive headline font, one ultra-clean body font, and one technical monospace font). Provide a valid Google Fonts embed URL.
+3. Wordmark Style: Choose 'serif' | 'sans' | 'mono' | 'small-caps'.
+4. Texture: Choose 'washi' | 'grid' | 'dots' | 'blueprint' | 'none'.
+5. Motif: Choose 'seal' (Japanese cinnabar seal) | 'crosshair' (Swiss modernist registration) | 'coord' (technical coordinate badge) | 'bracket' | 'none'.
+6. Return strictly valid JSON matching the BrandTokens schema without preamble or markdown formatting outside the json code block.`;
 }
 
-export function buildConceptUserPrompt(brief: TemplateBrief): string {
-  return `Conceptualize the Brand Design System for:
+export function buildBrandUserPrompt(brief: TemplateBrief): string {
+  return `Define the complete Brand Tokens for this template:
 Template Name: "${brief.name}"
 Vibe / Aesthetic: "${brief.vibe}"
-Domain: "${brief.domain || 'General Editorial & Business'}"
-${brief.inspiration ? `Inspiration: "${brief.inspiration}"` : ''}
+Content Domain: "${brief.domain || 'General In-Depth Editorial'}"
+Inspiration: "${brief.inspiration || 'Monocle, The New York Times Magazine, Wired, Swiss Modernism'}"
 
-Output JSON schema:
+Return JSON matching:
 {
-  "templateName": "${brief.name}",
-  "domain": "${brief.domain || 'Editorial'}",
-  "tagline": "Short evocative editorial series tagline",
-  "aestheticManifesto": "2 sentences describing the physical print feel and typography tension",
-  "colors": {
+  "name": "${brief.name}",
+  "slug": "${brief.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}",
+  "vibe": "${brief.vibe}",
+  "domain": "${brief.domain || 'General In-Depth Editorial'}",
+  "palette": {
     "paper": "#HEX",
     "ink": "#HEX",
-    "graphite": "#HEX",
     "accent": "#HEX",
-    "hairline": "#HEX",
-    "surface": "#HEX"
+    "surface": "#HEX",
+    "border": "#HEX",
+    "subtle": "#HEX"
   },
   "typography": {
-    "displayFont": "FontName",
-    "bodyFont": "FontName",
-    "monoFont": "FontName",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=..."
+    "headlineFont": "Font Name",
+    "bodyFont": "Font Name",
+    "monoFont": "Font Name",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=...&display=swap"
   },
-  "visualMetaphor": {
-    "texturePattern": "washi",
-    "signatureMotif": "seal",
-    "motifText": "印",
-    "borderStyle": "architectural"
-  },
-  "slideConcepts": [
-    { "slideNumber": 1, "archetype": "Cover", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 2, "archetype": "Catalog", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 3, "archetype": "ImageSplit", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 4, "archetype": "Telemetry", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 5, "archetype": "Dialogue", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 6, "archetype": "Quadrant", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 7, "archetype": "CaseStudy", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 8, "archetype": "Debunk", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 9, "archetype": "Grid", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 10, "archetype": "Timeline", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 11, "archetype": "Pullquote", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 12, "archetype": "HeroCTA", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 13, "archetype": "HeroStat", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 14, "archetype": "StepByStep", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 15, "archetype": "DosAndDonts", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 16, "archetype": "Checklist", "title": "...", "narrativeAngle": "..." },
-    { "slideNumber": 17, "archetype": "Anatomy", "title": "...", "narrativeAngle": "..." }
-  ]
+  "wordmark": "PUBLICATION NAME",
+  "wordmarkStyle": "serif",
+  "handle": "@publication",
+  "texture": "washi",
+  "motif": "seal"
 }`;
 }
 
-// ======================================================================
-// PASS 2: EDITORIAL COPYWRITING & SPATIAL COMPOSITION (BATCH 1 & BATCH 2)
-// ======================================================================
+// ============================================================================
+// PASS 2: 17-SLIDE MASTER CONTENT DECK (2 FAST BATCHES TO PREVENT TIMEOUTS)
+// ============================================================================
 
-export function buildEditorialSystemPrompt(): string {
-  return `You are an Executive Editor and Master Editorial Copywriter (The New Yorker, Monocle, Harvard Business Review, Wired).
+export function buildDeckSystemPrompt(): string {
+  return `You are an Executive Editor at The New York Times Magazine and Harvard Business Review.
+Your task is to author rich, high-signal narrative content for a carousel template.
 
-Your task is to write handcrafted, publication-grade editorial journalism for the provided Brand Design Manifest.
-
-STRICT EDITORIAL STANDARDS:
-1. NEVER use generic placeholder bullets or robotic corporate fluff ("synergy", "paradigm", "scrutinizes", "fosters", "actionable").
-2. Write deep, intelligent, provocative, human journalism specifically about the provided Domain and Aesthetic.
-3. Every metric MUST be strictly numerical or a signed badge (+12%, -17%, $1.2T, 94.2). NEVER output text phrases like "To be measured" in metric values.
-4. Craft captivating headlines (punchy, commanding, no rhetorical questions).
-
-CRITICAL: Return ONLY a valid JSON array of slide objects. Do NOT wrap in markdown code blocks.`;
+CRITICAL EDITORIAL RULES:
+1. Handcrafted editorial depth: ZERO corporate filler, zero robotic phrasing ("synergy", "game-changer", "dive into"), zero rhetorical question headlines.
+2. Every slide must deliver concrete, authentic, high-signal intel specifically tailored to the requested domain.
+3. Telemetry numbers MUST be strictly numerical or signed badge (e.g. "$1.2T", "+34%", "4.8ms"). Never put explanatory text in the value slot.
+4. Return strictly valid JSON array of slide objects: [ { "id": "slide-1", "type": "...", ... } ] without preamble.`;
 }
 
-export function buildEditorialBatch1UserPrompt(manifest: any): string {
-  return `Write bespoke editorial copy for Slides 1 through 9 based on this Brand Design Manifest:
-${JSON.stringify(manifest, null, 2)}
+export function buildDeckBatch1Prompt(brief: TemplateBrief, brand: BrandTokens): string {
+  return `Author Batch 1 (Slides 1–9) for:
+Publication: "${brand.name}"
+Domain: "${brand.domain}"
+Tone: "${brand.vibe}"
 
-Return a JSON array of 9 slide objects:
-[
-  {
-    "slideNumber": 1,
-    "archetype": "Cover",
-    "kicker": "ESSAY / REPORT",
-    "headline": "Commanding title (max 7 words)",
-    "subhead": "Deep narrative deck (2 sentences)",
-    "authorOrAttribution": "Byline / Editorial Board"
-  },
-  {
-    "slideNumber": 2,
-    "archetype": "Catalog",
-    "kicker": "CORE POSTULATES",
-    "headline": "Section title",
-    "items": [
-      { "index": "01", "kicker": "TITLE 1", "body": "25-30 words of domain journalism." },
-      { "index": "02", "kicker": "TITLE 2", "body": "25-30 words of domain journalism." },
-      { "index": "03", "kicker": "TITLE 3", "body": "25-30 words of domain journalism." }
-    ]
-  },
-  {
-    "slideNumber": 3,
-    "archetype": "ImageSplit",
-    "kicker": "SPATIAL ANALYSIS",
-    "headline": "Observation title",
-    "bodyText": "Deep analytical critique explaining the visual exhibit (40-50 words).",
-    "authorOrAttribution": "FIG. 01 — ARCHITECTURAL ELEVATION"
-  },
-  {
-    "slideNumber": 4,
-    "archetype": "Telemetry",
-    "kicker": "EMPIRICAL DATA",
-    "headline": "Metrics title",
-    "stats": [
-      { "value": "88.4", "unit": "%", "label": "METRIC A", "context": "One-line context sentence." },
-      { "value": "3.8", "unit": "x", "label": "METRIC B", "context": "One-line context sentence." },
-      { "value": "-45", "unit": "%", "label": "METRIC C", "context": "One-line context sentence." },
-      { "value": "99.2", "unit": "%", "label": "METRIC D", "context": "One-line context sentence." }
-    ]
-  },
-  {
-    "slideNumber": 5,
-    "archetype": "Dialogue",
-    "kicker": "ANALYTICAL INQUIRY",
-    "headline": "Inquiry title",
-    "claimVsRecord": {
-      "claim": "Provocative question being investigated?",
-      "recordTitle": "REVIEW BOARD COMMENTARY",
-      "recordBody": "Definitive analytical verdict (40-50 words)."
-    }
-  },
-  {
-    "slideNumber": 6,
-    "archetype": "Quadrant",
-    "kicker": "THE VALUE MATRIX",
-    "headline": "Matrix title",
-    "quadrants": [
-      { "quadrantNumber": "I", "title": "Quadrant Name", "body": "20-word description.", "isHero": false },
-      { "quadrantNumber": "II", "title": "Target Hero Quadrant", "body": "20-word description.", "isHero": true },
-      { "quadrantNumber": "III", "title": "Legacy Trap", "body": "20-word description.", "isHero": false },
-      { "quadrantNumber": "IV", "title": "Alternative Model", "body": "20-word description.", "isHero": false }
-    ]
-  },
-  {
-    "slideNumber": 7,
-    "archetype": "CaseStudy",
-    "kicker": "LONGITUDINAL STUDY",
-    "headline": "Case study title",
-    "caseStudy": {
-      "hypothesis": "Initial observation or baseline limitation.",
-      "intervention": "Strategic structural or architectural shift enacted.",
-      "result": "Empirically validated outcome and compounding benefit."
-    }
-  },
-  {
-    "slideNumber": 8,
-    "archetype": "Debunk",
-    "kicker": "CORRECTION",
-    "headline": "Myth vs Record title",
-    "claimVsRecord": {
-      "claim": "The common unverified myth or flawed assumption.",
-      "recordTitle": "THE DOCUMENTED RECORD",
-      "recordBody": "Authoritative reality backed by empirical observation (35-45 words)."
-    }
-  },
-  {
-    "slideNumber": 9,
-    "archetype": "Grid",
-    "kicker": "TAXONOMY",
-    "headline": "Pillars or components title",
-    "items": [
-      { "index": "01", "kicker": "PILLAR 1", "body": "20-word analysis." },
-      { "index": "02", "kicker": "PILLAR 2", "body": "20-word analysis." },
-      { "index": "03", "kicker": "PILLAR 3", "body": "20-word analysis." },
-      { "index": "04", "kicker": "PILLAR 4", "body": "20-word analysis." }
-    ]
-  }
-]`;
+Archetypes to produce (strictly in this order):
+1. cover: { "id": "slide-1", "type": "cover", "headline": "...", "subheadline": "...", "kicker": "...", "authorName": "...", "authorRole": "..." }
+2. list: { "id": "slide-2", "type": "list", "title": "...", "items": [{ "tag": "...", "title": "...", "takeaway": "..." }, { ... }, { ... }] }
+3. image-split: { "id": "slide-3", "type": "image-split", "headline": "...", "label": "...", "observation": "...", "notes": ["...", "..."] }
+4. telemetry: { "id": "slide-4", "type": "telemetry", "headline": "...", "metrics": [{ "value": "+34%", "label": "...", "context": "..." }, { "value": "$1.2T", "label": "...", "context": "..." }, { "value": "4.2ms", "label": "...", "context": "..." }] }
+5. dialogue: { "id": "slide-5", "type": "dialogue", "topic": "...", "speaker": "...", "role": "...", "thesis": "...", "counterThesis": "..." }
+6. quadrant: { "id": "slide-6", "type": "quadrant", "headline": "...", "quadrants": [{ "quadrant": "Q1", "title": "...", "body": "..." }, { "quadrant": "Q2", ... }, { "quadrant": "Q3", ... }, { "quadrant": "Q4", ... }] }
+7. case-study: { "id": "slide-7", "type": "case-study", "headline": "...", "subject": "...", "before": "...", "after": "...", "takeaway": "...", "impact": { "value": "2.4x", "label": "..." } }
+8. debunk: { "id": "slide-8", "type": "debunk", "headline": "...", "myth": { "title": "THE MYTH", "text": "..." }, "reality": { "title": "THE REALITY", "text": "..." } }
+9. grid: { "id": "slide-9", "type": "grid", "headline": "...", "cards": [{ "index": "01", "title": "...", "desc": "..." }, { "index": "02", ... }, { "index": "03", ... }] }
+
+Return strictly JSON array: [ ... 9 slide objects ... ]`;
 }
 
-export function buildEditorialBatch2UserPrompt(manifest: any): string {
-  return `Write bespoke editorial copy for Slides 10 through 17 based on this Brand Design Manifest:
-${JSON.stringify(manifest, null, 2)}
+export function buildDeckBatch2Prompt(brief: TemplateBrief, brand: BrandTokens): string {
+  return `Author Batch 2 (Slides 10–17) for:
+Publication: "${brand.name}"
+Domain: "${brand.domain}"
+Tone: "${brand.vibe}"
 
-Return a JSON array of 8 slide objects:
-[
-  {
-    "slideNumber": 10,
-    "archetype": "Timeline",
-    "kicker": "CHRONOLOGY",
-    "headline": "Methodology or evolution title",
-    "milestones": [
-      { "phase": "1920s", "title": "ERA OR STAGE 1", "body": "25-word historical context." },
-      { "phase": "1980s", "title": "ERA OR STAGE 2", "body": "25-word transitional shift." },
-      { "phase": "PRESENT", "title": "CONTEMPORARY SYNTHESIS", "body": "25-word modern resolution." }
-    ]
-  },
-  {
-    "slideNumber": 11,
-    "archetype": "Pullquote",
-    "kicker": "CITATION",
-    "headline": "Insight title",
-    "thesisQuote": "A profound, memorable statement (15-25 words) that crystallizes the domain thesis.",
-    "authorOrAttribution": "Key Luminary / Thinker Name",
-    "subhead": "Professional Title / Historic Affiliation"
-  },
-  {
-    "slideNumber": 12,
-    "archetype": "HeroCTA",
-    "kicker": "DISPATCH ARCHIVE",
-    "headline": "Direct action headline",
-    "bodyText": "Closing mandate explaining why the reader must engage or subscribe (35 words).",
-    "cta": {
-      "buttonText": "EXPLORE THE MANIFESTO",
-      "socialHandle": "@BRANDHANDLE"
-    }
-  },
-  {
-    "slideNumber": 13,
-    "archetype": "HeroStat",
-    "kicker": "CRITICAL FINDING",
-    "headline": "Significance title",
-    "stats": [
-      {
-        "value": "84",
-        "unit": "%",
-        "label": "CORE METRIC NAME",
-        "context": "Contextual explanation of why this singular statistic is transformative (30 words)."
-      }
-    ]
-  },
-  {
-    "slideNumber": 14,
-    "archetype": "StepByStep",
-    "kicker": "PROTOCOL",
-    "headline": "Methodological flow title",
-    "steps": [
-      { "stepNumber": "PHASE 01", "title": "Step 1 Title", "body": "20-word instruction." },
-      { "stepNumber": "PHASE 02", "title": "Step 2 Title", "body": "20-word instruction." },
-      { "stepNumber": "PHASE 03", "title": "Step 3 Title", "body": "20-word instruction." }
-    ]
-  },
-  {
-    "slideNumber": 15,
-    "archetype": "DosAndDonts",
-    "kicker": "PARADIGM",
-    "headline": "Comparative standards title",
-    "dosAndDonts": {
-      "legacyItems": [
-        "First outdated or flawed behavior to reject.",
-        "Second habit that drains resources or clarity.",
-        "Third misconception to discard."
-      ],
-      "proposedItems": [
-        "First disciplined principle to adopt.",
-        "Second high-leverage practice that compounds value.",
-        "Third non-negotiable operational standard."
-      ]
-    }
-  },
-  {
-    "slideNumber": 16,
-    "archetype": "Checklist",
-    "kicker": "AUDIT",
-    "headline": "Diagnostic checklist title",
-    "checklist": [
-      { "text": "First rigorous diagnostic evaluation question?", "checked": true },
-      { "text": "Second diagnostic evaluation question?", "checked": false },
-      { "text": "Third diagnostic evaluation question?", "checked": true },
-      { "text": "Fourth diagnostic evaluation question?", "checked": true }
-    ]
-  },
-  {
-    "slideNumber": 17,
-    "archetype": "Anatomy",
-    "kicker": "SYSTEM TOPOLOGY",
-    "headline": "Anatomy breakdown title",
-    "callouts": [
-      { "tag": "01. SUBSYSTEM", "title": "Component One", "body": "15-word breakdown." },
-      { "tag": "02. SUBSYSTEM", "title": "Component Two", "body": "15-word breakdown." },
-      { "tag": "03. SUBSYSTEM", "title": "Component Three", "body": "15-word breakdown." },
-      { "tag": "04. SUBSYSTEM", "title": "Component Four", "body": "15-word breakdown." }
-    ]
-  }
-]`;
+Archetypes to produce (strictly in this order):
+10. timeline: { "id": "slide-10", "type": "timeline", "headline": "...", "phases": [{ "phase": "01", "label": "...", "detail": "..." }, { "phase": "02", ... }, { "phase": "03", ... }] }
+11. pullquote: { "id": "slide-11", "type": "pullquote", "quote": "...", "attribution": "...", "role": "..." }
+12. hero-cta: { "id": "slide-12", "type": "hero-cta", "headline": "...", "kicker": "...", "action": "...", "handle": "${brand.handle}" }
+13. hero-stat: { "id": "slide-13", "type": "hero-stat", "headline": "...", "stat": { "value": "94.8%", "label": "...", "detail": "..." } }
+14. step-by-step: { "id": "slide-14", "type": "step-by-step", "headline": "...", "steps": [{ "step": "1", "title": "...", "body": "..." }, { "step": "2", ... }, { "step": "3", ... }] }
+15. dos-and-donts: { "id": "slide-15", "type": "dos-and-donts", "headline": "...", "do": { "title": "RECOMMENDED", "body": "..." }, "dont": { "title": "AVOID", "body": "..." } }
+16. checklist: { "id": "slide-16", "type": "checklist", "headline": "...", "items": [{ "check": true, "title": "...", "note": "..." }, { ... }, { ... }, { ... }] }
+17. anatomy: { "id": "slide-17", "type": "anatomy", "headline": "...", "components": [{ "label": "...", "desc": "..." }, { "label": "...", "desc": "..." }, { "label": "...", "desc": "..." }] }
+
+Return strictly JSON array: [ ... 8 slide objects ... ]`;
 }
 
-// ======================================================================
-// PASS 3: MASTER HTML/CSS ASSEMBLY
-// ======================================================================
+// ============================================================================
+// PASS 3: SINGLE SLIDE REACT + TAILWIND COMPONENT
+// ============================================================================
 
-export function buildAssemblySystemPrompt(): string {
-  return `You are a Principal UI Front-End Engineer & Typographer specializing in production-grade editorial publication templates.
+export function buildSingleSlideSystemPrompt(): string {
+  return `You are a world-class Frontend Engineer and Editorial Art Director.
+You write bespoke React components using Tailwind CSS for editorial publication carousels.
 
-Your sole job is to compile the provided Design Manifest and Editorial Copy into a single-file, standalone HTML5 document.
+CRITICAL DESIGN & CODING RULES:
+1. Component Signature:
+   import React from 'react';
+   import type { SlideComponentProps } from '../../../src/skeleton/types';
 
-======================================================================
-CRITICAL ARCHITECTURAL STANDARD: THREE-TIER CANVAS SYSTEM (1080x1350)
-======================================================================
-The canvas MUST be constructed using the persistent 3-tier editorial structure:
-
-1. GLOBAL CANVAS CONTAINER:
-   <div id="export-canvas" class="canvas-container font-sans text-ink bg-paper w-[1080px] h-[1350px] relative overflow-hidden shadow-2xl mx-auto mt-[60px]">
-
-2. PINNED GLOBAL MASTHEAD PLACARD (HEADER):
-   Pinned to canvas top:
-   <div class="absolute top-[50px] left-[70px] right-[70px] z-50 flex justify-between items-end border-b-2 border-ink pb-4">
-     <div class="flex flex-col">
-       <span class="font-display font-bold text-[28px] tracking-tight uppercase text-ink leading-none">{{TEMPLATE_TITLE}}</span>
-       <span class="font-mono text-[13px] text-graphite mt-1 uppercase tracking-widest">{{DOMAIN_OR_SERIES}}</span>
-     </div>
-     <div class="text-right">
-       <span id="global-tag" class="font-mono font-bold text-[14px] uppercase tracking-widest text-accent">{{CATEGORY_TAG}}</span>
-     </div>
-   </div>
-
-3. PINNED GLOBAL FOOTER PLACARD (FOOTER):
-   Pinned to canvas bottom:
-   <div class="absolute bottom-[50px] left-[70px] right-[70px] z-50 flex justify-between items-center border-t border-hairline pt-4 font-mono text-[14px] uppercase tracking-widest text-graphite">
-     <span>{{BRAND_OR_HANDLE}}</span>
-     <div class="flex items-center gap-4">
-       <span>FOLIO</span>
-       <span id="page-num" class="font-bold text-ink text-[18px]">01</span>
-     </div>
-   </div>
-
-4. CONTENT SAFE AREA:
-   <div class="absolute top-[150px] bottom-[130px] left-[70px] right-[70px] z-30">
-     <!-- All 8 slide layers live here -->
-     <div id="slide-1" class="slide-layer active">...</div>
-     <div id="slide-2" class="slide-layer">...</div>
-     ...
-     <div id="slide-8" class="slide-layer">...</div>
-   </div>
-
-5. MANDATORY CSS IN <style>:
-   You MUST include:
-   <script src="https://cdn.tailwindcss.com"></script> (NEVER an outdated link tag).
-   And in <style>:
-   .canvas-container, #export-canvas {
-     width: 1080px;
-     height: 1350px;
-     position: relative;
-     overflow: hidden;
-     box-sizing: border-box;
-   }
-   .slide-layer {
-     display: none;
-     width: 100%;
-     height: 100%;
-     position: absolute;
-     inset: 0;
-   }
-   .slide-layer.active {
-     display: flex;
-     flex-direction: column;
+   export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
+     return ( ... );
    }
 
-======================================================================
-MANDATORY ARCHITECTURAL CLASS RECIPES FOR EACH SLIDE (NON-NEGOTIABLE)
-======================================================================
-Every slide MUST be constructed using these exact Tailwind structural recipes to ensure publication-grade graphic design richness and zero layout bugs:
+2. Styling & Theme Integration:
+   - Use Tailwind CSS classes for layout, flexbox, grid, padding, rounded corners, and typography.
+   - Use CSS variables for brand colors and fonts:
+     * bg-[var(--surface)] for cards/panels
+     * text-[var(--ink)] for body text
+     * text-[var(--accent)] or bg-[var(--accent)] for accents, badges, highlights
+     * border-[var(--border)] for card borders and hairlines
+     * font-[var(--font-headline)] for titles, quotes, hero numbers
+     * font-[var(--font-body)] for body copy and descriptions
+     * font-[var(--font-mono)] for metrics, tags, indices
+   - Card styling: Elegant borders (border border-[var(--border)]), subtle shadows, rounded-lg or rounded-xl.
 
-- SLIDE 1 (COVER):
-  <div id="slide-1" class="slide-layer active">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="pt-4">
-        <div class="w-16 h-1 bg-accent mb-8"></div>
-        <h1 class="font-display font-bold text-[115px] leading-[0.92] tracking-tight balance-text text-ink clamp-4">
-          <!-- headline -->
-        </h1>
-        <p class="font-sans text-[30px] leading-[1.3] text-graphite mt-8 max-w-[850px] clamp-3">
-          <!-- subhead -->
-        </p>
-      </div>
-      <div class="flex gap-12 items-end pt-8 border-t-2 border-ink pb-4">
-        <div class="w-[35%] font-mono text-[16px] uppercase tracking-widest text-graphite">
-          <!-- authorOrAttribution -->
-        </div>
-        <div class="w-[65%] font-display italic text-[36px] leading-[1.3] text-ink pl-8 border-l-2 border-accent">
-          "<!-- thesisQuote -->"
-        </div>
-      </div>
-    </div>
-  </div>
+3. Spatial Balance Rule (75%–90% Vertical Fill):
+   - Zero top-heavy clumping: do not cram all content into the top 20% leaving an empty void at the bottom.
+   - Distribute space vertically using \`flex flex-col justify-between h-full\`, \`gap-6\`, or generous card padding (\`p-8\`).
+   - If content is short, center it optically with generous line heights and larger font scales.
 
-- SLIDE 2 (CATALOG / LIST):
-  <div id="slide-2" class="slide-layer">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[72px] leading-none text-ink"><!-- headline --></h2>
-      </div>
-      <div class="flex-1 flex flex-col justify-around border-b border-hairline">
-        <!-- 3 Items, each with: -->
-        <div class="flex items-start gap-8 py-6 border-t border-hairline">
-          <span class="font-display italic text-[60px] text-graphite w-20 shrink-0 leading-none"><!-- index --></span>
-          <div>
-            <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-2 block"><!-- kicker --></span>
-            <p class="font-sans text-[28px] text-graphite leading-[1.35]"><!-- body --></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+4. Slide-Specific Art Direction:
+   - cover: Massive headline (\`text-6xl\` or \`text-7xl\` font-bold tracking-tight), subtle category pill, editorial subheadline, author credits bar.
+   - list: 3 distinct cards with accent tag, clear bold title, and takeaway subtext.
+   - image-split: Two-column layout with an editorial diagram placeholder frame on one side and structured analytical notes on the other.
+   - telemetry: 3-4 metric cards. Numbers must be large and prominent (\`text-5xl\` or \`text-6xl\` font-mono font-bold), with percentage badges and concise context.
+   - dialogue: Dramatic Q&A with oversized drop-caps or quotation marks.
+   - debunk: Side-by-side or stacked comparative cards contrasting Myth (subtle muted/red) vs Reality (accent/green).
+   - pullquote: Large italic quote with 4px brand accent border (\`border-l-4 border-[var(--accent)] pl-8\`).
+   - hero-stat: Single massive stat (\`text-8xl\` or \`text-9xl\` font-mono) dominating the upper frame with deep analytical paragraph below.
 
-- SLIDE 3 (TELEMETRY / 2x2 METRICS):
-  <div id="slide-3" class="slide-layer">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[72px] leading-none text-ink"><!-- headline --></h2>
-      </div>
-      <div class="flex-1 grid grid-cols-2 gap-x-16 gap-y-12 items-center content-center my-auto">
-        <!-- 4 Stats, each with 4px accent spine: -->
-        <div class="flex flex-col justify-end pl-8 border-l-4 border-accent bg-surface p-6 border-y border-r border-hairline">
-          <span class="font-display font-bold text-[115px] leading-none text-ink"><!-- value --><span class="text-[50px] font-sans font-normal"><!-- unit --></span></span>
-          <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-3"><!-- label --></span>
-          <p class="font-sans italic text-[24px] text-graphite leading-[1.3] mt-2"><!-- context --></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-- SLIDE 4 (FRAMEWORK / SYSTEM ANATOMY):
-  <div id="slide-4" class="slide-layer">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[72px] leading-none text-ink"><!-- headline --></h2>
-      </div>
-      <div class="flex-1 grid grid-cols-3 gap-8 items-stretch content-center my-auto">
-        <!-- 3 Pillars: -->
-        <div class="p-8 bg-surface border border-hairline flex flex-col justify-between">
-          <div>
-            <span class="font-mono text-[22px] font-bold text-accent mb-4 block"><!-- index --></span>
-            <h3 class="font-display font-bold text-[26px] leading-[1.2] text-ink mb-4 break-words hyphens-auto uppercase tracking-wide"><!-- kicker --></h3>
-            <p class="font-sans text-[22px] leading-[1.4] text-graphite"><!-- body --></p>
-          </div>
-          <div class="w-16 h-1 bg-accent mt-8"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-- SLIDE 5 (CHRONOLOGY / STEM TIMELINE):
-  <div id="slide-5" class="slide-layer">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[72px] leading-none text-ink"><!-- headline --></h2>
-      </div>
-      <div class="flex-1 flex flex-col justify-around pl-16 border-l-2 border-hairline ml-8 my-4 relative">
-        <!-- 3 Timeline Events: -->
-        <div class="relative flex flex-col gap-2">
-          <div class="absolute -left-[73px] top-2 w-4 h-4 bg-accent rounded-full border-2 border-paper"></div>
-          <span class="font-mono text-[32px] text-accent font-bold"><!-- index/year --></span>
-          <h3 class="font-display font-bold text-[36px] leading-[1.15] text-ink"><!-- kicker --></h3>
-          <p class="font-sans text-[26px] text-graphite leading-[1.4] max-w-[800px]"><!-- body --></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-- SLIDE 6 (DEBUNK / JUXTAPOSITION):
-  <div id="slide-6" class="slide-layer">
-    <div class="flex flex-col h-full justify-between py-6">
-      <div class="shrink-0 mb-8 border-b-2 border-ink pb-4">
-        <h2 class="font-display font-bold text-[72px] leading-none text-ink"><!-- headline --></h2>
-      </div>
-      <div class="flex-1 flex items-stretch gap-12 my-auto">
-        <div class="w-1/2 flex flex-col justify-center pr-8 text-right bg-surface p-10 border border-hairline">
-          <span class="font-mono text-[20px] uppercase tracking-widest text-graphite mb-4 block">THE CLAIM [UNVERIFIED]</span>
-          <p class="font-sans italic text-[30px] leading-[1.35] text-graphite">"<!-- claim -->"</p>
-        </div>
-        <div class="w-[2px] bg-hairline self-stretch"></div>
-        <div class="w-1/2 flex flex-col justify-center pl-8 bg-surface p-10 border-l-4 border-accent border-y border-r border-hairline">
-          <span class="font-mono text-[20px] uppercase tracking-widest text-accent mb-4 block">THE RECORD [DOCUMENTED]</span>
-          <h3 class="font-display font-bold text-[40px] leading-[1.2] text-ink mb-4"><!-- recordTitle --></h3>
-          <p class="font-sans text-[26px] leading-[1.4] text-graphite"><!-- recordBody --></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-- SLIDE 7 (PULLQUOTE / MONOLITH):
-  <div id="slide-7" class="slide-layer">
-    <div class="flex flex-col h-full justify-center items-center text-center px-12">
-      <span class="font-display text-[96px] text-accent leading-none mb-4">“</span>
-      <blockquote class="font-display font-bold text-[52px] leading-[1.2] text-ink mb-10 max-w-[900px] clamp-4 balance-text italic">
-        <!-- thesisQuote -->
-      </blockquote>
-      <div class="pt-8 border-t-2 border-ink w-1/2 flex flex-col items-center">
-        <span class="font-sans text-[26px] font-bold text-ink uppercase tracking-widest"><!-- authorOrAttribution --></span>
-        <span class="font-mono text-[18px] uppercase tracking-widest text-graphite mt-2"><!-- subhead --></span>
-      </div>
-    </div>
-  </div>
-
-- SLIDE 8 (HERO METRIC & DIRECTIVE CTA):
-  <div id="slide-8" class="slide-layer">
-    <div class="flex flex-col h-full justify-between items-center text-center py-6">
-      <div class="flex flex-col items-center pt-4">
-        <span class="font-display font-bold text-[180px] leading-none text-accent"><!-- stats[0].value --></span>
-        <h2 class="font-display font-bold text-[52px] text-ink mt-2 mb-4"><!-- stats[0].label --></h2>
-        <div class="bg-surface p-8 max-w-[850px] border-t-2 border-b-2 border-ink">
-          <p class="font-sans text-[28px] text-graphite leading-[1.4]"><!-- stats[0].context or bodyText --></p>
-        </div>
-      </div>
-      <div class="pb-4 flex flex-col items-center">
-        <a href="#" class="px-12 py-5 bg-ink text-paper font-bold uppercase tracking-widest text-[24px] hover:bg-graphite transition-colors inline-block rounded-none shadow-md">
-          <!-- cta.buttonText -->
-        </a>
-        <span class="font-mono text-[16px] uppercase tracking-widest text-graphite mt-6"><!-- cta.socialHandle --></span>
-      </div>
-    </div>
-  </div>
-
-6. ZERO ABSOLUTE POSITIONING INSIDE SLIDES:
-   Never use "position: absolute" on text, dates, or cards inside a slide layer!
-   Every slide must use pure Flexbox flow:
-   <div class="flex flex-col h-full justify-between py-6">
-   This guarantees ZERO text collisions and perfect 75%–90% vertical frame fill.
-
-7. INLINE REAL EDITORIAL COPY (NEVER OUTPUT PLACEHOLDERS):
-   You MUST bake the ACTUAL copy strings, headlines, numbers, quotes, and author attributions from the provided EDITORIAL SLIDES CONTENT directly into the HTML markup!
-   NEVER leave template variables like {{headline}}, {{thesisQuote}}, {{bodyText}}, or {{subhead}}.
-   Every slide must contain the rich, specific, real journalism written in Pass 2.
-
-8. FULL PREVIEW HARNESS SCRIPT:
-   Include the top web control bar and JavaScript that handles slide transitions, keyboard arrows, and syncs #page-num.
-
-CRITICAL: Return ONLY valid, complete HTML5 starting with <!DOCTYPE html> and ending with </html>. Do NOT wrap in markdown code blocks.`;
+5. Technical Constraints:
+   - Output ONLY self-contained React TypeScript JSX code in a \`\`\`tsx code block.
+   - NO external dependencies or icon libraries (no lucide-react, no react-icons). Use pure SVG or Tailwind.
+   - Do NOT wrap in the outer 1080x1350 frame or header/footer—the framework's SlideFrame already provides those.
+   - Return valid JSX without syntax errors.`;
 }
 
-export function buildAssemblyUserPrompt(manifest: any, slides: any): string {
-  return `Assemble the final single-file HTML design reference using this Design Manifest and Editorial Content:
+export function buildSingleSlideUserPrompt(
+  slideNumber: number,
+  slideData: SlideData,
+  brand: BrandTokens
+): string {
+  return `Generate the React + Tailwind component for Slide ${slideNumber}:
+Archetype: "${slideData.type}"
+Slide Data:
+${JSON.stringify(slideData, null, 2)}
 
-DESIGN MANIFEST:
-${JSON.stringify(manifest, null, 2)}
+Brand Context:
+- Publication: "${brand.name}"
+- Domain: "${brand.domain}"
+- Accent Color: "${brand.palette.accent}"
+- Paper Background: "${brand.palette.paper}"
+- Surface Color: "${brand.palette.surface}"
+- Border Color: "${brand.palette.border}"
 
-EDITORIAL SLIDES CONTENT:
-${JSON.stringify(slides, null, 2)}
+Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
+}
 
-INSTRUCTIONS:
-1. Interpolate every actual string (headlines, quotes, numbers, items) from EDITORIAL SLIDES CONTENT directly into the HTML elements. Do NOT output curly bracket placeholders like {{headline}} or {{thesisQuote}}.
-2. Ensure all 8 slide archetypes are fully articulated, beautiful, mobile legible, and completely free of text collisions.
-3. Begin directly with <!DOCTYPE html>.`;
+// ============================================================================
+// PASS 5: COMPILER ERROR SELF-HEALING
+// ============================================================================
+
+export function buildSelfHealingPrompt(
+  filename: string,
+  code: string,
+  compilerError: string
+): string {
+  return `The following React component failed TypeScript compilation:
+File: ${filename}
+Error Output:
+${compilerError}
+
+Original Code:
+\`\`\`tsx
+${code}
+\`\`\`
+
+Fix the syntax or type errors completely. Return ONLY the corrected code in a \`\`\`tsx code block.`;
 }

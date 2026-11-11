@@ -1,0 +1,25 @@
+{
+  "name": "The Tokyo Review",
+  "slug": "the-tokyo-review",
+  "vibe": "Minimalist Japanese architecture & spatial design. Washi paper canvas (#F5F2EB), sumi-e charcoal (#1A1918), cinnabar vermilion accent (#E85A3C), refined serif paired with clean geometric sans.",
+  "domain": "Architecture & Spatial Philosophy",
+  "palette": {
+    "paper": "#F5F2EB",
+    "ink": "#1A1918",
+    "accent": "#E85A3C",
+    "surface": "#EDE8DE",
+    "border": "#D3CCC0",
+    "subtle": "#716B62"
+  },
+  "typography": {
+    "headlineFont": "Cormorant Garamond",
+    "bodyFont": "Manrope",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+  },
+  "wordmark": "THE TOKYO REVIEW",
+  "wordmarkStyle": "serif",
+  "handle": "@thetokyoreview",
+  "texture": "washi",
+  "motif": "seal"
+}

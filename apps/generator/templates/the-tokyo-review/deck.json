@@ -1,0 +1,283 @@
+{
+  "templateName": "The Tokyo Review",
+  "templateSlug": "the-tokyo-review",
+  "domain": "Architecture & Spatial Philosophy",
+  "slides": [
+    {
+      "id": "slide-1",
+      "type": "cover",
+      "headline": "The Space Between",
+      "subheadline": "Courtyards, thresholds and the quiet negotiations between shelter and exposure. An editorial reading of Japanese domestic space.",
+      "kicker": "THE TOKYO REVIEW · ARCHITECTURE & SPATIAL PHILOSOPHY",
+      "authorName": "The Tokyo Review",
+      "authorRole": "Architecture Editorial Desk"
+    },
+    {
+      "id": "slide-2",
+      "type": "list",
+      "title": "Give the interval a job",
+      "items": [
+        {
+          "tag": "THRESHOLD",
+          "title": "Make the boundary inhabitable",
+          "takeaway": "The engawa accommodates sitting, passing and watching the garden. A common width is 1–1.3 m: an edge with enough depth to become a place."
+        },
+        {
+          "tag": "COURTYARD",
+          "title": "Bring weather into the plan",
+          "takeaway": "At Tadao Ando’s Azuma House, moving between interiors means crossing an open courtyard. Nature is not merely framed; it interrupts the domestic route."
+        },
+        {
+          "tag": "SEPARATION",
+          "title": "Let gaps connect",
+          "takeaway": "Moriyama House distributes domestic life across ten separate volumes. Garden paths become places for encounters rather than leftover space around a building."
+        }
+      ]
+    },
+    {
+      "id": "slide-3",
+      "type": "image-split",
+      "headline": "A house interrupted by sky",
+      "label": "AZUMA HOUSE · OSAKA · 1976",
+      "observation": "The street-facing concrete façade has no windows; the open courtyard brings light and weather into the interior world. Privacy is gained at the perimeter, exposure accepted at the center.",
+      "notes": [
+        "Read the courtyard as circulation, not scenery: crossing it is part of moving through the house.",
+        "Editorial reading: the compelling image is not empty concrete, but the resident’s passage between shelter and rain."
+      ]
+    },
+    {
+      "id": "slide-4",
+      "type": "telemetry",
+      "headline": "Moriyama, measured in separation",
+      "metrics": [
+        {
+          "value": "290",
+          "label": "Site area · square meters",
+          "context": "The Tokyo plot accommodates the owner’s dwelling and five rental apartments, with gardens and interconnected courtyards between volumes."
+        },
+        {
+          "value": "10",
+          "label": "Detached volumes",
+          "context": "The steel-sheet volumes do not touch. The house is an arrangement of buildings rather than a single enclosure."
+        },
+        {
+          "value": "5",
+          "label": "Rental mini-houses",
+          "context": "Each includes its own kitchenette and bathroom. Independent domestic facilities underpin the possibility of living alongside others."
+        }
+      ]
+    },
+    {
+      "id": "slide-5",
+      "type": "dialogue",
+      "topic": "The price of an open sky",
+      "speaker": "The Tokyo Review",
+      "role": "Editorial dialogue · not an architect quotation",
+      "thesis": "At Azuma House, the exposed crossing makes sunlight, wind and rain part of ordinary movement. Our reading: a route can cultivate attention as deliberately as a window frames a view.",
+      "counterThesis": "But an architectural lesson should not become a compulsory hardship. Our design position: preserve contact with weather while giving residents a sheltered alternative. Atmosphere should invite participation, not demand endurance."
+    },
+    {
+      "id": "slide-6",
+      "type": "quadrant",
+      "headline": "Read the threshold on two axes",
+      "quadrants": [
+        {
+          "quadrant": "Q1",
+          "title": "Sheltered × Private",
+          "body": "Design brief: a screened edge for solitary sitting. Keep the garden visible without making the seated resident equally visible."
+        },
+        {
+          "quadrant": "Q2",
+          "title": "Sheltered × Shared",
+          "body": "Design brief: a covered meeting edge. Allow conversation beside the circulation route, not across it."
+        },
+        {
+          "quadrant": "Q3",
+          "title": "Exposed × Private",
+          "body": "Design brief: an inward courtyard. Distinguish the pleasure of stepping into rain from the obligation to cross it."
+        },
+        {
+          "quadrant": "Q4",
+          "title": "Exposed × Shared",
+          "body": "Design brief: a garden passage with places to pause. Preserve a clear route home for the resident who does not want to socialize."
+        }
+      ]
+    },
+    {
+      "id": "slide-7",
+      "type": "case-study",
+      "headline": "The common room was not prescribed",
+      "subject": "Ryue Nishizawa · Moriyama House, Tokyo · 2002–2005",
+      "before": "Design intent: none of the individual units was intended for communal use. Five self-contained mini-houses provided rental accommodation alongside the owner’s spaces.",
+      "after": "In occupation: the owner’s living room, Unit C, became an informal common room for lunches and drinks. The paths between buildings also became places to meet.",
+      "takeaway": "Our reading: architecture can make encounters possible without scripting every encounter. Leave room for residents to assign a space its social meaning.",
+      "impact": {
+        "value": "5",
+        "label": "Rental mini-houses within the semi-communal arrangement—not a measured social-performance score."
+      }
+    },
+    {
+      "id": "slide-8",
+      "type": "debunk",
+      "headline": "White walls do not explain the house",
+      "myth": {
+        "title": "THE MYTH",
+        "text": "A restrained Japanese interior is principally a visual formula: pale surfaces, sparse furniture and nothing out of place."
+      },
+      "reality": {
+        "title": "THE REALITY",
+        "text": "At Moriyama House, ten white volumes contain a life of films, music, books and informal gatherings. Windows avoid directly facing neighboring windows. The lesson is not compulsory emptiness; it is careful separation that permits both privacy and company."
+      }
+    },
+    {
+      "id": "slide-9",
+      "type": "grid",
+      "headline": "Draw the life before the photograph",
+      "cards": [
+        {
+          "index": "01",
+          "title": "Trace the rainy route",
+          "desc": "Mark every daily crossing between rooms. Identify where exposure is optional and where the plan makes it unavoidable."
+        },
+        {
+          "index": "02",
+          "title": "Draw the reciprocal view",
+          "desc": "For each window, draw both directions of sight. A view into the garden may also be a view into someone else’s room."
+        },
+        {
+          "index": "03",
+          "title": "Leave a place unassigned",
+          "desc": "Reserve somewhere to sit, meet or withdraw without fixing its use in advance. Judge the interval by what residents can make of it."
+        }
+      ]
+    },
+    {
+      "id": "slide-10",
+      "type": "timeline",
+      "headline": "One room. A changing day.",
+      "phases": [
+        {
+          "phase": "01",
+          "label": "MORNING — RELEASE",
+          "detail": "Bedding returns to storage; the sleeping area becomes available for daytime use. An adaptable room needs somewhere for its previous function to go."
+        },
+        {
+          "phase": "02",
+          "label": "AFTERNOON — CONNECT",
+          "detail": "Sliding partitions open adjoining spaces for gathering. The boundary moves instead of requiring another permanently dedicated room."
+        },
+        {
+          "phase": "03",
+          "label": "EVENING — ENCLOSE",
+          "detail": "Partitions close and bedding returns. The same floor supports another occupation: domestic capacity measured through time, not merely area."
+        }
+      ]
+    },
+    {
+      "id": "slide-11",
+      "type": "pullquote",
+      "quote": "Before removing another object, draw where someone will sit, what they will see, and where their belongings will go.",
+      "attribution": "The Tokyo Review",
+      "role": "Original editorial principle"
+    },
+    {
+      "id": "slide-12",
+      "type": "hero-cta",
+      "headline": "Draw the pause before the room.",
+      "kicker": "A spatial exercise: trace your arrival from the front door to your usual seat. Mark the place for shoes, the first sheltered view, and every obstruction.",
+      "action": "Save this exercise. Redraw your arrival.",
+      "handle": "@thetokyoreview"
+    },
+    {
+      "id": "slide-13",
+      "type": "hero-stat",
+      "headline": "An empty floor proves very little.",
+      "stat": {
+        "value": "94.8%",
+        "label": "Unoccupied floor — hypothetical study",
+        "detail": "Illustrative calculation, not measured research: 23.7 m² clear within a 25 m² room leaves 1.3 m² occupied. The percentage says nothing about comfortable seating, accessible routes, or adequate storage. Do not mistake vacancy for generosity."
+      }
+    },
+    {
+      "id": "slide-14",
+      "type": "step-by-step",
+      "headline": "Design the room in use.",
+      "steps": [
+        {
+          "step": "1",
+          "title": "Draw the changeover",
+          "body": "Sketch sleeping, working, and hosting arrangements. For every object that moves, assign a storage location. Traditional room flexibility depends partly on putting bedding and furniture away."
+        },
+        {
+          "step": "2",
+          "title": "Separate light from view",
+          "body": "Shoji can obscure an exterior view while admitting light. Test a translucent sample at the intended opening before specifying the entire screen."
+        },
+        {
+          "step": "3",
+          "title": "Give the edge a purpose",
+          "body": "An engawa accommodates movement and sitting between room and garden. In your plan, test the seated view and the passing route together—not as separate drawings."
+        }
+      ]
+    },
+    {
+      "id": "slide-15",
+      "type": "dos-and-donts",
+      "headline": "Borrow the function, not the costume.",
+      "do": {
+        "title": "RECOMMENDED",
+        "body": "Specify what each element must accomplish: a screen filters daylight; a partition changes enclosure; an eave shelters the opening. These are working relationships, not decorative motifs."
+      },
+      "dont": {
+        "title": "AVOID",
+        "body": "Do not add a timber platform and call the boundary resolved. An engawa also depends on shelter, exposure-appropriate finishes, and drainage away from the building."
+      }
+    },
+    {
+      "id": "slide-16",
+      "type": "checklist",
+      "headline": "Approve the room after rehearsal.",
+      "items": [
+        {
+          "check": true,
+          "title": "Arrival tested",
+          "note": "Rehearse entering with shoes, a wet umbrella, and a bag. Give each a destination without occupying the onward route."
+        },
+        {
+          "check": true,
+          "title": "Storage tested",
+          "note": "Put away the actual bedding and movable furniture. Confirm that the proposed daytime arrangement can genuinely be achieved."
+        },
+        {
+          "check": true,
+          "title": "Light tested",
+          "note": "Review the screen sample from the intended seat in morning and afternoon light, then check privacy with the interior illuminated."
+        },
+        {
+          "check": true,
+          "title": "Movement tested",
+          "note": "Mock up partitions and furniture at full scale. Walk the route with doors open and closed; include the mobility aids occupants use."
+        }
+      ]
+    },
+    {
+      "id": "slide-17",
+      "type": "anatomy",
+      "headline": "The boundary has depth.",
+      "components": [
+        {
+          "label": "EAVE — SHELTER",
+          "desc": "The roof projects beyond the enclosure to shade openings and reduce rain exposure. Protection begins before the wall."
+        },
+        {
+          "label": "ENGAWA — OCCUPIABLE EDGE",
+          "desc": "A timber or bamboo floor strip provides a place to pass, sit, and face the garden. Common widths are 1–1.3 m; large temples may have over 3 metres."
+        },
+        {
+          "label": "SHOJI — FILTER",
+          "desc": "The sliding wood-and-paper screen softens daylight; closing it can obscure the view without extinguishing the changing light outside.​"
+        }
+      ]
+    }
+  ]
+}

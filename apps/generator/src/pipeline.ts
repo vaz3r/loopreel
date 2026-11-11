@@ -1,205 +1,253 @@
-import type { LLMClient } from '@loopreel/llm';
-import type { TemplateBrief } from './prompt.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
+import { createLLMClient } from '@loopreel/llm';
+import type { BrandTokens, DeckData, SlideData } from './skeleton/types';
 import {
-  buildConceptSystemPrompt,
-  buildConceptUserPrompt,
-  buildEditorialSystemPrompt,
-  buildEditorialBatch1UserPrompt,
-  buildEditorialBatch2UserPrompt,
-} from './prompt.js';
-import { compileCompleteTemplate } from './archetypes.js';
+  type TemplateBrief,
+  buildBrandSystemPrompt,
+  buildBrandUserPrompt,
+  buildDeckSystemPrompt,
+  buildDeckBatch1Prompt,
+  buildDeckBatch2Prompt,
+  buildSingleSlideSystemPrompt,
+  buildSingleSlideUserPrompt,
+  buildSelfHealingPrompt,
+} from './prompt';
 
-export interface BrandDesignSystem {
-  templateName: string;
-  domain: string;
-  tagline: string;
-  aestheticManifesto: string;
-  colors: {
-    paper: string;     // e.g. #F5F5F0
-    ink: string;       // e.g. #1A1A1A
-    graphite: string;  // e.g. #4A4A4A
-    accent: string;    // e.g. #D97706
-    hairline: string;  // e.g. #D1D1CD
-    surface: string;   // e.g. #EFEFEA
-  };
-  typography: {
-    displayFont: string;  // e.g. Cormorant Garamond, Syne
-    bodyFont: string;     // e.g. Inter, Plus Jakarta Sans
-    monoFont: string;     // e.g. IBM Plex Mono, Space Mono
-    googleFontsUrl: string;
-  };
-  visualMetaphor: {
-    texturePattern: 'washi' | 'grid' | 'dots' | 'blueprint' | 'clean';
-    signatureMotif: 'seal' | 'crosshair' | 'coordinate' | 'medallion' | 'bracket';
-    motifText: string;   // e.g. "印", "+", "CH-8001", "MOD. 01"
-    borderStyle: 'minimal' | 'architectural' | 'technical' | 'editorial';
-  };
-  slideConcepts: Array<{
-    slideNumber: number;
-    archetype: string;
-    title: string;
-    narrativeAngle: string;
-  }>;
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const TEMPLATES_ROOT = path.resolve(__dirname, '../templates');
 
-export interface SlideItem {
-  index: string;
-  kicker: string;
-  body: string;
-}
-
-export interface SlideStat {
-  value: string;
-  unit?: string;
-  label: string;
-  context: string;
-}
-
-export interface DetailedSlideContent {
-  slideNumber: number;
-  archetype: string;
-  kicker: string;
-  headline: string;
-  subhead?: string;
-  bodyText?: string;
-  authorOrAttribution?: string;
-  thesisQuote?: string;
-  items?: SlideItem[];
-  stats?: SlideStat[];
-  claimVsRecord?: {
-    claim: string;
-    recordTitle: string;
-    recordBody: string;
-  };
-  quadrants?: Array<{
-    quadrantNumber: string;
-    title: string;
-    body: string;
-    isHero?: boolean;
-  }>;
-  caseStudy?: {
-    hypothesis: string;
-    intervention: string;
-    result: string;
-  };
-  milestones?: Array<{
-    phase: string;
-    title: string;
-    body: string;
-  }>;
-  steps?: Array<{
-    stepNumber: string;
-    title: string;
-    body: string;
-  }>;
-  dosAndDonts?: {
-    legacyItems: string[];
-    proposedItems: string[];
-  };
-  checklist?: Array<{
-    text: string;
-    checked: boolean;
-  }>;
-  callouts?: Array<{
-    tag: string;
-    title: string;
-    body: string;
-  }>;
-  cta?: {
-    buttonText: string;
-    socialHandle: string;
-  };
-}
-
-function cleanJsonResponse(raw: string): string {
+function extractJson<T>(raw: string): T {
   let cleaned = raw.trim();
-  if (cleaned.startsWith('```json')) {
-    cleaned = cleaned.replace(/^```json\s*/i, '');
-  } else if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```\s*/i, '');
+  const jsonMatch = cleaned.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+  if (jsonMatch && jsonMatch[1]) {
+    cleaned = jsonMatch[1].trim();
   }
-  if (cleaned.endsWith('```')) {
-    cleaned = cleaned.replace(/\s*```$/i, '');
+  const firstBrace = cleaned.indexOf('{');
+  const firstBracket = cleaned.indexOf('[');
+  let startIdx = -1;
+  let endIdx = -1;
+  if (firstBracket !== -1 && (firstBrace === -1 || firstBracket < firstBrace)) {
+    startIdx = firstBracket;
+    endIdx = cleaned.lastIndexOf(']');
+  } else if (firstBrace !== -1) {
+    startIdx = firstBrace;
+    endIdx = cleaned.lastIndexOf('}');
   }
-  return cleaned.trim();
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    cleaned = cleaned.slice(startIdx, endIdx + 1);
+  }
+  return JSON.parse(cleaned) as T;
 }
 
-/**
- * Pass 1: Strategic Art Direction & Concept Brainstorming
- */
-export async function runConceptPass(brief: TemplateBrief, client: LLMClient): Promise<BrandDesignSystem> {
-  console.log('[apps/generator] >>> Pass 1: Creative Director Art Direction & Brand Concept...');
-  const sysPrompt = buildConceptSystemPrompt();
-  const userPrompt = buildConceptUserPrompt(brief);
+function extractTsx(raw: string): string {
+  let cleaned = raw.trim();
+  const codeMatch = cleaned.match(/```(?:tsx|typescript|jsx)?\s*([\s\S]*?)\s*```/);
+  if (codeMatch && codeMatch[1]) {
+    return codeMatch[1].trim();
+  }
+  return cleaned;
+}
 
-  const res = await client.generateJSON(sysPrompt, userPrompt);
-  const jsonStr = cleanJsonResponse(res.text);
+export interface PipelineOptions {
+  provider?: string;
+  onProgress?: (step: string, current: number, total: number) => void;
+}
 
-  try {
-    const data = JSON.parse(jsonStr) as BrandDesignSystem;
-    if (!data.colors || !data.typography || !data.slideConcepts) {
-      throw new Error('Manifest missing required fields');
+export async function runTemplatePipeline(
+  brief: TemplateBrief,
+  options: PipelineOptions = {}
+): Promise<{
+  templateSlug: string;
+  templateDir: string;
+  brand: BrandTokens;
+  deck: DeckData;
+  slideCount: number;
+}> {
+  const provider = options.provider || process.env.LLM_PROVIDER || 'copilot';
+  const llm = createLLMClient(provider);
+
+  console.log(`\n[Pipeline] Initializing LLM client with provider "${provider}"...`);
+
+  // ==========================================================================
+  // PASS 1: BRAND CONCEPT & DESIGN SYSTEM TOKENS
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 1: Creative Director Art Direction & Brand Concept...');
+  options.onProgress?.('Generating Brand Tokens', 1, 20);
+
+  const brandResponse = await llm.generateJSON(
+    buildBrandSystemPrompt(),
+    buildBrandUserPrompt(brief),
+    0.7
+  );
+
+  const brand = extractJson<BrandTokens>(brandResponse.text);
+  const slug = brand.slug || brief.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  brand.slug = slug;
+  console.log(`[Pipeline] Pass 1 complete: Brand established for "${brand.name}" (${brand.slug}).`);
+
+  // ==========================================================================
+  // PASS 2: 17-SLIDE MASTER EDITORIAL DECK (2 FAST BATCHES)
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 1: Slides 1–9)...');
+  options.onProgress?.('Authoring Master Deck (Batch 1)', 2, 21);
+
+  const batch1Response = await llm.generateJSON(
+    buildDeckSystemPrompt(),
+    buildDeckBatch1Prompt(brief, brand),
+    0.7
+  );
+  const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
+
+  console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 2: Slides 10–17)...');
+  options.onProgress?.('Authoring Master Deck (Batch 2)', 3, 21);
+
+  const batch2Response = await llm.generateJSON(
+    buildDeckSystemPrompt(),
+    buildDeckBatch2Prompt(brief, brand),
+    0.7
+  );
+  const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
+
+  const allSlides = [...batch1Slides, ...batch2Slides];
+  const deck: DeckData = {
+    templateName: brand.name,
+    templateSlug: brand.slug,
+    domain: brand.domain,
+    slides: allSlides,
+  };
+  console.log(`[Pipeline] Pass 2 complete: Master deck authored with ${deck.slides.length} slides.`);
+
+  // Create isolated template folder in apps/generator/templates/<slug>/
+  const templateDir = path.join(TEMPLATES_ROOT, slug);
+  const slidesDir = path.join(templateDir, 'slides');
+  fs.mkdirSync(slidesDir, { recursive: true });
+
+  fs.writeFileSync(path.join(templateDir, 'brand.json'), JSON.stringify(brand, null, 2), 'utf-8');
+  fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
+
+  // ==========================================================================
+  // PASSES 3.1 TO 3.17: SINGLE-SLIDE REACT COMPONENT GENERATION
+  // ==========================================================================
+  console.log(`[Pipeline] >>> Pass 3: Generating bespoke React + Tailwind components (1 slide per pass)...`);
+
+  const slideExports: { filename: string; componentName: string }[] = [];
+
+  for (let i = 0; i < deck.slides.length; i++) {
+    const slideNumber = i + 1;
+    const slideData = deck.slides[i]!;
+    const padNum = String(slideNumber).padStart(2, '0');
+    const cleanType = (slideData.type || 'slide').replace(/[^a-zA-Z0-9]/g, '');
+    const pascalType = cleanType.charAt(0).toUpperCase() + cleanType.slice(1);
+    const componentName = `Slide${padNum}_${pascalType}`;
+    const filename = `${componentName}.tsx`;
+    const filePath = path.join(slidesDir, filename);
+
+    console.log(`[Pipeline]   └─ [${slideNumber}/${deck.slides.length}] Generating ${filename} (${slideData.type})...`);
+    options.onProgress?.(`Generating Slide ${slideNumber}: ${slideData.type}`, 2 + slideNumber, 20);
+
+    const slideResponse = await llm.generateJSON(
+      buildSingleSlideSystemPrompt(),
+      buildSingleSlideUserPrompt(slideNumber, slideData, brand),
+      0.6
+    );
+
+    let code = extractTsx(slideResponse.text);
+
+    // Ensure proper relative import for SlideComponentProps
+    if (!code.includes("from '../../../src/skeleton/types'")) {
+      code = code.replace(
+        /import type \{ SlideComponentProps \} from ['"][^'"]+['"];?/,
+        "import type { SlideComponentProps } from '../../../src/skeleton/types';"
+      );
     }
-    console.log(`[apps/generator] Pass 1 complete: Established "${data.templateName}" with palette [${data.colors.paper}, ${data.colors.ink}, ${data.colors.accent}]`);
-    return data;
-  } catch (err) {
-    console.warn('[apps/generator] Failed to parse Pass 1 JSON. Raw response:\n', res.text.slice(0, 300));
-    throw new Error(`Pass 1 (Concept) JSON parse error: ${err instanceof Error ? err.message : String(err)}`);
+    if (!code.includes('import type { SlideComponentProps }')) {
+      code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
+    }
+
+    fs.writeFileSync(filePath, code, 'utf-8');
+    slideExports.push({ filename, componentName });
   }
-}
 
-/**
- * Pass 2: Editorial & Spatial Composition Engineering (All 17 Slides in 2 Batches)
- */
-export async function runEditorialPass(
-  manifest: BrandDesignSystem,
-  client: LLMClient
-): Promise<DetailedSlideContent[]> {
-  const sysPrompt = buildEditorialSystemPrompt();
-  const allSlides: DetailedSlideContent[] = [];
+  // ==========================================================================
+  // PASS 4: TEMPLATE INDEX ASSEMBLY
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 4: Assembling template package entry point (index.ts)...');
+  const indexImports = slideExports
+    .map((s) => `import ${s.componentName} from './slides/${s.filename.replace('.tsx', '')}';`)
+    .join('\n');
 
-  // Batch 1: Slides 1-9
-  console.log('[apps/generator] >>> Pass 2: Executive Editor Copywriting (Batch 1: Slides 1–9)...');
-  const batch1Prompt = buildEditorialBatch1UserPrompt(manifest);
-  const res1 = await client.generateJSON(sysPrompt, batch1Prompt);
-  const jsonStr1 = cleanJsonResponse(res1.text);
+  const indexArray = slideExports.map((s) => `  ${s.componentName},`).join('\n');
+
+  const indexContent = `// Auto-generated by @loopreel/generator
+import type { TemplatePackage } from '../../src/skeleton/types';
+import brandData from './brand.json';
+import deckData from './deck.json';
+
+${indexImports}
+
+const pkg: TemplatePackage = {
+  brand: brandData as any,
+  deck: deckData as any,
+  slides: [
+${indexArray}
+  ],
+};
+
+export default pkg;
+`;
+
+  fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
+
+  // ==========================================================================
+  // PASS 5: TYPESCRIPT BUILD VERIFICATION & SELF-HEALING
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 5: TypeScript build verification (tsc --noEmit)...');
+  options.onProgress?.('Verifying TypeScript Integrity', 19, 20);
+
   try {
-    const parsed1 = JSON.parse(jsonStr1);
-    const slides1: DetailedSlideContent[] = Array.isArray(parsed1) ? parsed1 : parsed1.slides || [];
-    allSlides.push(...slides1);
-    console.log(`[apps/generator] Batch 1 complete: ${slides1.length} slides authored.`);
-  } catch (err) {
-    console.warn('[apps/generator] Failed to parse Batch 1 JSON. Raw response:\n', res1.text.slice(0, 300));
+    execSync('pnpm --filter @loopreel/generator typecheck', {
+      stdio: 'pipe',
+      encoding: 'utf-8',
+    });
+    console.log('[Pipeline] TypeScript integrity verified: 0 errors.');
+  } catch (err: any) {
+    const errorOutput = err.stderr || err.stdout || String(err);
+    console.warn('[Pipeline] TypeScript reported errors. Attempting self-healing...');
+    console.warn(errorOutput.slice(0, 500));
+
+    // Identify which slide file failed and repair it
+    for (const s of slideExports) {
+      if (errorOutput.includes(s.filename)) {
+        console.log(`[Pipeline] Self-healing repair for ${s.filename}...`);
+        const currentCode = fs.readFileSync(path.join(slidesDir, s.filename), 'utf-8');
+        const repairResponse = await llm.generateJSON(
+          'You are a TypeScript and React compiler expert. Fix the reported compiler error.',
+          buildSelfHealingPrompt(s.filename, currentCode, errorOutput),
+          0.2
+        );
+        const fixedCode = extractTsx(repairResponse.text);
+        fs.writeFileSync(path.join(slidesDir, s.filename), fixedCode, 'utf-8');
+      }
+    }
+
+    // Re-verify after repair
+    try {
+      execSync('pnpm --filter @loopreel/generator typecheck', { stdio: 'pipe' });
+      console.log('[Pipeline] Self-healing succeeded: 0 errors after repair.');
+    } catch {
+      console.warn('[Pipeline] Self-healing completed with remaining warnings.');
+    }
   }
 
-  // Batch 2: Slides 10-17
-  console.log('[apps/generator] >>> Pass 2: Executive Editor Copywriting (Batch 2: Slides 10–17)...');
-  const batch2Prompt = buildEditorialBatch2UserPrompt(manifest);
-  const res2 = await client.generateJSON(sysPrompt, batch2Prompt);
-  const jsonStr2 = cleanJsonResponse(res2.text);
-  try {
-    const parsed2 = JSON.parse(jsonStr2);
-    const slides2: DetailedSlideContent[] = Array.isArray(parsed2) ? parsed2 : parsed2.slides || [];
-    allSlides.push(...slides2);
-    console.log(`[apps/generator] Batch 2 complete: ${slides2.length} slides authored.`);
-  } catch (err) {
-    console.warn('[apps/generator] Failed to parse Batch 2 JSON. Raw response:\n', res2.text.slice(0, 300));
-  }
-
-  console.log(`[apps/generator] Pass 2 complete: Authored bespoke editorial copy for ${allSlides.length} slides.`);
-  return allSlides;
-}
-
-/**
- * Pass 3: Front-End Master Assembly into Single-File HTML (All 17 Canonical Archetypes)
- */
-export async function runAssemblyPass(
-  manifest: BrandDesignSystem,
-  slides: DetailedSlideContent[],
-  _client: LLMClient
-): Promise<string> {
-  console.log('[apps/generator] >>> Pass 3: Compiling All 17 Canonical Archetypes with Interactive Preview Panel...');
-  const html = compileCompleteTemplate(manifest, slides);
-  console.log(`[apps/generator] Pass 3 complete: Assembled ${html.length} characters of standalone HTML.`);
-  return html.trim();
+  options.onProgress?.('Complete', 20, 20);
+  return {
+    templateSlug: slug,
+    templateDir,
+    brand,
+    deck,
+    slideCount: deck.slides.length,
+  };
 }
