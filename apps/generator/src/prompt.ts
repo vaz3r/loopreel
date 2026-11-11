@@ -297,13 +297,20 @@ CRITICAL CONTENT & ANTI-OVERFLOW RULES:
      * Slide 10: 'hero-cta' (Final verdict takeaway and reader prompt)
    - For Policy, Science, or Enterprise, adapt the archetypes accordingly (e.g. 'investigative-timeline', 'policy-dilemma', 'unit-economics').
 
-3. STRICT WORD LIMITS (Anti-Overflow Guardrail):
-   - Headlines: Maximum 7–9 words.
-   - Subheadlines: Maximum 14–16 words.
-   - Cards / Points: Maximum 12–15 words per item! Never write long, dense paragraphs.
+3. RULE OF 3 ANTI-CRAMMING (Prevent Overcrowding):
+   - MAXIMUM 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
+   - Telemetry slides: Exactly 3 key metrics (e.g. $1,999 base price, +$400 increase over M5, +$700 over M1). Never list 5 rows!
+   - Hardware/Specs slides: Exactly 2 to 3 primary callouts (e.g. 12-core M6 Silicon + Dual Fan Cooling).
+   - Trade-off / The Catch: Exactly 2 sharp contrast cards (e.g. Mandatory 1TB Lock-in vs Missing OLED & Touch). Never stack 3 full-sized articles!
+   - Upgrade Verdict: Exactly 2 distinct guidance groups (Who Should Upgrade vs Who Should Hold).
+
+4. STRICT WORD LIMITS (Anti-Overflow Guardrail):
+   - Headlines: Maximum 6–8 words.
+   - Subheadlines: Maximum 12–14 words.
+   - Cards / Points: Maximum 10–13 words per item! Every word must be punchy and high-signal.
    - Telemetry Values: MUST be strictly numerical or signed badge (e.g. "$1,999", "+15%", "+30%", "1,600 NITS", "+$700"). Never put sentence fragments in value.
 
-4. Return strictly a JSON array of slide objects:
+5. Return strictly a JSON array of slide objects:
    [
      {
        "id": "slide-1",
@@ -447,20 +454,28 @@ CRITICAL DESIGN & CODING RULES:
      * font-[var(--font-body)] for body copy and descriptions
      * font-[var(--font-mono)] for metrics, tags, numbers
 
-4. Spatial Balance & Strict Zero-Overflow Sizing:
+4. MOBILE INSTAGRAM LEGIBILITY (0.36x Phone Scaling Law):
+   When viewed on a smartphone (390px mobile Instagram / LinkedIn viewport), canvas elements scale down by 0.36x.
+   - TEXT UNDER 20px IS STRICTLY FORBIDDEN!
+     * NEVER use 'text-xs' (12px), 'text-sm' (14px), 'text-base' (16px), or 'text-lg' (18px) for readable content!
+     * On a phone screen, 14px becomes 5.0px (unreadable), and 18px becomes 6.5px (squinting).
+   - MANDATORY FONT SIZE SCALE:
+     * Body copy & descriptions: MUST be text-[24px] to text-[28px] (leading-snug / leading-normal).
+     * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
+     * Kickers, badges, tags, metadata: MUST be text-[20px] to text-[22px] (font-mono tracking-wider).
+     * Major headlines: MUST be text-[52px] to text-[68px] (font-headline font-bold).
+     * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold).
+
+5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
    - The interior safe area is strictly 952px wide by 1028px high.
-   - HEADLINE SIZING DISCIPLINE:
-     * If slide has 2 or 3 cards below the headline: Headline MUST be compact (text-4xl or text-5xl, max 48px). NEVER use text-[76px] or text-[86px] on a multi-card slide!
-     * Monumental headlines (text-6xl to text-7xl / 72px+) are ONLY allowed when there is NO heavy card grid below (e.g. Cover, Quote, or Hero CTA).
-   - HERO TELEMETRY DISCIPLINE:
-     * If a slide features a monumental hero metric (e.g. text-[96px] to text-[120px]), you may only place ONE compact supporting row or 2 concise bullet points below it. Never stack a 120px number on top of 3 full-sized cards!
-   - CARD PADDING & GAP BUDGET:
-     * Multi-card grids: Use 'gap-4' or 'gap-5', card padding 'py-4 px-6' or 'py-5 px-6' (avoid py-8 or py-10 which bloat the height).
-     * Body copy inside cards: Use 'text-base' (16px) or 'text-lg' (18px) with leading-snug or leading-normal (avoid text-2xl inside dense cards).
-   - AutoFit is a safety net only: The content MUST fit naturally without forcing AutoFit to scale below 0.98.
+   - NEVER put 'overflow-hidden' on the top-level <section>! 'overflow-hidden' clips content and conceals overflow.
+   - Outer wrapper signature: className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
+   - Multi-card grids: Use 'gap-5' or 'gap-6', card padding 'py-5 px-7' or 'py-6 px-8'.
+   - Limit items to 2 or 3 per slide so the larger 24px-28px body text fits effortlessly without overflow.
+   - AutoFit scale MUST remain 1.000 (no scaling needed).
    - Always respect the locked text provided—do not invent new text or exceed word counts.
 
-5. Technical Constraints:
+6. Technical Constraints:
    - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
    - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
    - Do NOT output the outer 1080x1350 wrapper or header/footer—SlideFrame provides those.`;

@@ -1,0 +1,25 @@
+{
+  "name": "The Alloy Review",
+  "slug": "alloy-review",
+  "vibe": "Brushed-aluminum precision meets skeptical editorial restraint: oversized headlines, crisp spec labels, and orange brackets framing what is missing.",
+  "domain": "Apple Silicon / Consumer Hardware Criticism",
+  "palette": {
+    "paper": "#F5F5F7",
+    "ink": "#1D1D1F",
+    "accent": "#C74416",
+    "surface": "#E9EAED",
+    "border": "#C5C7CD",
+    "subtle": "#686B73"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Manrope",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+  },
+  "wordmark": "THE ALLOY REVIEW",
+  "wordmarkStyle": "sans",
+  "handle": "@alloyreview",
+  "texture": "grid",
+  "motif": "bracket"
+}

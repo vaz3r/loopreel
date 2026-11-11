@@ -65,7 +65,31 @@ export async function auditTemplateStudio(
               `Slide ${slideIdx + 1}: Text clipped in <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 30)}..." (scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth})`
             );
           }
+
+          // Check mobile legibility floor (0.36x phone scale rule: font < 20px is illegible on mobile)
+          const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 ? el.textContent?.trim() : '';
+          // Ignore frame header and footer elements outside main content
+          const isInsideMain = !!el.closest('main');
+          if (isInsideMain && text && text.length > 1) {
+            const fontSize = parseFloat(style.fontSize);
+            if (fontSize < 20) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Text too small for mobile (${fontSize}px < 20px floor): <${el.tagName.toLowerCase()}> "${text.slice(0, 30)}..."`
+              );
+            }
+          }
         });
+
+        // Check for banned overflow-hidden on the slide section
+        const topSection = canvas.querySelector('main section');
+        if (topSection) {
+          const secStyle = window.getComputedStyle(topSection);
+          if (secStyle.overflow === 'hidden' || secStyle.overflowY === 'hidden') {
+            collisions.push(
+              `Slide ${slideIdx + 1}: Main <section> has overflow:hidden which risks clipping cards/elements. Size content naturally without overflow:hidden.`
+            );
+          }
+        }
 
         // Check container boundary overflow
         const canvasRect = canvas.getBoundingClientRect();
