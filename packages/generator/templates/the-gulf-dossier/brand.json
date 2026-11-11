@@ -1,0 +1,25 @@
+{
+  "name": "The Gulf Dossier",
+  "slug": "the-gulf-dossier",
+  "vibe": "Sober geopolitical field reporting: midnight maritime charts, muted brass signals, condensed headlines, and restrained cartographic detail. Documentary, never triumphalist.",
+  "domain": "Iran / Regional Conflict / Diplomacy",
+  "palette": {
+    "paper": "#101923",
+    "ink": "#EEF0EB",
+    "accent": "#D9B45B",
+    "surface": "#1C2A36",
+    "border": "#445563",
+    "subtle": "#A3AFB7"
+  },
+  "typography": {
+    "headlineFont": "Barlow Condensed",
+    "bodyFont": "Public Sans",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap"
+  },
+  "wordmark": "THE GULF DOSSIER",
+  "wordmarkStyle": "small-caps",
+  "handle": "@thegulfdossier",
+  "texture": "grid",
+  "motif": "coord"
+}

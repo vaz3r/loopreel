@@ -24,19 +24,7 @@ export interface CreateJobInput {
   engine?: 'bespoke' | 'classic';
   templateId?: string;
   generateText?: boolean;
-  brandKit?: {
-    bg?: string;
-    text?: string;
-    accent?: string;
-    surface?: string;
-    fontSerif?: string;
-    fontSans?: string;
-    fontMono?: string;
-    wordmark?: string;
-    handle?: string;
-    wordmarkStyle?: 'serif' | 'sans' | 'mono' | 'small-caps';
-    logoUrl?: string;
-  };
+  brandKit?: any;
 }
 
 export interface JobSummary {

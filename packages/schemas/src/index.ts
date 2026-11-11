@@ -40,8 +40,12 @@ export const PlatformEnum = z.enum([
 ]);
 export type Platform = z.infer<typeof PlatformEnum>;
 
-// BrandKit schema with typographic wordmark support
+// BrandKit schema with typographic wordmark and bespoke brand token support
 export const BrandKitSchema = z.object({
+  name: z.string().optional(),
+  slug: z.string().optional(),
+  vibe: z.string().optional(),
+  domain: z.string().optional(),
   bg: z.string().optional(),
   text: z.string().optional(),
   accent: z.string().optional(),
@@ -54,7 +58,11 @@ export const BrandKitSchema = z.object({
   handle: z.string().optional(),   // e.g. "@dailydigest"
   wordmarkStyle: z.enum(['serif', 'sans', 'mono', 'small-caps']).optional(),
   logoUrl: z.string().optional(), // Preserved for backwards compatibility
-});
+  palette: z.record(z.string()).optional(),
+  typography: z.record(z.string()).optional(),
+  texture: z.string().optional(),
+  motif: z.string().optional(),
+}).passthrough();
 export type BrandKit = z.infer<typeof BrandKitSchema>;
 
 export const TEMPLATE_KEYS = [

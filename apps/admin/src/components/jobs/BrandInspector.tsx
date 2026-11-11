@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Palette, Type, Sparkles, Copy, Check } from 'lucide-react';
+import { Palette, Type, Sparkles, Copy, Check, BookmarkPlus, BookmarkCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { saveBrandPreset } from '@/lib/brand-presets';
 import type { BespokeBrand } from '@/api/client';
 
 export function BrandInspector({ brand }: { brand?: BespokeBrand }) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
 
   // Invalidate and inject google fonts link if provided
   useEffect(() => {
@@ -59,16 +62,43 @@ export function BrandInspector({ brand }: { brand?: BespokeBrand }) {
           <p className="text-[12px] text-text-quaternary mt-0.5">{brand.domain}</p>
         </div>
 
-        {brand.wordmark && (
-          <div className="flex items-center gap-2 self-start sm:self-auto bg-surface-2 px-3 py-1.5 rounded-md border border-border">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary">
-              Wordmark:
-            </span>
-            <span className="text-[13px] font-bold tracking-wider text-text-primary">
-              {brand.wordmark}
-            </span>
-          </div>
-        )}
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          {brand.wordmark && (
+            <div className="flex items-center gap-2 bg-surface-2 px-3 py-1.5 rounded-md border border-border">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary">
+                Wordmark:
+              </span>
+              <span className="text-[13px] font-bold tracking-wider text-text-primary">
+                {brand.wordmark}
+              </span>
+            </div>
+          )}
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              saveBrandPreset(brand);
+              setIsSaved(true);
+              toast.success(`Saved "${brand.name}" to your Brand Kits!`);
+              setTimeout(() => setIsSaved(false), 3000);
+            }}
+            className="h-8 text-[12px] gap-1.5 border-border bg-surface-2 hover:bg-surface-3 text-text-secondary hover:text-text-primary"
+          >
+            {isSaved ? (
+              <>
+                <BookmarkCheck className="h-3.5 w-3.5 text-emerald-400" />
+                Saved Preset
+              </>
+            ) : (
+              <>
+                <BookmarkPlus className="h-3.5 w-3.5 text-emerald-400" />
+                Save as Brand Preset
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Brand Vibe / Art Direction Brief */}

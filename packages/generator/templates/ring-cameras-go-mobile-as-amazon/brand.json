@@ -1,25 +1,26 @@
 {
-  "name": "Ars Technica",
+  "name": "Custom Brand",
   "slug": "ring-cameras-go-mobile-as-amazon",
-  "vibe": "High-end investigative technology editorial: obsidian fields, restrained cyan signals, architectural grids, and forensic typography. Scrutinize domestic surveillance rather than celebrate gadget spectacle.",
-  "domain": "Consumer Robotics / Artificial Intelligence / Surveillance & Privacy",
+  "vibe": "Curated Editorial Publication",
+  "domain": "ring-cameras-go-mobile-as-amazon.pub",
   "palette": {
-    "paper": "#0A0E17",
-    "ink": "#F1F5F9",
-    "accent": "#38BDF8",
-    "surface": "#141D2B",
-    "border": "#334155",
-    "subtle": "#94A3B8"
+    "paper": "#0D0E12",
+    "ink": "#F1F3F9",
+    "accent": "#FF4D00",
+    "surface": "#161820",
+    "border": "#F1F3F925",
+    "subtle": "#F1F3F980"
   },
   "typography": {
-    "headlineFont": "Space Grotesk",
+    "headlineFont": "Syne",
     "bodyFont": "Inter",
-    "monoFont": "IBM Plex Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
   },
-  "wordmark": "ARS TECHNICA",
+  "wordmark": "CUSTOM BRAND",
   "wordmarkStyle": "sans",
-  "handle": "@arstechnica",
+  "handle": "@ringcamerasgomobileasamazon",
   "texture": "grid",
-  "motif": "crosshair"
+  "motif": "crosshair",
+  "platform": "instagram-stories"
 }

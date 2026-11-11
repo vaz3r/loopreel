@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Loader2, ChevronDown, Sparkles, BookOpen } from 'lucide-react';
+import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2 } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { TemplateSelect } from '@/components/TemplateSelect';
 import { BrandKitForm, type BrandKitValues } from '@/components/BrandKitForm';
-import type { CreateJobInput } from '@/api/client';
+import { getAllBrandPresets } from '@/lib/brand-presets';
+import type { CreateJobInput, BespokeBrand } from '@/api/client';
 
 const DEMO_PRESETS = [
   {
@@ -26,11 +27,23 @@ const DEMO_PRESETS = [
 
 export function CreateJobPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialBrandPreset = searchParams.get('brandPreset') || 'auto';
+
   const createJob = useCreateJob();
   const [url, setUrl] = useState('');
   const [platform, setPlatform] = useState('instagram-feed');
   const [engine, setEngine] = useState<'bespoke' | 'classic'>('bespoke');
   const [templateId, setTemplateId] = useState('bespoke');
+
+  const brandPresets = useMemo(() => getAllBrandPresets(), []);
+  const [selectedPresetSlug, setSelectedPresetSlug] = useState<string>(initialBrandPreset);
+
+  const activePreset = useMemo<BespokeBrand | undefined>(() => {
+    if (selectedPresetSlug === 'auto') return undefined;
+    return brandPresets.find((b) => b.slug === selectedPresetSlug);
+  }, [selectedPresetSlug, brandPresets]);
+
   const [brandKit, setBrandKit] = useState<BrandKitValues>(() => {
     try {
       const saved = localStorage.getItem('loopreel_saved_brandkit');
@@ -39,13 +52,7 @@ export function CreateJobPage() {
       return {};
     }
   });
-  const [showBrandKit, setShowBrandKit] = useState(() => {
-    try {
-      return Boolean(localStorage.getItem('loopreel_saved_brandkit'));
-    } catch {
-      return false;
-    }
-  });
+  const [showBrandKit, setShowBrandKit] = useState(false);
   const [generateText, setGenerateText] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
@@ -58,9 +65,13 @@ export function CreateJobPage() {
       templateId: engine === 'bespoke' ? 'bespoke' : templateId,
       generateText,
     };
-    if (brandKit && Object.keys(brandKit).length > 0) {
+
+    if (activePreset) {
+      input.brandKit = activePreset;
+    } else if (brandKit && Object.keys(brandKit).length > 0) {
       input.brandKit = brandKit;
     }
+
     createJob.mutate(input, {
       onSuccess: (data) => navigate(`/jobs/${data.jobId}`),
     });
@@ -169,6 +180,86 @@ export function CreateJobPage() {
             <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Platform Canvas</Label>
             <PlatformSelect value={platform} onChange={setPlatform} />
           </div>
+
+          {/* Bespoke Brand Direction Selector */}
+          {engine === 'bespoke' && (
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em] flex items-center gap-1.5">
+                  <Palette className="h-3.5 w-3.5 text-emerald-400" />
+                  Brand Identity & Art Direction
+                </Label>
+                <button
+                  type="button"
+                  onClick={() => navigate('/brand-kits')}
+                  className="text-[11px] text-text-quaternary hover:text-emerald-400 transition-colors"
+                >
+                  Manage Brand Kits →
+                </button>
+              </div>
+
+              <select
+                value={selectedPresetSlug}
+                onChange={(e) => setSelectedPresetSlug(e.target.value)}
+                className="h-9 w-full rounded-md border border-border bg-surface-2 px-3 text-[13px] text-text-primary focus:outline-hidden focus:border-border-secondary"
+              >
+                <option value="auto">✨ Auto-Invent (AI Creative Director crafts unique brand per story)</option>
+                <optgroup label="Saved Brand Kits & Archetypes">
+                  {brandPresets.map((b) => (
+                    <option key={b.slug} value={b.slug}>
+                      {b.name} — {b.wordmark || b.name} ({b.domain})
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+
+              {/* Live Preview Banner when a brand preset is selected */}
+              {activePreset && (
+                <div className="rounded-lg border border-emerald-800/40 bg-emerald-950/20 p-3.5 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                      <span className="text-[13px] font-semibold text-text-primary">
+                        {activePreset.name}
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-2 text-text-secondary border border-border">
+                        {activePreset.wordmark || activePreset.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-300 uppercase tracking-wider font-semibold">
+                      Tokens Locked
+                    </span>
+                  </div>
+
+                  <p className="text-[12px] text-text-secondary italic">
+                    "{activePreset.vibe}"
+                  </p>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-border/50">
+                    {/* Palette swatches */}
+                    <div className="flex items-center gap-1.5">
+                      {Object.entries(activePreset.palette || {})
+                        .filter(([, v]) => typeof v === 'string' && v.startsWith('#'))
+                        .slice(0, 5)
+                        .map(([k, hex]) => (
+                          <span
+                            key={k}
+                            title={`${k}: ${hex}`}
+                            className="h-4 w-6 rounded border border-black/20"
+                            style={{ backgroundColor: hex }}
+                          />
+                        ))}
+                    </div>
+
+                    {/* Typography summary */}
+                    <div className="text-[11px] font-mono text-text-tertiary">
+                      {activePreset.typography.headlineFont} / {activePreset.typography.bodyFont}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Classic Template Selector (only if classic selected) */}
           {engine === 'classic' && (

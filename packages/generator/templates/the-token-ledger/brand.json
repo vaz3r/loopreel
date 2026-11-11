@@ -1,25 +1,26 @@
 {
   "name": "The Token Ledger",
   "slug": "the-token-ledger",
-  "vibe": "Computational linguistics meets the accounting ledger: mint-tinted paper, aubergine ink, violet annotations, and precisely bracketed text fragments.",
-  "domain": "Language Models / Tokenization / Usage Accounting",
+  "vibe": "Autonomous AI, Cryptographic Compute & Financial Telemetry",
+  "domain": "tokenledger.ai",
   "palette": {
-    "paper": "#EAF2EC",
-    "ink": "#291D35",
-    "accent": "#6534BC",
-    "surface": "#DCE8DF",
-    "border": "#A4B5A9",
-    "subtle": "#59675E"
+    "paper": "#0C0E12",
+    "ink": "#F0F4F8",
+    "accent": "#38BDF8",
+    "surface": "#151921",
+    "border": "#263040",
+    "subtle": "#8A99AD"
   },
   "typography": {
-    "headlineFont": "Syne",
-    "bodyFont": "Public Sans",
-    "monoFont": "IBM Plex Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+    "headlineFont": "Cinzel",
+    "bodyFont": "Plus Jakarta Sans",
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
   },
   "wordmark": "THE TOKEN LEDGER",
-  "wordmarkStyle": "mono",
-  "handle": "@thetokenledger",
-  "texture": "grid",
-  "motif": "bracket"
+  "wordmarkStyle": "small-caps",
+  "handle": "@tokenledger",
+  "texture": "blueprint",
+  "motif": "coord",
+  "platform": "instagram-feed"
 }

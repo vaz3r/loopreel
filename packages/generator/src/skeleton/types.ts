@@ -5,6 +5,7 @@ export interface BrandTokens {
   slug: string;
   vibe: string;
   domain: string;
+  platform?: string;
   palette: {
     paper: string;       // Canvas background
     ink: string;         // Primary text
@@ -30,6 +31,7 @@ export interface SlideData {
   id: string;
   index: number;
   type: string;
+  platform?: string;
   title?: string;
   headline?: string;
   subheadline?: string;
@@ -47,6 +49,7 @@ export interface DeckData {
   templateName: string;
   templateSlug: string;
   domain: string;
+  platform?: string;
   slides: SlideData[];
 }
 
@@ -54,6 +57,7 @@ export interface SlideComponentProps {
   slide: SlideData;
   brand: BrandTokens;
   totalSlides: number;
+  platform?: string;
 }
 
 export type SlideComponent = React.ComponentType<SlideComponentProps>;

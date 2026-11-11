@@ -18,15 +18,19 @@ export interface VisualAuditResult {
 export async function auditTemplateStudio(
   templateSlug: string,
   slideCount: number,
-  options: { baseUrl?: string; deviceScaleFactor?: number } = {}
+  options: { baseUrl?: string; deviceScaleFactor?: number; platform?: string } = {}
 ): Promise<VisualAuditResult> {
   const baseUrl = options.baseUrl || 'http://localhost:5174';
   const screenshotsDir = path.resolve(__dirname, `../templates/${templateSlug}/screenshots`);
   fs.mkdirSync(screenshotsDir, { recursive: true });
 
+  const activePlatform = options.platform || 'instagram-feed';
+  const width = 1080;
+  const height = activePlatform === 'instagram-stories' ? 1920 : activePlatform === 'instagram-square' ? 1080 : 1350;
+
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
-    viewport: { width: 1080, height: 1350 },
+    viewport: { width, height },
     deviceScaleFactor: options.deviceScaleFactor || 1,
   });
 
@@ -36,7 +40,7 @@ export async function auditTemplateStudio(
 
   try {
     for (let i = 0; i < slideCount; i++) {
-      const url = `${baseUrl}/?template=${templateSlug}&slide=${i}&mode=1:1&export=true`;
+      const url = `${baseUrl}/?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`;
       await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
       await page.waitForTimeout(300); // Allow fonts and AutoFit to settle
 

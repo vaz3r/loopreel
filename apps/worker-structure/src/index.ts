@@ -86,7 +86,11 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
 
       // Run bespoke generation pipeline with parallel codegen (N=3) and automated visual audit
       const result = await generateTemplateReference(
-        { url: existing.source_url },
+        {
+          url: existing.source_url,
+          platform: existing.platform,
+          brandKit: existing.brand_kit as any,
+        },
         { runAudit: true, concurrency: 3 }
       );
 

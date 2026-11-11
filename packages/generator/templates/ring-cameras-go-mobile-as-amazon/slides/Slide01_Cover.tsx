@@ -6,230 +6,277 @@ export default function Slide01({
   brand,
   totalSlides,
 }: SlideComponentProps) {
+  const titleId = React.useId();
+  const diagramId = React.useId();
+
+  void slide;
+  void brand;
+  void totalSlides;
+
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-center overflow-hidden text-[var(--ink)]">
+    <section
+      aria-labelledby={titleId}
+      className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
+      style={
+        {
+          '--paper': '#0D0E12',
+          '--ink': '#F1F3F9',
+          '--accent': '#FF4D00',
+          '--surface': '#161820',
+          '--border': '#F1F3F925',
+          backgroundColor: 'var(--paper)',
+        } as React.CSSProperties
+      }
+    >
       <div className="flex items-center gap-4">
-        <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--accent)]" />
-        <p className="font-[var(--font-mono)] text-[18px] leading-6 tracking-[0.18em] text-[var(--accent)]">
-          {slide.kicker}
+        <span
+          aria-hidden="true"
+          className="h-3 w-3 shrink-0 bg-[var(--accent)]"
+        />
+        <p className="font-[var(--font-mono)] text-[20px] leading-[28px] tracking-[0.12em]">
+          CUSTOM BRAND / MOBILE SECURITY
         </p>
-        <span className="h-px flex-1 bg-[var(--border)]" />
       </div>
 
-      <h1 className="mt-7 max-w-[880px] text-balance font-[var(--font-headline)] text-[88px] font-bold leading-[0.99] tracking-[-0.055em]">
-        {slide.headline}
+      <h1
+        id={titleId}
+        className="mt-8 max-w-[900px] font-[var(--font-headline)] text-[68px] font-bold leading-[1.04] tracking-[-0.045em]"
+      >
+        Ring Cameras
+        <br />
+        Leave Their Mounts
       </h1>
 
-      <div className="relative my-7 h-[350px] w-full shrink-0 overflow-hidden rounded-[2px] border border-[var(--border)] bg-[var(--surface)]">
+      <p className="mt-7 max-w-[790px] font-[var(--font-body)] text-[28px] leading-[1.4]">
+        Amazon pairs a flying indoor camera with a wheeled business patrol robot.
+      </p>
+
+      <div className="relative mt-10 h-[1000px] w-full shrink-0">
         <svg
-          viewBox="0 0 952 350"
+          role="img"
+          aria-labelledby={diagramId}
+          viewBox="0 0 952 1000"
+          className="absolute inset-0 h-full w-full"
           fill="none"
-          aria-hidden="true"
-          className="h-full w-full"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Quiet architectural registration grid. */}
-          <g stroke="var(--border)" strokeWidth="1" opacity="0.36">
-            <path d="M48 0V350M112 0V350M176 0V350M240 0V350M304 0V350M368 0V350M432 0V350M496 0V350M560 0V350M624 0V350M688 0V350M752 0V350M816 0V350M880 0V350" />
-            <path d="M0 47H952M0 111H952M0 175H952M0 239H952M0 303H952" />
+          <title id={diagramId}>
+            Conceptual drone and wheeled robot glyphs connected to a common
+            origin by diverging orange trajectories.
+          </title>
+
+          {/* Sparse plotting field, not a containing card. */}
+          <g stroke="var(--border)" strokeWidth="1">
+            <path d="M0 1H952" />
+            <path d="M0 999H952" />
+            <path d="M58 450H894" strokeDasharray="3 13" />
+            <path d="M58 740H894" strokeDasharray="3 13" />
+            <path d="M220 80V920" strokeDasharray="3 13" />
+            <path d="M740 80V920" strokeDasharray="3 13" />
           </g>
 
-          {/* Open-door floor plan, deliberately cropped at its eastern edge. */}
-          <g stroke="var(--border)" strokeWidth="3" strokeLinecap="square">
-            <path d="M78 292V57H448V292H325M261 292H78" />
-            <path d="M448 57H871V292H448" />
-            <path d="M78 173H183M247 173H448" />
-            <path d="M607 57V130M607 194V292" />
-            <path d="M607 224H736M800 224H871" />
+          <g stroke="var(--border)" strokeWidth="2">
+            <path d="M38 40H62M50 28V52" />
+            <path d="M890 40H914M902 28V52" />
+            <path d="M38 960H62M50 948V972" />
+            <path d="M890 960H914M902 948V972" />
           </g>
 
-          <g stroke="var(--border)" strokeWidth="1.2">
-            <path d="M183 173V109A64 64 0 0 1 247 173" />
-            <path d="M607 130H671A64 64 0 0 1 607 194" />
-            <path d="M261 292V228A64 64 0 0 1 325 292" />
-            <rect x="99" y="78" width="90" height="55" rx="3" />
-            <path d="M111 78V133M177 78V133" />
-            <rect x="723" y="76" width="122" height="78" rx="3" />
-            <path d="M723 96H845M784 76V96" />
-            <rect x="475" y="235" width="70" height="32" rx="16" />
+          {/* Shared origin with architectural mounting traces. */}
+          <g stroke="var(--border)" strokeWidth="2">
+            <circle cx="220" cy="740" r="76" />
+            <circle cx="220" cy="740" r="110" strokeDasharray="4 12" />
+            <path d="M95 654V826M78 665L95 648M78 697L95 680M78 729L95 712M78 761L95 744M78 793L95 776M78 825L95 808" />
+            <path d="M95 740H177" />
           </g>
 
-          {/* Fields of view: sensing is spatial, not omniscient. */}
-          <path
-            d="M311 243L397 116Q456 170 442 253Z"
-            fill="var(--accent)"
-            fillOpacity="0.08"
-          />
-          <path
-            d="M311 243L397 116M311 243L442 253"
+          {/* A single origin splits into upward and horizontal movement. */}
+          <g
             stroke="var(--accent)"
-            strokeOpacity="0.3"
-          />
-          <path
-            d="M711 143L820 180Q783 255 695 260Z"
-            fill="var(--accent)"
-            fillOpacity="0.1"
-          />
-          <path
-            d="M711 143L820 180M711 143L695 260"
-            stroke="var(--accent)"
-            strokeOpacity="0.35"
-          />
-
-          {/* A single patrol trace connects the two mobile forms. */}
-          <path
-            d="M150 243H264M348 243H548Q575 243 575 216V162Q575 143 598 143H659"
-            stroke="var(--accent)"
-            strokeWidth="2"
-            strokeDasharray="6 8"
-            strokeLinecap="round"
-          />
-          <circle cx="150" cy="243" r="5" fill="var(--accent)" />
-          <circle
-            cx="150"
-            cy="243"
-            r="13"
-            stroke="var(--accent)"
-            strokeOpacity="0.4"
-          />
-          <path
-            d="M491 237L497 243L491 249M624 137L630 143L624 149"
-            stroke="var(--accent)"
-            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+          >
+            <path
+              d="M220 740V542C220 426 286 423 286 314"
+              strokeWidth="7"
+            />
+            <path d="M220 740H601" strokeWidth="7" />
+
+            <path d="M274 339L286 314L298 339" strokeWidth="5" />
+            <path d="M576 728L601 740L576 752" strokeWidth="5" />
+
+            <path
+              d="M191 612V542C191 421 257 411 257 348"
+              strokeWidth="2"
+              opacity="0.3"
+            />
+            <path d="M327 768H538" strokeWidth="2" opacity="0.3" />
+          </g>
+
+          <circle
+            cx="220"
+            cy="740"
+            r="31"
+            fill="var(--paper)"
+            stroke="var(--accent)"
+            strokeWidth="3"
           />
+          <circle cx="220" cy="740" r="10" fill="var(--accent)" />
 
-          {/* Rolling camera: chassis, wheels, lens, and heading. */}
-          <g transform="translate(311 243)">
-            <circle r="48" stroke="var(--accent)" strokeOpacity="0.2" />
-            <rect
-              x="-36"
-              y="-19"
-              width="11"
-              height="38"
-              rx="5"
-              fill="var(--border)"
-              stroke="var(--ink)"
-              strokeOpacity="0.55"
+          {/* Abstract flying camera: suspended lens and rotor geometry. */}
+          <g transform="translate(286 226)">
+            <ellipse
+              cy="70"
+              rx="123"
+              ry="21"
+              stroke="var(--border)"
+              strokeDasharray="5 10"
             />
-            <rect
-              x="25"
-              y="-19"
-              width="11"
-              height="38"
-              rx="5"
-              fill="var(--border)"
-              stroke="var(--ink)"
-              strokeOpacity="0.55"
-            />
-            <rect
-              x="-27"
-              y="-31"
-              width="54"
-              height="62"
-              rx="18"
+
+            <g stroke="var(--ink)" strokeWidth="4" strokeLinejoin="round">
+              <path d="M-40 -12L-95 -42M40 -12L95 -42" />
+              <path d="M-40 12L-95 34M40 12L95 34" />
+
+              <ellipse
+                cx="-96"
+                cy="-43"
+                rx="56"
+                ry="18"
+                fill="var(--surface)"
+              />
+              <ellipse
+                cx="96"
+                cy="-43"
+                rx="56"
+                ry="18"
+                fill="var(--surface)"
+              />
+              <ellipse
+                cx="-96"
+                cy="35"
+                rx="56"
+                ry="18"
+                fill="var(--surface)"
+              />
+              <ellipse
+                cx="96"
+                cy="35"
+                rx="56"
+                ry="18"
+                fill="var(--surface)"
+              />
+
+              <path
+                d="M-45 -22L0 -38L45 -22V20L0 43L-45 20Z"
+                fill="var(--surface)"
+              />
+              <path d="M-45 -22L0 0L45 -22M0 0V43" />
+            </g>
+
+            <path
+              d="M-23 43V61Q0 79 23 61V43"
               fill="var(--surface)"
               stroke="var(--ink)"
-              strokeWidth="2"
+              strokeWidth="3"
             />
             <circle
-              cy="-5"
-              r="15"
-              fill="var(--surface)"
+              cx="0"
+              cy="57"
+              r="8"
               stroke="var(--accent)"
+              strokeWidth="4"
+            />
+
+            <g stroke="var(--accent)" strokeWidth="3">
+              <path d="M-122 -43H-70M70 -43H122" />
+              <path d="M-122 35H-70M70 35H122" />
+            </g>
+          </g>
+
+          {/* Drone endpoint leader. */}
+          <path
+            d="M451 186H481L502 165H526"
+            stroke="var(--ink)"
+            strokeWidth="2"
+          />
+          <circle cx="451" cy="186" r="4" fill="var(--accent)" />
+
+          {/* Abstract patrol robot: upright sensor and wheeled chassis. */}
+          <g transform="translate(740 650)">
+            <ellipse
+              cy="116"
+              rx="122"
+              ry="19"
+              fill="var(--surface)"
+              stroke="var(--border)"
               strokeWidth="2"
             />
-            <circle cy="-5" r="7" fill="var(--accent)" fillOpacity="0.22" />
-            <circle cx="3" cy="-8" r="2.5" fill="var(--accent)" />
-            <path
-              d="M-7 20H7M-4-41L0-46L4-41"
-              stroke="var(--accent)"
-              strokeWidth="2"
-              strokeLinecap="round"
+
+            <g
+              fill="var(--surface)"
+              stroke="var(--ink)"
+              strokeWidth="4"
               strokeLinejoin="round"
-            />
-          </g>
+            >
+              <path d="M-11 -53V-114H11V-53" />
+              <path d="M-47 -156H47V-115H-47Z" />
+              <path d="M-69 -40L-43 -66H43L69 -40V61H-69Z" />
+              <path d="M-89 44H89L105 69V100H-105V69Z" />
 
-          {/* Flying camera: four enclosed rotors around a central optic. */}
-          <g transform="translate(711 143) rotate(-12)">
-            <circle r="92" stroke="var(--accent)" strokeOpacity="0.15" />
-            <circle
-              r="77"
-              stroke="var(--accent)"
-              strokeOpacity="0.3"
-              strokeDasharray="2 9"
-            />
+              <rect x="-110" y="60" width="32" height="53" rx="12" />
+              <rect x="78" y="60" width="32" height="53" rx="12" />
+            </g>
 
             <path
-              d="M-37-32L37 32M37-32L-37 32"
-              stroke="var(--ink)"
-              strokeWidth="8"
-              strokeOpacity="0.85"
-            />
-
-            {[
-              [-39, -34],
-              [39, -34],
-              [-39, 34],
-              [39, 34],
-            ].map(([cx, cy], index) => (
-              <g key={index} transform={`translate(${cx} ${cy})`}>
-                <circle
-                  r="25"
-                  fill="var(--surface)"
-                  stroke="var(--ink)"
-                  strokeWidth="2"
-                />
-                <circle r="19" stroke="var(--border)" strokeWidth="1.5" />
-                <path
-                  d="M-13-7L13 7M-7 13L7-13"
-                  stroke="var(--accent)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeOpacity="0.7"
-                />
-                <circle r="4" fill="var(--ink)" />
-              </g>
-            ))}
-
-            <rect
-              x="-22"
-              y="-26"
-              width="44"
-              height="52"
-              rx="12"
-              fill="var(--surface)"
-              stroke="var(--ink)"
-              strokeWidth="2"
-            />
-            <circle
-              r="12"
+              d="M-36 -135H14"
               stroke="var(--accent)"
-              strokeWidth="2"
-              fill="var(--accent)"
-              fillOpacity="0.12"
-            />
-            <circle r="5" fill="var(--accent)" />
-            <path
-              d="M-6 19H6"
-              stroke="var(--ink)"
-              strokeWidth="2"
+              strokeWidth="5"
               strokeLinecap="round"
             />
+            <circle cx="29" cy="-135" r="5" fill="var(--ink)" />
+
+            <circle
+              cy="-13"
+              r="23"
+              stroke="var(--ink)"
+              strokeWidth="3"
+            />
+            <circle
+              cy="-13"
+              r="10"
+              stroke="var(--accent)"
+              strokeWidth="4"
+            />
+            <path d="M-39 29H39" stroke="var(--border)" strokeWidth="3" />
+            <path d="M-54 80H54" stroke="var(--accent)" strokeWidth="4" />
           </g>
 
-          {/* Viewfinder corners keep the illustration editorial, not decorative. */}
-          <g stroke="var(--accent)" strokeWidth="2">
-            <path d="M18 37V18H37M915 18H934V37M18 313V332H37M915 332H934V313" />
-          </g>
+          {/* Robot endpoint leader. */}
+          <path
+            d="M740 786V808L716 832H690"
+            stroke="var(--ink)"
+            strokeWidth="2"
+          />
+          <circle cx="740" cy="786" r="4" fill="var(--accent)" />
         </svg>
-      </div>
 
-      <div className="grid grid-cols-[5px_1fr] gap-6">
-        <div className="bg-[var(--accent)]" />
-        <p className="max-w-[840px] text-pretty font-[var(--font-body)] text-[30px] font-normal leading-[1.35] tracking-[-0.015em]">
-          {slide.subheadline}
-        </p>
+        <div className="absolute left-[55.5%] top-[105px] w-[39%]">
+          <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-[1.1] tracking-[-0.025em]">
+            Ring Drone Cam
+          </h2>
+          <p className="mt-4 max-w-[310px] font-[var(--font-body)] text-[26px] leading-snug">
+            Flying indoor security camera.
+          </p>
+        </div>
+
+        <div className="absolute left-[49%] top-[848px] w-[47%]">
+          <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-[1.1] tracking-[-0.025em]">
+            Ring Rover Cam
+          </h2>
+          <p className="mt-4 font-[var(--font-body)] text-[26px] leading-snug">
+            Wheeled autonomous security robot designed for business.
+          </p>
+        </div>
       </div>
     </section>
   );

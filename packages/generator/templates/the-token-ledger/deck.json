@@ -1,217 +1,282 @@
 {
   "templateName": "The Token Ledger",
   "templateSlug": "the-token-ledger",
-  "domain": "Language Models / Tokenization / Usage Accounting",
+  "domain": "tokenledger.ai",
+  "platform": "instagram-feed",
   "slides": [
     {
       "id": "slide-1",
       "index": 0,
       "type": "cover",
       "kicker": "THE TOKEN LEDGER",
-      "headline": "Token Estimates Aren’t The Final Count",
-      "subheadline": "Usage returned by the API is the source of truth.",
-      "visualStyle": "monumental-token-ledger",
-      "layoutTopology": "oversized-headline-over-converging-paths",
-      "svgBlueprint": "Use Paper #EAF2EC background, Ink #291D35 lettering, Accent #6534BC paths, and Surface #DCE8DF panels. Below the headline, draw two conceptual paths labeled Estimate and Returned usage. Make the estimate dashed and returned usage solid. Avoid numeric scales and invented quantities.",
-      "points": [
+      "headline": "Ring Cameras Take Flight And Patrol",
+      "subheadline": "Two autonomous cameras bring indoor mapping, cloud processing, and physical constraints.",
+      "visualStyle": "airborne-versus-grounded-hero",
+      "layoutTopology": "diagonal-dual-trajectory",
+      "palette": {
+        "paper": "#0C0E12",
+        "ink": "#F0F4F8",
+        "accent": "#38BDF8",
+        "surface": "#151921"
+      },
+      "items": [
         {
-          "title": "Estimate",
-          "body": "Token estimates may differ slightly from actual processing usage."
+          "type": "metric",
+          "label": "Ring Drone Cam starting price",
+          "value": "$250"
         },
         {
-          "title": "Final count",
-          "body": "The API’s returned usage establishes the actual processed token count."
+          "type": "metric",
+          "label": "Ring Rover Cam price",
+          "value": "$1,000"
         }
-      ]
+      ],
+      "svgBlueprint": "Use the supplied palette throughout. Draw an abstract airborne camera above a curved dashed route, and a wheeled camera beside a floor-level route. Arrange the two trajectories diagonally around generous headline space. Anchor one price badge to each device. Silhouettes are conceptual, not dimensionally accurate product renderings.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-2",
       "index": 1,
-      "type": "token-definition",
-      "kicker": "COUNTING UNITS",
-      "headline": "What Typically Counts As A Token?",
-      "subheadline": "The article names words, numbers, and symbols as typical token units.",
-      "visualStyle": "typographic-specimen-diptych",
-      "layoutTopology": "two-column-specimen-sheet",
-      "svgBlueprint": "On Paper #EAF2EC, create exactly two open specimen frames in Ink #291D35. Label one Words and the other Numbers and symbols. Use Accent #6534BC brackets to suggest token boundaries without demonstrating a specific tokenizer. Place explanatory copy on Surface #DCE8DF caption strips.",
-      "points": [
+      "type": "availability-timeline",
+      "kicker": "THE RELEASE GAP",
+      "headline": "One Shipping Schedule, One Regulatory Gate",
+      "subheadline": "Rover preorders are open; the drone's target still requires authorization.",
+      "visualStyle": "gated-release-calendar",
+      "layoutTopology": "horizontal-timeline-with-terminal-gate",
+      "items": [
         {
-          "title": "Words",
-          "body": "Typically, a Chinese word or an English word counts as a token."
+          "type": "point",
+          "title": "Ring Rover Cam",
+          "body": "Preorders open; shipping scheduled for December 16, 2026."
         },
         {
-          "title": "Numbers and symbols",
-          "body": "Typically, a number or a symbol counts as a token."
+          "type": "point",
+          "title": "Ring Drone Cam",
+          "body": "Target: January 27, 2027, contingent on Federal Communications Commission authorization."
         }
-      ]
+      ],
+      "svgBlueprint": "Create a horizontal, explicitly schematic timeline with two release nodes. Use a solid node for Rover's scheduled shipping and an outlined node behind a gate for the drone's contingent target. Place each date inside its corresponding text zone, not duplicated on an axis. Avoid a completion checkmark or any suggestion of granted authorization.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-3",
       "index": 2,
-      "type": "conversion-caveat",
-      "kicker": "MODEL DEPENDENCE",
-      "headline": "Conversion Ratios Can Vary",
-      "subheadline": "Different models use different tokenization methods.",
-      "visualStyle": "branching-tokenization-schematic",
-      "layoutTopology": "central-fork-with-terminal-annotations",
-      "svgBlueprint": "Draw a central Tokenization label branching toward exactly two annotations: Model methods and Conversion ratios. Use Ink #291D35 branches and Accent #6534BC endpoint brackets on Paper #EAF2EC. Keep branches unscaled; do not depict numerical ratios or specific model outputs. Use Surface #DCE8DF behind annotations.",
-      "points": [
+      "type": "processing-architecture",
+      "kicker": "INSIDE AI PILOT",
+      "headline": "Autonomous Does Not Mean Local Only",
+      "subheadline": "Both devices combine onboard inputs with cloud processing for navigation.",
+      "visualStyle": "open-cloud-processing-circuit",
+      "layoutTopology": "triangular-system-diagram",
+      "items": [
         {
-          "title": "Different methods",
-          "body": "Different models use different tokenization methods."
+          "type": "point",
+          "title": "Cameras And Sensors",
+          "body": "AI Pilot uses cameras and on-device sensors."
         },
         {
-          "title": "Variable ratios",
-          "body": "Token-to-character conversion ratios can vary; the supplied text gives none."
+          "type": "point",
+          "title": "Vision Models",
+          "body": "Specialized vision models support autonomous route planning and obstacle avoidance."
+        },
+        {
+          "type": "point",
+          "title": "Cloud Processing",
+          "body": "Amazon explicitly includes cloud processing; operation is not local-only."
         }
-      ]
+      ],
+      "svgBlueprint": "Arrange three labeled nodes as a spacious triangle around an AI Pilot label. Represent cameras and sensors with an aperture, vision models with a layered mesh, and cloud processing with an outlined cloud. Connect nodes using neutral, undirected lines: the dossier does not establish processing order or model location. Do not depict video-upload contents.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-4",
       "index": 3,
-      "type": "tooling-gap",
-      "kicker": "TOKENIZER DEMO",
-      "headline": "Demo Code, But No Package Link",
-      "subheadline": "The article references a zip package for calculating input/output token usage.",
-      "visualStyle": "technical-package-cutaway",
-      "layoutTopology": "central-artifact-with-opposed-callouts",
-      "svgBlueprint": "Center an outlined zip-package icon on Paper #EAF2EC. Place exactly two callouts on opposing sides: Demo tokenizer and Missing link. Connect the first with a solid Ink #291D35 leader and the second with a broken Accent #6534BC leader. Use Surface #DCE8DF callout backgrounds; include no fabricated filename or URL.",
-      "points": [
+      "type": "mapping-comparison",
+      "kicker": "BEFORE THE PATROL",
+      "headline": "Both Map Interiors, But Differently",
+      "subheadline": "The drone needs a carried walkthrough; the Rover explores autonomously.",
+      "visualStyle": "annotated-floorplan-duet",
+      "layoutTopology": "shared-floorplan-with-opposed-callouts",
+      "items": [
         {
-          "title": "Referenced tool",
-          "body": "Demo tokenizer code calculates input/output token usage."
+          "type": "point",
+          "title": "Ring Drone Cam",
+          "body": "Maps indoor floor plans after customers carry it through the spaces."
         },
         {
-          "title": "Missing access",
-          "body": "The supplied text includes no package link."
+          "type": "point",
+          "title": "Ring Rover Cam",
+          "body": "Maps indoor floor plans through autonomous exploration."
         }
-      ]
+      ],
+      "svgBlueprint": "Draw one large schematic indoor floor plan, explicitly illustrative and without dimensions. Overlay two visually distinct mapping traces: a dashed carried walkthrough and a dotted autonomous exploration path. Attach the drone explanation above-left and Rover explanation below-right. Do not imply simultaneous operation, shared maps, or measured coverage.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-5",
       "index": 4,
-      "type": "usage-accounting",
-      "kicker": "ACTUAL PROCESSING",
-      "headline": "Read The Returned Usage",
-      "subheadline": "The actual processed token count is based on the model’s return.",
-      "visualStyle": "editorial-response-receipt",
-      "layoutTopology": "vertical-receipt-with-margin-notes",
-      "svgBlueprint": "Create a tall Surface #DCE8DF receipt on Paper #EAF2EC with exactly two labeled sections: Model return and Usage results. Use Ink #291D35 rules and an Accent #6534BC vertical margin connector. Leave out numerical placeholders, JSON keys, and interface details not supplied by the dossier.",
-      "points": [
+      "type": "flight-and-subscription",
+      "kicker": "THE FLIGHT CONDITIONS",
+      "headline": "Eight Minutes, With Conditions Attached",
+      "subheadline": "Flight duration is conditional; scheduled routes require an Amazon Ring Protect subscription.",
+      "visualStyle": "finite-flight-duration-placard",
+      "layoutTopology": "oversized-numeral-with-bottom-condition-rail",
+      "items": [
         {
-          "title": "Model return",
-          "body": "The actual processed token count is based on the model’s return."
+          "type": "point",
+          "title": "8 minutes",
+          "body": "Flight limit: new, fully-charged battery under controlled conditions."
         },
         {
-          "title": "Usage results",
-          "body": "The actual number of processed tokens appears in usage results."
+          "type": "point",
+          "title": "Scheduled Routes",
+          "body": "Set-route and scheduled patrol capability requires an Amazon Ring Protect subscription."
         }
-      ]
+      ],
+      "svgBlueprint": "Make the numeral 8 the dominant vector element, with minutes set beside it and the full battery-condition statement directly below. End a short flight trace at a simple charging-dock outline. Use a separate bottom rail for the subscription requirement. Avoid countdown ticks, battery percentages, or implied real-world endurance.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-6",
       "index": 5,
-      "type": "image-processing",
-      "kicker": "IMAGE INPUTS",
-      "headline": "Images Are Resized Before Inference",
-      "subheadline": "Image dimensions can help estimate token usage.",
-      "visualStyle": "dimension-bracket-transform",
-      "layoutTopology": "horizontal-transformation-with-underlined-captions",
-      "svgBlueprint": "On Paper #EAF2EC, draw an image outline with width and height brackets, followed by an Accent #6534BC arrow toward a differently sized image outline. Use Ink #291D35 borders and Surface #DCE8DF fills. Label the diagram Conceptual; show no dimensions, scale factor, or token counts. Place exactly two captions below.",
-      "points": [
+      "type": "navigation-bottleneck",
+      "kicker": "WHEN VISION STRUGGLES",
+      "headline": "Ordinary Surfaces Can Complicate Drone Navigation",
+      "subheadline": "Amazon identifies three surface categories where navigation performance may degrade.",
+      "visualStyle": "material-interference-triptych",
+      "layoutTopology": "three-horizontal-material-bands",
+      "items": [
         {
-          "title": "Dimension-based estimate",
-          "body": "Image token usage can be estimated from image dimensions."
+          "type": "point",
+          "title": "Reflective Surfaces",
+          "body": "Examples include polished marble or wet tile."
         },
         {
-          "title": "Automatic resizing",
-          "body": "Images are automatically resized before inference."
+          "type": "point",
+          "title": "Featureless Walls",
+          "body": "Blank matte walls without features may degrade navigation."
+        },
+        {
+          "type": "point",
+          "title": "Transparent Surfaces",
+          "body": "Amazon lists frameless glass and mirrors."
         }
-      ]
+      ],
+      "svgBlueprint": "Use three full-width material bands rather than cards. Illustrate reflection with a doubled ray, a blank wall with an untextured rectangle, and transparent surfaces with offset outlines. Place one concise label and body beside each material illustration. Use interrupted navigation traces to indicate possible degradation, never certain collisions.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-7",
       "index": 6,
-      "type": "image-limit",
-      "kicker": "UNSPECIFIED CEILING",
-      "headline": "An Image Token Ceiling Exists",
-      "subheadline": "The supplied text gives no numerical limit and points to Vision.",
-      "visualStyle": "ceiling-rule-editorial",
-      "layoutTopology": "full-width-boundary-over-stacked-annotations",
-      "svgBlueprint": "Draw a bold Accent #6534BC horizontal ceiling near the upper third of a Paper #EAF2EC canvas. Beneath it, place an Ink #291D35 image outline and exactly two stacked annotations on Surface #DCE8DF. Label the rule Upper bound without a numeric axis or implied threshold value.",
-      "points": [
+      "type": "rover-capability",
+      "kicker": "THE GROUND PATROL",
+      "headline": "Rover Extends Its View Indoors",
+      "subheadline": "Amazon describes broad coverage, designated scans, and an automatically adjustable mast.",
+      "visualStyle": "telescoping-rover-radial-cutaway",
+      "layoutTopology": "central-device-with-three-satellite-annotations",
+      "items": [
         {
-          "title": "Per-image bound",
-          "body": "An upper bound applies to the number of tokens per image."
+          "type": "point",
+          "title": "Claimed Coverage",
+          "body": "Up to 5,000 square feet (465 square meters), according to Amazon."
         },
         {
-          "title": "Unspecified value",
-          "body": "No numerical limit is supplied; the article refers readers to Vision."
+          "type": "point",
+          "title": "Designated Scan",
+          "body": "Can perform a 360-degree scan at a designated location."
+        },
+        {
+          "type": "point",
+          "title": "Adjustable Mast",
+          "body": "Automatically adjusts to view over counters, shelving, and other obstacles."
         }
-      ]
+      ],
+      "svgBlueprint": "Center an abstract wheeled camera with a vertically adjustable mast. Place exactly three annotation zones around it: coverage, scan, and mast. Draw a circular scan arrow and a schematic counter silhouette. Represent coverage with an irregular dotted enclosure, not a measured radius. Do not imply mast height, dimensions, or guaranteed coverage.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-8",
       "index": 7,
-      "type": "estimate-versus-actual",
-      "kicker": "ACCOUNTING DISTINCTION",
-      "headline": "Estimated Usage Versus Actual Usage",
-      "subheadline": "Estimates may differ slightly; API-returned usage remains the source of truth.",
-      "visualStyle": "dashed-solid-comparison",
-      "layoutTopology": "parallel-horizontal-lanes",
-      "svgBlueprint": "Create exactly two equal-length horizontal lanes on Paper #EAF2EC. Render Estimate as a dashed Ink #291D35 line and API-returned usage as a solid Accent #6534BC line. Place each description in its lane on Surface #DCE8DF. Equal lengths are schematic, not quantitative; include no percentage difference.",
-      "comparisons": [
+      "type": "terrain-restrictions",
+      "kicker": "THE FLOOR PLAN VETO",
+      "headline": "Rover Cannot Patrol Every Indoor Floor",
+      "subheadline": "Stairs, transitions, and incompatible surfaces constrain where it can operate.",
+      "visualStyle": "architectural-obstacle-section",
+      "layoutTopology": "continuous-floor-cross-section",
+      "items": [
         {
-          "entity": "Estimate",
-          "body": "May differ slightly from actual processing usage."
+          "type": "point",
+          "title": "Single Floor",
+          "body": "Indoor operation only; Rover cannot climb stairs."
         },
         {
-          "entity": "API-returned usage",
-          "body": "The source of truth for actual processing usage."
+          "type": "point",
+          "title": "Flooring Transitions",
+          "body": "Transitions greater than 1.375 inches (3.5 centimeters) are incompatible."
+        },
+        {
+          "type": "point",
+          "title": "Other Incompatibilities",
+          "body": "Curved edges, sunken areas, and black glossy floors are incompatible."
         }
-      ]
+      ],
+      "svgBlueprint": "Build one continuous architectural floor cross-section divided into three annotation regions. Show a stair interruption, a transition marked with the exact greater-than threshold, and a composite incompatible-surface region. Terminate the Rover path before obstacles. Keep all geometry schematic; do not imply transitions at or below the threshold are universally safe.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-9",
       "index": 8,
-      "type": "documentation-audit",
-      "kicker": "NUMERICAL GAPS",
-      "headline": "Two Values The Text Doesn’t Supply",
-      "subheadline": "Neither conversion ratios nor the image token ceiling receive numerical specifications.",
-      "visualStyle": "open-field-document-audit",
-      "layoutTopology": "staggered-ledger-rows-with-status-gutter",
-      "svgBlueprint": "Build exactly two staggered ledger rows on Paper #EAF2EC: Conversion ratios and Image token ceiling. Use Ink #291D35 labels, Surface #DCE8DF row fills, and Accent #6534BC status brackets reading Not supplied. Do not use zeroes, dashes resembling numerical values, gauges, or placeholder amounts.",
-      "points": [
+      "type": "privacy-context",
+      "kicker": "THE TRUST BACKDROP",
+      "headline": "Cloud Storage Meets Ring's Security History",
+      "subheadline": "Current retention terms sit alongside earlier FTC findings about Ring safeguards.",
+      "items": [
         {
-          "title": "Conversion ratios",
-          "body": "No numerical token-to-character conversion ratios appear in the supplied text."
+          "type": "metric",
+          "label": "FTC investigation year",
+          "value": "2023",
+          "body": "Ring faced charges over employees and contractors watching customers' private-space recordings."
         },
         {
-          "title": "Image token ceiling",
-          "body": "The supplied text gives no numerical per-image token limit."
+          "type": "metric",
+          "label": "US customers' accounts accessed by hackers",
+          "value": "55,000",
+          "body": "The FTC attributed that access to inadequate Ring safeguards."
+        },
+        {
+          "type": "metric",
+          "label": "Rover cloud video storage: up to this many days",
+          "value": "180",
+          "body": "Applies to doorbell rings, motion events, and Live View events."
         }
-      ]
+      ],
+      "visualStyle": "archival-record-and-retention-ledger",
+      "layoutTopology": "stacked-editorial-ledger-with-separated-current-row",
+      "svgBlueprint": "Draw three typographic ledger rows with oversized numerical badges. Group the first two under historical Ring context; separate the current Rover storage row with a strong rule and extra whitespace. Use no connecting trend line: these are different measures. Ensure the graphic does not imply the new devices experienced the historical breaches.",
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-10",
       "index": 9,
-      "type": "closing-takeaway",
-      "kicker": "THE TOKEN LEDGER",
-      "headline": "Let Returned Usage Settle The Count",
-      "subheadline": "Estimation and actual processing usage are not necessarily identical.",
-      "visualStyle": "authoritative-ledger-close",
-      "layoutTopology": "full-height-editorial-statement-with-bottom-rail",
-      "svgBlueprint": "Set the headline in oversized Ink #291D35 on Paper #EAF2EC. Draw an Accent #6534BC underline terminating at an outlined Usage results tab. Reserve a Surface #DCE8DF bottom rail for exactly two concise takeaways. Include no invented totals, savings, billing claims, or performance metrics.",
-      "points": [
+      "type": "encryption-verdict",
+      "kicker": "THE ENCRYPTION CATCH",
+      "headline": "Encryption Claims Need A Crucial Distinction",
+      "subheadline": "The article does not specify encryption-key retention or deletion policies.",
+      "visualStyle": "claim-versus-caveat-editorial",
+      "layoutTopology": "asymmetric-quotation-column-and-margin-rebuttal",
+      "items": [
         {
-          "title": "Estimates",
-          "body": "Token estimates may differ slightly from actual processing usage."
+          "type": "point",
+          "title": "Amazon",
+          "body": "Says both devices' videos receive Ring's Throw Away the Key Encryption."
         },
         {
-          "title": "Source of truth",
-          "body": "Use API-returned usage as the source of truth."
+          "type": "point",
+          "title": "Electronic Frontier Foundation",
+          "body": "Says the encryption remains well short of end-to-end encryption."
         }
-      ]
+      ],
+      "svgBlueprint": "Use a wide editorial column for Amazon's attributed claim and a narrower, accent-lined margin for the EFF's attributed caveat. Connect them with a thin bracket, not an equivalence sign. Place the missing key-policy information prominently beneath the headline. Avoid lock-check icons, key-deletion animations, or diagrams implying verified cryptographic architecture.",
+      "platform": "instagram-feed"
     }
   ]
 }

@@ -1,187 +1,249 @@
 {
-  "templateName": "Ars Technica",
+  "templateName": "Custom Brand",
   "templateSlug": "ring-cameras-go-mobile-as-amazon",
-  "domain": "Consumer Robotics / Artificial Intelligence / Surveillance & Privacy",
+  "domain": "ring-cameras-go-mobile-as-amazon.pub",
+  "platform": "instagram-stories",
   "slides": [
     {
       "id": "slide-1",
+      "index": 0,
       "type": "cover",
-      "kicker": "SURVEILLANCE / IN FOCUS",
-      "headline": "Ring’s Cameras Are Learning to Patrol",
-      "subheadline": "Flying and rolling cameras promise mobile monitoring—with cloud processing, physical limits and unresolved privacy questions."
+      "kicker": "CUSTOM BRAND / MOBILE SECURITY",
+      "headline": "Ring Cameras Leave Their Mounts",
+      "subheadline": "Amazon pairs a flying indoor camera with a wheeled business patrol robot.",
+      "visualStyle": "diverging-motion-hero",
+      "layoutTopology": "central-origin-with-diverging-paths",
+      "svgBlueprint": "Use Paper #0D0E12, Ink #F1F3F9, Accent #FF4D00 and Surface #161820 throughout. Branch an orange trajectory upward toward an abstract drone glyph and horizontally toward a wheeled robot glyph. Place one product callout at each endpoint. Keep the headline above both paths. Glyphs are conceptual, not dimensionally accurate product renderings.",
+      "items": [
+        {
+          "title": "Ring Drone Cam",
+          "body": "Flying indoor security camera."
+        },
+        {
+          "title": "Ring Rover Cam",
+          "body": "Wheeled autonomous security robot designed for business."
+        }
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-2",
-      "type": "brief",
-      "headline": "What Changes When Cameras Can Move?",
-      "items": [
-        {
-          "index": 1,
-          "tag": "AI",
-          "title": "Navigation needs the cloud",
-          "body": "AI Pilot combines cameras, specialized vision models, on-device sensors and cloud processing."
-        },
-        {
-          "index": 2,
-          "tag": "MAPPING",
-          "title": "Your space becomes a map",
-          "body": "Both devices digitally map customers’ home or business floor plans."
-        },
-        {
-          "index": 3,
-          "tag": "RESPONSE",
-          "title": "Alerts can trigger patrols",
-          "body": "Connected Ring-device alerts can send the cameras along predefined routes or patrol points."
-        }
-      ]
-    },
-    {
-      "id": "slide-3",
-      "type": "mechanism",
-      "headline": "Two Machines, Two Ways to Map",
-      "left": {
-        "tag": "DRONE CAM",
-        "title": "Carry it before it flies",
-        "description": "Customers carry the drone through rooms for mapping. Its camera records 2K video."
-      },
-      "right": {
-        "tag": "ROVER CAM",
-        "title": "Explores on its own",
-        "description": "Rover maps through autonomous exploration, livestreaming and recording in up to 4K."
-      }
-    },
-    {
-      "id": "slide-4",
-      "type": "telemetry",
-      "headline": "The Prices—and the Cloud Footprint",
+      "index": 1,
+      "type": "price-comparison",
+      "kicker": "THE HARDWARE BILL",
+      "headline": "Flight And Wheels, Different Prices",
+      "subheadline": "Drone targets home monitoring; Rover is designed for business.",
+      "visualStyle": "oversized-price-ledger",
+      "layoutTopology": "stacked-full-width-price-bands",
+      "svgBlueprint": "Draw two full-width ledger bands separated by an orange rule. Align product names left and oversized numerical price badges right. Add a small flight-path glyph to Drone and a wheel-track glyph to Rover. Use equal band heights; do not imply subscription costs are included.",
       "metrics": [
         {
           "value": "$250",
-          "label": "DRONE STARTING PRICE",
-          "context": "January 27, 2027 target depends on Federal Communications Commission authorization.",
-          "tag": "PENDING FCC"
+          "label": "Ring Drone Cam starting price"
         },
         {
           "value": "$1,000",
-          "label": "ROVER PRICE",
-          "context": "Available for preorder; scheduled to start shipping December 16, 2026.",
-          "tag": "PREORDER"
+          "label": "Ring Rover Cam price"
+        }
+      ],
+      "platform": "instagram-stories"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "release-sequence",
+      "kicker": "AVAILABILITY",
+      "headline": "Rover Ships First. Drone Awaits Authorization.",
+      "subheadline": "Rover has a scheduled shipping date; Drone’s target requires FCC authorization.",
+      "visualStyle": "conditional-release-track",
+      "layoutTopology": "horizontal-sequence-with-regulatory-gate",
+      "svgBlueprint": "Create a chronological horizontal track with two labeled milestones. Place Rover first using a solid marker. Place Drone second beyond an outlined FCC gate, connected by a dashed segment. Render full dates as editorial text, not numerical telemetry. Spacing is schematic, not a duration scale.",
+      "items": [
+        {
+          "title": "Ring Rover Cam",
+          "body": "Preorders available; shipping scheduled to start December 16, 2026."
         },
         {
-          "value": "180 DAYS",
-          "label": "ROVER CLOUD RETENTION",
-          "context": "Up to this duration for doorbell-ring, motion-event and Live View videos.",
-          "tag": "UP TO"
+          "title": "Ring Drone Cam",
+          "body": "Target: January 27, 2027, conditional on Federal Communications Commission authorization."
         }
-      ]
+      ],
+      "platform": "instagram-stories"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "drone-telemetry",
+      "kicker": "DRONE CAPABILITIES",
+      "headline": "An Eight-Minute Flight, Under Controlled Conditions",
+      "subheadline": "Flight time assumes a new, fully-charged battery under controlled conditions.",
+      "visualStyle": "radial-flight-instrument",
+      "layoutTopology": "central-reticle-with-three-metric-anchors",
+      "svgBlueprint": "Center an abstract drone glyph inside a circular rotation arrow. Add a field-of-view wedge corresponding to the stated angle. Position three numerical badges around the diagram with separate unit labels. Reserve an unobstructed text strip for the battery qualification. Do not depict coverage distance or flight range.",
+      "metrics": [
+        {
+          "value": "8",
+          "label": "Minutes of flight time",
+          "context": "New, fully-charged battery under controlled conditions."
+        },
+        {
+          "value": "148",
+          "label": "Degree field of view"
+        },
+        {
+          "value": "360",
+          "label": "Degree rotation"
+        }
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-5",
-      "type": "controversy",
-      "quote": "privacy and security without compromise",
-      "attribution": "Amazon",
-      "role": "Product promoter",
-      "context": "EFF says Throw Away the Key Encryption falls well short of end-to-end encryption."
+      "index": 4,
+      "type": "mapping-comparison",
+      "kicker": "TEACHING THE SPACE",
+      "headline": "Two Different Ways To Map Indoors",
+      "subheadline": "Both devices build digital floor plans, but their setup workflows differ.",
+      "visualStyle": "paired-cartographic-workflows",
+      "layoutTopology": "shared-floorplan-with-opposing-route-overlays",
+      "svgBlueprint": "Draw one abstract, unmeasured floor-plan outline. Overlay a dashed hand-carried Drone route and a solid autonomous Rover route, differentiated by line pattern and endpoint glyphs. Place one annotation above and one below the shared plan. Mark the diagram as schematic; imply neither room count nor floor-transition capability.",
+      "items": [
+        {
+          "title": "Drone: customer-carried mapping",
+          "body": "The customer carries the drone through indoor spaces to support mapping."
+        },
+        {
+          "title": "Rover: autonomous exploration",
+          "body": "Autonomous exploration supports digital floor-plan mapping and suggested patrol points."
+        }
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-6",
-      "type": "catch",
-      "headline": "The Fine Print Shapes the Patrol",
+      "index": 5,
+      "type": "automation-dependencies",
+      "kicker": "THE AUTOMATION CONDITIONS",
+      "headline": "Autonomous Does Not Mean Local-Only",
+      "subheadline": "AI Pilot combines device cameras, specialized vision models, on-device sensors and cloud processing.",
+      "visualStyle": "cloud-linked-patrol-circuit",
+      "layoutTopology": "vertical-dependency-spine-with-three-branches",
+      "svgBlueprint": "Build a vertical orange spine joining three compact annotations: shared AI Pilot processing, Drone subscription access, and Drone alert response. Use camera, cloud and route glyphs without additional text nodes. Keep processing arrows schematic; do not imply continuous uploading, processing location for every model, or a Rover subscription requirement.",
       "items": [
         {
-          "index": 1,
-          "tag": "KEY DELETION",
-          "title": "No timetable provided",
-          "body": "The supplied article specifies no encryption-key retention or deletion periods."
+          "title": "Shared AI Pilot",
+          "body": "Cloud processing works alongside device cameras, specialized vision models and on-device sensors."
         },
         {
-          "index": 2,
-          "tag": "SUBSCRIPTION",
-          "title": "Drone scheduling costs extra",
-          "body": "Set routes and schedules require Amazon Ring Protect; the article states no explicit Rover subscription requirement."
+          "title": "Drone routes and schedules",
+          "body": "Described for Amazon Ring Protect subscribers; subscription pricing is not stated."
         },
         {
-          "index": 3,
-          "tag": "FLIGHT TIME",
-          "title": "A conditional endurance claim",
-          "body": "Amazon specifies 8 minutes on a “new, fully-charged battery under controlled conditions.”"
-        },
-        {
-          "index": 4,
-          "tag": "NAVIGATION",
-          "title": "Ordinary surfaces can interfere",
-          "body": "Drone navigation may degrade around reflective surfaces, featureless blank matte walls, frameless glass and mirrors."
+          "title": "Drone alert response",
+          "body": "Ring camera, sensor or alarm notifications can trigger automatic set-route flights."
         }
-      ]
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-7",
-      "type": "debunk",
-      "headline": "Don’t Confuse Navigation With Facial Recognition",
-      "left": {
-        "tag": "THE MYTH",
-        "title": "These robots identify faces",
-        "description": "That capability is not established by the supplied article."
-      },
-      "right": {
-        "tag": "THE REALITY",
-        "title": "Familiar Faces concerns fixed cameras",
-        "description": "Available since December 2025 on fixed Ring doorbell cameras, Familiar Faces already faces a class action lawsuit."
-      }
+      "index": 6,
+      "type": "drone-navigation-bottleneck",
+      "kicker": "DRONE NAVIGATION",
+      "headline": "Ordinary Surfaces Can Complicate Navigation",
+      "subheadline": "Amazon identifies indoor surfaces around which Drone navigation performance may degrade.",
+      "visualStyle": "material-hazard-cross-section",
+      "layoutTopology": "three-zone-continuous-room-section",
+      "svgBlueprint": "Draw a continuous schematic room section divided into three material zones: reflective flooring, a featureless matte wall, and glass or mirror panels. Use orange broken route segments near each zone to indicate possible navigation degradation, not inevitable crashes. Place one short annotation beneath each zone.",
+      "items": [
+        {
+          "title": "Reflective flooring",
+          "body": "Polished marble or wet tile may degrade navigation performance."
+        },
+        {
+          "title": "Featureless walls",
+          "body": "Blank matte walls without features may degrade navigation performance."
+        },
+        {
+          "title": "Glass and mirrors",
+          "body": "Frameless glass and mirrors may degrade navigation performance."
+        }
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-8",
-      "type": "verdict",
-      "headline": "Choose by Constraints, Not Autonomy Claims",
-      "avoid": {
-        "tag": "WHO SHOULD SKIP",
-        "title": "Requirements these robots cannot meet",
-        "points": [
-          "Skip both if local-only processing is essential: AI Pilot uses cloud processing.",
-          "Skip Rover if patrols must climb stairs: it operates indoors on a single floor."
-        ]
-      },
-      "fit": {
-        "tag": "POTENTIAL FIT",
-        "title": "Conditional uses, not blanket endorsements",
-        "points": [
-          "Consider Drone only if cloud processing and a Ring Protect subscription for set routes and schedules are acceptable.",
-          "Consider Rover for compatible single-floor interiors; claimed coverage is up to 5,000 square feet (465 square meters)."
-        ]
-      }
+      "index": 7,
+      "type": "rover-operating-envelope",
+      "kicker": "ROVER’S PHYSICAL LIMITS",
+      "headline": "Business Coverage, Bounded By The Floor",
+      "subheadline": "Rover’s coverage claim comes with single-floor and terrain restrictions.",
+      "visualStyle": "bounded-patrol-floorplate",
+      "layoutTopology": "large-floorplate-with-bottom-restriction-rail",
+      "svgBlueprint": "Use a large unmeasured floorplate with a Rover route and a prominent coverage annotation. Beneath it, place two restriction annotations: single-floor operation and incompatible terrain. Show a crossed stair glyph and an enlarged threshold detail labeled with the exact stated limit. Do not invent building dimensions or mast height.",
+      "items": [
+        {
+          "title": "Claimed coverage",
+          "body": "Up to 5,000 square feet (465 square meters)."
+        },
+        {
+          "title": "Operating environment",
+          "body": "Single-floor, indoor environment; cannot climb stairs."
+        },
+        {
+          "title": "Incompatible terrain",
+          "body": "Curved edges, sunken areas, black glossy floors; transitions greater than 1.375 inches (3.5 centimeters)."
+        }
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-9",
-      "type": "future",
-      "headline": "What to Watch Before Buying",
+      "index": 8,
+      "type": "privacy-accountability",
+      "kicker": "THE PRIVACY TEST",
+      "headline": "Encryption Claims Meet A Security Record",
+      "subheadline": "Amazon says Throw Away the Key Encryption will protect both new devices’ videos.",
+      "visualStyle": "editorial-evidence-stack",
+      "layoutTopology": "three-tier-evidence-ledger",
+      "svgBlueprint": "Create three full-width evidence rows with distinct cloud, historical-account and encryption glyphs. Give each row equal visual weight. Separate historical FTC reporting from current product claims with explicit headings. Avoid shield checkmarks or imagery suggesting confirmed end-to-end encryption. Keep the full retention scope visible.",
       "items": [
         {
-          "index": 1,
-          "tag": "DRONE AUTHORIZATION",
-          "title": "The launch remains conditional",
-          "body": "Amazon targets January 27, 2027, subject to Federal Communications Commission authorization."
+          "title": "Rover cloud retention",
+          "body": "Doorbell-ring, motion-event and Live View videos: cloud storage up to 180 days."
         },
         {
-          "index": 2,
-          "tag": "ROVER SHIPPING",
-          "title": "Preorders precede deliveries",
-          "body": "Rover is scheduled to start shipping December 16, 2026."
+          "title": "2023 FTC investigation",
+          "body": "The FTC described hackers accessing 55,000 US customers’ accounts."
         },
         {
-          "index": 3,
-          "tag": "MISSING SPECIFICATIONS",
-          "title": "Practical questions remain unanswered",
-          "body": "The supplied article gives neither device’s physical dimensions, nor Rover’s mast height or battery life."
+          "title": "EFF’s encryption assessment",
+          "body": "Throw Away the Key Encryption remains well short of end-to-end encryption."
         }
-      ]
+      ],
+      "platform": "instagram-stories"
     },
     {
       "id": "slide-10",
-      "type": "hero-cta",
-      "headline": "More Mobility Is Not More Privacy",
-      "verdict": "Judge these cameras by cloud dependence, operating limits and encryption—not autonomy alone.",
-      "question": "Would mobile monitoring justify digitally mapping your private spaces?",
-      "actionText": "Where do you draw the line?"
+      "index": 9,
+      "type": "specification-debrief",
+      "kicker": "WHAT REMAINS UNANSWERED",
+      "headline": "Mobile Security Still Has Specification Gaps",
+      "subheadline": "The supplied article leaves practical hardware details unstated for both devices.",
+      "visualStyle": "open-ended-specification-brackets",
+      "layoutTopology": "diagonal-product-anchors-with-open-brackets",
+      "svgBlueprint": "Anchor an abstract Drone glyph at upper left and Rover glyph at lower right. Extend open-ended orange specification brackets toward their respective text blocks. Use no measurement ticks, invented dimensions or placeholder values. Reserve a clear headline zone and end both brackets without closure to emphasize unstated specifications.",
+      "items": [
+        {
+          "title": "Ring Drone Cam",
+          "body": "Dimensions, coverage area, charging duration and floor-transition capabilities are not stated."
+        },
+        {
+          "title": "Ring Rover Cam",
+          "body": "Dimensions, mast height, battery life and charging duration are not stated."
+        }
+      ],
+      "platform": "instagram-stories"
     }
   ]
 }

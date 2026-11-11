@@ -57,6 +57,7 @@ export function TemplateStudio() {
   const initialTemplateParam = searchParams.get('template');
   const initialSlideParam = parseInt(searchParams.get('slide') || '0', 10);
   const initialModeParam = (searchParams.get('mode') as 'fit' | '1:1' | 'grid') || 'fit';
+  const platformParam = searchParams.get('platform');
 
   // Discover template manifests synchronously from brand.json
   const templates: TemplateManifest[] = useMemo(() => {
@@ -138,6 +139,9 @@ export function TemplateStudio() {
   const [metrics, setMetrics] = useState<{ fill: number; scale: string }>({ fill: 80, scale: '1.000' });
 
   const totalSlides = activePkg?.deck.slides.length || 0;
+  const activePlatform = platformParam || activePkg?.deck?.platform || activePkg?.brand?.platform || 'instagram-feed';
+  const canvasWidth = 1080;
+  const canvasHeight = activePlatform === 'instagram-stories' ? 1920 : activePlatform === 'instagram-square' ? 1080 : 1350;
 
   // Keyboard navigation
   useEffect(() => {
@@ -203,7 +207,7 @@ export function TemplateStudio() {
       );
     }
     if (isLoading || !activePkg) {
-      return <div className="flex h-[1350px] w-[1080px] items-center justify-center bg-zinc-950 text-zinc-400">Loading...</div>;
+      return <div className="flex items-center justify-center bg-zinc-950 text-zinc-400" style={{ width: canvasWidth, height: canvasHeight }}>Loading...</div>;
     }
 
     const { brand, deck, slides } = activePkg;
@@ -211,12 +215,13 @@ export function TemplateStudio() {
     const CurrentSlideComponent = (slides[activeSlideIndex] || slides[0]) as SlideComponent;
 
     return (
-      <div className="inline-block" style={{ width: 1080, height: 1350 }}>
+      <div className="inline-block" style={{ width: canvasWidth, height: canvasHeight }}>
         <SlideFrame
           brand={brand}
           slide={currentSlideData}
           slideIndex={activeSlideIndex}
           totalSlides={totalSlides}
+          platform={activePlatform}
         >
           <CurrentSlideComponent
             slide={currentSlideData}
@@ -370,11 +375,11 @@ export function TemplateStudio() {
               <div
                 className="transition-transform duration-200 ease-out origin-center shadow-2xl rounded-sm"
                 style={{
-                  transform: 'scale(0.48)',
-                  width: 1080,
-                  height: 1350,
-                  marginBottom: -420,
-                  marginTop: -280,
+                  transform: activePlatform === 'instagram-stories' ? 'scale(0.38)' : 'scale(0.48)',
+                  width: canvasWidth,
+                  height: canvasHeight,
+                  marginBottom: activePlatform === 'instagram-stories' ? -560 : -420,
+                  marginTop: activePlatform === 'instagram-stories' ? -380 : -280,
                 }}
               >
                 <SlideFrame
@@ -382,6 +387,7 @@ export function TemplateStudio() {
                   slide={currentSlideData}
                   slideIndex={activeSlideIndex}
                   totalSlides={totalSlides}
+                  platform={activePlatform}
                 >
                   <CurrentSlideComponent
                     slide={currentSlideData}
@@ -399,6 +405,7 @@ export function TemplateStudio() {
                   slide={currentSlideData}
                   slideIndex={activeSlideIndex}
                   totalSlides={totalSlides}
+                  platform={activePlatform}
                 >
                   <SlideErrorBoundary>
                     <CurrentSlideComponent
@@ -415,6 +422,7 @@ export function TemplateStudio() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl w-full py-8">
                 {deck.slides.map((s, idx) => {
                   const SlideComp = (slides[idx] || slides[0]) as SlideComponent;
+                  const thumbHeight = (canvasHeight / canvasWidth) * 270;
                   return (
                     <div
                       key={idx}
@@ -429,10 +437,10 @@ export function TemplateStudio() {
                       </div>
                       <div
                         className="overflow-hidden shadow-lg border border-zinc-800 group-hover:border-emerald-500/50 rounded-sm transition-all"
-                        style={{ width: 270, height: 337.5 }}
+                        style={{ width: 270, height: thumbHeight }}
                       >
-                        <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
-                          <SlideFrame brand={brand} slide={s} slideIndex={idx} totalSlides={totalSlides}>
+                        <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: canvasWidth, height: canvasHeight }}>
+                          <SlideFrame brand={brand} slide={s} slideIndex={idx} totalSlides={totalSlides} platform={activePlatform}>
                             <SlideErrorBoundary>
                               <SlideComp slide={s} brand={brand} totalSlides={totalSlides} />
                             </SlideErrorBoundary>

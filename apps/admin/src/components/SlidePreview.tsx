@@ -25,6 +25,16 @@ export function SlidePreview({ job }: { job: JobDetail }) {
 
   const bespokeDeck = (job.contentPayload as any)?.deck as BespokeDeck | undefined;
 
+  const isStories = job.platform === 'instagram-stories';
+  const isSquare = job.platform === 'instagram-square';
+  const aspectClass = isStories ? 'aspect-[9/16]' : isSquare ? 'aspect-square' : 'aspect-[4/5]';
+  const containerWidth = isStories
+    ? (deviceFrame === 'phone' ? 'w-[320px]' : 'w-[360px]')
+    : isSquare
+    ? 'w-[420px]'
+    : (deviceFrame === 'phone' ? 'w-[360px]' : 'w-[420px]');
+  const lightboxMaxWidth = isStories ? 'max-w-sm' : isSquare ? 'max-w-lg' : 'max-w-xl';
+
   const currentSlide = slides[activeIdx] ?? slides[0];
   const slideDeckData = bespokeDeck?.slides?.[activeIdx] as BespokeSlide | undefined;
 
@@ -195,10 +205,10 @@ export function SlidePreview({ job }: { job: JobDetail }) {
 
               {/* Slide Mockup Container */}
               <div
-                className={`relative transition-all duration-200 ${
+                className={`relative transition-all duration-200 ${containerWidth} ${
                   deviceFrame === 'phone'
-                    ? 'w-[360px] p-3 rounded-[44px] bg-zinc-950 border-[6px] border-zinc-800 shadow-2xl'
-                    : 'w-[420px] rounded-xl border border-border bg-surface-2 shadow-xl overflow-hidden'
+                    ? 'p-3 rounded-[44px] bg-zinc-950 border-[6px] border-zinc-800 shadow-2xl'
+                    : 'rounded-xl border border-border bg-surface-2 shadow-xl overflow-hidden'
                 }`}
               >
                 {/* Phone Notch/Island if mobile mockup */}
@@ -207,7 +217,7 @@ export function SlidePreview({ job }: { job: JobDetail }) {
                 )}
 
                 <div
-                  className={`relative aspect-[4/5] w-full overflow-hidden ${
+                  className={`relative ${aspectClass} w-full overflow-hidden ${
                     deviceFrame === 'phone' ? 'rounded-[32px]' : ''
                   }`}
                 >
@@ -286,7 +296,7 @@ export function SlidePreview({ job }: { job: JobDetail }) {
               <button
                 key={slide.id}
                 onClick={() => setLightboxIdx(idx)}
-                className="group relative aspect-[4/5] overflow-hidden rounded-lg border border-border bg-surface-2 transition-all hover:border-border-secondary hover:shadow-md text-left"
+                className={`group relative ${aspectClass} overflow-hidden rounded-lg border border-border bg-surface-2 transition-all hover:border-border-secondary hover:shadow-md text-left`}
               >
                 <img
                   src={`/api/slides/${slide.storageUrl}`}
@@ -331,7 +341,7 @@ export function SlidePreview({ job }: { job: JobDetail }) {
                 )}
               </div>
 
-              <div className="relative w-full max-w-xl aspect-[4/5] overflow-hidden rounded-lg border border-border bg-surface-2 shadow-2xl">
+              <div className={`relative w-full ${lightboxMaxWidth} ${aspectClass} overflow-hidden rounded-lg border border-border bg-surface-2 shadow-2xl`}>
                 <img
                   src={`/api/slides/${slides[lightboxIdx].storageUrl}`}
                   alt={`Slide ${(slides[lightboxIdx].slideIndex ?? 0) + 1}`}

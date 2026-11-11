@@ -81,6 +81,8 @@ export interface PipelineOptions {
   brief?: TemplateBrief;
   url?: string;
   provider?: string;
+  platform?: string;
+  brandKit?: any;
   concurrency?: number;
   onProgress?: (stage: string, current: number, total: number) => void;
 }
@@ -208,22 +210,83 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   console.log('[Pipeline] >>> Pass 2: Creative Director Art Direction & Brand Identity...');
   options.onProgress?.('Generating Brand Identity', 2, 15);
 
-  const brandPrompt = article
-    ? buildArticleBrandUserPrompt(article, brief)
-    : buildBrandUserPrompt(brief);
-
-  const brandResponse = await llm.generateJSON(
-    buildBrandSystemPrompt(),
-    brandPrompt,
-    0.7
-  );
-
-  const brand = extractJson<BrandTokens>(brandResponse.text);
   const defaultSlug = article
     ? (article.title || 'story').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 32).replace(/(^-|-$)/g, '')
     : (brief.name || 'custom').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  const slug = brand.slug || defaultSlug;
-  brand.slug = slug;
+
+  let brand: BrandTokens;
+
+  if (options.brandKit && Object.keys(options.brandKit).length > 0) {
+    console.log('[Pipeline] Pass 2: Using User-Selected Brand Kit / Preset override...');
+    const b = options.brandKit;
+    const palette = b.palette || {};
+    const typography = b.typography || {};
+
+    const paper = palette.paper || b.bg || '#0D0E12';
+    const ink = palette.ink || b.text || '#F1F3F9';
+    const accent = palette.accent || b.accent || '#FF4D00';
+    const surface = palette.surface || b.surface || '#161820';
+    const border = palette.border || (typeof ink === 'string' && ink.startsWith('#') ? `${ink}25` : '#2A2D3A');
+    const subtle = palette.subtle || (typeof ink === 'string' && ink.startsWith('#') ? `${ink}80` : '#8E93A6');
+
+    const headlineFont = typography.headlineFont || b.fontSerif || 'Syne';
+    const bodyFont = typography.bodyFont || b.fontSans || 'Inter';
+    const monoFont = typography.monoFont || b.fontMono || 'JetBrains Mono';
+
+    let googleFontsUrl = typography.googleFontsUrl || b.googleFontsUrl;
+    if (!googleFontsUrl) {
+      const fontsParam = [headlineFont, bodyFont, monoFont]
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .map((f) => `family=${encodeURIComponent(f)}:wght@400;500;600;700;800`)
+        .join('&');
+      googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
+    }
+
+    const name = b.name || b.wordmark || 'Custom Brand';
+    const slug = b.slug || defaultSlug;
+
+    brand = {
+      name,
+      slug,
+      vibe: b.vibe || 'Curated Editorial Publication',
+      domain: b.domain || `${slug}.pub`,
+      palette: {
+        paper,
+        ink,
+        accent,
+        surface,
+        border,
+        subtle,
+      },
+      typography: {
+        headlineFont,
+        bodyFont,
+        monoFont,
+        googleFontsUrl,
+      },
+      wordmark: b.wordmark || name.toUpperCase(),
+      wordmarkStyle: (b.wordmarkStyle as any) || 'sans',
+      handle: b.handle || `@${slug.replace(/[^a-zA-Z0-9]/g, '')}`,
+      texture: (b.texture as any) || 'grid',
+      motif: (b.motif as any) || 'crosshair',
+    };
+  } else {
+    const brandPrompt = article
+      ? buildArticleBrandUserPrompt(article, brief)
+      : buildBrandUserPrompt(brief);
+
+    const brandResponse = await llm.generateJSON(
+      buildBrandSystemPrompt(),
+      brandPrompt,
+      0.7
+    );
+
+    brand = extractJson<BrandTokens>(brandResponse.text);
+    brand.slug = brand.slug || defaultSlug;
+  }
+
+  brand.platform = options.platform || 'instagram-feed';
+  const slug = brand.slug;
   console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
   // ==========================================================================
@@ -290,17 +353,20 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   }
 
   // Normalize slide schema ensuring id, index, and type are guaranteed
+  const activePlatform = options.platform || 'instagram-feed';
   allSlides = allSlides.map((s, idx) => ({
     ...s,
     id: s.id || `slide-${idx + 1}`,
     index: typeof s.index === 'number' ? s.index : idx,
     type: s.type || (s as any).archetype || 'editorial',
+    platform: activePlatform,
   }));
 
   const deck: DeckData = {
     templateName: brand.name,
     templateSlug: brand.slug,
     domain: brand.domain,
+    platform: activePlatform,
     slides: allSlides,
   };
   console.log(`[Pipeline] Pass 4 complete: Storyboard authored with ${deck.slides.length} slides.`);
@@ -369,7 +435,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
-      buildSingleSlideSystemPrompt(),
+      buildSingleSlideSystemPrompt(activePlatform),
       buildSingleSlideUserPrompt(slideNumber, slideData, blueprint, brand),
       0.6
     );

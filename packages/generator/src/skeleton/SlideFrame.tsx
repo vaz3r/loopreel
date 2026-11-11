@@ -7,6 +7,7 @@ export interface SlideFrameProps {
   slide: SlideData;
   slideIndex: number;
   totalSlides: number;
+  platform?: string;
   children: React.ReactNode;
 }
 
@@ -15,8 +16,23 @@ export function SlideFrame({
   slide,
   slideIndex,
   totalSlides,
+  platform,
   children,
 }: SlideFrameProps) {
+  const activePlatform = platform || slide.platform || brand.platform || 'instagram-feed';
+  const isStories = activePlatform === 'instagram-stories';
+  const isSquare = activePlatform === 'instagram-square';
+
+  const canvasWidth = 1080;
+  const canvasHeight = isStories ? 1920 : isSquare ? 1080 : 1350;
+
+  // Safe padding: Instagram stories needs extra clearance for the top profile bar (120px) and bottom reply bar (200px)
+  const paddingStyles: React.CSSProperties = isStories
+    ? { paddingTop: 120, paddingBottom: 200, paddingLeft: 64, paddingRight: 64 }
+    : isSquare
+    ? { paddingTop: 48, paddingBottom: 48, paddingLeft: 48, paddingRight: 48 }
+    : { paddingTop: 64, paddingBottom: 64, paddingLeft: 64, paddingRight: 64 };
+
   // Dynamically inject Google Fonts
   useEffect(() => {
     if (!brand.typography.googleFontsUrl) return;
@@ -106,12 +122,17 @@ export function SlideFrame({
 
   return (
     <div
-      className={`slide-canvas relative w-[1080px] h-[1350px] shrink-0 overflow-hidden flex flex-col justify-between p-16 select-none ${textureClass}`}
+      className={`slide-canvas relative shrink-0 overflow-hidden flex flex-col justify-between select-none ${textureClass}`}
       style={
         {
+          width: canvasWidth,
+          height: canvasHeight,
+          ...paddingStyles,
           backgroundColor: brand.palette.paper,
           color: brand.palette.ink,
           fontFamily: `'${brand.typography.bodyFont}', sans-serif`,
+          '--canvas-width': `${canvasWidth}px`,
+          '--canvas-height': `${canvasHeight}px`,
           '--paper': brand.palette.paper,
           '--ink': brand.palette.ink,
           '--accent': brand.palette.accent,
@@ -126,6 +147,7 @@ export function SlideFrame({
       data-slide-index={slideIndex}
       data-slide-id={slide.id || `slide-${slideIndex + 1}`}
       data-slide-type={slide.type}
+      data-platform={activePlatform}
     >
       {/* FRAME HEADER */}
       <header

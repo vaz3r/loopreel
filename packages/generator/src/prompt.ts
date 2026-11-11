@@ -432,9 +432,19 @@ Output strictly the JSON array of 10 SlideDesignBlueprint objects.`;
 // STAGE 6: PRINCIPAL REACT ENGINEER (BESPOKE CODE GENERATION)
 // ============================================================================
 
-export function buildSingleSlideSystemPrompt(): string {
+export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): string {
+  const isStories = platform === 'instagram-stories';
+  const isSquare = platform === 'instagram-square';
+  const canvasWidth = 1080;
+  const canvasHeight = isStories ? 1920 : isSquare ? 1080 : 1350;
+  const safeAreaDesc = isStories
+    ? '1080x1920 canvas (9:16 vertical stories format), 952x1596 safe area'
+    : isSquare
+    ? '1080x1080 canvas (1:1 square format), 952x758 safe area'
+    : '1080x1350 canvas (4:5 portrait format), 952x1028 safe area';
+
   return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
-You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (1080x1350 canvas, 952x1028 safe area).
+You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (${safeAreaDesc}).
 
 CRITICAL DESIGN & CODING RULES:
 1. Component Signature:
@@ -473,7 +483,7 @@ CRITICAL DESIGN & CODING RULES:
      * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold).
 
 5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
-   - The interior safe area is strictly 952px wide by 1028px high.
+   - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.
    - NEVER put 'overflow-hidden' on the top-level <section>! 'overflow-hidden' clips content and conceals overflow.
    - Outer wrapper signature: className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
    - Multi-card grids: Use 'gap-5' or 'gap-6', card padding 'py-5 px-7' or 'py-6 px-8'.
@@ -484,7 +494,7 @@ CRITICAL DESIGN & CODING RULES:
 6. Technical Constraints:
    - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
    - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
-   - Do NOT output the outer 1080x1350 wrapper or header/footer—SlideFrame provides those.`;
+   - Do NOT output the outer ${canvasWidth}x${canvasHeight} wrapper or header/footer—SlideFrame provides those.`;
 }
 
 export function buildSingleSlideUserPrompt(

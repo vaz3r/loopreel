@@ -18,7 +18,14 @@ export async function generateTemplateReference(
 ): Promise<GenerationResult> {
   const mergedOptions: PipelineOptions & { runAudit?: boolean } = {
     ...options,
-    ...(briefOrOptions && ('concurrency' in briefOrOptions || 'provider' in briefOrOptions || 'url' in briefOrOptions)
+    ...(briefOrOptions && (
+      'concurrency' in briefOrOptions ||
+      'provider' in briefOrOptions ||
+      'url' in briefOrOptions ||
+      'platform' in briefOrOptions ||
+      'brandKit' in briefOrOptions ||
+      'brief' in briefOrOptions
+    )
       ? (briefOrOptions as PipelineOptions & { runAudit?: boolean })
       : { brief: briefOrOptions as TemplateBrief }),
   };
@@ -29,7 +36,9 @@ export async function generateTemplateReference(
   if (mergedOptions.runAudit) {
     try {
       console.log('\n[Engine] >>> Pass 6: Running Automated Playwright Visual Audit on http://localhost:5174...');
-      audit = await auditTemplateStudio(pipelineResult.templateSlug, pipelineResult.slideCount);
+      audit = await auditTemplateStudio(pipelineResult.templateSlug, pipelineResult.slideCount, {
+        platform: mergedOptions.platform,
+      });
       console.log(
         `[Engine] Audit finished: ${audit.totalCollisions} collisions detected across ${audit.slideCount} slides.`
       );

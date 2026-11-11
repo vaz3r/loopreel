@@ -1,0 +1,233 @@
+{
+  "templateName": "The Gulf Dossier",
+  "templateSlug": "the-gulf-dossier",
+  "domain": "Iran / Regional Conflict / Diplomacy",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "THE GULF DOSSIER",
+      "headline": "War, Ceasefires, and the Verification Gap",
+      "subheadline": "The supplied article traces regional escalation; its claims are not independently verified.",
+      "visualStyle": "fractured-diplomacy-hero",
+      "layoutTopology": "central-fracture-with-edge-annotations",
+      "svgBlueprint": "Use Paper #101923, Ink #EEF0EB, Accent #D9B45B, and Surface #1C2A36 throughout. Draw a central horizontal line interrupted by jagged breaks, symbolizing interrupted diplomacy rather than measured intensity. Place two annotations on opposite edges. Reserve the upper third for the headline; keep all SVG labels outside text zones.",
+      "items": [
+        {
+          "label": "28 February 2026",
+          "body": "Reported start of US–Israeli strikes and war with Iran and regional allies."
+        },
+        {
+          "label": "Opening strikes",
+          "body": "Hundreds of air strikes across Iran; no exact count supplied."
+        }
+      ]
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "escalation-timeline",
+      "kicker": "THE ROAD TO WAR",
+      "headline": "Escalation Preceded the Opening Strikes",
+      "subheadline": "The article connects the Gaza war, earlier attacks, and a US military buildup.",
+      "visualStyle": "ascending-editorial-staircase",
+      "layoutTopology": "three-step-diagonal-timeline",
+      "svgBlueprint": "Draw three ascending Surface platforms joined by an Accent hairline. Place dates above platforms and bodies below. Use equal platform dimensions; elevation indicates narrative sequence, not measured escalation. No proportional time axis.",
+      "items": [
+        {
+          "label": "2023",
+          "body": "The Gaza war triggered the wider Middle Eastern crisis, the article says."
+        },
+        {
+          "label": "June 2025",
+          "body": "Israel attacked military and nuclear facilities; US strikes also targeted nuclear facilities."
+        },
+        {
+          "label": "January–February 2026",
+          "body": "US regional military buildup described as largest since the 2003 invasion of Iraq."
+        }
+      ]
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "claim-assessment-comparison",
+      "kicker": "THE MISSILE QUESTION",
+      "headline": "A Threat Claim Meets Another Timeline",
+      "subheadline": "The article juxtaposes Trump's missile claim with a reported US intelligence assessment.",
+      "visualStyle": "opposing-bracket-editorial",
+      "layoutTopology": "two-column-comparison-with-central-divider",
+      "svgBlueprint": "Create exactly two contrasting text columns, framed by opposing open brackets. Use an Accent divider without arrows or magnitude bars. Anchor each date above its respective text; do not imply the statements describe identical development stages.",
+      "items": [
+        {
+          "label": "February 2026",
+          "body": "Trump said Iran was developing missiles capable of striking the United States."
+        },
+        {
+          "label": "2035",
+          "body": "Reported US intelligence assessment: Iran needed until 2035 to build US-threatening missiles."
+        }
+      ]
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "verification-distinction",
+      "kicker": "NUCLEAR SAFEGUARDS",
+      "headline": "Unverified Does Not Mean Weaponizing",
+      "subheadline": "The article reports separate IAEA findings in February 2026—not equivalent assurances.",
+      "visualStyle": "open-loop-verification-diagram",
+      "layoutTopology": "central-open-ring-with-two-callouts",
+      "svgBlueprint": "Draw an incomplete circular inspection boundary at center. Connect two equal-sized callouts with neutral leader lines. Use a gap rather than a warning symbol to communicate incomplete verification. Avoid progress percentages, weapon icons, or any implication of confirmed weaponization.",
+      "items": [
+        {
+          "label": "Verification limits",
+          "body": "The IAEA could not verify enrichment suspension or confirm the stockpile's status."
+        },
+        {
+          "label": "Weaponization finding",
+          "body": "The IAEA found no evidence Iran was weaponizing, according to the article."
+        }
+      ]
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "inspection-access",
+      "kicker": "THE ACCESS DIVIDE",
+      "headline": "Inspection Access Split Along Strike Lines",
+      "subheadline": "The article distinguishes bombed nuclear facilities from unaffected facilities.",
+      "visualStyle": "bifurcated-access-gate",
+      "layoutTopology": "single-entry-branching-to-two-terminal-zones",
+      "svgBlueprint": "Draw one neutral inspection entry line branching toward exactly two schematic facility outlines. End the bombed-facilities branch at a closed gate; continue the unaffected-facilities branch through an open gate. Buildings are generic symbols, not locations or facility counts.",
+      "items": [
+        {
+          "label": "Bombed facilities",
+          "body": "Iran denied the IAEA access to bombed nuclear facilities."
+        },
+        {
+          "label": "Unaffected facilities",
+          "body": "Iran provided the IAEA access to unaffected facilities."
+        }
+      ]
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "ceasefire-sequence",
+      "kicker": "APRIL DIPLOMACY",
+      "headline": "A Ceasefire Under Immediate Strain",
+      "subheadline": "The article traces a truce, failed talks, and a blockade.",
+      "visualStyle": "interrupted-horizontal-cadence",
+      "layoutTopology": "three-node-horizontal-event-rail",
+      "svgBlueprint": "Place three evenly spaced event nodes along a horizontal Accent rail. Interrupt the rail beneath the talks node with a narrow gap. Give each node one date and one compact body. Equal spacing is schematic, not elapsed time.",
+      "items": [
+        {
+          "label": "8 April",
+          "body": "A two-week ceasefire began; Israel launched massive airstrikes across Lebanon."
+        },
+        {
+          "label": "12–13 April",
+          "body": "Islamabad Talks failed; the United States subsequently imposed a naval blockade on Iran."
+        },
+        {
+          "label": "21 April",
+          "body": "The United States announced an indefinite ceasefire."
+        }
+      ]
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "diplomatic-reversal",
+      "kicker": "JUNE TO JULY",
+      "headline": "Agreements Did Not Hold",
+      "subheadline": "The article reports a memorandum, renewed ceasefire, and another collapse.",
+      "visualStyle": "descending-folded-ribbon",
+      "layoutTopology": "vertical-switchback-event-ribbon",
+      "svgBlueprint": "Create a narrow ribbon descending through three alternating bends, with one event at each bend. Finish with an open break beside the final event. Use identical event markers; ribbon direction represents sequence, not a quantitative diplomatic score.",
+      "items": [
+        {
+          "label": "17 June",
+          "body": "The United States and Iran signed a memorandum and lifted the dual blockade."
+        },
+        {
+          "label": "28 June",
+          "body": "The United States and Iran agreed to resume the ceasefire after brief escalation."
+        },
+        {
+          "label": "8 July",
+          "body": "Article attributes ceasefire collapse to Iranian attacks on commercial vessels in Hormuz."
+        }
+      ]
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "economic-impact",
+      "kicker": "THE ECONOMIC FALLOUT",
+      "headline": "Disruption Spread Beyond the Battlefield",
+      "subheadline": "The article calls oil disruption the largest ever, without volumes or comparative data.",
+      "visualStyle": "three-band-impact-atlas",
+      "layoutTopology": "full-width-stacked-sector-bands",
+      "svgBlueprint": "Stack three full-width Surface bands separated by generous Paper gutters. Add a small abstract symbol at each band's left edge: interrupted flow, oscillating line, and household outline. Keep bands equal-sized; do not encode unsupplied economic magnitudes or causal relationships.",
+      "items": [
+        {
+          "label": "Disrupted sectors",
+          "body": "Natural gas, fertilizer, aviation, tourism, and shipping faced disruption."
+        },
+        {
+          "label": "Financial pressures",
+          "body": "Financial-market volatility, inflation, lower economic growth, and higher borrowing costs."
+        },
+        {
+          "label": "Household consequences",
+          "body": "Higher fuel and energy prices; global cost-of-living crisis; protests in Europe and elsewhere."
+        }
+      ]
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "cost-accounting",
+      "kicker": "THE REPORTED TOLL",
+      "headline": "The Toll Is Only Partly Quantified",
+      "subheadline": "The spending estimate carries an [update] marker; it is not a comprehensive global cost.",
+      "visualStyle": "asymmetric-open-ledger",
+      "layoutTopology": "upper-spending-ledger-lower-casualty-footnote",
+      "svgBlueprint": "Build an open ledger with a large upper spending entry and a smaller lower casualty entry separated by a thin rule. Render complete amounts and qualifiers as text, not standalone telemetry badges. Do not use bars, casualty pictograms, or proportional areas.",
+      "items": [
+        {
+          "label": "US Department of Defense estimate",
+          "body": "$47.1 billion in US military spending as of October 2026."
+        },
+        {
+          "label": "Civilian and military casualties",
+          "body": "Thousands; no exact total, national breakdown, or separation of deaths and injuries."
+        }
+      ]
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "source-audit",
+      "kicker": "THE EVIDENCE BOUNDARY",
+      "headline": "An Article Is Not Independent Verification",
+      "subheadline": "The dossier records reported claims; its underlying cited documents were not supplied.",
+      "visualStyle": "editorial-document-cutaway",
+      "layoutTopology": "oversized-document-silhouette-with-two-margin-notes",
+      "svgBlueprint": "Place a large outlined document silhouette on the left, ending in a visibly interrupted bottom edge. Put exactly two margin notes on the right, connected to citation placeholders and the interrupted edge. Use generic marks rather than invented reference numbers or source logos.",
+      "items": [
+        {
+          "label": "Missing source documents",
+          "body": "Bracketed references appear, but their underlying source documents are not included."
+        },
+        {
+          "label": "Incomplete excerpt",
+          "body": "The supplied excerpt ends mid-citation after its final reference to Operation Roaring Lion."
+        }
+      ]
+    }
+  ]
+}
