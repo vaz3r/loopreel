@@ -4,30 +4,30 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_Tokendefinition from './slides/Slide02_Tokendefinition';
-import Slide03_Conversioncaveat from './slides/Slide03_Conversioncaveat';
-import Slide04_Toolinggap from './slides/Slide04_Toolinggap';
-import Slide05_Usageaccounting from './slides/Slide05_Usageaccounting';
-import Slide06_Imageprocessing from './slides/Slide06_Imageprocessing';
-import Slide07_Imagelimit from './slides/Slide07_Imagelimit';
-import Slide08_Estimateversusactual from './slides/Slide08_Estimateversusactual';
-import Slide09_Documentationaudit from './slides/Slide09_Documentationaudit';
-import Slide10_Closingtakeaway from './slides/Slide10_Closingtakeaway';
+import Slide02_Pricecomparison from './slides/Slide02_Pricecomparison';
+import Slide03_Setupcomparison from './slides/Slide03_Setupcomparison';
+import Slide04_Dronecapabilities from './slides/Slide04_Dronecapabilities';
+import Slide05_Droneconstraints from './slides/Slide05_Droneconstraints';
+import Slide06_Rovercapabilities from './slides/Slide06_Rovercapabilities';
+import Slide07_Roverboundaries from './slides/Slide07_Roverboundaries';
+import Slide08_Availabilitytimeline from './slides/Slide08_Availabilitytimeline';
+import Slide09_Privacyexplainer from './slides/Slide09_Privacyexplainer';
+import Slide10_Accountabilitydebrief from './slides/Slide10_Accountabilitydebrief';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_Tokendefinition,
-  Slide03_Conversioncaveat,
-  Slide04_Toolinggap,
-  Slide05_Usageaccounting,
-  Slide06_Imageprocessing,
-  Slide07_Imagelimit,
-  Slide08_Estimateversusactual,
-  Slide09_Documentationaudit,
-  Slide10_Closingtakeaway,
+  Slide02_Pricecomparison,
+  Slide03_Setupcomparison,
+  Slide04_Dronecapabilities,
+  Slide05_Droneconstraints,
+  Slide06_Rovercapabilities,
+  Slide07_Roverboundaries,
+  Slide08_Availabilitytimeline,
+  Slide09_Privacyexplainer,
+  Slide10_Accountabilitydebrief,
   ],
 };
 

@@ -62,15 +62,82 @@ function extractTsx(raw: string): string {
   return cleaned;
 }
 
+export function sanitizeTsxCode(rawCode: string): string {
+  let code = rawCode;
+
+  // Fix broken chained optional access: slide.items?.?.property -> slide.items?.[N]?.property
+  let titleIndex = 0;
+  code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.title/g, (_m, prop) => {
+    return `slide.${prop}?.[${titleIndex++}]?.title`;
+  });
+  let bodyIndex = 0;
+  code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.body/g, (_m, prop) => {
+    return `slide.${prop}?.[${bodyIndex++}]?.body`;
+  });
+  code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.([a-zA-Z0-9_]+)/g, 'slide.$1?.[0]?.$2');
+
+  // Fix dangling optional chaining: slide.items?. followed by ;, ,, ), }, or newline
+  let itemIndex = 0;
+  code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.(?=\s*[;,)\n}])/g, (_match, prop) => {
+    return `slide.${prop}?.[${itemIndex++}]`;
+  });
+
+  return code;
+}
+
 export function validateTsxSyntax(code: string, filename = 'slide.tsx'): { valid: boolean; errors: string[] } {
   try {
     const sf = ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const diags = (sf as any).parseDiagnostics || [];
     if (diags.length === 0) return { valid: true, errors: [] };
     const errors = diags.map((d: any) => {
+      const line = sf && d.start !== undefined ? sf.getLineAndCharacterOfPosition(d.start).line + 1 : 0;
       const msg = typeof d.messageText === 'string' ? d.messageText : d.messageText?.messageText || 'Syntax error';
-      return `${filename}: ${msg}`;
+      return `${filename}:${line}: ${msg}`;
     });
+    return { valid: false, errors };
+  } catch (err: any) {
+    return { valid: false, errors: [err.message] };
+  }
+}
+
+export function validateTemplateTypeScript(templateDir: string): { valid: boolean; errors: string[] } {
+  try {
+    const indexPath = path.join(templateDir, 'index.ts');
+    if (!fs.existsSync(indexPath)) {
+      return { valid: false, errors: [`Entrypoint not found: ${indexPath}`] };
+    }
+
+    const program = ts.createProgram([indexPath], {
+      target: ts.ScriptTarget.ES2022,
+      module: ts.ModuleKind.ESNext,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
+      jsx: ts.JsxEmit.ReactJSX,
+      skipLibCheck: true,
+      noEmit: true,
+      strict: false,
+      noImplicitAny: false,
+      allowImportingTsExtensions: true,
+    });
+
+    const diagnostics = ts.getPreEmitDiagnostics(program);
+    // Filter diagnostics to only report issues originating in the target template directory
+    const templateDiags = diagnostics.filter((d) => {
+      const fn = d.file?.fileName || '';
+      return fn.startsWith(templateDir) || fn.includes('/skeleton/');
+    });
+
+    if (templateDiags.length === 0) {
+      return { valid: true, errors: [] };
+    }
+
+    const errors = templateDiags.map((d) => {
+      const file = d.file?.fileName ? path.basename(d.file.fileName) : 'unknown';
+      const line = d.file && d.start !== undefined ? d.file.getLineAndCharacterOfPosition(d.start).line + 1 : 0;
+      const msg = typeof d.messageText === 'string' ? d.messageText : d.messageText?.messageText || 'Type error';
+      return `${file}:${line}: ${msg}`;
+    });
+
     return { valid: false, errors };
   } catch (err: any) {
     return { valid: false, errors: [err.message] };
@@ -440,7 +507,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       0.6
     );
 
-    let code = extractTsx(slideResponse.text);
+    let code = sanitizeTsxCode(extractTsx(slideResponse.text));
 
     // Fix imports if necessary
     if (!code.includes("from '../../../src/skeleton/types'")) {
@@ -463,10 +530,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
           buildSelfHealingPrompt(filename, code, syntaxCheck.errors.join('\n')),
           0.2
         );
-        const repaired = extractTsx(repairResponse.text);
+        const repaired = sanitizeTsxCode(extractTsx(repairResponse.text));
         const secondCheck = validateTsxSyntax(repaired, filename);
+        code = repaired;
         if (secondCheck.valid) {
-          code = repaired;
           console.log(`[Pipeline]   ✔ Syntax successfully auto-repaired for ${filename}`);
         } else {
           console.warn(`[Pipeline]   ⚠ Syntax repair partial for ${filename}`);
@@ -515,47 +582,44 @@ export default pkg;
 
   fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 
-  console.log('[Pipeline] >>> Verifying TypeScript integrity (tsc --noEmit)...');
+  console.log(`[Pipeline] >>> Verifying TypeScript integrity for template ${slug}...`);
   options.onProgress?.('Verifying TypeScript Integrity', 14, 15);
 
-  try {
-    execSync('pnpm --filter @loopreel/generator typecheck', {
-      stdio: 'pipe',
-      encoding: 'utf-8',
-    });
-    console.log('[Pipeline] TypeScript integrity verified: 0 errors.');
-  } catch (err: any) {
-    let errorOutput = err.stderr || err.stdout || String(err);
-    console.warn('[Pipeline] TypeScript reported errors. Attempting self-healing...');
+  const initialCheck = validateTemplateTypeScript(templateDir);
+  if (initialCheck.valid) {
+    console.log(`[Pipeline] TypeScript integrity verified for ${slug}: 0 errors.`);
+  } else {
+    let currentErrors = initialCheck.errors;
+    console.warn(`[Pipeline] TypeScript reported ${currentErrors.length} errors in ${slug}. Attempting self-healing...`);
 
     let healed = false;
     for (let attempt = 1; attempt <= 3; attempt++) {
       for (const s of slideExports) {
-        if (errorOutput.includes(s.filename)) {
+        if (currentErrors.some((e) => e.includes(s.filename))) {
+          const fileErrors = currentErrors.filter((e) => e.includes(s.filename)).join('\n');
           console.log(`[Pipeline] Self-healing repair for ${s.filename} (attempt ${attempt}/3)...`);
           const currentCode = fs.readFileSync(path.join(slidesDir, s.filename), 'utf-8');
           const repairResponse = await llm.generateJSON(
             'You are a TypeScript and React compiler expert. Fix the reported compiler error completely. Return ONLY the corrected code in a ```tsx code block.',
-            buildSelfHealingPrompt(s.filename, currentCode, errorOutput),
+            buildSelfHealingPrompt(s.filename, currentCode, fileErrors),
             0.2
           );
-          const fixedCode = extractTsx(repairResponse.text);
+          const fixedCode = sanitizeTsxCode(extractTsx(repairResponse.text));
           fs.writeFileSync(path.join(slidesDir, s.filename), fixedCode, 'utf-8');
         }
       }
 
-      try {
-        execSync('pnpm --filter @loopreel/generator typecheck', { stdio: 'pipe' });
+      const reCheck = validateTemplateTypeScript(templateDir);
+      if (reCheck.valid) {
         console.log(`[Pipeline] Self-healing succeeded on attempt ${attempt}: 0 errors after repair.`);
         healed = true;
         break;
-      } catch (subErr: any) {
-        errorOutput = subErr.stderr || subErr.stdout || String(subErr);
       }
+      currentErrors = reCheck.errors;
     }
 
     if (!healed) {
-      throw new Error(`TypeScript compilation failed for template ${slug} after 3 self-healing attempts:\n${errorOutput}`);
+      throw new Error(`TypeScript compilation failed for template ${slug} after 3 self-healing attempts:\n${currentErrors.join('\n')}`);
     }
   }
 

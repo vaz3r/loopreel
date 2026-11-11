@@ -1,0 +1,26 @@
+{
+  "name": "The Zurich Typographer",
+  "slug": "the-zurich-typographer",
+  "vibe": "Curated Editorial Publication",
+  "domain": "the-zurich-typographer.pub",
+  "palette": {
+    "paper": "#FFFFFF",
+    "ink": "#000000",
+    "accent": "#E60000",
+    "surface": "#F5F5F5",
+    "border": "#000000",
+    "subtle": "#888888"
+  },
+  "typography": {
+    "headlineFont": "Helvetica Neue, Arial, sans-serif",
+    "bodyFont": "Helvetica Neue, Arial, sans-serif",
+    "monoFont": "JetBrains Mono, monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Helvetica%20Neue%2C%20Arial%2C%20sans-serif:wght@400;500;600;700;800&family=JetBrains%20Mono%2C%20monospace:wght@400;500;600;700;800&display=swap"
+  },
+  "wordmark": "THE ZURICH TYPOGRAPHER",
+  "wordmarkStyle": "sans",
+  "handle": "@thezurichtypographer",
+  "texture": "grid",
+  "motif": "crosshair",
+  "platform": "instagram-stories"
+}

@@ -494,7 +494,15 @@ CRITICAL DESIGN & CODING RULES:
 6. Technical Constraints:
    - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
    - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
-   - Do NOT output the outer ${canvasWidth}x${canvasHeight} wrapper or header/footer—SlideFrame provides those.`;
+   - Do NOT output the outer ${canvasWidth}x${canvasHeight} wrapper or header/footer—SlideFrame provides those.
+
+7. TypeScript Type Safety, Array Indexing & Syntax Constraints:
+   - When accessing array elements by index, ALWAYS use standard indexing or valid optional indexing:
+     * CORRECT: slide.items?.[0]?.title, slide.items?.[1]?.body, or const items = slide.items ?? [];
+     * STRICTLY FORBIDDEN: Never write trailing dot optional chaining like 'slide.items?.' or 'slide.items?.?.title'. This causes an immediate JavaScript syntax error!
+   - When mapping over dynamic arrays (e.g. slide.items, slide.points, slide.timeline, slide.metrics), ALWAYS explicitly annotate parameter types:
+     (item: any, index: number) => ( ... )
+   - Never pass an array to a prop expecting a single item (e.g. if a row subcomponent expects a single object prop, pass item={items[0]!} NOT item={items}).`;
 }
 
 export function buildSingleSlideUserPrompt(

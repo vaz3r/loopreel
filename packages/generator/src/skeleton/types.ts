@@ -42,6 +42,12 @@ export interface SlideData {
   visualStyle?: string;
   layoutTopology?: string;
   svgBlueprint?: string;
+  items?: any;
+  points?: any;
+  metrics?: any;
+  timeline?: any;
+  specs?: any;
+  callouts?: any;
   [key: string]: any;
 }
 
