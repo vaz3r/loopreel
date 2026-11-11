@@ -1,0 +1,25 @@
+{
+  "name": "The Token Ledger",
+  "slug": "the-token-ledger",
+  "vibe": "Computational linguistics meets the accounting ledger: mint-tinted paper, aubergine ink, violet annotations, and precisely bracketed text fragments.",
+  "domain": "Language Models / Tokenization / Usage Accounting",
+  "palette": {
+    "paper": "#EAF2EC",
+    "ink": "#291D35",
+    "accent": "#6534BC",
+    "surface": "#DCE8DF",
+    "border": "#A4B5A9",
+    "subtle": "#59675E"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Public Sans",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+  },
+  "wordmark": "THE TOKEN LEDGER",
+  "wordmarkStyle": "mono",
+  "handle": "@thetokenledger",
+  "texture": "grid",
+  "motif": "bracket"
+}

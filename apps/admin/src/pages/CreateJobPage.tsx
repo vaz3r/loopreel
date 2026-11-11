@@ -4,12 +4,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Loader2, ChevronDown, Sparkles } from 'lucide-react';
+import { Loader2, ChevronDown, Sparkles, BookOpen } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { TemplateSelect } from '@/components/TemplateSelect';
 import { BrandKitForm, type BrandKitValues } from '@/components/BrandKitForm';
 import type { CreateJobInput } from '@/api/client';
+
+const DEMO_PRESETS = [
+  {
+    name: 'Ring Autonomous Drones',
+    publisher: 'Ars Technica',
+    url: 'https://arstechnica.com/ai/2026/11/ring-cameras-go-mobile-as-amazon-debuts-ai-powered-security-drone-and-robot/',
+  },
+  {
+    name: 'Frontier AI & Moats',
+    publisher: 'Google News / Tech',
+    url: 'https://news.google.com/rss/articles/CBMinwFBVV95cUxPc0xncmpQRnRNV3labGNBOE15RFpFWlYzclM1VmVEX3BQQm10c3dJTFJqQm5vbkdXMHZoUGRaY241M0Nvam14Rm5wTDAwSzRxdHdrTnFEd3hyeXcwMUR6bjA3eHJLVTF5c2NYT1BaTFdaLWRYMDVVaC1jZkhFcjJEaW5HQ3U3cnhRdnV2QzhVd1NYWENVOFN6T3MtMkdQQlE?oc=5',
+  },
+];
 
 export function CreateJobPage() {
   const navigate = useNavigate();
@@ -53,127 +66,152 @@ export function CreateJobPage() {
     });
   }
 
+  function applyPreset(presetUrl: string) {
+    setUrl(presetUrl);
+    setEngine('bespoke');
+    setTemplateId('bespoke');
+  }
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 pb-12">
       <div>
-        <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">New Job</h1>
-        <p className="text-[13px] text-text-tertiary mt-1">Generate social media content from any URL.</p>
+        <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">Create Editorial Publication</h1>
+        <p className="text-[13px] text-text-tertiary mt-1">Transform tech articles or research into art-directed social carousels.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">URL</Label>
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
+        <div className="space-y-5">
+          {/* URL Input & Quick Presets */}
+          <div className="space-y-2">
+            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Source Story URL</Label>
             <Input
               type="url"
               required
-              placeholder="https://example.com/article"
+              placeholder="https://arstechnica.com/..."
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               className="h-9 bg-surface-2 border-border text-[13px] text-text-secondary placeholder:text-text-quaternary"
             />
+
+            {/* Quick Demo Presets */}
+            <div className="pt-1">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary block mb-1.5">
+                Quick Story Presets:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {DEMO_PRESETS.map((p) => (
+                  <button
+                    key={p.name}
+                    type="button"
+                    onClick={() => applyPreset(p.url)}
+                    className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-md border border-border bg-surface-2 hover:border-emerald-700/60 hover:bg-emerald-950/20 text-text-tertiary hover:text-emerald-300 transition-all text-left"
+                  >
+                    <BookOpen className="h-3 w-3 text-emerald-400" />
+                    <span className="font-medium">{p.name}</span>
+                    <span className="text-[10px] text-text-quaternary">({p.publisher})</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-1.5">
+          {/* Engine Selector */}
+          <div className="space-y-1.5 pt-1">
             <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Generation Engine</Label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={() => { setEngine('bespoke'); setTemplateId('bespoke'); }}
-                className={`p-3 rounded-lg border text-left transition-all ${
+                className={`p-3.5 rounded-lg border text-left transition-all ${
                   engine === 'bespoke'
-                    ? 'border-emerald-500/50 bg-emerald-500/10 text-text-primary'
-                    : 'border-border bg-surface-2 text-text-tertiary hover:border-zinc-700'
+                    ? 'border-emerald-500/60 bg-emerald-500/10 text-text-primary shadow-xs'
+                    : 'border-border bg-surface-2 text-text-tertiary hover:border-border-secondary'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-medium text-emerald-400">Bespoke Codegen</span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">New</span>
+                  <span className="text-[13px] font-semibold text-emerald-400 flex items-center gap-1">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Bespoke Codegen
+                  </span>
+                  <span className="text-[9px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">
+                    Recommended
+                  </span>
                 </div>
-                <p className="text-[11px] text-text-tertiary mt-1 leading-snug">
-                  Autonomous brand design, custom layout topologies, and inline vector SVGs.
+                <p className="text-[11px] text-text-tertiary mt-1.5 leading-snug">
+                  Multi-pass autonomous art director, bespoke React slides, inline vector SVGs, and Playwright visual audits.
                 </p>
               </button>
 
               <button
                 type="button"
                 onClick={() => { setEngine('classic'); setTemplateId('auto'); }}
-                className={`p-3 rounded-lg border text-left transition-all ${
+                className={`p-3.5 rounded-lg border text-left transition-all ${
                   engine === 'classic'
-                    ? 'border-blue-500/50 bg-blue-500/10 text-text-primary'
-                    : 'border-border bg-surface-2 text-text-tertiary hover:border-zinc-700'
+                    ? 'border-blue-500/60 bg-blue-500/10 text-text-primary shadow-xs'
+                    : 'border-border bg-surface-2 text-text-tertiary hover:border-border-secondary'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-medium text-blue-400">Classic Remotion</span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">Preset</span>
+                  <span className="text-[13px] font-semibold text-blue-400">Classic Remotion</span>
+                  <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                    Predefined
+                  </span>
                 </div>
-                <p className="text-[11px] text-text-tertiary mt-1 leading-snug">
-                  Strict layout templates (The Paper of Record, The Globalist, etc.).
+                <p className="text-[11px] text-text-tertiary mt-1.5 leading-snug">
+                  Structured XML mapping to pre-built Remotion templates (Paper of Record, Curator, Globalist).
                 </p>
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Platform</Label>
-              <PlatformSelect value={platform} onChange={setPlatform} />
-            </div>
-
-            {engine === 'classic' ? (
-              <div className="space-y-1.5">
-                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Classic Template</Label>
-                <TemplateSelect value={templateId} onChange={setTemplateId} />
-                <p className="text-[10px] text-text-tertiary">
-                  {templateId === 'auto' ? 'AI classifier auto-selects' : 'Fixed template locked'}
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-1.5">
-                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Design Mode</Label>
-                <div className="h-9 px-3 rounded-md border border-emerald-900/40 bg-emerald-950/20 flex items-center gap-1.5 text-[12px] text-emerald-300">
-                  <Sparkles className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                  <span>Autonomous Art Direction</span>
-                </div>
-                <p className="text-[10px] text-text-tertiary">100% tailored React + Tailwind</p>
-              </div>
-            )}
+          {/* Platform Selector */}
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Platform Canvas</Label>
+            <PlatformSelect value={platform} onChange={setPlatform} />
           </div>
-        </div>
 
-        <Collapsible open={showBrandKit} onOpenChange={setShowBrandKit}>
-          <CollapsibleTrigger className="flex items-center gap-2 text-[12px] text-text-quaternary hover:text-text-tertiary transition-colors">
-            <ChevronDown className={`h-3 w-3 transition-transform ${showBrandKit ? 'rotate-180' : ''}`} />
-            Brand Kit
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-3">
-            <div className="rounded-md border border-border bg-surface-1 p-4">
-              <BrandKitForm value={brandKit ?? {}} onChange={setBrandKit} />
+          {/* Classic Template Selector (only if classic selected) */}
+          {engine === 'classic' && (
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Template Style</Label>
+              <TemplateSelect value={templateId} onChange={setTemplateId} />
             </div>
-          </CollapsibleContent>
-        </Collapsible>
+          )}
 
-        <div className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            id="generateText"
-            checked={generateText}
-            onChange={(e) => setGenerateText(e.target.checked)}
-            className="h-4 w-4 rounded border-border bg-surface-2 accent-text-primary"
-          />
-          <Label htmlFor="generateText" className="text-[13px] text-text-tertiary cursor-pointer">
-            Generate LinkedIn &amp; Twitter text
-          </Label>
+          {/* Brand Kit (Optional) */}
+          <Collapsible open={showBrandKit} onOpenChange={setShowBrandKit}>
+            <CollapsibleTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-8 p-0 text-[12px] font-medium text-text-tertiary hover:text-text-primary gap-1"
+              >
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showBrandKit ? 'rotate-180' : ''}`} />
+                {showBrandKit ? 'Hide brand kit override' : 'Custom brand kit override (optional)'}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-2">
+              <BrandKitForm value={brandKit} onChange={setBrandKit} />
+            </CollapsibleContent>
+          </Collapsible>
         </div>
 
         <Button
           type="submit"
-          className="h-9 rounded-md bg-text-primary text-background hover:bg-text-secondary px-4 text-[13px] font-medium"
           disabled={createJob.isPending || !url}
+          className="h-9 w-full rounded-md bg-text-primary text-background hover:bg-text-secondary text-[13px] font-semibold gap-1.5"
         >
-          {createJob.isPending && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-          Generate
+          {createJob.isPending ? (
+            <>
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              Dispatching Editorial Job...
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+              Generate Editorial Carousel
+            </>
+          )}
         </Button>
       </form>
     </div>

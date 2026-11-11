@@ -52,9 +52,78 @@ export interface JobSummary {
   updatedAt: string;
 }
 
+export interface BespokeBrand {
+  name: string;
+  slug: string;
+  vibe: string;
+  domain: string;
+  palette: {
+    paper: string;
+    ink: string;
+    accent: string;
+    surface: string;
+    border: string;
+    subtle?: string;
+  };
+  typography: {
+    headlineFont: string;
+    bodyFont: string;
+    monoFont: string;
+    googleFontsUrl?: string;
+  };
+  wordmark?: string;
+  wordmarkStyle?: string;
+  handle?: string;
+  texture?: string;
+  motif?: string;
+}
+
+export interface BespokeAudit {
+  passed: boolean;
+  totalCollisions: number;
+  errors: string[];
+  warnings?: string[];
+  slideCount?: number;
+}
+
+export interface BespokeSlideCard {
+  title?: string;
+  body?: string;
+  badge?: string;
+  qualifier?: string;
+}
+
+export interface BespokeSlide {
+  id: string;
+  type: string;
+  title?: string;
+  headline?: string;
+  subtitle?: string;
+  cards?: BespokeSlideCard[];
+  quote?: { text: string; author?: string; source?: string };
+  items?: Array<{ title?: string; body?: string; value?: string }>;
+  visualStyle?: string;
+  layoutTopology?: string;
+  svgBlueprint?: string;
+}
+
+export interface BespokeDeck {
+  title?: string;
+  domain?: string;
+  hook?: string;
+  slides: BespokeSlide[];
+}
+
+export interface BespokeContentPayload {
+  templateSlug?: string;
+  brand?: BespokeBrand;
+  audit?: BespokeAudit;
+  deck?: BespokeDeck;
+}
+
 export interface JobDetail extends JobSummary {
   errorPayload: { stage: string; reason: string; details: string } | null;
-  contentPayload: unknown;
+  contentPayload: BespokeContentPayload | unknown;
   totalPromptTokens: number;
   totalCompletionTokens: number;
   llmUsage: Array<{

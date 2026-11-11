@@ -8,6 +8,9 @@ import { JobInfoGrid } from '@/components/jobs/JobInfoGrid';
 import { CostBreakdown } from '@/components/jobs/CostBreakdown';
 import { ErrorDetails } from '@/components/jobs/ErrorDetails';
 import { SocialPostCard } from '@/components/jobs/SocialPostCard';
+import { BrandInspector } from '@/components/jobs/BrandInspector';
+import { VisualAuditCard } from '@/components/jobs/VisualAuditCard';
+import { StoryboardInspector } from '@/components/jobs/StoryboardInspector';
 
 export function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -50,11 +53,16 @@ export function JobDetailPage() {
   const twitterThread = job.assets.find((a) => a.formatType === 'twitter_thread' && a.contentText);
 
   const CLASSIC_TEMPLATES = ['paper-of-record', 'the-globalist', 'the-curator', 'the-academic', 'the-signal', 'the-field-notes'];
-  const templateSlug = (job.contentPayload as any)?.templateSlug || (!CLASSIC_TEMPLATES.includes(job.templateId) && job.templateId !== 'auto' && job.templateId !== 'bespoke' ? job.templateId : null);
+  const contentPayload = job.contentPayload as any;
+  const templateSlug = contentPayload?.templateSlug || (!CLASSIC_TEMPLATES.includes(job.templateId) && job.templateId !== 'auto' && job.templateId !== 'bespoke' ? job.templateId : null);
   const studioUrl = templateSlug ? `http://localhost:5174/?template=${templateSlug}` : null;
 
+  const bespokeBrand = contentPayload?.brand;
+  const bespokeAudit = contentPayload?.audit;
+  const bespokeDeck = contentPayload?.deck;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       <JobHeader
         jobId={job.id}
         status={job.status}
@@ -68,9 +76,21 @@ export function JobDetailPage() {
       <JobInfoGrid
         sourceUrl={job.sourceUrl}
         platform={job.platform}
-        templateId={job.templateId}
+        templateId={templateSlug || job.templateId}
         slideCount={job.slideCount}
       />
+
+      {/* Visual Quality & Playwright Audit Telemetry */}
+      {bespokeAudit && <VisualAuditCard audit={bespokeAudit} />}
+
+      {/* Editorial Art Direction & Brand Inspector */}
+      {bespokeBrand && <BrandInspector brand={bespokeBrand} />}
+
+      {/* Interactive Carousel Simulator & Slide Gallery */}
+      <SlidePreview job={job} />
+
+      {/* Editorial Storyboard Copy & Structure Breakdown */}
+      {bespokeDeck && <StoryboardInspector deck={bespokeDeck} />}
 
       <CostBreakdown
         totalCostUsd={job.totalCostUsd}
@@ -80,8 +100,6 @@ export function JobDetailPage() {
       />
 
       <ErrorDetails status={job.status} errorPayload={job.errorPayload} />
-
-      <SlidePreview job={job} />
 
       {linkedinPost && (
         <SocialPostCard

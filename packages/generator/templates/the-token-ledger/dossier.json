@@ -1,0 +1,52 @@
+{
+  "articleTitle": "Token & Token Usage",
+  "publisher": "Api-docs",
+  "byline": "Staff Bureau",
+  "summary": "Tokens are the units models use to represent natural language text and measure billing, with tokenization methods and character conversion ratios varying between models. The article describes demo tokenizer code for calculating input/output token usage and dimension-based estimates for image tokens, while identifying usage returned by the API as the source of truth.",
+  "entities": [
+    {
+      "name": "Api-docs",
+      "type": "Publisher",
+      "role": "Publisher identified in the supplied article metadata"
+    },
+    {
+      "name": "Staff Bureau",
+      "type": "Author",
+      "role": "Byline identified in the supplied article metadata"
+    }
+  ],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
+    },
+    "deviceB": {
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": null,
+    "criticismOrAlarm": null,
+    "regulatoryOrHistoricalPrecedent": null
+  },
+  "hiddenCatchesAndLimits": [
+    "The article states that typically a Chinese word, an English word, a number, or a symbol is counted as a token.",
+    "Token-to-character conversion ratios can vary because different models use different tokenization methods; no numerical conversion ratios appear in the supplied text.",
+    "The actual number of tokens processed is based on the model's return and can be viewed in the usage results.",
+    "The article refers to demo tokenizer code in a zip package for calculating input/output token usage, but the supplied text includes no package link.",
+    "Image token usage can be estimated from image dimensions, and images are automatically resized before inference.",
+    "An upper bound applies to the number of tokens per image, but the supplied text gives no numerical limit and refers readers to Vision for details.",
+    "Token estimates may differ slightly from actual processing usage; usage returned by the API is the source of truth."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}
