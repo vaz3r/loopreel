@@ -7,14 +7,17 @@ import type { BrandTokens, DeckData, SlideData } from './skeleton/types';
 import { ingestArticle, type ArticleIntel } from './ingest';
 import {
   type TemplateBrief,
+  type StoryStrategy,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
   buildArticleBrandUserPrompt,
+  buildStoryStrategySystemPrompt,
+  buildStoryStrategyUserPrompt,
+  buildStoryDeckSystemPrompt,
+  buildStoryDeckUserPrompt,
   buildDeckSystemPrompt,
   buildDeckBatch1Prompt,
   buildDeckBatch2Prompt,
-  buildArticleDeckBatch1Prompt,
-  buildArticleDeckBatch2Prompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -81,15 +84,15 @@ export async function runTemplatePipeline(
   let article: ArticleIntel | undefined;
   if (articleUrl) {
     console.log(`[Pipeline] Ingesting real news story from: ${articleUrl}...`);
-    options.onProgress?.('Ingesting Article Content', 0, 20);
+    options.onProgress?.('Ingesting Article Content', 0, 15);
     article = await ingestArticle(articleUrl);
   }
 
   // ==========================================================================
-  // PASS 1: BRAND CONCEPT & DESIGN SYSTEM TOKENS
+  // PASS 1A: BRAND CONCEPT & DESIGN SYSTEM TOKENS
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 1: Creative Director Art Direction & Brand Concept...');
-  options.onProgress?.('Generating Brand Tokens', 1, 20);
+  console.log('[Pipeline] >>> Pass 1: Creative Director Art Direction & Brand Identity...');
+  options.onProgress?.('Generating Brand Identity', 1, 15);
 
   const brandPrompt = article
     ? buildArticleBrandUserPrompt(article, brief)
@@ -110,44 +113,62 @@ export async function runTemplatePipeline(
   console.log(`[Pipeline] Pass 1 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
   // ==========================================================================
-  // PASS 2: 17-SLIDE MASTER EDITORIAL DECK (2 FAST BATCHES)
+  // PASS 1B: EDITORIAL STRATEGIST (HOOK & HIGH-SIGNAL EXTRACTION)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 1: Slides 1–9)...');
-  options.onProgress?.('Authoring Master Deck (Batch 1)', 2, 21);
+  let allSlides: SlideData[] = [];
 
-  const batch1Prompt = article
-    ? buildArticleDeckBatch1Prompt(article, brand)
-    : buildDeckBatch1Prompt(brief, brand);
+  if (article) {
+    console.log('[Pipeline] >>> Pass 1B: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
+    options.onProgress?.('Extracting Story Strategy', 2, 15);
 
-  const batch1Response = await llm.generateJSON(
-    buildDeckSystemPrompt(),
-    batch1Prompt,
-    0.7
-  );
-  const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
+    const strategyResponse = await llm.generateJSON(
+      buildStoryStrategySystemPrompt(),
+      buildStoryStrategyUserPrompt(article),
+      0.7
+    );
+    const strategy = extractJson<StoryStrategy>(strategyResponse.text);
+    console.log(`[Pipeline] Hook Formulated: "${strategy.hookHeadline}"`);
+    console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
 
-  console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 2: Slides 10–17)...');
-  options.onProgress?.('Authoring Master Deck (Batch 2)', 3, 21);
+    // ==========================================================================
+    // PASS 2: 10-SLIDE HIGH-SIGNAL NARRATIVE STORYBOARD
+    // ==========================================================================
+    console.log('[Pipeline] >>> Pass 2: Authoring 10-Slide High-Signal Narrative Storyboard...');
+    options.onProgress?.('Authoring Storyboard', 3, 15);
 
-  const batch2Prompt = article
-    ? buildArticleDeckBatch2Prompt(article, brand)
-    : buildDeckBatch2Prompt(brief, brand);
+    const deckResponse = await llm.generateJSON(
+      buildStoryDeckSystemPrompt(),
+      buildStoryDeckUserPrompt(strategy, article, brand),
+      0.7
+    );
+    allSlides = extractJson<SlideData[]>(deckResponse.text);
+  } else {
+    // Non-URL preset fallback: 17 slides in 2 batches
+    console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 1: Slides 1–9)...');
+    const batch1Response = await llm.generateJSON(
+      buildDeckSystemPrompt(),
+      buildDeckBatch1Prompt(brief, brand),
+      0.7
+    );
+    const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
 
-  const batch2Response = await llm.generateJSON(
-    buildDeckSystemPrompt(),
-    batch2Prompt,
-    0.7
-  );
-  const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
+    console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 2: Slides 10–17)...');
+    const batch2Response = await llm.generateJSON(
+      buildDeckSystemPrompt(),
+      buildDeckBatch2Prompt(brief, brand),
+      0.7
+    );
+    const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
+    allSlides = [...batch1Slides, ...batch2Slides];
+  }
 
-  const allSlides = [...batch1Slides, ...batch2Slides];
   const deck: DeckData = {
     templateName: brand.name,
     templateSlug: brand.slug,
     domain: brand.domain,
     slides: allSlides,
   };
-  console.log(`[Pipeline] Pass 2 complete: Master deck authored with ${deck.slides.length} slides.`);
+  console.log(`[Pipeline] Pass 2 complete: Storyboard authored with ${deck.slides.length} slides.`);
 
   // Create isolated template folder in apps/generator/templates/<slug>/
   const templateDir = path.join(TEMPLATES_ROOT, slug);
@@ -158,9 +179,9 @@ export async function runTemplatePipeline(
   fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
 
   // ==========================================================================
-  // PASSES 3.1 TO 3.17: SINGLE-SLIDE REACT COMPONENT GENERATION
+  // PASSES 3.1 TO 3.N: BESPOKE REACT + TAILWIND SLIDE GENERATION
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 3: Generating bespoke React + Tailwind components (1 slide per pass)...`);
+  console.log(`[Pipeline] >>> Pass 3: Generating bespoke React components using Editorial Primitives...`);
 
   const slideExports: { filename: string; componentName: string }[] = [];
 
@@ -175,7 +196,7 @@ export async function runTemplatePipeline(
     const filePath = path.join(slidesDir, filename);
 
     console.log(`[Pipeline]   └─ [${slideNumber}/${deck.slides.length}] Generating ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Generating Slide ${slideNumber}: ${slideData.type}`, 2 + slideNumber, 20);
+    options.onProgress?.(`Generating Slide ${slideNumber}: ${slideData.type}`, 3 + slideNumber, 15);
 
     const slideResponse = await llm.generateJSON(
       buildSingleSlideSystemPrompt(),
@@ -185,7 +206,7 @@ export async function runTemplatePipeline(
 
     let code = extractTsx(slideResponse.text);
 
-    // Ensure proper relative import for SlideComponentProps
+    // Fix imports if necessary
     if (!code.includes("from '../../../src/skeleton/types'")) {
       code = code.replace(
         /import type \{ SlideComponentProps \} from ['"][^'"]+['"];?/,
@@ -194,6 +215,9 @@ export async function runTemplatePipeline(
     }
     if (!code.includes('import type { SlideComponentProps }')) {
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
+    }
+    if (!code.includes("from '../../../src/skeleton/ui'")) {
+      code = `import { SlideHeader, ContentCard, MetricCard, ComparisonSplit, QuoteBox, SchematicFrame } from '../../../src/skeleton/ui';\n${code}`;
     }
 
     fs.writeFileSync(filePath, code, 'utf-8');
@@ -234,7 +258,7 @@ export default pkg;
   // PASS 5: TYPESCRIPT BUILD VERIFICATION & SELF-HEALING
   // ==========================================================================
   console.log('[Pipeline] >>> Pass 5: TypeScript build verification (tsc --noEmit)...');
-  options.onProgress?.('Verifying TypeScript Integrity', 19, 20);
+  options.onProgress?.('Verifying TypeScript Integrity', 14, 15);
 
   try {
     execSync('pnpm --filter @loopreel/generator typecheck', {
@@ -245,9 +269,7 @@ export default pkg;
   } catch (err: any) {
     const errorOutput = err.stderr || err.stdout || String(err);
     console.warn('[Pipeline] TypeScript reported errors. Attempting self-healing...');
-    console.warn(errorOutput.slice(0, 500));
 
-    // Identify which slide file failed and repair it
     for (const s of slideExports) {
       if (errorOutput.includes(s.filename)) {
         console.log(`[Pipeline] Self-healing repair for ${s.filename}...`);
@@ -262,7 +284,6 @@ export default pkg;
       }
     }
 
-    // Re-verify after repair
     try {
       execSync('pnpm --filter @loopreel/generator typecheck', { stdio: 'pipe' });
       console.log('[Pipeline] Self-healing succeeded: 0 errors after repair.');
@@ -271,7 +292,7 @@ export default pkg;
     }
   }
 
-  options.onProgress?.('Complete', 20, 20);
+  options.onProgress?.('Complete', 15, 15);
   return {
     templateSlug: slug,
     templateDir,

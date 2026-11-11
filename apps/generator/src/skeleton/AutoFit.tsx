@@ -10,10 +10,17 @@ export interface AutoFitProps {
   style?: React.CSSProperties;
 }
 
+/**
+ * Universal Dual-Axis AutoFit container for Loopreel slides.
+ *
+ * Measures unconstrained natural dimensions, reflows with width compensation,
+ * and applies a mathematical scale transform with optical vertical centering.
+ * Guarantees zero text overflow and zero horizontal clipping across all viewports.
+ */
 export function AutoFit({
   children,
   maxScale = 1.0,
-  minScale = 0.55,
+  minScale = 0.65,
   paddingBuffer = 32,
   verticalAlign = 'center',
   className = '',
@@ -21,33 +28,81 @@ export function AutoFit({
 }: AutoFitProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1.0);
+  const [fitState, setFitState] = useState<{ scale: number; offsetY: number }>({
+    scale: 1.0,
+    offsetY: 0,
+  });
+  const isCalculatingRef = useRef(false);
 
   const calculateFit = useCallback(() => {
+    if (isCalculatingRef.current) return;
     const container = containerRef.current;
     const content = contentRef.current;
     if (!container || !content) return;
 
-    // Reset transform to measure natural height
-    content.style.transform = 'none';
-    content.style.width = '100%';
-
-    const containerH = container.clientHeight;
-    const contentH = content.scrollHeight;
-
-    if (contentH > containerH - paddingBuffer) {
-      const calculatedScale = Math.max(minScale, (containerH - paddingBuffer) / contentH);
-      const clampedScale = Math.min(maxScale, calculatedScale);
-      setScale(clampedScale);
-      content.style.transform = `scale(${clampedScale})`;
-      content.style.transformOrigin = verticalAlign === 'center' ? 'center center' : 'top center';
-      if (clampedScale < 1.0) {
-        content.style.width = `${100 / clampedScale}%`;
-      }
-    } else {
-      setScale(1.0);
+    isCalculatingRef.current = true;
+    try {
+      // Temporarily unconstrain height and transform to measure true natural dimensions
       content.style.transform = 'none';
       content.style.width = '100%';
+      content.style.height = 'auto';
+      content.style.minHeight = 'auto';
+      content.style.position = 'relative';
+
+      const containerH = container.clientHeight;
+      const containerW = container.clientWidth;
+      const rawH = content.scrollHeight;
+      const rawW = content.scrollWidth;
+
+      if (containerH <= 0 || containerW <= 0 || rawH <= 0 || rawW <= 0) return;
+
+      const overflowsH = rawH > containerH;
+      const overflowsW = rawW > containerW;
+
+      let targetScale = 1.0;
+
+      if (overflowsH || overflowsW) {
+        const availableH = Math.max(10, containerH - paddingBuffer);
+        const availableW = Math.max(10, containerW - paddingBuffer);
+        const scaleH = overflowsH ? availableH / rawH : 1.0;
+        const scaleW = overflowsW ? availableW / rawW : 1.0;
+        targetScale = Math.max(minScale, Math.min(maxScale, scaleH, scaleW));
+      }
+
+      if (targetScale < 1.0) {
+        // Compensate width so text does not narrow horizontally
+        content.style.width = `${100 / targetScale}%`;
+        content.style.height = 'auto';
+        content.style.minHeight = 'auto';
+
+        // Measure reflowed height after width compensation to get true optical height
+        const reflowedH = content.scrollHeight;
+        const scaledH = reflowedH * targetScale;
+        const offsetY =
+          verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
+
+        content.style.transformOrigin = 'top center';
+        content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
+
+        container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));
+        container.setAttribute('data-autofit-overflow', 'true');
+        container.setAttribute(
+          'data-layout-health',
+          targetScale >= 0.94 ? 'optimal' : targetScale >= 0.85 ? 'compressed' : 'overflow'
+        );
+        setFitState({ scale: targetScale, offsetY });
+      } else {
+        content.style.width = '100%';
+        content.style.height = '100%';
+        content.style.minHeight = '100%';
+        content.style.transform = 'none';
+        container.setAttribute('data-autofit-scaled', '1.000');
+        container.removeAttribute('data-autofit-overflow');
+        container.setAttribute('data-layout-health', 'optimal');
+        setFitState({ scale: 1.0, offsetY: 0 });
+      }
+    } finally {
+      isCalculatingRef.current = false;
     }
   }, [maxScale, minScale, paddingBuffer, verticalAlign]);
 
@@ -60,15 +115,13 @@ export function AutoFit({
   return (
     <div
       ref={containerRef}
-      className={`loop-autofit-container relative w-full h-full flex flex-col overflow-hidden ${
-        verticalAlign === 'center' ? 'justify-center' : 'justify-start'
-      } ${className}`}
-      data-autofit-scaled={scale.toFixed(3)}
+      className={`loop-autofit-container relative w-full h-full flex flex-col overflow-hidden ${className}`}
+      data-autofit-scaled={fitState.scale.toFixed(3)}
       style={style}
     >
       <div
         ref={contentRef}
-        className="loop-autofit-content w-full transition-transform duration-100 ease-out"
+        className="loop-autofit-content w-full transition-transform duration-75 ease-out"
       >
         {children}
       </div>

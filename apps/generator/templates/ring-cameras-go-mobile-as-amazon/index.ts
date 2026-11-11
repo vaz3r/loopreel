@@ -4,44 +4,30 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_List from './slides/Slide02_List';
-import Slide03_Imagesplit from './slides/Slide03_Imagesplit';
+import Slide02_Brief from './slides/Slide02_Brief';
+import Slide03_Mechanism from './slides/Slide03_Mechanism';
 import Slide04_Telemetry from './slides/Slide04_Telemetry';
-import Slide05_Dialogue from './slides/Slide05_Dialogue';
-import Slide06_Quadrant from './slides/Slide06_Quadrant';
-import Slide07_Casestudy from './slides/Slide07_Casestudy';
-import Slide08_Debunk from './slides/Slide08_Debunk';
-import Slide09_Grid from './slides/Slide09_Grid';
-import Slide10_Timeline from './slides/Slide10_Timeline';
-import Slide11_Pullquote from './slides/Slide11_Pullquote';
-import Slide12_Herocta from './slides/Slide12_Herocta';
-import Slide13_Herostat from './slides/Slide13_Herostat';
-import Slide14_Stepbystep from './slides/Slide14_Stepbystep';
-import Slide15_Dosanddonts from './slides/Slide15_Dosanddonts';
-import Slide16_Checklist from './slides/Slide16_Checklist';
-import Slide17_Anatomy from './slides/Slide17_Anatomy';
+import Slide05_Controversy from './slides/Slide05_Controversy';
+import Slide06_Catch from './slides/Slide06_Catch';
+import Slide07_Debunk from './slides/Slide07_Debunk';
+import Slide08_Verdict from './slides/Slide08_Verdict';
+import Slide09_Future from './slides/Slide09_Future';
+import Slide10_Herocta from './slides/Slide10_Herocta';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_List,
-  Slide03_Imagesplit,
+  Slide02_Brief,
+  Slide03_Mechanism,
   Slide04_Telemetry,
-  Slide05_Dialogue,
-  Slide06_Quadrant,
-  Slide07_Casestudy,
-  Slide08_Debunk,
-  Slide09_Grid,
-  Slide10_Timeline,
-  Slide11_Pullquote,
-  Slide12_Herocta,
-  Slide13_Herostat,
-  Slide14_Stepbystep,
-  Slide15_Dosanddonts,
-  Slide16_Checklist,
-  Slide17_Anatomy,
+  Slide05_Controversy,
+  Slide06_Catch,
+  Slide07_Debunk,
+  Slide08_Verdict,
+  Slide09_Future,
+  Slide10_Herocta,
   ],
 };
 

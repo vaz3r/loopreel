@@ -81,6 +81,19 @@ export async function auditTemplateStudio(
         errors.push(...audit.collisions);
       }
 
+      const numericScale = parseFloat(audit.scale);
+      if (numericScale < 0.88) {
+        errors.push(
+          `Slide ${i + 1}: AutoFit scale ${audit.scale} is below 0.88 threshold (content too dense / excessive vertical height)`
+        );
+      } else if (numericScale < 0.95) {
+        warnings.push(`Slide ${i + 1}: AutoFit slightly scaled (${audit.scale})`);
+      }
+
+      if (audit.fillPercent < 60) {
+        warnings.push(`Slide ${i + 1}: Low space utilization (${audit.fillPercent}% fill)`);
+      }
+
       // Capture screenshot
       const screenshotPath = path.join(screenshotsDir, `slide-${String(i + 1).padStart(2, '0')}.png`);
       await page.screenshot({ path: screenshotPath, type: 'png' });

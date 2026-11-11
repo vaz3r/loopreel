@@ -1,5 +1,10 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
+import {
+  SlideHeader,
+  ContentCard,
+  SchematicFrame,
+} from '../../../src/skeleton/ui';
 
 export default function Slide01({
   slide,
@@ -7,159 +12,150 @@ export default function Slide01({
   totalSlides,
 }: SlideComponentProps) {
   return (
-    <div className="flex h-full flex-col justify-between gap-8 text-[var(--ink)]">
-      <div className="flex items-center gap-4">
-        <span className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-          Robotics / Privacy
-        </span>
-        <span className="h-px flex-1 bg-[var(--border)]" />
-        <span className="font-[var(--font-mono)] text-xs uppercase tracking-[0.2em] opacity-60">
-          In focus
-        </span>
-      </div>
+    <div
+      className="flex h-full flex-col justify-between gap-6 text-[var(--ink)]"
+      style={
+        {
+          '--ink': '#F1F5F9',
+          '--accent': '#38BDF8',
+          '--paper': '#0A0E17',
+          '--surface': '#141D2B',
+        } as React.CSSProperties
+      }
+    >
+      <SlideHeader
+        kicker="SURVEILLANCE / IN FOCUS"
+        headline="Ring’s Cameras Will Roam Your Rooms."
+        subheadline="The privacy promise has a catch."
+      />
 
-      <section className="flex flex-col gap-6">
-        <div className="flex items-center gap-3 font-[var(--font-mono)] text-xs uppercase tracking-[0.24em] text-[var(--accent)]">
-          <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-          The camera gets moving
-        </div>
-
-        <h1 className="max-w-[900px] text-balance font-[var(--font-headline)] text-7xl font-bold leading-[0.98] tracking-[-0.055em]">
-          {slide.headline ?? 'Amazon puts Ring cameras on patrol'}
-        </h1>
-
-        <p className="max-w-[820px] text-pretty font-[var(--font-body)] text-2xl leading-relaxed opacity-80">
-          {slide.subheadline ??
-            'An indoor drone and a wheeled security robot promise cameras that move toward alerts. They also bring Ring’s privacy questions deeper inside.'}
-        </p>
-      </section>
-
-      <figure className="relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.18em]">
-          <span className="opacity-60">Inside the perimeter</span>
-          <span className="text-[var(--accent)]">Concept schematic</span>
-        </div>
-
+      <SchematicFrame label="AUTONOMOUS HOME PATROL" badge="CONCEPT">
         <svg
-          viewBox="0 0 800 300"
-          className="my-3 block h-[300px] w-full text-[var(--accent)]"
+          viewBox="0 0 720 320"
+          className="mx-auto block w-full"
+          fill="none"
           role="img"
-          aria-label="Conceptual floor plan showing an indoor drone and a wheeled security robot moving toward an alert."
+          aria-labelledby="slide01-diagram-title slide01-diagram-description"
         >
-          <g
-            fill="none"
-            stroke="var(--border)"
+          <title id="slide01-diagram-title">
+            Flying and rolling cameras inside a home
+          </title>
+          <desc id="slide01-diagram-description">
+            Conceptual floor plan showing two camera forms and a dashed
+            patrol route between rooms. Not a product specification.
+          </desc>
+
+          <rect
+            x="60"
+            y="28"
+            width="600"
+            height="244"
+            rx="12"
+            fill="var(--surface)"
+            stroke="#64748B"
             strokeWidth="2"
-            strokeLinecap="square"
-          >
-            <path d="M35 55V20H765V280H35V110" />
-            <path d="M290 20V100M290 160V280" />
-            <path d="M540 20V100M540 160V280" />
-            <path d="M35 210H140M205 210H290" />
-            <path d="M540 210H625M690 210H765" />
-            <path d="M55 40H130V70H55ZM670 40H745V70H670Z" />
-          </g>
+          />
 
-          <g fill="currentColor" opacity="0.035">
-            <path d="M190 127L425 40V250Z" />
-            <path d="M635 178L425 55V250Z" />
+          <g stroke="#64748B" strokeWidth="2">
+            <path d="M340 28V104 M340 172V272" />
+            <path d="M340 148H438 M508 148H660" />
           </g>
 
           <g
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeDasharray="5 8"
-            opacity="0.55"
-          >
-            <path d="M205 127H330Q355 127 380 143L406 158" />
-            <path d="M622 178H495Q470 178 446 168" />
-          </g>
-
-          <g transform="translate(190 127)">
-            <g
-              fill="var(--surface)"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="-70" y="-35" width="140" height="70" rx="27" />
-              <ellipse cx="-39" cy="0" rx="23" ry="25" />
-              <ellipse cx="39" cy="0" rx="23" ry="25" />
-              <path d="M-39-15V15M-54 0H-24M39-15V15M24 0H54" opacity="0.5" />
-              <rect x="-20" y="-22" width="40" height="49" rx="11" />
-              <path d="M-13 27V45H13V27" />
-              <circle cx="0" cy="35" r="5" />
-            </g>
-          </g>
-
-          <g transform="translate(635 169)">
-            <g
-              fill="var(--surface)"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="-49" y="8" width="17" height="43" rx="7" />
-              <rect x="32" y="8" width="17" height="43" rx="7" />
-              <rect x="-38" y="-4" width="76" height="49" rx="16" />
-              <path d="M0-4V-31" />
-              <rect x="-29" y="-66" width="58" height="39" rx="9" />
-              <circle cx="0" cy="-47" r="10" />
-              <circle cx="0" cy="-47" r="3" fill="currentColor" />
-              <path d="M-17 23H17" opacity="0.6" />
-            </g>
-          </g>
-
-          <g transform="translate(426 162)">
-            <circle r="32" fill="none" stroke="currentColor" opacity="0.15" />
-            <circle r="21" fill="none" stroke="currentColor" opacity="0.4" />
-            <circle r="8" fill="currentColor" />
-          </g>
-
-          <g
-            fill="currentColor"
-            fontFamily="var(--font-mono)"
-            fontSize="10"
+            fill="#94A3B8"
+            fontFamily="ui-monospace, monospace"
+            fontSize="11"
             letterSpacing="2"
           >
-            <text x="426" y="111" textAnchor="middle">
-              ALERT
-            </text>
-            <text x="190" y="254" textAnchor="middle">
-              01 / AIR
-            </text>
-            <text x="635" y="254" textAnchor="middle">
-              02 / GROUND
-            </text>
+            <text x="82" y="54">LIVING</text>
+            <text x="364" y="54">HALL</text>
+            <text x="364" y="252">ROOM</text>
+          </g>
+
+          <path
+            d="M190 140H290Q310 140 330 120L370 90H472V210H554"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            strokeDasharray="5 8"
+            strokeLinecap="round"
+            opacity="0.65"
+          />
+
+          <g transform="translate(190 140)">
+            <circle r="70" fill="var(--accent)" opacity="0.04" />
+            <circle
+              r="58"
+              stroke="var(--accent)"
+              strokeDasharray="2 7"
+              opacity="0.3"
+            />
+            <g stroke="var(--accent)" strokeWidth="2">
+              <path d="M-24-15L-40-26 M24-15L40-26 M-24 15L-40 26 M24 15L40 26" />
+              <ellipse cx="-42" cy="-28" rx="19" ry="8" />
+              <ellipse cx="42" cy="-28" rx="19" ry="8" />
+              <ellipse cx="-42" cy="28" rx="19" ry="8" />
+              <ellipse cx="42" cy="28" rx="19" ry="8" />
+              <rect
+                x="-27"
+                y="-19"
+                width="54"
+                height="38"
+                rx="12"
+                fill="var(--paper)"
+              />
+              <circle r="9" />
+            </g>
+            <circle r="3" fill="var(--accent)" />
+          </g>
+
+          <g transform="translate(554 210)">
+            <path
+              d="M0-25L-55-65H55Z"
+              fill="var(--accent)"
+              opacity="0.08"
+            />
+            <g stroke="var(--accent)" strokeWidth="2">
+              <rect
+                x="-29"
+                y="-13"
+                width="58"
+                height="30"
+                rx="10"
+                fill="var(--paper)"
+              />
+              <path d="M0-13V-32" />
+              <rect
+                x="-15"
+                y="-47"
+                width="30"
+                height="23"
+                rx="7"
+                fill="var(--paper)"
+              />
+              <circle cy="-35" r="5" />
+              <circle cx="-18" cy="20" r="6" fill="var(--paper)" />
+              <circle cx="18" cy="20" r="6" fill="var(--paper)" />
+            </g>
+          </g>
+
+          <g
+            fill="var(--accent)"
+            fontFamily="ui-monospace, monospace"
+            fontSize="11"
+            letterSpacing="2"
+            textAnchor="middle"
+          >
+            <text x="190" y="301">FLYING</text>
+            <text x="554" y="301">ROLLING</text>
           </g>
         </svg>
+      </SchematicFrame>
 
-        <figcaption className="grid grid-cols-2 gap-6 border-t border-[var(--border)] pt-4 font-[var(--font-body)] text-sm">
-          <span>
-            <span className="mr-3 font-[var(--font-mono)] text-xs text-[var(--accent)]">
-              01
-            </span>
-            Indoor drone
-          </span>
-          <span>
-            <span className="mr-3 font-[var(--font-mono)] text-xs text-[var(--accent)]">
-              02
-            </span>
-            Wheeled security robot
-          </span>
-        </figcaption>
-      </figure>
-
-      <div className="flex items-center gap-4">
-        <span className="h-11 w-1 rounded-full bg-[var(--accent)]" />
-        <div className="flex flex-col gap-1">
-          <span className="font-[var(--font-body)] text-base font-semibold">
-            {slide.author ?? 'Staff Bureau'}
-          </span>
-          <span className="font-[var(--font-mono)] text-xs uppercase tracking-[0.18em] opacity-60">
-            {slide.publisher ?? 'Ars Technica'}
-          </span>
-        </div>
-      </div>
+      <ContentCard
+        title="Before you buy"
+        body="Flying and rolling cameras bring autonomous patrols inside. Understand the mapping, recording and encryption trade-offs before buying."
+        tag="PRIVACY"
+      />
     </div>
   );
 }

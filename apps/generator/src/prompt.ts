@@ -9,6 +9,17 @@ export interface TemplateBrief {
   url?: string;
 }
 
+export interface StoryStrategy {
+  hookHeadline: string;
+  valuePromise: string;
+  kicker: string;
+  coreConflict: string;
+  hiddenCatch: string;
+  verdict: string;
+  keyMetrics: Array<{ value: string; label: string; context: string }>;
+  keyQuotes: Array<{ quote: string; speaker: string; role: string }>;
+}
+
 // ============================================================================
 // PASS 1: BRAND CONCEPT & DESIGN TOKENS
 // ============================================================================
@@ -71,10 +82,10 @@ Summary Snippet:
 ${article.summary}
 
 Creative Direction Guidance:
-- If high-tech, AI, or compute infrastructure: consider deep slate/obsidian (#0A0E17), electric cobalt/cyan (#38BDF8), technical monospace typography.
-- If macroeconomics, business, or geopolitics: consider broadsheet newsprint (#F8F9FA or #FDFBF7), deep ink (#111827), crimson/amber accents (#E11D48), Playfair or Syne display.
-- If design, architecture, or spatial philosophy: consider warm washi (#F5F2EB), sumi-e ink (#1A1918), cinnabar vermilion (#E85A3C), elegant serif.
-- Custom vibe requested: "${brief?.vibe || 'High-end editorial publication'}"
+- If high-tech, AI, or consumer robotics: obsidian black (#0A0E17), electric cyan (#38BDF8), slate cards (#141D2B), Space Grotesk / Inter / IBM Plex Mono.
+- If macroeconomics, business, or geopolitics: broadsheet newsprint (#F8F9FA), deep ink (#111827), crimson accents (#E11D48), Playfair or Syne display.
+- If design, architecture, or spatial philosophy: warm washi (#F5F2EB), sumi-e ink (#1A1918), cinnabar vermilion (#E85A3C), elegant serif.
+- Custom vibe requested: "${brief?.vibe || 'High-end investigative technology editorial'}"
 
 Return strictly valid JSON matching BrandTokens:
 {
@@ -91,9 +102,9 @@ Return strictly valid JSON matching BrandTokens:
     "subtle": "#HEX"
   },
   "typography": {
-    "headlineFont": "Font Name",
-    "bodyFont": "Font Name",
-    "monoFont": "Font Name",
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Inter",
+    "monoFont": "IBM Plex Mono",
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=...&display=swap"
   },
   "wordmark": "${(article.publisher || 'THE REPORT').toUpperCase()}",
@@ -105,156 +116,180 @@ Return strictly valid JSON matching BrandTokens:
 }
 
 // ============================================================================
-// PASS 2: 17-SLIDE MASTER CONTENT DECK (2 FAST BATCHES)
+// PASS 1B: EDITORIAL STRATEGIST (THE HOOK & VALUE EXTRACTION)
 // ============================================================================
 
-export function buildDeckSystemPrompt(): string {
-  return `You are an Executive Editor at The New York Times Magazine, Wired, and Harvard Business Review.
-Your task is to author rich, high-signal narrative content for a carousel template.
+export function buildStoryStrategySystemPrompt(): string {
+  return `You are the Editor-in-Chief at Wired, The New York Times Magazine, and Vox.
+Your mission is to transform a news article into a scroll-stopping, high-signal editorial carousel.
 
-CRITICAL EDITORIAL RULES:
-1. Handcrafted editorial depth: ZERO corporate filler, zero robotic phrasing ("synergy", "game-changer", "dive into"), zero rhetorical question headlines.
-2. Grounded Truth: If article text is provided, you MUST strictly use real facts, actual company/individual names, real numbers, and verified quotes from the story.
-3. Telemetry numbers MUST be strictly numerical or signed badge (e.g. "$1.2T", "+34%", "4.8ms", "100M"). Never put explanatory text in the value slot.
-4. Return strictly valid JSON array of slide objects: [ { "id": "slide-1", "type": "...", ... } ] without preamble.`;
+CRITICAL HOOK & VALUE PRINCIPLES:
+1. THE SCROLL-STOPPING HOOK (Slide 1):
+   - Never use passive corporate titles (e.g. "Amazon puts Ring cameras on patrol" is BANNED).
+   - Use the tension formula: [Surprising Action] + [The Hidden Catch / Stakes].
+   - Examples of great hooks:
+     * "Amazon Put Wings on Ring Cameras. Here’s What They Aren’t Telling You."
+     * "Your Next Security Guard Flies Inside Your House. Why Civil Rights Groups Are Terrified."
+     * "The $1,000 Indoor Drone: What Amazon’s Patent Disclosures Actually Reveal."
+2. THE VALUE PROPOSITION:
+   - State clearly why the reader must swipe through (e.g. "3 critical findings: The $1,000 price tag, interior mapping, and the 180-day retention loop.").
+3. HIGH-SIGNAL EXTRACTION:
+   - Extract the real numbers (pricing, dates, limits).
+   - Extract the core conflict (Amazon pitch vs privacy reality).
+   - Extract the hidden catch (what's in the fine print).
+   - Extract actionable advice (who should buy it vs who should avoid it).
+
+Return strictly JSON matching:
+{
+  "hookHeadline": "Scroll-stopping provocative headline",
+  "valuePromise": "Clear 1-sentence value promise telling viewer what they will learn",
+  "kicker": "SURVEILLANCE / IN FOCUS",
+  "coreConflict": "1-sentence summary of the main controversy",
+  "hiddenCatch": "1-sentence summary of what's in the fine print",
+  "verdict": "1-sentence consumer/enterprise advice",
+  "keyMetrics": [
+    { "value": "$250", "label": "Drone Cam starting price", "context": "Base consumer hardware" },
+    { "value": "$1,000", "label": "Rover Cam price", "context": "Positioned for businesses" },
+    { "value": "180 Days", "label": "Cloud retention limit", "context": "Triggered by motion and live view" }
+  ],
+  "keyQuotes": [
+    { "quote": "...", "speaker": "...", "role": "..." }
+  ]
+}`;
+}
+
+export function buildStoryStrategyUserPrompt(article: ArticleIntel): string {
+  return `Extract the high-signal story strategy for this article:
+Title: "${article.title}"
+Publisher: "${article.publisher}"
+Author: "${article.byline || 'Staff Bureau'}"
+Article Text:
+${article.cleanText.slice(0, 10000)}
+
+Output strictly the StoryStrategy JSON.`;
+}
+
+// ============================================================================
+// PASS 2: 10-SLIDE HIGH-SIGNAL NARRATIVE STORYBOARD
+// ============================================================================
+
+export function buildStoryDeckSystemPrompt(): string {
+  return `You are an Executive Editor authoring a 10-slide high-density editorial carousel.
+
+CRITICAL CONTENT & ANTI-OVERFLOW RULES:
+1. High Signal, Zero Filler: Every slide delivers a distinct, high-value takeaway that can be read in under 3 seconds.
+2. Strict Word Limits:
+   - Headlines: Maximum 10–12 words.
+   - Card Bodies / Bullets: Maximum 15–20 words per item! Never write long paragraph blocks.
+3. 10-Slide Narrative Arc:
+   1. cover: The Scroll-Stopping Hook & Stakes.
+   2. brief: The 3-Bullet Executive Summary (TL;DR).
+   3. mechanism: How It Works (Drone vs Rover hardware specs).
+   4. telemetry: 3 Hard Numbers / Pricing.
+   5. controversy: The Privacy Battle (Amazon claims vs Civil liberties alarm).
+   6. catch: The Hidden Catch (What's in the fine print).
+   7. debunk: Myth vs Reality.
+   8. verdict: Consumer Advice (Who should buy it vs who should avoid it).
+   9. future: The Big Picture (Autonomous domestic surveillance trends).
+   10. hero-cta: The Final Takeaway & Discussion Question.
+
+Return strictly a JSON array of 10 slide objects: [ { "id": "slide-1", "type": "cover", ... }, ... ]`;
+}
+
+export function buildStoryDeckUserPrompt(
+  strategy: StoryStrategy,
+  article: ArticleIntel,
+  brand: BrandTokens
+): string {
+  return `Author the 10-slide narrative storyboard using this strategy:
+
+Hook Headline: "${strategy.hookHeadline}"
+Value Promise: "${strategy.valuePromise}"
+Kicker: "${strategy.kicker}"
+Core Conflict: "${strategy.coreConflict}"
+Hidden Catch: "${strategy.hiddenCatch}"
+Verdict: "${strategy.verdict}"
+Key Metrics: ${JSON.stringify(strategy.keyMetrics)}
+Key Quotes: ${JSON.stringify(strategy.keyQuotes)}
+
+Article Details:
+Title: "${article.title}"
+Publisher: "${brand.name}"
+Author: "${article.byline || 'Staff Bureau'}"
+
+Output strictly the JSON array of 10 slide objects. Remember: MAX 20 WORDS PER CARD BODY!`;
+}
+
+// Fallback for non-article briefs
+export function buildDeckSystemPrompt(): string {
+  return `You are an Executive Editor authoring high-density editorial carousel content.
+Rules: Zero corporate filler, concise statements (max 20 words per card body), strict numerical telemetry.
+Return strictly valid JSON array of slide objects.`;
 }
 
 export function buildDeckBatch1Prompt(brief: TemplateBrief, brand: BrandTokens): string {
-  return `Author Batch 1 (Slides 1–9) for:
-Publication: "${brand.name}"
-Domain: "${brand.domain}"
-Tone: "${brand.vibe}"
-
-Archetypes to produce (strictly in this order):
-1. cover: { "id": "slide-1", "type": "cover", "headline": "...", "subheadline": "...", "kicker": "...", "authorName": "...", "authorRole": "..." }
-2. list: { "id": "slide-2", "type": "list", "title": "...", "items": [{ "tag": "...", "title": "...", "takeaway": "..." }, { ... }, { ... }] }
-3. image-split: { "id": "slide-3", "type": "image-split", "headline": "...", "label": "...", "observation": "...", "notes": ["...", "..."] }
-4. telemetry: { "id": "slide-4", "type": "telemetry", "headline": "...", "metrics": [{ "value": "+34%", "label": "...", "context": "..." }, { "value": "$1.2T", "label": "...", "context": "..." }, { "value": "4.2ms", "label": "...", "context": "..." }] }
-5. dialogue: { "id": "slide-5", "type": "dialogue", "topic": "...", "speaker": "...", "role": "...", "thesis": "...", "counterThesis": "..." }
-6. quadrant: { "id": "slide-6", "type": "quadrant", "headline": "...", "quadrants": [{ "quadrant": "Q1", "title": "...", "body": "..." }, { "quadrant": "Q2", ... }, { "quadrant": "Q3", ... }, { "quadrant": "Q4", ... }] }
-7. case-study: { "id": "slide-7", "type": "case-study", "headline": "...", "subject": "...", "before": "...", "after": "...", "takeaway": "...", "impact": { "value": "2.4x", "label": "..." } }
-8. debunk: { "id": "slide-8", "type": "debunk", "headline": "...", "myth": { "title": "THE MYTH", "text": "..." }, "reality": { "title": "THE REALITY", "text": "..." } }
-9. grid: { "id": "slide-9", "type": "grid", "headline": "...", "cards": [{ "index": "01", "title": "...", "desc": "..." }, { "index": "02", ... }, { "index": "03", ... }] }
-
-Return strictly JSON array: [ ... 9 slide objects ... ]`;
+  return `Author Batch 1 (Slides 1–9) for ${brand.name} (${brand.domain}).
+Archetypes: cover, list, image-split, telemetry, dialogue, quadrant, case-study, debunk, grid.
+Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 export function buildDeckBatch2Prompt(brief: TemplateBrief, brand: BrandTokens): string {
-  return `Author Batch 2 (Slides 10–17) for:
-Publication: "${brand.name}"
-Domain: "${brand.domain}"
-Tone: "${brand.vibe}"
-
-Archetypes to produce (strictly in this order):
-10. timeline: { "id": "slide-10", "type": "timeline", "headline": "...", "phases": [{ "phase": "01", "label": "...", "detail": "..." }, { "phase": "02", ... }, { "phase": "03", ... }] }
-11. pullquote: { "id": "slide-11", "type": "pullquote", "quote": "...", "attribution": "...", "role": "..." }
-12. hero-cta: { "id": "slide-12", "type": "hero-cta", "headline": "...", "kicker": "...", "action": "...", "handle": "${brand.handle}" }
-13. hero-stat: { "id": "slide-13", "type": "hero-stat", "headline": "...", "stat": { "value": "94.8%", "label": "...", "detail": "..." } }
-14. step-by-step: { "id": "slide-14", "type": "step-by-step", "headline": "...", "steps": [{ "step": "1", "title": "...", "body": "..." }, { "step": "2", ... }, { "step": "3", ... }] }
-15. dos-and-donts: { "id": "slide-15", "type": "dos-and-donts", "headline": "...", "do": { "title": "RECOMMENDED", "body": "..." }, "dont": { "title": "AVOID", "body": "..." } }
-16. checklist: { "id": "slide-16", "type": "checklist", "headline": "...", "items": [{ "check": true, "title": "...", "note": "..." }, { ... }, { ... }, { ... }] }
-17. anatomy: { "id": "slide-17", "type": "anatomy", "headline": "...", "components": [{ "label": "...", "desc": "..." }, { "label": "...", "desc": "..." }, { "label": "...", "desc": "..." }] }
-
-Return strictly JSON array: [ ... 8 slide objects ... ]`;
-}
-
-export function buildArticleDeckBatch1Prompt(article: ArticleIntel, brand: BrandTokens): string {
-  return `Author Batch 1 (Slides 1–9) based strictly on this real news article:
-Article Title: "${article.title}"
-Publisher: "${brand.name}"
-Author: "${article.byline || 'Staff Bureau'}"
-Extracted Quotes from story: ${JSON.stringify(article.extractedQuotes)}
-Extracted Numbers/Metrics from story: ${JSON.stringify(article.extractedMetrics)}
-
-Article Text:
-${article.cleanText.slice(0, 12000)}
-
-STRICT GROUNDING INSTRUCTIONS:
-- Slide 1 (cover): Headline must reflect the real news event, with author: "${article.byline || 'Staff Bureau'}".
-- Slide 2 (list): 3 core developments or findings reported in the piece.
-- Slide 3 (image-split): Deep observation or technical architecture breakdown from the article.
-- Slide 4 (telemetry): 3 real metrics/numbers from the story. Format numbers cleanly (e.g. "$10B", "45%", "2.4x").
-- Slide 5 (dialogue): Real debate or statement between key figures in the story.
-- Slide 6 (quadrant): 2x2 breakdown of market forces, technical trade-offs, or regulatory impacts mentioned.
-- Slide 7 (case-study): Before vs after transformation described in the article.
-- Slide 8 (debunk): Common misconception vs verified reality from the reporting.
-- Slide 9 (grid): 3 key entities, products, or core mechanisms discussed.
-
-Return strictly JSON array: [ ... 9 slide objects ... ]`;
-}
-
-export function buildArticleDeckBatch2Prompt(article: ArticleIntel, brand: BrandTokens): string {
-  return `Author Batch 2 (Slides 10–17) based strictly on this real news article:
-Article Title: "${article.title}"
-Publisher: "${brand.name}"
-Extracted Quotes from story: ${JSON.stringify(article.extractedQuotes)}
-Extracted Numbers from story: ${JSON.stringify(article.extractedMetrics)}
-
-Article Text:
-${article.cleanText.slice(0, 12000)}
-
-STRICT GROUNDING INSTRUCTIONS:
-- Slide 10 (timeline): 3-phase chronology of events leading to this announcement or finding.
-- Slide 11 (pullquote): The most powerful direct quote from the story, citing the exact speaker name.
-- Slide 12 (hero-cta): Key conclusion / question for the industry, handle: "${brand.handle}".
-- Slide 13 (hero-stat): The single most consequential statistic reported in the article.
-- Slide 14 (step-by-step): 3 sequential implications or strategic moves outlined.
-- Slide 15 (dos-and-donts): What to embrace vs avoid according to the story's analysis.
-- Slide 16 (checklist): 4 validation or inspection criteria from the piece.
-- Slide 17 (anatomy): Breakdown of the central product, policy, or system structure.
-
-Return strictly JSON array: [ ... 8 slide objects ... ]`;
+  return `Author Batch 2 (Slides 10–17) for ${brand.name} (${brand.domain}).
+Archetypes: timeline, pullquote, hero-cta, hero-stat, step-by-step, dos-and-donts, checklist, anatomy.
+Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// PASS 3: SINGLE SLIDE REACT + TAILWIND COMPONENT
+// PASS 3: SINGLE SLIDE REACT COMPONENT (USING EDITORIAL PRIMITIVES)
 // ============================================================================
 
 export function buildSingleSlideSystemPrompt(): string {
-  return `You are a world-class Frontend Engineer and Editorial Art Director.
-You write bespoke React components using Tailwind CSS for editorial publication carousels.
+  return `You are a world-class Editorial Art Director and React + Tailwind Engineer.
+You compose publication-grade carousel slides using the project's pre-built Editorial Primitives.
 
-CRITICAL DESIGN & CODING RULES:
+AVAILABLE EDITORIAL PRIMITIVES (Import from '../../../src/skeleton/ui'):
+\`\`\`tsx
+import {
+  SlideHeader,      // <SlideHeader kicker="SURVEILLANCE" headline="Title" subheadline="Subtitle" />
+  ContentCard,      // <ContentCard index={1} title="Title" body="Max 20 words" tag="AI" />
+  MetricCard,       // <MetricCard value="$250" label="Price" context="1-line context" tag="HARDWARE" />
+  ComparisonSplit,  // <ComparisonSplit left={{ tag: "MYTH", title: "...", description: "..." }} right={{ tag: "REALITY", title: "...", description: "..." }} />
+  QuoteBox,         // <QuoteBox quote="..." attribution="Name" role="Title" />
+  SchematicFrame    // <SchematicFrame label="SCHEMATIC" badge="RADAR"><svg>...</svg></SchematicFrame>
+} from '../../../src/skeleton/ui';
+\`\`\`
+
+CRITICAL COMPOSITION RULES:
 1. Component Signature:
    import React from 'react';
    import type { SlideComponentProps } from '../../../src/skeleton/types';
+   import { SlideHeader, ContentCard, MetricCard, ComparisonSplit, QuoteBox, SchematicFrame } from '../../../src/skeleton/ui';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
-     return ( ... );
+     return (
+       <div className="flex h-full flex-col justify-between gap-6 text-[var(--ink)]">
+         ...
+       </div>
+     );
    }
 
-2. Styling & Theme Integration:
-   - Use Tailwind CSS classes for layout, flexbox, grid, padding, rounded corners, and typography.
-   - Use CSS variables for brand colors and fonts:
-     * bg-[var(--surface)] for cards/panels
-     * text-[var(--ink)] for body text
-     * text-[var(--accent)] or bg-[var(--accent)] for accents, badges, highlights
-     * border-[var(--border)] for card borders and hairlines
-     * font-[var(--font-headline)] for titles, quotes, hero numbers
-     * font-[var(--font-body)] for body copy and descriptions
-     * font-[var(--font-mono)] for metrics, tags, indices
-   - Card styling: Elegant borders (border border-[var(--border)]), subtle shadows, rounded-xl.
+2. Architectural Layout Guidelines per Archetype:
+   - cover: Use <SlideHeader> with hook headline, value promise subtitle, and an inline <SchematicFrame> with a clean vector diagram.
+   - brief / list: Use <SlideHeader> + 3 stacked <ContentCard> (index 1, 2, 3).
+   - mechanism: Use <SlideHeader> + 2-column grid of <ContentCard> or <ComparisonSplit>.
+   - telemetry: Use <SlideHeader> + 3-card grid of <MetricCard>.
+   - controversy / quote: Use <SlideHeader> + <QuoteBox> + a supporting takeaway card.
+   - catch: Use <SlideHeader> + 2 high-impact warning/catch <ContentCard>.
+   - debunk: Use <SlideHeader> + <ComparisonSplit> (Myth vs Reality).
+   - verdict: Use <SlideHeader> + <ComparisonSplit> (Who It's For vs Who Should Avoid).
+   - future: Use <SlideHeader> + 2 stacked analytical <ContentCard>.
+   - hero-cta: Use <SlideHeader> + a bold conclusion <QuoteBox> + discussion pill.
 
-3. Spatial Balance Rule (75%–90% Vertical Fill):
-   - Zero top-heavy clumping: do not cram all content into the top 20% leaving an empty void at the bottom.
-   - Distribute space vertically using \`flex flex-col justify-between h-full\`, \`gap-6\`, or generous card padding (\`p-8\`).
-   - If content is short, center it optically with generous line heights and larger font scales.
-
-4. Creative Freedom & Expressive Archetypes:
-   - cover: Monumental headline (\`text-6xl\` or \`text-7xl\` font-bold tracking-tight), subtle category pill, editorial subheadline, author credits bar. Feel free to add an expressive conceptual SVG diagram or architectural framing.
-   - list: 3 distinct cards with accent tag, clear bold title, and takeaway subtext.
-   - image-split: Two-column layout with an editorial diagram/schematic SVG placeholder on one side and structured analytical notes on the other.
-   - telemetry: 3-4 metric cards. Numbers must be large and prominent (\`text-5xl\` or \`text-6xl\` font-mono font-bold), with percentage badges and concise context.
-   - dialogue: Dramatic Q&A with oversized drop-caps or quotation marks.
-   - debunk: Comparative cards contrasting Myth vs Reality.
-   - pullquote: Large italic quote with 4px brand accent border (\`border-l-4 border-[var(--accent)] pl-8\`).
-   - hero-stat: Single massive stat (\`text-8xl\` or \`text-9xl\` font-mono) dominating the upper frame with deep analytical paragraph below.
-
-5. Technical Constraints:
-   - Output ONLY self-contained React TypeScript JSX code in a \`\`\`tsx code block.
-   - NO external dependencies or icon libraries (no lucide-react, no react-icons). Use pure SVG or Tailwind.
-   - Do NOT wrap in the outer 1080x1350 frame or header/footer—the framework's SlideFrame already provides those.
-   - Return valid JSX without syntax errors.`;
+3. Strict Spatial Budget:
+   - Keep card count $\\le 3$ per slide.
+   - Rely on the Primitives for padding and borders.
+   - Never write raw uncontained paragraphs.
+   - Return ONLY valid JSX in a \`\`\`tsx code block.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -262,7 +297,7 @@ export function buildSingleSlideUserPrompt(
   slideData: SlideData,
   brand: BrandTokens
 ): string {
-  return `Generate the React + Tailwind component for Slide ${slideNumber}:
+  return `Generate Slide${String(slideNumber).padStart(2, '0')}.tsx for Slide ${slideNumber}:
 Archetype: "${slideData.type}"
 Slide Data:
 ${JSON.stringify(slideData, null, 2)}
@@ -270,12 +305,11 @@ ${JSON.stringify(slideData, null, 2)}
 Brand Context:
 - Publication: "${brand.name}"
 - Domain: "${brand.domain}"
-- Accent Color: "${brand.palette.accent}"
-- Paper Background: "${brand.palette.paper}"
-- Surface Color: "${brand.palette.surface}"
-- Border Color: "${brand.palette.border}"
+- Accent: "${brand.palette.accent}"
+- Paper: "${brand.palette.paper}"
+- Surface: "${brand.palette.surface}"
 
-Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
+Compose this slide using the Editorial Primitives (<SlideHeader>, <ContentCard>, <MetricCard>, <ComparisonSplit>, <QuoteBox>, <SchematicFrame>).`;
 }
 
 // ============================================================================
