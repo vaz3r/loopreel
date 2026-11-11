@@ -1,53 +1,28 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
-import {
-  SlideHeader,
-  ContentCard,
-  ComparisonSplit,
-} from '../../../src/skeleton/ui';
+import { EditorialVerdict } from '../../../src/skeleton/ui';
 
-export default function Slide08({
-  slide,
-  brand,
-  totalSlides,
-}: SlideComponentProps) {
+export default function Slide08({ slide, brand, totalSlides }: SlideComponentProps) {
   return (
-    <div
-      className="flex h-full flex-col justify-between gap-6 text-[var(--ink)]"
-      style={
-        {
-          '--accent': '#38BDF8',
-          '--paper': '#0A0E17',
-          '--surface': '#141D2B',
-          '--ink': '#F1F5F9',
-        } as React.CSSProperties
-      }
-    >
-      <SlideHeader
-        kicker="EDITORIAL VERDICT"
-        headline="Privacy First? Skip Both. Otherwise, Wait."
-      />
-
-      <ComparisonSplit
-        left={{
-          tag: 'POTENTIAL FIT',
-          title: 'Consider only after independent testing.',
-          description:
-            'Homeowners needing brief checks or businesses with compatible, single-floor interiors.',
-        }}
-        right={{
-          tag: 'AVOID',
-          title: 'Privacy-first buyers.',
-          description:
-            'Neither product’s cloud-dependent design meets a local-only requirement.',
-        }}
-      />
-
-      <ContentCard
-        title="Wrong expectations"
-        body="Avoid Drone for sustained airborne coverage; avoid Rover if your security plan requires navigating stairs."
-        tag="LIMITS"
-      />
-    </div>
+    <EditorialVerdict
+      kicker="EDITORIAL VERDICT"
+      headline="Privacy-First Homes: Hold Off. Businesses: Audit First."
+      avoid={{
+        tag: 'WHO SHOULD SKIP',
+        title: 'Households prioritizing minimal indoor surveillance',
+        points: [
+          'Hold off if interior mapping and cloud processing exceed your privacy boundaries.',
+          'Do not mistake an up-to-8-minute flight for continuous airborne coverage.',
+        ],
+      }}
+      fit={{
+        tag: 'POTENTIAL FIT',
+        title: 'Businesses with compatible single-floor premises',
+        points: [
+          'Claimed coverage: up to 5,000 square feet; indoor, single-floor operation only, with no stair climbing.',
+          'Exclude curved edges, sunken areas, black glossy floors and transitions greater than 1.375"/3.5cm.',
+        ],
+      }}
+    />
   );
 }

@@ -1,8 +1,8 @@
 {
   "name": "Ars Technica",
   "slug": "ring-cameras-go-mobile-as-amazon",
-  "vibe": "High-end investigative technology editorial: obsidian fields, restrained cyan annotations, precise gridwork and stark typography. Forensic rather than futuristic; surveillance examined, not celebrated.",
-  "domain": "Artificial Intelligence / Consumer Robotics / Surveillance & Privacy",
+  "vibe": "Investigative technology editorial: obsidian fields, restrained cyan annotations, architectural grids, and sharp typographic hierarchy. Forensic rather than futuristic; scrutiny over spectacle.",
+  "domain": "Technology / AI Robotics / Surveillance & Privacy",
   "palette": {
     "paper": "#0A0E17",
     "ink": "#F1F5F9",
@@ -15,7 +15,7 @@
     "headlineFont": "Space Grotesk",
     "bodyFont": "Inter",
     "monoFont": "IBM Plex Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
   },
   "wordmark": "ARS TECHNICA",
   "wordmarkStyle": "sans",

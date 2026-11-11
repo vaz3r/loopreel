@@ -1,178 +1,181 @@
 {
   "templateName": "Ars Technica",
   "templateSlug": "ring-cameras-go-mobile-as-amazon",
-  "domain": "Artificial Intelligence / Consumer Robotics / Surveillance & Privacy",
+  "domain": "Technology / AI Robotics / Surveillance & Privacy",
   "slides": [
     {
       "id": "slide-1",
       "type": "cover",
       "kicker": "SURVEILLANCE / IN FOCUS",
-      "headline": "Ring’s Cameras Will Roam Your Rooms.",
-      "subheadline": "The privacy promise has a catch.",
-      "body": "Flying and rolling cameras bring autonomous patrols inside. Understand the mapping, recording and encryption trade-offs before buying.​"
+      "headline": "Amazon Wants Patrolling Cameras. Its Privacy Promise Has Conditions.",
+      "subheadline": "Inside the prices, flight limits, interior mapping and encryption trade-offs behind Ring’s mobile security pitch."
     },
     {
       "id": "slide-2",
       "type": "brief",
-      "headline": "Three Things To Know Before Buying",
-      "bullets": [
-        "Both devices map interiors using AI Pilot, combining vision models, on-device sensors and cloud processing.",
-        "Drone flights last up to 8 minutes, tested with a new, fully-charged battery under controlled conditions.",
-        "Rover cloud recordings can remain for up to 180 days with a compatible Ring subscription."
+      "headline": "Three Conditions Behind Autonomous Security",
+      "items": [
+        {
+          "index": 1,
+          "tag": "AI",
+          "title": "Your rooms become a floor plan",
+          "body": "AI Pilot combines cameras, sensors and cloud processing to map interiors and suggest patrol points."
+        },
+        {
+          "index": 2,
+          "tag": "SUBSCRIPTION",
+          "title": "Scheduling costs beyond the hardware",
+          "body": "Scheduled drone patrols require a compatible Ring Protect plan."
+        },
+        {
+          "index": 3,
+          "tag": "FLIGHT LIMIT",
+          "title": "Up to 8 minutes, not continuous coverage",
+          "body": "Tested with a new, fully-charged battery under controlled conditions; actual flight time depends on usage and environment."
+        }
       ]
     },
     {
       "id": "slide-3",
       "type": "mechanism",
-      "headline": "One Flies. One Rolls. Both Map.",
-      "cards": [
-        {
-          "title": "DRONE CAM",
-          "body": "2K video, 148° field of view, 360° rotation and two LED lights for low-light scenes."
-        },
-        {
-          "title": "ROVER CAM",
-          "body": "Adjustable periscope; up to 4K livestreaming and recording during patrols; 360° scans at designated stops."
-        },
-        {
-          "title": "SETUP",
-          "body": "Carry Drone through your rooms; Rover explores independently. AI Pilot creates floor plans and suggests patrol points."
-        }
-      ]
+      "headline": "One Flies Through Homes. One Patrols Businesses.",
+      "left": {
+        "tag": "DRONE CAM",
+        "title": "Airborne checks, then back to dock",
+        "description": "2K video, 148° field of view, 360° rotation and two LED lights; camera off while docked."
+      },
+      "right": {
+        "tag": "ROVER CAM",
+        "title": "A mobile business security camera",
+        "description": "Streams and records in up to 4K while patrolling; performs a 360° scan at designated stops."
+      }
     },
     {
       "id": "slide-4",
       "type": "telemetry",
-      "headline": "Two Prices. One Long Recording Window.",
-      "cards": [
+      "headline": "The Price Tags—and the Storage Window",
+      "metrics": [
         {
           "value": "$249.99",
-          "title": "DRONE CAM",
-          "body": "U.S. shipping targeted January 27, 2027. FCC authorization remains pending; sales cannot proceed without approval."
+          "label": "DRONE CAM",
+          "context": "Target shipping: January 27, 2027. FCC authorization remains required before sale.",
+          "tag": "PENDING FCC"
         },
         {
           "value": "$999.99",
-          "title": "ROVER CAM",
-          "body": "Business-focused robot available for preorder. U.S. shipping scheduled for December 16, 2026."
+          "label": "ROVER CAM",
+          "context": "Preorders open; U.S. shipping scheduled for December 16, 2026.",
+          "tag": "BUSINESS"
         },
         {
-          "value": "up to 180 days",
-          "title": "ROVER CLOUD RETENTION",
-          "body": "Doorbell rings, motion events and Live View recordings; compatible subscription required. Not continuous recording."
+          "value": "180 DAYS",
+          "label": "MAXIMUM CLOUD VIDEO HISTORY",
+          "context": "Up to this limit for doorbell rings, motion events and Live View events; compatible subscription required.",
+          "tag": "SUBSCRIPTION"
         }
       ]
     },
     {
       "id": "slide-5",
       "type": "controversy",
-      "headline": "Amazon Promises Privacy. Its Record Demands Scrutiny.",
-      "cards": [
-        {
-          "title": "AMAZON’S PROMISE",
-          "body": "“Privacy and security without compromise”: docked Drone camera off; Rover Sleep Mode retracts its periscope and disables its microphone."
-        },
-        {
-          "title": "CIVIL-LIBERTIES WARNING",
-          "body": "EFF says TAKE falls short of end-to-end encryption and leaves potential avenues for compelled access."
-        },
-        {
-          "title": "PAST SECURITY FAILURES",
-          "body": "The FTC’s 2023 complaint said vulnerabilities exposed approximately 55,000 U.S. customers’ videos, live streams and account profiles."
-        },
-        {
-          "title": "INSIDER ACCESS",
-          "body": "The FTC also charged Ring with allowing employees and contractors to access customers’ private videos."
-        }
-      ]
+      "quote": "Privacy and security without compromise",
+      "attribution": "Amazon",
+      "role": "Company promoting Ring Robotics",
+      "context": "Both robots use Throw Away the Key encryption. EFF says it falls short of end-to-end protection."
     },
     {
       "id": "slide-6",
       "type": "catch",
-      "headline": "The Catch: Cloud Processing, Subscriptions, Temporary Keys",
-      "cards": [
+      "headline": "Throwing Away Keys Does Not End Access",
+      "items": [
         {
-          "title": "NOT LOCAL-ONLY",
-          "body": "AI Pilot combines interior mapping with cloud processing—not exclusively on-device computation."
+          "index": 1,
+          "tag": "KEY DELETION",
+          "title": "Ring gets a processing window",
+          "body": "TAKE permits cloud processing before Ring deletes its key copies after 24 hours."
         },
         {
-          "title": "AUTOMATION COSTS EXTRA",
-          "body": "Scheduled Drone flights and Rover patrols require a compatible Ring Protect plan."
+          "index": 2,
+          "tag": "KEY RETURN",
+          "title": "Playback can reopen that window",
+          "body": "Watching older footage or using smart features can send keys back to Ring’s servers."
         },
         {
-          "title": "TAKE IS NOT END-TO-END",
-          "body": "EFF says Throw Away the Key Encryption permits cloud decryption for 24 hours before Ring deletes its keys."
-        },
-        {
-          "title": "KEYS CAN RETURN",
-          "body": "Viewing older footage or using smart features can send keys back to Ring’s servers, EFF explains."
+          "index": 3,
+          "tag": "EFF ASSESSMENT",
+          "title": "An improvement, not end-to-end encryption",
+          "body": "EFF credits stronger defaults but says genuine end-to-end encryption prevents the provider from ever accessing keys."
         }
       ]
     },
     {
       "id": "slide-7",
       "type": "debunk",
-      "headline": "Autonomous Does Not Mean Unlimited",
-      "cards": [
-        {
-          "myth": "The drone patrols continuously.",
-          "reality": "Up to 8 minutes per flight; tested with a new, fully-charged battery under controlled conditions. Then it recharges."
-        },
-        {
-          "myth": "Rover covers the whole building.",
-          "reality": "Claimed coverage: up to 5,000 sq ft. Indoor, single-floor operation only; it cannot climb stairs."
-        },
-        {
-          "myth": "Any floor layout works.",
-          "reality": "Incompatible: transitions greater than 1.375 inches/3.5cm, curved edges, sunken areas and black glossy floors."
-        }
-      ]
+      "headline": "Visible Recording Is Not Complete Privacy",
+      "left": {
+        "tag": "THE MYTH",
+        "title": "If recording is obvious, privacy is solved",
+        "description": "Amazon emphasizes LED recording indicators, audible drone propellers and Rover’s visible light tower."
+      },
+      "right": {
+        "tag": "THE REALITY",
+        "title": "Indicators reveal activity—not data access",
+        "description": "Cloud mapping and temporary decryption remain separate questions that visible recording signals cannot resolve.​"
+      }
     },
     {
       "id": "slide-8",
       "type": "verdict",
-      "headline": "Privacy First? Skip Both. Otherwise, Wait.",
-      "kicker": "EDITORIAL VERDICT",
-      "cards": [
-        {
-          "title": "AVOID",
-          "body": "Privacy-first buyers: neither product’s cloud-dependent design meets a local-only requirement."
-        },
-        {
-          "title": "POTENTIAL FIT",
-          "body": "Consider only after independent testing: homeowners needing brief checks or businesses with compatible, single-floor interiors."
-        },
-        {
-          "title": "WRONG EXPECTATIONS",
-          "body": "Avoid Drone for sustained airborne coverage; avoid Rover if your security plan requires navigating stairs.​"
-        }
-      ]
+      "headline": "Privacy-First Homes: Hold Off. Businesses: Audit First.",
+      "avoid": {
+        "tag": "WHO SHOULD SKIP",
+        "title": "Households prioritizing minimal indoor surveillance",
+        "points": [
+          "Hold off if interior mapping and cloud processing exceed your privacy boundaries.",
+          "Do not mistake an up-to-8-minute flight for continuous airborne coverage."
+        ]
+      },
+      "fit": {
+        "tag": "POTENTIAL FIT",
+        "title": "Businesses with compatible single-floor premises",
+        "points": [
+          "Claimed coverage: up to 5,000 square feet; indoor, single-floor operation only, with no stair climbing.​",
+          "Exclude curved edges, sunken areas, black glossy floors and transitions greater than 1.375\"/3.5cm."
+        ]
+      }
     },
     {
       "id": "slide-9",
       "type": "future",
-      "headline": "The Camera Is Becoming A Mobile Investigator",
-      "cards": [
+      "headline": "Before Patrols Expand, Set the Rules",
+      "items": [
         {
-          "title": "FROM WATCHING TO RESPONDING",
-          "body": "Connected Ring alerts can dispatch either device to preset patrol points—not merely trigger a stationary recording."
+          "index": 1,
+          "tag": "PATROL POLICY",
+          "title": "Define where cameras may travel",
+          "body": "Approve routes, recording hours and restricted rooms before enabling automated patrols."
         },
         {
-          "title": "FROM VIDEO TO FLOOR PLANS",
-          "body": "AI Pilot adds mapped rooms, suggested viewpoints and autonomous routing to indoor monitoring."
+          "index": 2,
+          "tag": "RETENTION",
+          "title": "Choose a storage window deliberately",
+          "body": "Set retention around actual security needs, not the longest available history."
         },
         {
-          "title": "THE BIGGER QUESTION",
-          "body": "Editorial takeaway: evaluate access controls and independent verification as closely as camera resolution."
+          "index": 3,
+          "tag": "ACCESS",
+          "title": "Review recording policies before deployment",
+          "body": "Decide who can view footage, how occupants receive notice and what evidence would justify expanding coverage."
         }
       ]
     },
     {
       "id": "slide-10",
       "type": "hero-cta",
-      "headline": "More Visibility Is Not Automatically More Privacy.",
-      "body": "Our verdict: wait for independent testing. Mobility is a capability—not proof that the privacy promise holds.",
-      "question": "Would you let a cloud-connected camera map and patrol your private rooms?",
-      "cta": "Where would you draw the line?"
+      "headline": "A Moving Camera Needs More Than a Privacy Promise",
+      "verdict": "Privacy-first households should wait. Businesses should validate navigation, recording policies, retention and access before buying.",
+      "question": "Would you let a security camera map and patrol your private rooms?",
+      "actionText": "Where do you draw the line?"
     }
   ]
 }

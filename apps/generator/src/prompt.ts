@@ -179,21 +179,22 @@ export function buildStoryDeckSystemPrompt(): string {
 CRITICAL CONTENT & ANTI-OVERFLOW RULES:
 1. High Signal, Zero Filler: Every slide delivers a distinct, high-value takeaway that can be read in under 3 seconds.
 2. Strict Word Limits:
-   - Headlines: Maximum 10–12 words.
-   - Card Bodies / Bullets: Maximum 15–20 words per item! Never write long paragraph blocks.
-3. 10-Slide Narrative Arc:
-   1. cover: The Scroll-Stopping Hook & Stakes.
-   2. brief: The 3-Bullet Executive Summary (TL;DR).
-   3. mechanism: How It Works (Drone vs Rover hardware specs).
-   4. telemetry: 3 Hard Numbers / Pricing.
-   5. controversy: The Privacy Battle (Amazon claims vs Civil liberties alarm).
-   6. catch: The Hidden Catch (What's in the fine print).
-   7. debunk: Myth vs Reality.
-   8. verdict: Consumer Advice (Who should buy it vs who should avoid it).
-   9. future: The Big Picture (Autonomous domestic surveillance trends).
-   10. hero-cta: The Final Takeaway & Discussion Question.
+   - Headlines: Maximum 8–10 words.
+   - Bullet/Context: Maximum 15–18 words per item! Never write long paragraph blocks.
+3. Telemetry values MUST be strictly numerical or signed badge (e.g. "$249.99", "$999.99", "180 DAYS"). Never put sentence fragments in value.
+4. 10-Slide Narrative Arc & JSON Data Structure:
+   1. cover: { "id": "slide-1", "type": "cover", "kicker": "SURVEILLANCE / IN FOCUS", "headline": "...", "subheadline": "..." }
+   2. brief: { "id": "slide-2", "type": "brief", "headline": "...", "items": [{ "index": 1, "tag": "AI", "title": "...", "body": "..." }, ...] }
+   3. mechanism: { "id": "slide-3", "type": "mechanism", "headline": "...", "left": { "tag": "DRONE CAM", "title": "...", "description": "..." }, "right": { "tag": "ROVER CAM", "title": "...", "description": "..." } }
+   4. telemetry: { "id": "slide-4", "type": "telemetry", "headline": "...", "metrics": [{ "value": "$249.99", "label": "DRONE CAM", "context": "...", "tag": "PENDING FCC" }, { "value": "$999.99", "label": "ROVER CAM", "context": "...", "tag": "ENTERPRISE" }, { "value": "180 DAYS", "label": "CLOUD RETENTION", "context": "...", "tag": "SUBSCRIPTION" }] }
+   5. controversy: { "id": "slide-5", "type": "controversy", "quote": "...", "attribution": "...", "role": "...", "context": "..." }
+   6. catch: { "id": "slide-6", "type": "catch", "headline": "...", "items": [{ "index": 1, "tag": "KEY DELETION", "title": "...", "body": "..." }, ...] }
+   7. debunk: { "id": "slide-7", "type": "debunk", "headline": "...", "left": { "tag": "THE MYTH", "title": "...", "description": "..." }, "right": { "tag": "THE REALITY", "title": "...", "description": "..." } }
+   8. verdict: { "id": "slide-8", "type": "verdict", "headline": "...", "avoid": { "tag": "WHO SHOULD SKIP", "title": "...", "points": ["...", "..."] }, "fit": { "tag": "POTENTIAL FIT", "title": "...", "points": ["...", "..."] } }
+   9. future: { "id": "slide-9", "type": "future", "headline": "...", "items": [{ "index": 1, "tag": "PATROL FLEETS", "title": "...", "body": "..." }, ...] }
+   10. hero-cta: { "id": "slide-10", "type": "hero-cta", "headline": "...", "verdict": "...", "question": "...", "actionText": "Where do you draw the line?" }
 
-Return strictly a JSON array of 10 slide objects: [ { "id": "slide-1", "type": "cover", ... }, ... ]`;
+Return strictly a JSON array of 10 slide objects: [ { "id": "slide-1", ... }, ... ]`;
 }
 
 export function buildStoryDeckUserPrompt(
@@ -240,22 +241,23 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// PASS 3: SINGLE SLIDE REACT COMPONENT (USING EDITORIAL PRIMITIVES)
+// PASS 3: SINGLE SLIDE REACT COMPONENT (USING FULL-FRAME EDITORIAL ARCHETYPES)
 // ============================================================================
 
 export function buildSingleSlideSystemPrompt(): string {
-  return `You are a world-class Editorial Art Director and React + Tailwind Engineer.
-You compose publication-grade carousel slides using the project's pre-built Editorial Primitives.
+  return `You are a world-class Editorial Art Director and React + Tailwind Engineer at The New York Times, Wired, and Monocle.
+You compose publication-grade carousel slides using the project's pre-built Full-Frame Editorial Archetypes.
 
-AVAILABLE EDITORIAL PRIMITIVES (Import from '../../../src/skeleton/ui'):
+AVAILABLE FULL-FRAME EDITORIAL ARCHETYPES (Import from '../../../src/skeleton/ui'):
 \`\`\`tsx
 import {
-  SlideHeader,      // <SlideHeader kicker="SURVEILLANCE" headline="Title" subheadline="Subtitle" />
-  ContentCard,      // <ContentCard index={1} title="Title" body="Max 20 words" tag="AI" />
-  MetricCard,       // <MetricCard value="$250" label="Price" context="1-line context" tag="HARDWARE" />
-  ComparisonSplit,  // <ComparisonSplit left={{ tag: "MYTH", title: "...", description: "..." }} right={{ tag: "REALITY", title: "...", description: "..." }} />
-  QuoteBox,         // <QuoteBox quote="..." attribution="Name" role="Title" />
-  SchematicFrame    // <SchematicFrame label="SCHEMATIC" badge="RADAR"><svg>...</svg></SchematicFrame>
+  EditorialCover,      // Slide 1 (The Hook): monumental headline (86px), subtitle, category kicker, pinned bottom byline.
+  EditorialList,       // Slides 2, 6, 9: 3 full-height items (flex: 1 1 0%), 48px numeral badges, hairline borders.
+  EditorialTelemetry,  // Slide 4: Full-width stacked rows spanning 880px with giant 82px monospace numbers (zero horizontal clipping).
+  EditorialDebunk,     // Slides 3, 7: Exactly 1 high-impact contrast pair (Myth vs Reality, Drone vs Rover) filling the lower frame with 40px padding.
+  EditorialQuote,      // Slide 5: Optically centered 180px decorative quote mark, 48px italic quotation, speaker attribution.
+  EditorialVerdict,    // Slide 8: Balanced side-by-side Avoid vs Potential Fit columns with bulleted advice.
+  EditorialCTA         // Slide 10: Optically centered verdict takeaway, discussion prompt pill, swipe CTA.
 } from '../../../src/skeleton/ui';
 \`\`\`
 
@@ -263,33 +265,38 @@ CRITICAL COMPOSITION RULES:
 1. Component Signature:
    import React from 'react';
    import type { SlideComponentProps } from '../../../src/skeleton/types';
-   import { SlideHeader, ContentCard, MetricCard, ComparisonSplit, QuoteBox, SchematicFrame } from '../../../src/skeleton/ui';
+   import {
+     EditorialCover,
+     EditorialList,
+     EditorialTelemetry,
+     EditorialDebunk,
+     EditorialQuote,
+     EditorialVerdict,
+     EditorialCTA
+   } from '../../../src/skeleton/ui';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
      return (
-       <div className="flex h-full flex-col justify-between gap-6 text-[var(--ink)]">
-         ...
-       </div>
+       // Render the single matching Editorial Archetype component directly!
      );
    }
 
-2. Architectural Layout Guidelines per Archetype:
-   - cover: Use <SlideHeader> with hook headline, value promise subtitle, and an inline <SchematicFrame> with a clean vector diagram.
-   - brief / list: Use <SlideHeader> + 3 stacked <ContentCard> (index 1, 2, 3).
-   - mechanism: Use <SlideHeader> + 2-column grid of <ContentCard> or <ComparisonSplit>.
-   - telemetry: Use <SlideHeader> + 3-card grid of <MetricCard>.
-   - controversy / quote: Use <SlideHeader> + <QuoteBox> + a supporting takeaway card.
-   - catch: Use <SlideHeader> + 2 high-impact warning/catch <ContentCard>.
-   - debunk: Use <SlideHeader> + <ComparisonSplit> (Myth vs Reality).
-   - verdict: Use <SlideHeader> + <ComparisonSplit> (Who It's For vs Who Should Avoid).
-   - future: Use <SlideHeader> + 2 stacked analytical <ContentCard>.
-   - hero-cta: Use <SlideHeader> + a bold conclusion <QuoteBox> + discussion pill.
+2. Direct Archetype Mapping:
+   - cover (Slide 1): <EditorialCover kicker="..." headline="..." subheadline="..." authorName={brand.name} authorRole={brand.domain} readTime="4 min read" />
+   - brief (Slide 2): <EditorialList kicker="EXECUTIVE BRIEFING" headline="..." items={[{ index: 1, tag: "TAG", title: "...", body: "..." }, ...]} />
+   - mechanism (Slide 3): <EditorialDebunk kicker="HARDWARE SPECS" headline="..." left={{ tag: "DRONE CAM", title: "...", description: "..." }} right={{ tag: "ROVER CAM", title: "...", description: "..." }} />
+   - telemetry (Slide 4): <EditorialTelemetry kicker="HARDWARE & SERVICE PRICING" headline="..." metrics={[{ value: "$249.99", label: "...", context: "...", tag: "..." }, ...]} />
+   - controversy / quote (Slide 5): <EditorialQuote kicker="THE PRIVACY BATTLE" quote="..." attribution="..." role="..." context="..." />
+   - catch (Slide 6): <EditorialList kicker="THE HIDDEN CATCH" headline="..." items={[{ index: 1, tag: "...", title: "...", body: "..." }, ...]} />
+   - debunk (Slide 7): <EditorialDebunk kicker="MYTH VS REALITY" headline="..." left={{ tag: "THE MYTH", title: "...", description: "..." }} right={{ tag: "THE REALITY", title: "...", description: "..." }} />
+   - verdict (Slide 8): <EditorialVerdict kicker="EDITORIAL VERDICT" headline="..." avoid={{ tag: "WHO SHOULD SKIP", title: "...", points: ["...", "..."] }} fit={{ tag: "POTENTIAL FIT", title: "...", points: ["...", "..."] }} />
+   - future (Slide 9): <EditorialList kicker="THE BIGGER PICTURE" headline="..." items={[{ index: 1, tag: "...", title: "...", body: "..." }, ...]} />
+   - hero-cta (Slide 10): <EditorialCTA kicker="THE FINAL VERDICT" headline="..." verdict="..." question="..." actionText="Where do you draw the line?" />
 
-3. Strict Spatial Budget:
-   - Keep card count $\\le 3$ per slide.
-   - Rely on the Primitives for padding and borders.
-   - Never write raw uncontained paragraphs.
-   - Return ONLY valid JSX in a \`\`\`tsx code block.`;
+3. Space Balance Guarantee:
+   - NEVER wrap the archetype in an extra outer 'justify-between' container.
+   - The archetypes manage their own 100% space balance and optical centering.
+   - Return strictly valid TSX inside a \`\`\`tsx code block.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -309,7 +316,7 @@ Brand Context:
 - Paper: "${brand.palette.paper}"
 - Surface: "${brand.palette.surface}"
 
-Compose this slide using the Editorial Primitives (<SlideHeader>, <ContentCard>, <MetricCard>, <ComparisonSplit>, <QuoteBox>, <SchematicFrame>).`;
+Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component invoking the dedicated Full-Frame Editorial Archetype.`;
 }
 
 // ============================================================================

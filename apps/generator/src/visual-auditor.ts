@@ -52,7 +52,7 @@ export async function auditTemplateStudio(
         const scale = autoFit?.getAttribute('data-autofit-scaled') || '1.000';
 
         // Check text overflow / clipping
-        const textNodes = canvas.querySelectorAll('h1, h2, h3, h4, p, span');
+        const textNodes = canvas.querySelectorAll('h1, h2, h3, h4, p, span, blockquote');
         textNodes.forEach((node) => {
           const el = node as HTMLElement;
           // Ignore screen-reader only elements and hidden elements
@@ -67,9 +67,47 @@ export async function auditTemplateStudio(
           }
         });
 
-        // Check space balance
+        // Check container boundary overflow
         const canvasRect = canvas.getBoundingClientRect();
+        const allElements = canvas.querySelectorAll('h1, h2, h3, h4, p, div, span, blockquote, article, section');
+        allElements.forEach((node) => {
+          const el = node as HTMLElement;
+          if (el.classList.contains('sr-only') || el.closest('.sr-only')) return;
+          const rect = el.getBoundingClientRect();
+          if (rect.right > canvasRect.right + 6) {
+            collisions.push(
+              `Slide ${slideIdx + 1}: Element overflows canvas right by ${Math.round(rect.right - canvasRect.right)}px: <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 25)}..."`
+            );
+          }
+          if (rect.bottom > canvasRect.bottom + 6) {
+            collisions.push(
+              `Slide ${slideIdx + 1}: Element overflows canvas bottom by ${Math.round(rect.bottom - canvasRect.bottom)}px: <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 25)}..."`
+            );
+          }
+        });
+
+        // Check for empty vertical voids in content (gap > 180px between consecutive in-flow children)
         const content = canvas.querySelector('.loop-autofit-content');
+        const contentChildren = content
+          ? Array.from(content.children[0]?.children || []).filter((el) => {
+              const style = window.getComputedStyle(el as HTMLElement);
+              return style.position !== 'absolute' && style.display !== 'none' && (el as HTMLElement).offsetHeight > 10;
+            })
+          : [];
+        if (contentChildren.length >= 2) {
+          for (let c = 0; c < contentChildren.length - 1; c++) {
+            const r1 = (contentChildren[c] as HTMLElement).getBoundingClientRect();
+            const r2 = (contentChildren[c + 1] as HTMLElement).getBoundingClientRect();
+            const gap = r2.top - r1.bottom;
+            if (gap > 180) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Empty vertical void of ${Math.round(gap)}px detected between elements`
+              );
+            }
+          }
+        }
+
+        // Check space balance
         const contentRect = content?.getBoundingClientRect();
         const fillPercent = contentRect ? Math.round((contentRect.height / canvasRect.height) * 100) : 75;
 

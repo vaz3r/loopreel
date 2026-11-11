@@ -217,7 +217,7 @@ export async function runTemplatePipeline(
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
     if (!code.includes("from '../../../src/skeleton/ui'")) {
-      code = `import { SlideHeader, ContentCard, MetricCard, ComparisonSplit, QuoteBox, SchematicFrame } from '../../../src/skeleton/ui';\n${code}`;
+      code = `import { EditorialCover, EditorialList, EditorialTelemetry, EditorialDebunk, EditorialQuote, EditorialVerdict, EditorialCTA, SlideHeader, ContentCard, MetricCard, ComparisonSplit, QuoteBox, SchematicFrame } from '../../../src/skeleton/ui';\n${code}`;
     }
 
     fs.writeFileSync(filePath, code, 'utf-8');
