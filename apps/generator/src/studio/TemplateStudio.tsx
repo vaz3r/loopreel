@@ -1,6 +1,45 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Component, type ReactNode } from 'react';
 import { SlideFrame } from '../skeleton/SlideFrame';
 import type { TemplatePackage, SlideComponent } from '../skeleton/types';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+class SlideErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Slide render error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <div className="flex h-full w-full flex-col items-center justify-center p-8 text-rose-400 bg-zinc-950 font-mono text-sm border border-rose-800 rounded">
+            <p className="font-semibold text-base mb-2">Slide Rendering Error</p>
+            <p className="text-xs text-zinc-400 max-w-md text-center">{this.state.error?.message}</p>
+          </div>
+        )
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // Auto-discover all generated templates in /templates/
 const templateModules = import.meta.glob('/templates/**/index.ts', { eager: true });
@@ -183,7 +222,7 @@ export function TemplateStudio() {
               >
                 {deck.slides.map((s, idx) => (
                   <option key={idx} value={idx}>
-                    Slide {idx + 1}: {s.type.toUpperCase()} — {s.title || s.headline || 'Untitled'}
+                    Slide {idx + 1}: {(s.type || (s as any).archetype || 'editorial').toUpperCase()} — {s.title || s.headline || 'Untitled'}
                   </option>
                 ))}
               </select>
@@ -285,11 +324,13 @@ export function TemplateStudio() {
               slideIndex={activeSlideIndex}
               totalSlides={totalSlides}
             >
-              <CurrentSlideComponent
-                slide={currentSlideData}
-                brand={brand}
-                totalSlides={totalSlides}
-              />
+              <SlideErrorBoundary>
+                <CurrentSlideComponent
+                  slide={currentSlideData}
+                  brand={brand}
+                  totalSlides={totalSlides}
+                />
+              </SlideErrorBoundary>
             </SlideFrame>
           </div>
         )}
@@ -308,7 +349,7 @@ export function TemplateStudio() {
                   className="flex flex-col items-center group cursor-pointer"
                 >
                   <div className="text-xs font-mono text-zinc-400 mb-2 group-hover:text-emerald-400">
-                    Slide {idx + 1}: {s.type.toUpperCase()}
+                    Slide {idx + 1}: {(s.type || (s as any).archetype || 'editorial').toUpperCase()}
                   </div>
                   <div
                     className="overflow-hidden shadow-lg border border-zinc-800 group-hover:border-emerald-500/50 rounded-sm transition-all"
@@ -316,7 +357,9 @@ export function TemplateStudio() {
                   >
                     <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
                       <SlideFrame brand={brand} slide={s} slideIndex={idx} totalSlides={totalSlides}>
-                        <SlideComp slide={s} brand={brand} totalSlides={totalSlides} />
+                        <SlideErrorBoundary>
+                          <SlideComp slide={s} brand={brand} totalSlides={totalSlides} />
+                        </SlideErrorBoundary>
                       </SlideFrame>
                     </div>
                   </div>

@@ -249,6 +249,14 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     allSlides = [...batch1Slides, ...batch2Slides];
   }
 
+  // Normalize slide schema ensuring id, index, and type are guaranteed
+  allSlides = allSlides.map((s, idx) => ({
+    ...s,
+    id: s.id || `slide-${idx + 1}`,
+    index: typeof s.index === 'number' ? s.index : idx,
+    type: s.type || (s as any).archetype || 'editorial',
+  }));
+
   const deck: DeckData = {
     templateName: brand.name,
     templateSlug: brand.slug,

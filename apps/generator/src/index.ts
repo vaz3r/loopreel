@@ -53,7 +53,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
   let inspiration = '';
   let url = '';
   let provider = '';
-  let runAudit = false;
+  let runAudit: boolean | undefined = undefined;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -64,6 +64,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
     else if (arg === '--url' && args[i + 1]) url = args[++i]!;
     else if (arg === '--provider' && args[i + 1]) provider = args[++i]!;
     else if (arg === '--audit') runAudit = true;
+    else if (arg === '--no-audit') runAudit = false;
   }
 
   if (url) {
@@ -75,8 +76,8 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
         domain: domain || undefined,
         inspiration: inspiration || undefined,
       },
-      provider: provider || undefined,
-      runAudit,
+      provider: provider || 'copilot',
+      runAudit: runAudit ?? true, // Default to true for story generation
     };
   }
 
@@ -157,6 +158,11 @@ async function main() {
 
     if (brief.url) {
       console.log(`\nStarting Story-Driven React Generation from URL: ${brief.url}...`);
+      console.log('AI will autonomously infer:');
+      console.log('  • Publication identity & brand tokens (palette, typography, textures)');
+      console.log('  • Content domain & editorial angle');
+      console.log('  • Scroll-stopping hook & 10-slide high-signal narrative');
+      console.log('  • Bespoke vector SVGs & spatial layouts');
     } else {
       console.log(`\nStarting React template generation for: "${brief.name}"...`);
       if (brief.vibe) console.log(`Vibe:   ${brief.vibe}`);

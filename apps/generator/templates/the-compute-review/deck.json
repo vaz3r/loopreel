@@ -9,7 +9,10 @@
       "publication": "The Compute Review",
       "eyebrow": "BATCH 1 · ARTIFICIAL INTELLIGENCE",
       "title": "Open weights. Counted compute.",
-      "body": "Read the license. Inspect the architecture. Audit the denominator."
+      "body": "Read the license. Inspect the architecture. Audit the denominator.",
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover"
     },
     {
       "slide": 2,
@@ -29,7 +32,10 @@
           "title": "03 · Parameters",
           "body": "Model weights and other configuration settings—not merely access to an endpoint."
         }
-      ]
+      ],
+      "id": "slide-2",
+      "index": 1,
+      "type": "list"
     },
     {
       "slide": 3,
@@ -46,7 +52,10 @@
           "title": "NVLink",
           "body": "130 TB/s bandwidth across the rack-scale interconnect."
         }
-      ]
+      ],
+      "id": "slide-3",
+      "index": 2,
+      "type": "image-split"
     },
     {
       "slide": 4,
@@ -70,7 +79,10 @@
           "title": "Total",
           "body": "2788K H800 GPU hours · $5.576M."
         }
-      ]
+      ],
+      "id": "slide-4",
+      "index": 3,
+      "type": "telemetry"
     },
     {
       "slide": 5,
@@ -94,7 +106,10 @@
           "speaker": "Editor",
           "body": "Use, study, modify, and share—including use and modification for any purpose."
         }
-      ]
+      ],
+      "id": "slide-5",
+      "index": 4,
+      "type": "dialogue"
     },
     {
       "slide": 6,
@@ -132,7 +147,10 @@
           "title": "Available · Self-hosted",
           "body": "Budget infrastructure; verify modification and redistribution rights."
         }
-      ]
+      ],
+      "id": "slide-6",
+      "index": 5,
+      "type": "quadrant"
     },
     {
       "slide": 7,
@@ -152,7 +170,10 @@
           "title": "Context extension",
           "body": "Two stages: first 32K, then 128K maximum context length."
         }
-      ]
+      ],
+      "id": "slide-7",
+      "index": 6,
+      "type": "case-study"
     },
     {
       "slide": 8,
@@ -171,7 +192,10 @@
           "title": "Editorial rule",
           "body": "Attach the accounting boundary to every cost headline."
         }
-      ]
+      ],
+      "id": "slide-8",
+      "index": 7,
+      "type": "debunk"
     },
     {
       "slide": 9,
@@ -195,59 +219,86 @@
           "title": "Economics",
           "body": "Currency; hourly rate; included stages; excluded experiments; measurement date."
         }
-      ]
+      ],
+      "id": "slide-9",
+      "index": 8,
+      "type": "grid"
     },
     {
       "slide": 10,
       "archetype": "timeline",
       "headline": "DeepSeek-V3: the training ledger",
       "unit": "H800 GPU-hours / USD",
-      "body": "Pre-training: 2664K / $5.328M → Context extension: 119K / $0.238M → Post-training: 5K / $0.01M."
+      "body": "Pre-training: 2664K / $5.328M → Context extension: 119K / $0.238M → Post-training: 5K / $0.01M.",
+      "id": "slide-10",
+      "index": 9,
+      "type": "timeline"
     },
     {
       "slide": 11,
       "archetype": "pullquote",
       "headline": "Access is not infrastructure",
       "body": "“Open weights change who can deploy. They do not erase the compute bill.”",
-      "attribution": "The Compute Review — editorial"
+      "attribution": "The Compute Review — editorial",
+      "id": "slide-11",
+      "index": 10,
+      "type": "pullquote"
     },
     {
       "slide": 12,
       "archetype": "hero-cta",
       "headline": "Benchmark before you buy",
       "body": "OpenAI reports gpt-oss-120b runs on one 80 GB GPU; gpt-oss-20b needs 16 GB memory.",
-      "cta": "Test your workload"
+      "cta": "Test your workload",
+      "id": "slide-12",
+      "index": 11,
+      "type": "hero-cta"
     },
     {
       "slide": 13,
       "archetype": "hero-stat",
       "headline": "$5.576M",
-      "body": "DeepSeek-V3 official training: 2788K H800 GPU-hours at $2 per GPU-hour; excludes prior research and ablation experiments."
+      "body": "DeepSeek-V3 official training: 2788K H800 GPU-hours at $2 per GPU-hour; excludes prior research and ablation experiments.",
+      "id": "slide-13",
+      "index": 12,
+      "type": "hero-stat"
     },
     {
       "slide": 14,
       "archetype": "step-by-step",
       "headline": "Test all three reasoning settings",
-      "body": "1. Low → 2. Medium → 3. High: gpt-oss reasoning settings. Measure accuracy, latency, and cost at each."
+      "body": "1. Low → 2. Medium → 3. High: gpt-oss reasoning settings. Measure accuracy, latency, and cost at each.",
+      "id": "slide-14",
+      "index": 13,
+      "type": "step-by-step"
     },
     {
       "slide": 15,
       "archetype": "dos-and-donts",
       "headline": "Read beyond the model name",
-      "body": "DO distinguish gpt-oss-120b’s 117B total parameters from 5.1B active per token. DON'T treat them as interchangeable."
+      "body": "DO distinguish gpt-oss-120b’s 117B total parameters from 5.1B active per token. DON'T treat them as interchangeable.",
+      "id": "slide-15",
+      "index": 14,
+      "type": "dos-and-donts"
     },
     {
       "slide": 16,
       "archetype": "checklist",
       "headline": "Demand deployment telemetry",
       "body": "□ Task accuracy (%)\n□ p95 latency (ms)\n□ Throughput (tokens/s)\n□ Peak memory (GB)\n□ Cost per successful task ($)",
-      "label": "Editorial measurement checklist"
+      "label": "Editorial measurement checklist",
+      "id": "slide-16",
+      "index": 15,
+      "type": "checklist"
     },
     {
       "slide": 17,
       "archetype": "anatomy",
       "headline": "Inside gpt-oss-120b",
-      "body": "36 layers; 117B total parameters; 5.1B active parameters/token; 128 experts; 4 active experts/token; 128k context length."
+      "body": "36 layers; 117B total parameters; 5.1B active parameters/token; 128 experts; 4 active experts/token; 128k context length.",
+      "id": "slide-17",
+      "index": 16,
+      "type": "anatomy"
     }
   ]
 }
