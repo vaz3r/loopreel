@@ -9,19 +9,8 @@ export interface TemplateBrief {
   url?: string;
 }
 
-export interface StoryStrategy {
-  hookHeadline: string;
-  valuePromise: string;
-  kicker: string;
-  coreConflict: string;
-  hiddenCatch: string;
-  verdict: string;
-  keyMetrics: Array<{ value: string; label: string; context: string }>;
-  keyQuotes: Array<{ quote: string; speaker: string; role: string }>;
-}
-
 // ============================================================================
-// PASS 1: BRAND CONCEPT & DESIGN TOKENS
+// STAGE 1: BRAND CONCEPT & DESIGN SYSTEM TOKENS
 // ============================================================================
 
 export function buildBrandSystemPrompt(): string {
@@ -116,12 +105,104 @@ Return strictly valid JSON matching BrandTokens:
 }
 
 // ============================================================================
-// PASS 1B: EDITORIAL STRATEGIST (THE HOOK & VALUE EXTRACTION)
+// STAGE 2: GROUND TRUTH FACT EXTRACTION (ZERO HALLUCINATION)
 // ============================================================================
+
+export interface GroundTruthDossier {
+  articleTitle: string;
+  publisher: string;
+  byline: string;
+  summary: string;
+  entities: Array<{ name: string; type: string; role: string }>;
+  verifiedMetrics: Array<{ value: string; label: string; context: string }>;
+  verifiedQuotes: Array<{ quote: string; speaker: string; role: string; context: string }>;
+  hardwareSpecs: {
+    deviceA: { name: string; specs: string[]; price: string; availability: string };
+    deviceB?: { name: string; specs: string[]; price: string; availability: string };
+  };
+  coreControversy: {
+    corporateClaim: string;
+    criticismOrAlarm: string;
+    regulatoryOrHistoricalPrecedent: string;
+  };
+  hiddenCatchesAndLimits: string[];
+  editorialVerdict: {
+    avoidAdvice: string[];
+    fitAdvice: string[];
+  };
+}
+
+export function buildFactExtractionSystemPrompt(): string {
+  return `You are a Lead Investigative Researcher and Fact-Checker at Reuters, ProPublica, and The New York Times.
+Your mission is to extract verified ground truth from a news article into a structured GroundTruthDossier JSON.
+
+CRITICAL FACT-CHECKING RULES:
+1. ZERO HALLUCINATION: You must ONLY extract facts, quotes, specs, numbers, and precedents explicitly stated in the article.
+2. Exact Metrics: Numbers, prices, dates, flight times, and retention days must be verbatim from the text.
+3. Exact Quotes & Attribution: Attribute quotes only to the actual persons or organizations named in the piece (e.g. Amazon, FTC, EFF).
+4. Extract Hardware Specs: Detail dimensions, battery life, camera resolution, flight limits, coverage area, and floor restrictions.
+5. Extract Hidden Catches: Note subscriptions required, cloud dependencies, key retention policies, and FCC approval statuses.
+
+Return strictly valid JSON matching this exact structure:
+{
+  "articleTitle": "Title of article",
+  "publisher": "Publisher name",
+  "byline": "Author name",
+  "summary": "2-sentence factual summary",
+  "entities": [{ "name": "Amazon", "type": "Company", "role": "Hardware creator" }],
+  "verifiedMetrics": [{ "value": "$249.99", "label": "Drone Cam starting price", "context": "Target shipping Jan 2027" }],
+  "verifiedQuotes": [{ "quote": "...", "speaker": "...", "role": "...", "context": "..." }],
+  "hardwareSpecs": {
+    "deviceA": { "name": "Ring Drone Cam", "specs": ["2K video", "148 deg FOV", "8 min flight"], "price": "$249.99", "availability": "Jan 27, 2027" },
+    "deviceB": { "name": "Ring Rover Cam", "specs": ["4K livestream", "single floor", "5000 sq ft"], "price": "$999.99", "availability": "Dec 16, 2026" }
+  },
+  "coreControversy": {
+    "corporateClaim": "Amazon claims privacy and security without compromise",
+    "criticismOrAlarm": "EFF says TAKE falls short of end-to-end encryption",
+    "regulatoryOrHistoricalPrecedent": "FTC 2023 complaint cited 55,000 compromised accounts and employee access"
+  },
+  "hiddenCatchesAndLimits": [
+    "AI Pilot relies on cloud processing, not local-only",
+    "Scheduled patrols require Ring Protect subscription",
+    "Rover cannot climb stairs or cross thresholds > 1.375 in"
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": ["Privacy-first homes requiring local-only processing"],
+    "fitAdvice": ["Single-floor business facilities needing mobile patrols"]
+  }
+}`;
+}
+
+export function buildFactExtractionUserPrompt(article: ArticleIntel): string {
+  return `Extract the complete, verified GroundTruthDossier from this article:
+Title: "${article.title}"
+Publisher: "${article.publisher}"
+Author: "${article.byline || 'Staff Bureau'}"
+
+Raw Article Text:
+${article.cleanText.slice(0, 14000)}
+
+Output strictly the GroundTruthDossier JSON.`;
+}
+
+// ============================================================================
+// STAGE 3: EDITORIAL STRATEGY & HOOK FORMULATION
+// ============================================================================
+
+export interface StoryStrategy {
+  hookHeadline: string;
+  valuePromise: string;
+  kicker: string;
+  coreConflict: string;
+  hiddenCatch: string;
+  verdict: string;
+  keyMetrics: Array<{ value: string; label: string; context: string }>;
+  keyQuotes: Array<{ quote: string; speaker: string; role: string }>;
+}
 
 export function buildStoryStrategySystemPrompt(): string {
   return `You are the Editor-in-Chief at Wired, The New York Times Magazine, and Vox.
-Your mission is to transform a news article into a scroll-stopping, high-signal editorial carousel.
+Your mission is to transform verified facts into a scroll-stopping, high-signal editorial carousel strategy.
 
 CRITICAL HOOK & VALUE PRINCIPLES:
 1. THE SCROLL-STOPPING HOOK (Slide 1):
@@ -134,53 +215,40 @@ CRITICAL HOOK & VALUE PRINCIPLES:
 2. THE VALUE PROPOSITION:
    - State clearly why the reader must swipe through (e.g. "3 critical findings: The $1,000 price tag, interior mapping, and the 180-day retention loop.").
 3. HIGH-SIGNAL EXTRACTION:
-   - Extract the real numbers (pricing, dates, limits).
-   - Extract the core conflict (Amazon pitch vs privacy reality).
-   - Extract the hidden catch (what's in the fine print).
-   - Extract actionable advice (who should buy it vs who should avoid it).
+   - Ground strictly in the provided GroundTruthDossier.
 
-Return strictly JSON matching:
-{
-  "hookHeadline": "Scroll-stopping provocative headline",
-  "valuePromise": "Clear 1-sentence value promise telling viewer what they will learn",
-  "kicker": "SURVEILLANCE / IN FOCUS",
-  "coreConflict": "1-sentence summary of the main controversy",
-  "hiddenCatch": "1-sentence summary of what's in the fine print",
-  "verdict": "1-sentence consumer/enterprise advice",
-  "keyMetrics": [
-    { "value": "$250", "label": "Drone Cam starting price", "context": "Base consumer hardware" },
-    { "value": "$1,000", "label": "Rover Cam price", "context": "Positioned for businesses" },
-    { "value": "180 Days", "label": "Cloud retention limit", "context": "Triggered by motion and live view" }
-  ],
-  "keyQuotes": [
-    { "quote": "...", "speaker": "...", "role": "..." }
-  ]
-}`;
+Return strictly valid JSON matching StoryStrategy.`;
 }
 
-export function buildStoryStrategyUserPrompt(article: ArticleIntel): string {
-  return `Extract the high-signal story strategy for this article:
-Title: "${article.title}"
-Publisher: "${article.publisher}"
-Author: "${article.byline || 'Staff Bureau'}"
-Article Text:
-${article.cleanText.slice(0, 10000)}
+export function buildStoryStrategyUserPrompt(
+  dossier: GroundTruthDossier,
+  article: ArticleIntel
+): string {
+  return `Formulate the EditorialStrategy using this verified ground truth:
+Article: "${dossier.articleTitle}" (${dossier.publisher})
+Summary: "${dossier.summary}"
+Controversy: ${JSON.stringify(dossier.coreControversy)}
+Specs: ${JSON.stringify(dossier.hardwareSpecs)}
+Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
+Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
 
 Output strictly the StoryStrategy JSON.`;
 }
 
 // ============================================================================
-// PASS 2: 10-SLIDE HIGH-SIGNAL NARRATIVE STORYBOARD
+// STAGE 4: SENIOR COPY EDITOR (LOCKED STORYBOARD WITH HARD WORD BUDGETS)
 // ============================================================================
 
 export function buildStoryDeckSystemPrompt(): string {
-  return `You are an Executive Editor authoring a 10-slide high-density editorial carousel.
+  return `You are a Senior Copy Editor at The New York Times and The Economist.
+You author high-signal editorial carousel content with STRICT word budgets to prevent visual overflow.
 
 CRITICAL CONTENT & ANTI-OVERFLOW RULES:
-1. High Signal, Zero Filler: Every slide delivers a distinct, high-value takeaway that can be read in under 3 seconds.
-2. Strict Word Limits:
+1. ZERO HALLUCINATION: All content must be derived strictly from the provided GroundTruthDossier.
+2. STRICT WORD LIMITS:
    - Headlines: Maximum 8–10 words.
-   - Bullet/Context: Maximum 15–18 words per item! Never write long paragraph blocks.
+   - Subheadlines: Maximum 15–18 words.
+   - Bullets / Cards: Maximum 15–18 words per item! Never write long paragraph blocks.
 3. Telemetry values MUST be strictly numerical or signed badge (e.g. "$249.99", "$999.99", "180 DAYS"). Never put sentence fragments in value.
 4. 10-Slide Narrative Arc & JSON Data Structure:
    1. cover: { "id": "slide-1", "type": "cover", "kicker": "SURVEILLANCE / IN FOCUS", "headline": "...", "subheadline": "..." }
@@ -199,10 +267,10 @@ Return strictly a JSON array of 10 slide objects: [ { "id": "slide-1", ... }, ..
 
 export function buildStoryDeckUserPrompt(
   strategy: StoryStrategy,
-  article: ArticleIntel,
+  dossier: GroundTruthDossier,
   brand: BrandTokens
 ): string {
-  return `Author the 10-slide narrative storyboard using this strategy:
+  return `Author the 10-slide narrative storyboard using this strategy and verified dossier:
 
 Hook Headline: "${strategy.hookHeadline}"
 Value Promise: "${strategy.valuePromise}"
@@ -210,15 +278,15 @@ Kicker: "${strategy.kicker}"
 Core Conflict: "${strategy.coreConflict}"
 Hidden Catch: "${strategy.hiddenCatch}"
 Verdict: "${strategy.verdict}"
-Key Metrics: ${JSON.stringify(strategy.keyMetrics)}
-Key Quotes: ${JSON.stringify(strategy.keyQuotes)}
 
-Article Details:
-Title: "${article.title}"
-Publisher: "${brand.name}"
-Author: "${article.byline || 'Staff Bureau'}"
+Verified Dossier:
+Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
+Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
+Quotes: ${JSON.stringify(dossier.verifiedQuotes)}
+Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
+Verdict Advice: ${JSON.stringify(dossier.editorialVerdict)}
 
-Output strictly the JSON array of 10 slide objects. Remember: MAX 20 WORDS PER CARD BODY!`;
+Output strictly the JSON array of 10 slide objects. Remember: MAX 18 WORDS PER CARD BODY!`;
 }
 
 // Fallback for non-article briefs
@@ -241,73 +309,118 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// PASS 3: SINGLE SLIDE REACT COMPONENT (USING FULL-FRAME EDITORIAL ARCHETYPES)
+// STAGE 5: VISUAL ART DIRECTOR (SPATIAL LAYOUT & SVG BLUEPRINT)
+// ============================================================================
+
+export interface SlideDesignBlueprint {
+  slideId: string;
+  type: string;
+  layoutStructure: string;
+  svgConcept?: {
+    description: string;
+    type: 'floorplan' | 'schematic' | 'telemetry-bars' | 'contrast-icons' | 'spatial-glyphs' | 'none';
+    elements: string[];
+  };
+  typographyScale: {
+    headlineSize: string;
+    subtitleSize?: string;
+  };
+  accentPlacement: string;
+  spatialBalanceGuidance: string;
+}
+
+export function buildVisualBlueprintSystemPrompt(): string {
+  return `You are an Information Designer and Art Director at Pentagram, Monocle, and The New York Times Graphics Desk.
+Your task is to plan the visual layout architecture and bespoke vector SVG concept for each slide in a carousel deck.
+
+CRITICAL VISUAL DESIGN PRINCIPLES:
+1. Bespoke Vector Art:
+   - Slide 1 (Cover): Conceptual floor plan showing rooms and dashed patrol routes, or hardware blueprint.
+   - Slide 2 (Brief): Custom spatial glyphs or boundary threshold markers for each item.
+   - Slide 3 (Hardware Specs): Drone elevation cross-section vs Rover periscope diagram.
+   - Slide 4 (Telemetry): Custom data visualization bars or metric ratio indicators.
+2. Space Balance:
+   - Every slide must fill 75%–90% of the vertical frame organically.
+   - Avoid top-heavy clumping. If content is short, center it optically with generous line heights and large typography.
+   - Multi-item slides must use equal height distribution or balanced multi-column grids.
+
+Return strictly a JSON array of 10 SlideDesignBlueprint objects: [ { "slideId": "slide-1", ... }, ... ]`;
+}
+
+export function buildVisualBlueprintUserPrompt(
+  slides: SlideData[],
+  brand: BrandTokens,
+  dossier: GroundTruthDossier
+): string {
+  return `Design the visual blueprints for these 10 slides:
+Publication: "${brand.name}" (${brand.domain})
+Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}
+Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
+
+Slides Content:
+${JSON.stringify(slides, null, 2)}
+
+Output strictly the JSON array of 10 SlideDesignBlueprint objects.`;
+}
+
+// ============================================================================
+// STAGE 6: PRINCIPAL REACT ENGINEER (BESPOKE CODE GENERATION)
 // ============================================================================
 
 export function buildSingleSlideSystemPrompt(): string {
-  return `You are a world-class Editorial Art Director and React + Tailwind Engineer at The New York Times, Wired, and Monocle.
-You compose publication-grade carousel slides using the project's pre-built Full-Frame Editorial Archetypes.
+  return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
+You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (1080x1350 canvas, 952x1028 safe area).
 
-AVAILABLE FULL-FRAME EDITORIAL ARCHETYPES (Import from '../../../src/skeleton/ui'):
-\`\`\`tsx
-import {
-  EditorialCover,      // Slide 1 (The Hook): monumental headline (86px), subtitle, category kicker, pinned bottom byline.
-  EditorialList,       // Slides 2, 6, 9: 3 full-height items (flex: 1 1 0%), 48px numeral badges, hairline borders.
-  EditorialTelemetry,  // Slide 4: Full-width stacked rows spanning 880px with giant 82px monospace numbers (zero horizontal clipping).
-  EditorialDebunk,     // Slides 3, 7: Exactly 1 high-impact contrast pair (Myth vs Reality, Drone vs Rover) filling the lower frame with 40px padding.
-  EditorialQuote,      // Slide 5: Optically centered 180px decorative quote mark, 48px italic quotation, speaker attribution.
-  EditorialVerdict,    // Slide 8: Balanced side-by-side Avoid vs Potential Fit columns with bulleted advice.
-  EditorialCTA         // Slide 10: Optically centered verdict takeaway, discussion prompt pill, swipe CTA.
-} from '../../../src/skeleton/ui';
-\`\`\`
-
-CRITICAL COMPOSITION RULES:
+CRITICAL DESIGN & CODING RULES:
 1. Component Signature:
    import React from 'react';
    import type { SlideComponentProps } from '../../../src/skeleton/types';
-   import {
-     EditorialCover,
-     EditorialList,
-     EditorialTelemetry,
-     EditorialDebunk,
-     EditorialQuote,
-     EditorialVerdict,
-     EditorialCTA
-   } from '../../../src/skeleton/ui';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
-     return (
-       // Render the single matching Editorial Archetype component directly!
-     );
+     return ( ... );
    }
 
-2. Direct Archetype Mapping:
-   - cover (Slide 1): <EditorialCover kicker="..." headline="..." subheadline="..." authorName={brand.name} authorRole={brand.domain} readTime="4 min read" />
-   - brief (Slide 2): <EditorialList kicker="EXECUTIVE BRIEFING" headline="..." items={[{ index: 1, tag: "TAG", title: "...", body: "..." }, ...]} />
-   - mechanism (Slide 3): <EditorialDebunk kicker="HARDWARE SPECS" headline="..." left={{ tag: "DRONE CAM", title: "...", description: "..." }} right={{ tag: "ROVER CAM", title: "...", description: "..." }} />
-   - telemetry (Slide 4): <EditorialTelemetry kicker="HARDWARE & SERVICE PRICING" headline="..." metrics={[{ value: "$249.99", label: "...", context: "...", tag: "..." }, ...]} />
-   - controversy / quote (Slide 5): <EditorialQuote kicker="THE PRIVACY BATTLE" quote="..." attribution="..." role="..." context="..." />
-   - catch (Slide 6): <EditorialList kicker="THE HIDDEN CATCH" headline="..." items={[{ index: 1, tag: "...", title: "...", body: "..." }, ...]} />
-   - debunk (Slide 7): <EditorialDebunk kicker="MYTH VS REALITY" headline="..." left={{ tag: "THE MYTH", title: "...", description: "..." }} right={{ tag: "THE REALITY", title: "...", description: "..." }} />
-   - verdict (Slide 8): <EditorialVerdict kicker="EDITORIAL VERDICT" headline="..." avoid={{ tag: "WHO SHOULD SKIP", title: "...", points: ["...", "..."] }} fit={{ tag: "POTENTIAL FIT", title: "...", points: ["...", "..."] }} />
-   - future (Slide 9): <EditorialList kicker="THE BIGGER PICTURE" headline="..." items={[{ index: 1, tag: "...", title: "...", body: "..." }, ...]} />
-   - hero-cta (Slide 10): <EditorialCTA kicker="THE FINAL VERDICT" headline="..." verdict="..." question="..." actionText="Where do you draw the line?" />
+2. Creative Freedom & Architectural Excellence:
+   - You have 100% creative freedom to write bespoke JSX, custom vector SVGs, and responsive layouts.
+   - Author rich inline SVGs with crisp viewBoxes (e.g. floor plans with dashed patrol routes, elevation cross-sections, spatial markers, comparison glyphs).
+   - Use purposeful, asymmetric layouts (e.g. 'grid grid-cols-[0.82fr_1.18fr] gap-8', stacked full-width rows with hairline borders, or optically centered monumental layouts).
 
-3. Space Balance Guarantee:
-   - NEVER wrap the archetype in an extra outer 'justify-between' container.
-   - The archetypes manage their own 100% space balance and optical centering.
-   - Return strictly valid TSX inside a \`\`\`tsx code block.`;
+3. Theme & Token Integration:
+   - Use Tailwind utility classes with CSS variables:
+     * text-[var(--ink)] for primary text
+     * text-[var(--accent)] or bg-[var(--accent)] for focal points, badges, highlights
+     * bg-[var(--surface)] for card backgrounds and elevation
+     * border-[var(--border)] for hairlines and borders
+     * font-[var(--font-headline)] for titles, quotes, hero numbers
+     * font-[var(--font-body)] for body copy and descriptions
+     * font-[var(--font-mono)] for metrics, tags, numbers
+
+4. Spatial Balance & Zero-Overflow Rule:
+   - Fill 75%–90% of the vertical space organically.
+   - If content is short (Cover, Quote, CTA), center it optically with 'my-auto' or 'justify-center min-h-0' and generous font scales (text-6xl to text-7xl). NEVER use 'justify-between' across a 1000px height when there are only 2 items!
+   - If content is dense (List, Telemetry, Breakdown), use 'flex-1' or 'grid' with equal height distribution so items fill the frame without empty voids.
+   - Always respect the locked text provided—do not invent new text or exceed word counts.
+
+5. Technical Constraints:
+   - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
+   - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
+   - Do NOT output the outer 1080x1350 wrapper or header/footer—SlideFrame provides those.`;
 }
 
 export function buildSingleSlideUserPrompt(
   slideNumber: number,
   slideData: SlideData,
+  blueprint: SlideDesignBlueprint | undefined,
   brand: BrandTokens
 ): string {
-  return `Generate Slide${String(slideNumber).padStart(2, '0')}.tsx for Slide ${slideNumber}:
+  return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
 Archetype: "${slideData.type}"
-Slide Data:
+
+Slide Data (Locked Copy):
 ${JSON.stringify(slideData, null, 2)}
+
+Visual Blueprint:
+${blueprint ? JSON.stringify(blueprint, null, 2) : 'Design a bespoke editorial layout with custom SVG vector graphics.'}
 
 Brand Context:
 - Publication: "${brand.name}"
@@ -315,12 +428,13 @@ Brand Context:
 - Accent: "${brand.palette.accent}"
 - Paper: "${brand.palette.paper}"
 - Surface: "${brand.palette.surface}"
+- Border: "${brand.palette.border}"
 
-Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component invoking the dedicated Full-Frame Editorial Archetype.`;
+Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
 }
 
 // ============================================================================
-// PASS 5: COMPILER ERROR SELF-HEALING
+// STAGE 7: COMPILER ERROR SELF-HEALING
 // ============================================================================
 
 export function buildSelfHealingPrompt(

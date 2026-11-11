@@ -16,7 +16,7 @@ export async function generateTemplateReference(
   brief: TemplateBrief,
   options: PipelineOptions & { runAudit?: boolean } = {}
 ): Promise<GenerationResult> {
-  const pipelineResult = await runTemplatePipeline(brief, options);
+  const pipelineResult = await runTemplatePipeline({ ...options, brief });
 
   let audit: VisualAuditResult | undefined;
   if (options.runAudit) {
