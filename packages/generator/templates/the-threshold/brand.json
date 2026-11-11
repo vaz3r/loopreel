@@ -1,0 +1,25 @@
+{
+  "name": "The Threshold",
+  "slug": "the-threshold",
+  "vibe": "Domestic architecture meets surveillance reporting: mist-green surfaces, recording-red signals, and floor-plan brackets frame the tension between convenience and intrusion.",
+  "domain": "Domestic Robotics / Connected Security / Privacy",
+  "palette": {
+    "paper": "#E8EFEB",
+    "ink": "#20292A",
+    "accent": "#B52D46",
+    "surface": "#D8E3DD",
+    "border": "#93A69C",
+    "subtle": "#52655C"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Public Sans",
+    "monoFont": "DM Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+  },
+  "wordmark": "THE THRESHOLD",
+  "wordmarkStyle": "sans",
+  "handle": "@thethreshold",
+  "texture": "grid",
+  "motif": "bracket"
+}

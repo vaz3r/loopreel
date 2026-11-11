@@ -191,7 +191,7 @@ export default function Slide06({
               <ellipse cx="42" cy="23" rx="22" ry="10" />
               <path d="M0 -16 L23 -4 L23 9 L0 21 L-23 9 L-23 -4 Z" />
               <path d="M-23 -4 L0 8 L23 -4 M0 8 L0 21" fill="none" />
-            />
+            </g>
 
             <circle cx="0" cy="-3" r="4" fill="var(--accent)" />
           </g>

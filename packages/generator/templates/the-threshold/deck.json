@@ -1,0 +1,249 @@
+{
+  "templateName": "The Threshold",
+  "templateSlug": "the-threshold",
+  "domain": "Domestic Robotics / Connected Security / Privacy",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "publication": "The Threshold",
+      "kicker": "DOMESTIC ROBOTICS",
+      "headline": "Ring Gives Surveillance Room to Roam",
+      "subheadline": "Flying and wheeled cameras bring indoor mapping, cloud processing and privacy questions.",
+      "visualStyle": "diverging-patrol-hero",
+      "layoutTopology": "central-headline-with-diverging-paths",
+      "palette": {
+        "paper": "#E8EFEB",
+        "ink": "#20292A",
+        "accent": "#B52D46",
+        "surface": "#D8E3DD"
+      },
+      "cards": [
+        {
+          "title": "Ring Drone Cam",
+          "badge": "$250",
+          "body": "Indoor flying security camera."
+        },
+        {
+          "title": "Ring Rover Cam",
+          "badge": "$1,000",
+          "body": "Wheeled autonomous security robot marketed for business."
+        }
+      ],
+      "svgBlueprint": "Use the publication palette throughout the storyboard. Place the headline above a schematic indoor outline. Branch a dashed airborne path toward an abstract drone glyph and a solid floor path toward an abstract rover glyph. Anchor each product caption at its path endpoint. Keep silhouettes conceptual, not dimensionally representative; reserve clear text zones."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "release-timeline",
+      "kicker": "THE ARRIVAL WINDOW",
+      "headline": "Two Dates, Different Certainty",
+      "subheadline": "Rover shipping is scheduled; the drone still needs regulatory authorization.",
+      "visualStyle": "conditional-release-rail",
+      "layoutTopology": "horizontal-timeline-with-offset-annotations",
+      "cards": [
+        {
+          "title": "Ring Rover Cam",
+          "date": "December 16, 2026",
+          "body": "Scheduled shipping; already available for preorder when the article was published."
+        },
+        {
+          "title": "Ring Drone Cam",
+          "date": "January 27, 2027",
+          "body": "Amazon's target depends on Federal Communications Commission authorization."
+        }
+      ],
+      "svgBlueprint": "Draw a horizontal release rail with two labeled milestones, explicitly not to scale. Use a solid square for Rover's scheduled shipping and a hollow accent circle for Drone's conditional target. Offset the captions above and below the rail. End the drone segment with a dashed line rather than a completion arrow."
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "mapping-comparison",
+      "kicker": "INSIDE AI PILOT",
+      "headline": "Different Mapping, Shared Cloud Processing",
+      "subheadline": "AI Pilot combines device cameras, specialized vision models, on-device sensors and cloud processing.",
+      "visualStyle": "paired-floorplan-convergence",
+      "layoutTopology": "mirrored-plans-with-shared-processing-node",
+      "cards": [
+        {
+          "title": "Ring Drone Cam",
+          "body": "Customers carry the drone through indoor spaces to map floor plans."
+        },
+        {
+          "title": "Ring Rover Cam",
+          "body": "Autonomous exploration maps indoor floor plans."
+        }
+      ],
+      "svgBlueprint": "Draw two schematic floor plans without dimensions. Show a hand-and-drone symbol following a dotted setup path on the left; show a rover tracing its own exploration path on the right. Connect both diagrams to one cloud-processing node below. Avoid arrows implying specific uploads, retention or processing sequences not established by the dossier."
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "drone-optics",
+      "kicker": "DRONE CAMERA",
+      "headline": "A Flying Camera's Viewing Envelope",
+      "subheadline": "Field of view, rotation and resolution describe what the onboard camera offers.",
+      "visualStyle": "optical-fan-reticle",
+      "layoutTopology": "radial-diagram-with-three-perimeter-readouts",
+      "metrics": [
+        {
+          "value": "148",
+          "label": "Field of view, degrees"
+        },
+        {
+          "value": "360",
+          "label": "Rotation, degrees"
+        },
+        {
+          "value": "2K",
+          "label": "Video resolution"
+        }
+      ],
+      "svgBlueprint": "Center an abstract camera lens inside a circular rotation arrow. Draw an accurately proportioned 148-degree viewing wedge in translucent accent. Place three numerical readouts around the perimeter with short, noncrossing leaders. Treat the wedge as an angular diagram, never a coverage-distance claim."
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "drone-constraints",
+      "kicker": "THE FLIGHT CONDITIONS",
+      "headline": "Eight Minutes, With Conditions Attached",
+      "subheadline": "Flight duration, navigation surfaces and subscriber access constrain the drone's promise.",
+      "visualStyle": "stacked-flight-condition-ledger",
+      "layoutTopology": "three-horizontal-editorial-bands",
+      "cards": [
+        {
+          "title": "8 minutes",
+          "body": "On a new, fully-charged battery under controlled conditions."
+        },
+        {
+          "title": "Navigation may degrade near",
+          "body": "Polished marble, wet tile, featureless blank matte walls, frameless glass and mirrors."
+        },
+        {
+          "title": "Amazon Ring Protect subscribers",
+          "body": "Set-route and scheduled operation described; subscription price not stated."
+        }
+      ],
+      "svgBlueprint": "Build three full-width bands separated by thin ink rules, not floating cards. Pair the runtime band with an unscaled battery outline; pair navigation with one abstract reflective-wall motif; pair subscription access with a route passing through a labeled gate. Keep each illustration small enough to preserve generous text width."
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "rover-capabilities",
+      "kicker": "BUSINESS PATROL",
+      "headline": "Rover Trades Flight for Floor Coverage",
+      "subheadline": "Amazon claims indoor coverage alongside high-resolution video and stationary scanning.",
+      "visualStyle": "coverage-field-and-scan-hub",
+      "layoutTopology": "large-plan-field-with-bottom-metric-rail",
+      "metrics": [
+        {
+          "value": "5,000",
+          "label": "Up to square feet",
+          "body": "Amazon's claimed coverage: 465 square meters."
+        },
+        {
+          "value": "4K",
+          "label": "Up to video resolution",
+          "body": "Livestreaming and recording while patrolling or scanning."
+        },
+        {
+          "value": "360",
+          "label": "Scan, degrees",
+          "body": "Performed at a designated location."
+        }
+      ],
+      "svgBlueprint": "Use a large schematic business floor plan as the upper field, explicitly not to scale. Place a rover glyph at a designated scan point with a complete circular sweep. Set three metrics in a single bottom rail. Do not shade the plan as guaranteed coverage or imply walls are transparent to the camera."
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "rover-bottleneck",
+      "kicker": "THE FLOOR IS THE LIMIT",
+      "headline": "Rover Cannot Patrol Every Floor",
+      "subheadline": "Indoor, single-floor operation comes with explicit terrain exclusions.",
+      "cards": [
+        {
+          "title": "Single-floor only",
+          "body": "Indoor operation; no stair-climbing capability."
+        },
+        {
+          "title": "Incompatible terrain",
+          "body": "Curved edges, sunken areas and black glossy floors."
+        },
+        {
+          "title": "Incompatible flooring transitions",
+          "body": "Greater than 1.375 inches (3.5 centimeters)."
+        }
+      ],
+      "visualStyle": "architectural-threshold-section",
+      "layoutTopology": "continuous-floor-section-with-three-callouts",
+      "svgBlueprint": "Draw one continuous schematic floor section across the slide. Attach three callouts to a staircase, an abstract recessed glossy-floor segment and a raised transition. Mark incompatibilities with accent stop bars. Label only the transition with its supplied threshold; do not invent stair dimensions, robot clearance or terrain tolerances."
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "retention-comparison",
+      "kicker": "AFTER THE PATROL",
+      "headline": "Recording Outlasts the Patrol",
+      "subheadline": "Rover cloud retention is specified; a separate drone retention period is not.",
+      "visualStyle": "archive-span-versus-open-record",
+      "layoutTopology": "stacked-comparison-ledger",
+      "cards": [
+        {
+          "title": "Rover: up to 180 days",
+          "body": "Cloud-stored videos: doorbell rings, motion events and Live View events."
+        },
+        {
+          "title": "Drone: retention not stated",
+          "body": "The supplied article gives no separate cloud video retention period."
+        }
+      ],
+      "svgBlueprint": "Create two full-width ledger rows. In the Rover row, place a cloud archive symbol beside a long retention bar labeled up to 180 days. In the Drone row, use an outlined document with an em dash, not a zero-length bar. Keep the rows visually distinct so missing information cannot be mistaken for zero retention."
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "privacy-record",
+      "kicker": "THE TRUST BACKDROP",
+      "headline": "Ring's Privacy Record Follows It Indoors",
+      "subheadline": "The FTC's earlier case concerned private recordings and safeguards against hackers.",
+      "visualStyle": "monumental-accountability-dossier",
+      "layoutTopology": "oversized-year-spine-with-account-count",
+      "metrics": [
+        {
+          "value": "2023",
+          "label": "FTC investigation",
+          "body": "Ring charged with allowing employees and contractors to watch customers' private-space recordings."
+        },
+        {
+          "value": "55,000",
+          "label": "US customer accounts",
+          "body": "FTC said Ring's safeguards allowed hackers to access these accounts."
+        }
+      ],
+      "svgBlueprint": "Set the investigation year as a tall typographic spine on the left. Place the account count in a large right-side evidence block with its attribution directly underneath. Use a restrained document-outline motif and thin connecting rule. Do not depict these historical allegations as incidents involving the new robots."
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "privacy-verdict",
+      "kicker": "THE THRESHOLD VERDICT",
+      "headline": "Mobile Security, Unresolved Privacy Questions",
+      "subheadline": "Throw Away the Key Encryption arrived in September 2026; its protections remain contested.",
+      "visualStyle": "claim-and-challenge-bracket",
+      "layoutTopology": "opposing-statements-around-open-lock",
+      "cards": [
+        {
+          "title": "Amazon's assurance",
+          "body": "Amazon says Throw Away the Key Encryption will protect both devices' videos."
+        },
+        {
+          "title": "EFF's assessment",
+          "body": "EFF says it remains well short of end-to-end encryption."
+        }
+      ],
+      "svgBlueprint": "Place the two attributed statements on opposing sides of a central abstract lock outline. Use an open bracket around the lock to signify an unresolved assessment, not a demonstrated vulnerability. Keep Amazon's statement in ink and EFF's challenge in accent. Give the closing headline a broad, uncluttered lower text zone."
+    }
+  ]
+}

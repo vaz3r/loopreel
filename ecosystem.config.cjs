@@ -74,7 +74,7 @@ module.exports = {
       script: 'node',
       args: '--import tsx src/bootstrap.ts',
       cwd: resolve(__dirname, 'apps/worker-structure'),
-      max_memory_restart: '256M',
+      max_memory_restart: '1G',
       autorestart: true,
       watch: false,
       error_file: resolve(LOG_DIR, 'worker-structure-error.log'),

@@ -40,6 +40,26 @@ export async function auditTemplateStudio(
       await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
       await page.waitForTimeout(300); // Allow fonts and AutoFit to settle
 
+      // Detect Vite compilation / runtime error overlay immediately
+      const viteOverlay = await page.$('vite-error-overlay');
+      if (viteOverlay) {
+        const overlayText = await page.evaluate(() => {
+          const overlay = document.querySelector('vite-error-overlay');
+          const body = overlay?.shadowRoot?.querySelector('.message-body')?.textContent?.trim();
+          return body || overlay?.shadowRoot?.textContent?.trim() || 'Vite React Babel compilation error';
+        });
+        errors.push(`Slide ${i + 1}: Compilation Error Overlay: ${overlayText.slice(0, 300)}`);
+        totalCollisions++;
+        continue;
+      }
+
+      const canvasExists = await page.$('.slide-canvas');
+      if (!canvasExists) {
+        errors.push(`Slide ${i + 1}: Slide canvas (.slide-canvas) was not rendered into the DOM`);
+        totalCollisions++;
+        continue;
+      }
+
       // Run collision & balance audit on the rendered slide
       const audit = await page.evaluate((slideIdx) => {
         const collisions: string[] = [];
@@ -114,8 +134,9 @@ export async function auditTemplateStudio(
         const content = canvas.querySelector('.loop-autofit-content');
         const contentChildren = content
           ? Array.from(content.children[0]?.children || []).filter((el) => {
-              const style = window.getComputedStyle(el as HTMLElement);
-              return style.position !== 'absolute' && style.display !== 'none' && (el as HTMLElement).offsetHeight > 10;
+              const style = window.getComputedStyle(el as Element);
+              const height = (el as HTMLElement).offsetHeight || (el as Element).getBoundingClientRect().height || 0;
+              return style.position !== 'absolute' && style.display !== 'none' && height > 10;
             })
           : [];
         if (contentChildren.length >= 2) {

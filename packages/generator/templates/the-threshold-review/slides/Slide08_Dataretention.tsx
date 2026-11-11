@@ -27,7 +27,7 @@ export default function Slide08({
 
       <figure className="mt-7 shrink-0 border-t border-[var(--border)] pt-5">
         <figcaption className="font-[var(--font-headline)] text-[34px] font-semibold leading-tight">
-          {slide.items?.?.title}
+          {slide.items?.[0]?.title ?? 'Rover event retention'}
         </figcaption>
 
         <svg
@@ -177,11 +177,11 @@ export default function Slide08({
         </svg>
 
         <h2 className="relative font-[var(--font-headline)] text-[34px] font-semibold leading-tight">
-          {slide.items?.?.title}
+          {slide.items?.[1]?.title ?? slide.items?.[0]?.title ?? 'Unspecified schedules'}
         </h2>
 
         <p className="relative mt-4 max-w-[850px] font-[var(--font-body)] text-[26px] leading-snug">
-          {slide.items?.?.body}
+          {slide.items?.[1]?.body ?? slide.items?.[0]?.body ?? slide.subheadline}
         </p>
       </div>
     </section>

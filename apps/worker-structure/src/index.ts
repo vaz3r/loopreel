@@ -90,6 +90,20 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         { runAudit: true, concurrency: 3 }
       );
 
+      // Strict failure gate: never upload corrupt slides if audit failed
+      if (result.audit && !result.audit.passed) {
+        const errorDetails = result.audit.errors.length > 0
+          ? result.audit.errors.join('; ')
+          : `${result.audit.totalCollisions} collisions or visual faults detected during visual audit`;
+        jobLogger.error({ errors: result.audit.errors, collisions: result.audit.totalCollisions }, 'Visual audit failed — rejecting job');
+        await JobRepository.markFailed(jobId, {
+          stage: 'structuring',
+          reason: 'visual_audit_failed',
+          details: errorDetails,
+        });
+        return;
+      }
+
       jobLogger.info({
         templateSlug: result.templateSlug,
         slideCount: result.slideCount,

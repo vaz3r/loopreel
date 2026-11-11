@@ -41,13 +41,14 @@ class SlideErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryStat
   }
 }
 
-// Auto-discover all generated templates in /templates/
-const templateModules = import.meta.glob('/templates/**/index.ts', { eager: true });
+// Auto-discover brand manifests from brand.json (pure JSON, never causes transform failure)
+const brandFiles = import.meta.glob('/templates/**/brand.json', { eager: true });
+const templateLoaders = import.meta.glob('/templates/**/index.ts');
 
-interface DiscoveredTemplate {
+interface TemplateManifest {
   slug: string;
   name: string;
-  pkg: TemplatePackage;
+  indexPath: string;
 }
 
 export function TemplateStudio() {
@@ -57,16 +58,17 @@ export function TemplateStudio() {
   const initialSlideParam = parseInt(searchParams.get('slide') || '0', 10);
   const initialModeParam = (searchParams.get('mode') as 'fit' | '1:1' | 'grid') || 'fit';
 
-  // Discover templates
-  const templates: DiscoveredTemplate[] = useMemo(() => {
-    const list: DiscoveredTemplate[] = [];
-    for (const path in templateModules) {
-      const mod = templateModules[path] as { default: TemplatePackage };
-      if (mod?.default?.brand && mod?.default?.deck) {
+  // Discover template manifests synchronously from brand.json
+  const templates: TemplateManifest[] = useMemo(() => {
+    const list: TemplateManifest[] = [];
+    for (const brandPath in brandFiles) {
+      const brand = ((brandFiles[brandPath] as any)?.default || brandFiles[brandPath]) as { slug: string; name: string };
+      const indexPath = brandPath.replace(/brand\.json$/, 'index.ts');
+      if (brand?.slug && brand?.name && templateLoaders[indexPath]) {
         list.push({
-          slug: mod.default.brand.slug,
-          name: mod.default.brand.name,
-          pkg: mod.default,
+          slug: brand.slug,
+          name: brand.name,
+          indexPath,
         });
       }
     }
@@ -80,17 +82,62 @@ export function TemplateStudio() {
     return templates[0]?.slug || '';
   });
 
+  const [activePkg, setActivePkg] = useState<TemplatePackage | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const activeManifest = useMemo(() => {
+    return templates.find((t) => t.slug === activeSlug) || templates[0];
+  }, [templates, activeSlug]);
+
+  useEffect(() => {
+    if (!activeManifest) {
+      setIsLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+    setIsLoading(true);
+    setLoadError(null);
+
+    const loader = templateLoaders[activeManifest.indexPath];
+    if (!loader) {
+      setLoadError(`No template entrypoint found for ${activeManifest.slug}`);
+      setIsLoading(false);
+      return;
+    }
+
+    loader()
+      .then((mod: any) => {
+        if (!isMounted) return;
+        const pkg = mod.default as TemplatePackage;
+        if (!pkg?.brand || !pkg?.deck) {
+          throw new Error('Template package missing brand or deck data');
+        }
+        setActivePkg(pkg);
+        setLoadError(null);
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        if (!isMounted) return;
+        console.error(`Failed to load template ${activeManifest.slug}:`, err);
+        setLoadError(err.message || String(err));
+        setActivePkg(null);
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeManifest]);
+
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(
     isNaN(initialSlideParam) ? 0 : initialSlideParam
   );
   const [viewMode, setViewMode] = useState<'fit' | '1:1' | 'grid'>(initialModeParam);
   const [metrics, setMetrics] = useState<{ fill: number; scale: string }>({ fill: 80, scale: '1.000' });
 
-  const activeTemplate = useMemo(() => {
-    return templates.find((t) => t.slug === activeSlug) || templates[0];
-  }, [templates, activeSlug]);
-
-  const totalSlides = activeTemplate?.pkg.deck.slides.length || 0;
+  const totalSlides = activePkg?.deck.slides.length || 0;
 
   // Keyboard navigation
   useEffect(() => {
@@ -109,14 +156,14 @@ export function TemplateStudio() {
 
   // Synchronize URL
   useEffect(() => {
-    if (activeTemplate) {
+    if (activeManifest) {
       const url = new URL(window.location.href);
-      url.searchParams.set('template', activeTemplate.slug);
+      url.searchParams.set('template', activeManifest.slug);
       url.searchParams.set('slide', String(activeSlideIndex));
       url.searchParams.set('mode', viewMode);
       window.history.replaceState({}, '', url.toString());
     }
-  }, [activeTemplate, activeSlideIndex, viewMode]);
+  }, [activeManifest, activeSlideIndex, viewMode]);
 
   // Measure live metrics
   useEffect(() => {
@@ -134,29 +181,35 @@ export function TemplateStudio() {
     return () => clearTimeout(timer);
   }, [activeSlideIndex, activeSlug, viewMode]);
 
-  if (!activeTemplate) {
+  if (!activeManifest) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center">
         <h1 className="text-2xl font-bold tracking-tight mb-2">Loopreel Template Studio</h1>
         <p className="text-zinc-400 max-w-md mb-6">
-          No templates found in <code className="text-zinc-200">apps/generator/templates/</code> yet.
+          No templates found in <code className="text-zinc-200">packages/generator/templates/</code> yet.
         </p>
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 text-left font-mono text-sm">
-          <p className="text-zinc-500 mb-2">// Generate your first template:</p>
-          <p className="text-emerald-400">
-            pnpm --filter @loopreel/generator generate --name &quot;The Tokyo Review&quot;
-          </p>
-        </div>
       </div>
     );
   }
 
-  const { brand, deck, slides } = activeTemplate.pkg;
-  const currentSlideData = deck.slides[activeSlideIndex] || deck.slides[0]!;
-  const CurrentSlideComponent = (slides[activeSlideIndex] || slides[0]) as SlideComponent;
-
   // Export mode for Playwright automated visual audits
   if (initialModeParam === '1:1' && searchParams.get('export') === 'true') {
+    if (loadError) {
+      return (
+        <div className="vite-error-overlay flex h-[1350px] w-[1080px] flex-col items-center justify-center bg-zinc-950 p-12 text-rose-400 font-mono">
+          <p className="text-2xl font-bold mb-4">Template Compilation Error</p>
+          <pre className="text-sm bg-zinc-900 p-6 rounded border border-rose-900 max-w-3xl whitespace-pre-wrap">{loadError}</pre>
+        </div>
+      );
+    }
+    if (isLoading || !activePkg) {
+      return <div className="flex h-[1350px] w-[1080px] items-center justify-center bg-zinc-950 text-zinc-400">Loading...</div>;
+    }
+
+    const { brand, deck, slides } = activePkg;
+    const currentSlideData = deck.slides[activeSlideIndex] || deck.slides[0]!;
+    const CurrentSlideComponent = (slides[activeSlideIndex] || slides[0]) as SlideComponent;
+
     return (
       <div className="inline-block" style={{ width: 1080, height: 1350 }}>
         <SlideFrame
@@ -174,6 +227,12 @@ export function TemplateStudio() {
       </div>
     );
   }
+
+  const brand = activePkg?.brand;
+  const deck = activePkg?.deck;
+  const slides = activePkg?.slides || [];
+  const currentSlideData = deck?.slides[activeSlideIndex] || deck?.slides[0];
+  const CurrentSlideComponent = (slides[activeSlideIndex] || slides[0]) as SlideComponent | undefined;
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-950 text-zinc-100">
@@ -204,7 +263,7 @@ export function TemplateStudio() {
           </select>
 
           {/* Slide Selector & Pagination */}
-          {viewMode !== 'grid' && (
+          {deck && deck.slides && viewMode !== 'grid' && (
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setActiveSlideIndex((prev) => Math.max(0, prev - 1))}
@@ -246,7 +305,7 @@ export function TemplateStudio() {
         {/* View Mode & Metrics */}
         <div className="flex items-center gap-4">
           {/* Live DOM Metrics HUD */}
-          {viewMode !== 'grid' && (
+          {viewMode !== 'grid' && activePkg && (
             <div className="flex items-center gap-3 text-[11px] font-mono bg-zinc-950 px-3 py-1 rounded border border-zinc-800 text-zinc-400">
               <span>
                 FILL: <strong className="text-zinc-200">{metrics.fill}%</strong>
@@ -290,83 +349,102 @@ export function TemplateStudio() {
 
       {/* STAGE CANVAS */}
       <main className="flex-1 flex items-center justify-center p-8 overflow-auto">
-        {viewMode === 'fit' && (
-          <div
-            className="transition-transform duration-200 ease-out origin-center shadow-2xl rounded-sm"
-            style={{
-              transform: 'scale(0.48)',
-              width: 1080,
-              height: 1350,
-              marginBottom: -420,
-              marginTop: -280,
-            }}
-          >
-            <SlideFrame
-              brand={brand}
-              slide={currentSlideData}
-              slideIndex={activeSlideIndex}
-              totalSlides={totalSlides}
-            >
-              <CurrentSlideComponent
-                slide={currentSlideData}
-                brand={brand}
-                totalSlides={totalSlides}
-              />
-            </SlideFrame>
+        {loadError && (
+          <div className="flex flex-col items-center justify-center p-8 bg-zinc-900 border border-rose-900/50 rounded-lg max-w-xl text-center">
+            <span className="text-rose-400 font-bold mb-2">Template Load Error</span>
+            <p className="text-zinc-400 font-mono text-xs whitespace-pre-wrap">{loadError}</p>
+            <p className="text-zinc-500 text-xs mt-4">Select another template from the top bar to continue.</p>
           </div>
         )}
 
-        {viewMode === '1:1' && (
-          <div className="shadow-2xl rounded-sm my-8">
-            <SlideFrame
-              brand={brand}
-              slide={currentSlideData}
-              slideIndex={activeSlideIndex}
-              totalSlides={totalSlides}
-            >
-              <SlideErrorBoundary>
-                <CurrentSlideComponent
-                  slide={currentSlideData}
+        {isLoading && !loadError && (
+          <div className="flex items-center justify-center text-zinc-400 font-mono text-sm">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping mr-3" />
+            Loading template package...
+          </div>
+        )}
+
+        {!isLoading && !loadError && brand && deck && currentSlideData && CurrentSlideComponent && (
+          <>
+            {viewMode === 'fit' && (
+              <div
+                className="transition-transform duration-200 ease-out origin-center shadow-2xl rounded-sm"
+                style={{
+                  transform: 'scale(0.48)',
+                  width: 1080,
+                  height: 1350,
+                  marginBottom: -420,
+                  marginTop: -280,
+                }}
+              >
+                <SlideFrame
                   brand={brand}
+                  slide={currentSlideData}
+                  slideIndex={activeSlideIndex}
                   totalSlides={totalSlides}
-                />
-              </SlideErrorBoundary>
-            </SlideFrame>
-          </div>
-        )}
-
-        {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl w-full py-8">
-            {deck.slides.map((s, idx) => {
-              const SlideComp = (slides[idx] || slides[0]) as SlideComponent;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => {
-                    setActiveSlideIndex(idx);
-                    setViewMode('fit');
-                  }}
-                  className="flex flex-col items-center group cursor-pointer"
                 >
-                  <div className="text-xs font-mono text-zinc-400 mb-2 group-hover:text-emerald-400">
-                    Slide {idx + 1}: {(s.type || (s as any).archetype || 'editorial').toUpperCase()}
-                  </div>
-                  <div
-                    className="overflow-hidden shadow-lg border border-zinc-800 group-hover:border-emerald-500/50 rounded-sm transition-all"
-                    style={{ width: 270, height: 337.5 }}
-                  >
-                    <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
-                      <SlideFrame brand={brand} slide={s} slideIndex={idx} totalSlides={totalSlides}>
-                        <SlideErrorBoundary>
-                          <SlideComp slide={s} brand={brand} totalSlides={totalSlides} />
-                        </SlideErrorBoundary>
-                      </SlideFrame>
+                  <CurrentSlideComponent
+                    slide={currentSlideData}
+                    brand={brand}
+                    totalSlides={totalSlides}
+                  />
+                </SlideFrame>
+              </div>
+            )}
+
+            {viewMode === '1:1' && (
+              <div className="shadow-2xl rounded-sm my-8">
+                <SlideFrame
+                  brand={brand}
+                  slide={currentSlideData}
+                  slideIndex={activeSlideIndex}
+                  totalSlides={totalSlides}
+                >
+                  <SlideErrorBoundary>
+                    <CurrentSlideComponent
+                      slide={currentSlideData}
+                      brand={brand}
+                      totalSlides={totalSlides}
+                    />
+                  </SlideErrorBoundary>
+                </SlideFrame>
+              </div>
+            )}
+
+            {viewMode === 'grid' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl w-full py-8">
+                {deck.slides.map((s, idx) => {
+                  const SlideComp = (slides[idx] || slides[0]) as SlideComponent;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => {
+                        setActiveSlideIndex(idx);
+                        setViewMode('fit');
+                      }}
+                      className="flex flex-col items-center group cursor-pointer"
+                    >
+                      <div className="text-xs font-mono text-zinc-400 mb-2 group-hover:text-emerald-400">
+                        Slide {idx + 1}: {(s.type || (s as any).archetype || 'editorial').toUpperCase()}
+                      </div>
+                      <div
+                        className="overflow-hidden shadow-lg border border-zinc-800 group-hover:border-emerald-500/50 rounded-sm transition-all"
+                        style={{ width: 270, height: 337.5 }}
+                      >
+                        <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
+                          <SlideFrame brand={brand} slide={s} slideIndex={idx} totalSlides={totalSlides}>
+                            <SlideErrorBoundary>
+                              <SlideComp slide={s} brand={brand} totalSlides={totalSlides} />
+                            </SlideErrorBoundary>
+                          </SlideFrame>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>

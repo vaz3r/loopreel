@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import ts from 'typescript';
 import { createLLMClient } from '@loopreel/llm';
 import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
 import { ingestArticle, type ArticleIntel } from './ingest.js';
@@ -59,6 +60,21 @@ function extractTsx(raw: string): string {
     cleaned = tsxMatch[1].trim();
   }
   return cleaned;
+}
+
+export function validateTsxSyntax(code: string, filename = 'slide.tsx'): { valid: boolean; errors: string[] } {
+  try {
+    const sf = ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const diags = (sf as any).parseDiagnostics || [];
+    if (diags.length === 0) return { valid: true, errors: [] };
+    const errors = diags.map((d: any) => {
+      const msg = typeof d.messageText === 'string' ? d.messageText : d.messageText?.messageText || 'Syntax error';
+      return `${filename}: ${msg}`;
+    });
+    return { valid: false, errors };
+  } catch (err: any) {
+    return { valid: false, errors: [err.message] };
+  }
 }
 
 export interface PipelineOptions {
@@ -371,6 +387,29 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
 
+    // Fast AST syntax check before writing to disk
+    const syntaxCheck = validateTsxSyntax(code, filename);
+    if (!syntaxCheck.valid) {
+      console.warn(`[Pipeline]   ⚠ Syntax issues in ${filename}: ${syntaxCheck.errors.join('; ')}. Auto-repairing...`);
+      try {
+        const repairResponse = await llm.generateJSON(
+          'You are a TypeScript and React compiler expert. Fix the reported syntax errors completely. Return ONLY the corrected code in a ```tsx code block.',
+          buildSelfHealingPrompt(filename, code, syntaxCheck.errors.join('\n')),
+          0.2
+        );
+        const repaired = extractTsx(repairResponse.text);
+        const secondCheck = validateTsxSyntax(repaired, filename);
+        if (secondCheck.valid) {
+          code = repaired;
+          console.log(`[Pipeline]   ✔ Syntax successfully auto-repaired for ${filename}`);
+        } else {
+          console.warn(`[Pipeline]   ⚠ Syntax repair partial for ${filename}`);
+        }
+      } catch (repairErr: any) {
+        console.warn(`[Pipeline]   ⚠ Syntax auto-repair skipped: ${repairErr.message}`);
+      }
+    }
+
     fs.writeFileSync(filePath, code, 'utf-8');
     const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log(`[Pipeline]   ✔ [${slideNumber}/${deck.slides.length}] ${filename} finished in ${elapsedSec}s`);
@@ -420,28 +459,37 @@ export default pkg;
     });
     console.log('[Pipeline] TypeScript integrity verified: 0 errors.');
   } catch (err: any) {
-    const errorOutput = err.stderr || err.stdout || String(err);
+    let errorOutput = err.stderr || err.stdout || String(err);
     console.warn('[Pipeline] TypeScript reported errors. Attempting self-healing...');
 
-    for (const s of slideExports) {
-      if (errorOutput.includes(s.filename)) {
-        console.log(`[Pipeline] Self-healing repair for ${s.filename}...`);
-        const currentCode = fs.readFileSync(path.join(slidesDir, s.filename), 'utf-8');
-        const repairResponse = await llm.generateJSON(
-          'You are a TypeScript and React compiler expert. Fix the reported compiler error.',
-          buildSelfHealingPrompt(s.filename, currentCode, errorOutput),
-          0.2
-        );
-        const fixedCode = extractTsx(repairResponse.text);
-        fs.writeFileSync(path.join(slidesDir, s.filename), fixedCode, 'utf-8');
+    let healed = false;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      for (const s of slideExports) {
+        if (errorOutput.includes(s.filename)) {
+          console.log(`[Pipeline] Self-healing repair for ${s.filename} (attempt ${attempt}/3)...`);
+          const currentCode = fs.readFileSync(path.join(slidesDir, s.filename), 'utf-8');
+          const repairResponse = await llm.generateJSON(
+            'You are a TypeScript and React compiler expert. Fix the reported compiler error completely. Return ONLY the corrected code in a ```tsx code block.',
+            buildSelfHealingPrompt(s.filename, currentCode, errorOutput),
+            0.2
+          );
+          const fixedCode = extractTsx(repairResponse.text);
+          fs.writeFileSync(path.join(slidesDir, s.filename), fixedCode, 'utf-8');
+        }
+      }
+
+      try {
+        execSync('pnpm --filter @loopreel/generator typecheck', { stdio: 'pipe' });
+        console.log(`[Pipeline] Self-healing succeeded on attempt ${attempt}: 0 errors after repair.`);
+        healed = true;
+        break;
+      } catch (subErr: any) {
+        errorOutput = subErr.stderr || subErr.stdout || String(subErr);
       }
     }
 
-    try {
-      execSync('pnpm --filter @loopreel/generator typecheck', { stdio: 'pipe' });
-      console.log('[Pipeline] Self-healing succeeded: 0 errors after repair.');
-    } catch {
-      console.warn('[Pipeline] Self-healing completed with remaining warnings.');
+    if (!healed) {
+      throw new Error(`TypeScript compilation failed for template ${slug} after 3 self-healing attempts:\n${errorOutput}`);
     }
   }
 

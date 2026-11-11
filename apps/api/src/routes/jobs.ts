@@ -37,6 +37,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
           platform: { type: 'string', enum: getPlatformIds(), default: 'instagram-feed' },
+          engine: { type: 'string', enum: ['bespoke', 'classic'], default: 'bespoke' },
           templateId: { type: 'string', enum: ALL_TEMPLATE_KEYS, default: 'auto' },
           brandKit: {
             type: 'object',
