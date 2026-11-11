@@ -137,6 +137,9 @@ importers:
       '@loopreel/llm':
         specifier: workspace:*
         version: link:../../packages/llm
+      cheerio:
+        specifier: ^1.0.0
+        version: 1.2.0
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2

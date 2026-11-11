@@ -4,13 +4,17 @@ import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { createLLMClient } from '@loopreel/llm';
 import type { BrandTokens, DeckData, SlideData } from './skeleton/types';
+import { ingestArticle, type ArticleIntel } from './ingest';
 import {
   type TemplateBrief,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
+  buildArticleBrandUserPrompt,
   buildDeckSystemPrompt,
   buildDeckBatch1Prompt,
   buildDeckBatch2Prompt,
+  buildArticleDeckBatch1Prompt,
+  buildArticleDeckBatch2Prompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -53,6 +57,7 @@ function extractTsx(raw: string): string {
 
 export interface PipelineOptions {
   provider?: string;
+  url?: string;
   onProgress?: (step: string, current: number, total: number) => void;
 }
 
@@ -71,20 +76,36 @@ export async function runTemplatePipeline(
 
   console.log(`\n[Pipeline] Initializing LLM client with provider "${provider}"...`);
 
+  // Optional: Ingest live article URL if provided
+  const articleUrl = options.url || brief.url;
+  let article: ArticleIntel | undefined;
+  if (articleUrl) {
+    console.log(`[Pipeline] Ingesting real news story from: ${articleUrl}...`);
+    options.onProgress?.('Ingesting Article Content', 0, 20);
+    article = await ingestArticle(articleUrl);
+  }
+
   // ==========================================================================
   // PASS 1: BRAND CONCEPT & DESIGN SYSTEM TOKENS
   // ==========================================================================
   console.log('[Pipeline] >>> Pass 1: Creative Director Art Direction & Brand Concept...');
   options.onProgress?.('Generating Brand Tokens', 1, 20);
 
+  const brandPrompt = article
+    ? buildArticleBrandUserPrompt(article, brief)
+    : buildBrandUserPrompt(brief);
+
   const brandResponse = await llm.generateJSON(
     buildBrandSystemPrompt(),
-    buildBrandUserPrompt(brief),
+    brandPrompt,
     0.7
   );
 
   const brand = extractJson<BrandTokens>(brandResponse.text);
-  const slug = brand.slug || brief.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const defaultSlug = article
+    ? (article.title || 'story').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 32).replace(/(^-|-$)/g, '')
+    : (brief.name || 'custom').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const slug = brand.slug || defaultSlug;
   brand.slug = slug;
   console.log(`[Pipeline] Pass 1 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
@@ -94,9 +115,13 @@ export async function runTemplatePipeline(
   console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 1: Slides 1–9)...');
   options.onProgress?.('Authoring Master Deck (Batch 1)', 2, 21);
 
+  const batch1Prompt = article
+    ? buildArticleDeckBatch1Prompt(article, brand)
+    : buildDeckBatch1Prompt(brief, brand);
+
   const batch1Response = await llm.generateJSON(
     buildDeckSystemPrompt(),
-    buildDeckBatch1Prompt(brief, brand),
+    batch1Prompt,
     0.7
   );
   const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
@@ -104,9 +129,13 @@ export async function runTemplatePipeline(
   console.log('[Pipeline] >>> Pass 2: Authoring Master Deck (Batch 2: Slides 10–17)...');
   options.onProgress?.('Authoring Master Deck (Batch 2)', 3, 21);
 
+  const batch2Prompt = article
+    ? buildArticleDeckBatch2Prompt(article, brand)
+    : buildDeckBatch2Prompt(brief, brand);
+
   const batch2Response = await llm.generateJSON(
     buildDeckSystemPrompt(),
-    buildDeckBatch2Prompt(brief, brand),
+    batch2Prompt,
     0.7
   );
   const batch2Slides = extractJson<SlideData[]>(batch2Response.text);

@@ -51,6 +51,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
   let vibe = '';
   let domain = '';
   let inspiration = '';
+  let url = '';
   let provider = '';
   let runAudit = false;
 
@@ -60,8 +61,23 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
     else if (arg === '--vibe' && args[i + 1]) vibe = args[++i]!;
     else if (arg === '--domain' && args[i + 1]) domain = args[++i]!;
     else if (arg === '--inspiration' && args[i + 1]) inspiration = args[++i]!;
+    else if (arg === '--url' && args[i + 1]) url = args[++i]!;
     else if (arg === '--provider' && args[i + 1]) provider = args[++i]!;
     else if (arg === '--audit') runAudit = true;
+  }
+
+  if (url) {
+    return {
+      brief: {
+        url,
+        name: name || undefined,
+        vibe: vibe || undefined,
+        domain: domain || undefined,
+        inspiration: inspiration || undefined,
+      },
+      provider: provider || undefined,
+      runAudit,
+    };
   }
 
   if (name && vibe) {
@@ -87,19 +103,35 @@ async function promptUser(): Promise<TemplateBrief> {
   console.log('\n======================================================');
   console.log('   Loopreel React Template Generator (@loopreel/generator)   ');
   console.log('======================================================\n');
-  console.log('Select a pre-engineered archetype, or enter custom details:\n');
+  console.log('Select an option:\n');
   console.log('  [1] The Tokyo Review      — Japanese architecture, warm washi & sumi-e ink');
   console.log('  [2] The Zurich Typographer— Swiss international style, vermilion & grid');
   console.log('  [3] The Nordic Diplomat   — Scandinavian policy, fjord blue & sand');
   console.log('  [4] The Silicon Architect — Deep tech, cobalt blue & engineering placards');
-  console.log('  [5] Custom Archetype      — Enter your own name, vibe, and domain\n');
+  console.log('  [5] Custom Archetype      — Enter your own name, vibe, and domain');
+  console.log('  [6] Story from Live URL   — Ingest Google News / TechCrunch / Verge URL\n');
 
-  const choice = await question('Select [1-5] (default: 1): ');
+  const choice = await question('Select [1-6] (default: 6): ');
   rl.close();
 
-  const selectedKey = choice || '1';
+  const selectedKey = choice || '6';
   if (PRESET_ARCHETYPES[selectedKey]) {
     return PRESET_ARCHETYPES[selectedKey]!;
+  }
+
+  if (selectedKey === '6') {
+    const rlUrl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const qUrl = (q: string): Promise<string> =>
+      new Promise((resolve) => rlUrl.question(q, (ans) => resolve(ans.trim())));
+
+    const inputUrl = await qUrl('Article or Google News URL: ');
+    const optionalVibe = await qUrl('Optional Vibe / Aesthetic (press Enter for auto-inference): ');
+    rlUrl.close();
+
+    return {
+      url: inputUrl,
+      vibe: optionalVibe || undefined,
+    };
   }
 
   const rlCustom = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -123,26 +155,30 @@ async function main() {
     const { brief: cliBrief, provider, runAudit } = parseArgs();
     const brief = cliBrief || (await promptUser());
 
-    console.log(`\nStarting React template generation for: "${brief.name}"...`);
-    console.log(`Vibe:   ${brief.vibe}`);
-    if (brief.domain) console.log(`Domain: ${brief.domain}`);
+    if (brief.url) {
+      console.log(`\nStarting Story-Driven React Generation from URL: ${brief.url}...`);
+    } else {
+      console.log(`\nStarting React template generation for: "${brief.name}"...`);
+      if (brief.vibe) console.log(`Vibe:   ${brief.vibe}`);
+      if (brief.domain) console.log(`Domain: ${brief.domain}`);
+    }
 
     const startTime = Date.now();
-    const result = await generateTemplateReference(brief, { provider, runAudit });
+    const result = await generateTemplateReference(brief, { provider, runAudit, url: brief.url });
     const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
 
     console.log('\n======================================================');
     console.log('   React Template Generated Successfully!             ');
     console.log('======================================================');
-    console.log(`Template:   ${result.brand.name} (${result.templateSlug})`);
-    console.log(`Directory:  ${result.templateDir}`);
-    console.log(`Slides:     ${result.slideCount} bespoke React + Tailwind components`);
-    console.log(`Time:       ${elapsedSec}s`);
+    console.log(`Story/Brand: ${result.brand.name} (${result.templateSlug})`);
+    console.log(`Directory:   ${result.templateDir}`);
+    console.log(`Slides:      ${result.slideCount} bespoke React + Tailwind components`);
+    console.log(`Time:        ${elapsedSec}s`);
 
     if (result.audit) {
-      console.log(`Audit:      Collisions: ${result.audit.totalCollisions} | Passed: ${result.audit.passed ? 'YES' : 'NO'}`);
+      console.log(`Audit:       Collisions: ${result.audit.totalCollisions} | Passed: ${result.audit.passed ? 'YES' : 'NO'}`);
       if (result.audit.errors.length > 0) {
-        console.log(`Errors:     ${result.audit.errors.join('; ')}`);
+        console.log(`Errors:      ${result.audit.errors.join('; ')}`);
       }
     }
 

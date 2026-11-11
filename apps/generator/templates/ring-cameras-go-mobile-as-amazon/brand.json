@@ -1,0 +1,25 @@
+{
+  "name": "Ars Technica",
+  "slug": "ring-cameras-go-mobile-as-amazon",
+  "vibe": "Investigative technology editorial: obsidian fields, restrained cyan, oversized headlines and precise mapping grids frame domestic surveillance with critical distance. Google Fonts pairing: Space Grotesk, Inter and IBM Plex Mono.",
+  "domain": "Artificial Intelligence / Consumer Robotics / Surveillance & Privacy",
+  "palette": {
+    "paper": "#0A0E17",
+    "ink": "#F3F4F1",
+    "accent": "#38BDF8",
+    "surface": "#141D2B",
+    "border": "#334155",
+    "subtle": "#A3B0C2"
+  },
+  "typography": {
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Inter",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+  },
+  "wordmark": "ARS TECHNICA",
+  "wordmarkStyle": "sans",
+  "handle": "@arstechnica",
+  "texture": "grid",
+  "motif": "crosshair"
+}

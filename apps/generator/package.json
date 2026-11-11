@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@loopreel/llm": "workspace:*",
+    "cheerio": "^1.0.0",
     "dotenv": "^17.4.2",
     "playwright": "^1.49.0",
     "react": "^18.3.1",
