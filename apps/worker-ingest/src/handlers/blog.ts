@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import { JobRepository } from '@loopreel/db';
 import { createQueue } from '@loopreel/queue';
+import type { Engine } from '@loopreel/schemas';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -118,6 +119,7 @@ export async function handleBlog(
   jobId: string,
   sourceUrl: string,
   logger: pino.Logger,
+  engine?: Engine,
 ): Promise<void> {
   const targetUrl = await resolveGoogleNewsUrl(sourceUrl, logger);
   logger.info({ sourceUrl, targetUrl }, 'Scraping blog/article content');
@@ -194,6 +196,7 @@ export async function handleBlog(
   await structureQueue.add(`job-${jobId}`, {
     jobId,
     rawText,
+    engine,
   });
 
   logger.info('Dispatched to structure queue');

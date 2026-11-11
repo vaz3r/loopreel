@@ -208,6 +208,9 @@ importers:
       '@loopreel/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@loopreel/generator':
+        specifier: workspace:*
+        version: link:../../packages/generator
       '@loopreel/llm':
         specifier: workspace:*
         version: link:../../packages/llm

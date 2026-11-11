@@ -1,0 +1,25 @@
+{
+  "name": "The Threshold Review",
+  "slug": "the-threshold-review",
+  "vibe": "Domestic calm meets autonomous surveillance: architectural grids, optical burgundy, and tightly bracketed typography turn the familiar floor plan into contested private space.",
+  "domain": "Domestic Robotics / Machine Vision / Privacy",
+  "palette": {
+    "paper": "#E7ECE5",
+    "ink": "#182923",
+    "accent": "#9B254D",
+    "surface": "#D6DFD5",
+    "border": "#A0AFA3",
+    "subtle": "#53665A"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Public Sans",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+  },
+  "wordmark": "THE THRESHOLD REVIEW",
+  "wordmarkStyle": "sans",
+  "handle": "@thresholdreview",
+  "texture": "grid",
+  "motif": "bracket"
+}

@@ -21,6 +21,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export interface CreateJobInput {
   sourceUrl: string;
   platform?: string;
+  engine?: 'bespoke' | 'classic';
   templateId?: string;
   generateText?: boolean;
   brandKit?: {

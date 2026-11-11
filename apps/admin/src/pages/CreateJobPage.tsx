@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Loader2, ChevronDown } from 'lucide-react';
+import { Loader2, ChevronDown, Sparkles } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { TemplateSelect } from '@/components/TemplateSelect';
@@ -16,7 +16,8 @@ export function CreateJobPage() {
   const createJob = useCreateJob();
   const [url, setUrl] = useState('');
   const [platform, setPlatform] = useState('instagram-feed');
-  const [templateId, setTemplateId] = useState('auto');
+  const [engine, setEngine] = useState<'bespoke' | 'classic'>('bespoke');
+  const [templateId, setTemplateId] = useState('bespoke');
   const [brandKit, setBrandKit] = useState<BrandKitValues>(() => {
     try {
       const saved = localStorage.getItem('loopreel_saved_brandkit');
@@ -37,7 +38,13 @@ export function CreateJobPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const sourceUrl = url.startsWith('http') ? url : `https://${url}`;
-    const input: CreateJobInput = { sourceUrl, platform, templateId, generateText };
+    const input: CreateJobInput = {
+      sourceUrl,
+      platform,
+      engine,
+      templateId: engine === 'bespoke' ? 'bespoke' : templateId,
+      generateText,
+    };
     if (brandKit && Object.keys(brandKit).length > 0) {
       input.brandKit = brandKit;
     }
@@ -67,18 +74,71 @@ export function CreateJobPage() {
             />
           </div>
 
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Generation Engine</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => { setEngine('bespoke'); setTemplateId('bespoke'); }}
+                className={`p-3 rounded-lg border text-left transition-all ${
+                  engine === 'bespoke'
+                    ? 'border-emerald-500/50 bg-emerald-500/10 text-text-primary'
+                    : 'border-border bg-surface-2 text-text-tertiary hover:border-zinc-700'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] font-medium text-emerald-400">Bespoke Codegen</span>
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">New</span>
+                </div>
+                <p className="text-[11px] text-text-tertiary mt-1 leading-snug">
+                  Autonomous brand design, custom layout topologies, and inline vector SVGs.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setEngine('classic'); setTemplateId('auto'); }}
+                className={`p-3 rounded-lg border text-left transition-all ${
+                  engine === 'classic'
+                    ? 'border-blue-500/50 bg-blue-500/10 text-text-primary'
+                    : 'border-border bg-surface-2 text-text-tertiary hover:border-zinc-700'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] font-medium text-blue-400">Classic Remotion</span>
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">Preset</span>
+                </div>
+                <p className="text-[11px] text-text-tertiary mt-1 leading-snug">
+                  Strict layout templates (The Paper of Record, The Globalist, etc.).
+                </p>
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Platform</Label>
               <PlatformSelect value={platform} onChange={setPlatform} />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Template</Label>
-              <TemplateSelect value={templateId} onChange={setTemplateId} />
-              <p className="text-[10px] text-text-tertiary">
-                {templateId === 'auto' ? 'AI classifier auto-selects' : 'Fixed template locked'}
-              </p>
-            </div>
+
+            {engine === 'classic' ? (
+              <div className="space-y-1.5">
+                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Classic Template</Label>
+                <TemplateSelect value={templateId} onChange={setTemplateId} />
+                <p className="text-[10px] text-text-tertiary">
+                  {templateId === 'auto' ? 'AI classifier auto-selects' : 'Fixed template locked'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Design Mode</Label>
+                <div className="h-9 px-3 rounded-md border border-emerald-900/40 bg-emerald-950/20 flex items-center gap-1.5 text-[12px] text-emerald-300">
+                  <Sparkles className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>Autonomous Art Direction</span>
+                </div>
+                <p className="text-[10px] text-text-tertiary">100% tailored React + Tailwind</p>
+              </div>
+            )}
           </div>
         </div>
 

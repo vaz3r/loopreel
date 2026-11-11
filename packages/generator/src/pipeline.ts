@@ -3,8 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { createLLMClient } from '@loopreel/llm';
-import type { BrandTokens, DeckData, SlideData, TemplatePackage } from './skeleton/types';
-import { ingestArticle, type ArticleIntel } from './ingest';
+import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
+import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
   type TemplateBrief,
   type StoryStrategy,
@@ -29,7 +29,7 @@ import {
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
-} from './prompt';
+} from './prompt.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_ROOT = path.resolve(__dirname, '../templates');

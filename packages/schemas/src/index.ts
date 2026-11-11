@@ -68,14 +68,18 @@ export const TEMPLATE_KEYS = [
 export type TemplateId = (typeof TEMPLATE_KEYS)[number];
 export type ClassicTemplateId = TemplateId;
 
-export const ALL_TEMPLATE_KEYS = ['auto', ...TEMPLATE_KEYS] as const;
+export const EngineEnum = z.enum(['bespoke', 'classic']);
+export type Engine = z.infer<typeof EngineEnum>;
+
+export const ALL_TEMPLATE_KEYS = ['auto', 'bespoke', ...TEMPLATE_KEYS] as const;
 export type TemplateInputId = (typeof ALL_TEMPLATE_KEYS)[number];
 
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
   platform: PlatformEnum.default('instagram-feed'),
-  templateId: z.enum(ALL_TEMPLATE_KEYS).default('auto'),
+  engine: EngineEnum.default('bespoke'),
+  templateId: z.enum(ALL_TEMPLATE_KEYS).default('bespoke'),
   brandKit: BrandKitSchema.optional(),
   generateText: z.boolean().default(false),
 });
@@ -86,6 +90,7 @@ export const IngestPayloadSchema = z.object({
   jobId: z.string().uuid(),
   sourceUrl: z.string().url(),
   sourceType: SourceTypeEnum,
+  engine: EngineEnum.optional(),
 });
 export type IngestPayload = z.infer<typeof IngestPayloadSchema>;
 
@@ -98,6 +103,7 @@ export type TranscribePayload = z.infer<typeof TranscribePayloadSchema>;
 export const StructurePayloadSchema = z.object({
   jobId: z.string().uuid(),
   rawText: z.string().min(10),
+  engine: EngineEnum.optional(),
 });
 export type StructurePayload = z.infer<typeof StructurePayloadSchema>;
 

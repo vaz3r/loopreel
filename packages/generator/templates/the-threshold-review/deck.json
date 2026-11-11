@@ -1,0 +1,233 @@
+{
+  "templateName": "The Threshold Review",
+  "templateSlug": "the-threshold-review",
+  "domain": "Domestic Robotics / Machine Vision / Privacy",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "THE THRESHOLD REVIEW",
+      "headline": "Ring Gives Surveillance Room To Roam",
+      "subheadline": "Flying and wheeled cameras bring indoor patrols—and new operational and privacy questions.",
+      "visualStyle": "airborne-grounded-editorial-hero",
+      "layoutTopology": "diagonal-dual-trajectory",
+      "telemetry": [
+        {
+          "label": "Ring Drone Cam starting price",
+          "value": "$250"
+        },
+        {
+          "label": "Ring Rover Cam price",
+          "value": "$1,000"
+        }
+      ],
+      "svgBlueprint": "Use Paper #E7ECE5 background, Ink #182923 outlines, Accent #9B254D trajectories and Surface #D6DFD5 label plates. Place abstract, non-dimensional drone and wheeled-camera glyphs at opposite ends of a diagonal composition. Give the drone an elevated curved route and Rover a floor-level route. Anchor exactly two price badges beside their respective devices. Reserve the upper quarter for editorial copy; imply no measured speed, distance or physical scale."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "release-gates",
+      "kicker": "THE RELEASE WINDOW",
+      "headline": "Two Launches, Different Degrees Of Certainty",
+      "subheadline": "Rover has a shipping schedule; Drone still needs FCC authorization.",
+      "visualStyle": "conditional-release-rail",
+      "layoutTopology": "stacked-horizontal-release-tracks",
+      "items": [
+        {
+          "title": "Ring Rover Cam",
+          "body": "Already available for preorder; shipping scheduled to start December 16, 2026."
+        },
+        {
+          "title": "Ring Drone Cam",
+          "body": "Amazon targets January 27, 2027, contingent on FCC authorization; email updates available."
+        }
+      ],
+      "svgBlueprint": "Draw two separated horizontal tracks on Paper #E7ECE5. End Rover’s Ink #182923 track at a solid scheduled-shipping marker; end Drone’s dashed track at an open Accent #9B254D authorization gate. Set exact dates in Surface #D6DFD5 endpoint panels. Tracks represent release status, not proportional elapsed time. Keep device names at the left and all copy above its associated track."
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "camera-comparison",
+      "kicker": "THE CAMERA PAYLOAD",
+      "headline": "Different Ways To Look Around",
+      "subheadline": "Drone combines a wide view with rotation; Rover scans designated locations.",
+      "visualStyle": "optical-sector-versus-scan-reticle",
+      "layoutTopology": "opposed-circular-instrument-fields",
+      "comparison": [
+        {
+          "entity": "Ring Drone Cam",
+          "body": "148-degree field of view; 360-degree rotation; 2K video; two low-light LEDs."
+        },
+        {
+          "entity": "Ring Rover Cam",
+          "body": "Livestreams and records in up to 4K; performs a 360-degree location scan."
+        }
+      ],
+      "svgBlueprint": "Place two large, unboxed circular instruments across a Paper #E7ECE5 canvas. For Drone, draw an accurate 148-degree Accent #9B254D viewing sector inside an Ink #182923 full-rotation arrow. For Rover, draw a full-circle scan ring around a stationary camera glyph. Attach resolution labels beneath each instrument. Represent Drone’s two LEDs with exactly two small marks. Avoid suggesting simultaneous panoramic recording or measured detection range."
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mapping-workflow",
+      "kicker": "BEFORE THE FIRST PATROL",
+      "headline": "First, Both Robots Map Your Space",
+      "subheadline": "AI Pilot uses cameras, specialized vision models, on-device sensors and cloud processing.",
+      "comparison": [
+        {
+          "entity": "Ring Drone Cam",
+          "body": "Customers carry the drone through indoor spaces to digitally map the floor plan."
+        },
+        {
+          "entity": "Ring Rover Cam",
+          "body": "Autonomous exploration during setup digitally maps the floor plan."
+        }
+      ],
+      "visualStyle": "floorplan-convergence-diagram",
+      "layoutTopology": "branching-workflows-to-shared-map",
+      "svgBlueprint": "Draw two input paths converging on a central schematic floor-plan outline. Use a hand-carry glyph on Drone’s branch and a wheeled exploration glyph on Rover’s branch. Render paths in Accent #9B254D, walls in Ink #182923 and mapped space in Surface #D6DFD5 over Paper #E7ECE5. Include a small cloud-processing glyph beside the shared AI Pilot caption without implying that the floor plan itself has a specified storage destination. Use no room dimensions or coverage scale."
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "drone-operating-envelope",
+      "kicker": "THE FLIGHT BUDGET",
+      "headline": "Eight Minutes, Under Controlled Conditions",
+      "subheadline": "Flight endurance and scheduled patrols each come with explicit qualifications.",
+      "items": [
+        {
+          "title": "Flight-time limit",
+          "body": "8 minutes on a new, fully-charged battery under controlled conditions."
+        },
+        {
+          "title": "Subscription dependency",
+          "body": "Set-route and scheduled operation reportedly requires Ring Protect; subscription price unspecified."
+        }
+      ],
+      "visualStyle": "monumental-endurance-dial",
+      "layoutTopology": "dominant-dial-with-bottom-condition-strip",
+      "svgBlueprint": "Make a large Ink #182923 endurance dial the dominant element on Paper #E7ECE5, with an Accent #9B254D terminal mark and the exact label '8 minutes.' Do not add percentage markings, estimated recharge time or other durations. Place the complete battery-condition sentence immediately below the dial. Use a single full-width Surface #D6DFD5 footer strip for the Ring Protect qualification, visually separate from the battery specification."
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "drone-navigation-bottleneck",
+      "kicker": "WHEN VISION STRUGGLES",
+      "headline": "Ordinary Interiors Can Complicate Drone Navigation",
+      "subheadline": "Amazon warns that these surfaces may degrade navigation performance.",
+      "items": [
+        {
+          "title": "Reflective flooring",
+          "body": "Polished marble or wet tile."
+        },
+        {
+          "title": "Featureless walls",
+          "body": "Blank matte walls."
+        },
+        {
+          "title": "Glass and mirrors",
+          "body": "Frameless glass and mirrors."
+        }
+      ],
+      "visualStyle": "architectural-material-hazard-section",
+      "layoutTopology": "single-room-cutaway-with-three-callouts",
+      "svgBlueprint": "Build one schematic room cutaway rather than separate cards. Position exactly three callouts around reflective flooring, a blank wall and a glass-or-mirror plane. Use Paper #E7ECE5 negative space, Surface #D6DFD5 architectural planes and Ink #182923 contours. An Accent #9B254D dashed drone route becomes uncertain near the highlighted surfaces. Do not depict a collision, guaranteed failure or quantified error rate."
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "rover-operating-envelope",
+      "kicker": "THE GROUND RULES",
+      "headline": "Rover’s Coverage Comes With Floor Rules",
+      "subheadline": "Amazon’s coverage claim does not remove its single-floor and terrain restrictions.",
+      "items": [
+        {
+          "title": "Claimed coverage",
+          "body": "Up to 5,000 square feet (465 square meters); not independently verified."
+        },
+        {
+          "title": "Indoor boundary",
+          "body": "Single-floor operation; cannot climb stairs."
+        },
+        {
+          "title": "Incompatible terrain",
+          "body": "Curved edges, sunken areas, black glossy floors; transitions exceeding 1.375 inches (3.5 centimeters)."
+        }
+      ],
+      "visualStyle": "coverage-footprint-with-threshold-section",
+      "layoutTopology": "large-footprint-over-two-constraint-zones",
+      "svgBlueprint": "Use a large, explicitly schematic Surface #D6DFD5 footprint in the upper half, labeled with the complete claimed coverage and verification qualification. Below, place an Ink #182923 stair-stop section and a floor-transition detail as two distinct constraint zones. Label the transition restriction exactly as greater than 1.375 inches (3.5 centimeters). Use Accent #9B254D boundary bars. Keep the remaining incompatible terrain in the same constraint zone; add no inferred dimensions or navigable room count."
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "data-retention",
+      "kicker": "WHERE THE RECORDINGS GO",
+      "headline": "Rover’s Event Videos Reach The Cloud",
+      "subheadline": "The article specifies Rover’s retention window, but not the drone’s separate period.",
+      "items": [
+        {
+          "title": "Rover event retention",
+          "body": "Doorbell-ring, motion-event and Live View videos: cloud storage up to 180 days."
+        },
+        {
+          "title": "Unspecified schedules",
+          "body": "Drone video retention and encryption-key retention or deletion schedules are not specified."
+        }
+      ],
+      "visualStyle": "cloud-retention-ledger",
+      "layoutTopology": "vertical-data-flow-with-open-ledger",
+      "svgBlueprint": "Draw a vertical Ink #182923 flow from a Rover camera glyph into a Surface #D6DFD5 cloud archive on Paper #E7ECE5. Put the three event types together in one source label, not separate cards. Attach an Accent #9B254D bracket labeled 'up to 180 days.' Beneath the archive, use an open-ended ledger outline for the unspecified schedules. Do not imply automatic deletion at day 180 or a known encryption-key lifecycle."
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "privacy-accountability",
+      "kicker": "THE TRUST TEST",
+      "headline": "Encryption Meets A Troubled Privacy Record",
+      "subheadline": "Amazon promises protection; EFF says the encryption remains well short of end-to-end.",
+      "items": [
+        {
+          "title": "2023 FTC charges",
+          "body": "Alleged employee/contractor viewing of private recordings; weak safeguards enabled hackers’ access: 55,000 US accounts."
+        },
+        {
+          "title": "September 2026 introduction",
+          "body": "Amazon says Throw Away the Key Encryption will protect both robots’ videos."
+        },
+        {
+          "title": "EFF’s assessment",
+          "body": "Improves former default settings, but remains well short of end-to-end encryption."
+        }
+      ],
+      "visualStyle": "accountability-dossier-stack",
+      "layoutTopology": "three-tier-evidence-staircase",
+      "svgBlueprint": "Arrange exactly three wide, vertically stepped evidence bands on Paper #E7ECE5: the FTC charges, Amazon’s encryption statement and EFF’s assessment. Use Ink #182923 text rules, Surface #D6DFD5 bands and Accent #9B254D attribution markers. Give '55,000 US accounts' prominence within the FTC band without separating it into another item. Keep attribution visible in each band. Avoid shield or lock imagery that could imply independently verified protection."
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "closing-disclosure-audit",
+      "kicker": "THE THRESHOLD REVIEW / BOTTOM LINE",
+      "headline": "The Specification Sheet Still Has Gaps",
+      "subheadline": "The supplied article leaves practical hardware and subscription questions unanswered.",
+      "items": [
+        {
+          "title": "Both devices",
+          "body": "Physical dimensions, battery capacity and charging duration are not stated."
+        },
+        {
+          "title": "Rover endurance",
+          "body": "Battery life is not stated."
+        },
+        {
+          "title": "Subscription terms",
+          "body": "Ring Protect pricing and any Rover-specific subscription requirement are not specified."
+        }
+      ],
+      "visualStyle": "open-specification-editorial-checklist",
+      "layoutTopology": "full-height-headline-spine-with-three-open-rows",
+      "svgBlueprint": "Set the headline in a tall left-hand editorial column on Paper #E7ECE5. On the right, draw exactly three spacious specification rows with Ink #182923 labels and Surface #D6DFD5 rules. Use an open Accent #9B254D bracket at the end of each row to signal missing disclosure, not product failure. Include the complete item text inline. Add no invented measurements, estimated battery life, subscription prices or purchase recommendation."
+    }
+  ]
+}

@@ -3,8 +3,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import readline from 'node:readline';
-import { generateTemplateReference } from './engine';
-import type { TemplateBrief } from './prompt';
+import { generateTemplateReference } from './engine.js';
+import type { TemplateBrief } from './prompt.js';
 
 // Robustly locate and load root .env
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -210,4 +210,17 @@ async function main() {
   }
 }
 
-main();
+export { generateTemplateReference } from './engine.js';
+export type { GenerationResult } from './engine.js';
+export { runTemplatePipeline } from './pipeline.js';
+export type { PipelineOptions, PipelineResult } from './pipeline.js';
+export { auditTemplateStudio } from './visual-auditor.js';
+export type { VisualAuditResult } from './visual-auditor.js';
+export type { TemplateBrief } from './prompt.js';
+export type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
+
+// Run CLI main only when executed directly
+const invokedFile = process.argv[1];
+if (invokedFile && (invokedFile.endsWith('/generator/src/index.ts') || invokedFile.endsWith('\\generator\\src\\index.ts') || invokedFile.endsWith('src/index.ts'))) {
+  main();
+}

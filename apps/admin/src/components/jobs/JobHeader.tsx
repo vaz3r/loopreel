@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Download, RotateCcw, ExternalLink } from 'lucide-react';
 
 interface JobHeaderProps {
   jobId: string;
   status: string;
+  studioUrl?: string | null;
   onRetry: () => void;
   isRetrying: boolean;
 }
 
-export function JobHeader({ jobId, status, onRetry, isRetrying }: JobHeaderProps) {
+export function JobHeader({ jobId, status, studioUrl, onRetry, isRetrying }: JobHeaderProps) {
   return (
     <div className="flex items-center gap-3">
       <Link to="/jobs" className="text-text-quaternary hover:text-text-primary transition-colors">
@@ -19,6 +20,14 @@ export function JobHeader({ jobId, status, onRetry, isRetrying }: JobHeaderProps
         <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">Job Details</h1>
         <p className="text-[11px] text-text-quaternary font-mono mt-0.5">{jobId}</p>
       </div>
+      {studioUrl && (
+        <Button asChild variant="outline" className="h-8 rounded-md border-emerald-800/60 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 hover:text-emerald-200 px-3 text-[13px] font-medium gap-1.5">
+          <a href={studioUrl} target="_blank" rel="noopener noreferrer">
+            <ExternalLink className="h-3.5 w-3.5 text-emerald-400" />
+            Open in Studio
+          </a>
+        </Button>
+      )}
       {status === 'complete' && (
         <Button asChild className="h-8 rounded-md bg-text-primary text-background hover:bg-text-secondary px-3 text-[13px] font-medium">
           <a href={`/api/jobs/${jobId}/download?format=all`}>

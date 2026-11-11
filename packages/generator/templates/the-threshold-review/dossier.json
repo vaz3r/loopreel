@@ -1,0 +1,330 @@
+{
+  "articleTitle": "Ring cameras go mobile as Amazon debuts AI-powered security drone and robot",
+  "publisher": "Ars Technica",
+  "byline": "Staff Bureau",
+  "summary": "Amazon announced Ring Drone Cam and Ring Rover Cam, mobile security devices that use AI Pilot, on-device sensors and cloud processing to map indoor spaces and navigate patrol routes, with targeted availability on January 27, 2027, and shipping on December 16, 2026, respectively. The article contrasts Amazon’s privacy claims with operational restrictions, the drone’s pending FCC authorization, EFF criticism of Ring’s encryption and surveillance practices, and a 2023 FTC investigation describing employee access to private recordings and safeguards that allowed hackers to access 55,000 US customers’ accounts.",
+  "entities": [
+    {
+      "name": "Amazon",
+      "type": "Company",
+      "role": "Announced the Ring Robotics products and makes the product capability and privacy claims reported in the article."
+    },
+    {
+      "name": "Ring",
+      "type": "Company",
+      "role": "Amazon subsidiary whose security products and privacy practices are discussed."
+    },
+    {
+      "name": "Ring Drone Cam",
+      "type": "Product",
+      "role": "Upcoming flying indoor security camera that appears to succeed Ring Always Home Cam."
+    },
+    {
+      "name": "Ring Rover Cam",
+      "type": "Product",
+      "role": "Wheeled autonomous security robot marketed for business."
+    },
+    {
+      "name": "AI Pilot",
+      "type": "Technology",
+      "role": "Uses cameras, specialized vision models, on-device sensors and cloud processing to map spaces, suggest patrol points and navigate obstacles."
+    },
+    {
+      "name": "Ring Protect",
+      "type": "Subscription plan",
+      "role": "Subscription identified as necessary for the drone to follow a set route and schedule."
+    },
+    {
+      "name": "Alexa Home Map",
+      "type": "Software",
+      "role": "Interactive map showing Amazon-linked devices through which customers can directly control the drone."
+    },
+    {
+      "name": "Federal Communications Commission",
+      "type": "Government agency",
+      "role": "Must authorize Ring Drone Cam before it goes on sale."
+    },
+    {
+      "name": "Federal Trade Commission",
+      "type": "Government agency",
+      "role": "Conducted the 2023 investigation describing improper access to Ring recordings and inadequate account safeguards."
+    },
+    {
+      "name": "Electronic Frontier Foundation",
+      "type": "Nonprofit organization",
+      "role": "Digital rights organization criticizing Ring’s encryption limitations and surveillance practices."
+    },
+    {
+      "name": "Jamie Siminoff",
+      "type": "Person",
+      "role": "Ring founder whose approach to Ring devices is criticized by EFF."
+    },
+    {
+      "name": "Ryan Calo",
+      "type": "Person",
+      "role": "University of Washington law and technology researcher who previously described privacy risks associated with flying security cameras."
+    },
+    {
+      "name": "University of Washington",
+      "type": "University",
+      "role": "Ryan Calo’s stated institutional affiliation."
+    },
+    {
+      "name": "Ring Always Home Cam",
+      "type": "Product",
+      "role": "Earlier flying security camera temporarily available by invitation as a Day 1 Edition product in September 2021."
+    },
+    {
+      "name": "Amazon Astro",
+      "type": "Product",
+      "role": "Invite-only beta home-monitoring robot whose customer feedback inspired Ring Rover."
+    },
+    {
+      "name": "Throw Away the Key Encryption",
+      "type": "Technology",
+      "role": "Ring encryption introduced in September 2026 that Amazon says will protect videos from both new devices."
+    },
+    {
+      "name": "Familiar Faces",
+      "type": "Feature",
+      "role": "Optional facial recognition feature available to owners of fixed Ring doorbell cameras starting in December 2025 and already the subject of a class action lawsuit."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "November 10",
+      "label": "Amazon announcement date",
+      "context": "The article identifies the announcement’s month and day without explicitly stating its year."
+    },
+    {
+      "value": "the end of 2026",
+      "label": "Initial Ring Rover Cam delivery window",
+      "context": "The article initially describes when Rover is expected to reach customers."
+    },
+    {
+      "value": "early 2027",
+      "label": "Initial Ring Drone Cam delivery window",
+      "context": "The article initially describes when the drone is expected to reach customers."
+    },
+    {
+      "value": "September 2021",
+      "label": "Ring Always Home Cam invitation-only availability",
+      "context": "Temporarily available for purchase as a Day 1 Edition product."
+    },
+    {
+      "value": "$250",
+      "label": "Ring Drone Cam starting price",
+      "context": "The article says the drone has the same starting price as Ring Always Home Cam."
+    },
+    {
+      "value": "January 27, 2027",
+      "label": "Target Ring Drone Cam availability",
+      "context": "Amazon’s target depends on obtaining FCC authorization."
+    },
+    {
+      "value": "148-degree",
+      "label": "Drone camera field of view",
+      "context": "Reported onboard camera capability."
+    },
+    {
+      "value": "360-degree",
+      "label": "Drone camera rotation",
+      "context": "Reported alongside the camera’s field of view and resolution."
+    },
+    {
+      "value": "2K",
+      "label": "Drone video resolution",
+      "context": "Reported onboard camera capability."
+    },
+    {
+      "value": "Two",
+      "label": "Drone LED light count",
+      "context": "Lights activate in low-light conditions to illuminate the camera’s scene."
+    },
+    {
+      "value": "8 minutes",
+      "label": "Drone flight-time limit",
+      "context": "Applies when operating on a new, fully-charged battery under controlled conditions."
+    },
+    {
+      "value": "$1,000",
+      "label": "Ring Rover Cam price",
+      "context": "The article says the robot is already available for preorder."
+    },
+    {
+      "value": "December 16, 2026",
+      "label": "Scheduled Ring Rover Cam shipping date",
+      "context": "Scheduled start of customer shipments."
+    },
+    {
+      "value": "up to 4K",
+      "label": "Rover livestream and recording resolution",
+      "context": "Available while patrolling or performing a scan at a designated location."
+    },
+    {
+      "value": "360-degree",
+      "label": "Rover scan capability",
+      "context": "Scan performed at a designated location."
+    },
+    {
+      "value": "up to 180 days",
+      "label": "Rover event-video cloud storage",
+      "context": "Videos triggered by doorbell rings, motion events and Live View events are stored for sharing and replaying."
+    },
+    {
+      "value": "single-floor",
+      "label": "Rover operating environment",
+      "context": "Designed for indoor operation and lacks stair-climbing capability."
+    },
+    {
+      "value": "1.375 inches (3.5 centimeters)",
+      "label": "Rover flooring-transition restriction",
+      "context": "Amazon warns that Rover is not compatible with flooring transitions greater than this measurement."
+    },
+    {
+      "value": "up to 5,000 square feet (465 square meters)",
+      "label": "Rover claimed coverage area",
+      "context": "Attributed to Amazon’s product description."
+    },
+    {
+      "value": "2023",
+      "label": "FTC investigation",
+      "context": "Ring was charged with allowing employees and contractors to watch recordings of customers’ private spaces."
+    },
+    {
+      "value": "55,000",
+      "label": "US customer accounts accessed by hackers",
+      "context": "The FTC described Ring’s lackluster safeguards as allowing this access."
+    },
+    {
+      "value": "September 2026",
+      "label": "Throw Away the Key Encryption introduction",
+      "context": "Amazon says this encryption will protect videos from the new drone and Rover."
+    },
+    {
+      "value": "December 2025",
+      "label": "Familiar Faces availability began",
+      "context": "Owners of fixed Ring doorbell cameras could enable facial recognition of visitors."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "specialized vision models, on-device sensors and cloud processing",
+      "speaker": "Amazon",
+      "role": "Product announcer",
+      "context": "Components used with device cameras by AI Pilot to plan routes and navigate obstacles."
+    },
+    {
+      "quote": "new, fully-charged battery under controlled conditions",
+      "speaker": "Amazon",
+      "role": "Product-description source",
+      "context": "Conditions attached to the drone’s 8 minutes of flight time."
+    },
+    {
+      "quote": "polished marble or wet tile",
+      "speaker": "Amazon",
+      "role": "Product-description source",
+      "context": "Examples of reflective surfaces that may degrade drone navigation performance."
+    },
+    {
+      "quote": "autonomous way to check on your home that has never existed before",
+      "speaker": "Amazon",
+      "role": "Product marketer",
+      "context": "Claim about the drone’s home-monitoring capabilities."
+    },
+    {
+      "quote": "an autonomous security robot designed for business",
+      "speaker": "Amazon",
+      "role": "Product marketer",
+      "context": "Description of the $1,000 Ring Rover Cam."
+    },
+    {
+      "quote": "curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), and black glossy floors",
+      "speaker": "Amazon",
+      "role": "Product-description source",
+      "context": "Conditions and surfaces identified as incompatible with Rover."
+    },
+    {
+      "quote": "privacy and security without compromise",
+      "speaker": "Amazon",
+      "role": "Product marketer",
+      "context": "Claim about Ring Robotics, accompanied by references to recording indicators and notifications."
+    },
+    {
+      "quote": "surveillance-first-privacy-last",
+      "speaker": "Electronic Frontier Foundation",
+      "role": "Digital rights nonprofit",
+      "context": "EFF’s characterization of Ring founder Jamie Siminoff’s approach; not a quotation attributed to Siminoff."
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Ring Drone Cam",
+      "specs": [
+        "Flying indoor security camera.",
+        "148-degree field of view.",
+        "360-degree rotation.",
+        "2K video resolution.",
+        "Two LED lights activate in low-light conditions.",
+        "Limited to 8 minutes of flight time on a new, fully-charged battery under controlled conditions.",
+        "Includes a charging docking station.",
+        "AI Pilot uses cameras, specialized vision models, on-device sensors and cloud processing.",
+        "Setup requires the customer to carry the drone through indoor spaces so AI Pilot can digitally map the floor plan.",
+        "AI Pilot can supposedly identify rooms and suggest patrol points near doors, windows or sensitive business locations.",
+        "Can supposedly follow a set route and schedule for Ring Protect subscribers.",
+        "Can automatically fly set routes in response to a notification from a Ring camera, sensor or alarm.",
+        "Can be controlled directly from Alexa Home Map.",
+        "Navigation performance may degrade around reflective surfaces such as polished marble or wet tile, featureless blank matte walls, or transparent surfaces such as frameless glass and mirrors.",
+        "Physical dimensions, battery capacity, charging duration, quantified coverage area and a specific floor-count restriction are not stated in the supplied article."
+      ],
+      "price": "$250",
+      "availability": "Amazon aims for January 27, 2027, contingent on FCC authorization; customers can register for email updates."
+    },
+    "deviceB": {
+      "name": "Ring Rover Cam",
+      "specs": [
+        "Wheeled autonomous security robot designed for business.",
+        "Livestreams and records in up to 4K video resolution.",
+        "Can perform a 360-degree scan at a designated location.",
+        "AI Pilot uses cameras, specialized vision models, on-device sensors and cloud processing.",
+        "Autonomous exploration during setup allows AI Pilot to digitally map the floor plan.",
+        "Automatically responds to connected Ring-device alerts by following preprogrammed patrol points.",
+        "Designed for a single-floor, indoor environment; cannot climb stairs.",
+        "Not compatible with curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), or black glossy floors.",
+        "Automatically adjustable mast allows the camera to peer over counters, shelving and other obstacles.",
+        "Claimed coverage of up to 5,000 square feet (465 square meters).",
+        "Includes a siren and light tower.",
+        "Includes a microphone for two-way audio communication.",
+        "Doorbell-ring, motion-event and Live View event videos are stored in the cloud for sharing and replaying for up to 180 days.",
+        "Physical dimensions, mast height, battery life, battery capacity and charging duration are not stated in the supplied article."
+      ],
+      "price": "$1,000",
+      "availability": "Already available for preorder; scheduled to start shipping on December 16, 2026."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "Amazon describes Ring Robotics as offering “privacy and security without compromise,” citing LED indicators and screen notifications when video and audio recording are active. Amazon also says videos from both devices will be protected by Throw Away the Key Encryption, introduced in September 2026.",
+    "criticismOrAlarm": "EFF describes Throw Away the Key Encryption as an improvement over Ring’s former default settings but still well short of end-to-end encryption. EFF also criticizes Jamie Siminoff’s approach and Ring’s reintroduction of features allowing law enforcement to request footage or live-stream access from users’ home security devices. The article warns that mobile AI-enabled cameras could create additional privacy risks.",
+    "regulatoryOrHistoricalPrecedent": "In a 2023 FTC investigation, Ring was charged with allowing employees and contractors to watch recordings of customers’ private spaces; the FTC also described safeguards that allowed hackers to access 55,000 US customers’ accounts. Ring Always Home Cam previously prompted privacy concerns, with University of Washington researcher Ryan Calo describing additional opportunities for indoor surveillance and corporate access to sensitive or identifying details of homes and businesses. Ring’s Familiar Faces feature, available for fixed Ring doorbell cameras starting in December 2025, is already the subject of a class action lawsuit. The article does not identify facial recognition as a feature of the new robots."
+  },
+  "hiddenCatchesAndLimits": [
+    "AI Pilot uses cloud processing as well as on-device sensors; the described system is not local-only.",
+    "Both devices digitally map the customer’s home or business floor plan during setup.",
+    "The article explicitly ties the drone’s set-route and scheduled operation to a Ring Protect subscription; it does not specify a subscription price or a Rover-specific subscription requirement.",
+    "Ring Drone Cam still requires FCC authorization before going on sale, making January 27, 2027, a conditional availability target.",
+    "The drone’s 8 minutes of flight time is specified for a new, fully-charged battery under controlled conditions.",
+    "Drone navigation may degrade around polished marble, wet tile, featureless blank matte walls, frameless glass and mirrors.",
+    "Rover is restricted to a single-floor, indoor environment and cannot climb stairs.",
+    "Rover is incompatible with curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), and black glossy floors.",
+    "Rover coverage is claimed to be up to 5,000 square feet (465 square meters), not an independently verified performance result.",
+    "Rover videos triggered by doorbell rings, motion events and Live View events are stored in the cloud for up to 180 days.",
+    "The article does not specify a separate drone video-retention period or an encryption-key retention or deletion schedule.",
+    "EFF says Throw Away the Key Encryption remains well short of end-to-end encryption despite improving on Ring’s former default settings.",
+    "The article makes no claim that the new robots implement facial recognition or similar AI-powered identification of people.",
+    "The supplied article does not provide physical dimensions for either device or battery-life specifications for Rover."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

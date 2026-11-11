@@ -1,6 +1,8 @@
-import { JobRepository } from '@loopreel/db';
+import { JobRepository, AssetRepository, type InsertAssetParams } from '@loopreel/db';
 import { createWorker, createQueue } from '@loopreel/queue';
 import { classifyError, type StructurePayload } from '@loopreel/schemas';
+import { uploadSlide } from '@loopreel/storage';
+import { generateTemplateReference } from '@loopreel/generator';
 import { getTemplate, getPrompt, autoSelectTemplate, paginateContract, TEMPLATES, introspectSchema, introspectSchemaConcise } from '@loopreel/loop/bridge';
 import { createLLMClient, parseLlmXmlOutput, generateSlides, calculateCost } from '@loopreel/llm';
 import type { TemplateInfo } from '@loopreel/llm';
@@ -8,7 +10,8 @@ import { validateInput } from '@loopreel/llm';
 import { sanitizeSlides } from './slide-sanitizer.js';
 import { fetchImagesForSlides } from './image-fetcher.js';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import fs from 'node:fs';
+import path, { join } from 'node:path';
 import pino from 'pino';
 
 const DEBUG_LOG = process.env['DEBUG_LOG'] === 'true';
@@ -74,6 +77,80 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
   }
 
   try {
+    const isBespoke = existing.template_id === 'bespoke' ||
+      job.data.engine === 'bespoke' ||
+      ((existing.brand_kit as any)?.engine === 'bespoke');
+
+    if (isBespoke) {
+      jobLogger.info({ sourceUrl: existing.source_url }, 'Processing via Bespoke Codegen Engine (@loopreel/generator)...');
+
+      // Run bespoke generation pipeline with parallel codegen (N=3) and automated visual audit
+      const result = await generateTemplateReference(
+        { url: existing.source_url },
+        { runAudit: true, concurrency: 3 }
+      );
+
+      jobLogger.info({
+        templateSlug: result.templateSlug,
+        slideCount: result.slideCount,
+        collisions: result.audit?.totalCollisions ?? 0,
+      }, 'Bespoke codegen completed, uploading slide snapshots to storage');
+
+      // Upload screenshots to storage and create asset records
+      const screenshotsDir = result.audit?.screenshotsDir ||
+        path.resolve(result.templateDir, 'screenshots');
+
+      const assets: InsertAssetParams[] = [];
+
+      for (let i = 0; i < result.slideCount; i++) {
+        const slideFileName = `slide-${String(i + 1).padStart(2, '0')}.png`;
+        const filePath = path.join(screenshotsDir, slideFileName);
+        if (fs.existsSync(filePath)) {
+          const buffer = await fs.promises.readFile(filePath);
+          const r2Key = await uploadSlide(jobId, i, buffer);
+          assets.push({
+            jobId,
+            formatType: 'carousel_slide',
+            slideIndex: i,
+            storageUrl: r2Key,
+          });
+        }
+      }
+
+      // Generate companion social posts if enabled
+      if (existing.generate_text && result.deck?.slides) {
+        const linkedinText = result.deck.slides
+          .map((s: { headline?: string; body?: string }) => `${s.headline ?? ''}\n${s.body ?? ''}`.trim())
+          .join('\n\n');
+
+        const twitterThread = result.deck.slides
+          .map((s: { headline?: string; body?: string }, idx: number) => `${idx + 1}/${result.slideCount} ${s.headline ?? ''}\n${s.body ?? ''}`.trim())
+          .join('\n\n');
+
+        assets.push({ jobId, formatType: 'linkedin_post', contentText: linkedinText });
+        assets.push({ jobId, formatType: 'twitter_thread', contentText: twitterThread });
+      }
+
+      await AssetRepository.insertBatch(assets);
+      await JobRepository.updateTemplate(jobId, result.templateSlug);
+      await JobRepository.updateStatus(jobId, 'complete', {
+        contentPayload: {
+          templateSlug: result.templateSlug,
+          brand: result.brand,
+          deck: result.deck,
+          audit: result.audit,
+        },
+        slideCount: result.slideCount,
+      });
+
+      jobLogger.info({
+        jobId,
+        templateSlug: result.templateSlug,
+        assetCount: assets.length,
+      }, 'Bespoke job successfully completed');
+      return;
+    }
+
     let targetTemplateId = existing.template_id;
     const isFixedTemplate = Boolean(existing.template_id && existing.template_id !== 'auto');
 

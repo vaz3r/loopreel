@@ -49,7 +49,7 @@ const worker = createWorker<IngestPayload>('ingest', async (job) => {
     if (sourceType === 'youtube') {
       await handleYouTube(jobId, sourceUrl, jobLogger);
     } else {
-      await handleBlog(jobId, sourceUrl, jobLogger);
+      await handleBlog(jobId, sourceUrl, jobLogger, job.data.engine);
     }
 
     await writeDebug('00-ingest-complete.json', JSON.stringify({ sourceType, sourceUrl, jobId }, null, 2));

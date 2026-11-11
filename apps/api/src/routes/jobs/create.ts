@@ -25,7 +25,8 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
         properties: {
           sourceUrl: { type: 'string', format: 'uri' },
           platform: { type: 'string', enum: getPlatformIds(), default: 'instagram-feed' },
-          templateId: { type: 'string', enum: ALL_TEMPLATE_KEYS, default: 'auto' },
+          engine: { type: 'string', enum: ['bespoke', 'classic'], default: 'bespoke' },
+          templateId: { type: 'string', enum: ALL_TEMPLATE_KEYS, default: 'bespoke' },
           brandKit: {
             type: 'object',
             properties: {
@@ -52,19 +53,28 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, platform, templateId, brandKit, generateText } = parse.data;
+    const { sourceUrl, platform, engine, templateId, brandKit, generateText } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
+
+    const targetTemplateId = engine === 'bespoke'
+      ? (templateId === 'auto' ? 'bespoke' : templateId)
+      : (templateId === 'bespoke' ? 'auto' : (templateId ?? 'auto'));
+
+    const effectiveBrandKit = {
+      ...(brandKit ?? {}),
+      engine,
+    };
 
     const jobId = await JobRepository.create({
       sourceUrl,
       sourceType,
-      templateId: templateId ?? 'auto',
+      templateId: targetTemplateId,
       platform: platform ?? 'instagram-feed',
-      brandKit: brandKit ?? {},
+      brandKit: effectiveBrandKit,
       generateText: generateText ?? false,
     });
 
-    const jobPayload = { jobId, sourceUrl, sourceType };
+    const jobPayload = { jobId, sourceUrl, sourceType, engine };
 
     await OutboxRepository.create({
       queueName: 'ingest',

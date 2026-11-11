@@ -1,5 +1,5 @@
-import type { BrandTokens, SlideData } from './skeleton/types';
-import type { ArticleIntel } from './ingest';
+import type { BrandTokens, SlideData } from './skeleton/types.js';
+import type { ArticleIntel } from './ingest.js';
 
 export interface TemplateBrief {
   name?: string;
@@ -68,7 +68,7 @@ Return JSON matching:
 }`;
 }
 
-export function buildArticleBrandUserPrompt(article: ArticleIntel, brief?: TemplateBrief): string {
+export function buildArticleBrandUserPrompt(article: ArticleIntel, _brief?: TemplateBrief): string {
   return `Analyze this journalism reporting and autonomously establish a 100% BESPOKE Publication Identity and Brand Tokens:
 
 Article Title: "${article.title}"
@@ -270,7 +270,7 @@ Return strictly valid JSON matching StoryStrategy.`;
 
 export function buildStoryStrategyUserPrompt(
   dossier: GroundTruthDossier,
-  article: ArticleIntel
+  _article?: ArticleIntel
 ): string {
   return `Formulate the EditorialStrategy using this verified ground truth:
 Article: "${dossier.articleTitle}" (${dossier.publisher})
@@ -361,13 +361,13 @@ Rules: Zero corporate filler, concise statements (max 20 words per card body), s
 Return strictly valid JSON array of slide objects.`;
 }
 
-export function buildDeckBatch1Prompt(brief: TemplateBrief, brand: BrandTokens): string {
+export function buildDeckBatch1Prompt(_brief: TemplateBrief, brand: BrandTokens): string {
   return `Author Batch 1 (Slides 1–9) for ${brand.name} (${brand.domain}).
 Archetypes: cover, list, image-split, telemetry, dialogue, quadrant, case-study, debunk, grid.
 Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
-export function buildDeckBatch2Prompt(brief: TemplateBrief, brand: BrandTokens): string {
+export function buildDeckBatch2Prompt(_brief: TemplateBrief, brand: BrandTokens): string {
   return `Author Batch 2 (Slides 10–17) for ${brand.name} (${brand.domain}).
 Archetypes: timeline, pullquote, hero-cta, hero-stat, step-by-step, dos-and-donts, checklist, anatomy.
 Keep card text concise under 20 words each. Return strictly JSON array.`;

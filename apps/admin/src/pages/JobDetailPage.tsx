@@ -49,11 +49,16 @@ export function JobDetailPage() {
   const linkedinPost = job.assets.find((a) => a.formatType === 'linkedin_post' && a.contentText);
   const twitterThread = job.assets.find((a) => a.formatType === 'twitter_thread' && a.contentText);
 
+  const CLASSIC_TEMPLATES = ['paper-of-record', 'the-globalist', 'the-curator', 'the-academic', 'the-signal', 'the-field-notes'];
+  const templateSlug = (job.contentPayload as any)?.templateSlug || (!CLASSIC_TEMPLATES.includes(job.templateId) && job.templateId !== 'auto' && job.templateId !== 'bespoke' ? job.templateId : null);
+  const studioUrl = templateSlug ? `http://localhost:5174/?template=${templateSlug}` : null;
+
   return (
     <div className="space-y-8">
       <JobHeader
         jobId={job.id}
         status={job.status}
+        studioUrl={studioUrl}
         onRetry={handleRetry}
         isRetrying={retryMutation.isPending}
       />

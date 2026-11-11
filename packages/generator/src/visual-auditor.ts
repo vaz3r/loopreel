@@ -1,4 +1,4 @@
-import { chromium, type Page } from 'playwright';
+import { chromium } from 'playwright';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -67,7 +67,7 @@ export async function auditTemplateStudio(
           }
 
           // Check mobile legibility floor (0.36x phone scale rule: font < 20px is illegible on mobile)
-          const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3 ? el.textContent?.trim() : '';
+          const text = el.childNodes.length === 1 && el.childNodes[0]?.nodeType === 3 ? el.textContent?.trim() : '';
           // Ignore frame header and footer elements outside main content
           const isInsideMain = !!el.closest('main');
           if (isInsideMain && text && text.length > 1) {

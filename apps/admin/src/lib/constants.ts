@@ -9,6 +9,7 @@ export const PLATFORM_LABELS: Record<string, string> = {
 };
 
 export const TEMPLATE_LABELS: Record<string, string> = {
+  bespoke: 'Bespoke (Autonomous Design Engine)',
   auto: 'Auto (AI Dynamic Classifier)',
   'paper-of-record': 'The Paper of Record (Broadsheet)',
   'the-globalist': 'The Globalist (Newsprint Digest)',
