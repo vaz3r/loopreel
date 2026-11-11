@@ -1,0 +1,25 @@
+{
+  "name": "Carbon & Consequence",
+  "slug": "carbon-and-consequence",
+  "vibe": "An energy-and-climate broadsheet: financial salmon, petroleum-dark ink, and restrained forest-green signals. Archival typography meets measured telemetry, emphasizing long-term trends over celebratory headlines.",
+  "domain": "Climate / Energy Markets / Geopolitics",
+  "palette": {
+    "paper": "#EBD4C3",
+    "ink": "#202B27",
+    "accent": "#21664D",
+    "surface": "#DCC1AA",
+    "border": "#A58D7D",
+    "subtle": "#665E55"
+  },
+  "typography": {
+    "headlineFont": "Fraunces",
+    "bodyFont": "Public Sans",
+    "monoFont": "IBM Plex Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  "wordmark": "CARBON & CONSEQUENCE",
+  "wordmarkStyle": "serif",
+  "handle": "@carbonandconsequence",
+  "texture": "grid",
+  "motif": "coord"
+}

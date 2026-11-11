@@ -65,6 +65,7 @@ export interface PipelineOptions {
   brief?: TemplateBrief;
   url?: string;
   provider?: string;
+  concurrency?: number;
   onProgress?: (stage: string, current: number, total: number) => void;
 }
 
@@ -74,6 +75,29 @@ export interface PipelineResult {
   brand: BrandTokens;
   deck: DeckData;
   slideCount: number;
+}
+
+async function runConcurrentPool<T, R>(
+  items: T[],
+  concurrency: number,
+  taskFn: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let currentIndex = 0;
+
+  async function worker() {
+    while (currentIndex < items.length) {
+      const idx = currentIndex++;
+      results[idx] = await taskFn(items[idx]!, idx);
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(concurrency, items.length) },
+    () => worker()
+  );
+  await Promise.all(workers);
+  return results;
 }
 
 export async function runTemplatePipeline(options: PipelineOptions): Promise<PipelineResult> {
@@ -307,15 +331,15 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   }
 
   // ==========================================================================
-  // PASS 6: PRINCIPAL REACT ENGINEER (BESPOKE CODE GENERATION PER SLIDE)
+  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 6: Principal React Engineer Authoring Bespoke Slide Components...`);
+  const concurrency = options.concurrency || 3;
+  console.log(
+    `[Pipeline] >>> Pass 6: Principal React Engineer Synthesizing Slides in Parallel (Concurrency: ${concurrency})...`
+  );
 
-  const slideExports: { filename: string; componentName: string }[] = [];
-
-  for (let i = 0; i < deck.slides.length; i++) {
+  const slideTasks = deck.slides.map((slideData, i) => async () => {
     const slideNumber = i + 1;
-    const slideData = deck.slides[i]!;
     const blueprint = blueprints[i] || blueprints.find((b) => b.slideId === slideData.id);
     const padNum = String(slideNumber).padStart(2, '0');
     const cleanType = (slideData.type || 'slide').replace(/[^a-zA-Z0-9]/g, '');
@@ -324,9 +348,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filename = `${componentName}.tsx`;
     const filePath = path.join(slidesDir, filename);
 
-    console.log(`[Pipeline]   └─ [${slideNumber}/${deck.slides.length}] Generating ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Authoring Slide ${slideNumber}: ${slideData.type}`, 5 + slideNumber, 15);
+    console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
+    options.onProgress?.(`Synthesizing Slide ${slideNumber}: ${slideData.type}`, 5 + slideNumber, 15);
 
+    const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
       buildSingleSlideSystemPrompt(),
       buildSingleSlideUserPrompt(slideNumber, slideData, blueprint, brand),
@@ -347,8 +372,13 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     }
 
     fs.writeFileSync(filePath, code, 'utf-8');
-    slideExports.push({ filename, componentName });
-  }
+    const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`[Pipeline]   ✔ [${slideNumber}/${deck.slides.length}] ${filename} finished in ${elapsedSec}s`);
+
+    return { filename, componentName, index: i };
+  });
+
+  const slideExports = await runConcurrentPool(slideTasks, concurrency, (task) => task());
 
   // ==========================================================================
   // PASS 7: TEMPLATE INDEX ASSEMBLY & TYPESCRIPT COMPILER VERIFICATION

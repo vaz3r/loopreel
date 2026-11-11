@@ -1,0 +1,237 @@
+{
+  "templateName": "Carbon & Consequence",
+  "templateSlug": "carbon-and-consequence",
+  "domain": "Climate / Energy Markets / Geopolitics",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "CARBON & CONSEQUENCE",
+      "headline": "Emissions Dip. A Turning Point?",
+      "subheadline": "An estimated decline offers hope, not proof of a sustained peak.",
+      "visualStyle": "oversized-numeral-editorial",
+      "layoutTopology": "central-metric-with-offset-caveat",
+      "palette": {
+        "paper": "#EBD4C3",
+        "ink": "#202B27",
+        "accent": "#21664D",
+        "surface": "#DCC1AA"
+      },
+      "telemetry": [
+        {
+          "value": "2026",
+          "label": "Estimated decline year"
+        },
+        {
+          "value": "-0.4%",
+          "label": "Fossil fuel emissions",
+          "qualifier": "Estimated decrease: about 0.4 percent"
+        }
+      ],
+      "svgBlueprint": "Use Paper background and an oversized Ink 2026 above an Accent downward arrow beside the decline badge. Place the estimate qualifier immediately beneath its badge. Reserve the bottom quarter for the subheadline on Surface. Do not draw a historical curve or imply a confirmed peak."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "annual-reversal",
+      "kicker": "THE REVERSAL",
+      "headline": "Growth Gives Way To A Dip",
+      "subheadline": "Last year's increase contrasts with this year's estimated decrease.",
+      "visualStyle": "opposing-direction-ledger",
+      "layoutTopology": "diverging-bars-around-central-baseline",
+      "telemetry": [
+        {
+          "value": "+1.2%",
+          "label": "Last year's increase",
+          "qualifier": "1.2 percent"
+        },
+        {
+          "value": "-0.4%",
+          "label": "This year's estimated decrease",
+          "qualifier": "about 0.4 percent"
+        }
+      ],
+      "svgBlueprint": "Draw one vertical baseline with two separated horizontal rows. Extend an Ink bar rightward for +1.2% and an Accent bar leftward for approximately -0.4%, using equal percentage scaling. Place labels outside bar ends. Use Paper background and a Surface strip behind the estimate qualifier; include no additional years."
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "fuel-divergence",
+      "kicker": "THE FUEL SPLIT",
+      "headline": "Coal Moves The Other Way",
+      "subheadline": "Oil and natural gas emissions fall; coal emissions rise.",
+      "visualStyle": "three-lane-fuel-telemetry",
+      "layoutTopology": "stacked-horizontal-directional-lanes",
+      "telemetry": [
+        {
+          "value": "-1.9%",
+          "label": "Oil emissions decline",
+          "qualifier": "1.9 percent"
+        },
+        {
+          "value": "-0.3%",
+          "label": "Natural gas emissions decline",
+          "qualifier": "0.3 percent"
+        },
+        {
+          "value": "+0.6%",
+          "label": "Coal emissions increase",
+          "qualifier": "0.6 percent"
+        }
+      ],
+      "svgBlueprint": "Arrange three full-width lanes on Paper, each with its own label and badge. Use equal-sized Accent downward arrows for oil and gas, and an Ink upward arrow for coal. Arrows communicate direction only, not magnitude. Separate lanes with thin Surface rules and leave generous space around every badge."
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "demand-context",
+      "kicker": "NOT ANOTHER LOCKDOWN",
+      "headline": "Demand Grew Through The Decline",
+      "subheadline": "Clean technologies covered almost 70 percent of energy-demand growth.",
+      "comparison": [
+        {
+          "name": "2020",
+          "body": "The pandemic drove the emissions decline."
+        },
+        {
+          "name": "2026",
+          "body": "Energy demand increased despite the estimated emissions decline."
+        }
+      ],
+      "visualStyle": "demand-coverage-ribbon",
+      "layoutTopology": "dominant-horizontal-ribbon-with-two-era-footnotes",
+      "svgBlueprint": "Use a broad Surface ribbon to represent energy-demand growth, with an Accent overlay covering approximately 70 percent. Label the overlay 'almost 70 percent'; leave the remainder unnumbered. Beneath it, place the two year comparisons as short unboxed footnotes separated by an Ink rule. Do not imply 70 percent of total energy demand."
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "attribution-check",
+      "kicker": "THE OIL CATCH",
+      "headline": "EVs Explain Only Part",
+      "subheadline": "Electric vehicles account for only about 20 percent of the oil emissions decline.",
+      "comparison": [
+        {
+          "name": "Electric vehicles",
+          "body": "A limited contribution to the decline."
+        },
+        {
+          "name": "High prices",
+          "body": "The article attributes the bulk of the decline to high prices."
+        }
+      ],
+      "visualStyle": "annotated-attribution-ring",
+      "layoutTopology": "left-ring-right-editorial-attribution",
+      "svgBlueprint": "Place a large ring on the left with an approximately 20 percent Accent arc and an unnumbered Surface remainder. Label the arc 'about 20 percent' and connect it to the electric-vehicle annotation. Put the high-prices explanation on the right without a proportional shape. Never label the remainder as an exact high-price contribution."
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "counterfactual-comparison",
+      "kicker": "THE AVOIDED GROWTH",
+      "headline": "Clean Technology Slowed Emissions Growth",
+      "subheadline": "During 2019–2025, observed growth was below the estimated no-expansion counterfactual.",
+      "visualStyle": "solid-versus-outline-columns",
+      "layoutTopology": "paired-columns-with-shared-scale",
+      "telemetry": [
+        {
+          "value": "+0.8%",
+          "label": "Observed average annual growth",
+          "qualifier": "0.8 percent per year"
+        },
+        {
+          "value": "+1.9%",
+          "label": "Estimated without clean-technology expansion",
+          "qualifier": "1.9 percent per year"
+        }
+      ],
+      "svgBlueprint": "Draw exactly two columns on a shared zero baseline with heights proportional to 0.8 and 1.9. Fill observed growth with Ink; render the counterfactual as a dashed Accent outline over Paper. Place full annual-rate qualifiers beneath the badges. Explicitly label the outlined column 'counterfactual estimate'; avoid an invented annual trajectory."
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "decoupling-gap",
+      "kicker": "LOCAL PROGRESS, GLOBAL GROWTH",
+      "headline": "Economic Growth Can Accompany Emissions Cuts",
+      "subheadline": "During 2019–2025, national reductions coexisted with rising global emissions.",
+      "visualStyle": "country-count-global-ledger",
+      "layoutTopology": "upper-dot-field-lower-global-total",
+      "telemetry": [
+        {
+          "value": "59",
+          "label": "Countries cutting emissions while economies grew",
+          "qualifier": "59 countries"
+        },
+        {
+          "value": "+0.8%",
+          "label": "Global average annual emissions growth",
+          "qualifier": "0.8 percent per year"
+        }
+      ],
+      "svgBlueprint": "Render exactly 59 small Accent dots in an airy upper field, grouped only for spacing. Place the country-count badge beside this field. Below a full-width Ink rule, display the global-growth badge at large scale. Use Surface behind the lower ledger. Do not invent country identities, geographic locations, or individual emissions values."
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "trend-literacy",
+      "kicker": "THE INTERPRETATION TRAP",
+      "headline": "One Year Cannot Establish A Trend",
+      "subheadline": "The article rejects a historical warming claim and cautions against declaring an emissions peak.",
+      "comparison": [
+        {
+          "name": "1998 warming claim",
+          "body": "La-Niña-dominated years followed a very strong El Niño; warming had not ended."
+        },
+        {
+          "name": "2026 emissions estimate",
+          "body": "The decline is probably temporary, not an established sustained peak."
+        }
+      ],
+      "visualStyle": "dual-era-evidence-annotations",
+      "layoutTopology": "vertical-spine-with-alternating-era-notes",
+      "svgBlueprint": "Draw a thin Ink vertical spine with two widely separated, equally sized date nodes. Position the 1998 annotation left and the 2026 annotation right. Use Surface backing for the historical note and an Accent outline for the current caution. State through labels that one concerns warming and the other emissions; do not plot them as one data series."
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "conditional-outlook",
+      "kicker": "THE FORECAST CONDITIONS",
+      "headline": "A Sustained Peak Remains Conditional",
+      "subheadline": "Researchers say sustained peak and decline could be a few years away.",
+      "points": [
+        {
+          "title": "Projection horizon",
+          "body": "Researchers extrapolated trends using the IMF's GDP projection through 2028."
+        },
+        {
+          "title": "Deployment condition",
+          "body": "Further acceleration of clean-technology deployment must be supported through time."
+        }
+      ],
+      "visualStyle": "conditional-pathway-gate",
+      "layoutTopology": "open-path-through-central-condition",
+      "svgBlueprint": "Draw an Ink pathway entering an Accent-outlined gate labeled 'Deployment condition'. Beyond the gate, continue with a dashed, open-ended path labeled 'Conditional outlook', not a dated endpoint. Put the projection-horizon note beneath the incoming path. Use Paper background and Surface for the gate interior; do not depict 2028 as the year of a peak."
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "editorial-verdict",
+      "kicker": "CARBON & CONSEQUENCE / VERDICT",
+      "headline": "Progress Is Real. Permanence Is Unproven.",
+      "subheadline": "Clean technologies restrained emissions growth; one estimated decline does not establish a sustained peak.",
+      "points": [
+        {
+          "title": "What the evidence supports",
+          "body": "Clean technologies slowed emissions growth while energy demand continued rising."
+        },
+        {
+          "title": "What remains conditional",
+          "body": "A sustained peak and decline requires further deployment acceleration over time."
+        }
+      ],
+      "visualStyle": "closing-editorial-bracket",
+      "layoutTopology": "full-height-thesis-with-bottom-verdict-rail",
+      "svgBlueprint": "Set the headline in large Ink type across the upper two-thirds of Paper. Draw one oversized Accent bracket linking the two brief verdict points in a bottom rail, separated by a thin Surface rule. End the bracket with an open cap rather than a checkmark, reinforcing that durability remains unproven. Add no new metrics or decorative charts."
+    }
+  ]
+}

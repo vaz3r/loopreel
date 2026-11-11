@@ -45,7 +45,7 @@ const PRESET_ARCHETYPES: Record<string, TemplateBrief> = {
   },
 };
 
-function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit?: boolean } {
+function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit?: boolean; concurrency?: number } {
   const args = process.argv.slice(2);
   let name = '';
   let vibe = '';
@@ -54,6 +54,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
   let url = '';
   let provider = '';
   let runAudit: boolean | undefined = undefined;
+  let concurrency: number | undefined = undefined;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -63,6 +64,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
     else if (arg === '--inspiration' && args[i + 1]) inspiration = args[++i]!;
     else if (arg === '--url' && args[i + 1]) url = args[++i]!;
     else if (arg === '--provider' && args[i + 1]) provider = args[++i]!;
+    else if ((arg === '--concurrency' || arg === '-c') && args[i + 1]) concurrency = parseInt(args[++i]!, 10);
     else if (arg === '--audit') runAudit = true;
     else if (arg === '--no-audit') runAudit = false;
   }
@@ -78,6 +80,7 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
       },
       provider: provider || 'copilot',
       runAudit: runAudit ?? true, // Default to true for story generation
+      concurrency,
     };
   }
 
@@ -86,10 +89,11 @@ function parseArgs(): { brief: TemplateBrief | null; provider?: string; runAudit
       brief: { name, vibe, domain: domain || undefined, inspiration: inspiration || undefined },
       provider: provider || undefined,
       runAudit,
+      concurrency,
     };
   }
 
-  return { brief: null, provider: provider || undefined, runAudit };
+  return { brief: null, provider: provider || undefined, runAudit, concurrency };
 }
 
 async function promptUser(): Promise<TemplateBrief> {
@@ -153,7 +157,7 @@ async function promptUser(): Promise<TemplateBrief> {
 
 async function main() {
   try {
-    const { brief: cliBrief, provider, runAudit } = parseArgs();
+    const { brief: cliBrief, provider, runAudit, concurrency } = parseArgs();
     const brief = cliBrief || (await promptUser());
 
     if (brief.url) {
@@ -170,7 +174,12 @@ async function main() {
     }
 
     const startTime = Date.now();
-    const result = await generateTemplateReference(brief, { provider, runAudit, url: brief.url });
+    const result = await generateTemplateReference(brief, {
+      provider,
+      runAudit,
+      url: brief.url,
+      concurrency,
+    });
     const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
 
     console.log('\n======================================================');

@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_ROOT = path.resolve(__dirname, '../templates');
-const LOOP_ROOT = path.resolve(__dirname, '../../../packages/loop');
-const SCHEMAS_ROOT = path.resolve(__dirname, '../../../packages/schemas');
+const LOOP_ROOT = path.resolve(__dirname, '../../loop');
+const SCHEMAS_ROOT = path.resolve(__dirname, '../../schemas');
 
 function toPascalCase(str: string): string {
   return str

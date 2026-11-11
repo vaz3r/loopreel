@@ -1,0 +1,166 @@
+{
+  "articleTitle": "Carbon emissions are down this year",
+  "publisher": "Ars Technica",
+  "byline": "Staff Bureau",
+  "summary": "An analysis led by Corinne Le Quéré at the University of East Anglia estimates that fossil fuel emissions have fallen about 0.4 percent from last year, with researchers attributing the decline primarily to the war in Iran and its effect on oil prices. Electric vehicles and renewable energy are offsetting much of the growth in emissions, but the researchers expect global fossil fuel emissions to continue increasing under extrapolated trends rather than entering a sustained decline.",
+  "entities": [
+    {
+      "name": "Corinne Le Quéré",
+      "type": "Person",
+      "role": "Led the analysis estimating the decline in fossil fuel emissions."
+    },
+    {
+      "name": "University of East Anglia",
+      "type": "University",
+      "role": "Institution associated with Corinne Le Quéré."
+    },
+    {
+      "name": "Global Carbon Project",
+      "type": "Research project",
+      "role": "Compiles statistics on fossil fuel use and factors such as deforestation to track carbon emissions globally and by country; the researchers work on this project."
+    },
+    {
+      "name": "International Monetary Fund",
+      "type": "Organization",
+      "role": "Provided the GDP projection through 2028 used to extrapolate emissions trends."
+    },
+    {
+      "name": "Nature Climate Change",
+      "type": "Scientific journal",
+      "role": "Journal cited for the research, with a publication year of 2026 and DOI 10.1038/s41558-026-02821-8."
+    },
+    {
+      "name": "Iran",
+      "type": "Country",
+      "role": "Location of the war that researchers link to oil-price effects driving the short-term emissions decline."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "1998",
+      "label": "Historical global-warming claim",
+      "context": "The article rejects claims that global warming ended in 1998, describing a run of La-Niña-dominated years following a very strong El Niño."
+    },
+    {
+      "value": "2026",
+      "label": "Year of estimated emissions decline",
+      "context": "The article describes this year as a likely departure from the longer-term trend of increasing emissions."
+    },
+    {
+      "value": "about 0.4 percent",
+      "label": "Estimated fossil fuel emissions decline",
+      "context": "Estimated decrease from last year in the analysis led by Corinne Le Quéré."
+    },
+    {
+      "value": "1.2 percent",
+      "label": "Last year's fossil fuel emissions increase",
+      "context": "The increase was above the 2019–2025 average of 0.8 percent per year."
+    },
+    {
+      "value": "2019–2025",
+      "label": "Historical averaging period",
+      "context": "Period used for the average fossil fuel emissions growth rate of 0.8 percent per year."
+    },
+    {
+      "value": "0.8 percent per year",
+      "label": "Historical average emissions growth",
+      "context": "Average growth during 2019–2025; global emissions increased at this rate despite emissions reductions in 59 countries experiencing economic growth."
+    },
+    {
+      "value": "1.9 percent",
+      "label": "Oil emissions decline",
+      "context": "This year's drop in emissions from oil."
+    },
+    {
+      "value": "0.3 percent",
+      "label": "Natural gas emissions decline",
+      "context": "This year's drop in emissions from natural gas use."
+    },
+    {
+      "value": "0.6 percent",
+      "label": "Coal emissions increase",
+      "context": "This year's increase in coal emissions."
+    },
+    {
+      "value": "2020",
+      "label": "Pandemic-driven emissions decline",
+      "context": "Historical comparison: unlike the pandemic-driven drop in 2020, this year's decline was not driven by a widespread decrease in energy demand."
+    },
+    {
+      "value": "almost 70 percent",
+      "label": "Share of energy-demand growth covered by clean technologies",
+      "context": "Additions of electric vehicles and solar and wind generation covered this share of the growth in energy demand."
+    },
+    {
+      "value": "about 20 percent",
+      "label": "Electric vehicles' contribution to the oil emissions decline",
+      "context": "Electric vehicles can account for only this share of the decline in oil emissions; the article attributes the bulk to high prices."
+    },
+    {
+      "value": "59 countries",
+      "label": "Countries cutting emissions despite economic growth",
+      "context": "Between 2019 and 2025, these countries reduced emissions while their economies grew."
+    },
+    {
+      "value": "1.9 percent per year",
+      "label": "Estimated emissions growth without clean-technology expansion",
+      "context": "Researchers estimate this would have been the increase between 2019 and 2025 without the growth of electric vehicles and solar and wind generation accompanying economic growth."
+    },
+    {
+      "value": "2028",
+      "label": "GDP projection horizon",
+      "context": "Researchers extrapolated trends using the International Monetary Fund's projection for GDP through 2028."
+    },
+    {
+      "value": "2026",
+      "label": "Research publication year",
+      "context": "The article's research citation reads: Nature Climate Change, 2026."
+    },
+    {
+      "value": "10.1038/s41558-026-02821-8",
+      "label": "Research DOI",
+      "context": "DOI supplied in the article's Nature Climate Change citation."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "If further acceleration of clean technology deployment can be supported through time, a sustained peak and decline in global CO2 emissions could be a few years away.",
+      "speaker": "The researchers",
+      "role": "Research team led by Corinne Le Quéré at the University of East Anglia",
+      "context": "Conditional outlook for a sustained emissions peak and decline if clean-technology deployment accelerates."
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
+    },
+    "deviceB": {
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": null,
+    "criticismOrAlarm": "The estimated decline of about 0.4 percent probably does not represent a sustained emissions peak: researchers consider it a short-term dip driven by the war in Iran and its effect on oil prices. Their extrapolation indicates that emissions would have increased in 2026 without the oil-price shock.",
+    "regulatoryOrHistoricalPrecedent": "The article contrasts the current decline with the pandemic-driven drop in 2020, when energy demand decreased widely. It also rejects the historical claim that global warming ended in 1998, using subsequent La-Niña-dominated years after a very strong El Niño to illustrate why individual years require longer-term context."
+  },
+  "hiddenCatchesAndLimits": [
+    "The emissions decline is an estimate and is described as probably temporary, not evidence of an established sustained peak.",
+    "Energy demand increased; additions of electric vehicles and solar and wind generation covered almost 70 percent of its growth, not all of it.",
+    "Electric vehicles account for only about 20 percent of the decline in oil emissions; the article attributes the bulk to high prices.",
+    "Coal emissions increased 0.6 percent even as oil emissions fell 1.9 percent and natural gas emissions fell 0.3 percent.",
+    "The estimate of 1.9 percent per year emissions growth without clean-technology expansion is a counterfactual estimate, not the observed 0.8 percent per year growth during 2019–2025.",
+    "Forward expectations extrapolate trends using the International Monetary Fund's GDP projection through 2028.",
+    "A sustained peak and decline a few years away is conditional on further acceleration of clean-technology deployment being supported through time.",
+    "The article provides no hardware specifications, device prices, subscription requirements, cloud dependencies, retention policies, or FCC approval statuses."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}
