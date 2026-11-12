@@ -27,6 +27,13 @@ const navItems = [
 
 export function Layout() {
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isExportMode = searchParams.get('export') === 'true';
+
+  if (isExportMode) {
+    return <Outlet />;
+  }
+
   const isStudio = location.pathname.startsWith('/studio');
 
   return (

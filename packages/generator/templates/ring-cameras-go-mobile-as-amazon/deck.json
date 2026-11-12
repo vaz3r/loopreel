@@ -8,241 +8,137 @@
       "id": "slide-1",
       "index": 0,
       "type": "cover",
-      "kicker": "CUSTOM BRAND / MOBILE SECURITY",
-      "headline": "Ring Cameras Leave Their Mounts",
-      "subheadline": "Amazon pairs a flying indoor camera with a wheeled business patrol robot.",
-      "visualStyle": "diverging-motion-hero",
-      "layoutTopology": "central-origin-with-diverging-paths",
-      "svgBlueprint": "Use Paper #0D0E12, Ink #F1F3F9, Accent #FF4D00 and Surface #161820 throughout. Branch an orange trajectory upward toward an abstract drone glyph and horizontally toward a wheeled robot glyph. Place one product callout at each endpoint. Keep the headline above both paths. Glyphs are conceptual, not dimensionally accurate product renderings.",
-      "items": [
+      "publication": "Custom Brand",
+      "publicationId": "ring-cameras-go-mobile-as-amazon.pub",
+      "kicker": "AUTONOMOUS SECURITY / INDOOR PRIVACY",
+      "headline": "Amazon Mobilizes Ring. Privacy Questions Follow.",
+      "subheadline": "Roaming cameras promise wider coverage. Cloud access complicates their privacy assurances.",
+      "issueBadge": "SPECIAL REPORT · 5 SLIDES",
+      "telemetry": [
         {
-          "title": "Ring Drone Cam",
-          "body": "Flying indoor security camera."
+          "badge": "$249.99",
+          "label": "Ring Drone Cam",
+          "qualification": "Planned release requires FCC authorization."
         },
         {
-          "title": "Ring Rover Cam",
-          "body": "Wheeled autonomous security robot designed for business."
+          "badge": "$999.99",
+          "label": "Ring Rover Cam",
+          "qualification": "Business patrol robot available for preorder."
         }
       ],
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "palette": {
+        "paper": "#0D0E12",
+        "ink": "#F1F3F9",
+        "accent": "#FF4D00",
+        "surface": "#161820"
+      },
+      "svgBlueprint": "Portrait 1080×1350. Use the supplied palette throughout the carousel. Place Custom Brand above a thin orange rule; kicker beneath. Set the headline at 68px across three deliberate lines. Use one oversized aperture emblem intersecting a doorway outline below the subheadline. Anchor two price badges along the bottom and the issue badge at the top right. No schematic, arrows, or callout boxes.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-2",
       "index": 1,
-      "type": "price-comparison",
-      "kicker": "THE HARDWARE BILL",
-      "headline": "Flight And Wheels, Different Prices",
-      "subheadline": "Drone targets home monitoring; Rover is designed for business.",
-      "visualStyle": "oversized-price-ledger",
-      "layoutTopology": "stacked-full-width-price-bands",
-      "svgBlueprint": "Draw two full-width ledger bands separated by an orange rule. Align product names left and oversized numerical price badges right. Add a small flight-path glyph to Drone and a wheel-track glyph to Rover. Use equal band heights; do not imply subscription costs are included.",
-      "metrics": [
+      "type": "chronology",
+      "kicker": "THE ROLLOUT / ANNOUNCED VS SCHEDULED",
+      "headline": "The Announcement Outruns The Arrival",
+      "subheadline": "Amazon has announced both devices; their shipping dates remain ahead.",
+      "items": [
         {
-          "value": "$250",
-          "label": "Ring Drone Cam starting price"
+          "badge": "November 10, 2026",
+          "title": "ANNOUNCED",
+          "body": "Amazon introduces Ring Robotics: a flying home camera and a wheeled business patrol robot."
         },
         {
-          "value": "$1,000",
-          "label": "Ring Rover Cam price"
+          "badge": "December 16, 2026",
+          "title": "ROVER SHIPPING TARGET",
+          "body": "Ring Rover Cam shipping is scheduled; preorders are open."
+        },
+        {
+          "badge": "January 27, 2027",
+          "title": "DRONE SHIPPING TARGET",
+          "body": "Ring Drone Cam awaits FCC authorization; offering it for sale or lease remains prohibited."
         }
       ],
+      "visualStyle": "precision-newswire-timeline",
+      "layoutTopology": "vertical-milestone-spine",
+      "svgBlueprint": "Portrait 1080×1350 with 72px safe margins. Set a 60px headline above a left-aligned vertical spine. Stack three spacious milestones chronologically downward. Use one solid orange node for the announcement and two outlined nodes for future shipping targets. Dates are 36px numerical badges; bodies are 30px. End the drone milestone with a small outlined regulatory gate, not an approval checkmark.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-3",
       "index": 2,
-      "type": "release-sequence",
-      "kicker": "AVAILABILITY",
-      "headline": "Rover Ships First. Drone Awaits Authorization.",
-      "subheadline": "Rover has a scheduled shipping date; Drone’s target requires FCC authorization.",
-      "visualStyle": "conditional-release-track",
-      "layoutTopology": "horizontal-sequence-with-regulatory-gate",
-      "svgBlueprint": "Create a chronological horizontal track with two labeled milestones. Place Rover first using a solid marker. Place Drone second beyond an outlined FCC gate, connected by a dashed segment. Render full dates as editorial text, not numerical telemetry. Spacing is schematic, not a duration scale.",
+      "type": "official-positions",
+      "kicker": "AMAZON'S POSITION / THE CONDITIONS",
+      "headline": "Uncompromised Privacy, Connected By Design",
+      "subheadline": "Amazon pairs its privacy assurance with cloud navigation and subscription-dependent scheduling.",
       "items": [
         {
-          "title": "Ring Rover Cam",
-          "body": "Preorders available; shipping scheduled to start December 16, 2026."
+          "title": "THE ASSURANCE",
+          "body": "Amazon promises “privacy and security without compromise”: recording indicators and Throw Away the Key Encryption."
         },
         {
-          "title": "Ring Drone Cam",
-          "body": "Target: January 27, 2027, conditional on Federal Communications Commission authorization."
+          "title": "THE ARCHITECTURE",
+          "body": "AI Pilot combines cameras, vision models, sensors and cloud processing; setup creates indoor floor plans."
+        },
+        {
+          "title": "THE SUBSCRIPTION",
+          "body": "Scheduled drone flights and Rover patrols require a compatible Ring Protect plan."
         }
       ],
+      "visualStyle": "corporate-promise-contract",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Portrait 1080×1350. Place a broad assurance card beneath the 60px headline, followed by two narrower cards stacked with alternating horizontal offsets. Use Surface fills, Ink text and orange clause markers. A restrained cloud contour sits behind the architecture card; a calendar outline marks scheduling. Keep bodies at 30px and avoid decorative numbers or unsupported subscription prices.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-4",
       "index": 3,
-      "type": "drone-telemetry",
-      "kicker": "DRONE CAPABILITIES",
-      "headline": "An Eight-Minute Flight, Under Controlled Conditions",
-      "subheadline": "Flight time assumes a new, fully-charged battery under controlled conditions.",
-      "visualStyle": "radial-flight-instrument",
-      "layoutTopology": "central-reticle-with-three-metric-anchors",
-      "svgBlueprint": "Center an abstract drone glyph inside a circular rotation arrow. Add a field-of-view wedge corresponding to the stated angle. Position three numerical badges around the diagram with separate unit labels. Reserve an unobstructed text strip for the battery qualification. Do not depict coverage distance or flight range.",
-      "metrics": [
+      "type": "forensic-counter-evidence",
+      "kicker": "EFF ANALYSIS / ENCRYPTION UNDER SCRUTINY",
+      "headline": "Deleting Keys Doesn't Eliminate Access",
+      "subheadline": "EFF's September 11, 2026 analysis challenges TAKE, not the robots' navigation.",
+      "items": [
         {
-          "value": "8",
-          "label": "Minutes of flight time",
-          "context": "New, fully-charged battery under controlled conditions."
+          "badge": "24 hours",
+          "title": "THE ACCESS WINDOW",
+          "body": "Ring's cloud receives video keys for processing, then deletes its copy after 24 hours."
         },
         {
-          "value": "148",
-          "label": "Degree field of view"
-        },
-        {
-          "value": "360",
-          "label": "Degree rotation"
+          "title": "THE RETURN PATH",
+          "body": "Later playback or smart features can return keys; EFF says TAKE is not end-to-end encryption."
         }
       ],
+      "visualStyle": "forensic-key-access-diptych",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "Portrait 1080×1350. Divide the content field into two tall panels beneath a shared 60px headline. Left: a key inside a cloud contour, with the 24 hours badge at 52px. Right: a returning arrow carrying the same key toward the cloud. Use an orange divider and generous negative space. Label the right path with words, not an invented duration. Bodies remain 30px; diagrams show access mechanics, not a proven breach.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-5",
       "index": 4,
-      "type": "mapping-comparison",
-      "kicker": "TEACHING THE SPACE",
-      "headline": "Two Different Ways To Map Indoors",
-      "subheadline": "Both devices build digital floor plans, but their setup workflows differ.",
-      "visualStyle": "paired-cartographic-workflows",
-      "layoutTopology": "shared-floorplan-with-opposing-route-overlays",
-      "svgBlueprint": "Draw one abstract, unmeasured floor-plan outline. Overlay a dashed hand-carried Drone route and a solid autonomous Rover route, differentiated by line pattern and endpoint glyphs. Place one annotation above and one below the shared plan. Mark the diagram as schematic; imply neither room count nor floor-transition capability.",
+      "type": "source-audit-verdict",
+      "kicker": "BUREAU AUDIT / THE ACCOUNTABILITY TEST",
+      "headline": "A Recording Light Isn't An Answer",
+      "subheadline": "Expanded visibility demands accountable access—not merely cameras that can navigate indoors.",
       "items": [
         {
-          "title": "Drone: customer-carried mapping",
-          "body": "The customer carries the drone through indoor spaces to support mapping."
+          "title": "DOCUMENTED / AMAZON",
+          "body": "Amazon specifies cloud-assisted navigation and visible recording indicators; these are commitments, not independent performance findings."
         },
         {
-          "title": "Rover: autonomous exploration",
-          "body": "Autonomous exploration supports digital floor-plan mapping and suggested patrol points."
+          "title": "CONTESTED / EFF",
+          "body": "Ring reports independent security testing; EFF seeks infrastructure-wide auditing of TAKE's privacy claims."
+        },
+        {
+          "title": "VERDICT / STILL OPEN",
+          "body": "Indicators disclose recording, not access. Can independently verified safeguards match the cameras' expanded indoor reach?"
         }
       ],
-      "platform": "instagram-stories"
-    },
-    {
-      "id": "slide-6",
-      "index": 5,
-      "type": "automation-dependencies",
-      "kicker": "THE AUTOMATION CONDITIONS",
-      "headline": "Autonomous Does Not Mean Local-Only",
-      "subheadline": "AI Pilot combines device cameras, specialized vision models, on-device sensors and cloud processing.",
-      "visualStyle": "cloud-linked-patrol-circuit",
-      "layoutTopology": "vertical-dependency-spine-with-three-branches",
-      "svgBlueprint": "Build a vertical orange spine joining three compact annotations: shared AI Pilot processing, Drone subscription access, and Drone alert response. Use camera, cloud and route glyphs without additional text nodes. Keep processing arrows schematic; do not imply continuous uploading, processing location for every model, or a Rover subscription requirement.",
-      "items": [
-        {
-          "title": "Shared AI Pilot",
-          "body": "Cloud processing works alongside device cameras, specialized vision models and on-device sensors."
-        },
-        {
-          "title": "Drone routes and schedules",
-          "body": "Described for Amazon Ring Protect subscribers; subscription pricing is not stated."
-        },
-        {
-          "title": "Drone alert response",
-          "body": "Ring camera, sensor or alarm notifications can trigger automatic set-route flights."
-        }
-      ],
-      "platform": "instagram-stories"
-    },
-    {
-      "id": "slide-7",
-      "index": 6,
-      "type": "drone-navigation-bottleneck",
-      "kicker": "DRONE NAVIGATION",
-      "headline": "Ordinary Surfaces Can Complicate Navigation",
-      "subheadline": "Amazon identifies indoor surfaces around which Drone navigation performance may degrade.",
-      "visualStyle": "material-hazard-cross-section",
-      "layoutTopology": "three-zone-continuous-room-section",
-      "svgBlueprint": "Draw a continuous schematic room section divided into three material zones: reflective flooring, a featureless matte wall, and glass or mirror panels. Use orange broken route segments near each zone to indicate possible navigation degradation, not inevitable crashes. Place one short annotation beneath each zone.",
-      "items": [
-        {
-          "title": "Reflective flooring",
-          "body": "Polished marble or wet tile may degrade navigation performance."
-        },
-        {
-          "title": "Featureless walls",
-          "body": "Blank matte walls without features may degrade navigation performance."
-        },
-        {
-          "title": "Glass and mirrors",
-          "body": "Frameless glass and mirrors may degrade navigation performance."
-        }
-      ],
-      "platform": "instagram-stories"
-    },
-    {
-      "id": "slide-8",
-      "index": 7,
-      "type": "rover-operating-envelope",
-      "kicker": "ROVER’S PHYSICAL LIMITS",
-      "headline": "Business Coverage, Bounded By The Floor",
-      "subheadline": "Rover’s coverage claim comes with single-floor and terrain restrictions.",
-      "visualStyle": "bounded-patrol-floorplate",
-      "layoutTopology": "large-floorplate-with-bottom-restriction-rail",
-      "svgBlueprint": "Use a large unmeasured floorplate with a Rover route and a prominent coverage annotation. Beneath it, place two restriction annotations: single-floor operation and incompatible terrain. Show a crossed stair glyph and an enlarged threshold detail labeled with the exact stated limit. Do not invent building dimensions or mast height.",
-      "items": [
-        {
-          "title": "Claimed coverage",
-          "body": "Up to 5,000 square feet (465 square meters)."
-        },
-        {
-          "title": "Operating environment",
-          "body": "Single-floor, indoor environment; cannot climb stairs."
-        },
-        {
-          "title": "Incompatible terrain",
-          "body": "Curved edges, sunken areas, black glossy floors; transitions greater than 1.375 inches (3.5 centimeters)."
-        }
-      ],
-      "platform": "instagram-stories"
-    },
-    {
-      "id": "slide-9",
-      "index": 8,
-      "type": "privacy-accountability",
-      "kicker": "THE PRIVACY TEST",
-      "headline": "Encryption Claims Meet A Security Record",
-      "subheadline": "Amazon says Throw Away the Key Encryption will protect both new devices’ videos.",
-      "visualStyle": "editorial-evidence-stack",
-      "layoutTopology": "three-tier-evidence-ledger",
-      "svgBlueprint": "Create three full-width evidence rows with distinct cloud, historical-account and encryption glyphs. Give each row equal visual weight. Separate historical FTC reporting from current product claims with explicit headings. Avoid shield checkmarks or imagery suggesting confirmed end-to-end encryption. Keep the full retention scope visible.",
-      "items": [
-        {
-          "title": "Rover cloud retention",
-          "body": "Doorbell-ring, motion-event and Live View videos: cloud storage up to 180 days."
-        },
-        {
-          "title": "2023 FTC investigation",
-          "body": "The FTC described hackers accessing 55,000 US customers’ accounts."
-        },
-        {
-          "title": "EFF’s encryption assessment",
-          "body": "Throw Away the Key Encryption remains well short of end-to-end encryption."
-        }
-      ],
-      "platform": "instagram-stories"
-    },
-    {
-      "id": "slide-10",
-      "index": 9,
-      "type": "specification-debrief",
-      "kicker": "WHAT REMAINS UNANSWERED",
-      "headline": "Mobile Security Still Has Specification Gaps",
-      "subheadline": "The supplied article leaves practical hardware details unstated for both devices.",
-      "visualStyle": "open-ended-specification-brackets",
-      "layoutTopology": "diagonal-product-anchors-with-open-brackets",
-      "svgBlueprint": "Anchor an abstract Drone glyph at upper left and Rover glyph at lower right. Extend open-ended orange specification brackets toward their respective text blocks. Use no measurement ticks, invented dimensions or placeholder values. Reserve a clear headline zone and end both brackets without closure to emphasize unstated specifications.",
-      "items": [
-        {
-          "title": "Ring Drone Cam",
-          "body": "Dimensions, coverage area, charging duration and floor-transition capabilities are not stated."
-        },
-        {
-          "title": "Ring Rover Cam",
-          "body": "Dimensions, mast height, battery life and charging duration are not stated."
-        }
-      ],
+      "visualStyle": "editorial-evidence-register",
+      "layoutTopology": "three-row-verification-ledger",
+      "svgBlueprint": "Portrait 1080×1350 with a 60px headline and three full-width ledger rows. Give each row a narrow status rail and a spacious 30px body. Use a document outline for Amazon's commitments, a magnifier for EFF's challenge, and an open bracket for the unanswered accountability question. Highlight only the final row with an orange left rule. Finish with Custom Brand and a restrained closing rule; avoid a false pass-or-fail certification.",
       "platform": "instagram-stories"
     }
   ]

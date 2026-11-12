@@ -38,7 +38,7 @@ export async function generateTemplateReference(
   let audit: VisualAuditResult | undefined;
   if (mergedOptions.runAudit) {
     try {
-      console.log('\n[Engine] >>> Pass 6: Running Automated Playwright Visual Audit on http://localhost:5174...');
+      console.log('\n[Engine] >>> Pass 6: Running Automated Playwright Visual Audit on http://localhost:5175/studio...');
       audit = await auditTemplateStudio(pipelineResult.templateSlug, pipelineResult.slideCount, {
         platform: mergedOptions.platform,
       });

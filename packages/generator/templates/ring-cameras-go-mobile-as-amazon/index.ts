@@ -4,30 +4,20 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_Pricecomparison from './slides/Slide02_Pricecomparison';
-import Slide03_Releasesequence from './slides/Slide03_Releasesequence';
-import Slide04_Dronetelemetry from './slides/Slide04_Dronetelemetry';
-import Slide05_Mappingcomparison from './slides/Slide05_Mappingcomparison';
-import Slide06_Automationdependencies from './slides/Slide06_Automationdependencies';
-import Slide07_Dronenavigationbottleneck from './slides/Slide07_Dronenavigationbottleneck';
-import Slide08_Roveroperatingenvelope from './slides/Slide08_Roveroperatingenvelope';
-import Slide09_Privacyaccountability from './slides/Slide09_Privacyaccountability';
-import Slide10_Specificationdebrief from './slides/Slide10_Specificationdebrief';
+import Slide02_Chronology from './slides/Slide02_Chronology';
+import Slide03_Officialpositions from './slides/Slide03_Officialpositions';
+import Slide04_Forensiccounterevidence from './slides/Slide04_Forensiccounterevidence';
+import Slide05_Sourceauditverdict from './slides/Slide05_Sourceauditverdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_Pricecomparison,
-  Slide03_Releasesequence,
-  Slide04_Dronetelemetry,
-  Slide05_Mappingcomparison,
-  Slide06_Automationdependencies,
-  Slide07_Dronenavigationbottleneck,
-  Slide08_Roveroperatingenvelope,
-  Slide09_Privacyaccountability,
-  Slide10_Specificationdebrief,
+  Slide02_Chronology,
+  Slide03_Officialpositions,
+  Slide04_Forensiccounterevidence,
+  Slide05_Sourceauditverdict,
   ],
 };
 

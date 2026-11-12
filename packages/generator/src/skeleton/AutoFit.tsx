@@ -81,7 +81,7 @@ export function AutoFit({
         const offsetY =
           verticalAlign === 'center' ? Math.max(0, (containerH - scaledH) / 2) : 0;
 
-        content.style.transformOrigin = 'top center';
+        content.style.transformOrigin = 'top left';
         content.style.transform = `translate(0px, ${offsetY / targetScale}px) scale(${targetScale})`;
 
         container.setAttribute('data-autofit-scaled', targetScale.toFixed(3));

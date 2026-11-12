@@ -168,6 +168,17 @@ export function sanitizeTsxCode(rawCode: string): string {
     return `${prefix}${arr}[${count}]`;
   });
 
+  // 4b. Fix array literals with unindexed repeated collections: e.g. [cards, cards, cards] -> [cards[0], cards[1], cards[2]]
+  code = code.replace(/\[\s*(cards|items|telemetry|metrics|stages|steps|milestones|columns)\b(?!\s*\[)([^\]]*?)\]/g, (fullMatch) => {
+    const colRegex = /\b(cards|items|telemetry|metrics|stages|steps|milestones|columns)\b(?!\s*\[)/g;
+    const counters: Record<string, number> = {};
+    return fullMatch.replace(colRegex, (m) => {
+      const idx = counters[m] ?? 0;
+      counters[m] = idx + 1;
+      return `${m}[${idx}]`;
+    });
+  });
+
   // 5. Fix unindexed items/cards/telemetry property access when variable is an array
   let cardTitleCount = 0;
   code = code.replace(/(?:cards|items)\??\.(?:title|label)(?!\[)/g, () => {

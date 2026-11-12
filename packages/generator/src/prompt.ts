@@ -815,7 +815,7 @@ ${code}
 Common Fix Guidelines:
 1. "Property 'value' does not exist on type '...[]'" or "Property 'title' does not exist on type '...[]'":
    - An entire array was assigned where a single object was expected.
-   - If stages/columns are declared: change \`{ card: cards, metric: telemetry }\` to \`{ card: cards[0], metric: telemetry[0] }\`, etc.
+   - If stages/columns/strata are declared: change \`{ card: cards, metric: telemetry }\` to \`{ card: cards[0], metric: telemetry[0] }\` OR change \`[cards, cards, cards]\` to \`[cards[0], cards[1], cards[2]]\`.
    - If numbered variables are declared: change \`const item0 = items;\` to \`const item0 = items[0];\`
    - If accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or map over the array.
 2. "Identifier expected":

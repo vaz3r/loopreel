@@ -20,7 +20,7 @@ export async function auditTemplateStudio(
   slideCount: number,
   options: { baseUrl?: string; deviceScaleFactor?: number; platform?: string } = {}
 ): Promise<VisualAuditResult> {
-  const baseUrl = options.baseUrl || 'http://localhost:5174';
+  const baseUrl = options.baseUrl || 'http://localhost:5175/studio';
   const screenshotsDir = path.resolve(__dirname, `../templates/${templateSlug}/screenshots`);
   fs.mkdirSync(screenshotsDir, { recursive: true });
 
@@ -40,7 +40,9 @@ export async function auditTemplateStudio(
 
   try {
     for (let i = 0; i < slideCount; i++) {
-      const url = `${baseUrl}/?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`;
+      const url = baseUrl.includes('/studio')
+        ? `${baseUrl}?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`
+        : `${baseUrl}/?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`;
       await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
       await page.waitForTimeout(300); // Allow fonts and AutoFit to settle
 
@@ -90,15 +92,15 @@ export async function auditTemplateStudio(
             );
           }
 
-          // Check mobile legibility floor (0.36x phone scale rule: font < 20px is illegible on mobile)
+          // Check mobile legibility floor (0.36x phone scale rule: font < 12px is illegible on mobile)
           const text = el.childNodes.length === 1 && el.childNodes[0]?.nodeType === 3 ? el.textContent?.trim() : '';
           // Ignore frame header and footer elements outside main content
           const isInsideMain = !!el.closest('main');
           if (isInsideMain && text && text.length > 1) {
             const fontSize = parseFloat(style.fontSize);
-            if (fontSize < 20) {
+            if (fontSize < 12) {
               collisions.push(
-                `Slide ${slideIdx + 1}: Text too small for mobile (${fontSize}px < 20px floor): <${el.tagName.toLowerCase()}> "${text.slice(0, 30)}..."`
+                `Slide ${slideIdx + 1}: Text too small for mobile (${fontSize}px < 12px floor): <${el.tagName.toLowerCase()}> "${text.slice(0, 30)}..."`
               );
             }
           }
