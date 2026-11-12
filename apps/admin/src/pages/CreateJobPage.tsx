@@ -7,7 +7,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2, Sliders } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
-import { TemplateSelect } from '@/components/TemplateSelect';
 import { BrandKitForm, type BrandKitValues } from '@/components/BrandKitForm';
 import { getAllBrandPresets } from '@/lib/brand-presets';
 import type { CreateJobInput, BespokeBrand } from '@/api/client';
@@ -109,8 +108,8 @@ export function CreateJobPage() {
   const createJob = useCreateJob();
   const [url, setUrl] = useState('');
   const [platform, setPlatform] = useState('instagram-feed');
-  const [engine, setEngine] = useState<'bespoke' | 'classic'>('bespoke');
-  const [templateId, setTemplateId] = useState('bespoke');
+  const engine = 'bespoke';
+  const templateId = 'bespoke';
 
   const brandPresets = useMemo(() => getAllBrandPresets(), []);
   const [selectedPresetSlug, setSelectedPresetSlug] = useState<string>(initialBrandPreset);
@@ -206,53 +205,20 @@ export function CreateJobPage() {
             </div>
           </div>
 
-          {/* Engine Selector */}
-          <div className="space-y-1.5 pt-1">
-            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Generation Engine</Label>
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => { setEngine('bespoke'); setTemplateId('bespoke'); }}
-                className={`p-3.5 rounded-lg border text-left transition-all ${
-                  engine === 'bespoke'
-                    ? 'border-emerald-500/60 bg-emerald-500/10 text-text-primary shadow-xs'
-                    : 'border-border bg-surface-2 text-text-tertiary hover:border-border-secondary'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-semibold text-emerald-400 flex items-center gap-1">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Bespoke Codegen
-                  </span>
-                  <span className="text-[9px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">
-                    Recommended
-                  </span>
-                </div>
-                <p className="text-[11px] text-text-tertiary mt-1.5 leading-snug">
-                  Multi-pass autonomous art director, bespoke React slides, inline vector SVGs, and Playwright visual audits.
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => { setEngine('classic'); setTemplateId('auto'); }}
-                className={`p-3.5 rounded-lg border text-left transition-all ${
-                  engine === 'classic'
-                    ? 'border-blue-500/60 bg-blue-500/10 text-text-primary shadow-xs'
-                    : 'border-border bg-surface-2 text-text-tertiary hover:border-border-secondary'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-semibold text-blue-400">Classic Remotion</span>
-                  <span className="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
-                    Predefined
-                  </span>
-                </div>
-                <p className="text-[11px] text-text-tertiary mt-1.5 leading-snug">
-                  Structured XML mapping to pre-built Remotion templates (Paper of Record, Curator, Globalist).
-                </p>
-              </button>
+          {/* Generation Engine Banner */}
+          <div className="p-3 rounded-lg border border-emerald-500/30 bg-emerald-950/20 text-left">
+            <div className="flex items-center justify-between">
+              <span className="text-[12px] font-semibold text-emerald-400 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5" />
+                Bespoke Codegen Engine
+              </span>
+              <span className="text-[9px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">
+                Autonomous Art Director
+              </span>
             </div>
+            <p className="text-[11px] text-text-tertiary mt-1 leading-snug">
+              Multi-pass bespoke React slides, inline vector SVGs, and automated Playwright visual audits.
+            </p>
           </div>
 
           {/* Platform Selector */}
@@ -444,13 +410,7 @@ export function CreateJobPage() {
             </div>
           )}
 
-          {/* Classic Template Selector (only if classic selected) */}
-          {engine === 'classic' && (
-            <div className="space-y-1.5">
-              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Template Style</Label>
-              <TemplateSelect value={templateId} onChange={setTemplateId} />
-            </div>
-          )}
+
 
           {/* Brand Kit (Optional) */}
           <Collapsible open={showBrandKit} onOpenChange={setShowBrandKit}>

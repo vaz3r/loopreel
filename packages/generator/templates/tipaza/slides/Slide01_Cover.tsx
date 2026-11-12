@@ -1,7 +1,7 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
 
-type CoverFields = {
+type CoverContent = {
   publication?: string;
   domain?: string;
   kicker?: string;
@@ -16,182 +16,180 @@ export default function Slide01({
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  void brand;
-  void totalSlides;
-
-  const cover = slide as typeof slide & CoverFields;
-  const headline =
-    cover.headline ?? 'Rome Claimed Tipasa. Ruins Outlasted Empires.';
-  const headlineLines =
-    headline === 'Rome Claimed Tipasa. Ruins Outlasted Empires.'
-      ? ['Rome Claimed Tipasa.', 'Ruins Outlasted', 'Empires.']
-      : [headline];
-
-  const telemetry = cover.telemetry ?? [
-    { badge: '430 CE', label: 'Vandal destruction' },
+  const content = slide as unknown as CoverContent;
+  const telemetry = content.telemetry ?? [
     { badge: '1857', label: 'Modern town founded' },
+    { badge: '430 CE', label: 'Vandal destruction' },
   ];
 
-  return (
-    <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex h-full min-h-0 flex-col px-4 py-4">
-        <div className="flex shrink-0 items-center justify-between border-b border-[var(--border)] pb-6">
-          <p className="font-[var(--font-headline)] text-[36px] font-semibold leading-none tracking-[-0.04em]">
-            {cover.publication ?? 'Custom Brand'}
-          </p>
+  const headline =
+    content.headline ?? 'Tipaza Returned. Its Continuity Was Broken.';
+  const headlineLines =
+    headline === 'Tipaza Returned. Its Continuity Was Broken.'
+      ? ['Tipaza Returned.', 'Its Continuity', 'Was Broken.']
+      : [headline];
 
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 64 40"
-            className="h-[40px] w-[64px] text-[var(--accent)]"
-            fill="none"
-          >
-            <path d="M1 1H63V39H1Z" stroke="currentColor" />
-            <path d="M20 1V39M44 1V39" stroke="currentColor" />
-            <path d="M20 27L32 15L44 27" stroke="currentColor" strokeWidth="3" />
-          </svg>
+  const theme = {
+    '--paper': '#0D0E12',
+    '--ink': '#F1F3F9',
+    '--accent': '#FF4D00',
+    '--surface': '#161820',
+    '--border': '#F1F3F925',
+  } as React.CSSProperties;
+
+  return (
+    <section
+      className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
+      style={theme}
+    >
+      <div className="flex h-full min-h-0 flex-col gap-8 bg-[var(--paper)]">
+        <div className="shrink-0 border-t-2 border-[var(--ink)] pt-5">
+          <div className="flex items-baseline justify-between gap-6">
+            <p className="font-[var(--font-headline)] text-[38px] font-semibold leading-none tracking-[-0.035em]">
+              {content.publication ?? 'Custom Brand'}
+            </p>
+            <p className="font-[var(--font-mono)] text-[20px] leading-none tracking-[0.08em]">
+              {content.domain ?? 'tipaza.pub'}
+            </p>
+          </div>
+
+          <p className="mt-5 font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.12em] text-[var(--accent)]">
+            {content.issueBadge ?? 'SPECIAL REPORT · 5 SLIDES'}
+          </p>
         </div>
 
-        <div className="mt-8 flex shrink-0 flex-col items-start">
-          <p className="rounded-full bg-[var(--accent)] px-6 py-3 font-[var(--font-mono)] text-[20px] font-semibold uppercase leading-normal tracking-[0.16em] text-[var(--paper,#0D0E12)]">
-            {cover.kicker ?? 'IMPERIAL AMBITION / URBAN SURVIVAL'}
+        <div className="flex shrink-0 flex-col items-start gap-7">
+          <p className="border-l-[4px] border-[var(--accent)] py-1 pl-4 font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.16em] text-[var(--accent)]">
+            {content.kicker ?? 'ANCIENT CITIES / BROKEN CONTINUITY'}
           </p>
 
-          <h1 className="mt-7 w-full font-[var(--font-headline)] text-[72px] font-bold leading-[1.02] tracking-[-0.04em]">
+          <h1
+            aria-label={headline}
+            className="m-0 w-full font-[var(--font-headline)] text-[72px] font-bold leading-[1.02] tracking-[-0.04em]"
+          >
             {headlineLines.map((line, index) => (
-              <span key={index} className="block">
+              <span
+                key={index}
+                aria-hidden="true"
+                className={`block ${
+                  index === 2 ? 'text-[var(--accent)]' : ''
+                }`}
+              >
                 {line}
               </span>
             ))}
           </h1>
 
-          <p className="mt-7 max-w-[840px] font-[var(--font-body)] text-[30px] leading-snug">
-            {cover.subheadline ??
-              'Conquest built an imperial outpost. Destruction separates its ruins from modern Tipaza.'}
+          <p className="max-w-[850px] font-[var(--font-body)] text-[30px] leading-snug tracking-[-0.015em]">
+            {content.subheadline ??
+              'Trace an imperial hub’s transformation—and why its modern foundation means resettlement.'}
           </p>
         </div>
 
-        <div className="relative mt-7 flex min-h-[580px] flex-1 items-center justify-center">
+        <div className="relative min-h-[580px] flex-1">
           <svg
-            aria-hidden="true"
-            focusable="false"
+            xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1080 1350"
             preserveAspectRatio="xMidYMid meet"
-            className="absolute inset-0 h-full w-full text-[var(--ink)]"
+            role="img"
+            aria-label="A monumental classical column fractured in orange, its lower section displaced from the original axis."
+            className="absolute inset-0 h-full w-full"
           >
-            {/* A single architectural relic, suspended above its broken base. */}
+            <rect width="1080" height="1350" fill="var(--paper)" />
+
             <path
-              d="M80 1238H1000"
+              d="M80 80V1270H1000"
               fill="none"
               stroke="var(--border)"
               strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
+            />
+            <path
+              d="M80 80H126M80 1270H126"
+              fill="none"
+              stroke="var(--ink)"
+              strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
             />
 
-            <g transform="rotate(-8 540 400)">
-              <path
-                d="M185 115H895V183H855V244H225V183H185Z"
-                fill="currentColor"
-              />
-              <path
-                d="M225 244H855L815 294H265Z"
-                fill="currentColor"
-              />
-              <path
-                d="M294 294H786V634L690 604L624 690L536 638L451 721L370 665L294 702Z"
-                fill="currentColor"
-              />
-
-              <g
-                fill="none"
-                stroke="var(--paper, #0D0E12)"
-                strokeWidth="14"
-                strokeLinecap="square"
-              >
-                <path d="M368 325V632" />
-                <path d="M454 325V663" />
-                <path d="M540 325V590" />
-                <path d="M626 325V630" />
-                <path d="M712 325V557" />
-              </g>
-
-              <path
-                d="M225 183H855"
-                fill="none"
-                stroke="var(--paper, #0D0E12)"
-                strokeWidth="9"
-              />
+            {/* Broad capital, tapering shaft, and an irregular break. */}
+            <g fill="var(--ink)">
+              <path d="M234 120H806V164H234Z" />
+              <path d="M258 178H782V222H258Z" />
+              <path d="M282 236H758L716 304H324Z" />
+              <path d="M324 318H716V362H324Z" />
+              <path d="M346 376H694L714 853L622 832L548 866L454 842L326 879Z" />
             </g>
 
+            {/* Fluting is cut directly into the silhouette. */}
+            <g
+              fill="none"
+              stroke="var(--paper)"
+              strokeWidth="15"
+              strokeLinecap="square"
+            >
+              <path d="M393 399L384 840" />
+              <path d="M456 399L452 811" />
+              <path d="M520 399V834" />
+              <path d="M584 399L588 814" />
+              <path d="M647 399L657 820" />
+            </g>
+
+            {/* One continuous orange fracture—not a connector. */}
             <path
-              d="M294 792L370 755L451 811L536 728L624 780L690 694L786 724V1107H294Z"
-              fill="currentColor"
+              d="M326 895L454 858L548 882L622 848L714 869
+                 L714 885L622 864L548 898L454 874L326 911Z"
+              fill="var(--accent)"
             />
+
+            {/* Displaced lower shaft and plinth. */}
+            <g fill="var(--ink)">
+              <path d="M412 952L536 917L630 940L706 907L800 929L812 1128H400Z" />
+              <path d="M376 1144H836V1184H376Z" />
+              <path d="M344 1198H868V1240H344Z" />
+              <path d="M320 1254H892V1270H320Z" />
+            </g>
 
             <g
               fill="none"
-              stroke="var(--paper, #0D0E12)"
-              strokeWidth="14"
+              stroke="var(--paper)"
+              strokeWidth="15"
+              strokeLinecap="square"
             >
-              <path d="M368 814V1072" />
-              <path d="M454 850V1072" />
-              <path d="M540 793V1072" />
-              <path d="M626 832V1072" />
-              <path d="M712 777V1072" />
+              <path d="M465 967L462 1104" />
+              <path d="M528 953L526 1104" />
+              <path d="M592 961V1104" />
+              <path d="M656 952L658 1104" />
+              <path d="M719 954L724 1104" />
             </g>
 
             <path
-              d="M294 1107H786L824 1150H256Z"
-              fill="currentColor"
-            />
-            <path d="M230 1150H850V1193H230Z" fill="currentColor" />
-            <path d="M185 1193H895V1238H185Z" fill="currentColor" />
-
-            {/* Orange appears only at the rupture and its fallen fragment. */}
-            <path
-              d="M294 792L370 755L451 811L536 728L624 780L690 694L786 724"
-              fill="none"
+              d="M916 1254H1000"
               stroke="var(--accent)"
-              strokeWidth="13"
-              strokeLinejoin="miter"
-            />
-            <path
-              d="M838 943L902 975L860 1034L818 1001Z"
-              fill="var(--accent)"
-            />
-            <path
-              d="M107 1209L151 1178L167 1238H112Z"
-              fill="var(--surface)"
-              stroke="var(--border)"
-              strokeWidth="2"
+              strokeWidth="3"
+              vectorEffect="non-scaling-stroke"
             />
           </svg>
         </div>
 
-        <div className="mt-7 shrink-0 border-t border-[var(--border)] pt-7">
-          <div className="grid grid-cols-2 gap-6">
-            {telemetry.slice(0, 2).map((item, index) => (
-              <div
-                key={`${item.badge}-${index}`}
-                className="min-w-0 border-l-2 border-[var(--accent)] pl-6"
-              >
-                <p className="font-[var(--font-mono)] text-[38px] font-semibold leading-none tracking-[-0.04em]">
-                  {item.badge}
-                </p>
-                <p className="mt-3 font-[var(--font-body)] text-[24px] leading-snug">
-                  {item.label}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 flex items-center justify-between gap-6 border-t border-[var(--border)] pt-6">
-            <p className="bg-[var(--surface)] px-4 py-3 font-[var(--font-mono)] text-[20px] leading-none tracking-[0.08em]">
-              {cover.issueBadge ?? 'SPECIAL REPORT · 5 SLIDES'}
-            </p>
-            <p className="font-[var(--font-mono)] text-[22px] leading-none tracking-[0.04em] text-[var(--accent)]">
-              {cover.domain ?? 'tipaza.pub'}
-            </p>
-          </div>
+        <div className="grid shrink-0 grid-cols-2 gap-8 border-t border-[var(--border)] pt-6 pb-2">
+          {telemetry.slice(0, 2).map((item, index) => (
+            <div
+              key={`${item.badge}-${index}`}
+              className={
+                index === 1
+                  ? 'min-w-0 border-l border-[var(--border)] pl-8'
+                  : 'min-w-0'
+              }
+            >
+              <p className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.045em]">
+                {item.badge}
+              </p>
+              <p className="mt-3 font-[var(--font-body)] text-[24px] leading-snug">
+                {item.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -10,10 +10,12 @@
       "type": "cover",
       "publication": "Custom Brand",
       "domain": "tipaza.pub",
-      "kicker": "IMPERIAL AMBITION / URBAN SURVIVAL",
-      "headline": "Rome Claimed Tipasa. Ruins Outlasted Empires.",
-      "subheadline": "Conquest built an imperial outpost. Destruction separates its ruins from modern Tipaza.",
+      "kicker": "ANCIENT CITIES / BROKEN CONTINUITY",
+      "headline": "Tipaza Returned. Its Continuity Was Broken.",
+      "subheadline": "Trace an imperial hub’s transformation—and why its modern foundation means resettlement.",
       "issueBadge": "SPECIAL REPORT · 5 SLIDES",
+      "visualStyle": "nocturnal-monumental-editorial",
+      "layoutTopology": "monumental-editorial-cover",
       "palette": {
         "paper": "#0D0E12",
         "ink": "#F1F3F9",
@@ -22,135 +24,116 @@
       },
       "telemetry": [
         {
-          "badge": "430 CE",
-          "label": "Vandal destruction"
-        },
-        {
           "badge": "1857",
           "label": "Modern town founded"
+        },
+        {
+          "badge": "430 CE",
+          "label": "Vandal destruction"
         }
       ],
-      "visualStyle": "monumental-editorial-cover",
-      "layoutTopology": "monumental-editorial-cover",
-      "svgBlueprint": "Portrait viewBox 0 0 1080 1350; inherit palette throughout. Use 80px margins, Custom Brand masthead, orange kicker capsule, and 72px ink headline across three lines. Set subheadline at 30px. Place one oversized fractured-column silhouette beneath the headline. Bottom rail holds two compact date badges, issue badge, and tipaza.pub. No diagrams or callout boxes.",
+      "svgBlueprint": "Portrait SVG, viewBox 0 0 1080 1350. Paper background; 80px safe margins. Custom Brand masthead above orange kicker badge. Set headline at 72px across three deliberate lines; subheadline at 30px. Lower half: one monumental column silhouette in Ink, interrupted by a narrow orange fracture and displaced base. Two compact telemetry badges along bottom; issue badge beneath masthead. No diagrams, arrows, or callout boxes.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-2",
       "index": 1,
       "type": "flashpoint",
-      "kicker": "THE FLASHPOINT / IMPERIAL FRAGILITY",
-      "headline": "The Colony Could Not Hold",
-      "subheadline": "Rome’s military colony for conquering Mauretania eventually became a target itself.",
+      "kicker": "THE FLASHPOINT / CONQUEST",
+      "headline": "Destruction Was Not The Final Act",
+      "subheadline": "Vandal destruction interrupted the city; Byzantine reconquest did not secure its future.",
+      "visualStyle": "fractured-chronological-engraving",
+      "layoutTopology": "vertical-milestone-spine",
       "items": [
         {
           "badge": "430 CE",
-          "label": "Vandal destruction",
-          "body": "The Vandals destroyed Tipasa; imperial importance had offered no guarantee of survival."
+          "title": "Vandal destruction",
+          "body": "Vandals destroyed Tipasa, but the invasion did not definitively end its prosperity.​"
         },
         {
-          "badge": "20,000 inhabitants",
-          "label": "Fourth-century population",
-          "body": "Stéphane Gsell’s population estimate reveals the urban scale behind the surviving ruins."
+          "badge": "531",
+          "title": "Byzantine reconquest",
+          "body": "Byzantines reconquered the town; gradual decline followed from the 6th century."
         }
       ],
-      "telemetry": {
-        "source": "items",
-        "count": 2
-      },
-      "visualStyle": "fractured-monumental-date",
-      "layoutTopology": "hero-metric-placard",
-      "svgBlueprint": "Portrait viewBox 0 0 1080 1350; use inherited palette and 80px margins. Place headline at 58px. Render 430 CE as an 84px full-width hero, interrupted underneath by an orange fracture line. Put its body directly below. Use one lower surface panel for the 20,000 inhabitants badge at 48px and its contextual body at 28px. Keep ornament abstract, not archaeological reconstruction.",
+      "svgBlueprint": "Portrait SVG, viewBox 0 0 1080 1350; retain brand palette and 80px margins. Headline 60px, subheadline 30px. Draw a thin Ink vertical spine at x180, visibly interrupted between two orange milestone nodes. Place two Surface panels to its right, each with a 52px date, 30px title, and 28px body. Behind the lower panel, architectural outlines become progressively incomplete. Sequence is top-to-bottom, not a proportional time scale.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-3",
       "index": 2,
       "type": "hidden-dynamic",
-      "kicker": "THE HIDDEN BREAK / TWO URBAN STORIES",
-      "headline": "One Place. No Unbroken Urban Story.",
-      "subheadline": "Ancient Tipasa and modern Tipaza share geography, not an uninterrupted urban life.",
+      "kicker": "THE HIDDEN DYNAMIC / IMPERIAL REINVENTION",
+      "headline": "The City Had Already Changed Identities",
+      "subheadline": "Before destruction, trade, conquest, and Christianity had repeatedly remade Tipasa’s purpose.",
+      "visualStyle": "archaeological-strata-ledger",
+      "layoutTopology": "three-row-verification-ledger",
       "items": [
         {
-          "badge": "three basilicas",
-          "label": "Ancient Tipasa",
-          "body": "A Punic trading-post became Rome’s military colony, then an important Christian hub."
+          "title": "Commerce becomes conquest",
+          "body": "Claudius turned a conquered Punic trading-post into a military colony for conquering Mauretania."
         },
         {
-          "badge": "1857",
-          "label": "Modern Tipaza",
-          "body": "The modern town was founded after ancient destruction, reconstruction, demolition, and nineteenth-century resettlement."
+          "badge": "20,000 inhabitants",
+          "title": "Imperial scale",
+          "body": "Stéphane Gsell’s fourth-century population estimate describes the ancient city, not modern Tipaza."
+        },
+        {
+          "badge": "three basilicas",
+          "title": "Christian transformation",
+          "body": "During late Roman governorship, Tipasa became an important Christian hub."
         }
       ],
-      "telemetry": {
-        "source": "items",
-        "count": 2
-      },
-      "visualStyle": "archaeological-discontinuity-diptych",
-      "layoutTopology": "full-height-editorial-split",
-      "svgBlueprint": "Portrait viewBox 0 0 1080 1350; inherited palette. Below a 58px headline, divide the content into two 440px columns separated by a 40px empty gutter. Left: broken foundation outlines and ancient-city copy. Right: restrained modern street-grid abstraction and foundation date. Do not connect the drawings. Use 48px badges, 28px bodies, and explicit multiline wrapping; preserve the written quantity three basilicas.",
+      "svgBlueprint": "Portrait SVG, viewBox 0 0 1080 1350; retain brand palette. Below a 60px headline and 30px subheadline, stack exactly three full-width ledger rows separated by orange hairlines. Each row pairs one minimal emblem—harbour, column, basilica—with its title and body. Embed the two quantitative badges within rows two and three; preserve their complete wording. Badge type 44px, body 28px. Faint offset foundations suggest successive uses, not uninterrupted occupation.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-4",
       "index": 3,
       "type": "collision",
-      "kicker": "OPPOSING FORCES / REBUILD OR ERASE",
-      "headline": "Reconstruction Met Another Conquest",
-      "subheadline": "Byzantine reconstruction reversed Vandal destruction, but Umayyad demolition broke the recovery.",
+      "kicker": "THE COLLISION / REMAINS VERSUS RESIDENCE",
+      "headline": "Surviving Ruins Are Not Continuous Settlement",
+      "subheadline": "Ancient destruction and modern foundation belong to different chapters, not uninterrupted urban life.",
       "items": [
         {
-          "badge": "430 CE",
-          "label": "Vandals destroy",
-          "body": "Tipasa’s destruction breaks the Roman city’s trajectory."
-        },
-        {
-          "badge": "one century later",
-          "label": "Byzantines reconstruct",
-          "body": "Reconstruction restores the city, but does not secure its future."
-        },
-        {
           "badge": "the end of the seventh century",
-          "label": "Umayyads demolish",
-          "body": "Umayyad forces demolish Tipasa and reduce the city to ruins."
+          "title": "The ancient rupture",
+          "body": "Umayyad forces demolished the city and reduced it to ruins."
+        },
+        {
+          "badge": "1857",
+          "title": "The modern restart",
+          "body": "Modern Tipaza’s foundation followed resettlement in the nineteenth century—not uninterrupted Roman urban survival."
         }
       ],
-      "telemetry": {
-        "source": "items",
-        "count": 3
-      },
-      "visualStyle": "broken-chronological-spine",
-      "layoutTopology": "vertical-milestone-spine",
-      "svgBlueprint": "Portrait viewBox 0 0 1080 1350; inherited palette and 80px margins. Set headline at 58px. Stack three milestones beside a thin vertical spine. Use orange severed segments for destruction and an ink bridge for reconstruction. Dates remain verbatim: 430 CE at 48px; relative dates at 32px with deliberate wrapping. Allocate 250px per milestone and render bodies at 28px. No invented exact reconstruction or demolition years.",
+      "visualStyle": "severed-architectural-diptych",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "Portrait SVG, viewBox 0 0 1080 1350; retain brand palette and 80px margins. Headline 58px above two equal vertical panels separated by a 40px Paper gutter. Left: broken ancient foundations on Surface. Right: a distinct modern street outline on Paper. Never connect their baselines. Place the long historical date in stacked 30px text; set 1857 at 52px, never above 56px. Titles 30px; bodies 28px with manual wrapping. Orange edges face across the empty gutter.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-5",
       "index": 4,
       "type": "strategic-verdict",
-      "kicker": "THE VERDICT / RUINS BECOME VALUE",
-      "headline": "The Ruins Sustain Their Successor",
-      "subheadline": "Modern Tipaza draws visitors through remains of the city that preceded it.",
+      "kicker": "THE VERDICT / REINVENTION",
+      "headline": "Reinvention, Not Unbroken Survival",
+      "subheadline": "Modern Tipaza draws visitors to ancient remains; its identity survives through reinvention.",
+      "visualStyle": "museum-accession-date-placard",
+      "layoutTopology": "hero-metric-placard",
       "items": [
         {
           "badge": "1857",
-          "label": "A new town",
-          "body": "Modern Tipaza’s tourist importance rests principally on ancient Tipasa’s ruins—not uninterrupted urban survival."
+          "title": "A new urban chapter",
+          "body": "The modern town was founded anew; ancient ruins now anchor its tourism."
         },
         {
           "badge": "1982",
-          "label": "World Heritage designation",
-          "body": "Tipasa’s ruins received UNESCO World Heritage recognition: imperial remains became internationally recognised heritage."
+          "title": "Heritage recognition",
+          "body": "UNESCO inscribed Tipasa’s archaeological heritage—not a claim of uninterrupted urban survival."
         }
       ],
-      "telemetry": {
-        "source": "items",
-        "count": 2
-      },
-      "closingQuestion": "What survives a city: its power, its people, or its remains?",
-      "visualStyle": "heritage-afterlife-editorial",
-      "layoutTopology": "asymmetric-editorial-cards",
-      "svgBlueprint": "Portrait viewBox 0 0 1080 1350; inherited palette and 80px margins. Place 58px headline above two vertically offset cards: a wide surface card for 1857 and a narrower orange-outlined card for 1982. Use 48px dates and 28px bodies. Repeat the cover’s fractured column as a faint background silhouette. Finish with the closing question at 32px above a thin orange rule and tipaza.pub.",
+      "closingQuestion": "What endures when a city’s identity outlives its continuity?",
+      "svgBlueprint": "Portrait SVG, viewBox 0 0 1080 1350; retain brand palette and 80px margins. Headline 64px, subheadline 30px. Make 1857 the full-width 84px hero numeral above its title and body. Below, place one compact Surface footnote card with a 48px 1982 badge. A minimal orange rectangular frame encloses disconnected architectural fragments, suggesting preservation rather than restored continuity. Set the closing question at 32px above the Custom Brand · tipaza.pub footer.",
       "platform": "instagram-stories"
     }
   ]

@@ -12,7 +12,6 @@
     "@loopreel/db": "workspace:*",
     "@loopreel/generator": "workspace:*",
     "@loopreel/llm": "workspace:*",
-    "@loopreel/loop": "workspace:*",
     "@loopreel/queue": "workspace:*",
     "@loopreel/schemas": "workspace:*",
     "@loopreel/storage": "workspace:*",

@@ -136,32 +136,6 @@ services:
       redis:
         condition: service_healthy
 
-  worker-render:
-    build:
-      context: .
-      dockerfile: apps/worker-render/Dockerfile
-    mem_limit: 10g
-    environment:
-      DATABASE_URL: postgresql://loopreel:loopreel@postgres:5432/loopreel
-      REDIS_URL: redis://redis:6379
-      API_URL: http://api:3000
-      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
-      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
-      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
-      R2_BUCKET_NAME: ${R2_BUCKET_NAME:-loopreel}
-      PLAYWRIGHT_POOL_SIZE: ${PLAYWRIGHT_POOL_SIZE:-20}
-      METRICS_PORT: ${METRICS_PORT:-8004}
-      LOG_LEVEL: ${LOG_LEVEL:-info}
-      DEBUG_LOG: ${DEBUG_LOG:-false}
-      DEBUG_DIR: /app/debug
-    volumes:
-      - ./debug:/app/debug
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
   admin:
     build:
       context: .

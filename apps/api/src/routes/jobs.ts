@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { JobRepository, AssetRepository, OutboxRepository } from '@loopreel/db';
-import { JobCreateSchema, ALL_TEMPLATE_KEYS, getPlatformIds } from '@loopreel/schemas';
+import { JobCreateSchema, getPlatformIds } from '@loopreel/schemas';
 import { createQueue } from '@loopreel/queue';
 import { getPresignedUrl } from '@loopreel/storage';
 
@@ -38,7 +38,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
           sourceUrl: { type: 'string', format: 'uri' },
           platform: { type: 'string', enum: getPlatformIds(), default: 'instagram-feed' },
           engine: { type: 'string', enum: ['bespoke', 'classic'], default: 'bespoke' },
-          templateId: { type: 'string', enum: ALL_TEMPLATE_KEYS, default: 'auto' },
+          templateId: { type: 'string', default: 'bespoke' },
           brandKit: {
             type: 'object',
             properties: {

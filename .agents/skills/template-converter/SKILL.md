@@ -1,14 +1,14 @@
 ---
 name: template-converter
 description: >-
-  Use this skill whenever the user asks to convert, ingest, or build a production
-  isolated Loopreel carousel template from a single-file HTML design reference in
-  packages/loop/design-references/, or asks to create or register a new template layout.
+  Use this skill whenever the user asks to reference, ingest, or build an editorial
+  carousel template from a single-file HTML design reference in
+  packages/generator/design-references/, or explore design archetype references.
 ---
 
-# Template Converter: HTML Design Reference → Production Isolated Template
+# Template Converter: HTML Design Reference → Bespoke Editorial Template
 
-This skill governs the end-to-end, zero-manual-effort conversion of single-file HTML design mocks (generated via ChatGPT, Claude 3.5 Sonnet, or Gemini) into 100% isolated production React templates for Loopreel.
+This skill governs the reference and conversion of single-file HTML design mocks in `packages/generator/design-references/` into bespoke production React slide components in `@loopreel/generator`.
 
 The user acts as the **Creative Director** (providing the HTML reference). The AI agent acts as the **Autonomous Engineer**, executing 100% of the extraction, CSS translation, scaffolding, schema registration, and visual testing.
 

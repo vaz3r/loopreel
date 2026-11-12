@@ -65,22 +65,15 @@ export const BrandKitSchema = z.object({
 }).passthrough();
 export type BrandKit = z.infer<typeof BrandKitSchema>;
 
-export const TEMPLATE_KEYS = [
-  'paper-of-record',
-  'the-globalist',
-  'the-curator',
-  'the-academic',
-  'the-signal',
-  'the-field-notes',
-] as const;
-export type TemplateId = (typeof TEMPLATE_KEYS)[number];
-export type ClassicTemplateId = TemplateId;
+export const TEMPLATE_KEYS = ['bespoke'] as const;
+export type TemplateId = string;
+export type ClassicTemplateId = string;
 
 export const EngineEnum = z.enum(['bespoke', 'classic']);
 export type Engine = z.infer<typeof EngineEnum>;
 
-export const ALL_TEMPLATE_KEYS = ['auto', 'bespoke', ...TEMPLATE_KEYS] as const;
-export type TemplateInputId = (typeof ALL_TEMPLATE_KEYS)[number];
+export const ALL_TEMPLATE_KEYS = ['auto', 'bespoke'] as const;
+export type TemplateInputId = string;
 
 export const NarrativePresetEnum = z.enum([
   'storytelling',
@@ -99,7 +92,7 @@ export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
   platform: PlatformEnum.default('instagram-feed'),
   engine: EngineEnum.default('bespoke'),
-  templateId: z.enum(ALL_TEMPLATE_KEYS).default('bespoke'),
+  templateId: z.string().default('bespoke'),
   brandKit: BrandKitSchema.optional(),
   narrativePreset: NarrativePresetEnum.default('storytelling'),
   targetSlideCount: z.number().int().min(4).max(14).default(7),
