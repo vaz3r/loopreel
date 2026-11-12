@@ -46,6 +46,14 @@ export async function auditTemplateStudio(
       await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
       await page.waitForTimeout(300); // Allow fonts and AutoFit to settle
 
+      // Verify that the browser actually rendered the requested template and was not redirected
+      const currentUrl = page.url();
+      if (!currentUrl.includes(`template=${templateSlug}`)) {
+        errors.push(`Slide ${i + 1}: Studio redirected away from requested template "${templateSlug}" to "${currentUrl}"`);
+        totalCollisions++;
+        continue;
+      }
+
       // Detect Vite compilation / runtime error overlay immediately
       const viteOverlay = await page.$('vite-error-overlay');
       if (viteOverlay) {

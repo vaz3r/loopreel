@@ -92,7 +92,7 @@ export function StudioPage() {
   }, []);
 
   const [activeSlug, setActiveSlug] = useState<string>(() => {
-    if (initialTemplateParam && templates.some((t) => t.slug === initialTemplateParam)) {
+    if (initialTemplateParam) {
       return initialTemplateParam;
     }
     return templates[0]?.slug || '';
@@ -111,13 +111,22 @@ export function StudioPage() {
 
   // Sync selected template from URL if it changes externally
   useEffect(() => {
-    if (initialTemplateParam && templates.some((t) => t.slug === initialTemplateParam) && initialTemplateParam !== activeSlug) {
+    if (initialTemplateParam && initialTemplateParam !== activeSlug) {
       setActiveSlug(initialTemplateParam);
     }
-  }, [initialTemplateParam, templates, activeSlug]);
+  }, [initialTemplateParam, activeSlug]);
 
   const activeManifest = useMemo(() => {
-    return templates.find((t) => t.slug === activeSlug) || templates[0];
+    const found = templates.find((t) => t.slug === activeSlug);
+    if (found) return found;
+    if (activeSlug) {
+      return {
+        slug: activeSlug,
+        name: activeSlug,
+        indexPath: `../../../../packages/generator/templates/${activeSlug}/index.ts`,
+      };
+    }
+    return templates[0];
   }, [templates, activeSlug]);
 
   // Load selected template package dynamically
@@ -131,7 +140,7 @@ export function StudioPage() {
     setIsLoading(true);
     setLoadError(null);
 
-    const loader = templateLoaders[activeManifest.indexPath];
+    const loader = templateLoaders[activeManifest.indexPath] || (() => import(`../../../../packages/generator/templates/${activeManifest.slug}/index.ts`));
     if (!loader) {
       setLoadError(`No template entrypoint found for ${activeManifest.slug}`);
       setIsLoading(false);
