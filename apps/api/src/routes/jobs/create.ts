@@ -53,7 +53,7 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, platform, engine, templateId, brandKit, generateText } = parse.data;
+    const { sourceUrl, platform, engine, templateId, brandKit, narrativePreset, targetSlideCount, generateText } = parse.data;
     const sourceType = determineSourceType(sourceUrl);
 
     const targetTemplateId = engine === 'bespoke'
@@ -63,6 +63,8 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
     const effectiveBrandKit = {
       ...(brandKit ?? {}),
       engine,
+      narrativePreset: narrativePreset || (brandKit as any)?.narrativePreset || 'storytelling',
+      targetSlideCount: targetSlideCount || (brandKit as any)?.targetSlideCount || 7,
     };
 
     const jobId = await JobRepository.create({

@@ -24,6 +24,8 @@ export interface CreateJobInput {
   engine?: 'bespoke' | 'classic';
   templateId?: string;
   generateText?: boolean;
+  narrativePreset?: string;
+  targetSlideCount?: number;
   brandKit?: any;
 }
 

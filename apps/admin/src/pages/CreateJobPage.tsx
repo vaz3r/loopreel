@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2 } from 'lucide-react';
+import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2, Sliders } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { TemplateSelect } from '@/components/TemplateSelect';
@@ -22,6 +22,82 @@ const DEMO_PRESETS = [
     name: 'Frontier AI & Moats',
     publisher: 'Google News / Tech',
     url: 'https://news.google.com/rss/articles/CBMinwFBVV95cUxPc0xncmpQRnRNV3labGNBOE15RFpFWlYzclM1VmVEX3BQQm10c3dJTFJqQm5vbkdXMHZoUGRaY241M0Nvam14Rm5wTDAwSzRxdHdrTnFEd3hyeXcwMUR6bjA3eHJLVTF5c2NYT1BaTFdaLWRYMDVVaC1jZkhFcjJEaW5HQ3U3cnhRdnV2QzhVd1NYWENVOFN6T3MtMkdQQlE?oc=5',
+  },
+];
+
+interface NarrativePresetOption {
+  id: string;
+  name: string;
+  category: 'Narrative' | 'Analysis' | 'Action';
+  tagline: string;
+  vibe: string;
+  icon: string;
+}
+
+const NARRATIVE_PRESETS: NarrativePresetOption[] = [
+  {
+    id: 'storytelling',
+    name: 'Narrative Storytelling',
+    category: 'Narrative',
+    tagline: 'Protagonist, conflict, escalating stakes & transformation',
+    vibe: 'Wired, Stripe Press, The Atlantic',
+    icon: '📖',
+  },
+  {
+    id: 'news-reporting',
+    name: 'Hard News & Briefing',
+    category: 'Narrative',
+    tagline: 'Inverted pyramid, breaking scoop, context & implications',
+    vibe: 'Financial Times, Reuters, Axios',
+    icon: '📰',
+  },
+  {
+    id: 'entertainment',
+    name: 'Pop & Entertainment',
+    category: 'Narrative',
+    tagline: 'Punchy hook, viral drama, cultural pulse & witty hot-takes',
+    vibe: 'The Verge, Rolling Stone, Vox',
+    icon: '🍿',
+  },
+  {
+    id: 'deep-dive',
+    name: 'Architectural Deep Dive',
+    category: 'Analysis',
+    tagline: 'First-principles breakdown, technical teardown & mechanics',
+    vibe: 'ACM Queue, Pragmatic Engineer, Stratechery',
+    icon: '🔬',
+  },
+  {
+    id: 'financial-analysis',
+    name: 'Markets & Valuation',
+    category: 'Analysis',
+    tagline: 'Unit economics, balance sheets, capital flows & thesis',
+    vibe: 'Bloomberg Markets, Economist, WSJ',
+    icon: '📈',
+  },
+  {
+    id: 'case-study',
+    name: 'Strategic Case Study',
+    category: 'Analysis',
+    tagline: 'Executive problem, pivot, measurable outcome & playbook',
+    vibe: 'Harvard Business Review, McKinsey Quarterly',
+    icon: '💼',
+  },
+  {
+    id: 'mythbuster',
+    name: 'Mythbuster & Contrarian',
+    category: 'Action',
+    tagline: 'Conventional wisdom debunked with empirical data',
+    vibe: 'Freakonomics, Farnam Street, Vox Explainers',
+    icon: '💡',
+  },
+  {
+    id: 'playbook',
+    name: 'Actionable Playbook',
+    category: 'Action',
+    tagline: 'Step-by-step tactics, recipes, checklists & anti-patterns',
+    vibe: 'Reforge, Y Combinator Library',
+    icon: '⚡',
   },
 ];
 
@@ -52,6 +128,8 @@ export function CreateJobPage() {
       return {};
     }
   });
+  const [narrativePreset, setNarrativePreset] = useState<string>('storytelling');
+  const [targetSlideCount, setTargetSlideCount] = useState<number>(7);
   const [showBrandKit, setShowBrandKit] = useState(false);
   const [generateText, setGenerateText] = useState(false);
 
@@ -63,6 +141,8 @@ export function CreateJobPage() {
       platform,
       engine,
       templateId: engine === 'bespoke' ? 'bespoke' : templateId,
+      narrativePreset,
+      targetSlideCount,
       generateText,
     };
 
@@ -180,6 +260,109 @@ export function CreateJobPage() {
             <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Platform Canvas</Label>
             <PlatformSelect value={platform} onChange={setPlatform} />
           </div>
+
+          {/* Slide Deck Size (Carousel Length) */}
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between">
+              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em] flex items-center gap-1.5">
+                <Sliders className="h-3.5 w-3.5 text-emerald-400" />
+                Slide Count ({targetSlideCount} Slides)
+              </Label>
+              <span className="text-[10px] font-mono text-text-quaternary">
+                Social sweet-spot: 5–8 slides
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {[
+                { count: 5, label: '5 Slides', desc: 'Punchy Brief' },
+                { count: 7, label: '7 Slides', desc: 'Optimal (Recommended)' },
+                { count: 10, label: '10 Slides', desc: 'Deep Dive' },
+              ].map((pill) => (
+                <button
+                  key={pill.count}
+                  type="button"
+                  onClick={() => setTargetSlideCount(pill.count)}
+                  className={`flex-1 py-2 px-2.5 rounded-lg border text-left transition-all ${
+                    targetSlideCount === pill.count
+                      ? 'border-emerald-500/80 bg-emerald-500/10 text-text-primary shadow-xs'
+                      : 'border-border bg-surface-2 text-text-secondary hover:border-border-secondary hover:text-text-primary'
+                  }`}
+                >
+                  <div className={`text-[12px] font-semibold ${targetSlideCount === pill.count ? 'text-emerald-400' : ''}`}>
+                    {pill.label}
+                  </div>
+                  <div className="text-[10px] text-text-quaternary">{pill.desc}</div>
+                </button>
+              ))}
+              <div className="flex items-center gap-1.5 pl-2 border-l border-border">
+                <Label htmlFor="custom-slides" className="text-[10px] text-text-quaternary uppercase font-mono">
+                  Custom
+                </Label>
+                <Input
+                  id="custom-slides"
+                  type="number"
+                  min={4}
+                  max={14}
+                  value={targetSlideCount}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10);
+                    if (!isNaN(val) && val >= 4 && val <= 14) {
+                      setTargetSlideCount(val);
+                    }
+                  }}
+                  className="w-14 h-9 bg-surface-2 border-border text-[12px] text-center font-mono"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Editorial Narrative Preset Selector */}
+          {engine === 'bespoke' && (
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center justify-between">
+                <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                  Editorial Narrative Preset
+                </Label>
+                <span className="text-[10px] font-mono text-emerald-400">
+                  {NARRATIVE_PRESETS.find((p) => p.id === narrativePreset)?.name}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {NARRATIVE_PRESETS.map((preset) => {
+                  const isSelected = narrativePreset === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setNarrativePreset(preset.id)}
+                      className={`p-2.5 rounded-lg border text-left transition-all ${
+                        isSelected
+                          ? 'border-emerald-500/80 bg-emerald-500/10 text-text-primary shadow-xs ring-1 ring-emerald-500/30'
+                          : 'border-border bg-surface-2 text-text-tertiary hover:border-border-secondary hover:text-text-secondary'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-base">{preset.icon}</span>
+                        <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-surface-3 text-text-quaternary">
+                          {preset.category}
+                        </span>
+                      </div>
+                      <div className={`text-[12px] font-semibold mt-1.5 ${isSelected ? 'text-emerald-400' : 'text-text-primary'}`}>
+                        {preset.name}
+                      </div>
+                      <p className="text-[10px] text-text-tertiary mt-0.5 line-clamp-1">
+                        {preset.tagline}
+                      </p>
+                      <span className="text-[9px] font-mono text-text-quaternary mt-1 block truncate">
+                        {preset.vibe}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Bespoke Brand Direction Selector */}
           {engine === 'bespoke' && (

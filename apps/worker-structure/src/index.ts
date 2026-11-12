@@ -84,12 +84,18 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     if (isBespoke) {
       jobLogger.info({ sourceUrl: existing.source_url }, 'Processing via Bespoke Codegen Engine (@loopreel/generator)...');
 
+      const rawBrandKit = (existing.brand_kit as any) || {};
+      const narrativePreset = rawBrandKit.narrativePreset || 'storytelling';
+      const targetSlideCount = typeof rawBrandKit.targetSlideCount === 'number' ? rawBrandKit.targetSlideCount : 7;
+
       // Run bespoke generation pipeline with parallel codegen (N=3) and automated visual audit
       const result = await generateTemplateReference(
         {
           url: existing.source_url,
           platform: existing.platform,
-          brandKit: existing.brand_kit as any,
+          brandKit: rawBrandKit,
+          narrativePreset,
+          targetSlideCount,
         },
         { runAudit: true, concurrency: 3 }
       );

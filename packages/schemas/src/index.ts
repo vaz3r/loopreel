@@ -82,6 +82,18 @@ export type Engine = z.infer<typeof EngineEnum>;
 export const ALL_TEMPLATE_KEYS = ['auto', 'bespoke', ...TEMPLATE_KEYS] as const;
 export type TemplateInputId = (typeof ALL_TEMPLATE_KEYS)[number];
 
+export const NarrativePresetEnum = z.enum([
+  'storytelling',
+  'news-reporting',
+  'deep-dive',
+  'financial-analysis',
+  'case-study',
+  'entertainment',
+  'mythbuster',
+  'playbook',
+]);
+export type NarrativePreset = z.infer<typeof NarrativePresetEnum>;
+
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
   sourceUrl: z.string().url(),
@@ -89,6 +101,8 @@ export const JobCreateSchema = z.object({
   engine: EngineEnum.default('bespoke'),
   templateId: z.enum(ALL_TEMPLATE_KEYS).default('bespoke'),
   brandKit: BrandKitSchema.optional(),
+  narrativePreset: NarrativePresetEnum.default('storytelling'),
+  targetSlideCount: z.number().int().min(4).max(14).default(7),
   generateText: z.boolean().default(false),
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;

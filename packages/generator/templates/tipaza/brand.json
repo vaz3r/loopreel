@@ -1,26 +1,26 @@
 {
   "name": "The Zurich Typographer",
   "slug": "tipaza",
-  "vibe": "Swiss International Style, Pure Grid Geometry & Clean Discipline",
-  "domain": "zurichtypo.ch",
+  "vibe": "Ultra-rigorous Swiss International style, asymmetric grid, stark contrast",
+  "domain": "tipaza.pub",
   "palette": {
-    "paper": "#FFFFFF",
-    "ink": "#000000",
-    "accent": "#E60000",
-    "surface": "#F5F5F5",
-    "border": "#E5E5E5",
-    "subtle": "#666666"
+    "paper": "#f5f5f7",
+    "ink": "#0b0c10",
+    "accent": "#ff2a2a",
+    "surface": "#e4e4e7",
+    "border": "#0b0c1025",
+    "subtle": "#0b0c1080"
   },
   "typography": {
-    "headlineFont": "Inter",
-    "bodyFont": "Inter",
+    "headlineFont": "Helvetica Neue, -apple-system, system-ui, sans-serif",
+    "bodyFont": "Helvetica Neue, -apple-system, system-ui, sans-serif",
     "monoFont": "JetBrains Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Helvetica%20Neue%2C%20-apple-system%2C%20system-ui%2C%20sans-serif:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
   },
-  "wordmark": "ZÜRICH TYPO",
+  "wordmark": "THE ZURICH TYPOGRAPHER",
   "wordmarkStyle": "sans",
-  "handle": "@zurichtypo",
+  "handle": "@tipaza",
   "texture": "grid",
-  "motif": "bracket",
+  "motif": "crosshair",
   "platform": "instagram-stories"
 }

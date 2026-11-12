@@ -7,131 +7,162 @@ export default function Slide05({
   totalSlides,
 }: SlideComponentProps) {
   const items = slide.items ?? [];
-  const item0 = items[0];
-  const item1 = items[1];
+  const ancient = items[0];
+  const modern = items[1];
+
+  const ancientWords = (ancient?.badge ?? '').trim().split(/\s+/);
+  const ancientPeriod = [
+    ancientWords.slice(0, 2).join(' '),
+    ancientWords.slice(2, 4).join(' '),
+    ancientWords.slice(4).join(' '),
+  ];
+
+  void brand;
+  void totalSlides;
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex h-full min-h-0 flex-col gap-9 bg-white">
-        <header className="shrink-0 border-t border-[var(--ink)] pt-7">
-          <p className="font-[var(--font-mono)] text-[20px] uppercase leading-normal tracking-[0.16em] text-[var(--accent)]">
+      <header className="shrink-0">
+        <div className="mb-7 flex items-center gap-5">
+          <span
+            aria-hidden="true"
+            className="h-[3px] w-14 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[22px] uppercase tracking-[0.16em] text-[var(--accent)]">
             {slide.kicker}
           </p>
-
-          <h1 className="mt-7 max-w-[880px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.02] tracking-[-0.04em]">
-            {slide.headline}
-          </h1>
-
-          <p className="mt-6 max-w-[850px] font-[var(--font-body)] text-[28px] leading-snug">
-            {slide.subheadline}
-          </p>
-        </header>
-
-        <div className="relative grid aspect-[1080/1350] w-full shrink-0 grid-rows-[480fr_870fr]">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 1080 1350"
-            fill="none"
-            className="pointer-events-none absolute inset-0 h-full w-full"
-          >
-            {/* Exploded rectilinear blocks: a schematic repair drawing. */}
-            <g
-              stroke="var(--border)"
-              strokeWidth="2"
-              strokeLinejoin="miter"
-            >
-              <path d="M24 520H136V640H24Z" />
-              <path d="M148 532H256V640H148Z" />
-              <path d="M36 652H144V772H36Z" />
-              <path d="M156 652H276V772H156Z" />
-
-              <path d="M80 920H280V1040H80Z" />
-              <path d="M292 920H492V1040H292Z" />
-              <path d="M504 920H704V1040H504Z" />
-              <path d="M716 920H916V1040H716Z" />
-
-              <path d="M80 1052H174V1172H80Z" />
-              <path d="M186 1052H386V1172H186Z" />
-              <path d="M398 1052H598V1172H398Z" />
-              <path d="M610 1052H810V1172H610Z" />
-              <path d="M822 1052H916V1172H822Z" />
-
-              <path d="M80 1184H280V1304H80Z" />
-              <path d="M292 1184H492V1304H292Z" />
-              <path d="M504 1184H704V1304H504Z" />
-              <path d="M716 1184H916V1304H716Z" />
-            </g>
-
-            <g
-              stroke="var(--border)"
-              strokeWidth="1"
-              strokeDasharray="7 9"
-            >
-              <path d="M280 870V1324" />
-              <path d="M704 870V1324" />
-              <path d="M48 908H948" />
-              <path d="M48 1316H948" />
-            </g>
-
-            {/* One spine; exactly two milestone nodes. */}
-            <g stroke="var(--ink)" strokeWidth="2">
-              <path d="M80 0V70" />
-              <path d="M80 130V568" />
-              <path d="M80 592V1350" />
-            </g>
-
-            {/* Red fracture interrupts the first milestone. */}
-            <g stroke="var(--accent)" strokeWidth="3">
-              <path d="M66 70L94 64" />
-              <path d="M66 136L94 130" />
-            </g>
-
-            <circle
-              cx="80"
-              cy="100"
-              r="12"
-              fill="white"
-              stroke="var(--accent)"
-              strokeWidth="3"
-            />
-            <circle
-              cx="80"
-              cy="580"
-              r="12"
-              fill="var(--ink)"
-              stroke="white"
-              strokeWidth="3"
-            />
-          </svg>
-
-          <article className="relative z-10 pl-[156px] pr-[70px] pt-[64px]">
-            <p className="font-[var(--font-mono)] text-[40px] font-semibold leading-[48px] tracking-[-0.04em] text-[var(--accent)]">
-              {item0?.badge}
-            </p>
-
-            <h2 className="mt-8 font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.02em]">
-              {item0?.label || item0?.title}
-            </h2>
-
-            <p className="mt-5 max-w-[620px] font-[var(--font-body)] text-[28px] leading-snug">
-              {item0?.body}
-            </p>
-          </article>
-
-          <article className="relative z-10 pl-[156px] pr-[70px] pt-[64px]">
-            <p className="font-[var(--font-mono)] text-[40px] font-semibold leading-[48px] tracking-[-0.04em]">
-              {item1?.badge}
-            </p>
-
-            <h2 className="mt-8 font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.02em]">
-              {item1?.label || item1?.title}
-            </h2>
-
-            <p className="mt-5 max-w-[620px] font-[var(--font-body)] text-[28px] leading-snug">
-              {item1?.body}
-            </p>
-          </article>
         </div>
+
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[68px] font-bold leading-[1.02] tracking-[-0.04em] [text-wrap:balance]">
+          {slide.headline}
+        </h1>
+
+        <p className="mt-7 max-w-[840px] font-[var(--font-body)] text-[28px] leading-snug">
+          {slide.subheadline}
+        </p>
+
+        <div
+          aria-hidden="true"
+          className="mt-8 h-px w-full bg-[var(--border)]"
+        />
+      </header>
+
+      <div className="mt-9 grid min-h-0 flex-1 grid-cols-2 grid-rows-[minmax(410px,1fr)_240px_minmax(410px,1fr)] gap-x-16 pb-5">
+        {/* Source order remains ancient → modern; placement climbs upward. */}
+        <article className="relative col-start-1 row-start-3 self-start bg-[var(--surface)] px-8 py-8">
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-[3px] bg-[var(--ink)]"
+          />
+
+          <p className="font-[var(--font-mono)] text-[28px] leading-[1.25]">
+            {ancientPeriod.map((line, index) => (
+              <span key={index} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+
+          <h2 className="mt-6 font-[var(--font-headline)] text-[34px] font-semibold leading-[1.12] tracking-[-0.025em]">
+            {ancient?.label || ancient?.title}
+          </h2>
+
+          <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
+            {ancient?.body}
+          </p>
+
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-4 left-0 right-8 h-4 border-b border-r border-[var(--border)] bg-[var(--surface)]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-5 left-0 right-16 h-px bg-[var(--border)]"
+          />
+        </article>
+
+        <article className="relative col-start-2 row-start-1 self-end border-l border-t border-[var(--border)] bg-[var(--paper,#f5f5f7)] px-8 py-8">
+          <div
+            aria-hidden="true"
+            className="absolute -top-px left-0 h-[3px] w-20 bg-[var(--accent)]"
+          />
+
+          <p className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.045em] text-[var(--accent)]">
+            {modern?.badge}
+          </p>
+
+          <h2 className="mt-6 font-[var(--font-headline)] text-[34px] font-semibold leading-[1.12] tracking-[-0.025em]">
+            {modern?.label || modern?.title}
+          </h2>
+
+          <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
+            {modern?.body}
+          </p>
+
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-4 left-8 right-0 h-4 border-b border-l border-[var(--border)] bg-[var(--paper,#f5f5f7)]"
+          />
+        </article>
+
+        {/* The connector, strata, endpoints and arrow share SVG coordinates. */}
+        <svg
+          className="col-span-2 col-start-1 row-start-2 h-[240px] w-full"
+          viewBox="0 0 952 240"
+          role="img"
+          aria-label="CHRONOLOGY, NOT TO SCALE"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          >
+            <path d="M32 214H176V188H278" />
+            <path d="M32 226H192V202H250" />
+            <path d="M674 50H778V24H920" />
+            <path d="M704 64H794V38H920" />
+          </g>
+
+          <g
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+          >
+            <path d="M278 188L386 154L399 160L408 146" />
+            <path d="M552 100L562 86L575 92L674 50" />
+          </g>
+
+          <g fill="var(--accent)">
+            <circle cx="278" cy="188" r="5" />
+            <circle cx="674" cy="50" r="5" />
+          </g>
+
+          <g
+            fill="none"
+            stroke="var(--ink)"
+            strokeWidth="2"
+            opacity="0.45"
+          >
+            <path d="M724 148L774 98" />
+            <path d="M756 98H774V116" />
+          </g>
+
+          <text
+            x="476"
+            y="225"
+            textAnchor="middle"
+            fill="var(--ink)"
+            fontSize="20"
+            letterSpacing="2"
+            className="font-[var(--font-mono)]"
+          >
+            CHRONOLOGY, NOT TO SCALE
+          </text>
+        </svg>
       </div>
     </section>
   );

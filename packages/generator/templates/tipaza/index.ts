@@ -9,10 +9,7 @@ import Slide03_Hiddendynamic from './slides/Slide03_Hiddendynamic';
 import Slide04_Collision from './slides/Slide04_Collision';
 import Slide05_Turningpoint from './slides/Slide05_Turningpoint';
 import Slide06_Groundreality from './slides/Slide06_Groundreality';
-import Slide07_Unintendedripple from './slides/Slide07_Unintendedripple';
-import Slide08_Highstakesdilemma from './slides/Slide08_Highstakesdilemma';
-import Slide09_Decisivepressurepoint from './slides/Slide09_Decisivepressurepoint';
-import Slide10_Strategicverdict from './slides/Slide10_Strategicverdict';
+import Slide07_Strategicverdict from './slides/Slide07_Strategicverdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
@@ -24,10 +21,7 @@ const pkg: TemplatePackage = {
   Slide04_Collision,
   Slide05_Turningpoint,
   Slide06_Groundreality,
-  Slide07_Unintendedripple,
-  Slide08_Highstakesdilemma,
-  Slide09_Decisivepressurepoint,
-  Slide10_Strategicverdict,
+  Slide07_Strategicverdict,
   ],
 };
 

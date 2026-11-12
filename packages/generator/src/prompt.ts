@@ -250,14 +250,181 @@ export interface StoryStrategy {
   keyQuotes: Array<{ quote: string; speaker: string; role: string }>;
 }
 
-export function buildStoryStrategySystemPrompt(): string {
-  return `You are the Editor-in-Chief at Wired, The New York Times Magazine, and Vox.
+export type NarrativePreset =
+  | 'storytelling'
+  | 'news-reporting'
+  | 'deep-dive'
+  | 'financial-analysis'
+  | 'case-study'
+  | 'entertainment'
+  | 'mythbuster'
+  | 'playbook';
+
+export function getNarrativeArc(preset: NarrativePreset = 'storytelling', targetSlideCount = 7): string {
+  const count = Math.max(4, Math.min(14, targetSlideCount));
+
+  if (preset === 'news-reporting') {
+    const steps = [
+      'Slide 1: BROADSHEET LEAD (Cover) — Definitive news headline, breaking event scope, and verified telemetry badge.',
+      'Slide 2: THE BREAKING CHRONOLOGY — Verified chronological sequence of fast-moving developments.',
+      'Slide 3: OFFICIAL POSITIONS & CLAIMS — What corporations, agencies, or state actors officially claimed.',
+      'Slide 4: FORENSIC COUNTER-EVIDENCE — Independent documents, contradictory evidence, or satellite data.',
+      'Slide 5: SYSTEMIC & FINANCIAL IMPACT — Hard verified telemetry, operational toll, or supply chain shock.',
+      'Slide 6: STAKEHOLDER EXPOSURE — Who wins, who pays, and who carries the systemic risk.',
+      'Slide 7: FORENSIC PAPER TRAIL — Internal memos, patent filings, contracts, or leaked records.',
+      'Slide 8: REGULATORY & MARKET FALLOUT — Sanctions, antitrust filings, or market shockwaves.',
+      'Slide 9: THE LOOMING MILESTONE — Upcoming court dates, hearings, or policy deadlines.',
+      'Slide 10: BUREAU SOURCE AUDIT & VERDICT — Final balance of verified facts and critical unanswered questions.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: BUREAU SOURCE AUDIT & VERDICT — Final balance of verified facts and critical unanswered questions.`]).join('\n     * ');
+  }
+
+  if (preset === 'deep-dive') {
+    const steps = [
+      'Slide 1: THE SYSTEMS THESIS (Cover) — The core engineering challenge and architectural paradigm shift.',
+      'Slide 2: FIRST PRINCIPLES & BASELINE — Fundamental physical, computational, or thermodynamic limits.',
+      'Slide 3: SYSTEM TOPOLOGY (UNDER THE HOOD) — How the core mechanism or model architecture functions.',
+      'Slide 4: THE CRITICAL BOTTLENECK — Memory wall, thermal dissipation, latency, or compute ceiling.',
+      'Slide 5: COMPONENT DATAFLOW & ARCHITECTURE — Stage-by-stage pipeline walkthrough with technical telemetry.',
+      'Slide 6: BENCHMARK TELEMETRY & EFFICIENCY — P99 latency, FLOPS/watt, cost-performance curves.',
+      'Slide 7: THE ARCHITECTURAL TRADEOFF MATRIX — What was sacrificed (consistency, cost, power, privacy).',
+      'Slide 8: FAILURE MODES & EDGE CASES — What breaks under stress or adversarial inputs.',
+      'Slide 9: DEPLOYMENT HORIZON — Production roadmap, ecosystem dependencies, and scaling hurdles.',
+      'Slide 10: ARCHITECTURAL VERDICT & LESSONS — The lasting takeaway for systems engineers and builders.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: ARCHITECTURAL VERDICT & LESSONS — The lasting takeaway for systems engineers and builders.`]).join('\n     * ');
+  }
+
+  if (preset === 'financial-analysis') {
+    const steps = [
+      'Slide 1: THE MARKET SHOCK (Cover) — The market-moving valuation event, earnings surprise, or capital shock.',
+      'Slide 2: TOPLINE VS BOTTOMLINE — Revenue trajectory, net margin, and consensus delta.',
+      'Slide 3: THE REVENUE ENGINE BREAKDOWN — Unit economics, segment growth, and customer acquisition efficiency.',
+      'Slide 4: MARGIN COMPRESSION & HIDDEN COSTS — Operating leverage, R&D burden, and overhead drag.',
+      'Slide 5: CASH RUNWAY & DEBT MATURITY — Free cash flow, liquidity runway, and balance sheet leverage.',
+      'Slide 6: COMPETITIVE MOAT TEARDOWN — Market share shifts, pricing power, and churn vs competitors.',
+      'Slide 7: BULL THESIS VS BEAR REALITY — Institutional upside case juxtaposed with downside exposure.',
+      'Slide 8: MACRO CONTAGION & HEADWINDS — Currency volatility, rate sensitivity, tariffs, and inflation.',
+      'Slide 9: THE GUIDANCE HORIZON — Management forecast, revisions, and the next earnings catalyst.',
+      'Slide 10: WALL STREET VERDICT — Consensus valuation takeaway and capital allocation summary.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: WALL STREET VERDICT — Consensus valuation takeaway and capital allocation summary.`]).join('\n     * ');
+  }
+
+  if (preset === 'case-study') {
+    const steps = [
+      'Slide 1: THE STRATEGIC PARADOX (Cover) — The existential crisis threatening market dominance.',
+      'Slide 2: PRE-CRISIS DOMINANCE — The original moat, market share, and structural advantage.',
+      'Slide 3: THE DISRUPTION TRIGGER — The technology or regulatory shock that broke the moat.',
+      'Slide 4: THE STRATEGIC FORK — The competing internal executive options (Path A vs Path B).',
+      'Slide 5: THE PIVOT DECISION — The capital, product, and organizational bet leadership made.',
+      'Slide 6: MEASURABLE AFTERMATH — Market share, churn, retention, and operating margin shift.',
+      'Slide 7: THE UNINTENDED TRADEOFFS — What was sacrificed to make the pivot work.',
+      'Slide 8: THE COMPETITIVE REBALANCING — How rivals countered and reorganized the industry.',
+      'Slide 9: OPERATIONAL LESSONS — Execution pitfalls and organizational friction.',
+      'Slide 10: THE EXECUTIVE PLAYBOOK — 3 core transferable strategic lessons for leaders.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: THE EXECUTIVE PLAYBOOK — 3 core transferable strategic lessons for leaders.`]).join('\n     * ');
+  }
+
+  if (preset === 'entertainment') {
+    const steps = [
+      'Slide 1: THE CULTURAL PHENOMENON (Cover) — Bold, witty hook that cuts through the internet noise.',
+      'Slide 2: THE SPECTACLE / THE PITCH — The glossy promise that captured mainstream attention.',
+      'Slide 3: BEHIND THE VELVET ROPE — What was actually happening behind closed doors and PR spin.',
+      'Slide 4: THE GREAT POLARIZATION — Fanatics vs skeptics, internet discourse, and tribal lines.',
+      'Slide 5: THE REALITY CHECK / CRASH — When the hype met cold operational friction.',
+      'Slide 6: THE RECEIPTS (NUMBERS & MEMES) — The eye-opening metrics, churn data, or viral receipts.',
+      'Slide 7: CULTURAL CONTAGION / THE RIPPLE — How competitors and copycats scrambled.',
+      'Slide 8: THE CYNICAL TRAP — Why users or platforms are locked into this dynamic.',
+      'Slide 9: THE NEXT DROP / IMMINENT CLIMAX — The upcoming sequel, product drop, or reckoning.',
+      'Slide 10: THE CULTURAL VERDICT — What this phenomenon reveals about modern attention and society.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: THE CULTURAL VERDICT — What this phenomenon reveals about modern attention and society.`]).join('\n     * ');
+  }
+
+  if (preset === 'mythbuster') {
+    const steps = [
+      'Slide 1: THE CONVENTIONAL WISDOM (Cover) — The widely repeated myth, PR talking point, or viral claim.',
+      'Slide 2: WHY EVERYONE BELIEVED IT — The psychological, financial, or PR engine behind the belief.',
+      'Slide 3: THE ANOMALY — The quiet contradiction or missing data that triggered scrutiny.',
+      'Slide 4: THE REAL MECHANISM REVEALED — What is actually occurring beneath the surface.',
+      'Slide 5: FORENSIC EVIDENCE & RECEIPTS — Independent data, physical tests, or leaked documentation.',
+      'Slide 6: FOLLOW THE MONEY / WHO BENEFITS — The institutional incentives keeping the illusion alive.',
+      'Slide 7: THE HIDDEN CASUALTIES — Who pays the cost or suffers the collateral damage.',
+      'Slide 8: WHY THE MYTH PERSISTS — Institutional incentives and cognitive bias keeping it alive.',
+      'Slide 9: THE LITMUS TEST — How the reader can independently spot this deception in the wild.',
+      'Slide 10: THE REALITY CHECK VERDICT — The definitive factual record and final takeaway.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: THE REALITY CHECK VERDICT — The definitive factual record and final takeaway.`]).join('\n     * ');
+  }
+
+  if (preset === 'playbook') {
+    const steps = [
+      'Slide 1: THE CORE FRAMEWORK (Cover) — The universal problem and the core mental model.',
+      'Slide 2: WHY STANDARD PLAYBOOKS FAIL — The flawed conventional advice that creates bottlenecks.',
+      'Slide 3: THE UNDERLYING PRINCIPLE — The fundamental dynamic that unlocks 10x leverage.',
+      'Slide 4: PHASE 1: BASELINE DIAGNOSTIC — How to audit your current state before taking action.',
+      'Slide 5: PHASE 2: HIGH-LEVERAGE INTERVENTION — The core strategic lever to pull first.',
+      'Slide 6: PHASE 3: OPERATIONAL GUARDRAILS — Rules and metrics to prevent backsliding.',
+      'Slide 7: COMMON FAILURE MODES & TRAPS — 3 mistakes where most teams derail.',
+      'Slide 8: REAL-WORLD CASE EXAMPLE — Concrete proof of the framework deployed in production.',
+      'Slide 9: THE DECISION MATRIX — Quick-reference logic tree for daily execution.',
+      'Slide 10: THE DAY-ONE ACTION PLAN — Concrete immediate execution steps.',
+    ];
+    return steps.slice(0, count - 1).concat([`Slide ${count}: THE DAY-ONE ACTION PLAN — Concrete immediate execution steps.`]).join('\n     * ');
+  }
+
+  // Default: storytelling
+  const steps = [
+    'Slide 1: THE INCITING HOOK (Cover) — What surprising event happened, what is at stake, and why everything changes now.',
+    'Slide 2: THE FLASHPOINT — The pivotal catalyst or trigger event that broke the equilibrium.',
+    'Slide 3: THE HIDDEN DYNAMIC — What most people miss: the quiet structural vulnerability, underlying motive, or pre-existing tension.',
+    'Slide 4: THE COLLISION / OPPOSING FRONTS — Direct clash of conflicting claims, opposing forces, or asymmetric strategies.',
+    'Slide 5: THE TURNING POINT — The strategic escalation or breakthrough that crossed the point of no return.',
+    'Slide 6: GROUND REALITY & SYSTEMIC TOLL — Hard verified numbers, operational disruption, or human and economic weight.',
+    'Slide 7: THE UNINTENDED RIPPLE — Global or regional side effects (trade routes, diplomacy, market contagion, energy).',
+    'Slide 8: THE HIGH-STAKES DILEMMA — The trap: what both sides are caught between and why easy exits failed.',
+    'Slide 9: THE DECISIVE PRESSURE POINT — The looming deadline, bottleneck, political clock, or threshold that forces a climax.',
+    'Slide 10: THE STRATEGIC VERDICT — The permanent shift in the landscape and the lingering question the reader must reckon with.',
+  ];
+  return steps.slice(0, count - 1).concat([`Slide ${count}: THE STRATEGIC VERDICT — The permanent shift in the landscape and the lingering question the reader must reckon with.`]).join('\n     * ');
+}
+
+export function buildStoryStrategySystemPrompt(preset: NarrativePreset = 'storytelling'): string {
+  let personaDesc = 'You are the Editor-in-Chief at Wired, The New York Times Magazine, and Vox.';
+  let focusDesc = 'Use the tension formula: [Surprising Action / Event] + [The Hidden Catch / Systemic Stakes].';
+
+  if (preset === 'news-reporting') {
+    personaDesc = 'You are an Investigative Bureau Chief at The Financial Times, Reuters, and ProPublica.';
+    focusDesc = 'Use the forensic lead formula: [Breaking Verified Action / Finding] + [Contradiction / Institutional Stakes].';
+  } else if (preset === 'deep-dive') {
+    personaDesc = 'You are a Principal Systems Research Editor at Stripe Press, MIT Technology Review, and Bell Labs.';
+    focusDesc = 'Use the systems thesis formula: [Architectural / Engineering Shift] + [The Physical / Computational Bottleneck].';
+  } else if (preset === 'financial-analysis') {
+    personaDesc = 'You are a Senior Equity Research Director at Bloomberg Intelligence and Wall Street Journal.';
+    focusDesc = 'Use the valuation shock formula: [Topline Valuation / Capital Event] + [The Margin / Cash Burn Reality].';
+  } else if (preset === 'case-study') {
+    personaDesc = 'You are a Senior Partner at Harvard Business Review and McKinsey Quarterly.';
+    focusDesc = 'Use the strategic dilemma formula: [Existential Market Threat] + [The Strategic Choice & Tradeoff].';
+  } else if (preset === 'entertainment') {
+    personaDesc = 'You are a Culture & Tech Editor at The Verge, New Yorker, and Wired.';
+    focusDesc = 'Use the zeitgeist formula: [The Viral Cultural Spectacle] + [The Cynical Truth / The Receipts].';
+  } else if (preset === 'mythbuster') {
+    personaDesc = 'You are a Lead Forensic Investigator at Vox Explained and Bellingcat.';
+    focusDesc = 'Use the mythbuster formula: [The Common PR Illusion] + [The Undeniable Counter-Evidence].';
+  } else if (preset === 'playbook') {
+    personaDesc = 'You are a Master Operator and Author at Farnam Street and First Round Review.';
+    focusDesc = 'Use the playbook formula: [Universal Bottleneck / Flawed Practice] + [The 10x Mental Model].';
+  }
+
+  return `${personaDesc}
 Your mission is to transform verified facts into a scroll-stopping, high-signal editorial carousel strategy.
 
 CRITICAL HOOK & VALUE PRINCIPLES:
 1. THE SCROLL-STOPPING HOOK (Slide 1):
    - Never use passive corporate titles or dry academic headings.
-   - Use the tension formula: [Surprising Action / Event] + [The Hidden Catch / Systemic Stakes].
+   - ${focusDesc}
    - Examples of great hooks:
      * "The Forgotten Port That Defied Two Empires"
      * "War Erupted During Nuclear Talks. What Went Wrong Behind Closed Doors."
@@ -300,24 +467,21 @@ Output strictly the StoryStrategy JSON.`;
 // STAGE 4: SENIOR COPY EDITOR & LAYOUT ARCHITECT (LOCKED STORYBOARD + VISUAL STYLES)
 // ============================================================================
 
-export function buildStoryDeckSystemPrompt(): string {
+export function buildStoryDeckSystemPrompt(
+  preset: NarrativePreset = 'storytelling',
+  targetSlideCount = 7
+): string {
+  const count = Math.max(4, Math.min(14, targetSlideCount));
+  const arcDescription = getNarrativeArc(preset, count);
+
   return `You are a Senior Editor and Visual Layout Architect at The Economist, Wired, and The New York Times Magazine.
 You author high-signal editorial carousel content with STRICT word budgets and AUTONOMOUSLY CHOOSE THE VISUAL STYLE & SVG BLUEPRINT FOR EACH SLIDE.
 
 CRITICAL CONTENT, EDITORIAL VOICE & LAYOUT RULES:
-1. NARRATIVE STORYTELLING ARC (NEVER AN ARTICLE SUMMARY):
+1. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER AN ARTICLE SUMMARY):
    - Do NOT write a flat, mechanical summary of the source article!
-   - Construct a dramatic, forward-moving narrative engine across the 10 slides:
-     * Slide 1: THE INCITING HOOK (Cover) — What surprising event happened, what is at stake, and why everything changes now.
-     * Slide 2: THE FLASHPOINT — The pivotal catalyst or trigger event that broke the equilibrium.
-     * Slide 3: THE HIDDEN DYNAMIC — What most people miss: the quiet structural vulnerability, underlying motive, or pre-existing tension.
-     * Slide 4: THE COLLISION / OPPOSING FRONTS — Direct clash of conflicting claims, opposing forces, or asymmetric strategies.
-     * Slide 5: THE TURNING POINT — The strategic escalation or breakthrough that crossed the point of no return.
-     * Slide 6: GROUND REALITY & SYSTEMIC TOLL — Hard verified numbers, operational disruption, or human and economic weight.
-     * Slide 7: THE UNINTENDED RIPPLE — Global or regional side effects (trade routes, diplomacy, market contagion, energy).
-     * Slide 8: THE HIGH-STAKES DILEMMA — The trap: what both sides are caught between and why easy exits failed.
-     * Slide 9: THE DECISIVE PRESSURE POINT — The looming deadline, bottleneck, political clock, or threshold that forces a climax.
-     * Slide 10: THE STRATEGIC VERDICT — The permanent shift in the landscape and the lingering question the reader must reckon with.
+   - Construct a dramatic, forward-moving narrative engine across the ${count} slides:
+     * ${arcDescription}
 
 2. STRICT BAN ON META-ATTRIBUTIONS:
    - STRICTLY FORBIDDEN: Writing "The article states...", "The article says...", "According to the article...", "The supplied text...", "The account describes...", "The text notes...", or "sentence marked [update]".
@@ -330,28 +494,30 @@ CRITICAL CONTENT, EDITORIAL VOICE & LAYOUT RULES:
 3. DEDICATED SLIDE 1 COVER ARCHETYPE ("monumental-editorial-cover"):
    - Slide 1 is an ICONIC MAGAZINE COVER, NOT an internal technical schematic!
    - Must have "layoutTopology": "monumental-editorial-cover".
-   - Must feature a bold, monumental headline (52px–72px), topic kicker badge, compelling narrative subheadline, and publication issue / reading time telemetry badge (e.g. "SPECIAL REPORT · 10 SLIDES").
+   - Must feature a bold, monumental headline (52px–72px), topic kicker badge, compelling narrative subheadline, and publication issue / reading time telemetry badge (e.g. "SPECIAL REPORT · ${count} SLIDES").
    - STRICT BAN ON COVER DIAGRAMS: Do NOT put complex flowcharts, multiple callout boxes, or sprawling schematic diagrams on Slide 1!
 
-4. DIVERSE CONTENT-DRIVEN TOPOLOGIES FOR SLIDES 2–10:
+4. DIVERSE CONTENT-DRIVEN TOPOLOGIES FOR SLIDES 2–${count}:
    - "layoutTopology" must suit vertical storytelling:
      * "ascending-stepped-timeline" or "vertical-milestone-spine" for chronological developments
      * "full-height-editorial-split" for opposing claims, dual intelligence timelines, or entity comparisons
      * "hero-metric-placard" for monumental statistics (e.g. "$47.1B") with editorial footnote cards
      * "three-row-verification-ledger" for structured registers or institutional positions
      * "asymmetric-editorial-cards" for contrasting strategic fronts
-   - STRICT TOPOLOGY DIVERSITY MANDATE: You MUST use at least 5 different layout topologies across the 10 slides.
+   - STRICT TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 different layout topologies across the slides.
 
 5. RULE OF 3 ANTI-CRAMMING:
    - Maximum 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
    - Telemetry: Exactly 2 or 3 key metrics with signed numerical badges (e.g. "$47.1B", "2026", "2035", "+18%").
 
-6. STRICT WORD LIMITS (Anti-Overflow Guardrail):
+6. STRICT WORD & SIZE LIMITS (Anti-Overflow Guardrail):
    - Headlines: Maximum 6–8 words.
    - Subheadlines: Maximum 10–14 words.
    - Cards / Points: Maximum 12–16 words per item! Every word must be punchy and high-signal.
+   - MULTI-COLUMN FONT CEILING: In 2-column or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly reserved for full-width hero placards.
+   - BADGE DESTRUCTURING: When separating numbers from units, destructure cleanly: const [metric, ...unitWords] = badge.split(/\\s+/); const unit = unitWords.join(' ');. Never assign an array directly to a metric variable.
 
-Return strictly a JSON array of 10 slide objects:
+Return strictly a JSON array of exactly ${count} slide objects:
 [
   {
     "id": "slide-1",
@@ -371,9 +537,11 @@ Return strictly a JSON array of 10 slide objects:
 export function buildStoryDeckUserPrompt(
   strategy: StoryStrategy,
   dossier: GroundTruthDossier,
-  brand: BrandTokens
+  brand: BrandTokens,
+  targetSlideCount = 7
 ): string {
-  return `Author the 10-slide narrative storyboard AND choose the distinct visual style, layout topology, and SVG blueprint for each slide:
+  const count = Math.max(4, Math.min(14, targetSlideCount));
+  return `Author the ${count}-slide storyboard AND choose the distinct visual style, layout topology, and SVG blueprint for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -391,7 +559,7 @@ Quotes: ${JSON.stringify(dossier.verifiedQuotes)}
 Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
 Verdict Advice: ${JSON.stringify(dossier.editorialVerdict)}
 
-Output strictly the JSON array of 10 slide objects. Remember: MAX 18 WORDS PER CARD BODY, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
+Output strictly the JSON array of exactly ${count} slide objects. Remember: MAX 16 WORDS PER CARD BODY, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
 }
 
 // Fallback for non-article briefs
@@ -520,7 +688,12 @@ CRITICAL DESIGN & CODING RULES:
      * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
      * Kickers, badges, tags, metadata: MUST be text-[20px] to text-[22px] (font-mono tracking-wider).
      * Major headlines: MUST be text-[52px] to text-[68px] (font-headline font-bold).
-     * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold).
+     * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold) ONLY when full-width (hero-metric-placard)!
+     * MULTI-COLUMN FONT CEILING: In 2-column, 3-column, or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly forbidden inside half-width columns because it causes horizontal clipping and overflows into adjacent columns.
+     * BADGE DESTRUCTURING: When splitting a badge string into a number and unit, write:
+       const [metric, ...unitWords] = (item?.badge ?? '').split(/\\s+/);
+       const unit = unitWords.join(' ');
+       Never assign an unindexed array to a metric variable!
 
 5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
    - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.

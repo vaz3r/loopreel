@@ -7,6 +7,7 @@ import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
 import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
   type TemplateBrief,
+  type NarrativePreset,
   type StoryStrategy,
   type GroundTruthDossier,
   type SlideDesignBlueprint,
@@ -130,6 +131,27 @@ export function sanitizeTsxCode(rawCode: string): string {
     return `${prefix}${arr}[${idx}]${suffix}`;
   });
 
+  // 3b. Fix unindexed assignment from .split(...) or .match(...) array variables:
+  // e.g. const ancientBadge = str.split(' '); const ancientMetric = ancientBadge; -> const ancientMetric = ancientBadge[0];
+  const splitVars = new Set<string>();
+  const splitRegex = /(?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*[^;]+?\.(?:split|match)\s*\([^;]+?\)\s*;/g;
+  let sm: RegExpExecArray | null;
+  while ((sm = splitRegex.exec(code)) !== null) {
+    if (sm[1]) splitVars.add(sm[1]);
+  }
+  if (splitVars.size > 0) {
+    const list = Array.from(splitVars).join('|');
+    code = code.replace(
+      new RegExp(`((?:const|let)\\s+([a-zA-Z0-9_$]+)\\s*=\\s*)(${list})(\\s*;)`, 'g'),
+      (full, prefix, lhs, rhs, suffix) => {
+        if (lhs !== rhs && !/words|parts|tokens|array|list/i.test(lhs)) {
+          return `${prefix}${rhs}[0]${suffix}`;
+        }
+        return full;
+      }
+    );
+  }
+
   // 4. Fix unindexed numbered variable declaration: e.g. const item0 = items; -> const item0 = items[0];
   code = code.replace(/const\s+([a-zA-Z0-9_$]*?(?:item|card|col|metric|entry|stage|step|milestone))([0-9])\s*=\s*([a-zA-Z0-9_$.]+?)\s*;/g, (match, prefix, num, rhs) => {
     if (rhs.includes('[')) return match;
@@ -168,6 +190,11 @@ export function sanitizeTsxCode(rawCode: string): string {
   // 6. Strip meta-attributions: eliminate robotic phrases like "The article states that", "The text notes", etc.
   code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
   code = code.replace(/\bAccording\s+to\s+(?:the\s+)?(?:article|piece|report|text|source|account),\s*/gi, '');
+
+  // 7. Multi-column font clamping: in 2-column or split layouts, clamp numerals >64px down to 56px to prevent column blowout
+  if (/grid-cols-2|grid-cols-3|grid-cols-\[.*?(?:fr|px).*?\]/i.test(code)) {
+    code = code.replace(/text-\[(?:8[0-9]|9[0-9]|1[0-1][0-9])px\]/g, 'text-[56px]');
+  }
 
   return code;
 }
@@ -234,6 +261,8 @@ export function validateTemplateTypeScript(templateDir: string): { valid: boolea
 export interface PipelineOptions {
   brief?: TemplateBrief;
   preset?: string;
+  narrativePreset?: NarrativePreset;
+  targetSlideCount?: number;
   url?: string;
   provider?: string;
   platform?: string;
@@ -445,16 +474,29 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   brand.slug = slug;
   console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
+  const rawBrandKit = (options.brandKit as any) || {};
+  const narrativePreset: NarrativePreset =
+    options.narrativePreset ||
+    rawBrandKit.narrativePreset ||
+    'storytelling';
+
+  const targetSlideCount: number =
+    typeof options.targetSlideCount === 'number'
+      ? options.targetSlideCount
+      : typeof rawBrandKit.targetSlideCount === 'number'
+      ? rawBrandKit.targetSlideCount
+      : 7;
+
   // ==========================================================================
   // PASS 3: EDITORIAL STRATEGIST (HOOK & TENSION FORMULA)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 3: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
+  console.log(`[Pipeline] >>> Pass 3: Editorial Strategist Formulating Hook & Angle (${narrativePreset})...`);
   options.onProgress?.('Extracting Story Strategy', 3, 15);
 
   let strategy: StoryStrategy;
   if (article) {
     const strategyResponse = await llm.generateJSON(
-      buildStoryStrategySystemPrompt(),
+      buildStoryStrategySystemPrompt(narrativePreset),
       buildStoryStrategyUserPrompt(dossier, article),
       0.7
     );
@@ -475,17 +517,17 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
 
   // ==========================================================================
-  // PASS 4: SENIOR COPY EDITOR (10-SLIDE STORYBOARD WITH HARD WORD BUDGETS)
+  // PASS 4: SENIOR COPY EDITOR (DYNAMIC STORYBOARD WITH HARD WORD BUDGETS)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 4: Senior Copy Editor Authoring 10-Slide High-Signal Storyboard...');
+  console.log(`[Pipeline] >>> Pass 4: Senior Copy Editor Authoring ${targetSlideCount}-Slide High-Signal Storyboard (${narrativePreset})...`);
   options.onProgress?.('Authoring Storyboard', 4, 15);
 
   let allSlides: SlideData[] = [];
 
   if (article) {
     const deckResponse = await llm.generateJSON(
-      buildStoryDeckSystemPrompt(),
-      buildStoryDeckUserPrompt(strategy, dossier, brand),
+      buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
+      buildStoryDeckUserPrompt(strategy, dossier, brand, targetSlideCount),
       0.6
     );
     allSlides = extractJson<SlideData[]>(deckResponse.text);
@@ -530,6 +572,14 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // Create isolated template folder in apps/generator/templates/<slug>/
   const templateDir = path.join(TEMPLATES_ROOT, slug);
   const slidesDir = path.join(templateDir, 'slides');
+  if (fs.existsSync(slidesDir)) {
+    const existing = fs.readdirSync(slidesDir);
+    for (const f of existing) {
+      if (f.endsWith('.tsx') || f.endsWith('.ts')) {
+        fs.unlinkSync(path.join(slidesDir, f));
+      }
+    }
+  }
   fs.mkdirSync(slidesDir, { recursive: true });
 
   fs.writeFileSync(path.join(templateDir, 'brand.json'), JSON.stringify(brand, null, 2), 'utf-8');

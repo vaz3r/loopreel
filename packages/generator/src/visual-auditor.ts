@@ -134,6 +134,25 @@ export async function auditTemplateStudio(
           }
         });
 
+        // Check multi-column card/column boundary overflow
+        const columnCards = canvas.querySelectorAll('article, [class*="col-"], [class*="grid-cols"] > div');
+        columnCards.forEach((card) => {
+          const cardRect = card.getBoundingClientRect();
+          if (cardRect.width < canvasRect.width - 100) {
+            const cardChildren = card.querySelectorAll('h1, h2, h3, h4, p, span');
+            cardChildren.forEach((child) => {
+              const el = child as HTMLElement;
+              if (el.classList.contains('sr-only') || el.closest('.sr-only')) return;
+              const childRect = el.getBoundingClientRect();
+              if (childRect.right > cardRect.right + 8) {
+                collisions.push(
+                  `Slide ${slideIdx + 1}: Element overflows column/card right boundary by ${Math.round(childRect.right - cardRect.right)}px: <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 25)}..."`
+                );
+              }
+            });
+          }
+        });
+
         // Check for empty vertical voids in content (gap > 180px between consecutive in-flow children)
         const content = canvas.querySelector('.loop-autofit-content');
         const contentChildren = content

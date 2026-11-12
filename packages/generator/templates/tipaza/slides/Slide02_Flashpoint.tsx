@@ -6,171 +6,149 @@ export default function Slide02({
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  const items = slide.items ?? [];
-  const item0 = items[0];
-  const item1 = items[1];
-  const arrowId = `terrace-arrow-${React.useId().replace(/:/g, '')}`;
+  void brand;
+  void totalSlides;
 
-  const populationBadge = item0?.badge ?? '';
-  const [population, ...populationUnit] = populationBadge.split(' ');
+  const items = slide.items ?? [];
+  const before = items[0];
+  const reversal = items[1];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex flex-col gap-10 py-10">
-        <header className="flex flex-col gap-7">
+      <div className="flex flex-col gap-10 py-6">
+        <header className="flex flex-col gap-6">
           <div className="flex items-center gap-5">
-            <span
-              aria-hidden="true"
-              className="h-5 w-5 shrink-0 bg-[var(--accent)]"
-            />
-            <p className="font-[var(--font-mono)] text-[22px] uppercase leading-snug tracking-[0.12em] text-[var(--accent)]">
+            <span className="h-[3px] w-14 shrink-0 bg-[var(--accent)]" />
+            <p className="font-[var(--font-mono)] text-[22px] uppercase tracking-[0.16em] text-[var(--accent)]">
               {slide.kicker}
             </p>
           </div>
 
-          <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.02] tracking-[-0.04em]">
+          <h1 className="max-w-[880px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
             {slide.headline}
           </h1>
 
-          <p className="max-w-[860px] font-[var(--font-body)] text-[30px] leading-snug">
+          <p className="max-w-[820px] font-[var(--font-body)] text-[28px] leading-snug">
             {slide.subheadline}
           </p>
-
-          <div className="h-px w-full bg-[var(--border)]" />
         </header>
 
-        <figure className="m-0 flex flex-col">
-          <svg
-            viewBox="0 0 952 560"
-            width="952"
-            height="560"
-            role="img"
-            aria-label="PUNIC TRADE → ROMAN MILITARY COLONY"
-            className="block h-[560px] w-full shrink-0"
-          >
-            <defs>
-              <marker
-                id={arrowId}
-                viewBox="0 0 12 12"
-                refX="10"
-                refY="6"
-                markerWidth="12"
-                markerHeight="12"
-                orient="auto"
-                markerUnits="userSpaceOnUse"
+        <div className="flex flex-col">
+          <article className="grid min-h-[440px] grid-cols-[64px_minmax(0,1fr)] gap-6 bg-[var(--surface)] px-8">
+            <div className="relative self-stretch" aria-hidden="true">
+              <svg
+                viewBox="0 0 64 440"
+                preserveAspectRatio="none"
+                className="absolute inset-0 h-full w-full text-[var(--ink)]"
+                fill="none"
               >
                 <path
-                  d="M1 1L10 6L1 11"
-                  fill="none"
-                  stroke="var(--accent)"
-                  strokeWidth="2.5"
-                  strokeLinecap="square"
+                  d="M32 0V440"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  vectorEffect="non-scaling-stroke"
                 />
-              </marker>
-            </defs>
+              </svg>
+              <svg
+                viewBox="0 0 64 64"
+                className="absolute left-0 top-[96px] h-16 w-16"
+                fill="none"
+              >
+                <rect
+                  x="20"
+                  y="20"
+                  width="24"
+                  height="24"
+                  fill="var(--surface)"
+                  stroke="var(--ink)"
+                  strokeWidth="3"
+                />
+                <path
+                  d="M27 32H37"
+                  stroke="var(--ink)"
+                  strokeWidth="3"
+                />
+              </svg>
+            </div>
 
-            <path
-              d="M0 560V280H476V72H952V560Z"
-              fill="var(--surface)"
-            />
+            <div className="flex min-w-0 flex-col justify-center gap-6 py-12">
+              <p className="font-[var(--font-mono)] text-[30px] leading-tight tracking-[-0.025em]">
+                {before?.badge}
+              </p>
+              <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+                {before?.label || before?.title}
+              </h2>
+              <p className="max-w-[740px] font-[var(--font-body)] text-[30px] leading-[1.4]">
+                {before?.body}
+              </p>
+            </div>
+          </article>
 
-            <path
-              d="M0 280H476V72H952"
+          <div className="h-[120px] w-full shrink-0" aria-hidden="true">
+            <svg
+              viewBox="0 0 952 120"
+              preserveAspectRatio="none"
+              className="block h-full w-full text-[var(--accent)]"
               fill="none"
-              stroke="var(--ink)"
-              strokeWidth="3"
-            />
-
-            <path
-              d="M476 280V560"
-              fill="none"
-              stroke="var(--border)"
-              strokeWidth="2"
-            />
-
-            <path
-              d="M64 238H382L590 30H884"
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="7"
-              strokeLinejoin="miter"
-              markerEnd={`url(#${arrowId})`}
-            />
-
-            <circle cx="64" cy="238" r="8" fill="var(--accent)" />
-
-            <g
-              fill="var(--ink)"
-              className="font-[var(--font-headline)] text-[38px] font-semibold tracking-[-0.025em]"
             >
-              <text x="32" y="353">
-                <tspan x="32">PUNIC</tspan>
-                <tspan x="32" dy="43">
-                  TRADE
-                </tspan>
-              </text>
-
-              <text x="508" y="145">
-                <tspan x="508">ROMAN</tspan>
-                <tspan x="508" dy="43">
-                  MILITARY
-                </tspan>
-                <tspan x="508" dy="43">
-                  COLONY
-                </tspan>
-              </text>
-            </g>
-
-            <g fill="var(--accent)">
-              <rect x="32" y="512" width="56" height="8" />
-              <rect x="508" y="512" width="56" height="8" />
-            </g>
-          </svg>
-
-          <div className="grid grid-cols-2 bg-[var(--surface)]">
-            <article className="flex min-w-0 flex-col gap-6 border-r border-[var(--border)] px-8 pb-10 pt-7">
-              <h2 className="font-[var(--font-mono)] text-[20px] font-medium uppercase leading-snug tracking-[0.1em]">
-                {item0?.label || item0?.title}
-              </h2>
-
-              <div className="flex min-h-[132px] flex-col justify-start">
-                <p className="whitespace-nowrap font-[var(--font-mono)] text-[84px] font-bold leading-none tracking-[-0.06em]">
-                  {population}
-                </p>
-                {populationUnit.length > 0 && (
-                  <p className="mt-3 font-[var(--font-body)] text-[26px] leading-snug">
-                    {populationUnit.join(' ')}
-                  </p>
-                )}
-              </div>
-
-              <p className="font-[var(--font-body)] text-[26px] leading-snug">
-                {item0?.body}
-              </p>
-            </article>
-
-            <article className="flex min-w-0 flex-col gap-6 px-8 pb-10 pt-7">
-              <h2 className="font-[var(--font-mono)] text-[20px] font-medium uppercase leading-snug tracking-[0.1em]">
-                {item1?.label || item1?.title}
-              </h2>
-
-              <div className="flex min-h-[132px] flex-col justify-start">
-                <p className="whitespace-nowrap font-[var(--font-mono)] text-[84px] font-bold leading-none tracking-[-0.06em] text-[var(--accent)]">
-                  {item1?.badge}
-                </p>
-              </div>
-
-              <p className="font-[var(--font-body)] text-[26px] leading-snug">
-                {item1?.body}
-              </p>
-            </article>
+              <path
+                d="M0 27L106 39L192 21L300 37L405 23L513 40L620 22L725 35L842 19L952 31V93L840 82L730 101L621 84L514 100L405 82L299 98L193 83L105 101L0 87Z"
+                fill="currentColor"
+              />
+              <path
+                d="M0 66L114 55L198 69L306 53L409 67L517 52L626 68L733 51L844 64L952 53"
+                stroke="var(--paper, #f5f5f7)"
+                strokeWidth="8"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
           </div>
 
-          <div
-            aria-hidden="true"
-            className="h-[3px] w-full bg-[var(--ink)]"
-          />
-        </figure>
+          <article className="grid min-h-[480px] grid-cols-[64px_minmax(0,1fr)] gap-6 border-b-2 border-[var(--border)] px-8">
+            <div className="relative self-stretch" aria-hidden="true">
+              <svg
+                viewBox="0 0 64 480"
+                preserveAspectRatio="none"
+                className="absolute inset-0 h-full w-full"
+                fill="none"
+              >
+                <path
+                  d="M32 0V480"
+                  stroke="var(--ink)"
+                  strokeWidth="3"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+              <svg
+                viewBox="0 0 64 64"
+                className="absolute left-0 top-[96px] h-16 w-16 text-[var(--accent)]"
+                fill="none"
+              >
+                <path
+                  d="M32 12L52 32L32 52L12 32Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M25 25L39 39M39 25L25 39"
+                  stroke="var(--paper, #f5f5f7)"
+                  strokeWidth="3"
+                />
+              </svg>
+            </div>
+
+            <div className="flex min-w-0 flex-col justify-center gap-6 py-12">
+              <p className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.045em] text-[var(--accent)]">
+                {reversal?.badge}
+              </p>
+              <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+                {reversal?.label || reversal?.title}
+              </h2>
+              <p className="max-w-[740px] font-[var(--font-body)] text-[30px] leading-[1.4]">
+                {reversal?.body}
+              </p>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
   );

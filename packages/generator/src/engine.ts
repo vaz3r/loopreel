@@ -24,6 +24,9 @@ export async function generateTemplateReference(
       'url' in briefOrOptions ||
       'platform' in briefOrOptions ||
       'brandKit' in briefOrOptions ||
+      'narrativePreset' in briefOrOptions ||
+      'targetSlideCount' in briefOrOptions ||
+      'preset' in briefOrOptions ||
       'brief' in briefOrOptions
     )
       ? (briefOrOptions as PipelineOptions & { runAudit?: boolean })
