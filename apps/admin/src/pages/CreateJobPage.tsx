@@ -158,8 +158,6 @@ export function CreateJobPage() {
 
   function applyPreset(presetUrl: string) {
     setUrl(presetUrl);
-    setEngine('bespoke');
-    setTemplateId('bespoke');
   }
 
   return (

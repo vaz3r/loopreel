@@ -18,9 +18,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@generator/*": ["../../packages/generator/src/*"]
     }
   },
   "include": ["src", "*.ts", "*.tsx"],

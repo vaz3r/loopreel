@@ -335,7 +335,7 @@ export function StudioPage() {
                 onChange={(e) => setActiveSlideIndex(parseInt(e.target.value, 10))}
                 className="h-6 bg-transparent border-0 px-2 text-[11px] font-mono font-medium text-text-primary focus:outline-hidden cursor-pointer"
               >
-                {deck.slides.map((s, idx) => (
+                {deck.slides.map((s: any, idx: number) => (
                   <option key={idx} value={idx} className="bg-zinc-900 text-zinc-100">
                     Slide {idx + 1}: {(s.type || (s as any).archetype || 'editorial').toUpperCase()} — {s.title || s.headline || 'Untitled'}
                   </option>
@@ -514,7 +514,7 @@ export function StudioPage() {
             {viewMode === 'grid' && (
               <div className="w-full h-full p-6 overflow-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 justify-items-center">
-                  {deck.slides.map((s, idx) => {
+                  {deck.slides.map((s: any, idx: number) => {
                     const Comp = slides[idx] as SlideComponent | undefined;
                     const isSelected = activeSlideIndex === idx;
                     const gridScale = activePlatform === 'instagram-stories' ? 0.22 : 0.26;
