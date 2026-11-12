@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SlideComponentProps } from '../../../src/skeleton/types';
+import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
 
 export default function Slide06({
   slide,
@@ -28,16 +28,7 @@ export default function Slide06({
 
       <div className="mt-7 grid min-h-0 flex-1 grid-rows-3 border-t-2 border-[var(--ink)]">
         {items.map((item, index) => {
-          const [firstWord, ...remainingWords] = (item.badge ?? '')
-            .trim()
-            .split(/\s+/);
-
-          const hasQualifier = firstWord.toLowerCase() === 'over';
-          const qualifier = hasQualifier ? firstWord : '';
-          const metric = hasQualifier ? remainingWords : firstWord;
-          const unit = (
-            hasQualifier ? remainingWords.slice(1) : remainingWords
-          ).join(' ');
+          const { qualifier, value: metric, unit } = parseMetricBadge(item.badge);
 
           const body = item.body ?? '';
           const separator = body.indexOf(';');
@@ -51,14 +42,14 @@ export default function Slide06({
           return (
             <article
               key={`${slide.id}-${index}`}
-              className="relative flex min-h-0 flex-col justify-center gap-3 border-b border-[var(--border)] px-7 py-5"
+              className="relative flex min-h-0 flex-col justify-center gap-2 border-b border-[var(--border)] px-6 py-4"
             >
               {highlighted && (
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 4 100"
                   preserveAspectRatio="none"
-                  className="pointer-events-none absolute inset-y-5 left-0 h-[calc(100%-40px)] w-[4px] text-[var(--accent)]"
+                  className="pointer-events-none absolute inset-y-4 left-0 h-[calc(100%-32px)] w-[4px] text-[var(--accent)]"
                 >
                   <path
                     d="M2 0V100"
@@ -69,34 +60,36 @@ export default function Slide06({
                 </svg>
               )}
 
-              <div className="flex items-center justify-between gap-5">
-                <h2 className="min-w-0 max-w-[420px] font-[var(--font-headline)] text-[34px] font-semibold leading-[1.1] tracking-[-0.025em]">
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="min-w-0 max-w-[500px] font-[var(--font-headline)] text-[28px] font-semibold leading-[1.15] tracking-tight">
                   {item.title || item.label}
                 </h2>
 
-                <div className="flex shrink-0 items-baseline gap-3 whitespace-nowrap">
+                <div className="flex shrink-0 items-baseline gap-2 whitespace-nowrap">
                   {qualifier && (
-                    <span className="font-[var(--font-body)] text-[26px] leading-none">
+                    <span className="font-[var(--font-body)] text-[20px] font-medium text-[var(--ink)]/80">
                       {qualifier}
                     </span>
                   )}
 
-                  <span className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.055em] tabular-nums">
+                  <span className="font-[var(--font-mono)] text-[40px] font-bold leading-none tracking-tight tabular-nums text-[var(--accent)]">
                     {metric}
                   </span>
 
-                  <span className="font-[var(--font-body)] text-[26px] leading-none">
-                    {unit}
-                  </span>
+                  {unit && (
+                    <span className="font-[var(--font-body)] text-[20px] font-medium text-[var(--ink)]/80">
+                      {unit}
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <p className="font-[var(--font-body)] text-[26px] leading-[1.3]">
-                <span className="block font-semibold">
+              <p className="font-[var(--font-body)] text-[20px] leading-[1.35] text-[var(--ink)]/90">
+                <span className="font-semibold text-[var(--ink)]">
                   {reportingWindow}
                 </span>
                 {explanation && (
-                  <span className="mt-1 block">{explanation}</span>
+                  <span className="ml-1 text-[var(--ink)]/80">{explanation}</span>
                 )}
               </p>
             </article>

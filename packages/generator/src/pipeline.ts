@@ -207,6 +207,19 @@ export function sanitizeTsxCode(rawCode: string): string {
     code = code.replace(/text-\[(?:8[0-9]|9[0-9]|1[0-1][0-9])px\]/g, 'text-[56px]');
   }
 
+  // 8. Fix unindexed array assignment to metric variables:
+  // e.g. const metric = hasQualifier ? remainingWords : firstWord;
+  // -> const metric = hasQualifier ? (remainingWords[0] ?? '') : firstWord;
+  code = code.replace(/(\bmetric\s*=\s*[^;]*?\bremainingWords\b)(?!\s*\[)(?!\s*\.join)/g, '$1[0]');
+  code = code.replace(/const\s+metric\s*=\s*remainingWords\s*;/g, 'const metric = remainingWords[0] ?? "";');
+
+  // 9. Multi-row ledger font clamping: in 3+ row stacked layouts (grid-rows-3, grid-rows-4),
+  // clamp numerals > 44px down to 40px and headers > 30px down to 28px to eliminate row boundary overflow
+  if (/grid-rows-(?:3|4|5)/i.test(code)) {
+    code = code.replace(/text-\[(?:4[5-9]|[5-9][0-9]|1[0-1][0-9])px\]/g, 'text-[40px]');
+    code = code.replace(/text-\[(?:3[1-9]|4[0-9])px\]/g, 'text-[28px]');
+  }
+
   return code;
 }
 
@@ -662,11 +675,17 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     // Fix imports if necessary
     if (!code.includes("from '../../../src/skeleton/types'")) {
       code = code.replace(
-        /import type \{ SlideComponentProps \} from ['"][^'"]+['"];?/,
-        "import type { SlideComponentProps } from '../../../src/skeleton/types';"
+        /import (?:type )?\{([^}]+)\}\s*from\s*['"][^'"]+['"];?/,
+        "import {$1} from '../../../src/skeleton/types';"
       );
     }
-    if (!code.includes('import type { SlideComponentProps }')) {
+    if (code.includes('parseMetricBadge') && !code.includes('parseMetricBadge,')) {
+      code = code.replace(
+        /import\s*\{(?:\s*type\s+)?SlideComponentProps\s*\}\s*from\s*['"][^'"]+['"];?/,
+        "import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';"
+      );
+    }
+    if (!code.includes('SlideComponentProps')) {
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
 

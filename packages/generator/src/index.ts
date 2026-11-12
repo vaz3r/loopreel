@@ -218,6 +218,8 @@ export { auditTemplateStudio } from './visual-auditor.js';
 export type { VisualAuditResult } from './visual-auditor.js';
 export type { TemplateBrief } from './prompt.js';
 export type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
+export { parseMetricBadge, type ParsedBadge } from './skeleton/types.js';
+
 
 // Run CLI main only when executed directly
 const invokedFile = process.argv[1];

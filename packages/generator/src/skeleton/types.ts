@@ -73,3 +73,6 @@ export interface TemplatePackage {
   deck: DeckData;
   slides: SlideComponent[];
 }
+
+export * from './badge.js';
+

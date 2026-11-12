@@ -515,7 +515,7 @@ CRITICAL CONTENT, EDITORIAL VOICE & LAYOUT RULES:
    - Subheadlines: Maximum 10–14 words.
    - Cards / Points: Maximum 12–16 words per item! Every word must be punchy and high-signal.
    - MULTI-COLUMN FONT CEILING: In 2-column or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly reserved for full-width hero placards.
-   - BADGE DESTRUCTURING: When separating numbers from units, destructure cleanly: const [metric, ...unitWords] = badge.split(/\\s+/); const unit = unitWords.join(' ');. Never assign an array directly to a metric variable.
+   - BADGE STRUCTURE & TELEMETRY: Numerical values must be clean signed numbers, currencies, or dates (e.g. "$47.1B", "+18%", "5.2", "1998"). Qualifiers ("over", "under", "nearly", "approx") must be separated or parsed using parseMetricBadge(badge). Never jam qualifiers into numerical spans.
 
 Return strictly a JSON array of exactly ${count} slide objects:
 [
@@ -690,10 +690,17 @@ CRITICAL DESIGN & CODING RULES:
      * Major headlines: MUST be text-[52px] to text-[68px] (font-headline font-bold).
      * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold) ONLY when full-width (hero-metric-placard)!
      * MULTI-COLUMN FONT CEILING: In 2-column, 3-column, or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly forbidden inside half-width columns because it causes horizontal clipping and overflows into adjacent columns.
-     * BADGE DESTRUCTURING: When splitting a badge string into a number and unit, write:
-       const [metric, ...unitWords] = (item?.badge ?? '').split(/\\s+/);
-       const unit = unitWords.join(' ');
-       Never assign an unindexed array to a metric variable!
+     * MULTI-ROW LEDGER CEILING: In 3-row or 4-row stacked ledgers (grid-rows-3, grid-rows-4), metric numerals MUST NOT exceed text-[38px] to text-[42px], and card titles MUST NOT exceed text-[26px] to text-[28px]! This guarantees zero vertical crowding and ample breathing room.
+     * CANONICAL BADGE PARSING: Always parse badges cleanly using parseMetricBadge:
+       import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
+       const { qualifier, value: metric, unit } = parseMetricBadge(item.badge);
+       // In JSX:
+       <div className="flex shrink-0 items-baseline gap-2">
+         {qualifier && <span className="font-[var(--font-body)] text-[22px]">{qualifier}</span>}
+         <span className="font-[var(--font-mono)] text-[40px] font-bold tabular-nums">{metric}</span>
+         {unit && <span className="font-[var(--font-body)] text-[22px]">{unit}</span>}
+       </div>
+       STRICTLY FORBIDDEN: Writing 'const metric = remainingWords;' or rendering unindexed array slices in JSX! In JavaScript, an array rendered in JSX concatenates into a collapsed token (e.g. "5.2millionunits") without spaces.
 
 5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
    - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.

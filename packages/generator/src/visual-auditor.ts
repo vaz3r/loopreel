@@ -100,6 +100,35 @@ export async function auditTemplateStudio(
             );
           }
 
+          // Check for semantic text anomalies and concatenation bugs
+          const fullText = (el.textContent || '').trim();
+          if (fullText) {
+            // A. Concatenated number-word tokens (e.g. "5.2millionunits", "100billiondollars")
+            // Suffixes up to 3 chars (e.g. 1st, 2nd, 3rd, 4th, 100k, 50M, 1.2B, 1000px) are allowed.
+            // 4+ contiguous alphabetical characters glued to a number indicates array-to-string concatenation bug.
+            const fusedTokenMatch = fullText.match(/\b\d+(?:\.\d+)?[a-zA-Z]{4,}\b/);
+            if (fusedTokenMatch) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Fused number-word token detected: "${fusedTokenMatch[0]}" in <${el.tagName.toLowerCase()}> (likely unspaced array-to-string concatenation bug)`
+              );
+            }
+
+            // B. Duplicated adjacent word repetition (e.g. "million units million units", "over over")
+            const repeatedWordMatch = fullText.match(/\b([a-zA-Z]{3,})\s+\1\b/i);
+            if (repeatedWordMatch) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Collapsed/duplicated text detected: "${repeatedWordMatch[0]}" in <${el.tagName.toLowerCase()}>`
+              );
+            }
+
+            // C. Leaked JavaScript runtime representations in text
+            if (/\[object Object\]|\bNaN\b|\bundefined\b|\bnull\b/.test(fullText)) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Leaked JavaScript runtime literal in <${el.tagName.toLowerCase()}>: "${fullText.slice(0, 40)}..."`
+              );
+            }
+          }
+
           // Check mobile legibility floor (0.36x phone scale rule: font < 12px is illegible on mobile)
           const text = el.childNodes.length === 1 && el.childNodes[0]?.nodeType === 3 ? el.textContent?.trim() : '';
           // Ignore frame header and footer elements outside main content
@@ -161,6 +190,23 @@ export async function auditTemplateStudio(
               }
             });
           }
+        });
+
+        // Check grid rows & stacked articles boundary overflow
+        const rowCards = canvas.querySelectorAll('[class*="grid-rows"] > article, [class*="grid-rows"] > div');
+        rowCards.forEach((row) => {
+          const rowRect = row.getBoundingClientRect();
+          const rowChildren = row.querySelectorAll('h1, h2, h3, h4, p, div, span');
+          rowChildren.forEach((child) => {
+            const el = child as HTMLElement;
+            if (el.classList.contains('sr-only') || el.closest('.sr-only')) return;
+            const childRect = el.getBoundingClientRect();
+            if (childRect.bottom > rowRect.bottom + 6) {
+              collisions.push(
+                `Slide ${slideIdx + 1}: Element overflows row bottom boundary by ${Math.round(childRect.bottom - rowRect.bottom)}px: <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 25)}..."`
+              );
+            }
+          });
         });
 
         // Check for empty vertical voids in content (gap > 180px between consecutive in-flow children)
