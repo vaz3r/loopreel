@@ -1,0 +1,189 @@
+{
+  "templateName": "Custom Brand",
+  "templateSlug": "the-legend-of-zelda-ocarina-of-t",
+  "domain": "the-legend-of-zelda-ocarina-of-t.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "publication": "Custom Brand",
+      "publicationId": "the-legend-of-zelda-ocarina-of-t.pub",
+      "kicker": "GAMING / NOSTALGIA VS. NUMBERS",
+      "headline": "Zelda’s Record Launch Has Fine Print",
+      "subheadline": "Ocarina wins Nintendo’s Switch 2 launch sprint—not its lifetime sales crown.",
+      "issueBadge": "SPECIAL REPORT · 7 SLIDES",
+      "palette": {
+        "paper": "#0D0E12",
+        "ink": "#F1F3F9",
+        "accent": "#FF4D00",
+        "surface": "#161820"
+      },
+      "telemetry": [
+        {
+          "badge": "over 5.2 million units",
+          "label": "Ocarina’s first four days"
+        },
+        {
+          "badge": "16.48 million",
+          "label": "Mario Kart World lifetime sales through September 30, 2026"
+        }
+      ],
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "svgBlueprint": "Use a 1080×1350 canvas and the supplied palette throughout. Set a 68px monumental headline in three deliberate lines, with an orange kicker above and a 30px subheadline below. Place one oversized abstract crown outline behind a small orange asterisk. Anchor two compact telemetry badges and the issue badge beneath generous negative space. No diagrams or callout boxes. Render citation markers as discreet source footnotes.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "pitch",
+      "kicker": "THE SPECTACLE / MEMORY, REMASTERED",
+      "headline": "Childhood Gets The Premium Treatment",
+      "subheadline": "The pitch pairs familiar adventure with a thoroughly refreshed presentation.",
+      "items": [
+        {
+          "badge": "1998",
+          "title": "The emotional foundation",
+          "body": "The Nintendo 64 original returns with reimagined visuals and expanded cutscenes."
+        },
+        {
+          "badge": "$59.99",
+          "title": "The modern package",
+          "body": "Orchestral music, voice acting, and reworked camera and movement controls accompany Nintendo’s listed price."
+        }
+      ],
+      "visualStyle": "archival-pixel-meets-concert-poster",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Use the inherited palette on a 1080×1350 canvas. Stack two offset Surface cards beneath a 54px headline. Give the upper card a restrained pixel-grid texture dissolving into clean vector lines; give the lower card abstract orchestral waveform strokes. Keep both badges at 52px and body copy at 28px. Use orange only for the transformation boundary and price underline. Preserve separate source-footnote space.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "disclosure",
+      "kicker": "BEHIND THE VELVET ROPE / DEFINING FASTEST",
+      "headline": "The Asterisk Sets The Arena",
+      "subheadline": "Nintendo-published Switch 2 games define the record—not every publisher.",
+      "items": [
+        {
+          "badge": "over 5.2 million units",
+          "title": "What gets counted",
+          "body": "Nintendo’s internal sales data combines physical and digital sales."
+        },
+        {
+          "badge": "four days",
+          "title": "What gets timed",
+          "body": "The launch window establishes sales speed, not lifetime leadership.​"
+        }
+      ],
+      "visualStyle": "backstage-audit-sheet",
+      "layoutTopology": "hero-metric-placard",
+      "svgBlueprint": "Use a 1080×1350 canvas. Center a full-width sales placard below the headline: render 'over' at 28px, '5.2' at 84px, and 'million units' at 32px, preserving the complete badge meaning. Place its methodology sentence directly below. Add one shallow Surface card for the four-day window. Use an orange asterisk as the only decorative emblem; avoid implying that internal figures are independently audited.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "tension",
+      "kicker": "THE GREAT DIVIDE / FEELING VS. MEASURING",
+      "headline": "The Heart Cheers. The Ledger Waits.",
+      "subheadline": "Nostalgic triumph and commercial supremacy are different claims, not interchangeable trophies.",
+      "items": [
+        {
+          "badge": "1998",
+          "title": "The nostalgia lens",
+          "body": "A beloved adventure’s return supplies the emotional story."
+        },
+        {
+          "badge": "16.48 million",
+          "title": "The accounting lens",
+          "body": "Mario Kart World’s lifetime total through September 30, 2026 remains ahead in published figures.​"
+        }
+      ],
+      "visualStyle": "romantic-archive-versus-financial-ledger",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "Divide a 1080×1350 canvas into two equal vertical fields beneath a shared headline. Left: warm orange halftone framing a simple memory-window motif. Right: precise Ink ledger rules on Surface. Cap all metric numerals at 48px, with units on separate lines. Use 26px body copy and wide gutters. Present contrasting interpretations, not fabricated fan quotations, social posts, or measured audience factions.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "reality-check",
+      "kicker": "THE REALITY CHECK / TWO DIFFERENT CLOCKS",
+      "headline": "The Leaderboard Has A Time Problem",
+      "subheadline": "The comparison pairs an older lifetime snapshot with a newer launch window.",
+      "items": [
+        {
+          "badge": "September 30, 2026",
+          "title": "Lifetime snapshot closes",
+          "body": "Mario Kart World: 16.48 million. Donkey Kong Bananza: 5.05 million."
+        },
+        {
+          "badge": "Nov. 5",
+          "title": "Ocarina’s launch begins",
+          "body": "The first four days deliver over 5.2 million units—not a synchronized market comparison.​"
+        }
+      ],
+      "visualStyle": "misaligned-calendar-editorial",
+      "layoutTopology": "vertical-milestone-spine",
+      "svgBlueprint": "Draw a vertical orange spine with exactly two milestone nodes on a 1080×1350 canvas. Set the September date above the November launch, each beside one spacious Surface panel. Break the long September badge across two lines at 40px; use 48px for the November badge. Insert a visible gap in the spine to emphasize different reporting cutoffs. Do not imply an operational failure, sales collapse, or extrapolated growth curve.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "receipts",
+      "kicker": "THE RECEIPTS / READ THE DENOMINATOR",
+      "headline": "Three Totals. Two Different Windows.",
+      "subheadline": "Ocarina clears Bananza’s published total; Mario Kart World’s remains higher.​",
+      "items": [
+        {
+          "badge": "16.48 million",
+          "title": "Mario Kart World",
+          "body": "Lifetime sales through September 30, 2026; Nintendo’s totals include downloadable versions and bundled units."
+        },
+        {
+          "badge": "over 5.2 million units",
+          "title": "Ocarina of Time",
+          "body": "First four days following Nov. 5; Nintendo internal data includes physical and digital sales."
+        },
+        {
+          "badge": "5.05 million",
+          "title": "Donkey Kong Bananza",
+          "body": "Lifetime sales through September 30, 2026; below Ocarina’s launch total, with different reporting cutoffs.​"
+        }
+      ],
+      "visualStyle": "high-contrast-sales-receipt",
+      "layoutTopology": "three-row-verification-ledger",
+      "svgBlueprint": "Build exactly three full-width ledger rows on a 1080×1350 canvas. Use 56px numerals and 26px explanatory text; separate qualifiers and units without deleting them. Highlight only Ocarina’s row with an orange left rule. Give every reporting window equal typographic prominence. Avoid proportional bars because Ocarina’s figure is a lower bound and the windows differ. Keep citations in a dedicated footer gutter.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "THE CULTURAL VERDICT / SPEED IS NOT SOVEREIGNTY",
+      "headline": "Nostalgia Wins Attention. Arithmetic Keeps Score.",
+      "subheadline": "An extraordinary opening proves demand; lifetime dominance still needs earning.",
+      "items": [
+        {
+          "badge": "over 5.2 million units",
+          "title": "The achievement",
+          "body": "Four days establish Nintendo’s Switch 2 launch-speed record—not an all-publisher record."
+        },
+        {
+          "badge": "16.48 million",
+          "title": "The unfinished race",
+          "body": "Mario Kart World’s September 30, 2026 benchmark remains ahead; overtaking it is a possibility.​"
+        }
+      ],
+      "closingLine": "Celebrate the return. Keep the qualifier.",
+      "visualStyle": "minimalist-editorial-endnote",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Return to generous negative space on a 1080×1350 canvas. Place a 56px verdict headline above two staggered Surface cards, with all metric numerals capped at 52px. Draw a single orange sprint line ending before a separate outlined crown; treat this as an editorial metaphor, not a forecast. Finish with the closing line at 34px and a thin publication rule. No projected sales, countdown, or invented finish date.",
+      "platform": "instagram-feed"
+    }
+  ]
+}

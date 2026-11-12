@@ -1,0 +1,122 @@
+{
+  "articleTitle": "The Legend Of Zelda: Ocarina Of Time Remake Is Nintendo's Fastest-Selling Switch 2 Game Ever",
+  "publisher": "Game Informer",
+  "byline": "Staff Bureau",
+  "summary": "The Legend of Zelda: Ocarina of Time sold more than 5.2 million copies in four days following its November 5 launch, becoming the fastest-selling Nintendo-published Switch 2 game. The remake anchors Zelda's 40th anniversary celebration and ranks behind Mario Kart World, whose reported sales total is 16.48 million copies.​",
+  "entities": [
+    {
+      "name": "Nintendo",
+      "type": "Company",
+      "role": "Publisher of the Switch 2 remake and source of the worldwide launch-sales figures."
+    },
+    {
+      "name": "Game Informer",
+      "type": "Organization",
+      "role": "Publisher of the article and the review awarding the remake 9.25 out of 10."
+    },
+    {
+      "name": "Kyle Hilliard",
+      "type": "Person",
+      "role": "Game Informer reviewer quoted describing his emotional response to revisiting Ocarina of Time."
+    },
+    {
+      "name": "Jon Batiste",
+      "type": "Person",
+      "role": "Award-winning composer and musician interviewed about the Ocarina of Time score."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "more than 5.2 million copies",
+      "label": "Launch sales",
+      "context": "Sold in four days following the November 5 launch; Nintendo's internal sales data includes digital and physical sales."
+    },
+    {
+      "value": "second-best-selling",
+      "label": "Nintendo-published Switch 2 sales ranking",
+      "context": "The remake ranks behind Mario Kart World using the published sales totals."
+    },
+    {
+      "value": "16.48 million",
+      "label": "Mario Kart World copies sold",
+      "context": "Lifetime sales through September 30, 2026."
+    },
+    {
+      "value": "5.05 million",
+      "label": "Donkey Kong Bananza copies sold",
+      "context": "Lifetime sales through September 30, 2026; below the remake's first four days of sales."
+    },
+    {
+      "value": "1998",
+      "label": "Original game's release year",
+      "context": "The original Ocarina of Time launched for Nintendo 64."
+    },
+    {
+      "value": "second remake",
+      "label": "Remake sequence",
+      "context": "Game Informer describes the 2026 release as Nintendo's second remake of the original N64 game."
+    },
+    {
+      "value": "40th",
+      "label": "Zelda series anniversary",
+      "context": "The celebration includes the remake, other games and products, and a worldwide concert tour beginning in 2027."
+    },
+    {
+      "value": "April 30, 2027",
+      "label": "Live-action film release",
+      "context": "Scheduled theatrical debut of The Legend of Zelda live-action film."
+    },
+    {
+      "value": "9.25 out of 10",
+      "label": "Game Informer review score",
+      "context": "Score reported in the article alongside Kyle Hilliard's review quotation."
+    },
+    {
+      "value": "28 years later",
+      "label": "Reviewer's retrospective interval",
+      "context": "Kyle Hilliard's description of returning to the game after its original release."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "For many like me, the original Ocarina of Time is an impactful adventure that arrived at a time in their lives when magic still felt real. Playing the game 28 years later and appreciating the care taken to maintain and improve the original vision was the ultimate surprise of the whole experience: I didn't expect to be so moved.",
+      "speaker": "Kyle Hilliard",
+      "role": "Game Informer reviewer",
+      "context": "Review of The Legend of Zelda: Ocarina of Time remake, awarded 9.25 out of 10."
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "The Legend of Zelda: Ocarina of Time",
+      "specs": [
+        "Released exclusively on Nintendo Switch 2.",
+        "Nintendo's second remake of the original N64 game released in 1998.",
+        "Reimagined visuals, orchestral music, voice acting, expanded cutscenes, and reworked camera and movement controls."
+      ],
+      "price": "$59.99 on Nintendo's official listing.",
+      "availability": "November 5 launch; identified in the article as the 2026 remake."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "Nintendo reports that the remake is the fastest-selling Nintendo-published Nintendo Switch 2 game globally and in the U.S., Canada and Latin America, with over 5.2 million units sold in its first four days.",
+    "criticismOrAlarm": "Launch-sales speed does not establish lifetime-sales leadership: Mario Kart World retains the higher published total of 16.48 million copies.",
+    "regulatoryOrHistoricalPrecedent": "The remake revisits the 1998 Nintendo 64 original during Zelda's 40th anniversary celebration. Game Informer identifies Mario Kart 8 Deluxe as the best-selling game on the original Switch."
+  },
+  "hiddenCatchesAndLimits": [
+    "The sales-speed record is specifically for Nintendo-published Switch 2 games, not an established record covering every publisher.",
+    "The launch-sales figure comes from Nintendo's internal sales data and combines digital and physical sales.",
+    "The comparison uses different reporting periods: Ocarina of Time's first four days after November 5 versus Mario Kart World's 16.48 million and Donkey Kong Bananza's 5.05 million through September 30, 2026.",
+    "Overtaking Mario Kart World is a prospective possibility, not an accomplished sales milestone.",
+    "The remake is exclusive to Nintendo Switch 2."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [
+      "Do not equate the fastest Nintendo-published launch with the highest lifetime sales or assume the four-day sales pace will persist.",
+      "Do not treat sales totals with different reporting cutoffs as a synchronized market comparison."
+    ],
+    "fitAdvice": [
+      "The remake achieved more than 5.2 million sales in four days and a Nintendo-published Switch 2 launch-speed record.",
+      "Mario Kart World remains ahead in published lifetime sales at 16.48 million copies."
+    ]
+  }
+}

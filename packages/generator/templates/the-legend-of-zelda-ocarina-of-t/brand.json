@@ -1,0 +1,26 @@
+{
+  "name": "Custom Brand",
+  "slug": "the-legend-of-zelda-ocarina-of-t",
+  "vibe": "Curated Editorial Publication",
+  "domain": "the-legend-of-zelda-ocarina-of-t.pub",
+  "palette": {
+    "paper": "#0D0E12",
+    "ink": "#F1F3F9",
+    "accent": "#FF4D00",
+    "surface": "#161820",
+    "border": "#F1F3F925",
+    "subtle": "#F1F3F980"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Inter",
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
+  },
+  "wordmark": "CUSTOM BRAND",
+  "wordmarkStyle": "sans",
+  "handle": "@thelegendofzeldaocarinaoft",
+  "texture": "grid",
+  "motif": "crosshair",
+  "platform": "instagram-feed"
+}
