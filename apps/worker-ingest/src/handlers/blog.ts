@@ -55,7 +55,22 @@ async function scrapeWithCheerioHtml(html: string): Promise<string> {
   const metaTitle = $('meta[property="og:title"]').attr('content')?.trim()
     || $('meta[name="twitter:title"]').attr('content')?.trim();
   const mainH1 = $('h1').first().text().trim();
+  const docTitle = $('title').text().trim().toLowerCase();
   const headline = metaTitle || (mainH1.length > 5 ? mainH1 : null);
+  const headlineLower = (headline || '').toLowerCase();
+
+  // Detect Cloudflare / Anti-Bot challenge pages
+  if (
+    docTitle.includes('just a moment') ||
+    headlineLower.includes('just a moment') ||
+    docTitle.includes('attention required') ||
+    html.includes('cf-browser-verification') ||
+    html.includes('challenge-platform')
+  ) {
+    throw new Error(
+      "Target URL is protected by Cloudflare/Anti-Bot verification ('Just a moment...'). Please switch to Prompt/Topic mode to generate this carousel directly."
+    );
+  }
 
   $('script, style, nav, header, footer, iframe, noscript, aside, [aria-hidden="true"], .advertisement, [data-testid*="ad"], .story-ad, [class*="advertis"], [id*="advertis"]').remove();
 

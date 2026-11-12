@@ -61,6 +61,8 @@ export function createWorker<T = unknown>(
   const WORKER_DEFAULTS: WorkerOptions = {
     connection: workerConnection,
     concurrency: 1,
+    lockDuration: 600_000, // 10 minutes for deep LLM codegen and rendering
+    stalledInterval: 60_000,
   };
   return new Worker<T>(name, handler as (job: { data: T }) => Promise<void>, { ...WORKER_DEFAULTS, ...opts });
 }

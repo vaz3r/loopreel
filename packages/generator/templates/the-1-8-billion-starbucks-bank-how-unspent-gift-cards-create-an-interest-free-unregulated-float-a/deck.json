@@ -1,0 +1,318 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-1-8-billion-starbucks-bank-how-unspent-gift-cards-create-an-interest-free-unregulated-float-a",
+  "domain": "thefineprint.co",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "CONSUMER FINANCE / CONVENIENCE VS. CONTROL",
+      "headline": "Starbucks Cards Never Expire. Nonredemption Pays.",
+      "subheadline": "Follow customer prepayments into interest-free financing—and separate nonredemption revenue from profit.",
+      "publication": "The Fine Print",
+      "domain": "thefineprint.co",
+      "issueBadge": "SPECIAL REPORT · 7 SLIDES",
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "designSystem": {
+        "appliesTo": "all-slides",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "canvas": {
+          "width": 1080,
+          "height": 1350,
+          "safeMargin": 72
+        },
+        "citationTreatment": "Render citation markers as compact source references outside headline and numerical spans."
+      },
+      "typography": {
+        "headlinePx": 72,
+        "subheadlinePx": 30,
+        "metricPx": 48
+      },
+      "metrics": [
+        {
+          "badge": "2025",
+          "label": "Fiscal-year evidence"
+        },
+        {
+          "badge": "$222.4",
+          "unit": "million",
+          "label": "Calculated card breakage revenue"
+        }
+      ],
+      "svgBlueprint": "Use a 1080×1350 near-black canvas. Place masthead above a thin red rule, followed by the kicker. Stack the monumental headline across four lines; emphasize Nonredemption Pays in red. Add one oversized, unbranded card silhouette with an unbroken white perimeter. Place subheadline beneath it and two compact telemetry badges above the issue footer. No diagrams, arrows, or callout boxes.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "belief",
+      "kicker": "THE APPEAL / FRICTIONLESS SPENDING",
+      "headline": "Convenience Makes Prepayment Feel Harmless",
+      "subheadline": "Easy payment and gifting encourage repeat visits; prepaid balances lack bank protections.​",
+      "visualStyle": "promise-versus-contract-diptych",
+      "layoutTopology": "full-height-editorial-split",
+      "typography": {
+        "headlinePx": 56,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "metricPx": 48
+      },
+      "items": [
+        {
+          "title": "THE PROMISE",
+          "body": "Convenient payment, gifting and rewards make keeping money inside Starbucks feel useful."
+        },
+        {
+          "title": "THE CONTRACT",
+          "body": "Balances prepay merchandise, earn no interest, and carry no FDIC insurance."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "2025",
+          "label": "Fiscal-year program evidence"
+        },
+        {
+          "badge": "2023",
+          "label": "Card terms effective July 24, 2023"
+        }
+      ],
+      "svgBlueprint": "Divide the content field into two equal vertical panels with a red hairline. On the left, draw a minimal gift-card outline above THE PROMISE; on the right, draw an open contract bracket above THE CONTRACT. Anchor one dated evidence badge inside each panel. Use 48px numerals, generous internal padding, and no bank-vault imagery.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "anomaly",
+      "kicker": "THE ANOMALY / MIXED BALANCES",
+      "headline": "The Big Balances Mix Different Obligations",
+      "subheadline": "Neither September 28, 2025 balance isolates outstanding gift-card principal.",
+      "visualStyle": "forensic-balance-sheet-cutaways",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "typography": {
+        "headlinePx": 56,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "metricPx": 52
+      },
+      "items": [
+        {
+          "title": "CURRENT BALANCE-SHEET LINE",
+          "metricIndex": 0,
+          "body": "Combines stored-value liabilities and current deferred revenue, including Nestlé’s $177.0 million prepaid royalty balance."
+        },
+        {
+          "title": "CARD-AND-LOYALTY BALANCE",
+          "metricIndex": 1,
+          "body": "Includes unredeemed Stars alongside cards—not gift-card principal alone."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "$1,840.6",
+          "unit": "million",
+          "label": "Combined current balance-sheet line"
+        },
+        {
+          "badge": "$1,751.7",
+          "unit": "million",
+          "label": "Cards plus loyalty deferred revenue"
+        }
+      ],
+      "svgBlueprint": "Stack two offset surface-colored cards, the upper card wider than the lower. Give each a red category tab, a 52px numerical badge, a separate million unit, and its qualification directly underneath. Add overlapping outline layers behind both cards to signal mixed categories, without implying proportional composition. Keep the date in the subheadline.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanism",
+      "kicker": "THE MECHANISM / ACCOUNTING WITHOUT EXPIRATION",
+      "headline": "No Expiration Does Not Mean No Breakage",
+      "subheadline": "Expected nonuse becomes revenue without a fixed card-confiscation deadline.​",
+      "visualStyle": "accounting-sequence-spine",
+      "layoutTopology": "vertical-milestone-spine",
+      "typography": {
+        "headlinePx": 54,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "metricPx": 48
+      },
+      "items": [
+        {
+          "title": "LOAD",
+          "body": "Customer loads initially create deferred revenue: Starbucks has cash but still owes merchandise."
+        },
+        {
+          "title": "REDEEM",
+          "body": "Spending the balance converts deferred revenue into revenue."
+        },
+        {
+          "title": "ESTIMATE NONUSE",
+          "body": "Historical patterns and applicable unclaimed-property remittances inform nonredemption estimates, recognized proportionately as cards redeem."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "2025",
+          "label": "Fiscal-year accounting policy"
+        },
+        {
+          "badge": "1",
+          "unit": "year",
+          "qualifier": "within",
+          "label": "Most cards historically redeemed"
+        }
+      ],
+      "svgBlueprint": "Draw a vertical white spine with three surface-filled nodes labeled LOAD, REDEEM, and ESTIMATE NONUSE. Branch a short red line from the redemption node toward the estimate node to show proportional recognition, not a countdown. Align each body beside its node. Place two small telemetry badges in the footer; never depict the one-year observation as an expiration deadline.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "evidence",
+      "kicker": "THE RECEIPTS / REVENUE, NOT NET PROFIT",
+      "headline": "The Receipts Establish Revenue, Not Profit",
+      "subheadline": "Two disclosed components produce the fiscal 2025 total.",
+      "visualStyle": "audited-receipt-ledger",
+      "layoutTopology": "three-row-verification-ledger",
+      "typography": {
+        "headlinePx": 56,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "metricPx": 56
+      },
+      "items": [
+        {
+          "title": "COMPANY-OPERATED STORES",
+          "metricIndex": 0,
+          "body": "Card breakage recognized in company-operated store revenues."
+        },
+        {
+          "title": "LICENSED STORES",
+          "metricIndex": 1,
+          "body": "Card breakage recognized in licensed store revenues."
+        },
+        {
+          "title": "CALCULATED TOTAL",
+          "metricIndex": 2,
+          "body": "Breakage revenue—not interest income or proof of an identical net-profit contribution."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "$200.4",
+          "unit": "million",
+          "label": "Company-operated breakage"
+        },
+        {
+          "badge": "$22.0",
+          "unit": "million",
+          "label": "Licensed-store breakage"
+        },
+        {
+          "badge": "$222.4",
+          "unit": "million",
+          "label": "Calculated sum; fiscal year ended September 28, 2025"
+        }
+      ],
+      "svgBlueprint": "Build three full-width receipt rows with monospaced numerical badges and separate million labels. Use a small plus sign between the first two rows and a double accounting rule above the total. Highlight only the total row in red. Place REVENUE in a rectangular outline stamp; do not use a profit label or a percentage chart.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "incentives",
+      "kicker": "FOLLOW THE MONEY / REPLENISHING PREPAYMENTS",
+      "headline": "Automatic Reload Keeps Customer Financing Flowing",
+      "subheadline": "Date or balance triggers replenish interest-free prepayments; Starbucks seeks more visits.​",
+      "visualStyle": "reload-control-dashboard",
+      "layoutTopology": "full-height-editorial-split",
+      "typography": {
+        "headlinePx": 54,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "metricPx": 52
+      },
+      "items": [
+        {
+          "title": "CANCELLATION WINDOW",
+          "metricIndex": 0,
+          "body": "Cancel at least twenty-four (24) hours before the next scheduled reload."
+        },
+        {
+          "title": "SETTINGS ARE NOT REVERSALS",
+          "metricIndex": 1,
+          "body": "Preference changes can lag; completed loads cannot be reversed under the automatic-reload provision."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "24",
+          "unit": "hours",
+          "qualifier": "at least",
+          "label": "Cancellation lead time"
+        },
+        {
+          "badge": "24",
+          "unit": "hours",
+          "qualifier": "up to",
+          "label": "Preference-change delay"
+        }
+      ],
+      "svgBlueprint": "Create two tall control panels beneath the headline. Use a simple clock arc in the cancellation panel and a reload arrow ending at a solid stop bar in the settings panel. Show both 24 badges at 52px, placing at least and up to on separate lines. Keep arrows inside panels and avoid suggesting automatic reload is mandatory.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "THE VERDICT / CONVENIENCE WITH CONTROL",
+      "headline": "Prepayment Is Financing. Revenue Is Not Profit.",
+      "subheadline": "Keep convenience, reject the savings-account analogy, and use applicable cash-out rights.​",
+      "visualStyle": "consumer-rights-verdict-placard",
+      "layoutTopology": "hero-metric-placard",
+      "typography": {
+        "headlinePx": 54,
+        "subheadlinePx": 28,
+        "bodyPx": 28,
+        "heroMetricPx": 84,
+        "secondaryMetricPx": 32
+      },
+      "items": [
+        {
+          "title": "THE FINANCIAL RECORD",
+          "body": "Customers provide interest-free financing; recognized nonredemption revenue does not establish equivalent net profit.​"
+        },
+        {
+          "title": "CALIFORNIA CASH-OUT",
+          "body": "Request cash for qualifying balances strictly below $15, including electronic gift cards."
+        },
+        {
+          "title": "REWARDS WITHOUT PRELOADING",
+          "body": "Fiscal 2025: members could earn Stars using cash, credit, debit or selected wallets at participating locations."
+        }
+      ],
+      "metrics": [
+        {
+          "badge": "$15",
+          "qualifier": "strictly below",
+          "label": "California qualifying cash-out threshold—not $15 or less"
+        },
+        {
+          "badge": "2026",
+          "label": "Effective April 1, 2026"
+        }
+      ],
+      "svgBlueprint": "Give the middle cash-out item a full-width hero placard. Set strictly below above an 84px $15 badge, with the effective-date badge beneath it. Place the financial verdict in a compact surface card above and the rewards alternative in one below. Finish with a red rule and The Fine Print masthead; avoid bank imagery or claims that every balance qualifies.",
+      "platform": "instagram-feed"
+    }
+  ]
+}

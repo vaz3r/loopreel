@@ -17,7 +17,7 @@ export const JobStatusEnum = z.enum([
 export type JobStatus = z.infer<typeof JobStatusEnum>;
 
 // Source Type enum (matches PostgreSQL source_type enum)
-export const SourceTypeEnum = z.enum(['youtube', 'blog', 'article']);
+export const SourceTypeEnum = z.enum(['youtube', 'blog', 'article', 'prompt']);
 export type SourceType = z.infer<typeof SourceTypeEnum>;
 
 // Format Type enum (matches PostgreSQL format_type enum)
@@ -88,7 +88,9 @@ export type NarrativePreset = z.infer<typeof NarrativePresetEnum>;
 
 // Job Creation Schema (API)
 export const JobCreateSchema = z.object({
-  sourceUrl: z.string().url(),
+  sourceUrl: z.string().optional(),
+  prompt: z.string().min(5).max(5000).optional(),
+  sourceType: SourceTypeEnum.optional(),
   platform: PlatformEnum.default('instagram-feed'),
   engine: EngineEnum.default('bespoke'),
   templateId: z.string().default('bespoke'),
@@ -96,6 +98,8 @@ export const JobCreateSchema = z.object({
   narrativePreset: NarrativePresetEnum.default('storytelling'),
   targetSlideCount: z.number().int().min(4).max(14).default(7),
   generateText: z.boolean().default(false),
+}).refine((data) => (data.sourceUrl && data.sourceUrl.trim().length > 0) || (data.prompt && data.prompt.trim().length > 0), {
+  message: 'Either sourceUrl or prompt must be provided',
 });
 export type JobCreateInput = z.infer<typeof JobCreateSchema>;
 

@@ -214,15 +214,46 @@ Output strictly the GroundTruthDossier JSON.`;
 }
 
 export function buildTopicResearchSystemPrompt(): string {
-  return `You are a Lead AI Research Analyst at SemiAnalysis, Epoch AI, and MIT Technology Review.
-Your task is to compile a verified, highly accurate GroundTruthDossier for an in-depth editorial topic.
+  return `You are a Lead Investigative Researcher, Financial Analyst, and Fact-Checker at The Economist, ProPublica, Reuters, and Bloomberg.
+Your mission is to compile an authoritative, empirical GroundTruthDossier for an editorial investigation.
 
 CRITICAL RULES:
-1. Grounded Technical Reality: Use real, verified technical facts, actual model names, verified benchmark scores (e.g. MMLU, GSM8K, MATH), exact hardware specs (H100/H800 cluster sizes, active vs total parameters), and published research innovations (Multi-head Latent Attention, DeepSeekMoE, GRPO).
-2. Exact Metrics: Training cost figures, parameter counts, context window sizes, and API pricing per million tokens.
-3. Real Industry Context: Real companies, researchers, and market reactions (OpenAI, DeepSeek, Meta Llama, US export controls).
+1. EMPIRICAL FACTS & VERIFIED METRICS:
+   - Provide concrete, verified numerical data, financial figures ($B, $M, percentages, multiples), regulatory milestones, and technical realities.
+   - For corporate/financial topics (e.g. unspent gift cards, float banking, revenue models, antitrust): include real balance sheet numbers, breakage metrics, SEC filing disclosures, and consumer protection precedents.
+   - For technology/engineering topics: include cluster sizes, parameter counts, benchmarks, latency, and hardware specs.
+   - NEVER provide meta-critique. Focus 100% on the factual subject matter.
 
-Return strictly valid JSON matching GroundTruthDossier without markdown outside the json block.`;
+2. STRUCTURED CORE CONTROVERSY & CATCHES:
+   - Identify the primary corporate claim / public narrative vs the hidden mechanism or critical downside.
+   - Extract 3–5 high-signal hidden catches, loopholes, or asterisks.
+
+Return strictly valid JSON matching this exact structure:
+{
+  "articleTitle": "Title of the investigation",
+  "publisher": "Investigation Bureau / Research Desk",
+  "byline": "Senior Investigative Bureau",
+  "summary": "2-sentence factual editorial summary of the core thesis and mechanism",
+  "entities": [{ "name": "Entity Name", "type": "Company | Agency | Person | Product", "role": "Factual role in the investigation" }],
+  "verifiedMetrics": [{ "value": "$1.8B", "label": "Stored value liabilities", "context": "Starbucks 10-K filing unspent customer card balance" }],
+  "verifiedQuotes": [{ "quote": "...", "speaker": "...", "role": "...", "context": "..." }],
+  "hardwareSpecs": {
+    "deviceA": { "name": "Core System / Mechanism", "specs": ["Parameter 1", "Parameter 2"], "price": "Financial scale", "availability": "Active" }
+  },
+  "coreControversy": {
+    "corporateClaim": "Primary corporate or PR claim (e.g. Convenience and customer rewards)",
+    "criticismOrAlarm": "Forensic reality or regulatory concern (e.g. Unregulated interest-free banking float)",
+    "regulatoryOrHistoricalPrecedent": "Relevant legal, CFPB, SEC, or banking framework"
+  },
+  "hiddenCatchesAndLimits": [
+    "High-signal caveat or hidden mechanism 1",
+    "High-signal caveat or hidden mechanism 2"
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": ["Critical risk or consumer trap to beware"],
+    "fitAdvice": ["Strategic reality or takeaway"]
+  }
+};`;
 }
 
 export function buildTopicResearchUserPrompt(brief: TemplateBrief): string {
@@ -823,7 +854,7 @@ ${code}
 Common Fix Guidelines:
 1. "Property 'value' does not exist on type '...[]'" or "Property 'title' does not exist on type '...[]'":
    - An entire array was assigned where a single object was expected.
-   - If stages/columns/strata are declared: change \`{ card: cards, metric: telemetry }\` to \`{ card: cards[0], metric: telemetry[0] }\` OR change \`[cards, cards, cards]\` to \`[cards[0], cards[1], cards[2]]\`.
+   - If stages/columns/strata are declared: change \`{ card: cards, inventory: telemetry }\` or \`{ card: cards, metric: telemetry }\` to \`{ card: cards[0], inventory: telemetry[0] }\` OR change \`[cards, cards, cards]\` to \`[cards[0], cards[1], cards[2]]\`. Never pass an unindexed array inside a column/stage helper object!
    - If numbered variables are declared: change \`const item0 = items;\` to \`const item0 = items[0];\`
    - If accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or map over the array.
 2. "Identifier expected":

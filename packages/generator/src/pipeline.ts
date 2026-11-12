@@ -24,9 +24,6 @@ import {
   buildStoryDeckUserPrompt,
   buildVisualBlueprintSystemPrompt,
   buildVisualBlueprintUserPrompt,
-  buildDeckSystemPrompt,
-  buildDeckBatch1Prompt,
-  buildDeckBatch2Prompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -159,9 +156,9 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
 
   // 4. Fix array helper objects with repeated unindexed collection properties:
-  // e.g. { card: cards, metric: telemetry } inside an array literal
+  // e.g. { card: cards, metric: telemetry }, { card: cards, inventory: telemetry } inside an array literal
   const propCounters: Record<string, number> = {};
-  code = code.replace(/(\b(?:card|item|metric|col|entry|step|stage|milestone)\s*:\s*)(cards|items|telemetry|metrics|stages|steps|milestones)\b(?!\s*\[)/g, (_m, prefix, arr) => {
+  code = code.replace(/(\b[a-zA-Z0-9_$]+\s*:\s*)(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)/g, (_m, prefix, arr) => {
     const key = prefix.trim();
     const count = propCounters[key] || 0;
     propCounters[key] = count + 1;
@@ -169,8 +166,8 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
 
   // 4b. Fix array literals with unindexed repeated collections: e.g. [cards, cards, cards] -> [cards[0], cards[1], cards[2]]
-  code = code.replace(/\[\s*(cards|items|telemetry|metrics|stages|steps|milestones|columns)\b(?!\s*\[)([^\]]*?)\]/g, (fullMatch) => {
-    const colRegex = /\b(cards|items|telemetry|metrics|stages|steps|milestones|columns)\b(?!\s*\[)/g;
+  code = code.replace(/\[\s*(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)([^\]]*?)\]/g, (fullMatch) => {
+    const colRegex = /\b(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)/g;
     const counters: Record<string, number> = {};
     return fullMatch.replace(colRegex, (m) => {
       const idx = counters[m] ?? 0;
@@ -179,7 +176,7 @@ export function sanitizeTsxCode(rawCode: string): string {
     });
   });
 
-  // 5. Fix unindexed items/cards/telemetry property access when variable is an array
+  // 5. Fix unindexed items/cards/telemetry/inventory property access when variable is an array
   let cardTitleCount = 0;
   code = code.replace(/(?:cards|items)\??\.(?:title|label)(?!\[)/g, () => {
     return `items?.[${cardTitleCount++}]?.title`;
@@ -190,11 +187,11 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
 
   let telValCount = 0;
-  code = code.replace(/(?:telemetry|metrics)\??\.(?:value|val)(?!\[)/g, () => {
+  code = code.replace(/(?:telemetry|metrics|inventory)\??\.(?:value|val|badge)(?!\[)/g, () => {
     return `telemetry?.[${telValCount++}]?.value`;
   });
   let telLabelCount = 0;
-  code = code.replace(/(?:telemetry|metrics)\??\.label(?!\[)/g, () => {
+  code = code.replace(/(?:telemetry|metrics|inventory)\??\.label(?!\[)/g, () => {
     return `telemetry?.[${telLabelCount++}]?.label`;
   });
 
@@ -518,25 +515,25 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   options.onProgress?.('Extracting Story Strategy', 3, 15);
 
   let strategy: StoryStrategy;
-  if (article) {
-    const strategyResponse = await llm.generateJSON(
-      buildStoryStrategySystemPrompt(narrativePreset),
-      buildStoryStrategyUserPrompt(dossier, article),
-      0.7
-    );
-    strategy = extractJson<StoryStrategy>(strategyResponse.text);
-  } else {
-    strategy = {
-      hookHeadline: brief.name || 'The Investigation',
-      valuePromise: brief.vibe || 'Essential insights',
-      kicker: 'ANALYSIS / IN FOCUS',
-      coreConflict: 'Understanding emerging market dynamics',
-      hiddenCatch: 'Critical parameters to watch',
-      verdict: 'The essential takeaway',
-      keyMetrics: [],
-      keyQuotes: [],
-    };
-  }
+  const effectiveArticle: ArticleIntel = article || {
+    url: brief.domain ? `https://${brief.domain}` : 'https://loopreel.local',
+    canonicalUrl: brief.domain ? `https://${brief.domain}` : 'https://loopreel.local',
+    title: dossier.articleTitle || brief.name || 'Editorial Investigation',
+    publisher: dossier.publisher || brand.name,
+    byline: dossier.byline || 'Staff Bureau',
+    summary: dossier.summary,
+    cleanText: brief.vibe ? `${brief.vibe}\n\n${dossier.summary}` : dossier.summary,
+    extractedQuotes: dossier.verifiedQuotes.map((q) => q.quote),
+    extractedMetrics: dossier.verifiedMetrics.map((m) => `${m.value} ${m.label}`),
+  };
+
+  const strategyResponse = await llm.generateJSON(
+    buildStoryStrategySystemPrompt(narrativePreset),
+    buildStoryStrategyUserPrompt(dossier, effectiveArticle),
+    0.7
+  );
+  strategy = extractJson<StoryStrategy>(strategyResponse.text);
+
   console.log(`[Pipeline] Hook Formulated: "${strategy.hookHeadline}"`);
   console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
 
@@ -546,32 +543,15 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   console.log(`[Pipeline] >>> Pass 4: Senior Copy Editor Authoring ${targetSlideCount}-Slide High-Signal Storyboard (${narrativePreset})...`);
   options.onProgress?.('Authoring Storyboard', 4, 15);
 
-  let allSlides: SlideData[] = [];
-
-  if (article) {
-    const deckResponse = await llm.generateJSON(
-      buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-      buildStoryDeckUserPrompt(strategy, dossier, brand, targetSlideCount),
-      0.6
-    );
-    allSlides = extractJson<SlideData[]>(deckResponse.text);
-  } else {
-    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 1: Slides 1–9)...');
-    const batch1Response = await llm.generateJSON(
-      buildDeckSystemPrompt(),
-      buildDeckBatch1Prompt(brief, brand),
-      0.7
-    );
-    const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
-
-    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 2: Slides 10–17)...');
-    const batch2Response = await llm.generateJSON(
-      buildDeckSystemPrompt(),
-      buildDeckBatch2Prompt(brief, brand),
-      0.7
-    );
-    const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
-    allSlides = [...batch1Slides, ...batch2Slides];
+  const deckResponse = await llm.generateJSON(
+    buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
+    buildStoryDeckUserPrompt(strategy, dossier, brand, targetSlideCount),
+    0.6
+  );
+  let allSlides = extractJson<SlideData[]>(deckResponse.text);
+  if (!Array.isArray(allSlides) || allSlides.length === 0) {
+    console.warn('[Pipeline] Storyboard JSON was not an array, attempting object extraction...');
+    allSlides = (allSlides as any)?.slides || [];
   }
 
   // Normalize slide schema ensuring id, index, and type are guaranteed

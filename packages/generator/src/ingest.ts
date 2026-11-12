@@ -83,6 +83,24 @@ export function extractArticleFromHtml(html: string, url: string): ArticleIntel 
   const rawTitle = metaTitle || (h1.length > 5 ? h1 : docTitle) || 'Untitled Article';
   const title = rawTitle.replace(/\s*[|•–—]\s*.*$/, '').replace(/\s+-\s+.*$/, '').trim();
 
+  // Detect Cloudflare / Anti-Bot challenge pages
+  const lowerDocTitle = docTitle.toLowerCase();
+  const lowerRawTitle = rawTitle.toLowerCase();
+  const isBotGate =
+    lowerDocTitle.includes('just a moment') ||
+    lowerRawTitle.includes('just a moment') ||
+    lowerDocTitle.includes('attention required') ||
+    lowerDocTitle.includes('security challenge') ||
+    html.includes('cf-browser-verification') ||
+    html.includes('challenge-platform') ||
+    html.includes('turnstile');
+
+  if (isBotGate) {
+    throw new Error(
+      "Target URL is protected by Cloudflare/Anti-Bot verification ('Just a moment...'). Please switch to Prompt/Topic mode to generate this carousel directly."
+    );
+  }
+
   // 2. Extract Publisher / Source
   let publisher =
     $('meta[property="og:site_name"]').attr('content')?.trim() ||

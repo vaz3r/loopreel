@@ -1,15 +1,34 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2, Sliders } from 'lucide-react';
+import { Loader2, ChevronDown, Sparkles, BookOpen, Palette, CheckCircle2, Sliders, PenTool, Link2 } from 'lucide-react';
 import { useCreateJob } from '@/api/hooks';
 import { PlatformSelect } from '@/components/PlatformSelect';
 import { BrandKitForm, type BrandKitValues } from '@/components/BrandKitForm';
 import { getAllBrandPresets } from '@/lib/brand-presets';
 import type { CreateJobInput, BespokeBrand } from '@/api/client';
+
+const VIRAL_FINE_PRINT_PROMPTS = [
+  {
+    title: 'Starbucks Gift Card Bank',
+    prompt: 'The $1.8 Billion Starbucks Bank: How unspent gift cards create an interest-free unregulated float, and why forgotten balance breakage generates $150M+ in pure annual profit.',
+  },
+  {
+    title: 'Airline Overbooking Loophole',
+    prompt: 'Why Airlines Love Overbooking: The $4.2 Billion mathematical loophole behind selling 115% seat capacity on peak routes and legal rights to 400% cash payouts.',
+  },
+  {
+    title: 'Sneaker Artificial Scarcity',
+    prompt: 'The Sneaker Illusion: How a $16.50 shoe turns into a $600 collectible through manufacturer backdoor allocations and raffle bot manipulation.',
+  },
+  {
+    title: 'Subscription Dark Patterns',
+    prompt: 'The Subscription Trap: The 5 psychological dark patterns Netflix, Adobe, and gym memberships use to extract an average of $133/month in unremembered charges.',
+  },
+];
 
 const DEMO_PRESETS = [
   {
@@ -106,13 +125,22 @@ export function CreateJobPage() {
   const initialBrandPreset = searchParams.get('brandPreset') || 'auto';
 
   const createJob = useCreateJob();
-  const [url, setUrl] = useState('');
+  const [inputMode, setInputMode] = useState<'prompt' | 'url'>('prompt');
+  const [prompt, setPrompt] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
   const [platform, setPlatform] = useState('instagram-feed');
   const engine = 'bespoke';
   const templateId = 'bespoke';
 
   const brandPresets = useMemo(() => getAllBrandPresets(), []);
   const [selectedPresetSlug, setSelectedPresetSlug] = useState<string>(initialBrandPreset);
+
+  // Auto-default narrative preset to 'mythbuster' when The Fine Print is selected
+  useEffect(() => {
+    if (selectedPresetSlug === 'the-fine-print') {
+      setNarrativePreset('mythbuster');
+    }
+  }, [selectedPresetSlug]);
 
   const activePreset = useMemo<BespokeBrand | undefined>(() => {
     if (selectedPresetSlug === 'auto') return undefined;
@@ -134,9 +162,7 @@ export function CreateJobPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const sourceUrl = url.startsWith('http') ? url : `https://${url}`;
     const input: CreateJobInput = {
-      sourceUrl,
       platform,
       engine,
       templateId: engine === 'bespoke' ? 'bespoke' : templateId,
@@ -144,6 +170,15 @@ export function CreateJobPage() {
       targetSlideCount,
       generateText,
     };
+
+    if (inputMode === 'prompt') {
+      input.prompt = prompt.trim();
+    } else {
+      input.sourceUrl = url.startsWith('http') ? url : `https://${url}`;
+      if (prompt.trim()) {
+        input.prompt = prompt.trim();
+      }
+    }
 
     if (activePreset) {
       input.brandKit = activePreset;
@@ -158,49 +193,130 @@ export function CreateJobPage() {
 
   function applyPreset(presetUrl: string) {
     setUrl(presetUrl);
+    setInputMode('url');
+  }
+
+  function applyPrompt(presetPrompt: string) {
+    setPrompt(presetPrompt);
+    setInputMode('prompt');
   }
 
   return (
     <div className="space-y-10 pb-12">
       <div>
         <h1 className="text-[20px] font-semibold tracking-[-0.02em] text-text-primary">Create Editorial Publication</h1>
-        <p className="text-[13px] text-text-tertiary mt-1">Transform tech articles or research into art-directed social carousels.</p>
+        <p className="text-[13px] text-text-tertiary mt-1">Transform topics, research prompts, or web articles into art-directed social carousels.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
         <div className="space-y-5">
-          {/* URL Input & Quick Presets */}
-          <div className="space-y-2">
-            <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Source Story URL</Label>
-            <Input
-              type="url"
-              required
-              placeholder="https://arstechnica.com/..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="h-9 bg-surface-2 border-border text-[13px] text-text-secondary placeholder:text-text-quaternary"
-            />
-
-            {/* Quick Demo Presets */}
-            <div className="pt-1">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary block mb-1.5">
-                Quick Story Presets:
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {DEMO_PRESETS.map((p) => (
-                  <button
-                    key={p.name}
-                    type="button"
-                    onClick={() => applyPreset(p.url)}
-                    className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-md border border-border bg-surface-2 hover:border-emerald-700/60 hover:bg-emerald-950/20 text-text-tertiary hover:text-emerald-300 transition-all text-left"
-                  >
-                    <BookOpen className="h-3 w-3 text-emerald-400" />
-                    <span className="font-medium">{p.name}</span>
-                    <span className="text-[10px] text-text-quaternary">({p.publisher})</span>
-                  </button>
-                ))}
+          {/* Dual Input Mode Switcher */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-[11px] font-medium text-text-tertiary uppercase tracking-[0.05em]">Content Input Source</Label>
+              <div className="flex rounded-md border border-border bg-surface-2 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setInputMode('prompt')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-medium transition-all ${
+                    inputMode === 'prompt'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-text-tertiary hover:text-text-secondary'
+                  }`}
+                >
+                  <PenTool className="h-3 w-3" />
+                  Prompt & Topic
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setInputMode('url')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-medium transition-all ${
+                    inputMode === 'url'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-text-tertiary hover:text-text-secondary'
+                  }`}
+                >
+                  <Link2 className="h-3 w-3" />
+                  Article URL
+                </button>
               </div>
             </div>
+
+            {inputMode === 'prompt' ? (
+              <div className="space-y-2">
+                <textarea
+                  required={inputMode === 'prompt'}
+                  rows={4}
+                  placeholder="Describe your story, investigation, or research thesis (e.g. 'The $1.8B Starbucks Bank: How unspent gift cards create an interest-free float, and why breakage generates $150M+ in pure profit.')"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="w-full rounded-md bg-surface-2 border border-border p-3 text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:ring-1 focus:ring-emerald-500 leading-relaxed resize-none"
+                />
+
+                {/* Viral Topic Inspiration Pills */}
+                <div className="pt-1">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary block mb-1.5">
+                    Viral Topic Inspiration:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {VIRAL_FINE_PRINT_PROMPTS.map((p) => (
+                      <button
+                        key={p.title}
+                        type="button"
+                        onClick={() => applyPrompt(p.prompt)}
+                        className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-md border border-border bg-surface-2 hover:border-emerald-700/60 hover:bg-emerald-950/20 text-text-tertiary hover:text-emerald-300 transition-all text-left"
+                      >
+                        <Sparkles className="h-3 w-3 text-red-400" />
+                        <span className="font-medium text-text-secondary">{p.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  type="url"
+                  required={inputMode === 'url'}
+                  placeholder="https://arstechnica.com/..."
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  className="h-9 bg-surface-2 border-border text-[13px] text-text-secondary placeholder:text-text-quaternary"
+                />
+
+                {/* Optional Custom Angle Directive */}
+                <div className="pt-1">
+                  <Input
+                    type="text"
+                    placeholder="Optional: Custom editorial angle or focus directive..."
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    className="h-8 bg-surface-2/60 border-border text-[12px] text-text-secondary placeholder:text-text-quaternary"
+                  />
+                </div>
+
+                {/* Quick Demo Presets */}
+                <div className="pt-1">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-text-quaternary block mb-1.5">
+                    Quick Story Presets:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {DEMO_PRESETS.map((p) => (
+                      <button
+                        key={p.name}
+                        type="button"
+                        onClick={() => applyPreset(p.url)}
+                        className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-md border border-border bg-surface-2 hover:border-emerald-700/60 hover:bg-emerald-950/20 text-text-tertiary hover:text-emerald-300 transition-all text-left"
+                      >
+                        <BookOpen className="h-3 w-3 text-emerald-400" />
+                        <span className="font-medium">{p.name}</span>
+                        <span className="text-[10px] text-text-quaternary">({p.publisher})</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Generation Engine Banner */}

@@ -19,7 +19,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export interface CreateJobInput {
-  sourceUrl: string;
+  sourceUrl?: string;
+  prompt?: string;
   platform?: string;
   engine?: 'bespoke' | 'classic';
   templateId?: string;

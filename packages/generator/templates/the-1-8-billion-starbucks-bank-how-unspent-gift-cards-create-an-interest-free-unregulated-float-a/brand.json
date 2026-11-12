@@ -1,0 +1,26 @@
+{
+  "name": "The Fine Print",
+  "slug": "the-1-8-billion-starbucks-bank-how-unspent-gift-cards-create-an-interest-free-unregulated-float-a",
+  "vibe": "Investigative Corporate Autopsies, Fine Print Tricks & Receipts",
+  "domain": "thefineprint.co",
+  "palette": {
+    "paper": "#0A0A0C",
+    "ink": "#F5F5F7",
+    "accent": "#FF2A2A",
+    "surface": "#141418",
+    "border": "#26262E",
+    "subtle": "#858592"
+  },
+  "typography": {
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Inter",
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+  },
+  "wordmark": "THE FINE PRINT",
+  "wordmarkStyle": "small-caps",
+  "handle": "@thefineprint.co",
+  "texture": "grid",
+  "motif": "bracket",
+  "platform": "instagram-feed"
+}

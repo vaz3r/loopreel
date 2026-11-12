@@ -65,11 +65,13 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: parse.error.issues });
     }
 
-    const { sourceUrl, platform, templateId, brandKit, generateText } = parse.data;
-    const sourceType = determineSourceType(sourceUrl);
+    const { sourceUrl, prompt, platform, templateId, brandKit, generateText } = parse.data;
+    const isPromptMode = (!sourceUrl || sourceUrl.trim().length === 0) && !!prompt && prompt.trim().length > 0;
+    const effectiveSourceUrl = isPromptMode ? `prompt:${prompt!.trim()}` : (sourceUrl ? sourceUrl.trim() : '');
+    const sourceType = isPromptMode ? 'prompt' : determineSourceType(effectiveSourceUrl);
 
     const jobId = await JobRepository.create({
-      sourceUrl,
+      sourceUrl: effectiveSourceUrl,
       sourceType,
       templateId: templateId ?? 'auto',
       platform: platform ?? 'instagram-feed',
@@ -77,7 +79,7 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
       generateText: generateText ?? false,
     });
 
-    const jobPayload = { jobId, sourceUrl, sourceType };
+    const jobPayload = { jobId, sourceUrl: effectiveSourceUrl, sourceType };
 
     await OutboxRepository.create({
       queueName: 'ingest',

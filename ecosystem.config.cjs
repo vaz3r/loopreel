@@ -11,6 +11,8 @@ const localEnv = {
   DIRECT_LINE_SECRET: process.env.DIRECT_LINE_SECRET,
   DIRECT_LINE_BASE_URL: process.env.DIRECT_LINE_BASE_URL,
   LLM_MULTI_PHASE: process.env.LLM_MULTI_PHASE || 'true',
+  LLM_TIMEOUT: process.env.LLM_TIMEOUT || '300000',
+  LLM_MAX_RETRIES: process.env.LLM_MAX_RETRIES || '3',
   LOG_LEVEL: 'info',
 };
 
