@@ -1,23 +1,23 @@
 {
-  "name": "The Zurich Typographer",
+  "name": "Custom Brand",
   "slug": "tipaza",
-  "vibe": "Ultra-rigorous Swiss International style, asymmetric grid, stark contrast",
+  "vibe": "Curated Editorial Publication",
   "domain": "tipaza.pub",
   "palette": {
-    "paper": "#f5f5f7",
-    "ink": "#0b0c10",
-    "accent": "#ff2a2a",
-    "surface": "#e4e4e7",
-    "border": "#0b0c1025",
-    "subtle": "#0b0c1080"
+    "paper": "#0D0E12",
+    "ink": "#F1F3F9",
+    "accent": "#FF4D00",
+    "surface": "#161820",
+    "border": "#F1F3F925",
+    "subtle": "#F1F3F980"
   },
   "typography": {
-    "headlineFont": "Helvetica Neue, -apple-system, system-ui, sans-serif",
-    "bodyFont": "Helvetica Neue, -apple-system, system-ui, sans-serif",
+    "headlineFont": "Syne",
+    "bodyFont": "Inter",
     "monoFont": "JetBrains Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Helvetica%20Neue%2C%20-apple-system%2C%20system-ui%2C%20sans-serif:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
   },
-  "wordmark": "THE ZURICH TYPOGRAPHER",
+  "wordmark": "CUSTOM BRAND",
   "wordmarkStyle": "sans",
   "handle": "@tipaza",
   "texture": "grid",

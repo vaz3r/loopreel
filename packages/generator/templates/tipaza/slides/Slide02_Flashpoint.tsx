@@ -6,149 +6,182 @@ export default function Slide02({
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  void brand;
-  void totalSlides;
-
   const items = slide.items ?? [];
-  const before = items[0];
-  const reversal = items[1];
+  const telemetry = slide.telemetry ?? [];
+
+  const cards = [
+    { item: items[0], metric: telemetry[0], military: true },
+    { item: items[1], metric: telemetry[1], military: false },
+  ];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex flex-col gap-10 py-6">
-        <header className="flex flex-col gap-6">
-          <div className="flex items-center gap-5">
-            <span className="h-[3px] w-14 shrink-0 bg-[var(--accent)]" />
-            <p className="font-[var(--font-mono)] text-[22px] uppercase tracking-[0.16em] text-[var(--accent)]">
-              {slide.kicker}
-            </p>
-          </div>
-
-          <h1 className="max-w-[880px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
-            {slide.headline}
-          </h1>
-
-          <p className="max-w-[820px] font-[var(--font-body)] text-[28px] leading-snug">
-            {slide.subheadline}
+      <header className="flex shrink-0 flex-col gap-7">
+        <div className="flex items-center gap-5">
+          <span
+            aria-hidden="true"
+            className="h-3 w-3 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase leading-normal tracking-[0.12em] text-[var(--accent)]">
+            {slide.kicker}
           </p>
-        </header>
-
-        <div className="flex flex-col">
-          <article className="grid min-h-[440px] grid-cols-[64px_minmax(0,1fr)] gap-6 bg-[var(--surface)] px-8">
-            <div className="relative self-stretch" aria-hidden="true">
-              <svg
-                viewBox="0 0 64 440"
-                preserveAspectRatio="none"
-                className="absolute inset-0 h-full w-full text-[var(--ink)]"
-                fill="none"
-              >
-                <path
-                  d="M32 0V440"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
-              <svg
-                viewBox="0 0 64 64"
-                className="absolute left-0 top-[96px] h-16 w-16"
-                fill="none"
-              >
-                <rect
-                  x="20"
-                  y="20"
-                  width="24"
-                  height="24"
-                  fill="var(--surface)"
-                  stroke="var(--ink)"
-                  strokeWidth="3"
-                />
-                <path
-                  d="M27 32H37"
-                  stroke="var(--ink)"
-                  strokeWidth="3"
-                />
-              </svg>
-            </div>
-
-            <div className="flex min-w-0 flex-col justify-center gap-6 py-12">
-              <p className="font-[var(--font-mono)] text-[30px] leading-tight tracking-[-0.025em]">
-                {before?.badge}
-              </p>
-              <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
-                {before?.label || before?.title}
-              </h2>
-              <p className="max-w-[740px] font-[var(--font-body)] text-[30px] leading-[1.4]">
-                {before?.body}
-              </p>
-            </div>
-          </article>
-
-          <div className="h-[120px] w-full shrink-0" aria-hidden="true">
-            <svg
-              viewBox="0 0 952 120"
-              preserveAspectRatio="none"
-              className="block h-full w-full text-[var(--accent)]"
-              fill="none"
-            >
-              <path
-                d="M0 27L106 39L192 21L300 37L405 23L513 40L620 22L725 35L842 19L952 31V93L840 82L730 101L621 84L514 100L405 82L299 98L193 83L105 101L0 87Z"
-                fill="currentColor"
-              />
-              <path
-                d="M0 66L114 55L198 69L306 53L409 67L517 52L626 68L733 51L844 64L952 53"
-                stroke="var(--paper, #f5f5f7)"
-                strokeWidth="8"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </div>
-
-          <article className="grid min-h-[480px] grid-cols-[64px_minmax(0,1fr)] gap-6 border-b-2 border-[var(--border)] px-8">
-            <div className="relative self-stretch" aria-hidden="true">
-              <svg
-                viewBox="0 0 64 480"
-                preserveAspectRatio="none"
-                className="absolute inset-0 h-full w-full"
-                fill="none"
-              >
-                <path
-                  d="M32 0V480"
-                  stroke="var(--ink)"
-                  strokeWidth="3"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
-              <svg
-                viewBox="0 0 64 64"
-                className="absolute left-0 top-[96px] h-16 w-16 text-[var(--accent)]"
-                fill="none"
-              >
-                <path
-                  d="M32 12L52 32L32 52L12 32Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M25 25L39 39M39 25L25 39"
-                  stroke="var(--paper, #f5f5f7)"
-                  strokeWidth="3"
-                />
-              </svg>
-            </div>
-
-            <div className="flex min-w-0 flex-col justify-center gap-6 py-12">
-              <p className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.045em] text-[var(--accent)]">
-                {reversal?.badge}
-              </p>
-              <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
-                {reversal?.label || reversal?.title}
-              </h2>
-              <p className="max-w-[740px] font-[var(--font-body)] text-[30px] leading-[1.4]">
-                {reversal?.body}
-              </p>
-            </div>
-          </article>
         </div>
+
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.04] tracking-[-0.04em]">
+          {slide.headline}
+        </h1>
+
+        <p className="max-w-[860px] font-[var(--font-body)] text-[30px] leading-snug">
+          {slide.subheadline}
+        </p>
+      </header>
+
+      <div className="my-8 h-[144px] shrink-0">
+        <svg
+          viewBox="0 0 952 144"
+          className="h-full w-full"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 113L98 102L161 111L222 86L293 90L348 64L422 76L493 48L562 64L624 41L695 51L756 26L824 39L896 17L952 24V144H0Z"
+            fill="var(--surface)"
+          />
+          <path
+            d="M0 113L98 102L161 111L222 86L293 90L348 64L422 76L493 48L562 64L624 41L695 51L756 26L824 39L896 17L952 24"
+            stroke="var(--border)"
+            strokeWidth="2"
+            strokeLinejoin="miter"
+          />
+          <path
+            d="M0 37H231M721 107H952M64 25V49M888 95V119"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
+          <path
+            d="M422 76L493 48L562 64"
+            stroke="var(--accent)"
+            strokeWidth="3"
+          />
+          <circle cx="493" cy="48" r="7" fill="var(--accent)" />
+          <circle
+            cx="493"
+            cy="48"
+            r="20"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            opacity="0.35"
+          />
+        </svg>
+      </div>
+
+      <div className="flex flex-1 flex-col justify-evenly gap-9 pb-8">
+        {cards.map(({ item, metric, military }, index) => {
+          const [value, ...unitWords] = (metric?.badge ?? '').split(/\s+/);
+          const unit = unitWords.join(' ');
+
+          return (
+            <article
+              key={index}
+              className={`relative flex min-h-[378px] w-[calc(100%-64px)] shrink-0 flex-col border border-[var(--border)] bg-[var(--surface)] ${
+                military ? 'ml-16' : 'mr-16'
+              }`}
+            >
+              <span
+                aria-hidden="true"
+                className={`absolute -left-px top-8 h-20 w-[3px] ${
+                  military ? 'bg-[var(--accent)]' : 'bg-[var(--ink)]'
+                }`}
+              />
+
+              <div className="flex flex-1 flex-col gap-5 px-8 pb-7 pt-7">
+                <div className="flex items-center gap-6">
+                  {military ? (
+                    <svg
+                      viewBox="0 0 72 80"
+                      className="h-20 w-[72px] shrink-0 text-[var(--accent)]"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M34 5L39 12L34 19L29 12Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M34 18V74M14 25H58M24 74H44"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeLinecap="square"
+                      />
+                      <path
+                        d="M19 27H53V54L36 65L19 54Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M29 36H43M36 36V51"
+                        stroke="var(--surface)"
+                        strokeWidth="3"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      viewBox="0 0 72 80"
+                      className="h-20 w-[72px] shrink-0 text-[var(--ink)]"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M8 73H64M15 72V36L36 19L57 36V72"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinejoin="miter"
+                      />
+                      <path
+                        d="M25 72V47C25 32 47 32 47 47V72"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                      />
+                      <path
+                        d="M36 5V19M29 11H43"
+                        stroke="var(--accent)"
+                        strokeWidth="3"
+                      />
+                    </svg>
+                  )}
+
+                  <h2 className="min-w-0 font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+                    {item?.title || item?.label}
+                  </h2>
+                </div>
+
+                <p className="font-[var(--font-body)] text-[28px] leading-[1.3]">
+                  {item?.body}
+                </p>
+              </div>
+
+              <div className="border-t border-[var(--border)] px-8 py-6">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span
+                    className={`font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.04em] ${
+                      military ? 'text-[var(--accent)]' : ''
+                    }`}
+                  >
+                    {value}
+                  </span>
+                  {unit && (
+                    <span className="font-[var(--font-body)] text-[26px] leading-snug">
+                      {unit}
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-3 font-[var(--font-mono)] text-[20px] leading-normal tracking-[0.015em]">
+                  {metric?.label}
+                </p>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

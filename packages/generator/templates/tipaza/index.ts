@@ -7,9 +7,7 @@ import Slide01_Cover from './slides/Slide01_Cover';
 import Slide02_Flashpoint from './slides/Slide02_Flashpoint';
 import Slide03_Hiddendynamic from './slides/Slide03_Hiddendynamic';
 import Slide04_Collision from './slides/Slide04_Collision';
-import Slide05_Turningpoint from './slides/Slide05_Turningpoint';
-import Slide06_Groundreality from './slides/Slide06_Groundreality';
-import Slide07_Strategicverdict from './slides/Slide07_Strategicverdict';
+import Slide05_Strategicverdict from './slides/Slide05_Strategicverdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
@@ -19,9 +17,7 @@ const pkg: TemplatePackage = {
   Slide02_Flashpoint,
   Slide03_Hiddendynamic,
   Slide04_Collision,
-  Slide05_Turningpoint,
-  Slide06_Groundreality,
-  Slide07_Strategicverdict,
+  Slide05_Strategicverdict,
   ],
 };
 

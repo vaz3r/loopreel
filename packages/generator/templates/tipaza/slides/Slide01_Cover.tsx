@@ -1,132 +1,211 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
 
+type CoverContent = {
+  publication: string;
+  kicker: string;
+  headline: string;
+  subheadline: string;
+  issueBadge: string;
+  telemetry?: Array<{ badge: string; label: string }>;
+};
+
 export default function Slide01({
   slide,
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  const items = slide.items ?? [];
-  const item0 = items[0];
-  const item1 = items[1];
+  const cover = slide as typeof slide & CoverContent;
+  const telemetry = cover.telemetry ?? [];
+  const publication =
+    cover.publication || (brand as { name?: string })?.name;
 
-  const headlineWords = (slide.headline ?? '').split(/\s+/);
-  const headlineLines = [
-    headlineWords.slice(0, 2).join(' '),
-    headlineWords.slice(2, 4).join(' '),
-    headlineWords.slice(4).join(' '),
-  ];
-
-  const [kickerLead, ...kickerRest] = (slide.kicker ?? '').split('/');
+  const headlineLines = cover.headline
+    .replace(' Colony', '\nColony')
+    .replace(' a Ruin', '\na Ruin')
+    .split('\n');
 
   return (
-    <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex shrink-0 items-baseline justify-between gap-7 border-b border-[var(--ink)] pb-5">
-        <p className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.035em]">
-          {slide.publication}
-        </p>
-        <p className="shrink-0 font-[var(--font-mono)] text-[20px] leading-normal tracking-wide">
-          {slide.domain}
+    <section
+      className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
+      data-total-slides={totalSlides}
+    >
+      <div className="flex shrink-0 flex-col gap-8">
+        <div className="flex items-center justify-between gap-6 border-b border-[var(--border)] pb-6">
+          <p className="font-[var(--font-headline)] text-[36px] font-bold leading-none tracking-[-0.04em]">
+            {publication}
+          </p>
+
+          <p className="shrink-0 border border-[var(--border)] bg-[var(--surface)] px-5 py-3 font-[var(--font-mono)] text-[20px] leading-none tracking-[0.08em]">
+            {cover.issueBadge}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="h-5 w-5 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.16em] text-[var(--accent)]">
+            {cover.kicker}
+          </p>
+        </div>
+
+        <h1
+          aria-label={cover.headline}
+          className="font-[var(--font-headline)] text-[72px] font-bold leading-[1.02] tracking-[-0.04em]"
+          style={{
+            fontFamily:
+              'var(--font-headline, Georgia), "Times New Roman", serif',
+          }}
+        >
+          {headlineLines.map((line, index) => (
+            <span key={index} aria-hidden="true" className="block">
+              {line}
+            </span>
+          ))}
+        </h1>
+
+        <p className="max-w-[850px] font-[var(--font-body)] text-[30px] leading-snug">
+          {cover.subheadline}
         </p>
       </div>
 
-      <div className="mt-8 self-start border border-[var(--accent)] px-6 py-4 text-[var(--accent)]">
-        <p className="font-[var(--font-mono)] text-[20px] uppercase leading-[1.5] tracking-[0.16em]">
-          <span className="block">
-            {kickerLead.trim()}
-            {kickerRest.length > 0 ? ' /' : ''}
-          </span>
-          {kickerRest.length > 0 && (
-            <span className="block">{kickerRest.join('/').trim()}</span>
-          )}
-        </p>
-      </div>
-
-      <h1 className="mt-9 shrink-0 font-[var(--font-headline)] text-[68px] font-bold leading-[1.02] tracking-[-0.04em]">
-        {headlineLines.map((line, index) => (
-          <React.Fragment key={index}>
-            {index > 0 && <br />}
-            {line}
-          </React.Fragment>
-        ))}
-      </h1>
-
-      <div className="flex min-h-[440px] flex-1 items-center justify-center py-7">
+      <div className="my-8 flex min-h-[650px] flex-1 items-center justify-center">
         <svg
           viewBox="0 0 1080 1350"
           xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-          focusable="false"
-          className="h-[500px] w-[400px] shrink-0 text-[var(--ink)]"
+          preserveAspectRatio="xMidYMid meet"
+          className="block h-full max-h-[850px] w-full"
+          role="img"
+          aria-label="A monumental ancient column, broken across an orange fracture."
         >
-          {/* A single fractured typographic column, not a reconstruction. */}
-          <path
-            d="M250 120H850V210H790V270H745V585L355 715V270H310V210H250Z"
-            fill="currentColor"
+          <rect
+            width="1080"
+            height="1350"
+            fill="var(--paper, #0D0E12)"
           />
 
-          <path
-            d="M320 815L710 685V1110H770V1175H830V1270H230V1175H290V1110H320Z"
-            fill="currentColor"
-          />
+          {/* Quiet architectural registration marks. */}
+          <g
+            fill="none"
+            stroke="var(--border, #F1F3F925)"
+            strokeWidth="2"
+          >
+            <path d="M80 170V80H170 M910 80H1000V170" />
+            <path d="M80 1180V1270H170 M910 1270H1000V1180" />
+            <path d="M80 1218H1000" />
+          </g>
 
-          {/* The exposed diagonal fracture is the only chromatic gesture. */}
+          {/* Detached capital and upper shaft: one displaced fragment. */}
+          <g transform="rotate(-11 540 390)">
+            <path
+              d="M242 145H838V205H242Z"
+              fill="var(--ink)"
+            />
+            <path
+              d="M270 215H810L778 269H302Z"
+              fill="var(--ink)"
+            />
+            <path
+              d="M313 278H767V326H313Z"
+              fill="var(--ink)"
+            />
+            <path
+              d="M344 337H736L721 539L660 570L591 538L524 591L450 555L365 588Z"
+              fill="var(--ink)"
+            />
+
+            <g
+              fill="none"
+              stroke="var(--paper, #0D0E12)"
+              strokeWidth="17"
+            >
+              <path d="M401 340L415 552" />
+              <path d="M470 340L477 550" />
+              <path d="M540 340V568" />
+              <path d="M610 340L604 542" />
+              <path d="M679 340L666 548" />
+            </g>
+
+            <path
+              d="M242 145H838V159H242Z"
+              fill="var(--surface)"
+              opacity="0.45"
+            />
+          </g>
+
+          {/* The fracture is a material interruption, not a connector. */}
           <path
-            d="M307 759L768 605L790 654L329 808Z"
+            d="M311 633L405 599L476 636L550 587L622 622L694 589L765 625L748 671L679 645L610 678L548 645L475 692L403 655L327 684Z"
             fill="var(--accent)"
           />
 
-          {/* Incised vertical rhythm remains interrupted by the fracture. */}
-          <g
-            fill="none"
-            stroke="var(--paper, #f5f5f7)"
-            strokeWidth="12"
-          >
-            <path d="M450 285V648" />
-            <path d="M550 285V615" />
-            <path d="M650 285V582" />
-            <path d="M415 818V1090" />
-            <path d="M515 785V1090" />
-            <path d="M615 752V1090" />
+          {/* Standing lower shaft. */}
+          <path
+            d="M348 709L407 683L478 719L548 671L610 705L680 672L735 697L774 1100H306Z"
+            fill="var(--ink)"
+          />
+
+          <g fill="var(--paper, #0D0E12)">
+            <path d="M393 720L411 728L396 1080H372Z" />
+            <path d="M465 746L484 754L482 1080H459Z" />
+            <path d="M536 705L554 699L558 1080H535Z" />
+            <path d="M606 731L624 725L639 1080H616Z" />
+            <path d="M678 707L696 714L718 1080H695Z" />
           </g>
 
+          {/* A small missing chip keeps the ruin deliberately imperfect. */}
           <path
-            d="M310 210H790M290 1175H770"
-            fill="none"
-            stroke="var(--paper, #f5f5f7)"
-            strokeWidth="8"
+            d="M753 880L718 910L759 942Z"
+            fill="var(--paper, #0D0E12)"
+          />
+
+          {/* Heavy stepped plinth. */}
+          <path
+            d="M288 1112H792V1150H288Z"
+            fill="var(--ink)"
+          />
+          <path
+            d="M251 1162H829V1205H251Z"
+            fill="var(--ink)"
+          />
+          <path
+            d="M215 1218H865V1260H215Z"
+            fill="var(--ink)"
+          />
+          <path
+            d="M215 1260H865"
+            stroke="var(--accent)"
+            strokeWidth="5"
           />
         </svg>
       </div>
 
-      <p className="max-w-[860px] shrink-0 font-[var(--font-body)] text-[30px] leading-snug tracking-[-0.015em]">
-        {slide.subheadline}
-      </p>
-
-      <div className="mt-9 grid shrink-0 grid-cols-2 gap-8 border-t border-[var(--border)] pt-7">
-        {[item0, item1].map((item, index) => (
+      <div className="grid shrink-0 grid-cols-2 gap-8 border-t border-[var(--border)] pt-7 pb-2">
+        {telemetry.slice(0, 2).map((item, index) => (
           <div
-            key={index}
-            className="flex min-w-0 flex-col items-start gap-3"
+            key={`${item.badge}-${index}`}
+            className={
+              index === 0
+                ? 'flex min-w-0 flex-col gap-3'
+                : 'flex min-w-0 flex-col gap-3 border-l border-[var(--border)] pl-8'
+            }
           >
-            <p className="border-l-[4px] border-[var(--accent)] pl-4 font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.045em]">
-              {item?.badge}
+            <p className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.04em]">
+              {item.badge}
             </p>
-            <p className="font-[var(--font-body)] text-[24px] leading-snug">
-              {item?.label}
-            </p>
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 shrink-0 bg-[var(--accent)]"
+              />
+              <p className="font-[var(--font-body)] text-[24px] leading-snug">
+                {item.label}
+              </p>
+            </div>
           </div>
         ))}
-      </div>
-
-      <div className="mt-8 flex shrink-0 items-center gap-4 border-t border-[var(--ink)] pt-5">
-        <span
-          aria-hidden="true"
-          className="h-3 w-3 shrink-0 bg-[var(--accent)]"
-        />
-        <p className="font-[var(--font-mono)] text-[20px] uppercase leading-normal tracking-[0.12em]">
-          {slide.issueBadge}
-        </p>
       </div>
     </section>
   );

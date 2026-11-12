@@ -6,105 +6,106 @@ export default function Slide03({
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  void brand;
-  void totalSlides;
-
   const items = slide.items ?? [];
-  const population = items[0];
-  const sacred = items[1];
-  const [metric, ...unitWords] = (population?.badge ?? '').split(/\s+/);
-  const unit = unitWords.join(' ');
+  const item0 = items[0];
+  const item1 = items[1];
+  const telemetry = slide.telemetry ?? [];
+  const founding = telemetry[0];
+  const destruction = telemetry[1];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
       <header className="flex shrink-0 flex-col gap-7">
-        <div className="flex items-center gap-5">
-          <span
-            aria-hidden="true"
-            className="h-[12px] w-[12px] shrink-0 bg-[var(--accent)]"
-          />
-          <p className="font-[var(--font-mono)] text-[22px] uppercase tracking-[0.16em] text-[var(--accent)]">
-            {slide.kicker}
-          </p>
-        </div>
+        <p className="font-[var(--font-mono)] text-[20px] uppercase leading-normal tracking-[0.14em] text-[var(--accent)]">
+          {slide.kicker}
+        </p>
 
-        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
+        <div className="h-px w-full bg-[var(--border)]" />
+
+        <h1 className="max-w-[880px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.03] tracking-[-0.04em]">
           {slide.headline}
         </h1>
 
-        <p className="max-w-[850px] font-[var(--font-body)] text-[30px] leading-snug">
+        <p className="max-w-[850px] font-[var(--font-body)] text-[28px] leading-snug">
           {slide.subheadline}
         </p>
       </header>
 
-      <div className="mt-10 flex min-h-0 flex-1 flex-col justify-evenly gap-10 pb-8">
-        <article className="relative shrink-0 border-y border-[var(--border)] py-10">
-          <span
-            aria-hidden="true"
-            className="absolute left-0 top-[-1px] h-[3px] w-[104px] bg-[var(--accent)]"
-          />
+      <div className="mt-10 flex min-h-[490px] flex-1 flex-col">
+        <div className="flex shrink-0 flex-col items-center gap-4 py-9 text-center">
+          <p className="font-[var(--font-mono)] text-[84px] font-bold leading-none tracking-[-0.06em] text-[var(--accent)]">
+            {founding?.badge}
+          </p>
+          <p className="font-[var(--font-mono)] text-[22px] leading-snug tracking-[0.04em]">
+            {founding?.label}
+          </p>
+        </div>
 
-          <div className="flex w-full flex-col items-start">
-            <p className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.06em] tabular-nums">
-              {metric}
-            </p>
-            <p className="mt-4 font-[var(--font-body)] text-[30px] leading-snug">
-              {unit}
-            </p>
-          </div>
+        {/* Deliberate absence: no line connects the modern date to the ruins. */}
+        <div className="min-h-[190px] flex-1" aria-hidden="true" />
 
-          <div className="mt-10 grid grid-cols-[0.9fr_1.1fr] gap-8 border-t border-[var(--border)] pt-8">
-            <h2 className="min-w-0 font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.025em]">
-              {population?.label || population?.title}
-            </h2>
-            <p className="min-w-0 border-l border-[var(--border)] pl-8 font-[var(--font-body)] text-[26px] leading-snug">
-              {population?.body}
-            </p>
-          </div>
+        <svg
+          viewBox="0 0 952 112"
+          className="block h-[112px] w-full shrink-0 text-[var(--ink)]"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <g
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="square"
+            opacity="0.19"
+          >
+            <path d="M0 83H165 M184 83H378 M406 83H664 M695 83H952" />
+            <path d="M47 83V69H108V83 M52 69V57H100V69" />
+            <path d="M205 83V47H223V83 M202 47H228 M208 41H222" />
+            <path d="M253 83V60H271V83 M249 60H276" />
+            <path d="M310 83V73H352V83" />
+            <path d="M464 83V65H498V50H526V65H554V83" />
+            <path d="M473 65H489 M505 61H519 M532 75H547" />
+            <path d="M590 83V72H635V83" />
+            <path d="M731 83V42H750V83 M727 42H755 M733 36H748" />
+            <path d="M789 83V59H807V83 M785 59H812" />
+            <path d="M855 83V71H911V83" />
+          </g>
+          <g stroke="currentColor" strokeWidth="1" opacity="0.09">
+            <path d="M24 96H126 M207 100H338 M442 96H582 M725 99H906" />
+            <path d="M67 106H149 M476 105H539 M818 108H928" />
+          </g>
+        </svg>
+      </div>
+
+      <div className="mt-7 flex shrink-0 flex-col gap-6">
+        <article className="border-t border-[var(--border)] bg-[var(--surface)] px-8 py-7">
+          <h2 className="font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.025em]">
+            {item0?.title || item0?.label}
+          </h2>
+          <p className="mt-4 max-w-[840px] font-[var(--font-body)] text-[28px] leading-snug">
+            {item0?.body}
+          </p>
         </article>
 
-        <article className="shrink-0 bg-[var(--surface)] p-10">
-          <div className="flex items-center gap-6">
-            <p className="shrink-0 font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
-              {sacred?.badge}
-            </p>
+        <article className="border-t border-[var(--border)] bg-[var(--surface)] px-8 py-7">
+          <div className="mb-6 flex items-center gap-6 border-b border-[var(--border)] pb-6">
+            <span className="shrink-0 font-[var(--font-mono)] text-[40px] font-semibold leading-none tracking-[-0.04em]">
+              {destruction?.badge}
+            </span>
             <span
+              className="h-9 w-px shrink-0 bg-[var(--border)]"
               aria-hidden="true"
-              className="h-px flex-1 bg-[var(--border)]"
             />
-          </div>
-
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 872 220"
-            className="my-8 block h-[220px] w-full text-[var(--ink)]"
-            fill="none"
-          >
-            <g
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="square"
-            >
-              <path d="M100 202V100a64 64 0 0 1 128 0v102" />
-              <path d="M372 202V100a64 64 0 0 1 128 0v102" />
-              <path d="M644 202V100a64 64 0 0 1 128 0v102" />
-            </g>
-            <path
-              d="M40 204H832"
-              stroke="var(--accent)"
-              strokeWidth="3"
-            />
-          </svg>
-
-          <div className="grid grid-cols-[0.9fr_1.1fr] gap-8">
-            <h2 className="min-w-0 font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.025em]">
-              {sacred?.label || sacred?.title}
-            </h2>
-            <p className="min-w-0 font-[var(--font-body)] text-[26px] leading-snug">
-              {sacred?.body}
+            <p className="font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.02em]">
+              {destruction?.label}
             </p>
           </div>
+
+          <h2 className="font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.025em]">
+            {item1?.title || item1?.label}
+          </h2>
+          <p className="mt-4 max-w-[840px] font-[var(--font-body)] text-[28px] leading-snug">
+            {item1?.body}
+          </p>
         </article>
       </div>
     </section>

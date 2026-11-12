@@ -10,6 +10,15 @@ export function useStats() {
   });
 }
 
+export function useTemplates() {
+  return useQuery({
+    queryKey: ['templates'],
+    queryFn: api.getTemplates,
+    staleTime: 10_000,
+    refetchInterval: 15_000,
+  });
+}
+
 export function useJobs(params: { page?: number; limit?: number; status?: string; search?: string } = {}) {
   return useQuery<JobsListResponse>({
     queryKey: ['jobs', params],

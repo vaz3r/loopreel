@@ -29,6 +29,16 @@ export interface CreateJobInput {
   brandKit?: any;
 }
 
+export interface TemplateSummary {
+  slug: string;
+  name: string;
+  domain?: string;
+  platform: string;
+  slideCount: number;
+  hasAudit?: boolean;
+  createdAt?: string;
+}
+
 export interface JobSummary {
   id: string;
   status: JobStatus;
@@ -188,6 +198,8 @@ export const api = {
     }),
 
   getStats: () => request<StatsResponse>('/stats'),
+
+  getTemplates: () => request<{ templates: TemplateSummary[] }>('/templates'),
 
   purgeAll: () =>
     request<{ jobsDeleted: number; outboxDeleted: number; queuesCleared: number }>(

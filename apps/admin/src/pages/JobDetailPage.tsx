@@ -55,7 +55,7 @@ export function JobDetailPage() {
   const CLASSIC_TEMPLATES = ['paper-of-record', 'the-globalist', 'the-curator', 'the-academic', 'the-signal', 'the-field-notes'];
   const contentPayload = job.contentPayload as any;
   const templateSlug = contentPayload?.templateSlug || (!CLASSIC_TEMPLATES.includes(job.templateId) && job.templateId !== 'auto' && job.templateId !== 'bespoke' ? job.templateId : null);
-  const studioUrl = templateSlug ? `http://localhost:5174/?template=${templateSlug}` : null;
+  const studioUrl = templateSlug ? `/studio?template=${templateSlug}` : null;
 
   const bespokeBrand = contentPayload?.brand;
   const bespokeAudit = contentPayload?.audit;

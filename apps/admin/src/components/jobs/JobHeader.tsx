@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, RotateCcw, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Download, RotateCcw, Sparkles } from 'lucide-react';
 
 interface JobHeaderProps {
   jobId: string;
@@ -22,10 +22,10 @@ export function JobHeader({ jobId, status, studioUrl, onRetry, isRetrying }: Job
       </div>
       {studioUrl && (
         <Button asChild variant="outline" className="h-8 rounded-md border-emerald-800/60 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 hover:text-emerald-200 px-3 text-[13px] font-medium gap-1.5">
-          <a href={studioUrl} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="h-3.5 w-3.5 text-emerald-400" />
+          <Link to={studioUrl}>
+            <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
             Open in Studio
-          </a>
+          </Link>
         </Button>
       )}
       {status === 'complete' && (
