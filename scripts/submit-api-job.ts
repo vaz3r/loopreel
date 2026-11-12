@@ -8,7 +8,8 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const options: Record<string, string> = {
     url: 'https://en.wikipedia.org/wiki/Artificial_intelligence',
-    template: 'auto',
+    preset: 'storytelling',
+    slides: '',
     platform: 'instagram-feed',
     api: 'http://localhost:3000',
     outDir: '',
@@ -18,20 +19,22 @@ function parseArgs() {
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    if ((arg === '--url' || arg === '-u') && args[i + 1]) options['url'] = args[++i];
-    else if ((arg === '--template' || arg === '-t') && args[i + 1]) options['template'] = args[++i];
-    else if ((arg === '--platform' || arg === '-p') && args[i + 1]) options['platform'] = args[++i];
-    else if ((arg === '--wordmark' || arg === '-w') && args[i + 1]) options['wordmark'] = args[++i];
-    else if (arg === '--handle' && args[i + 1]) options['handle'] = args[++i];
-    else if (arg === '--api' && args[i + 1]) options['api'] = args[++i];
-    else if ((arg === '--outDir' || arg === '-o') && args[i + 1]) options['outDir'] = args[++i];
+    if ((arg === '--url' || arg === '-u') && args[i + 1]) options['url'] = args[++i]!;
+    else if (arg === '--preset' && args[i + 1]) options['preset'] = args[++i]!;
+    else if ((arg === '--slides' || arg === '-s') && args[i + 1]) options['slides'] = args[++i]!;
+    else if ((arg === '--platform' || arg === '-p') && args[i + 1]) options['platform'] = args[++i]!;
+    else if ((arg === '--wordmark' || arg === '-w') && args[i + 1]) options['wordmark'] = args[++i]!;
+    else if (arg === '--handle' && args[i + 1]) options['handle'] = args[++i]!;
+    else if (arg === '--api' && args[i + 1]) options['api'] = args[++i]!;
+    else if ((arg === '--outDir' || arg === '-o') && args[i + 1]) options['outDir'] = args[++i]!;
     else if (arg === '--help' || arg === '-h') {
       console.log(`
 Usage: pnpm tsx scripts/submit-api-job.ts [options]
 
 Options:
   -u, --url <url>             URL of article, blog post, or YouTube video
-  -t, --template <template>   Template ID: auto | paper-of-record | the-globalist | the-curator | the-academic | the-signal
+  --preset <preset>           Narrative preset: storytelling | analytical | instructional | persuasive | chronological | teardown
+  -s, --slides <count>        Target slide count (3 - 15)
   -p, --platform <platform>   Platform: instagram-feed | instagram-square | instagram-stories | linkedin | pinterest | x | facebook
   -w, --wordmark <text>       Publication Wordmark (e.g. "TECH DISPATCH")
   --handle <handle>           Social Handle (e.g. "@techdispatch")
@@ -56,24 +59,32 @@ async function main() {
   console.log('🚀 LOOPREEL REST API JOB SUBMISSION CLIENT');
   console.log('====================================================\n');
   console.log(`  Source URL: ${opts['url']}`);
-  console.log(`  Template:   ${opts['template']}`);
+  console.log(`  Preset:     ${opts['preset']}`);
+  if (opts['slides']) console.log(`  Target Slides: ${opts['slides']}`);
   console.log(`  Platform:   ${opts['platform']}`);
   console.log(`  API Target: ${opts['api']}\n`);
 
   // 1. Post Job to API
   console.log('1. Submitting job to POST /api/jobs...');
+  const payload: Record<string, any> = {
+    sourceUrl: opts['url'],
+    platform: opts['platform'],
+    narrativePreset: opts['preset'],
+  };
+  if (opts['slides']) {
+    payload['targetSlideCount'] = parseInt(opts['slides'], 10);
+  }
+  if (opts['wordmark'] || opts['handle']) {
+    payload['brandKit'] = {
+      wordmark: opts['wordmark'] || undefined,
+      handle: opts['handle'] || undefined,
+    };
+  }
+
   const createRes = await fetch(`${opts['api']}/api/jobs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      sourceUrl: opts['url'],
-      templateId: opts['template'],
-      platform: opts['platform'],
-      brandKit: (opts['wordmark'] || opts['handle']) ? {
-        wordmark: opts['wordmark'] || undefined,
-        handle: opts['handle'] || undefined,
-      } : undefined,
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!createRes.ok) {
@@ -90,7 +101,6 @@ async function main() {
   // 2. Poll API for Job Completion
   console.log('2. Polling API GET /api/jobs/:id until workers complete processing...');
   const startTime = Date.now();
-  let completedJobData: any = null;
 
   while (true) {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
@@ -105,7 +115,6 @@ async function main() {
     process.stdout.write(`\r   ⏱️  [${elapsed}s] Current Status: ${jobStatusData.status.toUpperCase()}    `);
 
     if (jobStatusData.status === 'complete') {
-      completedJobData = jobStatusData;
       console.log(`\n\n🎉 Job completed in ${elapsed} seconds! (${jobStatusData.slideCount} slides generated)`);
       break;
     }
@@ -135,7 +144,7 @@ async function main() {
   };
 
   // 4. Download All Slides and Assets to Disk
-  const outDir = opts['outDir'];
+  const outDir = opts['outDir']!;
   await fs.mkdir(outDir, { recursive: true });
 
   console.log(`\n4. Downloading ${downloadData.slideCount} slide PNGs & text assets to ${outDir}...`);

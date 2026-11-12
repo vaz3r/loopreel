@@ -1,9 +1,15 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { pool } from './pool.js';
+import dotenv from 'dotenv';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
+dotenv.config({ path: join(__dirname, '../../../.env') });
+dotenv.config({ path: join(__dirname, '../../.env') });
+dotenv.config();
+
+import { pool } from './pool.js';
+
 const MIGRATIONS_DIR = join(__dirname, '..', 'migrations');
 
 async function runMigrations(): Promise<void> {
@@ -54,4 +60,7 @@ async function runMigrations(): Promise<void> {
 
 runMigrations()
   .then(() => process.exit(0))
-  .catch(() => process.exit(1));
+  .catch((err) => {
+    console.error('Migration crashed:', err);
+    process.exit(1);
+  });

@@ -730,6 +730,7 @@ CRITICAL DESIGN & CODING RULES:
          { card: cards[2], metric: telemetry[2], offset: 'ml-0' },
        ];
      * NEVER write '{ card: cards }' or '{ item: items }' or '{ metric: telemetry }' or 'const item0 = items;'! Passing an Array object instead of an element causes TypeScript failure: "Property 'title' does not exist on type 'Item[]'".
+     * NEVER call array methods like .find() on an individual array element (e.g. NEVER write 'telemetry[0].find(...)')! If matching telemetry, call .find() on the array: 'telemetry.find(t => t.id === cards[0]?.telemetryRef)' or use indexing 'telemetry[0]'.
    - If mapping dynamically:
      {items.map((item: any, index: number) => (
        <div key={index}>
@@ -820,6 +821,13 @@ Common Fix Guidelines:
    - If accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or map over the array.
 2. "Identifier expected":
    - Check for dangling optional chaining or unclosed syntax (e.g. \`telemetry?.;\` -> \`telemetry?.[0];\`).
+3. "Property 'find' does not exist on type '...'":
+   - \`.find()\` was called on an individual element instead of the array!
+   - Change \`telemetry[0].find(...)\` to \`telemetry.find(...)\`.
+4. "Property '...' does not exist on type '...[]'":
+   - A property was accessed directly on an array. Index into it first: change \`cards?.telemetryRef\` to \`cards[0]?.telemetryRef\` or \`card?.telemetryRef\`.
+5. Comparison with array:
+   - If \`words = str.split(...)\`, compare \`words[0] === '...'\` rather than \`words === '...'\`.
 
 Fix all syntax and type errors completely. Return ONLY the corrected code in a \`\`\`tsx code block.`;
 }

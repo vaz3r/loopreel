@@ -67,12 +67,11 @@ export type BrandKit = z.infer<typeof BrandKitSchema>;
 
 export const TEMPLATE_KEYS = ['bespoke'] as const;
 export type TemplateId = string;
-export type ClassicTemplateId = string;
 
-export const EngineEnum = z.enum(['bespoke', 'classic']);
+export const EngineEnum = z.enum(['bespoke']);
 export type Engine = z.infer<typeof EngineEnum>;
 
-export const ALL_TEMPLATE_KEYS = ['auto', 'bespoke'] as const;
+export const ALL_TEMPLATE_KEYS = ['bespoke'] as const;
 export type TemplateInputId = string;
 
 export const NarrativePresetEnum = z.enum([
@@ -121,8 +120,3 @@ export const StructurePayloadSchema = z.object({
   engine: EngineEnum.optional(),
 });
 export type StructurePayload = z.infer<typeof StructurePayloadSchema>;
-
-export const RenderPayloadSchema = z.object({
-  jobId: z.string().uuid(),
-});
-export type RenderPayload = z.infer<typeof RenderPayloadSchema>;

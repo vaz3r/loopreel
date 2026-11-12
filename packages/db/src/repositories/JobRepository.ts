@@ -15,11 +15,6 @@ export interface JobRow {
   error_payload: unknown;
   slide_count: number | null;
   retry_count: number;
-  checkpoint_phase: string | null;
-  checkpoint_data: Record<string, unknown>;
-  retries_used: Record<string, number>;
-  domain_id: string | null;
-  variety_seed: number | null;
   total_prompt_tokens: number;
   total_completion_tokens: number;
   total_cost_usd: number;
@@ -202,187 +197,13 @@ export class JobRepository {
     return rowCount ?? 0;
   }
 
-  static async checkpoint(
-    jobId: string,
-    phase: string,
-    data: Record<string, unknown>,
-  ): Promise<void> {
-    await pool.query(
-      `UPDATE generation_jobs
-       SET checkpoint_phase = $1, checkpoint_data = $2, updated_at = NOW()
-       WHERE id = $3`,
-      [phase, JSON.stringify(data), jobId],
-    );
-  }
-
-  static async getCheckpoint(jobId: string): Promise<{ phase: string; data: Record<string, unknown> } | null> {
-    const { rows } = await pool.query<{ checkpoint_phase: string | null; checkpoint_data: Record<string, unknown> }>(
-      `SELECT checkpoint_phase, checkpoint_data FROM generation_jobs WHERE id = $1`,
-      [jobId],
-    );
-    const row = rows[0];
-    if (!row?.checkpoint_phase) return null;
-    return { phase: row.checkpoint_phase, data: row.checkpoint_data ?? {} };
-  }
-
-  static async incrementRetry(jobId: string, phase: string): Promise<number> {
-    const { rows } = await pool.query<{ retries_used: Record<string, number> }>(
-      `SELECT retries_used FROM generation_jobs WHERE id = $1`,
-      [jobId],
-    );
-    const current = rows[0]?.retries_used ?? {};
-    const updated = { ...current, [phase]: (current[phase] ?? 0) + 1 };
-    await pool.query(
-      `UPDATE generation_jobs SET retries_used = $1, updated_at = NOW() WHERE id = $2`,
-      [JSON.stringify(updated), jobId],
-    );
-    return updated[phase] ?? 0;
-  }
-
-  static async getRetriesUsed(jobId: string): Promise<Record<string, number>> {
-    const { rows } = await pool.query<{ retries_used: Record<string, number> }>(
-      `SELECT retries_used FROM generation_jobs WHERE id = $1`,
-      [jobId],
-    );
-    return rows[0]?.retries_used ?? {};
-  }
-
-  static async markNeedsReview(jobId: string, reason: string): Promise<void> {
-    await pool.query(
-      `UPDATE generation_jobs
-       SET status = 'needs_review', error_payload = $1, updated_at = NOW()
-       WHERE id = $2`,
-      [JSON.stringify({ stage: 'label-detection', reason }), jobId],
-    );
-  }
-
-  static async clearCheckpoint(jobId: string): Promise<void> {
-    await pool.query(
-      `UPDATE generation_jobs
-       SET checkpoint_phase = NULL, checkpoint_data = '{}', updated_at = NOW()
-       WHERE id = $1`,
-      [jobId],
-    );
-  }
-
-  static async insertSlideData(params: {
-    jobId: string;
-    phase: string;
-    slideIndex: number;
-    slideType: string;
-    headline?: string;
-    content: Record<string, unknown>;
-    varietySeed?: number;
-  }): Promise<void> {
-    await pool.query(
-      `INSERT INTO slide_data (job_id, phase, slide_index, slide_type, headline, content, variety_seed)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (job_id, phase, slide_index) DO UPDATE SET
-         slide_type = EXCLUDED.slide_type,
-         headline = EXCLUDED.headline,
-         content = EXCLUDED.content,
-         variety_seed = EXCLUDED.variety_seed`,
-      [
-        params.jobId,
-        params.phase,
-        params.slideIndex,
-        params.slideType,
-        params.headline ?? null,
-        JSON.stringify(params.content),
-        params.varietySeed ?? null,
-      ],
-    );
-  }
-
-  static async insertLlmUsage(params: {
-    jobId: string;
-    phase: string;
-    provider: string;
-    model: string;
-    promptTokens: number;
-    completionTokens: number;
-    latencyMs: number;
-    estimatedCostUsd: number;
-  }): Promise<void> {
-    await pool.query(
-      `INSERT INTO llm_usage (job_id, phase, provider, model, prompt_tokens, completion_tokens, latency_ms, estimated_cost_usd)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [
-        params.jobId,
-        params.phase,
-        params.provider,
-        params.model,
-        params.promptTokens,
-        params.completionTokens,
-        params.latencyMs,
-        params.estimatedCostUsd,
-      ],
-    );
-  }
-
-  static async updateCostColumns(
-    jobId: string,
-    params: {
-      domainId?: string;
-      varietySeed?: number;
-      totalPromptTokens: number;
-      totalCompletionTokens: number;
-      totalCostUsd: number;
-    },
-  ): Promise<void> {
-    const sets: string[] = [
-      'total_prompt_tokens = $1',
-      'total_completion_tokens = $2',
-      'total_cost_usd = $3',
-      'updated_at = NOW()',
-    ];
-    const values: unknown[] = [
-      params.totalPromptTokens,
-      params.totalCompletionTokens,
-      params.totalCostUsd,
-    ];
-    let idx = 4;
-
-    if (params.domainId !== undefined) {
-      sets.push(`domain_id = $${idx++}`);
-      values.push(params.domainId);
-    }
-    if (params.varietySeed !== undefined) {
-      sets.push(`variety_seed = $${idx++}`);
-      values.push(params.varietySeed);
-    }
-
-    values.push(jobId);
-    await pool.query(
-      `UPDATE generation_jobs SET ${sets.join(', ')} WHERE id = $${idx}`,
-      values,
-    );
-  }
-
-  static async getLlmUsage(jobId: string): Promise<Array<{
+  static async getLlmUsage(_jobId: string): Promise<Array<{
     phase: string;
     promptTokens: number;
     completionTokens: number;
     latencyMs: number;
     estimatedCostUsd: number;
   }>> {
-    const { rows } = await pool.query<{
-      phase: string;
-      prompt_tokens: number;
-      completion_tokens: number;
-      latency_ms: number;
-      estimated_cost_usd: number;
-    }>(
-      `SELECT phase, prompt_tokens, completion_tokens, latency_ms, estimated_cost_usd
-       FROM llm_usage WHERE job_id = $1 ORDER BY created_at`,
-      [jobId],
-    );
-    return rows.map(r => ({
-      phase: r.phase,
-      promptTokens: r.prompt_tokens,
-      completionTokens: r.completion_tokens,
-      latencyMs: r.latency_ms,
-      estimatedCostUsd: Number(r.estimated_cost_usd),
-    }));
+    return Promise.resolve([]);
   }
 }

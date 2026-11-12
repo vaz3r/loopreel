@@ -16,8 +16,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "generate-template": "pnpm --filter @loopreel/generator generate",
-    "db:migrate": "pnpm --filter @loopreel/db run migrate",
-    "db:generate": "pnpm --filter @loopreel/db run generate"
+    "db:migrate": "pnpm --filter @loopreel/db run migrate"
   },
   "devDependencies": {
     "pm2": "^7.0.3",

@@ -28,10 +28,6 @@ export const QUEUE_RETRY_CONFIG: Record<string, { attempts: number; backoff: { t
     attempts: 3,
     backoff: { type: 'exponential', delay: 5000 },
   },
-  render: {
-    attempts: 2,
-    backoff: { type: 'fixed', delay: 5000 },
-  },
 };
 
 const QUEUE_DEFAULTS: QueueOptions = {

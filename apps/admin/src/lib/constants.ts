@@ -8,22 +8,10 @@ export const PLATFORM_LABELS: Record<string, string> = {
   facebook: 'Facebook',
 };
 
-export const TEMPLATE_LABELS: Record<string, string> = {
-  bespoke: 'Bespoke (Autonomous Design Engine)',
-  auto: 'Auto (AI Dynamic Classifier)',
-  'paper-of-record': 'The Paper of Record (Broadsheet)',
-  'the-globalist': 'The Globalist (Newsprint Digest)',
-  'the-curator': 'The Curator (Minimalist Gallery)',
-  'the-academic': 'The Academic (Research Paper)',
-  'the-signal': 'The Signal (Modern B2B / Tech)',
-  'the-field-notes': 'The Field Notes (Notebook Journal)',
-};
-
 export const STATUS_FLOW = [
   'queued',
   'ingesting',
   'transcribing',
   'structuring',
-  'rendering',
   'complete',
 ] as const;

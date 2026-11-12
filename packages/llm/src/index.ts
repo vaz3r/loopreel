@@ -7,11 +7,6 @@ export {
   MockLLMClient,
   CopilotStudioClient,
 } from './providers/index.js';
-export { parseLlmXmlOutput, parseXml, xmlElementToObjects } from './xml-parser.js';
-export { generateSlides } from './brain/index.js';
-export type {
-  BrainResult,
-  TemplateInfo,
-} from './brain/index.js';
 export { calculateCost, MODEL_PRICING } from './pricing.js';
-export { validateInput } from './brain/input-validator.js';
+export { validateInput } from './input-validator.js';
+export type { InputValidationResult } from './input-validator.js';

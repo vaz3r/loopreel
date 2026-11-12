@@ -10,162 +10,191 @@ export default function Slide05({
   const item0 = items[0];
   const item1 = items[1];
 
+  const [qualifier, population, ...populationUnits] = (
+    item1?.badge ?? ''
+  ).split(/\s+/);
+  const populationUnit = populationUnits.join(' ');
+
+  void brand;
+  void totalSlides;
+
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-8 flex items-center gap-5">
-          <span
-            aria-hidden="true"
-            className="h-4 w-4 shrink-0 bg-[var(--accent)]"
-          />
-          <p className="font-[var(--font-mono)] text-[22px] uppercase tracking-[0.16em] text-[var(--accent)]">
-            {slide.kicker}
-          </p>
-          <div
-            aria-hidden="true"
-            className="h-px flex-1 bg-[var(--border)]"
-          />
-        </div>
+      <header className="flex shrink-0 flex-col gap-6">
+        <p className="font-[var(--font-mono)] text-[22px] uppercase leading-snug tracking-[0.12em] text-[var(--accent)]">
+          {slide.kicker}
+        </p>
 
-        <h1 className="max-w-[920px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.02] tracking-[-0.04em]">
+        <h1 className="max-w-[920px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.04] tracking-[-0.04em]">
           {slide.headline}
         </h1>
 
-        <p className="mt-6 max-w-[880px] font-[var(--font-body)] text-[30px] leading-snug">
+        <p className="max-w-[890px] font-[var(--font-body)] text-[28px] leading-snug">
           {slide.subheadline}
         </p>
       </header>
 
-      <div className="mt-9 flex min-h-0 flex-1 flex-col justify-between gap-8">
-        <article className="shrink-0 border-t border-[var(--border)] pt-6">
-          <p className="font-[var(--font-mono)] text-[56px] font-bold leading-none tracking-[-0.06em] text-[var(--accent)] tabular-nums">
-            {item0?.badge}
-          </p>
+      <div className="relative mt-9 grid min-h-[880px] flex-1 grid-cols-2 border-y border-[var(--border)]">
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 600 750"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          fill="none"
+        >
+          <path d="M0 0H300V750H0Z" fill="var(--surface, #161820)" />
+          <path d="M300 0H600V750H300Z" fill="#0D0E12" />
 
-          <h2 className="mt-5 font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+          {/* A broken seam, rather than a continuous historical axis. */}
+          <g
+            stroke="var(--accent, #FF4D00)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          >
+            <path d="M300 0V188L292 207L307 228L298 247V315" />
+            <path d="M303 339L295 361L307 381V493" />
+            <path d="M298 517V596L308 617L296 638L300 661V750" />
+          </g>
+
+          {/* Fragmented foundations: separated masonry, absent superstructure. */}
+          <g
+            stroke="#F1F3F9"
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+          >
+            <path
+              d="M40 469H260M40 481H260"
+              strokeOpacity="0.16"
+              strokeDasharray="3 7"
+            />
+            <path
+              d="M48 449V422H93V399H122V413H142V450Z"
+              fill="#F1F3F9"
+              fillOpacity="0.06"
+              strokeOpacity="0.55"
+            />
+            <path
+              d="M161 449V426H181V376H202V393H217V448Z"
+              fill="#F1F3F9"
+              fillOpacity="0.08"
+              strokeOpacity="0.7"
+            />
+            <path
+              d="M232 449V431H253V449Z"
+              fill="#F1F3F9"
+              fillOpacity="0.06"
+              strokeOpacity="0.45"
+            />
+            <path
+              d="M48 435H93M76 422V435M93 413V449M105 413V399M161 437H181M181 406H217M193 406V425M202 425H217"
+              strokeOpacity="0.25"
+            />
+            <path
+              d="M55 491H102V511H55ZM120 491H142V509H120ZM162 490H211V512H162ZM232 492H251V508H232Z"
+              strokeOpacity="0.32"
+            />
+          </g>
+
+          <path
+            d="M145 457L151 445L156 456L151 468"
+            stroke="var(--accent, #FF4D00)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+
+          {/* Quiet coastal contours; no implied historical connection. */}
+          <g
+            stroke="#F1F3F9"
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+          >
+            <path
+              d="M340 496C383 491 389 451 419 433C458 409 515 423 560 366"
+              strokeOpacity="0.72"
+            />
+            <path
+              d="M340 518C390 511 402 474 430 455C469 429 520 446 560 394"
+              strokeOpacity="0.25"
+            />
+            <path
+              d="M354 537C404 528 415 495 445 477C482 455 523 465 560 425"
+              strokeOpacity="0.12"
+            />
+            <path d="M351 358H412M351 368H386" strokeOpacity="0.16" />
+          </g>
+
+          <path
+            d="M418 434C434 424 450 421 466 418"
+            stroke="var(--accent, #FF4D00)"
+            strokeWidth="3"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        <article className="relative z-10 flex min-w-0 flex-col px-10 py-10">
+          <h2 className="min-h-[90px] max-w-[300px] font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
             {item0?.title}
           </h2>
 
-          <p className="mt-3 max-w-[820px] font-[var(--font-body)] text-[28px] leading-snug">
-            {item0?.body}
-          </p>
-        </article>
+          <div className="mt-7 flex min-h-[150px] flex-col items-start gap-3">
+            <p className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.04em] text-[var(--accent)]">
+              {item0?.badge}
+            </p>
+            <p className="max-w-[310px] font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.025em]">
+              {item0?.badgeLabel}
+            </p>
+          </div>
 
-        <figure className="m-0 h-[440px] w-full shrink-0">
-          <svg
-            viewBox="0 0 1080 1350"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            focusable="false"
-            className="block h-full w-full"
-          >
-            {/* The accession frame preserves fragments without joining them. */}
-            <rect
-              x="80"
-              y="80"
-              width="920"
-              height="1190"
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="2"
-              vectorEffect="non-scaling-stroke"
-            />
+          <div aria-hidden="true" className="min-h-[300px] flex-1" />
 
-            <g
-              fill="var(--surface)"
-              stroke="var(--ink)"
-              strokeOpacity="0.65"
-              strokeWidth="1.5"
-              vectorEffect="non-scaling-stroke"
-            >
-              {/* Detached entablature. */}
-              <path
-                d="M190 255 H472 V345 H435 L415 387 H216 L190 345 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d="M214 291 H447 M230 345 H405"
-                fill="none"
-                vectorEffect="non-scaling-stroke"
-              />
-
-              {/* Broken shaft: its upper edge deliberately remains irregular. */}
-              <path
-                d="M258 505 L292 480 L320 526 L349 492 L378 519
-                   L397 944 H238 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d="M280 553 L270 886 M316 567 V909 M352 557 L365 882"
-                fill="none"
-                strokeOpacity="0.28"
-                vectorEffect="non-scaling-stroke"
-              />
-
-              {/* Separate arch voussoir. */}
-              <path
-                d="M604 308
-                   C724 323 825 442 870 634
-                   L773 720
-                   C743 585 683 497 602 473 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d="M680 339 L657 492 M761 410 L713 555 M830 521 L753 629"
-                fill="none"
-                strokeOpacity="0.28"
-                vectorEffect="non-scaling-stroke"
-              />
-
-              {/* Unconnected footing and displaced masonry. */}
-              <path
-                d="M179 1057 H441 V1142 H179 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d="M603 919 L725 884 L757 1019 L630 1061 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                d="M796 1090 L881 1070 L902 1152 L815 1174 Z"
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-
-            <g
-              fill="none"
-              stroke="var(--border)"
-              strokeWidth="1"
-            >
-              <path
-                d="M130 170 H165 M147.5 130 V210
-                   M915 1180 H950 M932.5 1140 V1220"
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-          </svg>
-        </figure>
-
-        <article className="grid shrink-0 grid-cols-[164px_minmax(0,1fr)] gap-7 border-l-[3px] border-[var(--accent)] bg-[var(--surface)] px-8 py-7">
-          <p className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.05em] text-[var(--accent)] tabular-nums">
-            {item1?.badge}
-          </p>
-
-          <div className="min-w-0">
-            <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.02em]">
-              {item1?.title}
-            </h2>
-            <p className="mt-3 font-[var(--font-body)] text-[26px] leading-snug">
-              {item1?.body}
+          <div className="min-h-[236px] border-t border-[var(--border)] pt-6">
+            <p className="font-[var(--font-body)] text-[24px] leading-snug">
+              {item0?.body}
             </p>
           </div>
         </article>
 
-        <div className="shrink-0 border-t border-[var(--border)] pt-7">
-          <p className="max-w-[850px] font-[var(--font-headline)] text-[32px] font-semibold leading-snug tracking-[-0.02em]">
-            {slide.closingQuestion}
-          </p>
-        </div>
+        <article className="relative z-10 flex min-w-0 flex-col px-10 py-10">
+          <h2 className="min-h-[90px] max-w-[310px] font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+            {item1?.title}
+          </h2>
+
+          <div className="mt-7 flex min-h-[150px] flex-col items-start gap-3">
+            <p className="font-[var(--font-mono)] text-[var(--accent)]">
+              <span className="flex items-baseline gap-3 whitespace-nowrap">
+                <span className="text-[24px] leading-none">{qualifier}</span>
+                <span className="text-[48px] font-bold leading-none tracking-[-0.04em]">
+                  {population}
+                </span>
+              </span>
+              <span className="mt-2 block text-[24px] leading-snug">
+                {populationUnit}
+              </span>
+            </p>
+
+            <p className="max-w-[330px] font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.025em]">
+              {item1?.badgeLabel}
+            </p>
+          </div>
+
+          <div aria-hidden="true" className="min-h-[300px] flex-1" />
+
+          <div className="min-h-[236px] border-t border-[var(--border)] pt-6">
+            <p className="font-[var(--font-body)] text-[24px] leading-snug">
+              {item1?.body}
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div className="mt-8 flex shrink-0 flex-col gap-5 border-t border-[var(--accent)] pt-7">
+        <p className="max-w-[900px] font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
+          {slide.closingQuestion}
+        </p>
+        <p className="self-end font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.1em] text-[var(--accent)]">
+          tipaza.pub
+        </p>
       </div>
     </section>
   );

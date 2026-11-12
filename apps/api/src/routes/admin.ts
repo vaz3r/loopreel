@@ -4,7 +4,7 @@ import { createQueue } from '@loopreel/queue';
 
 export const adminRoute: FastifyPluginAsync = async (app) => {
   app.delete('/api/admin/purge', async (_request, reply) => {
-    const queues = ['ingest', 'transcribe', 'structure', 'render'] as const;
+    const queues = ['ingest', 'transcribe', 'structure'] as const;
 
     const jobsDeleted = await JobRepository.purgeAll();
     const outboxDeleted = await OutboxRepository.purgeAll();

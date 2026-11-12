@@ -1,4 +1,12 @@
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import dotenv from 'dotenv';
 import pg from 'pg';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+dotenv.config({ path: join(__dirname, '../../../.env'), quiet: true });
+dotenv.config({ path: join(__dirname, '../../.env'), quiet: true });
+dotenv.config({ quiet: true });
 
 const { Pool } = pg;
 
