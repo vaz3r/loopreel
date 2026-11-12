@@ -65,7 +65,7 @@ function extractTsx(raw: string): string {
 export function sanitizeTsxCode(rawCode: string): string {
   let code = rawCode;
 
-  // Fix broken chained optional access: slide.items?.?.property -> slide.items?.[N]?.property
+  // 1. Fix broken chained optional access: slide.items?.?.property -> slide.items?.[N]?.property
   let titleIndex = 0;
   code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.title/g, (_m, prop) => {
     return `slide.${prop}?.[${titleIndex++}]?.title`;
@@ -76,10 +76,56 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
   code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.([a-zA-Z0-9_]+)/g, 'slide.$1?.[0]?.$2');
 
-  // Fix dangling optional chaining: slide.items?. followed by ;, ,, ), }, or newline
-  let itemIndex = 0;
-  code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.(?=\s*[;,)\n}])/g, (_match, prop) => {
-    return `slide.${prop}?.[${itemIndex++}]`;
+  // 2. Fix dangling optional chaining: any variable or property followed by ?. and punctuation/newline
+  let danglingIdx = 0;
+  code = code.replace(/([a-zA-Z0-9_$]+(?:\.[a-zA-Z0-9_$]+)*)\?\.\s*(?=[;,)\n}])/g, (_m, expr) => {
+    return `${expr}?.[${danglingIdx++}]`;
+  });
+
+  // 3. Fix sequential unpacking of array variables without index:
+  // e.g. const openingUS = cards; const openingIsrael = cards; -> cards[0], cards[1]
+  const collectionNames = new Set(['cards', 'metrics', 'items', 'telemetry', 'stages', 'steps', 'columns']);
+  const arrayCounts: Record<string, number> = {};
+  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)(cards|metrics|items|telemetry|stages|steps|columns)(\s*;)/g, (match, prefix, varName, arr, suffix) => {
+    if (collectionNames.has(varName)) return match; // keep array aliases intact
+    const idx = arrayCounts[arr] ?? 0;
+    arrayCounts[arr] = idx + 1;
+    return `${prefix}${arr}[${idx}]${suffix}`;
+  });
+
+  // 4. Fix unindexed numbered variable declaration: e.g. const item0 = items; -> const item0 = items[0];
+  code = code.replace(/const\s+([a-zA-Z0-9_$]*?(?:item|card|col|metric|entry|stage|step))([0-9])\s*=\s*([a-zA-Z0-9_$.]+?)\s*;/g, (match, prefix, num, rhs) => {
+    if (rhs.includes('[')) return match;
+    return `const ${prefix}${num} = ${rhs}[${num}];`;
+  });
+
+  // 4. Fix array helper objects with repeated unindexed collection properties:
+  // e.g. { card: cards, metric: telemetry } inside an array literal
+  const propCounters: Record<string, number> = {};
+  code = code.replace(/(\b(?:card|item|metric|col|entry|step|stage)\s*:\s*)(cards|items|telemetry|metrics|stages|steps)\b(?!\s*\[)/g, (_m, prefix, arr) => {
+    const key = prefix.trim();
+    const count = propCounters[key] || 0;
+    propCounters[key] = count + 1;
+    return `${prefix}${arr}[${count}]`;
+  });
+
+  // 5. Fix unindexed items/cards/telemetry property access when variable is an array
+  let cardTitleCount = 0;
+  code = code.replace(/(?:cards|items)\??\.(?:title|label)(?!\[)/g, () => {
+    return `items?.[${cardTitleCount++}]?.title`;
+  });
+  let cardBodyCount = 0;
+  code = code.replace(/(?:cards|items)\??\.body(?!\[)/g, () => {
+    return `items?.[${cardBodyCount++}]?.body`;
+  });
+
+  let telValCount = 0;
+  code = code.replace(/(?:telemetry|metrics)\??\.(?:value|val)(?!\[)/g, () => {
+    return `telemetry?.[${telValCount++}]?.value`;
+  });
+  let telLabelCount = 0;
+  code = code.replace(/(?:telemetry|metrics)\??\.label(?!\[)/g, () => {
+    return `telemetry?.[${telLabelCount++}]?.label`;
   });
 
   return code;

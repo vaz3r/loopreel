@@ -108,5 +108,18 @@ module.exports = {
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       env: { NODE_ENV: 'development', ...localEnv },
     },
+    {
+      name: 'generator-studio',
+      script: 'npx',
+      args: 'vite --host --port 5174',
+      cwd: resolve(__dirname, 'packages/generator'),
+      watch: false,
+      autorestart: true,
+      max_restarts: 10,
+      error_file: resolve(LOG_DIR, 'generator-studio-error.log'),
+      out_file: resolve(LOG_DIR, 'generator-studio-out.log'),
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      env: { NODE_ENV: 'development', ...localEnv },
+    },
   ],
 };

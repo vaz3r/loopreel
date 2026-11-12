@@ -34,7 +34,7 @@ export class CopilotStudioClient implements LLMClient {
       process.env['COPILOT_DIRECT_LINE_BASE_URL'] ||
       process.env['DIRECT_LINE_BASE_URL'] ||
       'https://europe.directline.botframework.com/v3/directline';
-    const timeoutMs = Number(process.env['LLM_TIMEOUT'] ?? '120000');
+    const timeoutMs = Number(process.env['LLM_TIMEOUT'] ?? '240000');
     const maxRetries = Number(process.env['LLM_MAX_RETRIES'] ?? '3');
 
     if (!secret) {
