@@ -3,7 +3,7 @@ import type { SlideComponentProps } from '../../../src/skeleton/types';
 
 export default function Slide03({ slide }: SlideComponentProps) {
   const items = slide.items ?? [];
-  const decemberBody = items?.body ?? '';
+  const decemberBody = items?.[0]?.body ?? '';
   const quotationIndex = decemberBody.indexOf('“');
   const introduction =
     quotationIndex >= 0
@@ -60,19 +60,19 @@ export default function Slide03({ slide }: SlideComponentProps) {
         <div className="grid h-full grid-rows-[420px_580px] pl-[76px]">
           <article className="flex min-h-0 flex-col pr-6">
             <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-[48px] tracking-[-0.025em]">
-              {items?.label}
+              {items?.[0]?.label}
             </h2>
 
             <div className="mt-7 border-t border-[var(--border)] pt-8">
               <p className="max-w-[700px] font-[var(--font-body)] text-[28px] leading-[1.5]">
-                {items?.body}
+                {items?.[1]?.body}
               </p>
             </div>
           </article>
 
           <article className="flex min-h-0 flex-col pr-6">
             <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-[48px] tracking-[-0.025em]">
-              {items?.label}
+              {items?.[1]?.label}
             </h2>
 
             <div className="mt-7 border-t border-[var(--border)] pt-8">

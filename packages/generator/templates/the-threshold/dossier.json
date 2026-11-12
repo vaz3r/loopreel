@@ -1,315 +1,572 @@
 {
-  "articleTitle": "Ring cameras go mobile as Amazon debuts AI-powered security drone and robot",
-  "publisher": "Ars Technica",
+  "articleTitle": "2026 Iran war",
+  "publisher": "En",
   "byline": "Staff Bureau",
-  "summary": "Amazon announced the Ring Drone Cam and Ring Rover Cam, mobile security devices that use AI Pilot, device cameras, on-device sensors and cloud processing to map indoor spaces and navigate patrol routes, with targeted availability on January 27, 2027, and scheduled shipping on December 16, 2026, respectively. The article examines operating limitations and privacy concerns, including cloud video storage, encryption criticized by the Electronic Frontier Foundation, and Ring’s history of employee access to recordings and compromised customer accounts.",
+  "summary": "The supplied article states that the United States and Israel began a war against Iran and its regional allies on 28 February 2026, describing leadership assassinations, regional retaliation, Strait of Hormuz blockades, and successive ceasefire efforts. It reports thousands of civilian and military casualties, an estimated $47.1 billion in US military spending as of October 2026, and widespread economic disruption; the entries below reflect the supplied text rather than independently verified ground truth.",
   "entities": [
     {
-      "name": "Amazon",
-      "type": "Company",
-      "role": "Announced the Ring Robotics products and made claims about their capabilities, privacy and security."
+      "name": "United States",
+      "type": "Country",
+      "role": "Joint initiator of the strikes on Iran; subsequently imposed a naval blockade and negotiated ceasefires with Iran."
     },
     {
-      "name": "Ring",
-      "type": "Company",
-      "role": "Amazon subsidiary whose security products and privacy history are discussed."
+      "name": "Israel",
+      "type": "Country",
+      "role": "Joint initiator of the strikes on Iran; also fought Hezbollah and began occupying southern Lebanon according to the article."
     },
     {
-      "name": "Federal Communications Commission",
-      "type": "Government agency",
-      "role": "Must authorize the Ring Drone Cam before it can go on sale."
+      "name": "Iran",
+      "type": "Country",
+      "role": "Target of US–Israeli strikes; responded with missile and drone attacks and blocked the Strait of Hormuz."
     },
     {
-      "name": "Federal Trade Commission",
-      "type": "Government agency",
-      "role": "Investigated Ring in 2023 over access to private recordings and safeguards that allowed hackers to access 55,000 US customers’ accounts."
-    },
-    {
-      "name": "Electronic Frontier Foundation",
-      "type": "Nonprofit",
-      "role": "Digital rights organization criticizing Ring’s encryption and surveillance practices."
-    },
-    {
-      "name": "Jamie Siminoff",
+      "name": "Donald Trump",
       "type": "Person",
-      "role": "Ring founder whose approach to Ring devices was criticized by the Electronic Frontier Foundation."
+      "role": "US president who authorized Operation Epic Fury and advanced the military and nuclear-policy claims described in the article."
     },
     {
-      "name": "Ryan Calo",
+      "name": "Benjamin Netanyahu",
       "type": "Person",
-      "role": "Law and technology researcher at the University of Washington who previously discussed privacy risks from flying security cameras."
+      "role": "Israeli prime minister who lobbied Trump for a joint strike targeting Iran's leadership."
     },
     {
-      "name": "University of Washington",
-      "type": "University",
-      "role": "Institutional affiliation of Ryan Calo."
+      "name": "Ali Khamenei",
+      "type": "Person",
+      "role": "Iranian supreme leader whom the article reports was assassinated in the opening strikes; previously issued a fatwa against nuclear weapons."
     },
     {
-      "name": "Ring Always Home Cam",
-      "type": "Product",
-      "role": "Earlier flying security camera temporarily available by invitation as a Day 1 Edition product in September 2021; described as the apparent predecessor to the Ring Drone."
+      "name": "Mojtaba Khamenei",
+      "type": "Person",
+      "role": "Ali Khamenei's son, whom the article reports was elected supreme leader after his father's assassination."
     },
     {
-      "name": "Amazon Astro",
-      "type": "Product",
-      "role": "Invite-only beta home-monitoring robot whose customer feedback inspired the Ring Rover, according to Amazon."
+      "name": "United Arab Emirates",
+      "type": "Country",
+      "role": "The article says it attacked Iran and skirmished with Iran's Iraqi non-state allies following strikes on its territory."
     },
     {
-      "name": "AI Pilot",
-      "type": "Technology",
-      "role": "System used by both new devices to map spaces, suggest patrol points, plan routes and navigate obstacles."
+      "name": "Saudi Arabia",
+      "type": "Country",
+      "role": "The article says it attacked Iran and skirmished with Iran's Iraqi non-state allies following strikes on its territory."
     },
     {
-      "name": "Amazon Ring Protect",
-      "type": "Subscription plan",
-      "role": "Subscription required for the drone’s described set-route and scheduled operation."
+      "name": "Kuwait",
+      "type": "Country",
+      "role": "The article says it attacked Iran and skirmished with Iran's Iraqi non-state allies following strikes on its territory."
     },
     {
-      "name": "Alexa Home Map",
-      "type": "Software feature",
-      "role": "Interactive map showing a customer’s Amazon-linked devices and allowing direct control of the Ring Drone."
+      "name": "Bahrain",
+      "type": "Country",
+      "role": "The article says it attacked Iran and skirmished with Iran's Iraqi non-state allies following strikes on its territory."
     },
     {
-      "name": "Throw Away the Key Encryption",
-      "type": "Encryption technology",
-      "role": "Ring encryption introduced in September 2026 that Amazon says will protect videos from both new devices."
+      "name": "Qatar",
+      "type": "Country",
+      "role": "Gulf state cited as warning that escalation could severely harm the region."
     },
     {
-      "name": "Familiar Faces",
-      "type": "Software feature",
-      "role": "Optional visitor facial recognition on fixed Ring doorbell cameras, available starting in December 2025 and already the subject of a class action lawsuit."
+      "name": "Hezbollah",
+      "type": "Organization",
+      "role": "Iran-backed group whose fighting with Israel reportedly resumed in March."
+    },
+    {
+      "name": "Hamas",
+      "type": "Organization",
+      "role": "Iran-backed group identified among the militias Israel fought during the regional escalation."
+    },
+    {
+      "name": "Houthis",
+      "type": "Organization",
+      "role": "Iran-backed group identified among the militias Israel fought during the regional escalation."
+    },
+    {
+      "name": "Axis of Resistance",
+      "type": "Alliance",
+      "role": "Informal grouping of Iranian proxy organizations described as countering American, Israeli, Saudi, Emirati, and sometimes Turkish influence."
+    },
+    {
+      "name": "United Nations",
+      "type": "Organization",
+      "role": "Its unnamed secretary-general condemned the US–Israeli strikes; the article also describes UN sanctions on Iran."
+    },
+    {
+      "name": "United Nations Security Council",
+      "type": "Organization",
+      "role": "Passed a resolution condemning Iranian retaliatory strikes on Gulf states and previously imposed nuclear-related sanctions on Iran."
+    },
+    {
+      "name": "US Department of Defense",
+      "type": "Government agency",
+      "role": "Attributed source of the estimated $47.1 billion in US military spending as of October 2026."
+    },
+    {
+      "name": "Republican Party",
+      "type": "Political party",
+      "role": "The article attributes its loss of a government trifecta in the 2026 US midterm elections to the war's economic effects."
+    },
+    {
+      "name": "International Atomic Energy Agency",
+      "type": "Organization",
+      "role": "Nuclear safeguards agency that found Iran non-compliant and later faced inspection and verification limitations."
+    },
+    {
+      "name": "Mohammad Eslami",
+      "type": "Person",
+      "role": "Head of the Atomic Energy Organization of Iran; set out conditions for inspections of facilities struck by the US."
+    },
+    {
+      "name": "Atomic Energy Organization of Iran",
+      "type": "Government organization",
+      "role": "Iranian nuclear organization headed by Mohammad Eslami."
+    },
+    {
+      "name": "Scott Bessent",
+      "type": "Person",
+      "role": "Treasury Secretary who characterized the Iranian currency collapse as the strategy's grand culmination."
+    },
+    {
+      "name": "Bulletin of the Atomic Scientists",
+      "type": "Publication",
+      "role": "Attributed source of the assessment that Iran used enrichment and uranium stockpiles as negotiating leverage."
+    },
+    {
+      "name": "Mohammad Mosaddegh",
+      "type": "Person",
+      "role": "Democratically elected Iranian prime minister deposed in the US- and UK-backed coup d'état in 1953."
+    },
+    {
+      "name": "Mohammad Reza Pahlavi",
+      "type": "Person",
+      "role": "Shah whose rule was strengthened by the 1953 coup and ended in the 1979 revolution."
+    },
+    {
+      "name": "United Kingdom",
+      "type": "Country",
+      "role": "Backed the 1953 coup with the US; also appears in the article's discussion of nuclear diplomacy and analysts' assessments."
+    },
+    {
+      "name": "Iraq",
+      "type": "Country",
+      "role": "Iran's adversary in the Iran–Iraq War, during which the article says the US supported Iraq."
+    },
+    {
+      "name": "Turkey",
+      "type": "Country",
+      "role": "Identified as the Muslim-majority country that recognized Israel before Pahlavi Iran."
+    },
+    {
+      "name": "Qasem Soleimani",
+      "type": "Person",
+      "role": "Commander of the Iranian Quds Force whose assassination Trump ordered in January 2020."
+    },
+    {
+      "name": "Iranian Quds Force",
+      "type": "Military organization",
+      "role": "Organization commanded by Qasem Soleimani."
+    },
+    {
+      "name": "Ismail Haniyeh",
+      "type": "Person",
+      "role": "Named among those assassinated in 2024 during the escalation preceding Iranian strikes on Israel."
+    },
+    {
+      "name": "Hassan Nasrallah",
+      "type": "Person",
+      "role": "Named among those assassinated in 2024 during the escalation preceding Iranian strikes on Israel."
+    },
+    {
+      "name": "Biden administration",
+      "type": "Government administration",
+      "role": "Kept most of the sanctions reimposed after the US withdrawal from the JCPOA."
+    },
+    {
+      "name": "P5+1",
+      "type": "Diplomatic grouping",
+      "role": "Party to the 2015 Joint Comprehensive Plan of Action with Iran and the EU."
+    },
+    {
+      "name": "EU",
+      "type": "Organization",
+      "role": "Party to the 2015 Joint Comprehensive Plan of Action."
+    },
+    {
+      "name": "American Israel Public Affairs Committee (AIPAC)",
+      "type": "Organization",
+      "role": "Named in the article's claim that pro-Israel lobbying groups pressured lawmakers to block the War Powers Resolution and maintain support for the conflict."
+    },
+    {
+      "name": "Strait of Hormuz",
+      "type": "Geographic location",
+      "role": "Waterway Iran reportedly blocked and claimed sovereignty over; reopening it became a stated US war goal."
     }
   ],
   "verifiedMetrics": [
     {
-      "value": "November 10",
-      "label": "Amazon announcement date",
-      "context": "Date stated in the article; the announcement date’s year is not explicitly supplied."
+      "value": "28 February 2026",
+      "label": "Reported beginning of the war",
+      "context": "The article states that the United States and Israel have been at war with Iran and its regional allies since this date."
     },
     {
-      "value": "the end of 2026",
-      "label": "Ring Rover Cam expected arrival window",
-      "context": "Opening description of when customers are expected to receive the robot."
-    },
-    {
-      "value": "early 2027",
-      "label": "Ring Drone Cam expected arrival window",
-      "context": "Opening description of when customers are expected to receive the drone."
-    },
-    {
-      "value": "$250",
-      "label": "Ring Drone starting price",
-      "context": "The article says it has the same starting price as the Ring Always Home Cam."
-    },
-    {
-      "value": "September 2021",
-      "label": "Ring Always Home Cam invitation-only availability",
-      "context": "Temporarily available for purchase as a Day 1 Edition product."
-    },
-    {
-      "value": "January 27, 2027",
-      "label": "Target Ring Drone availability",
-      "context": "Amazon’s target depends on Federal Communications Commission authorization."
-    },
-    {
-      "value": "148-degree",
-      "label": "Drone camera field of view",
-      "context": "Onboard camera capability."
-    },
-    {
-      "value": "360-degree",
-      "label": "Drone camera rotation",
-      "context": "Onboard camera capability."
-    },
-    {
-      "value": "2K",
-      "label": "Drone video resolution",
-      "context": "Onboard camera capability."
-    },
-    {
-      "value": "Two",
-      "label": "Drone LED light count",
-      "context": "Lights activate in low-light conditions."
-    },
-    {
-      "value": "8 minutes",
-      "label": "Drone flight time",
-      "context": "Limited to this duration on a new, fully-charged battery under controlled conditions, according to the product description."
-    },
-    {
-      "value": "$1,000",
-      "label": "Ring Rover Cam price",
-      "context": "Price stated in the article."
-    },
-    {
-      "value": "December 16, 2026",
-      "label": "Scheduled Ring Rover shipping date",
-      "context": "The article says the product is already available for preorder."
-    },
-    {
-      "value": "up to 4K",
-      "label": "Rover video resolution",
-      "context": "Livestreaming and recording while patrolling or scanning a designated location."
-    },
-    {
-      "value": "360-degree",
-      "label": "Rover scan",
-      "context": "Scan performed at a designated location."
-    },
-    {
-      "value": "up to 180 days",
-      "label": "Rover cloud video retention",
-      "context": "Videos triggered by doorbell rings, motion events and Live View events are stored for sharing and replaying."
-    },
-    {
-      "value": "single-floor",
-      "label": "Rover operating environment",
-      "context": "Indoor operation only; the robot lacks stair-climbing capability."
-    },
-    {
-      "value": "greater than 1.375 inches (3.5 centimeters)",
-      "label": "Incompatible Rover flooring transitions",
-      "context": "Amazon’s product description lists these transitions among incompatible flooring conditions."
-    },
-    {
-      "value": "up to 5,000 square feet (465 square meters)",
-      "label": "Rover claimed coverage",
-      "context": "Coverage claimed in Amazon’s product description."
+      "value": "June 2025",
+      "label": "Preceding Twelve-Day War",
+      "context": "Israel attacked Iranian military and nuclear facilities; the US joined by striking Iranian nuclear facilities, and the conflict ended in a ceasefire."
     },
     {
       "value": "2023",
-      "label": "FTC investigation",
-      "context": "Ring was charged with allowing employees and contractors to watch recordings of customers’ private spaces."
+      "label": "Beginning of the Gaza war",
+      "context": "The article identifies the Gaza war as the trigger for the preceding Middle Eastern crisis."
     },
     {
-      "value": "55,000",
-      "label": "US customer accounts accessed by hackers",
-      "context": "The FTC described Ring’s safeguards as allowing this access."
+      "value": "hundreds",
+      "label": "Opening air strikes",
+      "context": "The article describes hundreds of US and Israeli air strikes on targets across Iran."
     },
     {
-      "value": "September 2026",
-      "label": "Throw Away the Key Encryption introduction",
-      "context": "Amazon says this encryption will protect videos from both new devices."
+      "value": "thousands",
+      "label": "Anti-government protesters reportedly massacred",
+      "context": "A response to their massacre is listed among American rationales for initiating the war; no exact death toll is supplied."
+    },
+    {
+      "value": "January–February 2026",
+      "label": "Prewar US military buildup",
+      "context": "Described as the largest US military buildup in the region since the 2003 invasion of Iraq."
+    },
+    {
+      "value": "2003",
+      "label": "Military buildup comparison year",
+      "context": "The invasion of Iraq is the benchmark used for the scale of the US buildup."
+    },
+    {
+      "value": "March",
+      "label": "Renewed Hezbollah–Israel fighting",
+      "context": "The article says fighting resumed and Israel began occupying southern Lebanon."
+    },
+    {
+      "value": "two-week",
+      "label": "Initial ceasefire duration",
+      "context": "The initial ceasefire began on 8 April and came under strain when Israel launched massive airstrikes across Lebanon that same day."
+    },
+    {
+      "value": "8 April",
+      "label": "Initial ceasefire start",
+      "context": "Israel's airstrikes across Lebanon on the same day reportedly strained the ceasefire."
+    },
+    {
+      "value": "12–13 April",
+      "label": "Islamabad Talks",
+      "context": "The article says the talks failed, after which the US imposed a naval blockade on Iran."
+    },
+    {
+      "value": "21 April",
+      "label": "Indefinite US ceasefire announcement",
+      "context": "The US announced an indefinite ceasefire."
+    },
+    {
+      "value": "17 June",
+      "label": "US–Iran memorandum",
+      "context": "The article says the parties signed a memorandum to end the war, lifting the dual blockade."
+    },
+    {
+      "value": "28 June",
+      "label": "Agreement to resume the ceasefire",
+      "context": "The US and Iran agreed to resume the ceasefire after a brief escalation."
+    },
+    {
+      "value": "8 July",
+      "label": "Reported ceasefire collapse",
+      "context": "The article attributes the collapse to Iranian attacks on commercial vessels in the Strait of Hormuz."
+    },
+    {
+      "value": "thousands",
+      "label": "Civilian and military casualties",
+      "context": "The article supplies no exact total or civilian–military breakdown."
+    },
+    {
+      "value": "$47.1 billion",
+      "label": "Estimated US military spending",
+      "context": "Attributed to the US Department of Defense as of October 2026; the sentence includes an [update] marker."
+    },
+    {
+      "value": "October 2026",
+      "label": "Military spending estimate cutoff",
+      "context": "Date associated with the reported $47.1 billion estimate."
+    },
+    {
+      "value": "2026",
+      "label": "US midterm elections",
+      "context": "The article claims the Republican Party lost its government trifecta because of the war's economic effects on American households."
+    },
+    {
+      "value": "1990–1991",
+      "label": "Gulf War dates",
+      "context": "Used in explaining the alternative name Third Gulf War."
+    },
+    {
+      "value": "2003–2011",
+      "label": "Iraq War / Second Gulf War dates",
+      "context": "Used in explaining the alternative name Third Gulf War."
+    },
+    {
+      "value": "1980–1988",
+      "label": "Iran–Iraq War dates",
+      "context": "In the naming discussion, Iranian state media treats this as the First Imposed War and the Twelve-Day War as the Second."
+    },
+    {
+      "value": "1953",
+      "label": "Coup against Mohammad Mosaddegh",
+      "context": "The article attributes the US- and UK-backed coup to Mosaddegh's nationalization of the oil industry."
+    },
+    {
+      "value": "second",
+      "label": "Pahlavi Iran's recognition of Israel",
+      "context": "Described as the second Muslim-majority country after Turkey to recognize Israel's sovereignty."
+    },
+    {
+      "value": "1979",
+      "label": "Iranian revolution",
+      "context": "Pahlavi was overthrown and replaced by an Islamic republic."
+    },
+    {
+      "value": "1981",
+      "label": "Algiers Accords",
+      "context": "The article links the accords to the release of American embassy hostages and a US agreement not to intervene in Iranian affairs."
+    },
+    {
+      "value": "1988",
+      "label": "US–Iran naval confrontation",
+      "context": "A US warship struck an Iranian mine; the US attacked Iran's navy and mistakenly shot down a civilian Iranian flight a few months later."
+    },
+    {
+      "value": "1980–88",
+      "label": "Ballistic missile program development context",
+      "context": "The article says Iran started its program during the Iran–Iraq War to deter Iraqi missile attacks and compensate for the lack of a modern air force due to sanctions."
+    },
+    {
+      "value": "1985",
+      "label": "Beginning of proxy conflicts",
+      "context": "The article dates Iran's engagement in proxy conflicts throughout the Middle East to this year."
+    },
+    {
+      "value": "2002",
+      "label": "Disclosure of Iran's covert nuclear program",
+      "context": "The article says the program was first revealed and Iran denied seeking a weapon."
+    },
+    {
+      "value": "2003",
+      "label": "AMAD Project suspension",
+      "context": "The article says the project was suspended following Ali Khamenei's fatwa against nuclear weapons."
+    },
+    {
+      "value": "2005",
+      "label": "Beginning of US nuclear-program sanctions",
+      "context": "The US began imposing sanctions targeting Iran's nuclear program."
+    },
+    {
+      "value": "2006",
+      "label": "UN Security Council sanctions",
+      "context": "The Security Council imposed a series of sanctions against Iran; the article also dates its nuclear-program concerns from this year."
+    },
+    {
+      "value": "2015",
+      "label": "Joint Comprehensive Plan of Action",
+      "context": "Multilateral agreement between Iran, the P5+1, and the EU."
+    },
+    {
+      "value": "January 2020",
+      "label": "Qasem Soleimani assassination order",
+      "context": "Trump ordered the assassination of the Iranian Quds Force commander."
+    },
+    {
+      "value": "October 7",
+      "label": "Attacks on Israel",
+      "context": "The article identifies these attacks and the start of the Gaza war as a further escalation point."
+    },
+    {
+      "value": "2024",
+      "label": "Prewar regional escalation",
+      "context": "The article discusses Israeli strikes on the Iranian consulate in Damascus and the assassinations of Ismail Haniyeh and Hassan Nasrallah."
+    },
+    {
+      "value": "April and October",
+      "label": "Iranian strikes on Israel",
+      "context": "Presented as responses to the escalation described for 2024."
+    },
+    {
+      "value": "early 2026",
+      "label": "Netanyahu lobbying for a joint strike",
+      "context": "The article says Netanyahu lobbied Trump for a strike specifically targeting Iran's leadership."
+    },
+    {
+      "value": "February",
+      "label": "High-level meetings preceding authorization",
+      "context": "The article says Trump authorized Operation Epic Fury following these meetings, with reports citing intelligence provided by Netanyahu as decisive."
+    },
+    {
+      "value": "2018",
+      "label": "US withdrawal from the JCPOA",
+      "context": "The article says Trump withdrew despite Iran's compliance, reimposed sanctions, and adopted a maximum pressure strategy."
+    },
+    {
+      "value": "September 2025",
+      "label": "UN sanctions reimposition",
+      "context": "The article describes use of the snapback mechanism, currency weakening, food price increases, frozen Iranian assets abroad, suspended arms transactions, and ballistic-missile-related penalties."
     },
     {
       "value": "December 2025",
-      "label": "Familiar Faces availability began",
-      "context": "Owners of fixed Ring doorbell cameras could enable visitor facial recognition."
+      "label": "Iranian currency collapse",
+      "context": "Scott Bessent described the collapse as the strategy's grand culmination."
+    },
+    {
+      "value": "February 2026",
+      "label": "Trump's State of the Union assertions",
+      "context": "Trump asserted that Iran had restarted its nuclear program and was developing missiles capable of striking the US."
+    },
+    {
+      "value": "2035",
+      "label": "Missile development assessment",
+      "context": "The article says US intelligence reports assessed that Iran needed until this year to build missiles capable of striking the US."
+    },
+    {
+      "value": "12 June 2025",
+      "label": "IAEA safeguards non-compliance finding",
+      "context": "The IAEA found Iran non-compliant with its NPT safeguards agreement for the first time since 2005."
+    },
+    {
+      "value": "2005",
+      "label": "Previous safeguards non-compliance benchmark",
+      "context": "The article uses this year as the prior benchmark for the IAEA's 12 June 2025 finding."
+    },
+    {
+      "value": "2025",
+      "label": "US bombings and reported uranium storage",
+      "context": "The article says highly enriched uranium was reportedly stored in an underground facility undamaged by US bombings that year."
+    },
+    {
+      "value": "February 2026",
+      "label": "Iranian notification about safeguards",
+      "context": "Iran informed the IAEA that normal safeguards were legally untenable and materially impracticable."
+    },
+    {
+      "value": "between 90 and 400 nuclear warheads",
+      "label": "Estimated Israeli nuclear stockpile",
+      "context": "The article presents this as an estimate and says Israel is widely believed to possess nuclear weapons."
+    },
+    {
+      "value": "only",
+      "label": "Israeli nuclear acknowledgment status",
+      "context": "The article describes Israel as the only nuclear-armed country that does not officially acknowledge its nuclear weapons capability."
+    },
+    {
+      "value": "January 2026",
+      "label": "Suppression of Iranian protesters",
+      "context": "The article says violent suppression intensified US–Iran tensions during nuclear negotiations."
+    },
+    {
+      "value": "February",
+      "label": "Prewar nuclear negotiations",
+      "context": "Negotiations continued until US and Israeli military strikes commenced on 28 February 2026."
+    },
+    {
+      "value": "27 February",
+      "label": "Operation Epic Fury authorization date",
+      "context": "Trump authorized the operation while traveling on Air Force One to Texas."
+    },
+    {
+      "value": "3:38 p.m. EST (11:08 p.m. IRST)",
+      "label": "Operation Epic Fury authorization time",
+      "context": "The article gives this time for Trump's authorization on 27 February."
+    },
+    {
+      "value": "around 9:45 am. IRST (1:15 am. EST)",
+      "label": "Opening strike time",
+      "context": "US missiles, drones, and Israeli fighter jets began striking Iran the next day; the timing is expressly approximate."
     }
   ],
   "verifiedQuotes": [
     {
-      "quote": "specialized vision models, on-device sensors and cloud processing",
-      "speaker": "Amazon",
-      "role": "Product announcer",
-      "context": "Components used alongside each device’s cameras by AI Pilot."
+      "quote": "grand culmination",
+      "speaker": "Scott Bessent",
+      "role": "Treasury Secretary",
+      "context": "The article attributes this description of the Iranian currency collapse in December 2025 to Bessent."
     },
     {
-      "quote": "new, fully-charged battery under controlled conditions",
-      "speaker": "Amazon",
-      "role": "Product description provider",
-      "context": "Conditions attached to the drone’s stated 8 minutes of flight time."
+      "quote": "obliterated",
+      "speaker": "Donald Trump",
+      "role": "US president",
+      "context": "A quoted word from Trump's previous characterization of Iran's nuclear program, contrasted with his February 2026 assertion that Iran had restarted the program."
     },
     {
-      "quote": "polished marble or wet tile",
-      "speaker": "Amazon",
-      "role": "Product description provider",
-      "context": "Examples of reflective surfaces that may degrade drone navigation performance."
+      "quote": "legally untenable and materially impracticable",
+      "speaker": "Iran",
+      "role": "State communicating with the IAEA",
+      "context": "The article attributes this description of normal safeguards to Iran's February 2026 notification; no individual speaker is identified."
     },
     {
-      "quote": "autonomous way to check on your home that has never existed before",
-      "speaker": "Amazon",
-      "role": "Product marketer",
-      "context": "Claim about the drone’s use while customers are away or at home."
+      "quote": "acts of aggression",
+      "speaker": "Iran",
+      "role": "State communicating with the IAEA",
+      "context": "Quoted wording in the explanation Iran gave for why normal safeguards were no longer practicable."
     },
     {
-      "quote": "an autonomous security robot designed for business",
-      "speaker": "Amazon",
-      "role": "Product marketer",
-      "context": "Description of the Ring Rover Cam priced at $1,000."
+      "quote": "Third Imposed War",
+      "speaker": "Iranian state media",
+      "role": "Collective media attribution",
+      "context": "The article attributes this name for the conflict to Iranian state media without identifying a particular outlet."
     },
     {
-      "quote": "curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), and black glossy floors",
-      "speaker": "Amazon",
-      "role": "Product description provider",
-      "context": "Conditions listed as incompatible with the Rover."
+      "quote": "First",
+      "speaker": "Iranian state media",
+      "role": "Collective media attribution",
+      "context": "Designation applied to the Iran–Iraq War (1980–1988) in the article's explanation of the Third Imposed War label."
     },
     {
-      "quote": "privacy and security without compromise",
-      "speaker": "Amazon",
-      "role": "Product marketer",
-      "context": "Claim about Ring Robotics, accompanied by descriptions of recording indicators and notifications."
-    },
-    {
-      "quote": "surveillance-first-privacy-last",
-      "speaker": "Electronic Frontier Foundation",
-      "role": "Digital rights nonprofit",
-      "context": "EFF’s characterization of Ring founder Jamie Siminoff’s approach; not a quote attributed to Siminoff."
+      "quote": "Second",
+      "speaker": "Iranian state media",
+      "role": "Collective media attribution",
+      "context": "Designation applied to the Twelve-Day War in the article's explanation of the Third Imposed War label."
     }
   ],
   "hardwareSpecs": {
     "deviceA": {
-      "name": "Ring Drone Cam",
-      "specs": [
-        "Indoor flying security camera.",
-        "148-degree field of view.",
-        "360-degree rotation.",
-        "2K video resolution.",
-        "Two LED lights activate in low-light conditions.",
-        "8 minutes of flight time on a new, fully-charged battery under controlled conditions.",
-        "Includes a docking station for charging.",
-        "AI Pilot uses device cameras, specialized vision models, on-device sensors and cloud processing.",
-        "Maps indoor floor plans after the customer carries the drone through the spaces.",
-        "AI Pilot can supposedly identify rooms, suggest patrol points, plan routes and navigate around obstacles.",
-        "Set-route and scheduled operation described for Amazon Ring Protect subscribers.",
-        "Can automatically follow set routes in response to a notification from a Ring camera, sensor or alarm.",
-        "Can be controlled directly from Alexa Home Map.",
-        "Navigation may degrade around reflective surfaces such as polished marble or wet tile, featureless blank matte walls, and transparent surfaces such as frameless glass and mirrors.",
-        "Physical dimensions, charging duration, numerical coverage area and an explicit floor-count restriction are not stated in the supplied article."
-      ],
-      "price": "$250",
-      "availability": "Amazon aims for January 27, 2027, subject to Federal Communications Commission authorization; customers can register for email updates through the product page."
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
     },
     "deviceB": {
-      "name": "Ring Rover Cam",
-      "specs": [
-        "Wheeled autonomous security robot marketed for business.",
-        "Livestreams and records in up to 4K video resolution while patrolling or performing a 360-degree scan at a designated location.",
-        "Videos triggered by doorbell rings, motion events and Live View events are stored in the cloud for up to 180 days for sharing and replaying.",
-        "AI Pilot uses device cameras, specialized vision models, on-device sensors and cloud processing.",
-        "Maps indoor floor plans through autonomous exploration.",
-        "Can automatically respond to connected Ring device alerts by following preprogrammed patrol points.",
-        "Designed only for a single-floor, indoor environment; lacks stair-climbing capability.",
-        "Not compatible with curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), or black glossy floors.",
-        "Automatically adjustable mast allows viewing over counters, shelving and other obstacles.",
-        "Claimed coverage of up to 5,000 square feet (465 square meters).",
-        "Includes a siren, light tower and microphone for two-way audio communication.",
-        "Physical dimensions, mast height, battery runtime and charging duration are not stated in the supplied article."
-      ],
-      "price": "$1,000",
-      "availability": "Already available for preorder at the time described in the article; scheduled to start shipping on December 16, 2026."
+      "name": null,
+      "specs": [],
+      "price": null,
+      "availability": null
     }
   },
   "coreControversy": {
-    "corporateClaim": "Amazon describes Ring Robotics as offering “privacy and security without compromise,” citing LED indicators and screen notifications when video and audio recordings are active. Amazon says videos from both devices will be protected with Throw Away the Key Encryption, introduced in September 2026.",
-    "criticismOrAlarm": "The Electronic Frontier Foundation describes Throw Away the Key Encryption as an improvement over Ring’s former default settings but still well short of end-to-end encryption. EFF also criticizes Ring founder Jamie Siminoff’s “surveillance-first-privacy-last” approach, including reintroduced features allowing law enforcement to request footage or live-stream access from users’ home security devices. Ryan Calo previously described flying security cameras as creating new ways to surveil others indoors and giving companies greater access to potentially sensitive or identifying details of homes and businesses.",
-    "regulatoryOrHistoricalPrecedent": "In a 2023 Federal Trade Commission investigation, Ring was charged with allowing employees and contractors to watch recordings of customers’ private spaces; the FTC also described inadequate safeguards that allowed hackers to access 55,000 US customers’ accounts. The earlier Ring Always Home Cam, temporarily available by invitation in September 2021, also prompted expanded privacy concerns. Since December 2025, fixed Ring doorbell camera owners have been able to enable Familiar Faces facial recognition, which is already the subject of a class action lawsuit. The new Ring Drone still requires Federal Communications Commission authorization before sale."
+    "corporateClaim": "No corporate claim appears in the supplied article. The governmental rationales it attributes to the US are regime change, preventing Iran from obtaining a nuclear weapon, responding to the massacre of thousands of anti-government protesters, and taking Iran's oil and gas resources; later goals focused on nuclear negotiations and reopening the Strait of Hormuz. Iran denied seeking nuclear weapons and said its enrichment efforts were for civilian nuclear power.",
+    "criticismOrAlarm": "The article says critics rejected the US rationales and characterized the attack as a war of aggression violating international law. It reports condemnation of the US–Israeli strikes by the UN secretary-general and many countries, alongside a UN Security Council resolution condemning Iran's retaliatory strikes on Gulf states. It contrasts Trump's February 2026 nuclear and missile assertions with his previous description of Iran's nuclear program as \"obliterated\" and with intelligence reports that Iran did not pose a threat to the US and needed until 2035 to build missiles capable of striking it. The article also reports that the IAEA found no evidence Iran was weaponizing despite being unable to verify enrichment suspension or stockpile status, and describes scholars' concerns about a nonproliferation double standard involving Israel's estimated stockpile of between 90 and 400 nuclear warheads.",
+    "regulatoryOrHistoricalPrecedent": "The article cites the US- and UK-backed 1953 coup against Mohammad Mosaddegh; the 1979 revolution and embassy hostage crisis; the 1981 Algiers Accords, including a US commitment not to intervene in Iranian affairs; US support for Iraq during the Iran–Iraq War; the 1988 naval confrontation and mistaken destruction of a civilian Iranian flight; disclosure of Iran's covert nuclear program in 2002; suspension of the AMAD Project in 2003; US nuclear-related sanctions beginning in 2005 and UN Security Council sanctions in 2006; the 2015 JCPOA and US withdrawal in 2018; the January 2020 assassination of Qasem Soleimani; the escalation following the October 7 attacks and Gaza war; the June 2025 Twelve-Day War; the IAEA's 12 June 2025 safeguards non-compliance finding, its first since 2005; and the September 2025 reimposition of UN sanctions through the snapback mechanism."
   },
   "hiddenCatchesAndLimits": [
-    "AI Pilot explicitly uses cloud processing alongside device cameras, specialized vision models and on-device sensors; it is not described as local-only.",
-    "Both devices digitally map the customer’s home or business floor plan during setup.",
-    "The drone’s set-route and scheduled operation is described for Amazon Ring Protect subscribers; the article does not specify a subscription price or separately establish the Rover’s subscription requirements.",
-    "The Ring Drone cannot go on sale before Federal Communications Commission authorization; January 27, 2027, is a conditional target.",
-    "Drone flight time is limited to 8 minutes under the stated new, fully-charged battery and controlled-condition assumptions.",
-    "Drone navigation may degrade near polished marble, wet tile, featureless blank matte walls, frameless glass and mirrors.",
-    "The Rover operates only indoors on a single floor and cannot climb stairs.",
-    "The Rover is incompatible with curved edges, sunken areas, flooring transitions greater than 1.375 inches (3.5 centimeters), and black glossy floors.",
-    "Rover coverage of up to 5,000 square feet (465 square meters) is an Amazon product-description claim.",
-    "Rover videos triggered by doorbell rings, motion events and Live View events are stored in the cloud for up to 180 days.",
-    "EFF says Throw Away the Key Encryption remains well short of end-to-end encryption; the article does not state encryption-key retention or deletion timing.",
-    "The article does not state a separate cloud video retention period for the drone.",
-    "The article reports no current mention of facial recognition or similar person-identification technologies in the new Ring Robotics products; this is not an assurance that such features cannot be introduced.",
-    "The Familiar Faces class action concerns fixed Ring doorbell cameras, not a facial-recognition feature established for either new robot."
+    "The supplied text is an article excerpt, not independent corroboration. Its numbered citations are not accompanied by the underlying reference list, its spending sentence contains an [update] marker, and its final sentence ends with an incomplete citation.",
+    "The opening references to naval-loss and aviation-loss lists do not include those lists, so the excerpt supplies no complete loss inventory.",
+    "No consumer devices, dimensions, battery life, camera resolution, flight limits, coverage areas, floor restrictions, product prices, availability dates, subscriptions, cloud dependencies, key-retention policies, or FCC approval statuses are described.",
+    "The casualty total is stated only as thousands, with no exact civilian–military breakdown; the opening air-strike count is stated only as hundreds.",
+    "The $47.1 billion figure is an estimated US military-spending amount as of October 2026, not a stated total for worldwide economic losses.",
+    "Iran denied the IAEA access to facilities that had been bombed but provided access to all unaffected facilities.",
+    "Mohammad Eslami said inspections of facilities struck by the US would not be permitted until the IAEA established post-war rules and codified protocols for internationally protected facilities subjected to military attacks, and condemned the attacks.",
+    "The IAEA could not verify that Iran had suspended enrichment or confirm the status of its stockpile; the article separately states that it found no evidence Iran was weaponizing.",
+    "The Bulletin of the Atomic Scientists assessment described Iran as willing to dilute or export higher-level enriched uranium in exchange for sanctions relief and prevention of attacks, not as having completed those steps.",
+    "Israel's stockpile of between 90 and 400 nuclear warheads is presented as an estimate; the article says Israel does not officially acknowledge its nuclear weapons capability.",
+    "The article says Israel rejects calls to accede to the Treaty on the Non-Proliferation of Nuclear Weapons or participate in negotiations for a Middle East nuclear weapon free zone, citing security threats.",
+    "The initial two-week ceasefire beginning on 8 April was strained by Israeli airstrikes across Lebanon that day; Iran resumed its blockade, and the US imposed its own blockade after the failed Islamabad Talks on 12–13 April.",
+    "The 17 June memorandum reportedly lifted the dual blockade, but tensions escalated again; the parties agreed on 28 June to resume the ceasefire, which the article says collapsed on 8 July.",
+    "The article's attribution of the Republican Party's loss of its government trifecta in the 2026 US midterm elections to the war's economic effects is a causal claim made by the article, not independently established by this extraction.",
+    "The article describes the global oil-market supply disruption as the largest ever but supplies no numerical measure or comparison dataset.",
+    "Economic effects enumerated in the article include financial-market volatility; disruption to natural gas, fertilizer, aviation, tourism, and shipping; high fuel and energy prices; inflation; lower economic growth; higher borrowing costs; a global cost of living crisis; and protests in Europe and elsewhere. No numerical magnitudes are supplied for these effects.",
+    "The US codename is Operation Epic Fury, the Israeli codename is Operation Roaring Lion, and Iran's response is called Operation True Promise IV (Persian: عملیات وعده صادق ۴, romanized: Amaliyat-e Va'deh-ye Sadegh 4). Operation Rising Lion refers to Israel's strikes during the June 2025 Twelve-Day War.",
+    "Other names reported in the article are Iran war, Third Gulf War (Gulf War III), Third Imposed War, and Ramadan War; these are alternative labels, not separate conflicts.",
+    "The article explicitly describes the claim that Trump attacked Iran to distract from the Epstein files as a conspiracy theory spread by a pro-Iran propaganda network; Operation Epstein Fury is reported as a resulting social-media nickname, not an established motive.",
+    "Operation AIPAC Fury is reported as a nickname coined by netizens criticizing lobbying influence; it is not an official operation name.",
+    "The quoted passages are short fragments or naming labels reproduced from the excerpt, not full interview transcripts. The article does not name an individual Iranian speaker for the February 2026 safeguards statements."
   ],
   "editorialVerdict": {
     "avoidAdvice": [],

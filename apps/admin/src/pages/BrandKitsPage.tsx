@@ -6,10 +6,12 @@ import {
   Trash2,
   Sparkles,
   ArrowRight,
-  Copy,
   Check,
   Globe,
   Sliders,
+  Pencil,
+  RotateCcw,
+  Eye,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +22,9 @@ import {
   getBrandPresets,
   saveBrandPreset,
   deleteBrandPreset,
+  resetBrandPreset,
+  isPresetOverridden,
+  isCuratedSlug,
 } from '@/lib/brand-presets';
 import type { BespokeBrand } from '@/api/client';
 
@@ -28,6 +33,8 @@ export function BrandKitsPage() {
   const [data, setData] = useState(() => getBrandPresets());
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editingBrand, setEditingBrand] = useState<BespokeBrand | null>(null);
 
   // New Brand Kit form state
   const [formData, setFormData] = useState<Partial<BespokeBrand>>({
@@ -71,6 +78,58 @@ export function BrandKitsPage() {
     if (confirm(`Delete custom brand preset "${name}"?`)) {
       deleteBrandPreset(slug);
       toast.success(`Deleted ${name}`);
+      refresh();
+    }
+  }
+
+  function handleOpenEdit(brand: BespokeBrand) {
+    // Clone brand deep enough for editing
+    setEditingBrand(JSON.parse(JSON.stringify(brand)));
+    setIsEditOpen(true);
+  }
+
+  function handleSaveEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingBrand || !editingBrand.name) {
+      toast.error('Brand name is required');
+      return;
+    }
+
+    const headlineFont = editingBrand.typography?.headlineFont || 'Syne';
+    const bodyFont = editingBrand.typography?.bodyFont || 'Inter';
+    const monoFont = editingBrand.typography?.monoFont || 'JetBrains Mono';
+
+    const fonts = [headlineFont, bodyFont, monoFont].filter((v, i, a) => a.indexOf(v) === i);
+    const googleFontsUrl = `https://fonts.googleapis.com/css2?${fonts
+      .map((f) => `family=${encodeURIComponent(f)}:wght@400;500;600;700;800`)
+      .join('&')}&display=swap`;
+
+    const updated: BespokeBrand = {
+      ...editingBrand,
+      typography: {
+        ...editingBrand.typography,
+        headlineFont,
+        bodyFont,
+        monoFont,
+        googleFontsUrl,
+      },
+    };
+
+    saveBrandPreset(updated);
+    toast.success(`Saved changes to "${updated.name}"`);
+    setIsEditOpen(false);
+    setEditingBrand(null);
+    refresh();
+  }
+
+  function handleResetCurated(slug: string, name: string) {
+    if (confirm(`Reset "${name}" to original default curated values?`)) {
+      resetBrandPreset(slug);
+      toast.success(`Reset "${name}" to defaults`);
+      if (isEditOpen) {
+        setIsEditOpen(false);
+        setEditingBrand(null);
+      }
       refresh();
     }
   }
@@ -145,7 +204,7 @@ export function BrandKitsPage() {
             </span>
           </div>
           <p className="text-[13px] text-text-tertiary mt-1">
-            Art direction systems, color tokens, and typography kits for consistent publication identity across all stories.
+            Art direction systems, color tokens, and typography kits for consistent publication identity across all stories. Fully editable.
           </p>
         </div>
 
@@ -176,6 +235,7 @@ export function BrandKitsPage() {
                 isCustom={true}
                 copiedKey={copiedKey}
                 onCopy={handleCopy}
+                onEdit={() => handleOpenEdit(b)}
                 onDelete={() => handleDelete(b.slug, b.name)}
                 onUse={() => useInNewJob(b)}
               />
@@ -192,23 +252,386 @@ export function BrandKitsPage() {
             Curated Publication Archetypes ({data.curated.length})
           </h2>
           <span className="text-[11px] text-text-quaternary">
-            Handcrafted for high-signal editorial storytelling
+            Handcrafted for high-signal editorial storytelling • Click Edit to customize
           </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {data.curated.map((b) => (
-            <BrandPresetCard
-              key={b.slug}
-              brand={b}
-              isCustom={false}
-              copiedKey={copiedKey}
-              onCopy={handleCopy}
-              onUse={() => useInNewJob(b)}
-            />
-          ))}
+          {data.curated.map((b) => {
+            const isOverridden = isPresetOverridden(b.slug);
+            return (
+              <BrandPresetCard
+                key={b.slug}
+                brand={b}
+                isCustom={false}
+                isOverridden={isOverridden}
+                copiedKey={copiedKey}
+                onCopy={handleCopy}
+                onEdit={() => handleOpenEdit(b)}
+                onReset={isOverridden ? () => handleResetCurated(b.slug, b.name) : undefined}
+                onUse={() => useInNewJob(b)}
+              />
+            );
+          })}
         </div>
       </div>
+
+      {/* Edit Brand Kit Modal Dialog */}
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent className="max-w-3xl bg-background border-border max-h-[90vh] overflow-y-auto">
+          {editingBrand && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center justify-between pr-6">
+                  <DialogTitle className="text-[16px] font-semibold text-text-primary flex items-center gap-2">
+                    <Pencil className="h-4 w-4 text-emerald-400" />
+                    Edit Brand Kit: {editingBrand.name}
+                  </DialogTitle>
+                  {isCuratedSlug(editingBrand.slug) && isPresetOverridden(editingBrand.slug) && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleResetCurated(editingBrand.slug, editingBrand.name)}
+                      className="h-7 text-[11px] gap-1 text-amber-400 border-amber-800/60 bg-amber-950/20 hover:bg-amber-950/40"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      Reset to Curated Defaults
+                    </Button>
+                  )}
+                </div>
+              </DialogHeader>
+
+              <form onSubmit={handleSaveEdit} className="space-y-6 pt-2">
+                {/* Live Preview Strip */}
+                <div className="p-3.5 rounded-lg border border-border bg-surface-2 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-text-tertiary flex items-center gap-1.5">
+                      <Eye className="h-3.5 w-3.5 text-emerald-400" />
+                      Real-Time Palette & Typography Preview
+                    </span>
+                    <span className="text-[10px] font-mono text-text-quaternary">
+                      {editingBrand.domain} • {editingBrand.handle}
+                    </span>
+                  </div>
+
+                  <div
+                    className="p-5 rounded-md border transition-all"
+                    style={{
+                      backgroundColor: editingBrand.palette?.paper || '#0D0E12',
+                      borderColor: editingBrand.palette?.border || '#2A2D3A',
+                      color: editingBrand.palette?.ink || '#F1F3F9',
+                    }}
+                  >
+                    <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: editingBrand.palette?.border || '#2A2D3A' }}>
+                      <span className="text-[12px] font-bold tracking-wider font-mono uppercase">
+                        {editingBrand.wordmark || editingBrand.name}
+                      </span>
+                      <span
+                        className="text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold"
+                        style={{
+                          backgroundColor: `${editingBrand.palette?.accent || '#FF4D00'}22`,
+                          color: editingBrand.palette?.accent || '#FF4D00',
+                          border: `1px solid ${editingBrand.palette?.accent || '#FF4D00'}55`,
+                        }}
+                      >
+                        {editingBrand.motif || 'SPECIAL REPORT'}
+                      </span>
+                    </div>
+
+                    <div className="mt-3">
+                      <h4
+                        className="text-[20px] font-bold tracking-tight leading-tight"
+                        style={{ fontFamily: editingBrand.typography?.headlineFont || 'sans-serif' }}
+                      >
+                        Sample Editorial Headline Across The Grid
+                      </h4>
+                      <p
+                        className="text-[12px] mt-1.5 leading-relaxed"
+                        style={{
+                          color: editingBrand.palette?.subtle || '#8E93A6',
+                          fontFamily: editingBrand.typography?.bodyFont || 'sans-serif',
+                        }}
+                      >
+                        {editingBrand.vibe || 'Sample subheadline rendered with your selected typography and subtle color tone.'}
+                      </p>
+                    </div>
+
+                    <div
+                      className="mt-4 p-3 rounded flex items-center justify-between"
+                      style={{
+                        backgroundColor: editingBrand.palette?.surface || '#161820',
+                        border: `1px solid ${editingBrand.palette?.border || '#2A2D3A'}`,
+                      }}
+                    >
+                      <span
+                        className="text-[11px] font-mono uppercase"
+                        style={{ color: editingBrand.palette?.subtle || '#8E93A6' }}
+                      >
+                        Verified Telemetry Metric:
+                      </span>
+                      <span
+                        className="text-[14px] font-mono font-bold"
+                        style={{ color: editingBrand.palette?.accent || '#FF4D00' }}
+                      >
+                        +98.4% GAIN
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Identity Fields */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Publication Name *
+                    </Label>
+                    <Input
+                      required
+                      value={editingBrand.name}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })}
+                      className="h-8.5 bg-surface-2 border-border text-[13px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Domain / URL
+                    </Label>
+                    <Input
+                      value={editingBrand.domain}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, domain: e.target.value })}
+                      className="h-8.5 bg-surface-2 border-border text-[13px]"
+                    />
+                  </div>
+                </div>
+
+                {/* Wordmark & Handle */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Typographic Wordmark
+                    </Label>
+                    <Input
+                      value={editingBrand.wordmark || ''}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, wordmark: e.target.value })}
+                      className="h-8.5 bg-surface-2 border-border text-[13px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Wordmark Style
+                    </Label>
+                    <select
+                      value={editingBrand.wordmarkStyle || 'sans'}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, wordmarkStyle: e.target.value as any })}
+                      className="h-8.5 w-full rounded-md border border-border bg-surface-2 px-3 text-[12px] text-text-secondary"
+                    >
+                      <option value="sans">Bold Sans-Serif</option>
+                      <option value="serif">Italic Serif</option>
+                      <option value="small-caps">Tracked Small Caps</option>
+                      <option value="mono">Telemetry Mono</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Social Handle
+                    </Label>
+                    <Input
+                      value={editingBrand.handle || ''}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, handle: e.target.value })}
+                      className="h-8.5 bg-surface-2 border-border text-[13px]"
+                    />
+                  </div>
+                </div>
+
+                {/* Vibe */}
+                <div className="space-y-1.5">
+                  <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                    Editorial Vibe & Aesthetic Philosophy
+                  </Label>
+                  <Input
+                    value={editingBrand.vibe || ''}
+                    onChange={(e) => setEditingBrand({ ...editingBrand, vibe: e.target.value })}
+                    className="h-8.5 bg-surface-2 border-border text-[13px]"
+                  />
+                </div>
+
+                {/* Color Palette with Live Native Color Pickers */}
+                <div className="space-y-2">
+                  <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                    6-Token Color Palette (Click swatch to pick color)
+                  </Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {[
+                      { key: 'paper', label: 'Paper (Canvas)', def: '#0D0E12' },
+                      { key: 'ink', label: 'Ink (Primary Text)', def: '#F1F3F9' },
+                      { key: 'accent', label: 'Accent (Highlight)', def: '#FF4D00' },
+                      { key: 'surface', label: 'Surface (Cards)', def: '#161820' },
+                      { key: 'border', label: 'Border (Hairlines)', def: '#2A2D3A' },
+                      { key: 'subtle', label: 'Subtle (Muted Text)', def: '#8E93A6' },
+                    ].map(({ key, label, def }) => (
+                      <div key={key} className="space-y-1 p-2 rounded-md bg-surface-2 border border-border">
+                        <span className="text-[10px] text-text-quaternary block uppercase font-mono">
+                          {label}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={(editingBrand.palette as any)?.[key] || def}
+                            onChange={(e) =>
+                              setEditingBrand({
+                                ...editingBrand,
+                                palette: {
+                                  ...editingBrand.palette,
+                                  [key]: e.target.value,
+                                },
+                              })
+                            }
+                            className="h-7 w-7 rounded border border-border bg-transparent cursor-pointer shrink-0"
+                          />
+                          <Input
+                            value={(editingBrand.palette as any)?.[key] || def}
+                            onChange={(e) =>
+                              setEditingBrand({
+                                ...editingBrand,
+                                palette: {
+                                  ...editingBrand.palette,
+                                  [key]: e.target.value,
+                                },
+                              })
+                            }
+                            className="h-7 font-mono text-[11px] bg-background border-border uppercase"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Typography */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Headline Font
+                    </Label>
+                    <Input
+                      value={editingBrand.typography?.headlineFont || ''}
+                      onChange={(e) =>
+                        setEditingBrand({
+                          ...editingBrand,
+                          typography: {
+                            ...editingBrand.typography,
+                            headlineFont: e.target.value,
+                          },
+                        })
+                      }
+                      className="h-8.5 bg-surface-2 border-border text-[12px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Body Font
+                    </Label>
+                    <Input
+                      value={editingBrand.typography?.bodyFont || ''}
+                      onChange={(e) =>
+                        setEditingBrand({
+                          ...editingBrand,
+                          typography: {
+                            ...editingBrand.typography,
+                            bodyFont: e.target.value,
+                          },
+                        })
+                      }
+                      className="h-8.5 bg-surface-2 border-border text-[12px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Mono Font
+                    </Label>
+                    <Input
+                      value={editingBrand.typography?.monoFont || ''}
+                      onChange={(e) =>
+                        setEditingBrand({
+                          ...editingBrand,
+                          typography: {
+                            ...editingBrand.typography,
+                            monoFont: e.target.value,
+                          },
+                        })
+                      }
+                      className="h-8.5 bg-surface-2 border-border text-[12px]"
+                    />
+                  </div>
+                </div>
+
+                {/* Motif & Texture */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Editorial Motif
+                    </Label>
+                    <select
+                      value={editingBrand.motif || 'crosshair'}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, motif: e.target.value as any })}
+                      className="h-8.5 w-full rounded-md border border-border bg-surface-2 px-3 text-[12px] text-text-secondary"
+                    >
+                      <option value="crosshair">✛ Crosshair Reticle</option>
+                      <option value="seal">印 Japanese Red Seal</option>
+                      <option value="coord">Coordinate Telemetry Badge</option>
+                      <option value="bracket">[ SYS_01 ] Bracket Code</option>
+                      <option value="none">None (Clean Minimal)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-[11px] font-medium uppercase tracking-wider text-text-quaternary">
+                      Canvas Texture
+                    </Label>
+                    <select
+                      value={editingBrand.texture || 'grid'}
+                      onChange={(e) => setEditingBrand({ ...editingBrand, texture: e.target.value as any })}
+                      className="h-8.5 w-full rounded-md border border-border bg-surface-2 px-3 text-[12px] text-text-secondary"
+                    >
+                      <option value="grid">Subtle Technical Grid</option>
+                      <option value="blueprint">Engineering Blueprint</option>
+                      <option value="dots">Dotted Matrix</option>
+                      <option value="washi">Artisanal Washi Fiber</option>
+                      <option value="none">Flat Solid Surface</option>
+                    </select>
+                  </div>
+                </div>
+
+                <DialogFooter className="pt-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      setIsEditOpen(false);
+                      setEditingBrand(null);
+                    }}
+                    className="h-8.5 text-[12px]"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="h-8.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[12px] font-semibold"
+                  >
+                    Save Changes
+                  </Button>
+                </DialogFooter>
+              </form>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Create Modal Dialog */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -483,15 +906,21 @@ export function BrandKitsPage() {
 function BrandPresetCard({
   brand,
   isCustom,
+  isOverridden,
   copiedKey,
   onCopy,
+  onEdit,
+  onReset,
   onDelete,
   onUse,
 }: {
   brand: BespokeBrand;
   isCustom: boolean;
+  isOverridden?: boolean;
   copiedKey: string | null;
   onCopy: (key: string, value: string) => void;
+  onEdit: () => void;
+  onReset?: () => void;
   onDelete?: () => void;
   onUse: () => void;
 }) {
@@ -505,13 +934,18 @@ function BrandPresetCard({
         {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-border">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h3 className="text-[16px] font-semibold text-text-primary tracking-tight">
                 {brand.name}
               </h3>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-surface-2 text-text-tertiary border border-border">
                 {brand.slug}
               </span>
+              {isOverridden && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-950/40 text-amber-300 border border-amber-800/40">
+                  Customized
+                </span>
+              )}
               {brand.motif && brand.motif !== 'none' && (
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/40">
                   {brand.motif}
@@ -526,7 +960,27 @@ function BrandPresetCard({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            {isOverridden && onReset && (
+              <button
+                type="button"
+                onClick={onReset}
+                title="Reset to curated defaults"
+                className="p-1.5 rounded-md text-amber-400 hover:text-amber-300 hover:bg-amber-950/30 transition-colors"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onEdit}
+              title="Edit brand kit"
+              className="p-1.5 rounded-md text-text-quaternary hover:text-text-primary hover:bg-surface-3 transition-colors"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </button>
+
             {isCustom && onDelete && (
               <button
                 type="button"

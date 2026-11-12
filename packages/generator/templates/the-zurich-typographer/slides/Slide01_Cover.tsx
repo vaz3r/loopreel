@@ -1,92 +1,118 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
 
-export default function Slide01({ slide }: SlideComponentProps) {
-  const items = slide.items ?? [];
+type CoverData = {
+  publication?: string;
+  kicker?: string;
+  headline?: string;
+  subheadline?: string;
+  issueBadge?: string;
+  telemetry?: Array<{
+    value: string;
+    label: string;
+  }>;
+};
+
+export default function Slide01({
+  slide,
+  brand,
+  totalSlides,
+}: SlideComponentProps) {
+  void brand;
+  void totalSlides;
+
+  const cover = slide as unknown as CoverData;
+  const headline = cover.headline ?? 'The War That Outgrew Its Targets';
+  const headlineLines =
+    headline === 'The War That Outgrew Its Targets'
+      ? ['The War', 'That Outgrew', 'Its', 'Targets']
+      : [headline];
+
+  const telemetry = cover.telemetry ?? [
+    {
+      value: '28 February 2026',
+      label: 'Opening US–Israeli strikes',
+    },
+    {
+      value: '$47.1 billion',
+      label: 'Estimated US spending through Oct. 16',
+    },
+  ];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <div className="flex h-[420px] shrink-0 flex-col items-start">
-        <div className="flex items-center gap-5">
-          <span
-            aria-hidden="true"
-            className="h-[18px] w-[18px] bg-[var(--accent)]"
-          />
-          <p className="font-[var(--font-mono)] text-[22px] font-medium uppercase leading-normal tracking-[0.14em]">
-            {slide.kicker}
-          </p>
-        </div>
-
-        <h1 className="mt-12 max-w-[800px] font-[var(--font-headline)] text-[68px] font-bold leading-[1.04] tracking-[-0.045em]">
-          {slide.headline}
-        </h1>
-
-        <p className="mt-8 max-w-[710px] border-l-[3px] border-[var(--border)] pl-6 font-[var(--font-body)] text-[26px] leading-snug">
-          {slide.subheadline}
-        </p>
-      </div>
-
-      <div className="relative mt-10 h-[940px] w-full shrink-0 bg-[#FFFFFF]">
+      <div className="relative isolate flex h-full min-h-0 w-full flex-col bg-[var(--paper)] [--paper:#FFFFFF] [--ink:#000000] [--accent:#E60000] [--surface:#F5F5F5] [--border:#000000]">
         <svg
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full"
-          viewBox="0 0 952 940"
+          viewBox="0 0 540 960"
+          preserveAspectRatio="xMidYMid meet"
+          className="pointer-events-none absolute inset-0 -z-10 h-full w-full text-[var(--accent)]"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Negotiation line: deliberately broken at the interruption. */}
-          <path
-            d="M 0 470 H 445 M 507 470 H 952"
-            stroke="#000000"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
-
-          {/* Open endpoints keep the diagram conceptual, not quantitative. */}
-          <circle cx="24" cy="470" r="7" fill="#FFFFFF" stroke="#000000" strokeWidth="2" />
-          <circle cx="928" cy="470" r="7" fill="#FFFFFF" stroke="#000000" strokeWidth="2" />
-
-          {/* Callout leaders converge on opposite sides of the rupture. */}
-          <path
-            d="M 344 344 V 388 L 438 438"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinejoin="miter"
-          />
-          <circle cx="438" cy="438" r="5" fill="#000000" />
-
-          <path
-            d="M 608 604 V 554 L 514 502"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinejoin="miter"
-          />
-          <circle cx="514" cy="502" r="5" fill="#000000" />
-
-          {/* The single red interruption is the visual focal point. */}
-          <path
-            d="M 476 376 V 564"
-            stroke="#E60000"
-            strokeWidth="18"
-            strokeLinecap="square"
+          <circle
+            cx="270"
+            cy="624"
+            r="112"
+            stroke="currentColor"
+            strokeWidth="5"
+            strokeDasharray="610 94"
+            transform="rotate(-44 270 624)"
           />
         </svg>
 
-        <div className="absolute left-[64px] right-[248px] top-[112px] min-h-[232px] border-t-2 border-[var(--border)] bg-[var(--surface)] px-8 py-7">
-          <p className="font-[var(--font-mono)] text-[22px] font-medium leading-normal tracking-[0.04em]">
-            {items?.label}
+        <div className="flex shrink-0 items-center justify-between gap-8 border-b border-[var(--border)] pb-7 pt-9">
+          <p className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.045em]">
+            {cover.publication ?? 'The Zurich Typographer'}
           </p>
-          <p className="mt-4 font-[var(--font-body)] text-[28px] leading-snug">
-            {items?.body}
+          <span
+            aria-hidden="true"
+            className="h-5 w-5 shrink-0 bg-[var(--accent)]"
+          />
+        </div>
+
+        <div className="mt-12 flex shrink-0 flex-col items-start">
+          <p className="font-[var(--font-mono)] text-[22px] font-medium uppercase leading-normal tracking-[0.16em] text-[var(--accent)]">
+            {cover.kicker ?? 'GEOPOLITICS / SPECIAL REPORT'}
+          </p>
+
+          <h1
+            aria-label={headline}
+            className="mt-9 max-w-full font-[var(--font-headline)] text-[68px] font-bold leading-[1.02] tracking-[-0.04em]"
+          >
+            {headlineLines.map((line, index) => (
+              <span key={index} aria-hidden="true" className="block">
+                {line}
+              </span>
+            ))}
+          </h1>
+
+          <p className="mt-9 max-w-[760px] text-pretty font-[var(--font-body)] text-[28px] leading-snug tracking-[-0.015em]">
+            {cover.subheadline ??
+              'Nuclear talks gave way to strikes, maritime blockades and global economic disruption.'}
           </p>
         </div>
 
-        <div className="absolute left-[248px] right-[64px] top-[604px] min-h-[216px] border-t-2 border-[var(--border)] bg-[var(--surface)] px-8 py-7">
-          <p className="font-[var(--font-mono)] text-[22px] font-medium leading-normal tracking-[0.04em]">
-            {items?.label}
-          </p>
-          <p className="mt-4 font-[var(--font-body)] text-[28px] leading-snug">
-            {items?.body}
+        <div aria-hidden="true" className="min-h-[400px] flex-1" />
+
+        <div className="flex shrink-0 flex-col gap-8 pb-10">
+          <dl className="flex flex-col gap-6 border-t border-[var(--border)] pt-7">
+            {telemetry.slice(0, 2).map((item, index) => (
+              <div
+                key={`${item.value}-${index}`}
+                className="grid grid-cols-[310px_minmax(0,1fr)] items-baseline gap-7"
+              >
+                <dt className="col-start-2 row-start-1 font-[var(--font-body)] text-[24px] leading-snug">
+                  {item.label}
+                </dt>
+                <dd className="col-start-1 row-start-1 font-[var(--font-mono)] text-[26px] font-semibold leading-snug tracking-[-0.04em]">
+                  {item.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="self-start border-l-[5px] border-[var(--accent)] bg-[var(--surface)] px-6 py-4 font-[var(--font-mono)] text-[22px] uppercase leading-normal tracking-[0.12em]">
+            {cover.issueBadge ?? 'SPECIAL REPORT · 10 SLIDES'}
           </p>
         </div>
       </div>

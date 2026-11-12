@@ -32,7 +32,7 @@ export interface CreateJobParams {
   sourceType: SourceType;
   templateId: string;
   platform: string;
-  brandKit?: Record<string, string>;
+  brandKit?: Record<string, any>;
   generateText?: boolean;
 }
 

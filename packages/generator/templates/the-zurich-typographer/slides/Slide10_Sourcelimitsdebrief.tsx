@@ -109,10 +109,10 @@ export default function Slide10({
             id="slide-10-provenance"
             className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.025em]"
           >
-            {items?.label}
+            {items?.[0]?.label}
           </h2>
           <p className="mt-5 font-[var(--font-body)] text-[26px] leading-[1.4]">
-            {items?.body}
+            {items?.[0]?.body}
           </p>
         </aside>
 
@@ -124,10 +124,10 @@ export default function Slide10({
             id="slide-10-completeness"
             className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.025em]"
           >
-            {items?.label}
+            {items?.[1]?.label}
           </h2>
           <p className="mt-5 font-[var(--font-body)] text-[26px] leading-[1.4]">
-            {items?.body}
+            {items?.[1]?.body}
           </p>
         </aside>
       </div>

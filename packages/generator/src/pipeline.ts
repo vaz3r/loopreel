@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
 import ts from 'typescript';
 import { createLLMClient } from '@loopreel/llm';
 import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
@@ -76,17 +75,55 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
   code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.([a-zA-Z0-9_]+)/g, 'slide.$1?.[0]?.$2');
 
-  // 2. Fix dangling optional chaining: any variable or property followed by ?. and punctuation/newline
+  // 2. Fix dangling optional chaining: any variable or property followed by ?. and punctuation/newline/operator
   let danglingIdx = 0;
-  code = code.replace(/([a-zA-Z0-9_$]+(?:\.[a-zA-Z0-9_$]+)*)\?\.\s*(?=[;,)\n}])/g, (_m, expr) => {
+  code = code.replace(/([a-zA-Z0-9_$]+(?:\.[a-zA-Z0-9_$]+)*)\?\.\s*(?=[;,)\n}\?])/g, (_m, expr) => {
     return `${expr}?.[${danglingIdx++}]`;
   });
 
   // 3. Fix sequential unpacking of array variables without index:
   // e.g. const openingUS = cards; const openingIsrael = cards; -> cards[0], cards[1]
-  const collectionNames = new Set(['cards', 'metrics', 'items', 'telemetry', 'stages', 'steps', 'columns']);
+  // or const first = milestones; const second = milestones; -> milestones[0], milestones[1]
+  const collectionNames = new Set([
+    'cards',
+    'metrics',
+    'items',
+    'telemetry',
+    'stages',
+    'steps',
+    'columns',
+    'milestones',
+    'events',
+    'points',
+    'phases',
+    'quotes',
+    'takeaways',
+  ]);
+
+  // First pass: detect ANY identifier assigned to multiple distinct variables
+  const assignRegex = /(?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*([a-zA-Z0-9_$]+)\s*;/g;
+  const rhsCounts: Record<string, number> = {};
+  let matchAssign: RegExpExecArray | null;
+  while ((matchAssign = assignRegex.exec(code)) !== null) {
+    const lhs = matchAssign[1];
+    const rhs = matchAssign[2];
+    if (lhs && rhs && lhs !== rhs && !collectionNames.has(lhs)) {
+      rhsCounts[rhs] = (rhsCounts[rhs] || 0) + 1;
+    }
+  }
+
+  const universalRhsIndex: Record<string, number> = {};
+  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)([a-zA-Z0-9_$]+)(\s*;)/g, (full, prefix, lhs, rhs, suffix) => {
+    if (lhs && rhs && lhs !== rhs && !collectionNames.has(lhs) && rhsCounts[rhs] && rhsCounts[rhs] >= 2) {
+      const idx = universalRhsIndex[rhs] ?? 0;
+      universalRhsIndex[rhs] = idx + 1;
+      return `${prefix}${rhs}[${idx}]${suffix}`;
+    }
+    return full;
+  });
+
   const arrayCounts: Record<string, number> = {};
-  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)(cards|metrics|items|telemetry|stages|steps|columns)(\s*;)/g, (match, prefix, varName, arr, suffix) => {
+  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)(cards|metrics|items|telemetry|stages|steps|columns|milestones|events|points|phases|quotes|takeaways)(\s*;)/g, (match, prefix, varName, arr, suffix) => {
     if (collectionNames.has(varName)) return match; // keep array aliases intact
     const idx = arrayCounts[arr] ?? 0;
     arrayCounts[arr] = idx + 1;
@@ -94,7 +131,7 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
 
   // 4. Fix unindexed numbered variable declaration: e.g. const item0 = items; -> const item0 = items[0];
-  code = code.replace(/const\s+([a-zA-Z0-9_$]*?(?:item|card|col|metric|entry|stage|step))([0-9])\s*=\s*([a-zA-Z0-9_$.]+?)\s*;/g, (match, prefix, num, rhs) => {
+  code = code.replace(/const\s+([a-zA-Z0-9_$]*?(?:item|card|col|metric|entry|stage|step|milestone))([0-9])\s*=\s*([a-zA-Z0-9_$.]+?)\s*;/g, (match, prefix, num, rhs) => {
     if (rhs.includes('[')) return match;
     return `const ${prefix}${num} = ${rhs}[${num}];`;
   });
@@ -102,7 +139,7 @@ export function sanitizeTsxCode(rawCode: string): string {
   // 4. Fix array helper objects with repeated unindexed collection properties:
   // e.g. { card: cards, metric: telemetry } inside an array literal
   const propCounters: Record<string, number> = {};
-  code = code.replace(/(\b(?:card|item|metric|col|entry|step|stage)\s*:\s*)(cards|items|telemetry|metrics|stages|steps)\b(?!\s*\[)/g, (_m, prefix, arr) => {
+  code = code.replace(/(\b(?:card|item|metric|col|entry|step|stage|milestone)\s*:\s*)(cards|items|telemetry|metrics|stages|steps|milestones)\b(?!\s*\[)/g, (_m, prefix, arr) => {
     const key = prefix.trim();
     const count = propCounters[key] || 0;
     propCounters[key] = count + 1;
@@ -127,6 +164,10 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/(?:telemetry|metrics)\??\.label(?!\[)/g, () => {
     return `telemetry?.[${telLabelCount++}]?.label`;
   });
+
+  // 6. Strip meta-attributions: eliminate robotic phrases like "The article states that", "The text notes", etc.
+  code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
+  code = code.replace(/\bAccording\s+to\s+(?:the\s+)?(?:article|piece|report|text|source|account),\s*/gi, '');
 
   return code;
 }
@@ -192,6 +233,7 @@ export function validateTemplateTypeScript(templateDir: string): { valid: boolea
 
 export interface PipelineOptions {
   brief?: TemplateBrief;
+  preset?: string;
   url?: string;
   provider?: string;
   platform?: string;
@@ -356,7 +398,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     }
 
     const name = b.name || b.wordmark || 'Custom Brand';
-    const slug = b.slug || defaultSlug;
+    const slug = options.preset || defaultSlug;
 
     brand = {
       name,
@@ -395,11 +437,12 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     );
 
     brand = extractJson<BrandTokens>(brandResponse.text);
-    brand.slug = brand.slug || defaultSlug;
+    brand.slug = options.preset || brand.slug || defaultSlug;
   }
 
   brand.platform = options.platform || 'instagram-feed';
-  const slug = brand.slug;
+  const slug = options.preset || brand.slug || defaultSlug;
+  brand.slug = slug;
   console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
   // ==========================================================================

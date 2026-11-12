@@ -114,28 +114,28 @@ export default function Slide08({
         <ol className="m-0 flex list-none flex-col p-0 pt-[68px]">
           <li className="flex h-[248px] shrink-0 flex-col justify-center bg-[var(--surface)] py-6 pl-[220px] pr-[64px]">
             <h2 className="font-[var(--font-mono)] text-[36px] font-semibold leading-tight tracking-[-0.035em]">
-              {items?.label}
+              {items?.[0]?.label}
             </h2>
             <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
-              {items?.body}
+              {items?.[0]?.body}
             </p>
           </li>
 
           <li className="mt-[104px] flex h-[248px] shrink-0 flex-col justify-center bg-[var(--surface)] py-6 pl-[64px] pr-[220px]">
             <h2 className="font-[var(--font-mono)] text-[36px] font-semibold leading-tight tracking-[-0.035em]">
-              {items?.label}
+              {items?.[1]?.label}
             </h2>
             <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
-              {items?.body}
+              {items?.[1]?.body}
             </p>
           </li>
 
           <li className="mt-[184px] flex h-[260px] shrink-0 flex-col justify-center bg-[var(--surface)] py-6 pl-[220px] pr-[64px]">
             <h2 className="font-[var(--font-mono)] text-[36px] font-semibold leading-tight tracking-[-0.035em] text-[var(--accent)]">
-              {items?.label}
+              {items?.[2]?.label}
             </h2>
             <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
-              {items?.body}
+              {items?.[2]?.body}
             </p>
           </li>
         </ol>

@@ -1,249 +1,244 @@
 {
   "templateName": "The Threshold",
   "templateSlug": "the-threshold",
-  "domain": "Domestic Robotics / Connected Security / Privacy",
+  "domain": "thethreshold.tech",
+  "platform": "instagram-feed",
   "slides": [
     {
       "id": "slide-1",
       "index": 0,
       "type": "cover",
-      "publication": "The Threshold",
-      "kicker": "DOMESTIC ROBOTICS",
-      "headline": "Ring Gives Surveillance Room to Roam",
-      "subheadline": "Flying and wheeled cameras bring indoor mapping, cloud processing and privacy questions.",
-      "visualStyle": "diverging-patrol-hero",
-      "layoutTopology": "central-headline-with-diverging-paths",
-      "palette": {
-        "paper": "#E8EFEB",
-        "ink": "#20292A",
-        "accent": "#B52D46",
-        "surface": "#D8E3DD"
-      },
-      "cards": [
+      "kicker": "THE THRESHOLD",
+      "headline": "War, Truces, And Unresolved Questions",
+      "subheadline": "A supplied article excerpt traces escalation, failed ceasefires, and limits of verification.",
+      "visualStyle": "fractured-diplomacy-hero",
+      "layoutTopology": "central-fracture-with-opposing-annotations",
+      "svgBlueprint": "Use background #0D0E12, text #F1F3F9, accent #FF4D00, and surfaces #161820 throughout. Draw a central broken line separating two opposing annotations. Treat the fracture as an editorial metaphor, not a geographic boundary. Place the headline above and exactly two items below. No weapons silhouettes or quantitative scaling.",
+      "items": [
         {
-          "title": "Ring Drone Cam",
-          "badge": "$250",
-          "body": "Indoor flying security camera."
+          "label": "Reported beginning",
+          "body": "28 February 2026: US and Israeli strikes began the reported war."
         },
         {
-          "title": "Ring Rover Cam",
-          "badge": "$1,000",
-          "body": "Wheeled autonomous security robot marketed for business."
+          "label": "Reported belligerents",
+          "body": "United States and Israel against Iran and its regional allies."
         }
       ],
-      "svgBlueprint": "Use the publication palette throughout the storyboard. Place the headline above a schematic indoor outline. Branch a dashed airborne path toward an abstract drone glyph and a solid floor path toward an abstract rover glyph. Anchor each product caption at its path endpoint. Keep silhouettes conceptual, not dimensionally representative; reserve clear text zones."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-2",
       "index": 1,
-      "type": "release-timeline",
-      "kicker": "THE ARRIVAL WINDOW",
-      "headline": "Two Dates, Different Certainty",
-      "subheadline": "Rover shipping is scheduled; the drone still needs regulatory authorization.",
-      "visualStyle": "conditional-release-rail",
-      "layoutTopology": "horizontal-timeline-with-offset-annotations",
-      "cards": [
+      "type": "escalation-timeline",
+      "kicker": "THE PRECEDING CRISIS",
+      "headline": "The Escalation Predated The Opening Strikes",
+      "subheadline": "The excerpt connects the war to successive regional conflicts.",
+      "visualStyle": "ascending-editorial-chronology",
+      "layoutTopology": "three-step-diagonal-timeline",
+      "svgBlueprint": "Draw three ascending platforms linked by thin ink-colored connectors. Position one date and one body on each platform, with generous vertical separation. Highlight only the final platform in orange. Space milestones schematically; neither distance nor height represents elapsed time or conflict intensity.",
+      "items": [
         {
-          "title": "Ring Rover Cam",
-          "date": "December 16, 2026",
-          "body": "Scheduled shipping; already available for preorder when the article was published."
+          "label": "2023",
+          "body": "The excerpt identifies the Gaza war as the regional crisis trigger."
         },
         {
-          "title": "Ring Drone Cam",
-          "date": "January 27, 2027",
-          "body": "Amazon's target depends on Federal Communications Commission authorization."
+          "label": "June 2025",
+          "body": "Israel attacked Iranian military and nuclear facilities; US strikes targeted nuclear facilities."
+        },
+        {
+          "label": "28 February 2026",
+          "body": "Negotiations continued until US and Israeli military strikes commenced."
         }
       ],
-      "svgBlueprint": "Draw a horizontal release rail with two labeled milestones, explicitly not to scale. Use a solid square for Rover's scheduled shipping and a hollow accent circle for Drone's conditional target. Offset the captions above and below the rail. End the drone segment with a dashed line rather than a completion arrow."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-3",
       "index": 2,
-      "type": "mapping-comparison",
-      "kicker": "INSIDE AI PILOT",
-      "headline": "Different Mapping, Shared Cloud Processing",
-      "subheadline": "AI Pilot combines device cameras, specialized vision models, on-device sensors and cloud processing.",
-      "visualStyle": "paired-floorplan-convergence",
-      "layoutTopology": "mirrored-plans-with-shared-processing-node",
-      "cards": [
+      "type": "claim-assessment-comparison",
+      "kicker": "THE MISSILE QUESTION",
+      "headline": "A Presidential Claim, An Intelligence Timeline",
+      "subheadline": "The excerpt juxtaposes Trump's assertion with a reported US intelligence assessment.",
+      "visualStyle": "offset-claim-assessment-brackets",
+      "layoutTopology": "stacked-comparison-with-shared-axis",
+      "svgBlueprint": "Create two wide horizontal bands sharing a left alignment rail. Place the presidential assertion above the intelligence assessment. Use an orange bracket to connect their contrasting time references without implying a calculated gap. Include exactly two entities and no threat score, missile range, or projected trajectory.",
+      "items": [
         {
-          "title": "Ring Drone Cam",
-          "body": "Customers carry the drone through indoor spaces to map floor plans."
+          "label": "Trump · February 2026",
+          "body": "Asserted Iran was developing missiles capable of striking the US."
         },
         {
-          "title": "Ring Rover Cam",
-          "body": "Autonomous exploration maps indoor floor plans."
+          "label": "US intelligence reports · 2035",
+          "body": "The excerpt says Iran needed until this year to build such missiles."
         }
       ],
-      "svgBlueprint": "Draw two schematic floor plans without dimensions. Show a hand-and-drone symbol following a dotted setup path on the left; show a rover tracing its own exploration path on the right. Connect both diagrams to one cloud-processing node below. Avoid arrows implying specific uploads, retention or processing sequences not established by the dossier."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-4",
       "index": 3,
-      "type": "drone-optics",
-      "kicker": "DRONE CAMERA",
-      "headline": "A Flying Camera's Viewing Envelope",
-      "subheadline": "Field of view, rotation and resolution describe what the onboard camera offers.",
-      "visualStyle": "optical-fan-reticle",
-      "layoutTopology": "radial-diagram-with-three-perimeter-readouts",
-      "metrics": [
+      "type": "inspection-access-comparison",
+      "kicker": "THE ACCESS DISTINCTION",
+      "headline": "Inspection Access Was Not Uniform",
+      "subheadline": "The excerpt distinguishes bombed facilities from unaffected facilities.",
+      "visualStyle": "inspection-gate-schematic",
+      "layoutTopology": "single-inlet-two-branch-access-diagram",
+      "svgBlueprint": "Draw one inspection pathway splitting into two branches. End the bombed-facilities branch at an orange closed gate; continue the unaffected-facilities branch through an open ink-colored gate. Place exactly two annotations beside the endpoints. Use abstract facility outlines, not a map or an inventory of sites.",
+      "items": [
         {
-          "value": "148",
-          "label": "Field of view, degrees"
+          "label": "Bombed facilities",
+          "body": "Iran denied IAEA access to facilities that had been bombed."
         },
         {
-          "value": "360",
-          "label": "Rotation, degrees"
-        },
-        {
-          "value": "2K",
-          "label": "Video resolution"
+          "label": "Unaffected facilities",
+          "body": "Iran provided access to all unaffected facilities."
         }
       ],
-      "svgBlueprint": "Center an abstract camera lens inside a circular rotation arrow. Draw an accurately proportioned 148-degree viewing wedge in translucent accent. Place three numerical readouts around the perimeter with short, noncrossing leaders. Treat the wedge as an angular diagram, never a coverage-distance claim."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-5",
       "index": 4,
-      "type": "drone-constraints",
-      "kicker": "THE FLIGHT CONDITIONS",
-      "headline": "Eight Minutes, With Conditions Attached",
-      "subheadline": "Flight duration, navigation surfaces and subscriber access constrain the drone's promise.",
-      "visualStyle": "stacked-flight-condition-ledger",
-      "layoutTopology": "three-horizontal-editorial-bands",
-      "cards": [
+      "type": "verification-distinction",
+      "kicker": "WHAT REMAINED UNRESOLVED",
+      "headline": "Unverified Does Not Establish Weaponization",
+      "subheadline": "The excerpt reports verification limits separately from its account of weaponization evidence.",
+      "visualStyle": "open-ledger-evidence-boundary",
+      "layoutTopology": "nested-outline-with-margin-finding",
+      "svgBlueprint": "Place a large open-corner ledger outline on the left for unresolved verification. Place a smaller, unboxed finding in the right margin. Separate them with a thin vertical rule rather than a causal arrow. Use dashed edges for uncertainty, never percentages, gauges, or an invented confidence scale.",
+      "items": [
         {
-          "title": "8 minutes",
-          "body": "On a new, fully-charged battery under controlled conditions."
+          "label": "Verification limits",
+          "body": "IAEA could not verify enrichment suspension or confirm the stockpile's status."
         },
         {
-          "title": "Navigation may degrade near",
-          "body": "Polished marble, wet tile, featureless blank matte walls, frameless glass and mirrors."
-        },
-        {
-          "title": "Amazon Ring Protect subscribers",
-          "body": "Set-route and scheduled operation described; subscription price not stated."
+          "label": "Separate finding",
+          "body": "The excerpt says the IAEA found no evidence Iran was weaponizing."
         }
       ],
-      "svgBlueprint": "Build three full-width bands separated by thin ink rules, not floating cards. Pair the runtime band with an unscaled battery outline; pair navigation with one abstract reflective-wall motif; pair subscription access with a route passing through a labeled gate. Keep each illustration small enough to preserve generous text width."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-6",
       "index": 5,
-      "type": "rover-capabilities",
-      "kicker": "BUSINESS PATROL",
-      "headline": "Rover Trades Flight for Floor Coverage",
-      "subheadline": "Amazon claims indoor coverage alongside high-resolution video and stationary scanning.",
-      "visualStyle": "coverage-field-and-scan-hub",
-      "layoutTopology": "large-plan-field-with-bottom-metric-rail",
-      "metrics": [
+      "type": "ceasefire-sequence",
+      "kicker": "APRIL DIPLOMACY",
+      "headline": "A Ceasefire Under Immediate Strain",
+      "subheadline": "The account describes a strained truce, failed talks, and another ceasefire announcement.",
+      "visualStyle": "interrupted-ceasefire-cadence",
+      "layoutTopology": "horizontal-three-stop-event-rail",
+      "svgBlueprint": "Draw a horizontal rail with three equally spaced event stops. Break the rail beneath the first stop and use an orange interruption mark at the second. Give each stop a date header and a short body below. Equal spacing is schematic and must not suggest proportional elapsed time.",
+      "items": [
         {
-          "value": "5,000",
-          "label": "Up to square feet",
-          "body": "Amazon's claimed coverage: 465 square meters."
+          "label": "8 April · two-week ceasefire",
+          "body": "Israeli airstrikes across Lebanon strained the ceasefire that same day."
         },
         {
-          "value": "4K",
-          "label": "Up to video resolution",
-          "body": "Livestreaming and recording while patrolling or scanning."
+          "label": "12–13 April · Islamabad Talks",
+          "body": "Talks failed; the US then imposed a naval blockade on Iran."
         },
         {
-          "value": "360",
-          "label": "Scan, degrees",
-          "body": "Performed at a designated location."
+          "label": "21 April",
+          "body": "The US announced an indefinite ceasefire."
         }
       ],
-      "svgBlueprint": "Use a large schematic business floor plan as the upper field, explicitly not to scale. Place a rover glyph at a designated scan point with a complete circular sweep. Set three metrics in a single bottom rail. Do not shade the plan as guaranteed coverage or imply walls are transparent to the camera."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-7",
       "index": 6,
-      "type": "rover-bottleneck",
-      "kicker": "THE FLOOR IS THE LIMIT",
-      "headline": "Rover Cannot Patrol Every Floor",
-      "subheadline": "Indoor, single-floor operation comes with explicit terrain exclusions.",
-      "cards": [
+      "type": "agreement-breakdown",
+      "kicker": "JUNE TO JULY",
+      "headline": "Agreement Did Not End The Instability",
+      "subheadline": "The excerpt records a memorandum, renewed ceasefire agreement, and subsequent collapse.",
+      "visualStyle": "broken-diplomatic-loop",
+      "layoutTopology": "open-circular-sequence-with-three-annotations",
+      "svgBlueprint": "Arrange three event annotations around an open circular path. Connect them clockwise with small directional arrows, ending at an orange break beside the final event. Keep the center empty. The loop represents this sequence only, not a prediction of recurring conflict or a duration chart.",
+      "items": [
         {
-          "title": "Single-floor only",
-          "body": "Indoor operation; no stair-climbing capability."
+          "label": "17 June",
+          "body": "A US–Iran memorandum to end the war reportedly lifted the dual blockade."
         },
         {
-          "title": "Incompatible terrain",
-          "body": "Curved edges, sunken areas and black glossy floors."
+          "label": "28 June",
+          "body": "The US and Iran agreed to resume the ceasefire after brief escalation."
         },
         {
-          "title": "Incompatible flooring transitions",
-          "body": "Greater than 1.375 inches (3.5 centimeters)."
+          "label": "8 July",
+          "body": "The excerpt attributes collapse to Iranian attacks on commercial vessels in Hormuz."
         }
       ],
-      "visualStyle": "architectural-threshold-section",
-      "layoutTopology": "continuous-floor-section-with-three-callouts",
-      "svgBlueprint": "Draw one continuous schematic floor section across the slide. Attach three callouts to a staircase, an abstract recessed glossy-floor segment and a raised transition. Mark incompatibilities with accent stop bars. Label only the transition with its supplied threshold; do not invent stair dimensions, robot clearance or terrain tolerances."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-8",
       "index": 7,
-      "type": "retention-comparison",
-      "kicker": "AFTER THE PATROL",
-      "headline": "Recording Outlasts the Patrol",
-      "subheadline": "Rover cloud retention is specified; a separate drone retention period is not.",
-      "visualStyle": "archive-span-versus-open-record",
-      "layoutTopology": "stacked-comparison-ledger",
-      "cards": [
+      "type": "spending-scope",
+      "kicker": "THE COST BOUNDARY",
+      "headline": "Military Spending Is Not Total Damage",
+      "subheadline": "The reported estimate covers US military spending, not worldwide economic losses.",
+      "visualStyle": "monumental-cost-with-scope-footing",
+      "layoutTopology": "oversized-number-above-editorial-footing",
+      "svgBlueprint": "Render the first item's exact amount as monumental ink-colored typography, with its date and attribution immediately underneath. Place the second item in a full-width surface-colored footing separated by an orange rule. Do not abbreviate the amount or add a pie chart, spending breakdown, or global-loss estimate.",
+      "items": [
         {
-          "title": "Rover: up to 180 days",
-          "body": "Cloud-stored videos: doorbell rings, motion events and Live View events."
+          "label": "Estimated US military spending",
+          "body": "$47.1 billion as of October 2026; attributed to US Department of Defense."
         },
         {
-          "title": "Drone: retention not stated",
-          "body": "The supplied article gives no separate cloud video retention period."
+          "label": "Estimate caveat",
+          "body": "The spending sentence contains an [update] marker; worldwide losses are not quantified."
         }
       ],
-      "svgBlueprint": "Create two full-width ledger rows. In the Rover row, place a cloud archive symbol beside a long retention bar labeled up to 180 days. In the Drone row, use an outlined document with an em dash, not a zero-length bar. Keep the rows visually distinct so missing information cannot be mistaken for zero retention."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-9",
       "index": 8,
-      "type": "privacy-record",
-      "kicker": "THE TRUST BACKDROP",
-      "headline": "Ring's Privacy Record Follows It Indoors",
-      "subheadline": "The FTC's earlier case concerned private recordings and safeguards against hackers.",
-      "visualStyle": "monumental-accountability-dossier",
-      "layoutTopology": "oversized-year-spine-with-account-count",
-      "metrics": [
+      "type": "impact-evidence-limits",
+      "kicker": "REPORTED CONSEQUENCES",
+      "headline": "Severe Impacts, Incomplete Numerical Evidence",
+      "subheadline": "The excerpt describes casualties and oil disruption without complete supporting measurements.",
+      "visualStyle": "unscaled-impact-register",
+      "layoutTopology": "vertical-register-with-opposed-margin-notes",
+      "svgBlueprint": "Use one tall editorial register with two separated entries, alternating their label alignment. Pair casualties with an abstract open ledger and oil disruption with a broken flow line. Keep both symbols unscaled. Do not use repeated person icons, proportional bars, casualty counts, or supply percentages.",
+      "items": [
         {
-          "value": "2023",
-          "label": "FTC investigation",
-          "body": "Ring charged with allowing employees and contractors to watch customers' private-space recordings."
+          "label": "Civilian and military casualties",
+          "body": "Reported as thousands; no exact total or civilian–military breakdown is supplied."
         },
         {
-          "value": "55,000",
-          "label": "US customer accounts",
-          "body": "FTC said Ring's safeguards allowed hackers to access these accounts."
+          "label": "Global oil-market supply disruption",
+          "body": "Described as the largest ever; no numerical measure or comparison dataset supplied."
         }
       ],
-      "svgBlueprint": "Set the investigation year as a tall typographic spine on the left. Place the account count in a large right-side evidence block with its attribution directly underneath. Use a restrained document-outline motif and thin connecting rule. Do not depict these historical allegations as incidents involving the new robots."
+      "platform": "instagram-feed"
     },
     {
       "id": "slide-10",
       "index": 9,
-      "type": "privacy-verdict",
-      "kicker": "THE THRESHOLD VERDICT",
-      "headline": "Mobile Security, Unresolved Privacy Questions",
-      "subheadline": "Throw Away the Key Encryption arrived in September 2026; its protections remain contested.",
-      "visualStyle": "claim-and-challenge-bracket",
-      "layoutTopology": "opposing-statements-around-open-lock",
-      "cards": [
+      "type": "source-audit-verdict",
+      "kicker": "THE THRESHOLD · SOURCE CHECK",
+      "headline": "Read The Account With Its Caveats",
+      "subheadline": "This storyboard summarizes the supplied excerpt; it does not independently corroborate its claims.",
+      "visualStyle": "editorial-source-audit",
+      "layoutTopology": "full-width-verdict-over-three-row-checklist",
+      "svgBlueprint": "Place the verdict headline across the upper third, followed by three full-width audit rows. Give each row an open-square marker and a restrained orange underline beneath its label. Use no approval seals or verified badges. Finish with thethreshold.tech as a small publication signature, not a source citation.",
+      "items": [
         {
-          "title": "Amazon's assurance",
-          "body": "Amazon says Throw Away the Key Encryption will protect both devices' videos."
+          "label": "Underlying references",
+          "body": "Numbered citations lack the underlying reference list."
         },
         {
-          "title": "EFF's assessment",
-          "body": "EFF says it remains well short of end-to-end encryption."
+          "label": "Loss inventories",
+          "body": "Referenced naval-loss and aviation-loss lists are absent; no complete inventory is supplied."
+        },
+        {
+          "label": "Citation completeness",
+          "body": "The excerpt's final sentence ends with an incomplete citation."
         }
       ],
-      "svgBlueprint": "Place the two attributed statements on opposing sides of a central abstract lock outline. Use an open bracket around the lock to signify an unresolved assessment, not a demonstrated vulnerability. Keep Amazon's statement in ink and EFF's challenge in accent. Give the closing headline a broad, uncluttered lower text zone."
+      "platform": "instagram-feed"
     }
   ]
 }

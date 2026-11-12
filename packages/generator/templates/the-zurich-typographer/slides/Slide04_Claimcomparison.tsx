@@ -50,10 +50,10 @@ export default function Slide04({ slide }: SlideComponentProps) {
 
             <div className="mt-12 border-t border-[var(--border)] pt-7">
               <h2 className="min-h-[96px] font-[var(--font-headline)] text-[32px] font-semibold leading-snug tracking-[-0.02em]">
-                {items?.label}
+                {items?.[0]?.label}
               </h2>
               <p className="mt-7 font-[var(--font-body)] text-[28px] leading-normal">
-                {items?.body}
+                {items?.[0]?.body}
               </p>
             </div>
           </article>
@@ -67,10 +67,10 @@ export default function Slide04({ slide }: SlideComponentProps) {
 
             <div className="mt-12 border-t border-[var(--border)] pt-7">
               <h2 className="min-h-[96px] font-[var(--font-headline)] text-[32px] font-semibold leading-snug tracking-[-0.02em]">
-                {items?.label}
+                {items?.[1]?.label}
               </h2>
               <p className="mt-7 font-[var(--font-body)] text-[28px] leading-normal">
-                {items?.body}
+                {items?.[1]?.body}
               </p>
             </div>
           </article>

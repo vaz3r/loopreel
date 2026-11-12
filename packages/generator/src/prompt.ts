@@ -256,18 +256,29 @@ Your mission is to transform verified facts into a scroll-stopping, high-signal 
 
 CRITICAL HOOK & VALUE PRINCIPLES:
 1. THE SCROLL-STOPPING HOOK (Slide 1):
-   - Never use passive corporate titles (e.g. "Amazon puts Ring cameras on patrol" is BANNED).
-   - Use the tension formula: [Surprising Action] + [The Hidden Catch / Stakes].
+   - Never use passive corporate titles or dry academic headings.
+   - Use the tension formula: [Surprising Action / Event] + [The Hidden Catch / Systemic Stakes].
    - Examples of great hooks:
-     * "Amazon Put Wings on Ring Cameras. Here’s What They Aren’t Telling You."
-     * "Your Next Security Guard Flies Inside Your House. Why Civil Rights Groups Are Terrified."
+     * "The Forgotten Port That Defied Two Empires"
+     * "War Erupted During Nuclear Talks. What Went Wrong Behind Closed Doors."
      * "The $1,000 Indoor Drone: What Amazon’s Patent Disclosures Actually Reveal."
 2. THE VALUE PROPOSITION:
-   - State clearly why the reader must swipe through (e.g. "3 critical findings: The $1,000 price tag, interior mapping, and the 180-day retention loop.").
+   - State clearly why the reader must swipe through (e.g. "From Phoenician trade outpost to Roman colony, why Tipaza's ruin reshaped North African history.").
 3. HIGH-SIGNAL EXTRACTION:
    - Ground strictly in the provided GroundTruthDossier.
+   - Do NOT mention "the article" or "the text". Speak with primary editorial authority.
 
-Return strictly valid JSON matching StoryStrategy.`;
+Return strictly valid JSON matching this exact structure:
+{
+  "hookHeadline": "Short, punchy 4-7 word hook headline",
+  "valuePromise": "Compelling 10-15 word narrative promise of what the carousel reveals",
+  "kicker": "CATEGORY / TENSION KICKER",
+  "coreConflict": "The fundamental tension or opposing forces",
+  "hiddenCatch": "The quiet factor or structural vulnerability overlooked by most",
+  "verdict": "The enduring consequence or takeaway",
+  "keyMetrics": [{ "value": "Metric", "label": "Label", "context": "Context" }],
+  "keyQuotes": [{ "quote": "Quote text", "speaker": "Speaker", "role": "Role" }]
+}`;
 }
 
 export function buildStoryStrategyUserPrompt(
@@ -294,27 +305,48 @@ export function buildStoryDeckSystemPrompt(): string {
 You author high-signal editorial carousel content with STRICT word budgets and AUTONOMOUSLY CHOOSE THE VISUAL STYLE & SVG BLUEPRINT FOR EACH SLIDE.
 
 CRITICAL CONTENT, EDITORIAL VOICE & LAYOUT RULES:
-1. AUTHORITATIVE EDITORIAL PROSE (NO ROBOTIC META-COMMENTARY):
-   - Every slide must read like an elite art-directed broadsheet publication.
-   - STRICTLY FORBIDDEN: Writing robotic meta-phrases like "The article states...", "The supplied text...", "The account describes...", "The article contrasts...", "sentence marked [update]", or "publisher and byline are user-provided".
-   - State the facts, historical milestones, tensions, and implications directly with active, compelling journalistic prose!
-2. DEDICATED SLIDE 1 COVER ARCHETYPE ("monumental-editorial-cover"):
+1. NARRATIVE STORYTELLING ARC (NEVER AN ARTICLE SUMMARY):
+   - Do NOT write a flat, mechanical summary of the source article!
+   - Construct a dramatic, forward-moving narrative engine across the 10 slides:
+     * Slide 1: THE INCITING HOOK (Cover) — What surprising event happened, what is at stake, and why everything changes now.
+     * Slide 2: THE FLASHPOINT — The pivotal catalyst or trigger event that broke the equilibrium.
+     * Slide 3: THE HIDDEN DYNAMIC — What most people miss: the quiet structural vulnerability, underlying motive, or pre-existing tension.
+     * Slide 4: THE COLLISION / OPPOSING FRONTS — Direct clash of conflicting claims, opposing forces, or asymmetric strategies.
+     * Slide 5: THE TURNING POINT — The strategic escalation or breakthrough that crossed the point of no return.
+     * Slide 6: GROUND REALITY & SYSTEMIC TOLL — Hard verified numbers, operational disruption, or human and economic weight.
+     * Slide 7: THE UNINTENDED RIPPLE — Global or regional side effects (trade routes, diplomacy, market contagion, energy).
+     * Slide 8: THE HIGH-STAKES DILEMMA — The trap: what both sides are caught between and why easy exits failed.
+     * Slide 9: THE DECISIVE PRESSURE POINT — The looming deadline, bottleneck, political clock, or threshold that forces a climax.
+     * Slide 10: THE STRATEGIC VERDICT — The permanent shift in the landscape and the lingering question the reader must reckon with.
+
+2. STRICT BAN ON META-ATTRIBUTIONS:
+   - STRICTLY FORBIDDEN: Writing "The article states...", "The article says...", "According to the article...", "The supplied text...", "The account describes...", "The text notes...", or "sentence marked [update]".
+   - Report the reality itself directly with primary journalistic authority:
+     * BAD: "The article states that Umayyad forces demolished the city."
+     * GOOD: "Umayyad forces demolished the city and reduced its Roman foundations to ruins."
+     * BAD: "According to the report, 16 million tonnes of fertilizer were halted."
+     * GOOD: "16 million tonnes of global fertilizer shipments ground to a halt."
+
+3. DEDICATED SLIDE 1 COVER ARCHETYPE ("monumental-editorial-cover"):
    - Slide 1 is an ICONIC MAGAZINE COVER, NOT an internal technical schematic!
    - Must have "layoutTopology": "monumental-editorial-cover".
    - Must feature a bold, monumental headline (52px–72px), topic kicker badge, compelling narrative subheadline, and publication issue / reading time telemetry badge (e.g. "SPECIAL REPORT · 10 SLIDES").
    - STRICT BAN ON COVER DIAGRAMS: Do NOT put complex flowcharts, multiple callout boxes, or sprawling schematic diagrams on Slide 1!
-3. DIVERSE CONTENT-DRIVEN TOPOLOGIES FOR SLIDES 2–10:
-   - "layoutTopology" must suit 9:16 vertical storytelling:
+
+4. DIVERSE CONTENT-DRIVEN TOPOLOGIES FOR SLIDES 2–10:
+   - "layoutTopology" must suit vertical storytelling:
      * "ascending-stepped-timeline" or "vertical-milestone-spine" for chronological developments
      * "full-height-editorial-split" for opposing claims, dual intelligence timelines, or entity comparisons
      * "hero-metric-placard" for monumental statistics (e.g. "$47.1B") with editorial footnote cards
      * "three-row-verification-ledger" for structured registers or institutional positions
      * "asymmetric-editorial-cards" for contrasting strategic fronts
    - STRICT TOPOLOGY DIVERSITY MANDATE: You MUST use at least 5 different layout topologies across the 10 slides.
-4. RULE OF 3 ANTI-CRAMMING:
+
+5. RULE OF 3 ANTI-CRAMMING:
    - Maximum 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
    - Telemetry: Exactly 2 or 3 key metrics with signed numerical badges (e.g. "$47.1B", "2026", "2035", "+18%").
-5. STRICT WORD LIMITS (Anti-Overflow Guardrail):
+
+6. STRICT WORD LIMITS (Anti-Overflow Guardrail):
    - Headlines: Maximum 6–8 words.
    - Subheadlines: Maximum 10–14 words.
    - Cards / Points: Maximum 12–16 words per item! Every word must be punchy and high-signal.

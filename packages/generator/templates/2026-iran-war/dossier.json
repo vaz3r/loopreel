@@ -1,0 +1,132 @@
+{
+  "articleTitle": "Tipaza",
+  "publisher": "En",
+  "byline": "Staff Bureau",
+  "summary": "Tipaza, the capital of Algeria’s Tipaza Province, was known as Tipasa under Roman rule; the modern town was founded in 1857 and is a tourist destination chiefly for its ancient ruins and sandy littoral. Originally a Punic trading-post, the settlement became a Roman military colony and Christian hub with three basilicas, underwent destruction and reconstruction, and was settled again in the nineteenth century.",
+  "entities": [
+    {
+      "name": "Algeria",
+      "type": "Country",
+      "role": "Country containing Tipaza, the capital of Tipaza Province."
+    },
+    {
+      "name": "Roman Empire",
+      "type": "Organization",
+      "role": "Ancient imperial power that conquered the Punic trading-post known as Tipasa."
+    },
+    {
+      "name": "Claudius",
+      "type": "Person",
+      "role": "Emperor who turned Tipasa into a military colony for the conquest of the kingdoms of Mauretania."
+    },
+    {
+      "name": "Stéphane Gsell",
+      "type": "Person",
+      "role": "Attributed source for the population of 20,000 inhabitants in the fourth century at Colonia Aelia Tipasensis."
+    },
+    {
+      "name": "Vandals",
+      "type": "Organization",
+      "role": "Forces reported to have destroyed Tipasa in 430 CE."
+    },
+    {
+      "name": "Byzantines",
+      "type": "Organization",
+      "role": "Imperial power reported to have reconstructed Tipasa one century later."
+    },
+    {
+      "name": "Umayyad forces",
+      "type": "Organization",
+      "role": "Forces reported to have demolished the city at the end of the seventh century."
+    },
+    {
+      "name": "Algerian Broadcasting Company",
+      "type": "Organization",
+      "role": "Provider of French language Channel 3 radio programs broadcast by the Tipaza longwave transmitter at 252 kHz."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "1857",
+      "label": "Modern town foundation",
+      "context": "Year the modern town of Tipaza was founded."
+    },
+    {
+      "value": "20,000 inhabitants",
+      "label": "Ancient population",
+      "context": "Population of Colonia Aelia Tipasensis in the fourth century according to Stéphane Gsell."
+    },
+    {
+      "value": "three basilicas",
+      "label": "Christian religious infrastructure",
+      "context": "Tipasa was an important Christian hub during the last centuries of Roman governorship."
+    },
+    {
+      "value": "430 CE",
+      "label": "Vandal destruction",
+      "context": "Date given for the destruction of Tipasa by the Vandals."
+    },
+    {
+      "value": "one century later",
+      "label": "Byzantine reconstruction interval",
+      "context": "Reconstruction by the Byzantines followed the destruction in 430 CE."
+    },
+    {
+      "value": "the end of the seventh century",
+      "label": "Umayyad demolition",
+      "context": "Period when Umayyad forces demolished the city and reduced it to ruins."
+    },
+    {
+      "value": "the nineteenth century",
+      "label": "Resettlement",
+      "context": "Period when the site was settled again."
+    },
+    {
+      "value": "nearly 30,000 inhabitants",
+      "label": "Modern population description",
+      "context": "Population characterization given for the modern town."
+    },
+    {
+      "value": "252 kHz",
+      "label": "Longwave broadcasting frequency",
+      "context": "Frequency carrying French language Channel 3 programs, with reception in many parts of Europe."
+    },
+    {
+      "value": "March 17, 2014",
+      "label": "Transmitter outage start",
+      "context": "The Tipaza station had been out of service since this date before its reported return to broadcasting at 252 kHz."
+    }
+  ],
+  "verifiedQuotes": [],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Tipaza longwave transmitter",
+      "specs": [
+        "Located near Tipaza, Algeria.",
+        "Longwave frequency: 252 kHz.",
+        "Broadcasts French language Channel 3 radio programs from the Algerian Broadcasting Company.",
+        "Reception reported in many parts of Europe."
+      ],
+      "price": "N/A",
+      "availability": "Reported broadcasting again at 252 kHz after being out of service since March 17, 2014."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": null,
+    "criticismOrAlarm": null,
+    "regulatoryOrHistoricalPrecedent": "Claudius established Tipasa as a military colony for the conquest of the kingdoms of Mauretania; it subsequently became the municipium Colonia Aelia Tipasensis."
+  },
+  "hiddenCatchesAndLimits": [
+    "The ancient population of 20,000 inhabitants in the fourth century is attributed specifically to Stéphane Gsell; the modern population is described as nearly 30,000 inhabitants.",
+    "The modern town founded in 1857 followed ancient destruction, Byzantine reconstruction one century after 430 CE, and demolition at the end of the seventh century.",
+    "The transmitter’s reported return to broadcasting at 252 kHz followed an interruption beginning March 17, 2014."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": [
+      "Tipaza’s ancient ruins are the principal reason identified for its importance as a tourist destination in modern Algeria.",
+      "Tipaza and its surroundings are home to the Chenoua people, described as the largest Berber-speaking group of western Algeria; the majority of the Bouriba family also reside in this area.",
+      "The nearby transmitter carries French language Channel 3 programs at 252 kHz, with reception reported in many parts of Europe."
+    ]
+  }
+}

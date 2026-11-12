@@ -8,236 +8,363 @@
       "id": "slide-1",
       "index": 0,
       "type": "cover",
-      "kicker": "THE ZURICH TYPOGRAPHER",
-      "headline": "War During Nuclear Talks",
-      "subheadline": "The supplied article’s account, not an independently verified record.",
-      "visualStyle": "interrupted-diplomacy-hero",
-      "layoutTopology": "hero-diagram-with-callouts",
-      "svgBlueprint": "On #FFFFFF, interrupt a thin #000000 horizontal negotiation line with an #E60000 vertical slash. Place two callouts above and below the interruption. Reserve the upper third for the headline. Use #F5F5F5 behind the callouts. Diagram is conceptual, without quantitative scale.",
-      "items": [
+      "publication": "The Zurich Typographer",
+      "domain": "the-zurich-typographer.pub",
+      "kicker": "GEOPOLITICS / SPECIAL REPORT",
+      "headline": "The War That Outgrew Its Targets",
+      "subheadline": "Nuclear talks gave way to strikes, maritime blockades and global economic disruption.",
+      "issueBadge": "SPECIAL REPORT · 10 SLIDES",
+      "telemetry": [
         {
-          "label": "28 February 2026",
-          "body": "The article reports US and Israeli strikes during ongoing nuclear negotiations."
+          "value": "28 February 2026",
+          "label": "Opening US–Israeli strikes"
         },
         {
-          "label": "Opening assault",
-          "body": "The article describes hundreds of air strikes across Iran."
+          "value": "$47.1 billion",
+          "label": "Estimated US spending through Oct. 16"
         }
       ],
+      "palette": {
+        "paper": "#FFFFFF",
+        "ink": "#000000",
+        "accent": "#E60000",
+        "surface": "#F5F5F5"
+      },
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "svgBlueprint": "Use viewBox='0 0 540 960' with 36px safe margins. White paper, black typography, red accents and pale-gray surfaces throughout the series. Place publication masthead at y=44, red kicker at y=108, and a 68px bold grotesk headline across four manually wrapped lines. Position the 24px subheadline beneath. One interrupted red circle anchors the lower third. Stack two compact telemetry lines above the issue badge. No cards, arrows, maps or diagrams. Keep citations as readable source markers; never shrink body copy to accommodate them.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-2",
       "index": 1,
-      "type": "escalation-timeline",
-      "kicker": "THE PRECEDING CRISIS",
-      "headline": "The Escalation Before The War",
-      "subheadline": "The article traces the conflict through successive regional confrontations.",
-      "visualStyle": "stepped-escalation-chronology",
-      "layoutTopology": "ascending-three-step-timeline",
-      "svgBlueprint": "Draw three ascending #F5F5F5 terraces with #000000 date labels and #E60000 connectors. Place one text item inside each terrace. Keep generous gutters and equal text widths. State visually through equal connector lengths that spacing is schematic, not elapsed time.",
-      "items": [
+      "type": "timeline",
+      "kicker": "PRELUDE / ESCALATION",
+      "headline": "Diplomacy Under a Gathering Arsenal",
+      "subheadline": "The military buildup accelerated while nuclear negotiations remained underway.",
+      "cards": [
         {
-          "label": "2023",
-          "body": "The Gaza war triggered the broader Middle Eastern crisis."
+          "title": "The preceding war",
+          "body": "Israel’s Operation Rising Lion preceded the new campaign during the Twelve-Day War."
         },
         {
-          "label": "June 2025",
-          "body": "The Twelve-Day War involved Israel, Iran, and the United States."
+          "title": "The buildup",
+          "body": "Washington assembled its largest regional military buildup since the 2003 invasion of Iraq."
         },
         {
-          "label": "January–February 2026",
-          "body": "US regional buildup was the largest since the 2003 invasion of Iraq."
+          "title": "The rupture",
+          "body": "Hundreds of US–Israeli air strikes began during ongoing nuclear negotiations."
         }
       ],
+      "telemetry": [
+        {
+          "value": "June 2025",
+          "label": "Twelve-Day War"
+        },
+        {
+          "value": "January–February 2026",
+          "label": "Prewar US buildup"
+        },
+        {
+          "value": "28 February 2026",
+          "label": "Opening strikes"
+        }
+      ],
+      "visualStyle": "Swiss chronological staircase",
+      "layoutTopology": "ascending-stepped-timeline",
+      "svgBlueprint": "Maintain the cover palette and 540×960 canvas. Set a 46px headline above three ascending platforms, read chronologically from bottom-left to top-right. Place June 2025 at y=710, the buildup at y=530, and opening strikes at y=350. Integrate each telemetry badge directly into its corresponding platform rather than adding another dashboard. Use black hairline steps and a red terminal marker. Bodies use 22px text, maximum four lines, with generous separation.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-3",
       "index": 2,
-      "type": "sanctions-sequence",
-      "kicker": "ECONOMIC PRESSURE",
-      "headline": "Sanctions Preceded The Currency Collapse",
-      "subheadline": "The article links renewed sanctions to mounting economic pressure.",
-      "visualStyle": "descending-currency-editorial",
-      "layoutTopology": "vertical-sequence-with-quote-footer",
-      "svgBlueprint": "Use a narrow #000000 vertical spine beside two stacked editorial sections. Mark each date with a small #E60000 square. Set Bessent’s quotation inside the second section, not a separate card. Avoid exchange-rate charts because no currency values are supplied.",
-      "items": [
+      "type": "operation-register",
+      "kicker": "OPENING CAMPAIGN / THREE ACTORS",
+      "headline": "Three Codenames, One Expanding War",
+      "subheadline": "Leadership strikes triggered retaliation against Israel, US bases and regional allies.",
+      "cards": [
         {
-          "label": "September 2025",
-          "body": "UN sanctions snapback accompanied currency depreciation and higher food prices."
+          "title": "Operation Epic Fury",
+          "body": "Washington’s opening campaign joined Israeli attacks; the combined assault killed Supreme Leader Ali Khamenei."
         },
         {
-          "label": "December 2025",
-          "body": "Treasury Secretary Scott Bessent called Iran’s currency collapse the strategy’s “grand culmination.”"
+          "title": "Operation Roaring Lion",
+          "body": "Israel’s opening campaign followed Operation Rising Lion during the Twelve-Day War."
+        },
+        {
+          "title": "Operation True Promise IV",
+          "body": "Iran answered with missiles, drones and a blockade of the Strait of Hormuz."
         }
       ],
+      "telemetry": [
+        {
+          "value": "28 February 2026",
+          "label": "Opening attacks and Iranian response"
+        },
+        {
+          "value": "June 2025",
+          "label": "Operation Rising Lion predecessor"
+        }
+      ],
+      "visualStyle": "asymmetric operational broadsheet",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Use a 540×960 white canvas and 36px margins. Under the headline, place a wide black Epic Fury card with white text, a narrower pale-gray Roaring Lion card offset right, and a full-width outlined True Promise IV card. Mark the response with a red left rule, not an explosion icon. Titles use 27px type and bodies 22px. Keep cards vertically separated and non-overlapping. Position the two date badges in a restrained footer strip.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-4",
       "index": 3,
-      "type": "claim-comparison",
-      "kicker": "THE MISSILE RATIONALE",
-      "headline": "A Claim Meets An Intelligence Timeline",
-      "subheadline": "The article contrasts Trump’s characterization with a later intelligence horizon.",
-      "visualStyle": "opposed-claim-typographic-split",
-      "layoutTopology": "full-height-editorial-split",
-      "svgBlueprint": "Divide the canvas into two full-height editorial columns with a thin #E60000 rule. Use #FFFFFF left and #F5F5F5 right. Place February 2026 and 2035 as large typographic anchors, preserving all explanatory text below. Do not draw missiles, ranges, or implied capability measurements.",
-      "items": [
+      "type": "comparison",
+      "kicker": "WAR RATIONALE / INTELLIGENCE",
+      "headline": "The Threat Had Competing Timelines",
+      "subheadline": "Presidential warnings and intelligence assessments addressed different horizons of missile development.",
+      "cards": [
         {
-          "label": "Trump · February 2026",
-          "body": "Claimed Iran was developing missiles capable of striking the United States."
+          "title": "Trump’s warning",
+          "body": "Trump said Iran was developing US-reaching missiles and had restarted its supposedly “obliterated” nuclear program."
         },
         {
-          "label": "US intelligence · 2035",
-          "body": "Reports indicated Iran needed until 2035 to build missiles threatening the US."
+          "title": "The intelligence horizon",
+          "body": "A cited US intelligence assessment placed development of missiles capable of striking America at 2035."
         }
       ],
+      "telemetry": [
+        {
+          "value": "February 2026",
+          "label": "Trump’s threat claims"
+        },
+        {
+          "value": "2035",
+          "label": "Reported missile-development horizon"
+        }
+      ],
+      "visualStyle": "opposed typographic columns",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "Below the headline band, divide the 540×960 canvas into two tall columns separated by a red 2px rule. Use white on the left and pale gray on the right, with black text throughout. Anchor February 2026 and 2035 at matching heights in 34px type. Place each corresponding claim beneath its badge in 22px manually wrapped text. Leave substantial empty space below. Do not draw a proportional timeline or imply a quantified probability.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-5",
       "index": 4,
-      "type": "verification-boundaries",
-      "kicker": "NUCLEAR UNCERTAINTY",
-      "headline": "Unverified Does Not Mean Weaponizing",
-      "subheadline": "The article separates inspection access, unresolved verification, and evidence of weaponization.",
-      "visualStyle": "open-bracket-evidence-register",
-      "layoutTopology": "three-row-verification-ledger",
-      "svgBlueprint": "Create three spacious ledger rows separated by #000000 hairlines. Use an open #E60000 bracket for unresolved verification, a split doorway outline for access, and an unfilled circle for the reported weaponization finding. Keep symbols nonquantitative and subordinate to text; avoid green approval marks.",
-      "items": [
+      "type": "verification",
+      "kicker": "NUCLEAR FILE / THE HIDDEN CATCH",
+      "headline": "Destruction Is Not Nuclear Verification",
+      "subheadline": "Restricted access left inspectors unable to establish enrichment status or stockpile whereabouts.",
+      "cards": [
         {
-          "label": "Inspection access",
-          "body": "Iran denied access to bombed facilities but admitted inspectors to unaffected facilities."
+          "title": "Safeguards breached",
+          "body": "The IAEA Board found Iran non-compliant with its safeguards obligations."
         },
         {
-          "label": "Verification limits",
-          "body": "The IAEA could not verify suspended enrichment or confirm the stockpile’s status."
+          "title": "Iran’s objection",
+          "body": "Iran called normal safeguards implementation “legally untenable and materially impracticable,” citing attacks and continuing threats."
         },
         {
-          "label": "Weaponization evidence",
-          "body": "The article separately reports that the IAEA found no evidence of weaponization."
+          "title": "Inspectors’ limit",
+          "body": "The IAEA could not verify enrichment suspension or current uranium stocks; safeguards obligations remained binding."
         }
       ],
+      "telemetry": [
+        {
+          "value": "12 June 2025",
+          "label": "Non-compliance finding"
+        },
+        {
+          "value": "2 February 2026",
+          "label": "Iran’s communication"
+        },
+        {
+          "value": "27 February 2026",
+          "label": "IAEA report date"
+        }
+      ],
+      "visualStyle": "institutional verification register",
+      "layoutTopology": "three-row-verification-ledger",
+      "svgBlueprint": "Create three spacious ledger rows beneath a 46px headline on the standard 540×960 canvas. Each row contains its date badge, a 27px institutional heading and a 22px body. Use black horizontal rules and pale-gray alternate row backgrounds. A narrow red margin rule marks unresolved verification, without suggesting a weapons finding. Keep all three dates attached to their corresponding rows. Use no checkmarks: uncertainty must not resemble certification.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-6",
       "index": 5,
-      "type": "regional-spillover",
-      "kicker": "BEYOND IRAN",
-      "headline": "The Conflict Spread Beyond Airstrikes",
-      "subheadline": "Lebanon and the Strait of Hormuz became additional fronts in the account.",
-      "visualStyle": "regional-branch-schematic",
-      "layoutTopology": "central-spine-with-opposed-branches",
-      "svgBlueprint": "Run a #000000 spine through the center, branching left to a schematic land boundary and right to a narrow shipping passage. Place one text block beside each branch. Use #E60000 for the blocked passage and boundary interruption. Do not imply geographic accuracy, territorial extent, or shipping volumes.",
-      "items": [
+      "type": "timeline",
+      "kicker": "APRIL / THE FIRST TRUCE",
+      "headline": "A Ceasefire Without Regional Peace",
+      "subheadline": "Lebanon fighting and competing maritime restrictions undermined the diplomatic pause.",
+      "cards": [
         {
-          "label": "Lebanon · March",
-          "body": "Hezbollah–Israel fighting resumed; Israel began occupying southern Lebanon."
+          "title": "Two-week ceasefire",
+          "body": "Israeli airstrikes across Lebanon immediately strained the initial two-week truce."
         },
         {
-          "label": "Strait of Hormuz",
-          "body": "Iran blocked the strait; its sovereignty claim lacks established international recognition."
+          "title": "Islamabad fails",
+          "body": "Failed negotiations were followed by a US naval blockade on Iran."
+        },
+        {
+          "title": "Washington extends",
+          "body": "The United States announced an indefinite ceasefire; regional peace remained elusive."
         }
       ],
+      "telemetry": [
+        {
+          "value": "8 April",
+          "label": "Initial two-week ceasefire"
+        },
+        {
+          "value": "12–13 April",
+          "label": "Failed Islamabad Talks"
+        },
+        {
+          "value": "21 April",
+          "label": "Indefinite US ceasefire announcement"
+        }
+      ],
+      "visualStyle": "fractured diplomatic chronology",
+      "layoutTopology": "vertical-milestone-spine",
+      "svgBlueprint": "Run a thin black vertical spine at x=58 from y=310 to y=795 on a 540×960 white canvas. Place three red circular nodes in chronological order, with integrated date badges and body text to their right. Interrupt the spine with small white gaps after each milestone to suggest discontinuity, not measured duration. Use 30px date typography, 25px titles and 22px bodies. Keep a clear source footer and avoid additional callout boxes.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-7",
       "index": 6,
-      "type": "ceasefire-sequence",
-      "kicker": "APRIL DIPLOMACY",
-      "headline": "A Ceasefire Under Immediate Strain",
-      "subheadline": "Announcements and negotiations did not establish a lasting end to hostilities.",
-      "visualStyle": "broken-truce-horizontal-cadence",
-      "layoutTopology": "horizontal-three-station-timeline",
-      "svgBlueprint": "Arrange three equal-width date stations across a #FFFFFF canvas. Connect them with a thin #000000 line interrupted by #E60000 gaps. Place copy below each station with generous margins. Use equal schematic spacing rather than proportional elapsed-time distances.",
-      "items": [
+      "type": "timeline",
+      "kicker": "JUNE–JULY / AGREEMENT AND COLLAPSE",
+      "headline": "Signatures Could Not Secure the Strait",
+      "subheadline": "A war-ending memorandum failed to deliver durable passage through Hormuz.",
+      "cards": [
         {
-          "label": "8 April",
-          "body": "An initial two-week ceasefire began; Israeli Lebanon strikes strained it that day."
+          "title": "A memorandum signed",
+          "body": "Washington and Tehran signed a memorandum intended to end the war and lift their dual blockade."
         },
         {
-          "label": "12–13 April",
-          "body": "Islamabad Talks failed; the US imposed a blockade after Iran resumed its own."
+          "title": "A ceasefire resumed",
+          "body": "After renewed tension, the United States and Iran agreed to resume the ceasefire."
         },
         {
-          "label": "21 April",
-          "body": "The United States announced an indefinite ceasefire."
+          "title": "The agreement breaks",
+          "body": "The ceasefire collapsed amid Iranian attacks on commercial vessels in the Strait of Hormuz."
         }
       ],
+      "telemetry": [
+        {
+          "value": "17 June",
+          "label": "Memorandum signed"
+        },
+        {
+          "value": "28 June",
+          "label": "Ceasefire resumption agreement"
+        },
+        {
+          "value": "8 July",
+          "label": "Ceasefire collapse"
+        }
+      ],
+      "visualStyle": "documentary timeline with rupture",
+      "layoutTopology": "vertical-milestone-spine",
+      "svgBlueprint": "Use the shared 540×960 canvas but invert the composition: place the timeline spine at x=475 and align text blocks left. Integrate each date above its corresponding card. Render the first two nodes as black outlined squares; use a solid red square for 8 July. Break the connector before the final node. Preserve white paper and pale-gray document panels. Dates use 32px, titles 26px and bodies 22px. No decorative signatures or implied legal seals.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-8",
       "index": 7,
-      "type": "renewal-and-collapse",
-      "kicker": "JUNE TO JULY",
-      "headline": "Renewal Was Not Resolution",
-      "subheadline": "A memorandum and another ceasefire agreement preceded the reported collapse.",
-      "visualStyle": "descending-agreement-fracture",
-      "layoutTopology": "three-node-switchback-path",
-      "svgBlueprint": "Draw a broad switchback path through three vertically staggered text stations. Use #000000 for the first connections and an #E60000 break before the final station. Set stations on #F5F5F5 bands without enclosing cards. Avoid a closed loop that would imply an additional renewal.",
-      "items": [
+      "type": "economic-impact",
+      "kicker": "GLOBAL ECONOMY / MARITIME EXPOSURE",
+      "headline": "The Shock Travelled Beyond Oil",
+      "subheadline": "Disrupted shipping transmitted pressure through energy, fertilizer, transport and household budgets.",
+      "cards": [
         {
-          "label": "17 June",
-          "body": "The US and Iran reportedly signed a memorandum lifting the dual blockade."
+          "title": "Energy exposure",
+          "body": "Hormuz carried 25 per cent of global seaborne oil trade in 2024."
         },
         {
-          "label": "28 June",
-          "body": "After a brief escalation, both reportedly agreed to resume the ceasefire."
-        },
-        {
-          "label": "8 July",
-          "body": "The article attributes collapse to Iranian attacks on commercial vessels in Hormuz."
+          "title": "Agriculture exposure",
+          "body": "Persian Gulf seaborne fertilizer shipments totalled 16 million tonnes in 2024, exposing agriculture to disruption."
         }
       ],
+      "telemetry": [
+        {
+          "value": "25 per cent",
+          "label": "Global seaborne oil trade through Hormuz, 2024"
+        },
+        {
+          "value": "16 million tonnes",
+          "label": "Persian Gulf seaborne fertilizer shipments, 2024"
+        }
+      ],
+      "visualStyle": "paired commodity exposure placards",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Create two vertically staggered exposure cards on the standard 540×960 canvas. The upper white card uses a large black oil-trade figure; the lower pale-gray card uses a red fertilizer-shipment figure. Place 2024 baseline labels directly beneath both metrics so neither reads as a wartime loss. Integrate card copy below each badge. Use 44px metric type with deliberate wrapping, 22px bodies and thin black borders. Avoid proportional bars because the units differ.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-9",
       "index": 8,
-      "type": "cost-and-human-toll",
-      "kicker": "THE REPORTED COST",
-      "headline": "One Estimate, An Unresolved Human Toll",
-      "subheadline": "US military spending is not a comprehensive global economic cost.",
-      "visualStyle": "monumental-cost-with-evidence-footnote",
-      "layoutTopology": "oversized-metric-above-full-width-toll-band",
-      "svgBlueprint": "Set $47.1 billion as the dominant #000000 typographic element on #FFFFFF. Keep its attribution, October 2026 cutoff, and [update] marker immediately underneath. Add one full-width #F5F5F5 casualty band below, separated by an #E60000 rule. Do not chart casualties or compare incompatible units.",
-      "items": [
+      "type": "cost",
+      "kicker": "THE BILL / AN INCOMPLETE TOTAL",
+      "headline": "The Bill Was Not the Cost",
+      "subheadline": "The Pentagon’s estimate excluded damage to US bases in the Middle East.",
+      "cards": [
         {
-          "label": "$47.1 billion",
-          "body": "Estimated US military spending; Department of Defense, October 2026; sentence marked [update]."
+          "title": "Military accounting",
+          "body": "The estimate covered US war spending, not a separately itemized opening-operation budget."
         },
         {
-          "label": "Human toll",
-          "body": "Reported thousands of civilian and military casualties; no exact deaths-versus-injuries breakdown."
+          "title": "Costs beyond the ledger",
+          "body": "Base damage remained excluded; global energy, transport and household pressures lay beyond the military tally.​"
         }
       ],
+      "telemetry": [
+        {
+          "value": "$47.1 billion",
+          "label": "Estimated US war spending"
+        },
+        {
+          "value": "Oct. 16",
+          "label": "Accounting cutoff in the October 28, 2026 report"
+        }
+      ],
+      "visualStyle": "monumental fiscal placard",
+      "layoutTopology": "hero-metric-placard",
+      "svgBlueprint": "On the shared 540×960 canvas, make the spending estimate the dominant element: '$47.1' in 108px black type with 'billion' immediately beneath in 52px. Keep the exact combined value legible. Place an outlined Oct. 16 cutoff badge below, explicitly labelled as 2026 accounting. Stack two pale-gray footnote cards in the lower third with 22px bodies. A red underline emphasizes 'estimate'. Do not use a pie chart or imply a complete economic total.",
       "platform": "instagram-stories"
     },
     {
       "id": "slide-10",
       "index": 9,
-      "type": "source-limits-debrief",
-      "kicker": "THE EVIDENCE BOUNDARY",
-      "headline": "An Account, Not Independent Verification",
-      "subheadline": "The dossier’s limits remain part of the story.",
-      "visualStyle": "open-document-editorial-colophon",
-      "layoutTopology": "annotated-document-with-margin-notes",
-      "svgBlueprint": "Draw an oversized open document outline in #000000, with an unfinished lower edge indicating the truncated source. Place two margin notes connected by thin #E60000 leaders. Use #F5F5F5 behind the document and ample #FFFFFF whitespace. Include no invented citations, seals, or verification badges.",
-      "items": [
+      "type": "verdict",
+      "kicker": "VERDICT / WHAT SETTLEMENT REQUIRES",
+      "headline": "Peace Must Be Verified, Not Declared",
+      "subheadline": "Judge settlement by nuclear access, navigable seas and an end to regional fighting.",
+      "cards": [
         {
-          "label": "Provenance",
-          "body": "Dossier labels do not establish independent verification; publisher and byline are user-provided."
+          "title": "Verify the nuclear position",
+          "body": "Require inspector access and material accounting; destroyed facilities cannot certify the disappearance of nuclear capability."
         },
         {
-          "label": "Completeness",
-          "body": "The supplied text ends mid-citation; referenced naval-loss and aviation-loss lists are absent."
+          "title": "Secure commercial passage",
+          "body": "Judge ceasefires by safe navigation and regional restraint, not signatures alone.​"
+        },
+        {
+          "title": "Count the wider burden",
+          "body": "Keep military spending separate from omitted base damage and global economic consequences.​"
         }
       ],
+      "telemetry": [
+        {
+          "value": "27 February 2026",
+          "label": "IAEA verification warning"
+        },
+        {
+          "value": "8 July",
+          "label": "Ceasefire collapse"
+        },
+        {
+          "value": "$47.1 billion",
+          "label": "Incomplete US cost estimate through Oct. 16"
+        }
+      ],
+      "visualStyle": "closing editorial accountability ledger",
+      "layoutTopology": "three-row-verification-ledger",
+      "svgBlueprint": "Return to the cover’s strong Swiss typography on a 540×960 white canvas. Set the verdict headline at 50px across three lines. Below it, arrange three open ledger rows with black dividing rules and red left-edge squares. Each row combines its historical evidence badge, action heading and 22px body; badges are reminders, not future deadlines. End with a heavy black rule and the publication domain. No victory symbols, checkmarks or decorative charts.",
       "platform": "instagram-stories"
     }
   ]

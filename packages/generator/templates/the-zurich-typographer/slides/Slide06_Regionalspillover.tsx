@@ -139,20 +139,20 @@ export default function Slide06({ slide }: SlideComponentProps) {
           <div className="col-start-1 row-start-1 flex flex-col justify-end pb-6">
             <div className="mb-5 h-[4px] w-14 bg-[var(--accent)]" />
             <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
-              {items?.label}
+              {items?.[0]?.label}
             </h2>
             <p className="mt-4 font-[var(--font-body)] text-[28px] leading-snug">
-              {items?.body}
+              {items?.[0]?.body}
             </p>
           </div>
 
           <div className="col-start-3 row-start-2 flex flex-col justify-end">
             <div className="mb-5 h-[4px] w-14 bg-[var(--accent)]" />
             <h2 className="font-[var(--font-headline)] text-[36px] font-semibold leading-tight tracking-[-0.025em]">
-              {items?.label}
+              {items?.[1]?.label}
             </h2>
             <p className="mt-4 font-[var(--font-body)] text-[28px] leading-snug">
-              {items?.body}
+              {items?.[1]?.body}
             </p>
           </div>
         </div>

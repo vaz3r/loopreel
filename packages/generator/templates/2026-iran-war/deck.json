@@ -1,0 +1,269 @@
+{
+  "templateName": "Custom Brand",
+  "templateSlug": "2026-iran-war",
+  "domain": "2026-iran-war.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "publication": "Custom Brand",
+      "publicationDomain": "2026-iran-war.pub",
+      "issueBadge": "SPECIAL REPORT · 10 SLIDES",
+      "palette": {
+        "paper": "#0D0E12",
+        "ink": "#F1F3F9",
+        "accent": "#FF4D00",
+        "surface": "#161820"
+      },
+      "kicker": "ALGERIA / HISTORY & SIGNAL",
+      "headline": "Tipaza: Ruins With a Voice",
+      "subheadline": "An Algerian town connects ancient remains with a longwave voice reaching Europe.",
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "telemetry": [
+        {
+          "badge": "1857",
+          "label": "Modern town founded"
+        },
+        {
+          "badge": "252 kHz",
+          "label": "Longwave frequency"
+        }
+      ],
+      "svgBlueprint": "Use a 540×960 viewBox with 40px safe margins. Apply the specified palette throughout the carousel. Set Custom Brand above an orange kicker capsule. Stack the headline at 68px over three lines; place the subheadline beneath at 25px. Use one abstract broken-column silhouette intersected by a single orange wave. Place two compact telemetry badges above the issue footer. No cards, connectors, maps, or schematic diagrams. Reserve a bottom source strip for inline citation markers.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "ROMAN TIPASA / CIVIC SCALE",
+      "headline": "A City Before the Ruins",
+      "subheadline": "Roman Tipasa combined urban scale with an important Christian presence.",
+      "visualStyle": "archaeological-type-monument",
+      "layoutTopology": "hero-metric-placard",
+      "telemetry": [
+        {
+          "badge": "20,000 inhabitants",
+          "label": "Fourth-century population",
+          "body": "Stéphane Gsell attributed this population to Colonia Aelia Tipasensis in the fourth century."
+        },
+        {
+          "badge": "three basilicas",
+          "label": "Christian infrastructure",
+          "body": "The city became an important Christian hub during the last centuries of Roman governorship."
+        }
+      ],
+      "svgBlueprint": "Maintain the 540×960 canvas and palette. Use a 44px headline above monumental 84px population numerals; place inhabitants separately at 24px without abbreviating the value. Anchor the attribution directly underneath. Give the basilica metric one shallow Surface panel with three simple architectural arches. These are the only two content units. Use 24px body text and a discreet source footer.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "timeline",
+      "kicker": "DESTRUCTION / RECONSTRUCTION",
+      "headline": "Destruction Was Not the End",
+      "subheadline": "Vandal destruction preceded Byzantine reconstruction, but recovery did not secure permanence.",
+      "visualStyle": "fractured-stone-chronology",
+      "layoutTopology": "ascending-stepped-timeline",
+      "telemetry": [
+        {
+          "badge": "430 CE",
+          "label": "Vandal destruction",
+          "body": "The Vandals destroyed Tipasa."
+        },
+        {
+          "badge": "one century later",
+          "label": "Byzantine reconstruction",
+          "body": "The Byzantines rebuilt the city after its destruction in 430 CE."
+        }
+      ],
+      "svgBlueprint": "Use two broad steps ascending from lower left to upper right within the middle 560px. Label the lower step 430 CE and the upper step one century later; keep the interval wording intact. Draw one broken Ink baseline that resumes in Accent beside reconstruction. Headline 44px, badges 38px, bodies 25px. The steps indicate sequence, not a measured time scale.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "timeline",
+      "kicker": "DEMOLITION / RESETTLEMENT",
+      "headline": "Another Rupture, Then a Return",
+      "subheadline": "Umayyad demolition preceded resettlement in the nineteenth century.",
+      "visualStyle": "negative-space-historical-spine",
+      "layoutTopology": "vertical-milestone-spine",
+      "telemetry": [
+        {
+          "badge": "the end of the seventh century",
+          "label": "Umayyad demolition",
+          "body": "Umayyad forces demolished the city and reduced it to ruins."
+        },
+        {
+          "badge": "the nineteenth century",
+          "label": "Resettlement",
+          "body": "The site was settled again."
+        }
+      ],
+      "svgBlueprint": "Place two milestone blocks beside a thin vertical Accent spine. Wrap each period badge into short lines at 30px rather than inventing exact years. Leave a large unlabelled gap between milestones; use a broken spine to signal discontinuity without implying a quantified duration. Set headline at 44px and body text at 25px. No additional historical nodes.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "context",
+      "kicker": "MODERN TIPAZA / NEW FOUNDATIONS",
+      "headline": "The Modern Town Takes Shape",
+      "subheadline": "A modern settlement grew beside remains that now draw visitors.",
+      "visualStyle": "civic-foundation-date-plate",
+      "layoutTopology": "hero-metric-placard",
+      "telemetry": [
+        {
+          "badge": "1857",
+          "label": "Modern foundation",
+          "body": "The modern town of Tipaza was founded in 1857."
+        },
+        {
+          "badge": "nearly 30,000 inhabitants",
+          "label": "Modern population description",
+          "body": "Ancient ruins are the principal reason for Tipaza’s importance as a tourist destination."
+        }
+      ],
+      "svgBlueprint": "Center 1857 at 112px beneath the headline, framed by thin architectural rules. Place its explanatory sentence immediately below. Build one lower Surface placard for nearly 30,000 inhabitants, retaining nearly at the same visual prominence as the number. Add a restrained ruin-outline watermark behind the lower placard. Use two content units, 25px bodies, and no population chart.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "comparison",
+      "kicker": "POPULATION / THE ESSENTIAL CAVEAT",
+      "headline": "Two Populations, Different Evidentiary Weight",
+      "subheadline": "An attributed ancient estimate and an approximate modern description resist neat comparison.",
+      "visualStyle": "paired-demographic-editorial",
+      "layoutTopology": "full-height-editorial-split",
+      "telemetry": [
+        {
+          "badge": "20,000 inhabitants",
+          "label": "Ancient Tipasa",
+          "body": "The fourth-century population is attributed specifically to Stéphane Gsell."
+        },
+        {
+          "badge": "nearly 30,000 inhabitants",
+          "label": "Modern Tipaza",
+          "body": "The modern population description is approximate and carries no accompanying census date."
+        }
+      ],
+      "svgBlueprint": "Divide the content area into two tall panels below a shared 42px headline. Use Paper for ancient Tipasa and Surface for modern Tipaza, separated by a thin orange rule. Wrap both population values at 36px; never reduce them to 20K or 30K. Keep nearly visible. Place short explanations beneath at 23px. Do not draw proportional bars, growth arrows, or calculated percentages.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "culture",
+      "kicker": "LIVING TIPAZA / BEYOND THE RUINS",
+      "headline": "The Town Is Not a Museum",
+      "subheadline": "Ancient remains attract visitors; Chenoua communities belong to the living landscape.",
+      "telemetry": [
+        {
+          "badge": "1857",
+          "label": "Modern town foundation"
+        },
+        {
+          "badge": "nearly 30,000 inhabitants",
+          "label": "Modern population description"
+        }
+      ],
+      "cards": [
+        {
+          "title": "The visitor’s destination",
+          "body": "Tipaza’s ancient ruins underpin its importance as a tourist destination in modern Algeria."
+        },
+        {
+          "title": "The living community",
+          "body": "Tipaza and its surroundings house the Chenoua, western Algeria’s largest Berber-speaking group, and most Bouriba family members."
+        }
+      ],
+      "visualStyle": "living-landscape-editorial",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "Use two vertically stacked, offset cards: a shallow heritage card above a taller community card. Attach the 1857 badge to the first card and the population badge to the second, keeping labels explicit so neither implies community-specific population. Headline 44px; card titles 28px; bodies 24px. Use abstract masonry lines above and a warm orange horizon below. No invented portraits or cultural motifs.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-8",
+      "index": 7,
+      "type": "technology",
+      "kicker": "LONGWAVE / ACROSS THE MEDITERRANEAN",
+      "headline": "A Voice Beyond the Shore",
+      "subheadline": "The nearby transmitter carries French-language radio, with reception reported across Europe.",
+      "visualStyle": "longwave-frequency-poster",
+      "layoutTopology": "hero-metric-placard",
+      "telemetry": [
+        {
+          "badge": "252 kHz",
+          "label": "Longwave frequency",
+          "body": "Reception is reported in many parts of Europe."
+        },
+        {
+          "badge": "Channel 3",
+          "label": "French-language service",
+          "body": "The Tipaza longwave transmitter carries Algerian Broadcasting Company programs from near Tipaza, Algeria."
+        }
+      ],
+      "svgBlueprint": "Set 252 at 116px with kHz at 42px beside it. Place one minimal mast silhouette below, emitting two thin Accent arcs. Integrate Channel 3 into a lower Surface service panel, with its body beneath. Keep the arcs decorative: no map, coverage boundary, or distance scale. Use a 44px headline and 25px body text.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-9",
+      "index": 8,
+      "type": "verification",
+      "kicker": "BROADCAST STATUS / HISTORICAL RECORD",
+      "headline": "The Signal Also Fell Silent",
+      "subheadline": "A reported return followed an outage beginning March 17, 2014.",
+      "visualStyle": "interrupted-signal-status-ledger",
+      "layoutTopology": "three-row-verification-ledger",
+      "telemetry": [
+        {
+          "badge": "March 17, 2014",
+          "label": "Outage began",
+          "body": "The station had been out of service since this date before its reported return."
+        },
+        {
+          "badge": "252 kHz",
+          "label": "Reported return frequency",
+          "body": "The reported return is supported by a listening note dated 2015 Sept. 22."
+        }
+      ],
+      "cards": [
+        {
+          "title": "Historical, not live",
+          "body": "A historical reception report does not establish present-day operating status."
+        }
+      ],
+      "svgBlueprint": "Build exactly three full-width ledger rows: outage, reported return, and present-day verification caution. Attach the two telemetry badges to their respective rows; the third row has no metric. Set the full outage date across two lines at 34px. Run a decorative waveform through the first two row margins, interrupted then resumed. Use 24px bodies; avoid green live-status indicators.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-10",
+      "index": 9,
+      "type": "verdict",
+      "kicker": "THE TAKEAWAY / STONE & SIGNAL",
+      "headline": "Read the Ruins, Hear the Town",
+      "subheadline": "Tipaza’s story joins ancient remains, modern settlement, and radio reaching beyond Algeria.",
+      "visualStyle": "stone-and-signal-closing-diptych",
+      "layoutTopology": "full-height-editorial-split",
+      "telemetry": [
+        {
+          "badge": "1857",
+          "label": "Modern town founded",
+          "body": "Ancient ruins anchor tourism; the modern town has its own history."
+        },
+        {
+          "badge": "252 kHz",
+          "label": "Reported longwave reach",
+          "body": "French-language Channel 3 connects the local transmitter with listeners in many parts of Europe."
+        }
+      ],
+      "svgBlueprint": "Create a closing diptych with two tall fields beneath a 46px headline. The left field contains a minimal broken-column silhouette and the 1857 badge; the right contains a single wave arc and the 252 kHz badge. Keep both bodies at 24px inside their own fields. Join the silhouettes with one shared horizon, not an arrow. End with Custom Brand and a compact source strip.",
+      "platform": "instagram-feed"
+    }
+  ]
+}

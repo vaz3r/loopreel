@@ -68,7 +68,7 @@ export function CreateJobPage() {
 
     if (activePreset) {
       input.brandKit = activePreset;
-    } else if (brandKit && Object.keys(brandKit).length > 0) {
+    } else if (selectedPresetSlug !== 'auto' && brandKit && Object.keys(brandKit).length > 0) {
       input.brandKit = brandKit;
     }
 

@@ -4,30 +4,30 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_Releasetimeline from './slides/Slide02_Releasetimeline';
-import Slide03_Mappingcomparison from './slides/Slide03_Mappingcomparison';
-import Slide04_Droneoptics from './slides/Slide04_Droneoptics';
-import Slide05_Droneconstraints from './slides/Slide05_Droneconstraints';
-import Slide06_Rovercapabilities from './slides/Slide06_Rovercapabilities';
-import Slide07_Roverbottleneck from './slides/Slide07_Roverbottleneck';
-import Slide08_Retentioncomparison from './slides/Slide08_Retentioncomparison';
-import Slide09_Privacyrecord from './slides/Slide09_Privacyrecord';
-import Slide10_Privacyverdict from './slides/Slide10_Privacyverdict';
+import Slide02_Escalationtimeline from './slides/Slide02_Escalationtimeline';
+import Slide03_Claimassessmentcomparison from './slides/Slide03_Claimassessmentcomparison';
+import Slide04_Inspectionaccesscomparison from './slides/Slide04_Inspectionaccesscomparison';
+import Slide05_Verificationdistinction from './slides/Slide05_Verificationdistinction';
+import Slide06_Ceasefiresequence from './slides/Slide06_Ceasefiresequence';
+import Slide07_Agreementbreakdown from './slides/Slide07_Agreementbreakdown';
+import Slide08_Spendingscope from './slides/Slide08_Spendingscope';
+import Slide09_Impactevidencelimits from './slides/Slide09_Impactevidencelimits';
+import Slide10_Sourceauditverdict from './slides/Slide10_Sourceauditverdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_Releasetimeline,
-  Slide03_Mappingcomparison,
-  Slide04_Droneoptics,
-  Slide05_Droneconstraints,
-  Slide06_Rovercapabilities,
-  Slide07_Roverbottleneck,
-  Slide08_Retentioncomparison,
-  Slide09_Privacyrecord,
-  Slide10_Privacyverdict,
+  Slide02_Escalationtimeline,
+  Slide03_Claimassessmentcomparison,
+  Slide04_Inspectionaccesscomparison,
+  Slide05_Verificationdistinction,
+  Slide06_Ceasefiresequence,
+  Slide07_Agreementbreakdown,
+  Slide08_Spendingscope,
+  Slide09_Impactevidencelimits,
+  Slide10_Sourceauditverdict,
   ],
 };
 

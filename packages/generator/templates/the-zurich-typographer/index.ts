@@ -4,30 +4,30 @@ import brandData from './brand.json';
 import deckData from './deck.json';
 
 import Slide01_Cover from './slides/Slide01_Cover';
-import Slide02_Escalationtimeline from './slides/Slide02_Escalationtimeline';
-import Slide03_Sanctionssequence from './slides/Slide03_Sanctionssequence';
-import Slide04_Claimcomparison from './slides/Slide04_Claimcomparison';
-import Slide05_Verificationboundaries from './slides/Slide05_Verificationboundaries';
-import Slide06_Regionalspillover from './slides/Slide06_Regionalspillover';
-import Slide07_Ceasefiresequence from './slides/Slide07_Ceasefiresequence';
-import Slide08_Renewalandcollapse from './slides/Slide08_Renewalandcollapse';
-import Slide09_Costandhumantoll from './slides/Slide09_Costandhumantoll';
-import Slide10_Sourcelimitsdebrief from './slides/Slide10_Sourcelimitsdebrief';
+import Slide02_Timeline from './slides/Slide02_Timeline';
+import Slide03_Operationregister from './slides/Slide03_Operationregister';
+import Slide04_Comparison from './slides/Slide04_Comparison';
+import Slide05_Verification from './slides/Slide05_Verification';
+import Slide06_Timeline from './slides/Slide06_Timeline';
+import Slide07_Timeline from './slides/Slide07_Timeline';
+import Slide08_Economicimpact from './slides/Slide08_Economicimpact';
+import Slide09_Cost from './slides/Slide09_Cost';
+import Slide10_Verdict from './slides/Slide10_Verdict';
 
 const pkg: TemplatePackage = {
   brand: brandData as any,
   deck: deckData as any,
   slides: [
   Slide01_Cover,
-  Slide02_Escalationtimeline,
-  Slide03_Sanctionssequence,
-  Slide04_Claimcomparison,
-  Slide05_Verificationboundaries,
-  Slide06_Regionalspillover,
-  Slide07_Ceasefiresequence,
-  Slide08_Renewalandcollapse,
-  Slide09_Costandhumantoll,
-  Slide10_Sourcelimitsdebrief,
+  Slide02_Timeline,
+  Slide03_Operationregister,
+  Slide04_Comparison,
+  Slide05_Verification,
+  Slide06_Timeline,
+  Slide07_Timeline,
+  Slide08_Economicimpact,
+  Slide09_Cost,
+  Slide10_Verdict,
   ],
 };
 

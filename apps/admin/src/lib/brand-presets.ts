@@ -139,9 +139,16 @@ export function getBrandPresets(): { curated: BespokeBrand[]; custom: BespokeBra
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const custom: BespokeBrand[] = raw ? JSON.parse(raw) : [];
+    const customMap = new Map(custom.map((c) => [c.slug, c]));
+    const effectiveCurated = CURATED_BRAND_PRESETS.map((curated) => {
+      return customMap.get(curated.slug) || curated;
+    });
+    const curatedSlugs = new Set(CURATED_BRAND_PRESETS.map((c) => c.slug));
+    const strictlyCustom = custom.filter((c) => !curatedSlugs.has(c.slug));
+
     return {
-      curated: CURATED_BRAND_PRESETS,
-      custom,
+      curated: effectiveCurated,
+      custom: strictlyCustom,
     };
   } catch {
     return {
@@ -182,6 +189,24 @@ export function deleteBrandPreset(slug: string): boolean {
     return true;
   } catch (err) {
     console.error('Failed to delete brand preset:', err);
+    return false;
+  }
+}
+
+export function resetBrandPreset(slug: string): boolean {
+  return deleteBrandPreset(slug);
+}
+
+export function isCuratedSlug(slug: string): boolean {
+  return CURATED_BRAND_PRESETS.some((c) => c.slug === slug);
+}
+
+export function isPresetOverridden(slug: string): boolean {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const custom: BespokeBrand[] = raw ? JSON.parse(raw) : [];
+    return custom.some((c) => c.slug === slug);
+  } catch {
     return false;
   }
 }

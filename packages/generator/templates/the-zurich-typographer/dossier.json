@@ -2,537 +2,279 @@
   "articleTitle": "2026 Iran war",
   "publisher": "En",
   "byline": "Staff Bureau",
-  "summary": "The supplied article states that the United States and Israel began a war against Iran and its regional allies on 28 February 2026, with strikes that assassinated Supreme Leader Ali Khamenei, followed by Iranian retaliation, regional fighting, and blockades of the Strait of Hormuz and Iran. It describes subsequent ceasefires and their breakdown, thousands of civilian and military casualties, an estimated $47.1 billion in US military spending as of October 2026, and widespread economic and political consequences; these are claims extracted from the supplied text, not independently verified findings.",
+  "summary": "The United States and Israel began attacking Iran on 28 February 2026 during nuclear negotiations, killing Supreme Leader Ali Khamenei and prompting Iranian retaliatory attacks and restrictions on shipping through the Strait of Hormuz. The conflict spread across the region, survived repeated ceasefire initiatives, caused thousands of civilian and military casualties, and generated a global energy and cost-of-living crisis, with US military spending estimated at $47.1 billion as of October 2026.",
   "entities": [
     {
       "name": "United States",
       "type": "Country",
-      "role": "Launched strikes against Iran with Israel; subsequently imposed a naval blockade on Iran and participated in ceasefire negotiations."
+      "role": "Jointly initiated strikes on Iran on 28 February 2026 and subsequently imposed a naval blockade after the failure of the Islamabad Talks on 12–13 April."
     },
     {
       "name": "Israel",
       "type": "Country",
-      "role": "Launched strikes against Iran with the United States; fought Hezbollah and began occupying southern Lebanon."
+      "role": "Jointly attacked Iran, targeted its leadership, and began occupying southern Lebanon after fighting with Hezbollah resumed in March."
     },
     {
       "name": "Iran",
       "type": "Country",
-      "role": "Target of US–Israeli strikes; retaliated against Israel, US military bases, and regional US allies, and blocked the Strait of Hormuz."
-    },
-    {
-      "name": "Ali Khamenei",
-      "type": "Person",
-      "role": "Iranian supreme leader whom the article reports was assassinated in the opening strikes; previously issued a fatwa against nuclear weapons."
-    },
-    {
-      "name": "Mojtaba Khamenei",
-      "type": "Person",
-      "role": "Ali Khamenei's son, elected supreme leader after his father's assassination."
+      "role": "Responded with missile and drone attacks against Israel, US bases and regional US allies; blocked the Strait of Hormuz and claimed sovereignty over it."
     },
     {
       "name": "Donald Trump",
       "type": "Person",
-      "role": "US president who authorized Operation Epic Fury; advanced claims about Iran's nuclear and missile programs."
+      "role": "US president who authorized Operation Epic Fury and advanced changing war objectives involving regime change, nuclear restrictions and reopening the Strait of Hormuz."
     },
     {
       "name": "Benjamin Netanyahu",
       "type": "Person",
-      "role": "Israeli prime minister who lobbied Trump for a joint strike targeting Iran's leadership and provided intelligence described as influential in the decision."
+      "role": "Israeli prime minister who lobbied Trump in early 2026 for joint strikes targeting Iran's leadership."
     },
     {
-      "name": "United Arab Emirates",
-      "type": "Country",
-      "role": "The article reports that it attacked Iran and skirmished with Iran's Iraqi non-state allies after strikes on its territory."
+      "name": "Ali Khamenei",
+      "type": "Person",
+      "role": "Iranian supreme leader killed in the opening US–Israeli attacks on 28 February 2026."
     },
     {
-      "name": "Saudi Arabia",
-      "type": "Country",
-      "role": "The article reports that it attacked Iran and skirmished with Iran's Iraqi non-state allies after strikes on its territory."
-    },
-    {
-      "name": "Kuwait",
-      "type": "Country",
-      "role": "The article reports that it attacked Iran and skirmished with Iran's Iraqi non-state allies after strikes on its territory."
-    },
-    {
-      "name": "Bahrain",
-      "type": "Country",
-      "role": "The article reports that it attacked Iran and skirmished with Iran's Iraqi non-state allies after strikes on its territory."
-    },
-    {
-      "name": "Qatar",
-      "type": "Country",
-      "role": "Warned that escalation could severely harm the region."
+      "name": "Mojtaba Khamenei",
+      "type": "Person",
+      "role": "Ali Khamenei's son, selected as Iran's new supreme leader after his father's death."
     },
     {
       "name": "Hezbollah",
       "type": "Organization",
-      "role": "Iran-backed militia whose fighting with Israel resumed in March."
-    },
-    {
-      "name": "Hamas",
-      "type": "Organization",
-      "role": "Iran-backed militia identified among those Israel fought following the October 7 attacks and the start of the Gaza war."
+      "role": "Iran-backed Lebanese organization whose fighting with Israel resumed in March."
     },
     {
       "name": "Houthis",
       "type": "Organization",
-      "role": "Iran-backed militia identified among those Israel fought during the regional escalation."
+      "role": "Iran-backed Yemeni forces involved in escalating conflict with Saudi Arabia and threats to shipping around Bab al-Mandab."
     },
     {
-      "name": "Axis of Resistance",
-      "type": "Alliance",
-      "role": "Informal grouping of Iranian proxy organizations described as countering American, Israeli, Saudi, Emirati, and sometimes Turkish influence."
+      "name": "United Arab Emirates",
+      "type": "Country",
+      "role": "Attacked Iran and skirmished with its Iraqi non-state allies after strikes on Emirati territory."
+    },
+    {
+      "name": "Saudi Arabia",
+      "type": "Country",
+      "role": "Attacked Iran after strikes on its territory and fought Houthi forces threatening Saudi territory and maritime exports.​"
+    },
+    {
+      "name": "Kuwait",
+      "type": "Country",
+      "role": "Attacked Iran and skirmished with its Iraqi non-state allies after strikes on Kuwaiti territory."
+    },
+    {
+      "name": "Bahrain",
+      "type": "Country",
+      "role": "Attacked Iran and skirmished with its Iraqi non-state allies after strikes on Bahraini territory."
+    },
+    {
+      "name": "Qatar",
+      "type": "Country",
+      "role": "Warned before the war that escalation could severely harm the region."
     },
     {
       "name": "United Nations",
-      "type": "International organization",
-      "role": "Its secretary-general condemned the US–Israeli strikes; the organization reimposed sanctions on Iran in September 2025."
+      "type": "Organization",
+      "role": "Its secretary-general condemned the US–Israeli strikes."
     },
     {
       "name": "United Nations Security Council",
-      "type": "International body",
-      "role": "Condemned Iran's retaliatory strikes on Gulf states and previously imposed sanctions concerning Iran's nuclear program."
-    },
-    {
-      "name": "US Department of Defense",
-      "type": "Government agency",
-      "role": "Source attributed with the estimate of $47.1 billion in US military spending as of October 2026."
-    },
-    {
-      "name": "Republican Party",
-      "type": "Political party",
-      "role": "The article attributes its loss of the government trifecta in the 2026 US midterm elections to the war's economic effects."
-    },
-    {
-      "name": "American Israel Public Affairs Committee (AIPAC)",
       "type": "Organization",
-      "role": "Named in the article's discussion of pro-Israel lobbying, blocked war powers resolutions, and continued support for the conflict."
+      "role": "Condemned Iranian retaliatory strikes on Gulf states and previously imposed sanctions concerning Iran's nuclear program."
     },
     {
-      "name": "Mohammad Mosaddegh",
-      "type": "Person",
-      "role": "Democratically-elected Iranian prime minister deposed in the US- and UK-backed coup d'état in 1953."
-    },
-    {
-      "name": "Mohammad Reza Pahlavi",
-      "type": "Person",
-      "role": "Shah whose rule was strengthened by the 1953 coup and who was overthrown in the 1979 revolution."
-    },
-    {
-      "name": "United Kingdom",
-      "type": "Country",
-      "role": "Supported the 1953 coup; its diplomatic efforts toward a Middle East nuclear weapon free zone are discussed."
-    },
-    {
-      "name": "Turkey",
-      "type": "Country",
-      "role": "Identified as the Muslim-majority country that recognized Israel before Pahlavi Iran."
-    },
-    {
-      "name": "Iraq",
-      "type": "Country",
-      "role": "Fought Iran in the Iran–Iraq War and received US support."
-    },
-    {
-      "name": "Qasem Soleimani",
-      "type": "Person",
-      "role": "Commander of the Iranian Quds Force whose assassination Trump ordered in January 2020."
-    },
-    {
-      "name": "Ismail Haniyeh",
-      "type": "Person",
-      "role": "His assassination in 2024 is identified among events followed by Iranian strikes on Israel."
-    },
-    {
-      "name": "Hassan Nasrallah",
-      "type": "Person",
-      "role": "His assassination in 2024 is identified among events followed by Iranian strikes on Israel."
-    },
-    {
-      "name": "Scott Bessent",
-      "type": "Person",
-      "role": "US Treasury Secretary who described the December 2025 collapse of Iran's currency as the strategy's \"grand culmination\"."
-    },
-    {
-      "name": "International Atomic Energy Agency (IAEA)",
-      "type": "International organization",
-      "role": "Found Iran non-compliant with its NPT safeguards agreement on 12 June 2025; later could not verify suspension of enrichment or the status of Iran's stockpile, while finding no evidence of weaponization."
+      "name": "International Atomic Energy Agency",
+      "type": "Organization",
+      "role": "Found Iran non-compliant with its safeguards agreement on 12 June 2025 and subsequently faced restrictions preventing verification of enrichment suspension and uranium stocks.​"
     },
     {
       "name": "Mohammad Eslami",
       "type": "Person",
-      "role": "Head of the Atomic Energy Organization of Iran who set conditions for inspections of facilities struck by the United States."
+      "role": "Head of the Atomic Energy Organization of Iran who demanded post-attack inspection protocols and IAEA condemnation of attacks before inspections of struck facilities."
     },
     {
-      "name": "Atomic Energy Organization of Iran",
-      "type": "Government organization",
-      "role": "Iranian nuclear organization headed by Mohammad Eslami."
+      "name": "Scott Bessent",
+      "type": "Person",
+      "role": "US Treasury secretary who characterized Iran's December 2025 currency collapse as the culmination of economic pressure."
+    },
+    {
+      "name": "US Department of Defense",
+      "type": "Organization",
+      "role": "Provided the $47.1 billion estimate of US military spending as of October 2026.​"
     },
     {
       "name": "Bulletin of the Atomic Scientists",
-      "type": "Publication",
-      "role": "Characterized Iran's enrichment program and uranium stockpiles as leverage in negotiations."
+      "type": "Organization",
+      "role": "Described Iran's enrichment program and uranium stocks as negotiating leverage and reported willingness to dilute or export higher-level enriched uranium for sanctions relief and protection from attacks."
     },
     {
-      "name": "P5+1",
-      "type": "Diplomatic grouping",
-      "role": "Party to the 2015 Joint Comprehensive Plan of Action with Iran and the EU."
-    },
-    {
-      "name": "EU",
-      "type": "Political union",
-      "role": "Party to the 2015 Joint Comprehensive Plan of Action."
-    },
-    {
-      "name": "Biden administration",
-      "type": "Government administration",
-      "role": "Kept most sanctions reimposed after the US withdrawal from the nuclear agreement."
+      "name": "Republican Party",
+      "type": "Organization",
+      "role": "Lost its government trifecta in the 2026 US midterm elections amid the war's economic effects on American households."
     }
   ],
   "verifiedMetrics": [
     {
       "value": "28 February 2026",
-      "label": "Reported start of the war",
-      "context": "The article states that the United States and Israel began military strikes against Iran during ongoing nuclear negotiations."
+      "label": "War began",
+      "context": "US–Israeli strikes began while US–Iran nuclear negotiations were ongoing."
     },
     {
-      "value": "hundreds of air strikes",
-      "label": "Opening strike scale",
-      "context": "The article describes US and Israeli strikes on targets across Iran, including strikes that assassinated Ali Khamenei and other officials; no exact count is supplied."
-    },
-    {
-      "value": "June 2025",
-      "label": "Preceding Twelve-Day War",
-      "context": "Israel attacked Iranian military and nuclear facilities; Iran counterattacked, the United States struck Iranian nuclear facilities, and the conflict ended in a ceasefire."
-    },
-    {
-      "value": "2023",
-      "label": "Start of the Gaza war",
-      "context": "The article identifies the Gaza war as the trigger for the broader Middle Eastern crisis preceding this conflict."
-    },
-    {
-      "value": "thousands of anti-government protesters",
-      "label": "Protester deaths cited in US rationale",
-      "context": "The article lists a response to their massacre among American justifications for initiating the war; it supplies no exact death toll."
+      "value": "hundreds",
+      "label": "Opening air strikes",
+      "context": "Strikes hit targets across Iran, including its senior leadership."
     },
     {
       "value": "January–February 2026",
       "label": "Prewar US military buildup",
-      "context": "Described as the largest US military buildup in the region since the 2003 invasion of Iraq."
-    },
-    {
-      "value": "2003",
-      "label": "Military buildup comparison",
-      "context": "The invasion of Iraq is the benchmark used for the scale of the prewar US deployment."
+      "context": "Described as the largest regional buildup since the 2003 invasion of Iraq."
     },
     {
       "value": "March",
-      "label": "Renewed Hezbollah–Israel fighting",
-      "context": "The article states that fighting resumed and Israel began occupying southern Lebanon."
+      "label": "Lebanon front resumed",
+      "context": "Hezbollah–Israel fighting resumed and Israel began occupying southern Lebanon."
     },
     {
       "value": "two-week",
       "label": "Initial ceasefire duration",
-      "context": "The initial ceasefire began on 8 April."
-    },
-    {
-      "value": "8 April",
-      "label": "Initial ceasefire start and Lebanon strikes",
-      "context": "The article states that massive Israeli airstrikes across Lebanon on the same day strained the ceasefire."
+      "context": "The ceasefire began on 8 April and immediately came under strain from Israeli airstrikes across Lebanon."
     },
     {
       "value": "12–13 April",
-      "label": "Islamabad Talks",
-      "context": "After the talks failed, the United States imposed a naval blockade on Iran; Iran had resumed its blockade."
+      "label": "Failed Islamabad Talks",
+      "context": "Failure of negotiations was followed by a US naval blockade on Iran."
     },
     {
       "value": "21 April",
-      "label": "US indefinite ceasefire announcement",
-      "context": "The article reports that the United States announced an indefinite ceasefire."
+      "label": "Indefinite US ceasefire announcement",
+      "context": "The United States announced an indefinite ceasefire."
     },
     {
       "value": "17 June",
-      "label": "Memorandum to end the war",
-      "context": "The United States and Iran reportedly signed a memorandum that lifted the dual blockade."
+      "label": "War-ending memorandum signed",
+      "context": "The United States and Iran signed a memorandum intended to end the war and lift their dual blockade."
     },
     {
       "value": "28 June",
-      "label": "Agreement to resume the ceasefire",
-      "context": "Following a brief escalation, the United States and Iran reportedly agreed to resume the ceasefire."
+      "label": "Ceasefire resumption agreement",
+      "context": "The United States and Iran agreed to resume the ceasefire after renewed tension."
     },
     {
       "value": "8 July",
       "label": "Ceasefire collapse",
-      "context": "The article attributes the collapse to Iranian attacks on commercial vessels in the Strait of Hormuz."
+      "context": "The ceasefire collapsed amid Iranian attacks on commercial vessels in the Strait of Hormuz."
     },
     {
-      "value": "thousands of civilian and military casualties",
-      "label": "Reported human toll",
-      "context": "The article supplies no exact total or breakdown between deaths and injuries."
+      "value": "thousands",
+      "label": "Civilian and military casualties",
+      "context": "Combined qualitative scale of casualties reported for the war; not an exact death toll."
     },
     {
       "value": "$47.1 billion",
       "label": "Estimated US military spending",
-      "context": "Attributed to the US Department of Defense as of October 2026; the sentence carries an [update] marker."
-    },
-    {
-      "value": "October 2026",
-      "label": "Military spending estimate cutoff",
-      "context": "The stated cutoff for the estimated $47.1 billion cost to the United States."
-    },
-    {
-      "value": "2026",
-      "label": "US midterm elections",
-      "context": "The article claims that the Republican Party lost its government trifecta because of the war's economic effects on American households."
-    },
-    {
-      "value": "1990–1991",
-      "label": "Gulf War dates",
-      "context": "Cited in explaining why some outlets called the conflict the Third Gulf War."
-    },
-    {
-      "value": "2003–2011",
-      "label": "Iraq War/Second Gulf War dates",
-      "context": "Cited as the second predecessor in the Third Gulf War naming."
-    },
-    {
-      "value": "1980–1988",
-      "label": "Iran–Iraq War dates",
-      "context": "Cited in explaining Iranian state media's designation of the conflict as the Third Imposed War."
-    },
-    {
-      "value": "1953",
-      "label": "Coup against Mohammad Mosaddegh",
-      "context": "The article describes a US- and UK-backed coup following his nationalization of the oil industry."
-    },
-    {
-      "value": "second Muslim-majority country",
-      "label": "Iran's recognition of Israel",
-      "context": "The article states that Pahlavi Iran recognized Israel's sovereignty after Turkey."
-    },
-    {
-      "value": "1979",
-      "label": "Iranian revolution",
-      "context": "Pahlavi was overthrown and replaced by an Islamic republic; Iran severed diplomatic ties with the United States and Israel."
-    },
-    {
-      "value": "1981",
-      "label": "Algiers Accords",
-      "context": "American embassy hostages were released after the accords, which included a US agreement not to intervene in Iranian affairs."
-    },
-    {
-      "value": "1988",
-      "label": "US–Iran naval confrontation and civilian aircraft shootdown",
-      "context": "A US warship struck an Iranian mine, the United States attacked Iran's navy, and a few months later the United States mistakenly shot down a civilian Iranian flight."
-    },
-    {
-      "value": "1980–88",
-      "label": "Iranian ballistic missile program origins",
-      "context": "The article states that Iran started the program during the Iran–Iraq War to deter Iraqi missile attacks and compensate for its lack of a modern air force due to sanctions."
-    },
-    {
-      "value": "1985",
-      "label": "Start of Iranian proxy conflicts",
-      "context": "The article states that Iran began engaging in proxy conflicts throughout the Middle East."
-    },
-    {
-      "value": "2002",
-      "label": "Revelation of Iran's covert nuclear program",
-      "context": "Iran denied seeking a nuclear weapon."
-    },
-    {
-      "value": "2003",
-      "label": "AMAD Project suspension",
-      "context": "The article links the suspension to Ali Khamenei's fatwa against nuclear weapons."
-    },
-    {
-      "value": "2005",
-      "label": "US nuclear-program sanctions",
-      "context": "The article states that the United States began imposing sanctions targeting Iran's nuclear program."
-    },
-    {
-      "value": "2006",
-      "label": "UN Security Council sanctions",
-      "context": "The article states that the Security Council imposed a series of sanctions over Iran's nuclear program."
-    },
-    {
-      "value": "2015",
-      "label": "Joint Comprehensive Plan of Action",
-      "context": "Multilateral nuclear agreement between Iran, the P5+1, and the EU."
-    },
-    {
-      "value": "January 2020",
-      "label": "Qasem Soleimani assassination order",
-      "context": "Trump ordered the assassination of the Iranian Quds Force commander."
-    },
-    {
-      "value": "October 7",
-      "label": "Attacks on Israel",
-      "context": "The article links these attacks and the start of the Gaza war to further regional escalation."
-    },
-    {
-      "value": "2024",
-      "label": "Escalation involving assassinations and Iranian retaliation",
-      "context": "The article references Israeli strikes on Iran's consulate in Damascus and the assassinations of Ismail Haniyeh and Hassan Nasrallah."
-    },
-    {
-      "value": "April and October",
-      "label": "Iranian strikes on Israel",
-      "context": "Identified in the article's discussion of the 2024 escalation."
-    },
-    {
-      "value": "early 2026",
-      "label": "Netanyahu lobbying for a joint strike",
-      "context": "The article states that Netanyahu sought a joint operation specifically targeting Iran's leadership."
-    },
-    {
-      "value": "February",
-      "label": "High-level meetings preceding authorization",
-      "context": "The article states that Trump authorized Operation Epic Fury following these meetings, with reports identifying Netanyahu's intelligence as a decisive factor."
-    },
-    {
-      "value": "2018",
-      "label": "US withdrawal from the JCPOA",
-      "context": "The article states that Trump withdrew despite Iranian compliance, reimposed sanctions, and adopted a maximum pressure strategy."
-    },
-    {
-      "value": "September 2025",
-      "label": "UN sanctions snapback",
-      "context": "The article links reimposed sanctions to currency depreciation, higher food prices, frozen overseas assets, suspended arms transactions, and ballistic-missile-related penalties."
-    },
-    {
-      "value": "December 2025",
-      "label": "Iranian currency collapse",
-      "context": "Scott Bessent described the collapse as the strategy's grand culmination."
-    },
-    {
-      "value": "February 2026",
-      "label": "Trump's State of the Union claims",
-      "context": "Trump said Iran had restarted its nuclear program and was developing missiles capable of striking the United States."
-    },
-    {
-      "value": "2035",
-      "label": "US intelligence missile-development timeline",
-      "context": "The article says US intelligence reports indicated that Iran needed until 2035 to build missiles capable of threatening the United States, contradicting Trump's characterization."
+      "context": "US Department of Defense estimate as of October 2026; Associated Press reporting identifies the accounting date as Oct. 16.​"
     },
     {
       "value": "12 June 2025",
       "label": "IAEA safeguards non-compliance finding",
-      "context": "The article states that the IAEA found Iran non-compliant with its NPT safeguards agreement for the first time since 2005."
+      "context": "Iran was found non-compliant with its NPT safeguards agreement for the first time since 2005."
     },
     {
-      "value": "2005",
-      "label": "Previous IAEA non-compliance benchmark",
-      "context": "The 12 June 2025 finding is described as the first such finding since 2005."
-    },
-    {
-      "value": "2025",
-      "label": "US bombings and uranium storage report",
-      "context": "The article reports that highly enriched uranium was stored in an underground facility undamaged by US bombings in 2025."
-    },
-    {
-      "value": "February 2026",
-      "label": "Iranian notification concerning safeguards",
-      "context": "Iran told the IAEA that normal safeguards were legally untenable and materially impracticable; the agency could not verify suspended enrichment or confirm the stockpile's status."
+      "value": "2035",
+      "label": "Reported missile-development assessment",
+      "context": "The cited US intelligence assessment placed development of Iranian missiles capable of striking the United States at this horizon, contrasting with Trump's February 2026 threat claims."
     },
     {
       "value": "between 90 and 400 nuclear warheads",
       "label": "Estimated Israeli nuclear stockpile",
-      "context": "The article presents this as an estimate, states that Israel is widely believed to possess nuclear weapons, and notes that Israel does not officially acknowledge this capability."
-    },
-    {
-      "value": "January 2026",
-      "label": "Suppression of Iranian anti-government protests",
-      "context": "The article identifies the violent suppression as a source of intensified US–Iran tensions during nuclear negotiations."
-    },
-    {
-      "value": "27 February at 3:38 p.m. EST (11:08 p.m. IRST)",
-      "label": "Operation Epic Fury authorization",
-      "context": "Trump reportedly authorized the operation while traveling to Texas on Air Force One."
-    },
-    {
-      "value": "around 9:45 am. IRST (1:15 am. EST)",
-      "label": "Opening strike time",
-      "context": "The article states that US missiles, drones, and Israeli fighter jets began striking Iran the day after authorization."
+      "context": "An estimate, not an officially acknowledged Israeli inventory."
     }
   ],
   "verifiedQuotes": [
     {
       "quote": "grand culmination",
       "speaker": "Scott Bessent",
-      "role": "Treasury Secretary",
-      "context": "The article attributes this description of the strategy to Bessent regarding the collapse of Iran's currency in December 2025."
+      "role": "US Treasury secretary",
+      "context": "Characterization of Iran's December 2025 currency collapse under the economic-pressure strategy."
     },
     {
       "quote": "obliterated",
       "speaker": "Donald Trump",
       "role": "US president",
-      "context": "The article quotes this word from Trump's earlier characterization of Iran's nuclear program, contrasting it with his February 2026 claim that the program had restarted."
+      "context": "Earlier characterization of Iran's nuclear program, contrasted with his February 2026 claim that it had restarted."
     },
     {
       "quote": "legally untenable and materially impracticable",
       "speaker": "Iran",
-      "role": "State communicating with the IAEA",
-      "context": "The article quotes Iran's February 2026 description of normal safeguards under threats and military attacks."
+      "role": "Government communicating with the IAEA",
+      "context": "Description of normal safeguards implementation in February 2026; the IAEA records the communication as dated 2 February 2026.​"
     },
     {
       "quote": "acts of aggression",
       "speaker": "Iran",
-      "role": "State communicating with the IAEA",
-      "context": "Quoted as part of Iran's explanation for why normal safeguards were legally untenable and materially impracticable."
-    },
-    {
-      "quote": "Third Imposed War",
-      "speaker": "Iranian state media",
-      "role": "State media, with no individual outlet specified",
-      "context": "Name used for the conflict, following the Iran–Iraq War and the Twelve-Day War."
+      "role": "Government communicating with the IAEA",
+      "context": "Part of Iran's explanation for obstructed safeguards implementation, alongside continuing threats.​"
     }
   ],
   "hardwareSpecs": {
     "deviceA": {
-      "name": null,
-      "specs": [],
-      "price": null,
-      "availability": null
+      "name": "Operation Epic Fury",
+      "specs": [
+        "US codename for the opening strikes on Iran.",
+        "Conducted jointly with Israeli attacks during ongoing nuclear negotiations; the combined opening campaign involved hundreds of air strikes.",
+        "Targets included Iranian leadership, with Ali Khamenei killed in the opening attacks."
+      ],
+      "price": "Overall US war spending estimated at $47.1 billion as of October 2026; not a separately itemized operation budget.",
+      "availability": "Began on 28 February 2026."
     },
     "deviceB": {
-      "name": null,
-      "specs": [],
-      "price": null,
-      "availability": null
+      "name": "Operation Roaring Lion",
+      "specs": [
+        "Israeli codename for the opening strikes on Iran.",
+        "Followed Operation Rising Lion, Israel's campaign during the Twelve-Day War in June 2025."
+      ],
+      "price": "N/A",
+      "availability": "Began on 28 February 2026."
+    },
+    "deviceC": {
+      "name": "Operation True Promise IV",
+      "specs": [
+        "Iranian codename for its response to the US–Israeli attacks.",
+        "Iran's response included missile and drone attacks against Israel, US bases and regional US allies, alongside blocking the Strait of Hormuz."
+      ],
+      "price": "N/A",
+      "availability": "Response to the attacks beginning on 28 February 2026."
     }
   },
   "coreControversy": {
-    "corporateClaim": "No corporate claim is stated. The article lists American rationales as regime change, preventing Iran from obtaining a nuclear weapon, responding to the massacre of thousands of anti-government protesters, and taking Iran's oil and gas resources; later goals focused on nuclear negotiations and reopening the Strait of Hormuz. Iran denied seeking nuclear weapons and said its enrichment efforts served civilian nuclear power.",
-    "criticismOrAlarm": "The article reports that critics rejected the American justifications and characterized the attack as a war of aggression violating international law. It states that the UN secretary-general and many countries condemned the US–Israeli strikes, while the UN Security Council condemned Iranian retaliatory strikes on Gulf states. It contrasts Trump's threat claims with US intelligence reports that Iran did not pose a threat to the United States and needed until 2035 to build missiles capable of doing so, and notes that the IAEA found no evidence of weaponization despite its inability to verify enrichment suspension or stockpile status. The article also describes opposition to the war in the United States and other countries, declining views of the United States and Israel, and scholarly criticism of US acceptance of Israel's unacknowledged nuclear capability as a nonproliferation double standard.",
-    "regulatoryOrHistoricalPrecedent": "The article cites the US- and UK-backed 1953 coup, the 1979 revolution and embassy hostage crisis, the 1981 Algiers Accords including US nonintervention commitments, US support for Iraq during the Iran–Iraq War, the 1988 naval confrontation and mistaken shootdown of a civilian Iranian flight, and the January 2020 assassination of Qasem Soleimani. Nuclear precedents include the 2003 suspension of the AMAD Project following Khamenei's fatwa, US sanctions beginning in 2005, UN Security Council sanctions beginning in 2006, the 2015 JCPOA, US withdrawal in 2018 despite the article's description of Iranian compliance, the 12 June 2025 IAEA non-compliance finding, the June 2025 Twelve-Day War, and the September 2025 sanctions snapback. The article states that Israel rejects calls to join the Treaty on the Non-Proliferation of Nuclear Weapons or negotiate a Middle East nuclear weapon free zone."
+    "corporateClaim": "US rationales included regime change, preventing Iran from acquiring nuclear weapons, responding to the massacre of thousands of anti-government protesters, and taking Iranian oil and gas resources; subsequent objectives emphasized nuclear negotiations and reopening the Strait of Hormuz. Trump asserted in February 2026 that Iran had restarted its nuclear program and was developing missiles capable of striking the United States, while Iran maintained that its enrichment program served civilian electricity generation.",
+    "criticismOrAlarm": "Critics characterized the opening attack as a war of aggression violating international law; the UN secretary-general condemned the US–Israeli strikes, while the Security Council separately condemned Iranian attacks on Gulf states. The reported US intelligence assessment placed development of missiles capable of reaching the United States at 2035, and the IAEA's lack of evidence of weaponization coexisted with its inability to verify enrichment suspension or stockpile status. The IAEA also stated that unresolved safeguards issues prevented assurance that Iran's program was exclusively peaceful.",
+    "regulatoryOrHistoricalPrecedent": "The 1953 US- and UK-backed coup removed Mohammad Mosaddegh and strengthened Mohammad Reza Pahlavi; the 1979 revolution replaced the monarchy, and the 1981 Algiers Accords included a US non-intervention commitment. During the Iran–Iraq War, the United States supported Iraq; in 1988 it attacked Iran's navy after a mine strike and later mistakenly shot down an Iranian civilian aircraft. Iran's covert nuclear program was revealed in 2002, its AMAD Project was suspended in 2003, US nuclear sanctions began in 2005, and Security Council sanctions began in 2006. The 2015 JCPOA involved Iran, the P5+1 and the EU; Trump withdrew the United States in 2018, and UN sanctions were reimposed through snapback in September 2025. Immediate military precedents included Soleimani's assassination in January 2020, the Gaza war beginning in 2023, Iranian–Israeli exchanges in 2024, and the Twelve-Day War in June 2025."
   },
   "hiddenCatchesAndLimits": [
-    "The dossier extracts statements from the supplied article. Its labels do not establish independent verification, and the supplied publisher and byline are user-provided metadata.",
-    "The supplied text ends mid-citation after the final reference to Operation Roaring Lion; the referenced naval-loss and aviation-loss lists are not included.",
-    "No two named hardware products, dimensions, battery life, camera resolution, flight limits, coverage area, floor restrictions, product prices, or availability dates are supplied. The hardware fields are therefore null or empty.",
-    "No subscriptions, cloud-processing dependencies, key-retention policies, or FCC approval statuses are discussed.",
-    "The article reports thousands of civilian and military casualties but does not provide exact totals, a deaths-versus-injuries breakdown, or country-level casualty figures.",
-    "The $47.1 billion figure is an estimated US military-spending figure as of October 2026, not a comprehensive global economic cost; its sentence includes an [update] marker.",
-    "Iran denied IAEA access to bombed nuclear facilities but provided access to all unaffected facilities.",
-    "Mohammad Eslami said inspections of facilities struck by the United States would require IAEA rules for the post-war situation, codified protocols for internationally protected facilities subjected to military attacks, and IAEA condemnation of the attacks.",
-    "The IAEA could not verify that Iran had suspended enrichment or confirm its stockpile's status; the article separately states that it found no evidence Iran was weaponizing.",
-    "The Bulletin of the Atomic Scientists described Iran as willing to dilute or export higher-level enriched uranium in exchange for sanctions relief and prevention of attacks; the article does not state that this exchange occurred.",
-    "The Israeli stockpile of between 90 and 400 nuclear warheads is an estimate, and the article says Israel does not officially acknowledge its nuclear weapons capability.",
-    "The initial two-week ceasefire beginning on 8 April was strained by Israeli airstrikes across Lebanon that day; subsequent ceasefire announcements and the 17 June memorandum did not establish a lasting end to hostilities in the article's account.",
-    "Iran blocked the Strait of Hormuz and subsequently claimed sovereignty over it; the article does not establish that claim as internationally recognized.",
-    "The article describes the largest ever supply disruption of the global oil market, financial-market volatility, and disruption of natural gas, fertilizer, aviation, tourism, and shipping, but supplies no numerical measures for those effects.",
-    "The article links high fuel and energy prices to inflation, lower growth, higher borrowing costs, a global cost of living crisis, and protests in Europe and elsewhere, without supplying associated rates or counts.",
-    "The article attributes the Republican Party's loss of its government trifecta in the 2026 US midterm elections to the war's economic effects, but supplies no election totals or supporting causal analysis.",
-    "The United States named its opening strikes Operation Epic Fury; Israel named them Operation Roaring Lion, following Operation Rising Lion in June 2025; Iran named its response Operation True Promise IV (Persian: عملیات وعده صادق ۴, romanized: Amaliyat-e Va'deh-ye Sadegh 4).",
-    "The article reports the alternative names Iran war, Third Gulf War (Gulf War III), Third Imposed War, and Ramadan War. These are naming conventions, not separate conflicts.",
-    "The article explicitly characterizes the claim that Trump attacked Iran to distract from the Epstein files as a conspiracy theory spread by a pro-Iran propaganda network; the resulting Operation Epstein Fury nickname does not establish that motive.",
-    "Operation AIPAC Fury is presented as a nickname coined by netizens criticizing lobbying influence, not an official operation name.",
-    "The supplied article contains no consumer suitability recommendations or explicit editorial advice suitable for the avoidAdvice and fitAdvice fields."
+    "Failure to detect weaponization is not verification that nuclear activities are exclusively peaceful: inspection restrictions prevented confirmation of enrichment suspension and the status of uranium stocks.​",
+    "Mohammad Eslami conditioned inspections of struck facilities on codified post-attack protocols and IAEA condemnation of the attacks; the IAEA maintained that Iran could not suspend its safeguards obligations under any circumstances.​",
+    "Iran's enrichment program also functioned as negotiating leverage: the Bulletin of the Atomic Scientists reported willingness to dilute or export higher-level enriched uranium in return for sanctions relief and prevention of attacks.",
+    "Israel's estimated stockpile of between 90 and 400 nuclear warheads remains officially unacknowledged, and Israel rejects accession to the NPT and negotiations on a regional nuclear-weapon-free zone; scholars describe US acceptance of this position as a diplomatic double standard.",
+    "A US–Iran ceasefire did not reliably halt the Lebanon conflict: Israeli airstrikes on 8 April strained the initial two-week truce, and later agreements failed to secure lasting passage through the Strait of Hormuz.",
+    "The $47.1 billion US estimate was not a comprehensive final cost: it excluded damage to US bases in the Middle East.",
+    "Economic disruption extended beyond oil to natural gas, fertilizer, aviation, tourism and shipping, with financial-market volatility, inflation, lower growth, higher borrowing costs and protests in Europe and elsewhere.",
+    "Iran-backed Houthi activity created another maritime threat around Bab al-Mandab while Hormuz remained disrupted, exposing Saudi exports to pressure on multiple routes.",
+    "Electoral setbacks did not automatically resolve the conflict: Republicans lost their government trifecta in the 2026 US midterms, while Netanyahu's bloc secured 53 seats against the 61 needed to govern after Israel's October 27 election, leaving him caretaker prime minister during coalition negotiations.​",
+    "The claim that Trump attacked Iran to distract from the Epstein files circulated through a pro-Iran propaganda network as a conspiracy theory, not an established motive for the war."
   ],
   "editorialVerdict": {
-    "avoidAdvice": [],
-    "fitAdvice": []
+    "avoidAdvice": [
+      "Do not equate destruction of nuclear facilities or leadership losses with verified elimination of nuclear capability; inspectors lacked the access needed to establish the status of enrichment and material stocks.​",
+      "Do not treat ceasefire announcements as proof of durable regional peace or restored commercial navigation: the 8 April truce and 17 June memorandum were followed by renewed confrontation and the 8 July ceasefire collapse.",
+      "Do not treat $47.1 billion as the war's complete economic cost; the military estimate excluded US base damage and did not represent the global energy and cost-of-living consequences.​"
+    ],
+    "fitAdvice": [
+      "The central strategic outcome was a regional conflict connecting nuclear disputes, leadership targeting, maritime restrictions and global economic disruption rather than a self-contained strike campaign.",
+      "Distinguish official war rationales, intelligence assessments, safeguards findings and allegations of illegality; these address different questions and do not establish one another.​",
+      "A durable diplomatic settlement requires verifiable nuclear arrangements alongside workable provisions for shipping and regional hostilities; the IAEA explicitly supported a long-lasting, verifiable diplomatic agreement."
+    ]
   }
 }
