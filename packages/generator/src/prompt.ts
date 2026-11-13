@@ -213,57 +213,117 @@ ${article.cleanText.slice(0, 14000)}
 Output strictly the GroundTruthDossier JSON.`;
 }
 
-export function buildTopicResearchSystemPrompt(): string {
-  return `You are a Lead Investigative Researcher, Financial Analyst, and Fact-Checker at The Economist, ProPublica, Reuters, and Bloomberg.
-Your mission is to compile an authoritative, empirical GroundTruthDossier for an editorial investigation.
+// ============================================================================
+// STAGE 1: NARRATIVE INTELLIGENCE & HOOK FORMULATION (FACTS + ANGLE)
+// ============================================================================
 
-CRITICAL RULES:
+export interface NarrativeIntelligence {
+  articleTitle: string;
+  publisher: string;
+  byline: string;
+  summary: string;
+  hookHeadline: string; // 4-6 words
+  valuePromise: string; // 8-12 words
+  kicker: string; // CATEGORY / TENSION KICKER
+  visualMetaphor: string; // Physical visual anchor for the story (e.g. an unregulated bank vault disguised as a latte cup)
+  coreConflict: {
+    claim: string; // Primary corporate or PR claim (e.g. "Convenient digital gifting")
+    reality: string; // Forensic reality or regulatory concern (e.g. "Interest-free corporate financing float")
+  };
+  hiddenCatches: string[]; // 2-3 bullet catches
+  verifiedMetrics: Array<{ value: string; label: string; context?: string }>;
+  verifiedQuotes: Array<{ quote: string; speaker: string; role?: string; context?: string }>;
+  verdict: string; // Enduring consequence or takeaway
+}
+
+export function buildNarrativeIntelligenceSystemPrompt(): string {
+  return `You are a World-Class Investigative Journalist, Chief Financial Analyst, and Editorial Director at The Economist, ProPublica, Reuters, Bloomberg, and The New York Times Magazine.
+Your mission is to perform deep content analysis on an editorial subject and craft a definitive NarrativeIntelligence brief.
+
+CRITICAL EDITORIAL & FACTUAL RULES:
 1. EMPIRICAL FACTS & VERIFIED METRICS:
    - Provide concrete, verified numerical data, financial figures ($B, $M, percentages, multiples), regulatory milestones, and technical realities.
-   - For corporate/financial topics (e.g. unspent gift cards, float banking, revenue models, antitrust): include real balance sheet numbers, breakage metrics, SEC filing disclosures, and consumer protection precedents.
+   - For corporate/financial topics: include real balance sheet numbers, breakage metrics, SEC filing disclosures, and consumer protection precedents.
    - For technology/engineering topics: include cluster sizes, parameter counts, benchmarks, latency, and hardware specs.
-   - NEVER provide meta-critique. Focus 100% on the factual subject matter.
+   - ZERO HALLUCINATION & ZERO META-ATTRIBUTIONS: Never write "The article states...", "According to the report...", or "Sentence marked [update]". Speak with primary journalistic authority!
 
-2. STRUCTURED CORE CONTROVERSY & CATCHES:
-   - Identify the primary corporate claim / public narrative vs the hidden mechanism or critical downside.
-   - Extract 3–5 high-signal hidden catches, loopholes, or asterisks.
+2. TENSION-DRIVEN HOOK & VALUE FORMULA:
+   - "hookHeadline": Short, punchy 4 to 6 words maximum. High-tension, provocative, active voice.
+     * EXCELLENT: "Starbucks Is An Unregulated Bank"
+     * EXCELLENT: "The $1.8 Billion Coffee Float"
+     * EXCELLENT: "How Unspent Cards Finance Starbucks"
+     * BANNED: Vague rhetorical questions ("Did you know this about gift cards?").
+   - "valuePromise": 8 to 12 words explaining the systemic mechanism revealed by swiping through.
+   - "kicker": Category and tension pair in uppercase (e.g. "SHADOW BANKING / STORED VALUE", "CONSUMER FINANCE / EXPOSED").
+
+3. CENTRAL PHYSICAL VISUAL METAPHOR:
+   - Identify the tangible physical visual anchor that will drive the bespoke vector architectural illustrations across the carousel.
+   - EXAMPLES:
+     * "An industrial bank vault door disguised as a disposable coffee cup lid, with cash entering before coffee exits."
+     * "A fractured Roman aqueduct where the stone foundations break into empty space at a seismic fault line."
+     * "A dual-column balance sheet where customer liabilities transform into pure breakage profit."
+
+4. STRUCTURED CORE CONFLICT & CATCHES:
+   - Contrast the corporate PR claim against the forensic mechanism.
+   - Extract 2–3 high-signal hidden catches or loopholes.
+   - Deliver a clear, authoritative editorial verdict.
 
 Return strictly valid JSON matching this exact structure:
 {
   "articleTitle": "Title of the investigation",
-  "publisher": "Investigation Bureau / Research Desk",
-  "byline": "Senior Investigative Bureau",
+  "publisher": "Publisher name",
+  "byline": "Author / Bureau",
   "summary": "2-sentence factual editorial summary of the core thesis and mechanism",
-  "entities": [{ "name": "Entity Name", "type": "Company | Agency | Person | Product", "role": "Factual role in the investigation" }],
-  "verifiedMetrics": [{ "value": "$1.8B", "label": "Stored value liabilities", "context": "Starbucks 10-K filing unspent customer card balance" }],
-  "verifiedQuotes": [{ "quote": "...", "speaker": "...", "role": "...", "context": "..." }],
-  "hardwareSpecs": {
-    "deviceA": { "name": "Core System / Mechanism", "specs": ["Parameter 1", "Parameter 2"], "price": "Financial scale", "availability": "Active" }
+  "hookHeadline": "4-6 word punchy hook headline",
+  "valuePromise": "8-12 word narrative promise",
+  "kicker": "CATEGORY / TENSION KICKER",
+  "visualMetaphor": "Tangible physical visual anchor for vector illustrations",
+  "coreConflict": {
+    "claim": "Primary public/PR claim",
+    "reality": "Forensic reality or regulatory loophole"
   },
-  "coreControversy": {
-    "corporateClaim": "Primary corporate or PR claim (e.g. Convenience and customer rewards)",
-    "criticismOrAlarm": "Forensic reality or regulatory concern (e.g. Unregulated interest-free banking float)",
-    "regulatoryOrHistoricalPrecedent": "Relevant legal, CFPB, SEC, or banking framework"
-  },
-  "hiddenCatchesAndLimits": [
+  "hiddenCatches": [
     "High-signal caveat or hidden mechanism 1",
     "High-signal caveat or hidden mechanism 2"
   ],
-  "editorialVerdict": {
-    "avoidAdvice": ["Critical risk or consumer trap to beware"],
-    "fitAdvice": ["Strategic reality or takeaway"]
-  }
-};`;
+  "verifiedMetrics": [
+    { "value": "$1.8B", "label": "Stored value liabilities", "context": "10-K filing unspent customer card balance" },
+    { "value": "$222M", "label": "Annual nonredemption revenue", "context": "Breakage profit recognized without delivering goods" }
+  ],
+  "verifiedQuotes": [
+    { "quote": "...", "speaker": "...", "role": "..." }
+  ],
+  "verdict": "The enduring consequence or takeaway"
+}`;
 }
 
-export function buildTopicResearchUserPrompt(brief: TemplateBrief): string {
-  return `Compile the GroundTruthDossier for this editorial exploration:
-Topic/Name: "${brief.name || 'AI Frontier & Open Weights'}"
-Domain: "${brief.domain || 'Artificial Intelligence / Open Weights / Frontier Compute'}"
-Vibe/Angle: "${brief.vibe || 'The open-source revolution, reasoning models (DeepSeek-R1), and the collapse of proprietary AI moats'}"
-Inspiration: "${brief.inspiration || 'SemiAnalysis, Epoch AI, MIT Technology Review, Wired'}"
+export function buildNarrativeIntelligenceUserPrompt(input: {
+  article?: ArticleIntel;
+  brief?: TemplateBrief;
+  promptText?: string;
+}): string {
+  if (input.article) {
+    return `Analyze this source reporting and produce the complete NarrativeIntelligence brief:
+Article: "${input.article.title}"
+Publisher: "${input.article.publisher}"
+Byline: "${input.article.byline || 'Staff Bureau'}"
 
-Output strictly the GroundTruthDossier JSON.`;
+Raw Text:
+${input.article.cleanText.slice(0, 14000)}
+
+Output strictly valid JSON.`;
+  }
+
+  const topic = input.promptText || input.brief?.name || 'Editorial Investigation';
+  const domain = input.brief?.domain || 'Investigative Corporate & Consumer Analysis';
+  const vibe = input.brief?.vibe || input.brief?.inspiration || 'The Fine Print / Investigative Forensics';
+
+  return `Conduct deep investigative research and author the complete NarrativeIntelligence brief on this topic:
+Topic: "${topic}"
+Domain: "${domain}"
+Perspective / Focus: "${vibe}"
+
+Output strictly valid JSON.`;
 }
 
 // ============================================================================
@@ -506,9 +566,9 @@ export function buildStoryDeckSystemPrompt(
   const count = Math.max(4, Math.min(14, targetSlideCount));
   const arcDescription = getNarrativeArc(preset, count);
 
-  return `You are a World-Class Visual Journalism Creative Director and Senior Editor at Visual Capitalist, Vox Explained, Wired, and The Financial Times.
+  return `You are a World-Class Visual Journalism Creative Director and Senior Editor at The New York Times Graphics Desk, Reuters, Wired, and The Financial Times.
 You author scroll-stopping, high-impact editorial carousel content engineered for MOBILE INSTAGRAM (3-SECOND SCAN RULE).
-Every slide must look like an art-directed publication graphic—NEVER an academic memo, accounting footnote, or text-heavy corporate report.
+Every slide must look like an art-directed museum publication graphic (inspired by benchmark 'tipaza')—NEVER an off-the-shelf web UI, web dashboard, or corporate slide deck.
 
 CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
 
@@ -526,27 +586,26 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - CARD TITLES: 2 to 3 words maximum (e.g. "THE ILLUSION", "THE FINE PRINT", "THE FLOAT", "ZERO INSURANCE").
    - MANDATORY BOLD SKIM ANCHORS: You MUST bold the single highest-signal takeaway phrase in every point (e.g. **0% interest**, **$1.8B float**, **zero protection**).
 
-2. STRICT BAN ON CORPORATE, SEC & ACCOUNTING JARGON:
-   - FORBIDDEN: Citing regulatory codes, accounting standards, or legal minutiae in main slide copy (e.g. "ASC 606", "dormancy remittances", "Nestlé royalty upfront payments", "unclaimed property escheatment").
-   - Translate all financial/legal mechanisms into visceral, consumer-accessible human realities.
+2. STRICT BAN ON WEB UI TROPES & DASHBOARD PATTERNS:
+   - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
+   - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
 
-3. MANDATORY VISUAL EDITORIAL ARCHETYPE CATALOG:
-   Every slide in your JSON output MUST declare an explicit "archetype" chosen from this catalog:
-   - "monumental-cover": (Slide 1 exclusively) Broadsheet magazine cover with topic kicker capsule, monumental headline, and reading telemetry badge.
-   - "myth-vs-reality": High-contrast binary split contrasting "THE ILLUSION" (what consumers believe) vs "THE REALITY / FINE PRINT" (the hidden contract catch).
-   - "hero-stat-bar": Giant monumental number (e.g. "$1.8B"), 1-line plain-English label, and an editorial comparison bar (e.g. "Larger than 85% of US commercial banks").
-   - "step-flow-chain": 3 numbered step nodes ([01] Reload Cash -> [02] Forgotten $2.40 -> [03] 100% Margin Float) connected by visual arrows.
-   - "receipt-highlight": A stylized contract / receipt card featuring a marker-highlighted clause in accent color and a bottom verdict stamp.
-   - "by-the-numbers-grid": A 2x2 or 3-column data matrix of bold tabular numbers and 2-word labels (ZERO paragraphs!).
+3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE CATALOG:
+   Every slide in your JSON output MUST declare an explicit "archetype" chosen from this gold-standard catalog:
+   - "monumental-editorial-cover": (Slide 1 exclusively) Broadsheet magazine cover with monospace kicker + square accent dot, monumental 68px headline, 1px divider hairline, dominant architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger.
+   - "asymmetric-editorial-cards": High-contrast asymmetric multi-panel layout (e.g. 1 hero panel + 2 secondary ledger cards) with sharp 0px/2px corners, 1px hairlines, and inline technical SVG glyphs.
+   - "vertical-milestone-spine": Elegant continuous 1px vertical hairline spine with square milestone markers (rotate-45 or square), monospace timeline tags, and punchy 5-8 word impact bullets.
+   - "hero-metric-placard": Massive tabular numeral (96px-120px) in accent color, uppercase mono metric label, and an architectural SVG comparison scale or comparative ledger (NO HTML rounded progress bars!).
+   - "full-height-editorial-split": 50/50 or 60/40 vertical split: one half is a dominant bespoke architectural SVG vector illustration (isometric diagram, floorplan, elevation cross-section, coordinate grid); the other half is editorial typography with crisp 1px bordered ledger cards.
+   - "three-row-verification-ledger": Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
 
    STRICT ARCHETYPE DIVERSITY MANDATE: You MUST use at least 4 DIFFERENT archetypes across the ${count} slides. Never repeat the same archetype consecutively!
 
-4. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
-   * ${arcDescription}
+4. BESPOKE SVG VECTOR BLUEPRINT MANDATE:
+   Every slide MUST include a rich "svgBlueprint" describing a bespoke vector illustration that visually embodies the physical metaphor and technical mechanism (e.g. "Isometric cross-section of a disposable cup revealing multi-tiered vault chambers with coordinate grid and 1px flow arrows").
 
-5. STRICT BAN ON META-ATTRIBUTIONS:
-   - FORBIDDEN: "The article states...", "According to the report...", "The text notes...", "sentence marked [update]".
-   - State the reality with primary journalistic authority!
+5. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
+   * ${arcDescription}
 
 6. TELEMETRY & METRIC VALUES:
    - Numerical values must be strictly clean numbers, currencies, percentages, or years (e.g. "$1.8B", "0%", "2025", "+18%").
@@ -558,24 +617,24 @@ Return strictly a JSON array of exactly ${count} slide objects:
     "id": "slide-1",
     "index": 0,
     "type": "cover",
-    "archetype": "monumental-cover",
+    "archetype": "monumental-editorial-cover",
     "kicker": "CONSUMER FINANCE / EXPOSED",
     "headline": "The $1.8 Billion Coffee Bank",
     "subheadline": "How unspent gift card balances created an unregulated, interest-free corporate float.",
-    "visualStyle": "monumental-cover",
-    "layoutTopology": "monumental-cover",
+    "visualStyle": "monumental-editorial-cover",
+    "layoutTopology": "monumental-editorial-cover",
     "issueBadge": "SPECIAL INVESTIGATION · ${count} SLIDES",
     "telemetry": [
       { "badge": "$1.8B", "label": "Customer cash held on cards" },
       { "badge": "$222M", "label": "Annual profit from unused balances" }
     ],
-    "svgBlueprint": "Clean Swiss architectural rule with minimal geometric focal card emblem"
+    "svgBlueprint": "Bespoke architectural isometric vector of a coffee cup sliced into balance sheet vault strata with 1px dimension lines and coordinates"
   },
   {
     "id": "slide-2",
     "index": 1,
     "type": "belief",
-    "archetype": "myth-vs-reality",
+    "archetype": "asymmetric-editorial-cards",
     "kicker": "THE ILLUSION",
     "headline": "Convenience Hides The Tradeoff",
     "subheadline": "Customers pay cash before purchasing a single item.",
@@ -587,39 +646,50 @@ Return strictly a JSON array of exactly ${count} slide objects:
       { "badge": "$0", "label": "Interest paid to cardholders" },
       { "badge": "0%", "label": "FDIC deposit protection" }
     ],
-    "visualStyle": "myth-vs-reality",
-    "layoutTopology": "myth-vs-reality",
-    "svgBlueprint": "High-contrast dual panel comparing the PR illusion against the contract reality"
+    "visualStyle": "asymmetric-editorial-cards",
+    "layoutTopology": "asymmetric-editorial-cards",
+    "svgBlueprint": "Dual-node circuit diagram showing one-way customer cash transfer into zero-liability escrow"
   }
 ]`;
 }
 
 export function buildStoryDeckUserPrompt(
-  strategy: StoryStrategy,
-  dossier: GroundTruthDossier,
+  strategy: StoryStrategy | NarrativeIntelligence,
+  dossier: GroundTruthDossier | NarrativeIntelligence,
   brand: BrandTokens,
   targetSlideCount = 7
 ): string {
   const count = Math.max(4, Math.min(14, targetSlideCount));
-  return `Author the ${count}-slide storyboard AND choose the distinct visual style, layout topology, and SVG blueprint for each slide:
+  const hook = (strategy as any).hookHeadline || (dossier as any).hookHeadline || 'Editorial Investigation';
+  const promise = (strategy as any).valuePromise || (dossier as any).valuePromise || '';
+  const kicker = (strategy as any).kicker || (dossier as any).kicker || 'SPECIAL REPORT';
+  const coreConflict = typeof (strategy as any).coreConflict === 'string'
+    ? (strategy as any).coreConflict
+    : JSON.stringify((strategy as any).coreConflict || (dossier as any).coreConflict || {});
+  const catchText = Array.isArray((dossier as any).hiddenCatches)
+    ? (dossier as any).hiddenCatches.join('; ')
+    : (strategy as any).hiddenCatch || '';
+  const verdict = (strategy as any).verdict || (dossier as any).verdict || '';
+  const metaphor = (strategy as any).visualMetaphor || (dossier as any).visualMetaphor || 'Architectural structural diagram';
+
+  return `Author the ${count}-slide storyboard AND choose the distinct visual style, layout topology, and bespoke SVG blueprint for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
-Hook Headline: "${strategy.hookHeadline}"
-Value Promise: "${strategy.valuePromise}"
-Kicker: "${strategy.kicker}"
-Core Conflict: "${strategy.coreConflict}"
-Hidden Catch: "${strategy.hiddenCatch}"
-Verdict: "${strategy.verdict}"
+Hook Headline: "${hook}"
+Value Promise: "${promise}"
+Kicker: "${kicker}"
+Core Visual Metaphor: "${metaphor}"
+Core Conflict: "${coreConflict}"
+Hidden Catch: "${catchText}"
+Verdict: "${verdict}"
 
-Verified Dossier:
-Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
-Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
-Quotes: ${JSON.stringify(dossier.verifiedQuotes)}
-Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
-Verdict Advice: ${JSON.stringify(dossier.editorialVerdict)}
+Verified Data & Metrics:
+${JSON.stringify((dossier as any).verifiedMetrics || [], null, 2)}
+Quotes:
+${JSON.stringify((dossier as any).verifiedQuotes || [], null, 2)}
 
-Output strictly the JSON array of exactly ${count} slide objects. Remember: MAX 16 WORDS PER CARD BODY, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
+Output strictly the JSON array of exactly ${count} slide objects. Remember: MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, ZERO WEB UI SHADOWS OR PILLS, AND ARCHITECTURAL SVG BLUEPRINTS!`;
 }
 
 // Fallback for non-article briefs
@@ -788,7 +858,8 @@ CRITICAL DESIGN & CODING RULES:
        <p>{item0?.body}</p>
        <h2>{item1?.label || item1?.title}</h2>
        <p>{item1?.body}</p>
-     * STRICTLY FORBIDDEN: Writing '{items?.label}' or '{items?.body}'! In JavaScript, an Array object has NO .label or .body property. Doing so evaluates to undefined and leaves the card completely BLANK!
+     * STRICTLY FORBIDDEN: Writing '{items?.label}', '{items?.body}', '{items?.metric}', or '{items?.metric?.badge}'! In JavaScript/TypeScript, an Array object has NO .label, .body, or .metric property. Doing so causes fatal TypeScript compilation failure ("Property 'metric' does not exist on type 'Item[]'").
+     * When accessing item metrics or badges: ALWAYS index explicitly: '{items[0]?.metric?.badge}', '{items[1]?.metric?.badge}', or '{rows[0]?.item?.metric?.badge}'.
    - WHEN CREATING HELPER ARRAYS (e.g. columns, stages, rows):
      * You MUST index elements individually:
        const stages = [
@@ -806,48 +877,56 @@ CRITICAL DESIGN & CODING RULES:
        </div>
      ))}
 
-8. VISUAL EDITORIAL ARCHETYPE BLUEPRINTS (MANDATORY ARCHITECTURE PATTERNS):
-   You MUST implement the designated archetype for this slide:
+8. EDITORIAL PUBLICATION ARCHETYPE BLUEPRINTS (PRINT STANDARDS — ZERO WEB UI TROPES):
+   You MUST implement the designated archetype for this slide following handcrafted editorial standards (inspired by gold standard 'tipaza'):
+   * ABSOLUTE BAN: NEVER use 'shadow-lg', 'shadow-md', 'shadow-sm', 'rounded-full' on cards or kickers, 'border-l-[6px]', or HTML progress bars!
+   * MANDATORY: Sharp 0px or 2px corners ('rounded-none' or 'rounded-sm'), 1px hairlines ('border border-[var(--border)]'), monospace kickers with square accent dots, and bespoke vector SVG illustrations.
 
-   A. "monumental-cover":
-      - Kicker capsule: 'inline-flex px-5 py-2.5 rounded-full border border-[var(--accent)] bg-[var(--surface)] font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em] text-[var(--accent)]'
-      - Monumental headline: 'text-[60px] to text-[72px] font-bold leading-[1.04] tracking-[-0.04em]'
-      - Subheadline: 'text-[26px] to text-[28px] text-[var(--ink)]/80 leading-snug mt-6'
-      - Focal visual: Crisp inline SVG emblem matching subject (e.g. geometric card perimeter, vault seal, radar ring).
-      - Footer metadata: 2 compact telemetry cards + issue pill ('SPECIAL INVESTIGATION · 7 SLIDES').
+   A. "monumental-editorial-cover":
+      - Kicker: Monospace with square accent dot:
+        '<div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[18px] uppercase tracking-[0.2em] text-[var(--accent)]"><span className="inline-block w-2.5 h-2.5 bg-[var(--accent)]" /><span>{slide.kicker}</span></div>'
+      - Monumental headline: 'text-[64px] to text-[72px] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--ink)] mt-4'
+      - 1px hairline rule: '<div className="w-full border-b border-[var(--border)] my-6" />'
+      - Subheadline: 'text-[24px] text-[var(--ink)]/80 leading-snug mb-8'
+      - DOMINANT BESPOKE SVG VECTOR CENTERPIECE: Must occupy 40%–55% of the vertical frame! Clean architectural line work (strokeWidth="1.5" or "2"), coordinates, geometric forms matching the narrative visual metaphor (e.g. coffee cup vault strata, financial ledger grid, architectural cross-section).
+      - Footer metadata ledger: Clean 1px bordered split ledger at the bottom showing issue badge and numerical telemetry badges with 0px corners.
 
-   B. "myth-vs-reality":
-      - Two distinct, vertically stacked or side-by-side high-contrast panels:
-        * Card 1 (THE ILLUSION): 'bg-[var(--surface)]/50 border border-[var(--border)] p-7 rounded-lg'. Header tagged with muted text or alert tag. Body describes the consumer illusion in 6-8 words.
-        * Card 2 (THE FINE PRINT / REALITY): 'bg-[var(--surface)] border border-[var(--accent)] border-l-[6px] p-7 rounded-lg shadow-lg'. Header tagged with 'text-[var(--accent)] font-bold'. Large stat badge ('text-[48px]') and bolded reality punchline.
-        * Connect the two with an inline SVG indicator or contrast badge.
+   B. "asymmetric-editorial-cards":
+      - Header zone: Monospace kicker with square dot + punchy 4-6 word headline ('text-[46px] font-bold').
+      - Asymmetric layout: Primary hero card (occupying 55%-60% of card space) paired with 1 or 2 secondary ledger cards.
+      - Card styling: 'border border-[var(--border)] bg-[var(--surface)] p-8 rounded-none' (NO drop shadows, NO border-l-[6px]).
+      - Primary card features a bold tabular metric ('text-[52px] font-bold text-[var(--accent)]') and 5-8 word punchline with bold anchors.
+      - Secondary cards feature monospace headers, 1px dividers, and inline technical SVG glyphs.
 
-   C. "hero-stat-bar":
-      - Massive hero stat placard: Tabular numeral 'text-[96px] font-bold text-[var(--accent)] leading-none'.
-      - Single-line uppercase label 'text-[22px] font-[var(--font-mono)] tracking-wider text-[var(--ink)]/70'.
-      - Visual comparison / ratio bar:
-        '<div className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-full h-5 p-1 mt-6 flex"><div className="bg-[var(--accent)] h-full rounded-full" style={{ width: "82%" }} /></div>'
-      - Comparison label underneath: 'text-[24px] font-medium text-[var(--ink)] mt-3'.
-      - 1 or 2 high-contrast secondary cards below for the systemic takeaway.
+   C. "vertical-milestone-spine":
+      - Header zone: Monospace kicker + high-tension headline.
+      - Continuous 1px vertical hairline spine:
+        A vertical container with a continuous left border or central spine: 'border-l border-[var(--border)] pl-8 space-y-8 relative'.
+      - Square milestone nodes: Each milestone has an absolute square marker: 'w-3 h-3 bg-[var(--accent)] -left-[6.5px] top-2 absolute' or 'rotate-45'.
+      - Milestone content: Monospace time/phase label ('text-[18px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**.
 
-   D. "step-flow-chain":
-      - 3 connected sequential steps (e.g. [01] Cash In -> [02] Forgotten Card -> [03] 100% Margin Float).
-      - Each step features a circular/pill index: 'w-12 h-12 rounded-full border-2 border-[var(--accent)] text-[var(--accent)] font-[var(--font-mono)] font-bold text-[22px] flex items-center justify-center shrink-0'.
-      - Connected with crisp SVG downward/forward chevrons or line dividers.
-      - Step body copy: strictly 5-8 punchy words with bolded anchors!
+   D. "hero-metric-placard":
+      - Header zone: Monospace kicker with square dot + headline.
+      - Massive hero metric placard:
+        'border border-[var(--border)] bg-[var(--surface)] p-9 rounded-none'
+        Hero tabular numeral: 'text-[96px] to text-[110px] font-bold tabular-nums text-[var(--accent)] leading-none'.
+        Monospace metric label: 'text-[20px] font-[var(--font-mono)] uppercase tracking-wider text-[var(--ink)]/70 mt-3'.
+      - Bespoke architectural SVG comparison gauge: An inline SVG scale or ratio ledger with 1px dimension lines, tick marks, and coordinate markers (NO rounded-full HTML progress bars!).
+      - Bottom editorial context placard: 1px hairline card with 5-8 word takeaway.
 
-   E. "receipt-highlight":
-      - A stylized document/receipt placard: 'border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 rounded-lg relative'.
-      - Monospace document stamp header: 'DOCUMENT EXCERPT // SEC NOTE 14'.
-      - Highlighted contract clause callout: 'border-l-4 border-[var(--accent)] bg-[var(--accent)]/10 px-6 py-5 rounded-r my-6' with italicized locked contract quote.
-      - Bottom official verdict badge: 'inline-flex px-4 py-2 border border-[var(--accent)] text-[var(--accent)] font-[var(--font-mono)] text-[20px] uppercase font-bold tracking-wider'.
+   E. "full-height-editorial-split":
+      - 50/50 or 60/40 vertical or horizontal editorial split:
+      - Graphic half: Dominant architectural SVG vector diagram (occupying half the canvas) with rich technical linework, cross-hatching, dashed flow lines, and accent focal points.
+      - Editorial half: Monospace kicker with square dot, bold headline, and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
 
-   F. "by-the-numbers-grid":
-      - 2x2 grid or 3-column ledger of pure telemetry data.
-      - Each quadrant: 'border border-[var(--border)] bg-[var(--surface)] p-7 rounded-lg flex flex-col justify-between'.
-      - Huge numerals: 'text-[56px] font-bold tabular-nums text-[var(--accent)]'.
-      - Clean 2-to-3 word label: 'text-[22px] font-[var(--font-mono)] uppercase tracking-wider text-[var(--ink)]'.
-      - ZERO paragraph text in telemetry cells! Pure high-signal data.
+   F. "three-row-verification-ledger":
+      - Header zone: Monospace kicker with square dot + headline.
+      - Clean 3-row tabular ledger:
+        '<div className="border border-[var(--border)] bg-[var(--surface)] divide-y divide-[var(--border)] rounded-none">'
+      - Each row: 'p-7 flex items-center justify-between gap-6'
+      - Left column: Monospace index '[01]', '[02]', '[03]' in 'text-[var(--accent)] font-[var(--font-mono)] text-[20px] font-bold'.
+      - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
+      - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[18px] text-[var(--accent)]').
 
 9. UNIFIED SVG & HTML COORDINATES (No Disconnected Callout Lines):
    - NEVER draw hardcoded SVG connector lines pointing to disconnected HTML absolute <div>s!
@@ -916,12 +995,13 @@ ${code}
 \`\`\`
 
 Common Fix Guidelines:
-1. "Property 'value' does not exist on type '...[]'" or "Property 'title' does not exist on type '...[]'":
-   - An entire array was assigned where a single object was expected.
+1. "Property 'value' does not exist on type '...[]'" or "Property 'title' does not exist on type '...[]'" or "Property 'metric' does not exist on type '...[]'" or "Property 'badge' does not exist on type '...[]'":
+   - An entire array was assigned where a single object was expected, or an array was accessed without indexing.
    - If stages/columns/strata/boundaries are declared: change \`{ card: cards, inventory: telemetry }\` to \`{ card: cards[0], inventory: telemetry[0] }\` OR change \`[cards, cards]\` or \`[guardrails, guardrails]\` to \`[guardrails[0], guardrails[1]]\`.
    - Never write \`const boundaries = [guardrails, guardrails];\` — that creates an array of arrays (\`Guardrail[][]\`), so mapping gives an array instead of an object!
    - If numbered variables are declared: change \`const item0 = items;\` to \`const item0 = items[0];\`
-   - If accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or map over the array.
+   - If accessed in JSX: change \`{items?.metric}\` to \`{items?.[0]?.metric}\`, and change \`{items?.metric?.badge}\` to \`{items?.[0]?.metric?.badge}\` (or index with \`[i]\` when looping).
+   - If telemetry accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or \`{telemetry?.[0]?.badge}\`.
 2. "Identifier expected":
    - Check for dangling optional chaining or unclosed syntax (e.g. \`telemetry?.;\` -> \`telemetry?.[0];\`).
 3. "Property 'find' does not exist on type '...'":

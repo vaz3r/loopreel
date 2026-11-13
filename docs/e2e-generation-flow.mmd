@@ -1,0 +1,79 @@
+flowchart TD
+    classDef client fill:#1e1e24,stroke:#4a4a5a,stroke-width:1px,color:#f5f5f7
+    classDef queue fill:#2a1b1b,stroke:#ff2a2a,stroke-width:1px,color:#f5f5f7
+    classDef worker fill:#16241b,stroke:#2aff66,stroke-width:1px,color:#f5f5f7
+    classDef engine fill:#1b2434,stroke:#2a82ff,stroke-width:2px,color:#f5f5f7
+    classDef llm fill:#2d1e36,stroke:#c42aff,stroke-width:1px,color:#f5f5f7
+    classDef audit fill:#2e2416,stroke:#ffaa2a,stroke-width:1px,color:#f5f5f7
+
+    subgraph CLIENT_LAYER["1. Ingestion & Job Dispatch"]
+        A["User / Admin UI\n(http://localhost:5175)"] -->|POST /api/jobs\nURL or Raw Prompt| B["API Gateway\n(@loopreel/api)"]
+        B -->|Persist Job State: queued| DB[("PostgreSQL\n(@loopreel/db)")]
+        B -->|Enqueue BullMQ Job| Q["Redis Queue: jobsQueue\n(@loopreel/queue)"]
+    end
+
+    subgraph WORKER_ORCHESTRATION["2. Worker Orchestration"]
+        Q -->|Job Dispatch| WI["Worker Ingest\n(@loopreel/worker-ingest)"]
+        WI -->|Scrape Web URL / Clean HTML\nor Pass-through Prompt| WT["Worker Transcribe\n(@loopreel/worker-transcribe)"]
+        WT -->|Pass Text Payload| WS["Worker Structure\n(@loopreel/worker-structure)"]
+        WS -->|Status: structuring| DB
+    end
+
+    subgraph GENERATOR_ENGINE["3. Bespoke Codegen Engine (@loopreel/generator)"]
+        WS --> GE["runTemplatePipeline() / generateTemplateReference()"]
+
+        subgraph PASS1["Pass 1: Content & Factual Extraction"]
+            GE --> P1["Pass 1: Investigative Fact-Checker\n(GroundTruthDossier)"]
+            P1 <-->|Prompt & JSON Response\nTemp: 0.2| L1["LLM (Copilot / Anthropic)"]
+        end
+
+        subgraph PASS2["Pass 2: Art Direction & Brand Theme"]
+            P1 --> P2["Pass 2: Creative Director\n(BrandTokens)"]
+            P2 -->|User Brand Kit Override\ne.g. The Fine Print / Tipaza| P2B["Resolved Brand Tokens\n(Paper, Ink, Accent, Surface, Fonts)"]
+        end
+
+        subgraph PASS3["Pass 3: Editorial Hook Strategy"]
+            P2B --> P3["Pass 3: Editorial Strategist\n(StoryStrategy: Hook, Conflict, Catch, Verdict)"]
+            P3 <-->|Prompt & JSON Response\nTemp: 0.7| L3["LLM (Copilot / Anthropic)"]
+        end
+
+        subgraph PASS4["Pass 4: Storyboard & SVG Blueprint JSON"]
+            P3 --> P4["Pass 4: Senior Copy Editor\n(SlideData[] with 5-8 word budget & Archetype Blueprints)"]
+            P4 <-->|Prompt & JSON Response\nTemp: 0.6| L4["LLM (Copilot / Anthropic)"]
+            P4 --> SAN["Automated Trimmer & Normalizer\n(Clamp words, ensure valid archetypes)"]
+        end
+
+        subgraph PASS5["Pass 5: Spatial Layout & SVG Concept"]
+            SAN --> P5["Pass 5: Layout Architect\n(Bespoke SVG Blueprints)"]
+        end
+
+        subgraph PASS6["Pass 6: Bespoke Slide Code Synthesis"]
+            P5 --> P6["Pass 6: Principal React Engineer\n(Parallel Synthesis, Concurrency: 3)"]
+            P6 <-->|Slide 01..N .tsx Prompts| L6["LLM (Copilot / Anthropic)"]
+            P6 --> CS["Sanitizer & Import Linker\n(Array index healer, import normalizer)"]
+        end
+
+        subgraph PASS7["Pass 7: Assembly & Self-Healing Compiler"]
+            CS --> P7["Pass 7: Assembly (index.ts)\n& TypeScript Compiler Verification (tsc)"]
+            P7 -->|If tsc Errors| SH["Self-Healing Compiler Loop\n(Max 3 attempts)"]
+            SH <-->|Fix compiler errors| L7["LLM (Copilot / Anthropic)"]
+            SH -->|Valid TS| FIN["Verified Template Files\n(packages/generator/templates/<slug>)"]
+        end
+    end
+
+    subgraph AUDIT_AND_DELIVERY["4. Automated Visual Audit & Asset Delivery"]
+        FIN --> PVA["Automated Playwright Visual Auditor\n(Headless Chromium on Studio :5175)"]
+        PVA -->|Collision & Overflow Detection| CHK{"Collisions > 0?"}
+        CHK -->|Yes| FAIL["Reject Job & Mark Failed"]
+        CHK -->|0 Collisions| SNAP["Capture Full-Page Slide Snapshots\n(slide-01.png .. slide-07.png)"]
+        SNAP --> STO["Upload Slide Assets\n(@loopreel/storage: Supabase / S3)"]
+        STO --> DB2[("Update Job: complete\nLink Slide Asset URLs")]
+        DB2 --> FINISH["Ready for User in Admin & Studio\nhttp://localhost:5175/jobs/<id>"]
+    end
+
+    class A,B client;
+    class Q queue;
+    class WI,WT,WS worker;
+    class GE,P1,P2,P2B,P3,P4,SAN,P5,P6,CS,P7,SH,FIN engine;
+    class L1,L3,L4,L6,L7 llm;
+    class PVA,CHK,FAIL,SNAP,STO,DB2,FINISH audit;

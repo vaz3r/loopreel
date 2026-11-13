@@ -8,22 +8,16 @@ import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
   type TemplateBrief,
   type NarrativePreset,
-  type StoryStrategy,
   type GroundTruthDossier,
   type SlideDesignBlueprint,
-  buildFactExtractionSystemPrompt,
-  buildFactExtractionUserPrompt,
-  buildTopicResearchSystemPrompt,
-  buildTopicResearchUserPrompt,
+  type NarrativeIntelligence,
+  buildNarrativeIntelligenceSystemPrompt,
+  buildNarrativeIntelligenceUserPrompt,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
   buildArticleBrandUserPrompt,
-  buildStoryStrategySystemPrompt,
-  buildStoryStrategyUserPrompt,
   buildStoryDeckSystemPrompt,
   buildStoryDeckUserPrompt,
-  buildVisualBlueprintSystemPrompt,
-  buildVisualBlueprintUserPrompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -175,24 +169,19 @@ export function sanitizeTsxCode(rawCode: string): string {
     });
   });
 
-  // 5. Fix unindexed items/cards/telemetry/inventory property access when variable is an array
-  let cardTitleCount = 0;
-  code = code.replace(/(?:cards|items)\??\.(?:title|label)(?!\[)/g, () => {
-    return `items?.[${cardTitleCount++}]?.title`;
-  });
-  let cardBodyCount = 0;
-  code = code.replace(/(?:cards|items)\??\.body(?!\[)/g, () => {
-    return `items?.[${cardBodyCount++}]?.body`;
-  });
-
-  let telValCount = 0;
-  code = code.replace(/(?:telemetry|metrics|inventory)\??\.(?:value|val|badge)(?!\[)/g, () => {
-    return `telemetry?.[${telValCount++}]?.value`;
-  });
-  let telLabelCount = 0;
-  code = code.replace(/(?:telemetry|metrics|inventory)\??\.label(?!\[)/g, () => {
-    return `telemetry?.[${telLabelCount++}]?.label`;
-  });
+  // 5. Fix unindexed items/cards/telemetry/metrics/inventory/specs/badges property access when variable is an array
+  const unindexedPropCounts: Record<string, number> = {};
+  code = code.replace(
+    /(\b(?:cards|items|telemetry|metrics|inventory|specs|badges|stats|callouts|points))\??\.(title|label|body|metric|badge|value|val)(?!\s*\[)/g,
+    (_m, varName, prop) => {
+      const key = `${varName}.${prop}`;
+      const count = unindexedPropCounts[key] ?? 0;
+      unindexedPropCounts[key] = count + 1;
+      return `${varName}?.[${count}]?.${prop}`;
+    }
+  );
+  // Protect subsequent chained property access on metric (e.g. items?.[0]?.metric.badge -> items?.[0]?.metric?.badge)
+  code = code.replace(/(\?\.\[\d+\]\?\.metric)\.([a-zA-Z]+)/g, '$1?.$2');
 
   // 6. Strip meta-attributions: eliminate robotic phrases like "The article states that", "The text notes", etc.
   code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
@@ -215,6 +204,12 @@ export function sanitizeTsxCode(rawCode: string): string {
     code = code.replace(/text-\[(?:4[5-9]|[5-9][0-9]|1[0-1][0-9])px\]/g, 'text-[40px]');
     code = code.replace(/text-\[(?:3[1-9]|4[0-9])px\]/g, 'text-[28px]');
   }
+
+  // 10. Web UI trope sanitizer: enforce editorial print standards (zero drop shadows, zero pill badges on cards/kickers, zero progress bars)
+  code = code.replace(/\bshadow-(?:lg|md|xl|2xl|sm)\b/g, '');
+  code = code.replace(/\bborder-l-\[(?:4|6|8)px\]\b/g, 'border border-[var(--border)]');
+  code = code.replace(/\bborder-l-[468]\b/g, 'border border-[var(--border)]');
+  code = code.replace(/\brounded-(?:lg|xl|2xl|3xl)\b/g, 'rounded-none');
 
   return code;
 }
@@ -334,89 +329,76 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   let article: ArticleIntel | undefined;
   if (articleUrl) {
     console.log(`[Pipeline] Ingesting real news story from: ${articleUrl}...`);
-    options.onProgress?.('Ingesting Article Content', 0, 15);
+    options.onProgress?.('Ingesting Article Content', 0, 4);
     article = await ingestArticle(articleUrl);
   }
 
   // ==========================================================================
-  // PASS 1: INVESTIGATIVE FACT-CHECKER (ZERO HALLUCINATION DOSSIER)
+  // PASS 1: CONTENT & HOOK INTELLIGENCE (SPECIALIZED CONTENT / HOOK ANALYSIS)
   // ==========================================================================
-  let dossier: GroundTruthDossier;
-  if (article) {
-    console.log('[Pipeline] >>> Pass 1: Investigative Fact-Checker Extracting Verified GroundTruthDossier...');
-    options.onProgress?.('Extracting Verified Facts', 1, 15);
+  console.log('[Pipeline] >>> Pass 1/4: Analyzing Content & Formulating Hook Intelligence...');
+  options.onProgress?.('Analyzing Content & Hook Intelligence', 1, 4);
 
-    const factResponse = await llm.generateJSON(
-      buildFactExtractionSystemPrompt(),
-      buildFactExtractionUserPrompt(article),
-      0.2 // Low temperature for high factual precision
-    );
-    const rawDossier = extractJson<any>(factResponse.text);
-    dossier = {
-      articleTitle: rawDossier.articleTitle || article.title,
-      publisher: rawDossier.publisher || article.publisher,
-      byline: rawDossier.byline || article.byline || 'Staff Bureau',
-      summary: rawDossier.summary || article.summary,
-      entities: rawDossier.entities || [],
-      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
-      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
-      hardwareSpecs: rawDossier.hardwareSpecs || {
-        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
-      },
-      coreControversy: rawDossier.coreControversy || {
-        corporateClaim: '',
-        criticismOrAlarm: '',
-        regulatoryOrHistoricalPrecedent: '',
-      },
-      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
-      editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
-    };
-    console.log(
-      `[Pipeline] Dossier Extracted: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
-    );
-  } else {
-    console.log('[Pipeline] >>> Pass 1: Lead AI Research Analyst Compiling GroundTruthDossier from Brief...');
-    options.onProgress?.('Compiling Verified Topic Dossier', 1, 15);
+  const narrativeResponse = await llm.generateJSON(
+    buildNarrativeIntelligenceSystemPrompt(),
+    buildNarrativeIntelligenceUserPrompt({
+      article,
+      brief,
+      promptText: brief.name || options.brief?.name,
+    }),
+    0.2 // Low temperature for high factual precision & journalistic punch
+  );
+  const narrative = extractJson<NarrativeIntelligence>(narrativeResponse.text);
 
-    const factResponse = await llm.generateJSON(
-      buildTopicResearchSystemPrompt(),
-      buildTopicResearchUserPrompt(brief),
-      0.2
-    );
-    const rawDossier = extractJson<any>(factResponse.text);
-    dossier = {
-      articleTitle: rawDossier.articleTitle || brief.name || 'AI Frontier & Open Weights',
-      publisher: rawDossier.publisher || brief.name || 'The Compute Review',
-      byline: rawDossier.byline || 'Staff Intelligence Bureau',
-      summary: rawDossier.summary || brief.vibe || 'Curated editorial exploration',
-      entities: rawDossier.entities || [],
-      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
-      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
-      hardwareSpecs: rawDossier.hardwareSpecs || {
-        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
-      },
-      coreControversy: rawDossier.coreControversy || {
-        corporateClaim: '',
-        criticismOrAlarm: '',
-        regulatoryOrHistoricalPrecedent: '',
-      },
-      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
-      editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
-    };
-    console.log(
-      `[Pipeline] Topic Dossier Compiled: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
-    );
-  }
+  console.log(`[Pipeline] Pass 1 Complete:`);
+  console.log(`[Pipeline]   Hook:    "${narrative.hookHeadline}"`);
+  console.log(`[Pipeline]   Promise: "${narrative.valuePromise}"`);
+  console.log(`[Pipeline]   Metaphor: "${narrative.visualMetaphor}"`);
+
+  // Backwards compatibility dossier object for disk persistence
+  const dossier: GroundTruthDossier = {
+    articleTitle: narrative.articleTitle,
+    publisher: narrative.publisher,
+    byline: narrative.byline,
+    summary: narrative.summary,
+    entities: [],
+    verifiedMetrics: (narrative.verifiedMetrics || []).map((m) => ({
+      value: m.value,
+      label: m.label,
+      context: m.context || '',
+    })),
+    verifiedQuotes: (narrative.verifiedQuotes || []).map((q) => ({
+      quote: q.quote,
+      speaker: q.speaker,
+      role: q.role || '',
+      context: q.context || '',
+    })),
+    hardwareSpecs: {
+      deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
+    },
+    coreControversy: {
+      corporateClaim: narrative.coreConflict?.claim || '',
+      criticismOrAlarm: narrative.coreConflict?.reality || '',
+      regulatoryOrHistoricalPrecedent: narrative.hiddenCatches?.join('; ') || '',
+    },
+    hiddenCatchesAndLimits: narrative.hiddenCatches || [],
+    editorialVerdict: {
+      avoidAdvice: [narrative.verdict || ''],
+      fitAdvice: [],
+    },
+  };
 
   // ==========================================================================
-  // PASS 2: CREATIVE DIRECTOR ART DIRECTION & BRAND IDENTITY
+  // PASS 2: VISUAL CONFIG & BRAND THEME (THEME, STYLES & OPTIMAL PRESET)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 2: Creative Director Art Direction & Brand Identity...');
-  options.onProgress?.('Generating Brand Identity', 2, 15);
+  console.log('[Pipeline] >>> Pass 2/4: Creating Visual Theme, Styles & Optimal Config...');
+  options.onProgress?.('Creating Visual Theme & Config', 2, 4);
 
-  const defaultSlug = article
-    ? (article.title || 'story').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 32).replace(/(^-|-$)/g, '')
-    : (brief.name || 'custom').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const defaultSlug = (narrative.articleTitle || article?.title || brief.name || 'story')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .slice(0, 32)
+    .replace(/(^-|-$)/g, '');
 
   let brand: BrandTokens;
 
@@ -446,7 +428,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
     }
 
-    const name = b.name || b.wordmark || 'Custom Brand';
+    const name = b.name || b.wordmark || narrative.publisher || 'Custom Brand';
     const slug = options.preset || defaultSlug;
 
     brand = {
@@ -477,7 +459,12 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   } else {
     const brandPrompt = article
       ? buildArticleBrandUserPrompt(article, brief)
-      : buildBrandUserPrompt(brief);
+      : buildBrandUserPrompt({
+          ...brief,
+          name: narrative.publisher || brief.name,
+          domain: brief.domain || `${defaultSlug}.pub`,
+          vibe: `${narrative.visualMetaphor} - ${narrative.kicker}`,
+        });
 
     const brandResponse = await llm.generateJSON(
       buildBrandSystemPrompt(),
@@ -508,43 +495,14 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       : 7;
 
   // ==========================================================================
-  // PASS 3: EDITORIAL STRATEGIST (HOOK & TENSION FORMULA)
+  // PASS 3: SLIDES CONTENT & SPATIAL ELEMENTS JSON (CONTENT + CONFIG -> STORYBOARD)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 3: Editorial Strategist Formulating Hook & Angle (${narrativePreset})...`);
-  options.onProgress?.('Extracting Story Strategy', 3, 15);
-
-  let strategy: StoryStrategy;
-  const effectiveArticle: ArticleIntel = article || {
-    url: brief.domain ? `https://${brief.domain}` : 'https://loopreel.local',
-    canonicalUrl: brief.domain ? `https://${brief.domain}` : 'https://loopreel.local',
-    title: dossier.articleTitle || brief.name || 'Editorial Investigation',
-    publisher: dossier.publisher || brand.name,
-    byline: dossier.byline || 'Staff Bureau',
-    summary: dossier.summary,
-    cleanText: brief.vibe ? `${brief.vibe}\n\n${dossier.summary}` : dossier.summary,
-    extractedQuotes: dossier.verifiedQuotes.map((q) => q.quote),
-    extractedMetrics: dossier.verifiedMetrics.map((m) => `${m.value} ${m.label}`),
-  };
-
-  const strategyResponse = await llm.generateJSON(
-    buildStoryStrategySystemPrompt(narrativePreset),
-    buildStoryStrategyUserPrompt(dossier, effectiveArticle),
-    0.7
-  );
-  strategy = extractJson<StoryStrategy>(strategyResponse.text);
-
-  console.log(`[Pipeline] Hook Formulated: "${strategy.hookHeadline}"`);
-  console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
-
-  // ==========================================================================
-  // PASS 4: SENIOR COPY EDITOR (DYNAMIC STORYBOARD WITH HARD WORD BUDGETS)
-  // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 4: Senior Copy Editor Authoring ${targetSlideCount}-Slide High-Signal Storyboard (${narrativePreset})...`);
-  options.onProgress?.('Authoring Storyboard', 4, 15);
+  console.log(`[Pipeline] >>> Pass 3/4: Authoring ${targetSlideCount}-Slide Content & Elements JSON (${narrativePreset})...`);
+  options.onProgress?.('Authoring Slides Content JSON', 3, 4);
 
   const deckResponse = await llm.generateJSON(
     buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-    buildStoryDeckUserPrompt(strategy, dossier, brand, targetSlideCount),
+    buildStoryDeckUserPrompt(narrative, narrative, brand, targetSlideCount),
     0.6
   );
   let allSlides = extractJson<SlideData[]>(deckResponse.text);
@@ -556,31 +514,44 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // Normalize slide schema and enforce strict editorial word budgets & visual archetypes
   const activePlatform = options.platform || 'instagram-feed';
   const VALID_ARCHETYPES = [
-    'monumental-cover',
-    'myth-vs-reality',
-    'hero-stat-bar',
-    'step-flow-chain',
-    'receipt-highlight',
-    'by-the-numbers-grid',
+    'monumental-editorial-cover',
+    'asymmetric-editorial-cards',
+    'vertical-milestone-spine',
+    'hero-metric-placard',
+    'full-height-editorial-split',
+    'three-row-verification-ledger',
+  ];
+
+  const fallbackArchetypes = [
+    'monumental-editorial-cover',
+    'asymmetric-editorial-cards',
+    'vertical-milestone-spine',
+    'hero-metric-placard',
+    'full-height-editorial-split',
+    'three-row-verification-ledger',
+    'asymmetric-editorial-cards',
   ];
 
   allSlides = allSlides.map((s, idx) => {
-    // 1. Resolve visual archetype
-    let archetype = s.archetype || s.layoutTopology || s.visualStyle;
-    if (!VALID_ARCHETYPES.some((valid) => archetype?.includes(valid))) {
-      const fallbackArchetypes = [
-        'monumental-cover',
-        'myth-vs-reality',
-        'hero-stat-bar',
-        'step-flow-chain',
-        'receipt-highlight',
-        'by-the-numbers-grid',
-        'myth-vs-reality',
-      ];
-      archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
+    // 1. Resolve and normalize visual archetype
+    let rawArch = s.archetype || s.layoutTopology || s.visualStyle || '';
+    let archetype = VALID_ARCHETYPES.find((valid) => rawArch.toLowerCase().includes(valid.split('-')[1] || valid));
+
+    // Map legacy names if present
+    if (!archetype) {
+      if (/cover/i.test(rawArch)) archetype = 'monumental-editorial-cover';
+      else if (/myth|belief|contrast|cards/i.test(rawArch)) archetype = 'asymmetric-editorial-cards';
+      else if (/stat|metric|placard|hero/i.test(rawArch)) archetype = 'hero-metric-placard';
+      else if (/flow|step|chain|spine|timeline/i.test(rawArch)) archetype = 'vertical-milestone-spine';
+      else if (/split|diagram|schematic/i.test(rawArch)) archetype = 'full-height-editorial-split';
+      else if (/grid|ledger|numbers|receipt/i.test(rawArch)) archetype = 'three-row-verification-ledger';
+      else archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
     }
 
-    // 2. Clamp and sanitize items body copy (Hard 10-word ceiling for mobile scannability)
+    // Slide 1 is always monumental-editorial-cover
+    if (idx === 0) archetype = 'monumental-editorial-cover';
+
+    // 2. Clamp and sanitize items body copy (Strict 10-word ceiling for mobile scannability)
     let sanitizedItems = s.items;
     if (Array.isArray(sanitizedItems)) {
       sanitizedItems = sanitizedItems.map((item: any) => {
@@ -636,7 +607,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     platform: activePlatform,
     slides: allSlides,
   };
-  console.log(`[Pipeline] Pass 4 complete: Storyboard authored with ${deck.slides.length} slides.`);
+  console.log(`[Pipeline] Pass 3 complete: Storyboard authored with ${deck.slides.length} slides.`);
 
   // Create isolated template folder in apps/generator/templates/<slug>/
   const templateDir = path.join(TEMPLATES_ROOT, slug);
@@ -655,45 +626,25 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
-  // ==========================================================================
-  // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINT)
-  // ==========================================================================
-  console.log('[Pipeline] >>> Pass 5: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...');
-  options.onProgress?.('Designing Visual Blueprints', 5, 15);
-
-  let blueprints: SlideDesignBlueprint[] = [];
-  if (deck.slides.some((s) => s.svgBlueprint || s.layoutTopology)) {
-    console.log('[Pipeline] Pass 5: Using per-slide visual styles and SVG blueprints determined from content.');
-    blueprints = deck.slides.map((s) => ({
-      slideId: s.id,
-      type: s.type,
-      layoutStructure: s.layoutTopology || s.visualStyle || 'hero-diagram-with-callouts',
-      svgConcept: {
-        description: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
-        type: 'schematic',
-      },
-    }));
-  } else {
-    try {
-      const blueprintResponse = await llm.generateJSON(
-        buildVisualBlueprintSystemPrompt(),
-        buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
-        0.7
-      );
-      blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
-      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide visual blueprints generated.`);
-    } catch (err: any) {
-      console.warn(`[Pipeline] Visual blueprint generation fallback: ${err.message}`);
-    }
-  }
+  // Prepare slide design blueprints directly from Pass 3 content JSON
+  const blueprints: SlideDesignBlueprint[] = deck.slides.map((s) => ({
+    slideId: s.id,
+    type: s.type,
+    layoutStructure: s.archetype || s.layoutTopology || 'asymmetric-editorial-cards',
+    svgConcept: {
+      description: s.svgBlueprint || `Bespoke architectural SVG vector diagram matching ${s.archetype}`,
+      type: 'schematic',
+    },
+  }));
 
   // ==========================================================================
-  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)
+  // PASS 4: SLIDES FINAL FORM SYNTHESIS & AUDIT (REACT + SVG CODEGEN & AUDIT)
   // ==========================================================================
   const concurrency = options.concurrency || 3;
   console.log(
-    `[Pipeline] >>> Pass 6: Principal React Engineer Synthesizing Slides in Parallel (Concurrency: ${concurrency})...`
+    `[Pipeline] >>> Pass 4/4: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
   );
+  options.onProgress?.('Synthesizing Slides Final Form', 4, 4);
 
   const slideTasks = deck.slides.map((slideData, i) => async () => {
     const slideNumber = i + 1;
@@ -706,7 +657,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filePath = path.join(slidesDir, filename);
 
     console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Synthesizing Slide ${slideNumber}: ${slideData.type}`, 5 + slideNumber, 15);
+    options.onProgress?.(`Pass 4/4: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
@@ -766,10 +717,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   const slideExports = await runConcurrentPool(slideTasks, concurrency, (task) => task());
 
-  // ==========================================================================
-  // PASS 7: TEMPLATE INDEX ASSEMBLY & TYPESCRIPT COMPILER VERIFICATION
-  // ==========================================================================
-  console.log('[Pipeline] >>> Pass 7: Assembling template package entry point (index.ts)...');
+  // Assemble template package entry point (index.ts)
+  console.log('[Pipeline] >>> Pass 4: Assembling template package entry point (index.ts)...');
   const indexImports = slideExports
     .map((s) => `import ${s.componentName} from './slides/${s.filename.replace('.tsx', '')}';`)
     .join('\n');
@@ -796,8 +745,8 @@ export default pkg;
 
   fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 
-  console.log(`[Pipeline] >>> Verifying TypeScript integrity for template ${slug}...`);
-  options.onProgress?.('Verifying TypeScript Integrity', 14, 15);
+  console.log(`[Pipeline] >>> Pass 4: Verifying TypeScript compiler integrity for template ${slug}...`);
+  options.onProgress?.('Verifying TypeScript & Visual Integrity', 4, 4);
 
   const initialCheck = validateTemplateTypeScript(templateDir);
   if (initialCheck.valid) {

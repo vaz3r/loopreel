@@ -1,0 +1,87 @@
+{
+  "articleTitle": "Starbucks’ Gift Card Bank: Customers Supply the Cash, Starbucks Keeps the Float",
+  "publisher": "Unpublished research brief for thefineprint.co",
+  "byline": "NarrativeIntelligence / AI-assisted research",
+  "summary": "Starbucks receives customer money before supplying purchases, pays no interest on card balances, and ended fiscal 2025 with $1,751.7 million in combined stored-value-card and loyalty-program liabilities—not a separately disclosed cash-deposit pool.​ Its financing advantage has a second engine: expected nonredemption generated $222.4 million in fiscal 2025 breakage revenue, calculated from $200.4 million at company-operated stores and $22.0 million at licensed stores, even though U.S. card balances do not expire.​",
+  "entities": [],
+  "verifiedMetrics": [
+    {
+      "value": "$1,751.7 million",
+      "label": "Combined card and loyalty liability",
+      "context": "September 28, 2025 closing balance, versus $1,718.7 million at September 29, 2024. Approximately $1.6 billion was current at each year-end. Includes unredeemed loyalty Stars; not an isolated cash-float measurement."
+    },
+    {
+      "value": "$15,245.8 million",
+      "label": "Fiscal 2025 card-and-loyalty revenue deferrals",
+      "context": "Complete roll-forward, in millions: opening liability $1,718.7; activations, reloads and Stars earned +$15,245.8; card and Stars redemptions and breakage −$15,199.5; other changes −$13.3; closing liability $1,751.7. Other changes primarily reflect foreign-currency translation."
+    },
+    {
+      "value": "$15,807.1 million",
+      "label": "Fiscal 2024 comparative deferrals",
+      "context": "Complete roll-forward, in millions: opening liability $1,567.5; activations, reloads and Stars earned +$15,807.1; card and Stars redemptions and breakage −$15,665.1; other changes +$9.2; closing liability $1,718.7."
+    },
+    {
+      "value": "$222.4 million",
+      "label": "Calculated fiscal 2025 breakage revenue",
+      "context": "Company-operated stores $200.4 million plus licensed stores $22.0 million. Comparative calculated totals: fiscal 2024 $207.6 million, comprising $187.6 million and $20.0 million; fiscal 2023 $215.0 million, comprising $196.1 million and $18.9 million. These are revenue amounts, not quantified financing savings."
+    },
+    {
+      "value": "$1,840.6 million",
+      "label": "Broader current balance-sheet caption",
+      "context": "'Stored value card liability and current portion of deferred revenue' at September 28, 2025, versus $1,781.2 million at September 29, 2024. Current Nestlé prepaid-royalty deferred revenue was $177.0 million at both dates, illustrating why this caption cannot be equated with gift-card balances.​"
+    },
+    {
+      "value": "$3,219.8 million",
+      "label": "Company-wide cash and cash equivalents",
+      "context": "September 28, 2025 balance-sheet context: total assets $32,019.7 million; total liabilities $40,108.9 million; current liabilities $10,210.4 million. Company-wide cash is not identified as a dedicated gift-card reserve."
+    },
+    {
+      "value": "No interest; no FDIC insurance",
+      "label": "Cardholder financial protection",
+      "context": "The U.S. card agreement effective July 24, 2023 expressly provides neither interest nor FDIC insurance. Balances generally cannot be refunded or redeemed for cash except where law or the agreement permits."
+    },
+    {
+      "value": "Less than $15",
+      "label": "California statutory cash-out threshold",
+      "context": "SB 22, Chapter 207, approved October 1, 2025, made the increased threshold operative April 1, 2026 and expressly included electronic gift cards. A specified exemption covers certificates donated without consideration to nonprofit or charitable organizations bearing a noncash-redemption disclaimer in at least 10-point font."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "We offer the Starbucks Card to make it easier for you to shop with us and to make your relationship with us more rewarding.",
+      "speaker": "Starbucks Corporation",
+      "role": "Card issuer; U.S. Starbucks Card Terms & Conditions, effective July 24, 2023.",
+      "context": ""
+    },
+    {
+      "quote": "The value on your Starbucks Card is not insured by the Federal Deposit Insurance Corporation (FDIC), nor does it earn interest.",
+      "speaker": "Starbucks Corporation",
+      "role": "Card issuer; contractual disclosure of insurance and interest treatment.",
+      "context": ""
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Standard",
+      "specs": [],
+      "price": "N/A",
+      "availability": "N/A"
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "Starbucks markets its card as an easier, more rewarding way to shop, with no activation, service, dormancy or inactivity fees and no expiration of the card or its balance.",
+    "criticismOrAlarm": "Convenience also finances the seller: loading creates deferred revenue, while product revenue generally follows redemption; customers receive no interest, no FDIC insurance and generally no cash refund unless law or the agreement requires one.​ The mechanism resembles interest-free customer financing, but 'unregulated bank' overstates the legal reality: these are retail prepayments, and gift-card cash-redemption and applicable unclaimed-property laws still constrain them.​",
+    "regulatoryOrHistoricalPrecedent": "The headline balance is not pure gift-card cash. At September 28, 2025, $1,751.7 million combined stored-value cards with loyalty obligations; the separate $1,840.6 million balance-sheet caption also included other current deferred revenue, including $177.0 million associated with Nestlé. Neither figure should be presented as a standalone customer-deposit total, and the $15,245.8 million annual deferral flow includes Stars earned—not just cash loaded.​; No expiration does not prevent breakage recognition. Starbucks estimates balances unlikely to be redeemed and recognizes that revenue proportionately as other balances are redeemed, incorporating applicable unclaimed-property remittances. This is estimated nonredemption revenue—not interest income, not an expiration fee, and not a separately disclosed net-profit figure; historically, the majority of cards are redeemed within one year.; Reload friction can perpetuate residual balances. On December 19, 2023, the Washington Consumer Protection Coalition alleged four problematic app practices: a $10.00 minimum with restricted reload amounts; a $25.00 default and $15.00 lowest displayed option despite the $10.00 actual minimum; restricted tipping; and no split payment across payment methods for in-app card orders. These are dated allegations, not adjudicated findings or confirmation of today's interface. Cash-out rights provide a counterweight: California SB 22 raised the statutory threshold from less than $10 to less than $15, operative April 1, 2026."
+  },
+  "hiddenCatchesAndLimits": [
+    "The headline balance is not pure gift-card cash. At September 28, 2025, $1,751.7 million combined stored-value cards with loyalty obligations; the separate $1,840.6 million balance-sheet caption also included other current deferred revenue, including $177.0 million associated with Nestlé. Neither figure should be presented as a standalone customer-deposit total, and the $15,245.8 million annual deferral flow includes Stars earned—not just cash loaded.​",
+    "No expiration does not prevent breakage recognition. Starbucks estimates balances unlikely to be redeemed and recognizes that revenue proportionately as other balances are redeemed, incorporating applicable unclaimed-property remittances. This is estimated nonredemption revenue—not interest income, not an expiration fee, and not a separately disclosed net-profit figure; historically, the majority of cards are redeemed within one year.",
+    "Reload friction can perpetuate residual balances. On December 19, 2023, the Washington Consumer Protection Coalition alleged four problematic app practices: a $10.00 minimum with restricted reload amounts; a $25.00 default and $15.00 lowest displayed option despite the $10.00 actual minimum; restricted tipping; and no split payment across payment methods for in-app card orders. These are dated allegations, not adjudicated findings or confirmation of today's interface. Cash-out rights provide a counterweight: California SB 22 raised the statutory threshold from less than $10 to less than $15, operative April 1, 2026."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [
+      "The defensible finding is not that Starbucks secretly operates a bank: it collects retail prepayments without paying customers interest, then recognizes an additional revenue benefit when some value is unlikely to be redeemed.​ Customers surrender liquidity before receiving goods; Starbucks gains payment timing and breakage revenue. The editorial distinction matters: interest-free is accurate, entirely unregulated is not, and combined deferred-revenue balances must never be relabeled as pure customer cash.​"
+    ],
+    "fitAdvice": []
+  }
+}
