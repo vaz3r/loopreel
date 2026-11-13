@@ -203,6 +203,18 @@ export function sanitizeTsxCode(rawCode: string): string {
     });
   });
 
+  // 4c. Fix repeated unindexed array variables rendered in JSX:
+  // e.g. <span className="block">{headlineLines}</span>
+  //      <span className="block">{headlineLines}</span>
+  //      <span className="block">{headlineLines}</span>
+  // -> {headlineLines[0]}, {headlineLines[1]}, {headlineLines[2]}
+  const jsxArrayCounts: Record<string, number> = {};
+  code = code.replace(/\{([a-zA-Z0-9_$]*(?:Lines|Parts|Words|Items|Cards|List|Array))\}\s*(?=<\/(?:span|p|h[1-6]|div)>)/g, (_m, ident) => {
+    const idx = jsxArrayCounts[ident] ?? 0;
+    jsxArrayCounts[ident] = idx + 1;
+    return `{${ident}[${idx}]}`;
+  });
+
   // 5. Fix unindexed items/cards/telemetry/metrics/inventory/specs/badges property access when variable is an array
   const unindexedPropCounts: Record<string, number> = {};
   code = code.replace(
@@ -221,10 +233,8 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
   code = code.replace(/\bAccording\s+to\s+(?:the\s+)?(?:article|piece|report|text|source|account),\s*/gi, '');
 
-  // 7. Multi-column font clamping: in 2-column or split layouts, clamp numerals >64px down to 56px to prevent column blowout
-  if (/grid-cols-2|grid-cols-3|grid-cols-\[.*?(?:fr|px).*?\]/i.test(code)) {
-    code = code.replace(/text-\[(?:8[0-9]|9[0-9]|1[0-1][0-9])px\]/g, 'text-[56px]');
-  }
+  // 7. Auto-protect and promote main H1 headline to canonical editorial text-[64px]
+  code = code.replace(/(<h1\b[^>]*\bclassName="[^"]*?)\btext-\[(?:2[0-9]|3[0-9]|4[0-9]|5[0-2])px\]/g, '$1text-[64px]');
 
   // 8. Fix unindexed array assignment to metric variables:
   // e.g. const metric = hasQualifier ? remainingWords : firstWord;
@@ -232,23 +242,14 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/(\bmetric\s*=\s*[^;]*?\bremainingWords\b)(?!\s*\[)(?!\s*\.join)/g, '$1[0]');
   code = code.replace(/const\s+metric\s*=\s*remainingWords\s*;/g, 'const metric = remainingWords[0] ?? "";');
 
-  // 9. Multi-row ledger font clamping: in 3+ row stacked layouts (grid-rows-3, grid-rows-4),
-  // clamp numerals > 44px down to 40px and headers > 30px down to 28px to eliminate row boundary overflow
-  if (/grid-rows-(?:3|4|5)/i.test(code)) {
-    code = code.replace(/text-\[(?:4[5-9]|[5-9][0-9]|1[0-1][0-9])px\]/g, 'text-[40px]');
-    code = code.replace(/text-\[(?:3[1-9]|4[0-9])px\]/g, 'text-[28px]');
-  }
-
-  // 10. Web UI trope sanitizer: enforce editorial print standards (zero drop shadows, zero pill badges on cards/kickers, zero progress bars)
+  // 9. Web UI trope sanitizer: enforce editorial print standards (zero drop shadows, zero pill badges on cards/kickers, zero progress bars)
   code = code.replace(/\bshadow-(?:lg|md|xl|2xl|sm)\b/g, '');
   code = code.replace(/\bborder-l-\[(?:4|6|8)px\]\b/g, 'border border-[var(--border)]');
   code = code.replace(/\bborder-l-[468]\b/g, 'border border-[var(--border)]');
   code = code.replace(/\brounded-(?:lg|xl|2xl|3xl)\b/g, 'rounded-none');
 
-  // 11. SVG text stripper: remove rogue <text>...</text> tags from inside <svg> blocks (Tipaza rule: all typography belongs in HTML)
-  code = code.replace(/<svg\b[^>]*>([\s\S]*?)<\/svg>/gi, (svgBlock) => {
-    return svgBlock.replace(/<text\b[^>]*>[\s\S]*?<\/text>/gi, '');
-  });
+  // 10. Strip fake text skeleton wireframe paths inside SVGs (e.g. M106 529H276 M106 542H245)
+  code = code.replace(/<path\b[^>]*\bd="M[0-9]+\s+[0-9]+H[0-9]+(?:\s+M[0-9]+\s+[0-9]+H[0-9]+)+[^"]*"[^>]*\/?>/gi, '');
 
   // 12. Fix dangling or double optional chaining:
   // e.g. .split('/')?.?.trim() -> .split('/')?.[0]?.trim()
@@ -387,49 +388,49 @@ export function getDomainSvgBlueprints(themeText: string): string[] {
 
   if (isFinance) {
     return [
-      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline, micro-coordinates [37°N 122°W], and subtle foil stamp registration crosshairs. Geometric editorial linework. No clipart, no flowchart pipes, zero text in SVG.',
-      '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart.',
-      '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
-      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
-      '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with corporate float ledger strata and 1px hairlines. Right: paper with verified badges. Bottom full-width rule holds closing takeaway.',
-      '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
-      '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle balance-sheet strata boundary mark.',
+      'viewBox="0 0 952 650". Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline, micro-coordinates [37°N 122°W], and subtle foil stamp registration crosshairs. Geometric editorial linework. No clipart, no flowchart pipes, zero fake text wireframes.',
+      'viewBox="0 0 952 420". Stack two offset, full-width cards beneath a 64px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart.',
+      'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
+      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
+      'viewBox="0 0 952 440". Beneath a 64px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with corporate float ledger strata and 1px hairlines. Right: paper with verified badges. Bottom full-width rule holds closing takeaway.',
+      'viewBox="0 0 952 420". Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
+      'viewBox="0 0 952 420". Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle balance-sheet strata boundary mark.',
     ];
   }
 
   if (isTech) {
     return [
-      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, an imposing geometric silicon die section silhouette in dark surface and ink with 1px bus interconnect hairlines, micro-stepped cache strata, and registration crosshairs. Clean engineering linework. Zero text in SVG, zero flowchart pipes.',
-      '600×750 viewBox; 40px margins. Stack two offset cards. Subtle 1px bus traces and logic-gate coordinate ticks behind the cards. High precision technical linework, not a flowchart.',
-      '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Accent fracture line cutting across 1px dimension hairlines. Clean editorial layout, zero charts.',
-      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Precision micro-ticks and bus routing hairlines.',
-      '600×750 viewBox; 40px margins. Split diptych: Left dark surface with architectural wafer section silhouette and 1px hairlines. Right paper with verified specs.',
-      '600×750 viewBox; 40px margins. Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03], 1px dividers, and right-aligned metric badges.',
-      '600×750 viewBox; 40px margins. Final verdict diptych with closing takeaway and clean technical boundary marks.',
+      'viewBox="0 0 952 650". Dark paper field. In the center, an imposing geometric silicon die section silhouette in dark surface and ink with 1px bus interconnect hairlines, micro-stepped cache strata, and registration crosshairs. Clean engineering linework. Zero fake text wireframes, zero flowchart pipes.',
+      'viewBox="0 0 952 420". Stack two offset cards. Subtle 1px bus traces and logic-gate coordinate ticks behind the cards. High precision technical linework, not a flowchart.',
+      'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Accent fracture line cutting across 1px dimension hairlines. Clean editorial layout, zero charts.',
+      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Precision micro-ticks and bus routing hairlines.',
+      'viewBox="0 0 952 440". Split diptych: Left dark surface with architectural wafer section silhouette and 1px hairlines. Right paper with verified specs.',
+      'viewBox="0 0 952 420". Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03], 1px dividers, and right-aligned metric badges.',
+      'viewBox="0 0 952 420". Final verdict diptych with closing takeaway and clean technical boundary marks.',
     ];
   }
 
   if (isGeo) {
     return [
-      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, abstract territorial demarcation hairlines and maritime transit vectors in dark surface and accent ink. Zero cartoon maps, zero text in SVG.',
-      '600×750 viewBox; 40px margins. Stack two offset cards with subtle strategic coordinate crosshairs and 1px hairlines behind the cards.',
-      '600×750 viewBox; 40px margins. Massive metric placard with 1px border and focal vector accent. Clean editorial linework.',
-      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine with registration ticks.',
-      '600×750 viewBox; 40px margins. Split diptych with strategic convergence axes on dark surface and verified policy ledger on paper.',
-      '600×750 viewBox; 40px margins. Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03] and metric badges.',
-      '600×750 viewBox; 40px margins. Final verdict diptych with closing takeaway and signature publication wordmark.',
+      'viewBox="0 0 952 650". Dark paper field. In the center, abstract territorial demarcation hairlines and maritime transit vectors in dark surface and accent ink. Zero cartoon maps, zero fake text wireframes.',
+      'viewBox="0 0 952 420". Stack two offset cards with subtle strategic coordinate crosshairs and 1px hairlines behind the cards.',
+      'viewBox="0 0 952 440". Massive metric placard with 1px border and focal vector accent. Clean editorial linework.',
+      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine with registration ticks.',
+      'viewBox="0 0 952 440". Split diptych with strategic convergence axes on dark surface and verified policy ledger on paper.',
+      'viewBox="0 0 952 420". Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03] and metric badges.',
+      'viewBox="0 0 952 420". Final verdict diptych with closing takeaway and signature publication wordmark.',
     ];
   }
 
   // Historical / Architectural / General
   return [
-    '600×750 viewBox; 40px safe margins. Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
-    '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Restrained architectural silhouette.',
-    '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card.',
-    '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper.',
-    '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge.',
-    '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.',
-    '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
+    'viewBox="0 0 952 650". Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
+    'viewBox="0 0 952 420". Stack two offset, full-width cards beneath a 64px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Restrained architectural silhouette.',
+    'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card.',
+    'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper.',
+    'viewBox="0 0 952 440". Beneath a 64px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge.',
+    'viewBox="0 0 952 420". Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.',
+    'viewBox="0 0 952 420". Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
   ];
 }
 

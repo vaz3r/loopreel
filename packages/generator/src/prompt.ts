@@ -521,34 +521,39 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
 3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE CATALOG:
    You will be provided with the exact pre-assigned archetype sequence for this deck. You MUST match each slide's assigned archetype:
    - "monumental-editorial-cover" (Slide 1 EXCLUSIVELY):
-     Broadsheet magazine cover with monospace kicker + square accent dot, monumental condensed headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger. NEVER use this on Slide 2+!
+     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 64px condensed headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (45%-55% canvas, viewBox="0 0 952 650"), and a clean footer metadata ledger. NEVER use this on Slide 2+!
    - "asymmetric-editorial-cards":
-     High-contrast asymmetric multi-panel layout (1 hero panel + 1 or 2 secondary ledger cards) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art.
+     High-contrast asymmetric multi-panel layout (1 hero panel + 1 secondary ledger card, MAX 2 cards total) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art (viewBox="0 0 952 420").
    - "hero-metric-placard":
-     Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (NO HTML rounded progress bars!).
+     Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (viewBox="0 0 952 440").
    - "vertical-milestone-spine":
-     Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy 5-8 word impact bullets.
+     Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy 5-8 word impact bullets (MAX 3 milestones total, viewBox="0 0 952 480").
    - "full-height-editorial-split":
-     50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section; the other half is editorial typography with crisp 1px bordered ledger cards.
+     50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section (viewBox="0 0 448 370"); the other half is editorial typography with crisp 1px bordered ledger cards.
    - "three-row-verification-ledger":
      Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
 
-4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO SVG TEXT):
-   - Every slide MUST include an "svgBlueprint" tailored to the story's actual domain:
+4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO FAKE TEXT):
+   - Every slide MUST include an "svgBlueprint" tailored to the story's actual domain, with explicit container-matched viewBoxes (viewBox="0 0 952 420" or viewBox="0 0 448 370"):
      * For Financial / Corporate Forensics: Imposing geometric silhouettes of stored-value cards, magnetic stripe hairlines, micro-embossed coordinate ticks, dual balance-sheet strata, capital float comparison bars, vault elevation contours.
      * For Technology / Systems: Silicon die floorplans, bus interconnect traces, latency benchmark scales, pipeline data strata.
      * For Geopolitical / Policy: Territorial boundary hairlines, maritime transit corridors, radar focal rings, strategic convergence vectors.
      * For History / Culture: Monument elevations, architectural pediments, fluted archaeological contours.
    - ABSOLUTE BAN: ZERO clipart (no coffee cups with lids, no cartoon dollar bills, no phones with screens).
    - ABSOLUTE BAN: ZERO flowchart pipes, conduits, valves, or process arrows.
-   - ABSOLUTE BAN: ZERO <text> or <tspan> tags inside SVG! All copy in HTML.
+   - ABSOLUTE BAN: ZERO fake text wireframe paths (never draw parallel horizontal lines or hatching to simulate text).
+   - Uniform scaling only (never preserveAspectRatio="none").
 
 5. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
    * ${arcDescription}
 
-6. TELEMETRY & METRIC VALUES:
-   - Numerical values must be strictly clean numbers, currencies, percentages, or years (e.g. "$1.8B", "0%", "2025", "+18%").
-   - Put qualifiers ("calculated", "estimated", "annual") strictly into the "label" field.
+6. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
+   - Maximum 2 items per slide! (Milestone spine: max 3 compact milestones).
+   - Total words per slide: STRICTLY 25 to 50 words across the entire slide.
+   - Headlines: Maximum 5–7 words.
+   - Subheadlines: Maximum 8–12 words.
+   - Card / item body: Maximum 10–14 words per item! Every word must be punchy, high-signal, and editorial.
+   - Telemetry values: MUST be strictly numerical or signed badge ("$1.8B", "0%", "$222M", "+12%"). Qualifiers belong in label.
 
 Return strictly a JSON array of exactly ${count} slide objects:
 [
@@ -567,7 +572,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
       { "badge": "$1.8B", "label": "Customer cash held on cards" },
       { "badge": "$222M", "label": "Annual profit from unused balances" }
     ],
-    "svgBlueprint": "600×750 viewBox; 40px safe margins. Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline and micro-coordinates [37°N 122°W]. Geometric editorial linework. No clipart, no flowchart pipes, zero text in SVG."
+    "svgBlueprint": "viewBox=\"0 0 952 650\". Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline and micro-coordinates [37°N 122°W]. Geometric editorial linework. No clipart, no flowchart pipes, zero fake text wireframes."
   },
   {
     "id": "slide-2",
@@ -587,7 +592,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
     ],
     "visualStyle": "asymmetric-editorial-cards",
     "layoutTopology": "asymmetric-editorial-cards",
-    "svgBlueprint": "600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart."
+    "svgBlueprint": "viewBox=\"0 0 952 420\". Stack two offset, full-width cards beneath a 64px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart."
   }
 ]`;
 }
@@ -837,13 +842,14 @@ CRITICAL DESIGN & CODING RULES:
      * NEVER use 'text-xs' (12px), 'text-sm' (14px), 'text-base' (16px), or 'text-lg' (18px) for readable content!
      * On a phone screen, 14px becomes 5.0px (unreadable), and 18px becomes 6.5px (squinting).
    - MANDATORY FONT SIZE SCALE:
+     * Universal main headlines: MUST be locked at text-[64px] (font-headline font-bold leading-[1.02] to leading-[1.05] tracking-[-0.04em]) across ALL slides! Never shrink headlines below text-[56px].
+     * Subheadlines: MUST be text-[26px] to text-[28px] (leading-snug text-[var(--ink)]/80).
      * Body copy & descriptions: MUST be text-[24px] to text-[28px] (leading-snug / leading-normal).
      * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
      * Kickers, badges, tags, metadata: MUST be text-[20px] to text-[22px] (font-mono tracking-wider).
-     * Major headlines: MUST be text-[52px] to text-[68px] (font-headline font-bold).
      * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold) ONLY when full-width (hero-metric-placard)!
      * MULTI-COLUMN FONT CEILING: In 2-column, 3-column, or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly forbidden inside half-width columns because it causes horizontal clipping and overflows into adjacent columns.
-     * MULTI-ROW LEDGER CEILING: In 3-row or 4-row stacked ledgers (grid-rows-3, grid-rows-4), metric numerals MUST NOT exceed text-[38px] to text-[42px], and card titles MUST NOT exceed text-[26px] to text-[28px]! This guarantees zero vertical crowding and ample breathing room.
+     * MULTI-ROW LEDGER CEILING: In 3-row stacked ledgers (grid-rows-3), metric numerals MUST NOT exceed text-[38px] to text-[42px], and card titles MUST NOT exceed text-[26px] to text-[28px]! This guarantees zero vertical crowding and ample breathing room.
      * CANONICAL BADGE PARSING: Always parse badges cleanly using parseMetricBadge:
        import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
        const { qualifier, value: metric, unit } = parseMetricBadge(item.badge);
@@ -931,26 +937,26 @@ CRITICAL DESIGN & CODING RULES:
         For tech: Silicon die layout, wafer bus traces, or logic gate strata.
         For history/culture: Monument elevation, architectural pediments, fluted column contours.
         Pure sculptural vector linework with coordinate crosshairs and registration ticks.
-        ABSOLUTELY NO DIAGRAMS, NO PIPES, NO FLOWCHARTS, NO <text> LABELS!
+        NO CLIPART, NO FLOWCHART PIPES, ZERO FAKE TEXT WIREFRAME PATHS!
       - Footer metadata ledger: Clean 1px bordered split ledger pinned to bottom ('mt-auto border-t border-[var(--border)] pt-5') showing issue badge and numerical telemetry badges with 0px corners.
 
    B. "asymmetric-editorial-cards":
-      - Header zone: Monospace kicker with square dot + punchy 4-6 word headline ('text-[46px] font-bold leading-tight').
+      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
       - Layout container: MUST use 'grid min-h-0 flex-1 grid-rows-2 gap-7 my-6' so cards span the ENTIRE vertical space!
         Zero 300px dead bottom voids! Do NOT use unconstrained 'items-start'.
       - Each card: 'border border-[var(--border)] bg-[var(--surface)] p-8 rounded-none flex flex-col justify-between'
         Primary hero card features a bold tabular metric ('text-[52px] font-bold text-[var(--accent)] leading-none') and 5-8 word punchline with bold anchors.
-        Secondary card features monospace tag, 1px divider, and subtle graphic linework. Zero text inside SVG.
+        Secondary card features monospace tag, 1px divider, and subtle graphic linework. Zero fake text wireframes.
 
    C. "vertical-milestone-spine":
-      - Header zone: Monospace kicker + high-tension headline.
+      - Header zone: Monospace kicker + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
       - Layout container: MUST use 'relative my-6 flex min-h-0 flex-1 flex-col justify-between border-l-2 border-[var(--border)] pl-8 py-4'.
         Spans the full height between header and bottom!
       - Square milestone nodes: Each milestone has an absolute square marker: 'w-3 h-3 bg-[var(--accent)] -left-[33px] top-2 absolute'.
-      - Milestone content: Monospace time/phase label ('text-[20px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**.
+      - Milestone content: Monospace time/phase label ('text-[20px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**. Maximum 3 milestones total.
 
    D. "hero-metric-placard":
-      - Header zone: Monospace kicker with square dot + headline.
+      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
       - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between gap-7'. Spans the entire height!
       - Massive hero metric placard ('flex-1 min-h-0 border border-[var(--border)] bg-[var(--surface)] p-9 rounded-none flex flex-col justify-between'):
         Hero tabular numeral: 'text-[96px] to text-[110px] font-bold tabular-nums text-[var(--accent)] leading-none' (rendered in HTML, NOT in SVG!).
@@ -960,23 +966,26 @@ CRITICAL DESIGN & CODING RULES:
    E. "full-height-editorial-split":
       - Layout container: MUST use 'my-6 grid min-h-0 flex-1 grid-cols-2 gap-7 border-y border-[var(--border)] py-6'. Spans the entire height!
       - Graphic half: Dominant domain-adaptive vector silhouette or technical section linework with 1px hairlines and accent focal point. Abstract conceptual art, no explanatory labels.
-      - Editorial half: 'flex flex-col justify-between': Monospace kicker with square dot, bold headline, and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
+      - Editorial half: 'flex flex-col justify-between': Monospace kicker with square dot, bold 64px headline, and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
 
    F. "three-row-verification-ledger":
-      - Header zone: Monospace kicker with square dot + headline.
+      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
       - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between divide-y divide-[var(--border)] border border-[var(--border)] bg-[var(--surface)] rounded-none'.
       - Each row: 'p-7 flex items-center justify-between gap-6 flex-1'
       - Left column: Monospace index '[01]', '[02]', '[03]' in 'text-[var(--accent)] font-[var(--font-mono)] text-[20px] font-bold'.
       - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
       - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[22px] text-[var(--accent)]').
 
-9. TOTAL BAN ON <text> AND <tspan> INSIDE <svg>:
-   - NEVER put <text>, <tspan>, or typography inside an <svg> tag!
-   - ALL titles, headlines, subheadlines, card copy, metric numerals, and badges MUST be rendered in HTML elements (<h1>, <h2>, <p>, <span>, <div>) styled with Tailwind CSS!
-   - The <svg> element must contain ONLY graphic shapes: <path>, <rect>, <circle>, <g>, <line>, <defs>, <pattern>.
-   - Rendering text inside SVG causes severe layout collisions, text clipping, and amateur rendering.
-   - BAN DIAGRAMS, PIPES, PROCESS ARROWS, AND CLIPART: The SVG must be abstract, domain-adaptive editorial artwork, NEVER an explanatory flowchart.
-   - BAN <foreignObject> inside SVGs: It causes text clipping, font-rendering glitches, and layout failure. Use pure Tailwind flex/grid cards for copy.
+9. GRAPHIC VECTOR SVG STANDARDS & BAN ON FAKE TEXT SKELETONS:
+   - ABSOLUTE BAN ON FAKE TEXT PATHS: Strictly forbidden to draw parallel horizontal lines, dashes, or hatching (<path d="M106 529H276 M106 542H245" /> or lines with dx/dy) to mimic placeholder text or wireframe greeking! That looks broken and amateur.
+   - ALL editorial copy, long descriptions, titles, subheadlines, and card bodies MUST be authored in HTML elements (<h1>, <h2>, <p>, <span>) styled with Tailwind CSS!
+   - Standalone chart/vector numerals, degree symbols, dates, or concise 2-3 word unit labels (e.g. "148°", "360°", "8 min", "$250", "430 CE") MAY be rendered inside SVG <text> with font-[var(--font-mono)] or font-[var(--font-headline)], exactly as done in publication benchmarks 'tipaza' and 'the-threshold-review'.
+   - BAN <foreignObject> inside SVGs: It causes rendering glitches and layout failure.
+   - CONTAINER-MATCHED VIEWBOXES (BAN 600×750 and BAN preserveAspectRatio="none"):
+     * The interior canvas safe area is strictly 952px wide.
+     * Full-width SVGs MUST use viewBox="0 0 952 <height>" (e.g. viewBox="0 0 952 420" or viewBox="0 0 952 650").
+     * Half-width column SVGs MUST use viewBox="0 0 448 <height>" (e.g. viewBox="0 0 448 370").
+     * NEVER use preserveAspectRatio="none" or arbitrary scale transforms (scale(1.15 2.21)). All geometry must scale uniformly and remain undistorted.
 
 10. MANDATORY SPACE BALANCE & VERTICAL CANVAS SATURATION (ZERO BOTTOM VOIDS):
    - ABSOLUTE BAN: ZERO 300px–500px dead pitch-black bottom voids! A layout that hugs the top and leaves empty black space at the bottom looks like an unfinished wireframe and will be rejected instantly!

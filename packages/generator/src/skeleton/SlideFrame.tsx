@@ -139,7 +139,7 @@ export function SlideFrame({
           '--surface': brand.palette.surface,
           '--border': brand.palette.border,
           '--subtle': brand.palette.subtle || `${brand.palette.ink}99`,
-          '--font-headline': `'${brand.typography.headlineFont}', serif`,
+          '--font-headline': `'${brand.typography.headlineFont}', ${brand.wordmarkStyle === 'serif' ? 'serif' : 'sans-serif'}`,
           '--font-body': `'${brand.typography.bodyFont}', sans-serif`,
           '--font-mono': `'${brand.typography.monoFont}', monospace`,
         } as React.CSSProperties

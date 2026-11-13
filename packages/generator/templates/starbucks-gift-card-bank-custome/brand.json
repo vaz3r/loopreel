@@ -4,23 +4,24 @@
   "vibe": "Investigative Corporate Autopsies, Fine Print Tricks & Receipts",
   "domain": "thefineprint.co",
   "palette": {
-    "paper": "#0A0A0C",
-    "ink": "#F5F5F7",
-    "accent": "#FF2A2A",
-    "surface": "#141418",
-    "border": "#26262E",
-    "subtle": "#858592"
+    "paper": "#0D0E12",
+    "ink": "#F1F3F9",
+    "accent": "#FF4D00",
+    "surface": "#161820",
+    "border": "#262938",
+    "subtle": "#85889E"
   },
   "typography": {
-    "headlineFont": "Space Grotesk",
+    "headlineFont": "Syne",
     "bodyFont": "Inter",
     "monoFont": "JetBrains Mono",
-    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
   },
   "wordmark": "THE FINE PRINT",
   "wordmarkStyle": "small-caps",
   "handle": "@thefineprint.co",
   "texture": "grid",
   "motif": "bracket",
+  "aestheticPreset": "sculptural-monolith",
   "platform": "instagram-feed"
 }

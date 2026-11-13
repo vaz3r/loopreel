@@ -9,152 +9,85 @@
       "index": 0,
       "type": "cover",
       "archetype": "monumental-editorial-cover",
-      "publication": "The Fine Print",
-      "domain": "thefineprint.co",
-      "kicker": "CONSUMER FINANCE / THE INTEREST-FREE FLOAT",
-      "headline": "Your Gift Card Finances Starbucks",
-      "subheadline": "Follow prepaid dollars into corporate funding and forgotten-balance revenue.",
-      "issueBadge": "THE FINE PRINT · 7 SLIDES",
-      "items": [
-        {
-          "title": "THE PROMISE",
-          "body": "An **easier, more rewarding** shopping experience."
-        }
-      ],
+      "kicker": "CONSUMER FINANCE / THE PREPAYMENT ADVANTAGE",
+      "headline": "Your Coffee Cash Funds Starbucks",
+      "subheadline": "The promise: easier shopping, rewards, balances without expiration.",
+      "issueBadge": "FINANCIAL AUTOPSY · 01/07",
       "telemetry": [
         {
-          "badge": "2025",
-          "label": "Fiscal-year accounting examined"
+          "badge": "$0",
+          "label": "Activation, service, dormancy, inactivity fees."
         }
       ],
+      "footer": "The Fine Print · thefineprint.co",
       "visualStyle": "monumental-editorial-cover",
       "layoutTopology": "monumental-editorial-cover",
-      "designSystem": {
+      "production": {
         "canvas": "1080 × 1350",
         "palette": {
-          "paper": "#0A0A0C",
-          "ink": "#F5F5F7",
-          "accent": "#FF2A2A",
-          "surface": "#141418",
-          "border": "#414148"
+          "paper": "#0D0E12",
+          "ink": "#F1F3F9",
+          "accent": "#FF4D00",
+          "surface": "#161820",
+          "border": "rgba(241,243,249,0.24)"
         },
-        "typography": "Condensed editorial headlines; readable sans-serif body; monospace kickers, dates and tabular numerals.",
-        "geometry": "0px corners; crisp 1px hairlines; square markers; no shadows, pills, thick accent borders or rounded progress indicators.",
-        "citationRendering": "Retain inline citation markers in the storyboard; typeset their references in the footer source ledger.",
-        "productionNotesRendering": "Production notes are verification instructions, not additional slide copy."
+        "deckRules": "Apply throughout: 64px condensed headlines, 32px minimum body copy, monospace kickers with square accent dots, tabular numerals, 64px safe margins, 1px hairlines, 0px corners. No shadows, pills, thick accent borders, progress bars, clipart, arrows, conduits, or simulated text. Production fields and svgBlueprint are non-rendered instructions. Citations remain attached to supported copy. Illustrations are conceptual, never quantitative unless explicitly scaled."
       },
-      "svgBlueprint": "Draw an axonometric coffee cup as an engineering cutaway, occupying half the canvas. Rectangular dollar tokens enter immediately through the lid into a chamber labeled 'customer prepayments'. A narrow lower outlet labeled 'coffee later' ends at a cup silhouette. A separate dashed accounting conduit passes through a square valve labeled 'estimated nonredemption' into a revenue ledger. Render loyalty Stars in a detached, hatched compartment with no cash-flow connection. Use 1px section lines, dimension ticks and coordinate marks. The reservoir is a timing metaphor, not a segregated bank account; never label it insured deposits.",
-      "sourceNote": "The card agreement defines loaded value as prepayment and promises easier, more rewarding shopping. The annual report records loads as deferred revenue and describes breakage recognition.​",
+      "svgBlueprint": "viewBox=\"0 0 952 650\" preserveAspectRatio=\"xMidYMid meet\". Allocate 50% of the canvas to a financial specimen elevation. On #0D0E12, place an imposing #161820 stored-value-card rectangle at x=146,y=70,width=660,height=430, with a 1px #F1F3F9 outline. Draw one #FF4D00 magnetic-stripe hairline across y=168. Separate a narrow geometric section beneath the card at y=526, suggesting an exposed accounting layer rather than missing funds. Add four short corner registration ticks and a single vertical dimension rule with perpendicular terminals. Keep all geometry within bounds. No fabricated coordinates or account numbers. Above the illustration, set the supplied headline at 64px over three deliberate lines; below it, a 1px divider. Finish with the fee telemetry and publication metadata in a clean footer ledger.",
       "platform": "instagram-feed"
     },
     {
       "id": "slide-2",
       "index": 1,
       "type": "belief",
-      "archetype": "monumental-editorial-cover",
-      "kicker": "THE PROMISE / WHY IT PERSUADES",
-      "headline": "Convenience Makes Prepayment Feel Harmless",
-      "subheadline": "The shopping benefits are real; liquidity still leaves.",
+      "archetype": "asymmetric-editorial-cards",
+      "kicker": "THE CONVENIENCE ENGINE",
+      "headline": "Convenience Keeps Your Cash Committed",
+      "subheadline": "Automatic reload replenishes balances on your chosen trigger.",
       "items": [
         {
-          "title": "EASIER SHOPPING",
-          "body": "The pitch pairs **convenience with rewards**."
+          "title": "CANCELLATION WINDOW",
+          "body": "Cancel **at least 24 hours before** scheduled auto-reload."
         },
         {
-          "title": "NO EXPIRATION",
-          "body": "Your card and balance **never expire**."
-        },
-        {
-          "title": "NO FEES",
-          "body": "**No activation, service, dormancy or inactivity fees**."
+          "title": "COMPLETED LOADS",
+          "body": "**Cannot reverse**; legal and contractual refund exceptions remain."
         }
       ],
-      "telemetry": [
-        {
-          "badge": "$0",
-          "label": "Activation, service, dormancy and inactivity fees."
-        }
-      ],
-      "visualStyle": "monumental-editorial-cover",
-      "layoutTopology": "monumental-editorial-cover",
-      "svgBlueprint": "Create an exploded physical gift-card engraving inside the hero panel. Its top layer carries a simple coffee glyph; the lower layer exposes a one-way prepayment arrow. Place a calendar outline with no terminal date in the expiration panel and four empty fee cells in the fee panel. Stars sit in a separate perforated tray, visibly distinct from dollar tokens. Use sharp rectangular frames and 1px connector lines, not app screens or interface controls.",
-      "footer": "U.S. CARD AGREEMENT · EFFECTIVE JULY 24, 2023",
-      "sourceNote": "These promises apply to the Starbucks Card and its balance. Do not extend the no-expiration promise to loyalty Stars.",
+      "footer": "The Fine Print · thefineprint.co",
+      "visualStyle": "asymmetric-editorial-cards",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Continue the #0D0E12 paper field. Draw two offset stored-value-card outlines behind the composition, one at x=40,y=32,width=648,height=300 and another at x=112,y=82,width=648,height=300. Give each exactly one magnetic-stripe hairline; use muted ink for the rear specimen and #FF4D00 for the exposed foreground edge. Overlay a dominant #161820 editorial panel at x=0,y=54,width=600,height=298 and a smaller ledger panel at x=628,y=164,width=324,height=188. Both have 1px borders and square corners. Place cancellation copy in the hero panel and completed-load copy in the secondary panel. Use generous empty space, not decorative text lines. The offset silhouettes suggest replenishment without implying a measured quantity or showing a process diagram.",
       "platform": "instagram-feed"
     },
     {
       "id": "slide-3",
       "index": 2,
       "type": "anomaly",
-      "archetype": "three-row-verification-ledger",
-      "kicker": "THE ANOMALY / READ THE LABEL",
-      "headline": "That Balance Is Not Cash",
-      "subheadline": "Cards, loyalty obligations and royalties complicate the headline.",
-      "items": [
+      "archetype": "hero-metric-placard",
+      "kicker": "BALANCE AUTOPSY",
+      "headline": "That Balance Isn't Just Cards",
+      "subheadline": "September 28, 2025: cards and loyalty, not isolated cash.",
+      "telemetry": [
         {
-          "index": "",
-          "title": "COMBINED LIABILITY",
-          "body": "Card balances **also include loyalty obligations**.",
-          "metric": {
-            "badge": "$1,751.7",
-            "label": "Million; cards and loyalty; September 28, 2025."
-          }
-        },
-        {
-          "index": "",
-          "title": "ANNUAL FLOW",
-          "body": "Annual deferrals **include Stars, not just cash**.",
-          "metric": {
-            "badge": "$15,245.8",
-            "label": "Million; fiscal 2025 card-and-loyalty deferrals."
-          }
-        },
-        {
-          "index": "",
-          "title": "OTHER PREPAYMENTS",
-          "body": "**Nestlé royalties** also create deferred revenue.",
-          "metric": {
-            "badge": "$177.0",
-            "label": "Million; current Nestlé deferred revenue; September 28, 2025."
-          }
+          "badge": "$1,751.7",
+          "label": "MILLION · CARD-AND-LOYALTY LIABILITY."
         }
       ],
-      "visualStyle": "three-row-verification-ledger",
-      "layoutTopology": "three-row-verification-ledger",
-      "svgBlueprint": "Integrate a narrow exploded-ledger drawing above the rows. Show three separate transparent rectangular folios: dollar-token card obligations, star-hatched loyalty obligations and a Nestlé royalty contract. Bracket cards and Stars together without estimating their individual proportions. Draw the annual-flow arrow outside the closing-balance bracket to distinguish a yearly flow from a point-in-time stock. Never draw all three as liquid inside the customer-prepayment reservoir.",
-      "productionNotes": {
-        "accountingGuardrail": "Neither a combined card-and-loyalty liability nor a broader deferred-revenue caption is a standalone customer-cash measurement. Do not subtract Nestlé royalties and call the remainder gift-card cash.",
-        "rollForwardUnits": "USD millions",
-        "rollForwardCitation": "Complete fiscal 2025 and fiscal 2024 card-and-loyalty roll-forwards.",
-        "rollForward": [
-          {
-            "2024": "1,567.5",
-            "2025": "1,718.7",
-            "label": "Opening liability"
-          },
-          {
-            "2024": "15,807.1",
-            "2025": "15,245.8",
-            "label": "Activations, reloads and Stars earned"
-          },
-          {
-            "2024": "-15,665.1",
-            "2025": "-15,199.5",
-            "label": "Redemptions and breakage"
-          },
-          {
-            "2024": "9.2",
-            "2025": "-13.3",
-            "label": "Other changes"
-          },
-          {
-            "2024": "1,718.7",
-            "2025": "1,751.7",
-            "label": "Closing liability"
-          }
-        ],
-        "rollForwardNotes": "Other changes primarily reflect foreign-currency translation. Approximately $1.6 billion of the combined liability was current at each year-end."
-      },
+      "items": [
+        {
+          "title": "BROADER CAPTION",
+          "body": "**$1,840.6 million** combines cards with current deferred revenue."
+        },
+        {
+          "title": "NESTLÉ INCLUDED",
+          "body": "**$177.0 million** represents current Nestlé deferred revenue."
+        }
+      ],
+      "footer": "The Fine Print · thefineprint.co",
+      "visualStyle": "hero-metric-placard",
+      "layoutTopology": "hero-metric-placard",
+      "svgBlueprint": "viewBox=\"0 0 952 440\" preserveAspectRatio=\"xMidYMid meet\". Place the exact $1,751.7 numeral above the illustration at 104px, tabular and #FF4D00, with its uppercase monospace million-unit label immediately beneath. Within the SVG, construct two detached accounting strata: an upper outlined slab spanning x=76..876,y=54..180, and a lower #161820 slab spanning x=76..876,y=254..380. A clean 74px void separates them. Give the upper slab a short orange vertical incision at x=646; leave the lower slab intact. Add one capped dimension rule along x=34. These are conceptual accounting categories, not proportional bars or an additive reconciliation. Set the two explanatory items beneath the illustration as open typographic notes separated by one hairline, not cards. Never depict the combined liability as a cash reserve.",
       "platform": "instagram-feed"
     },
     {
@@ -162,185 +95,127 @@
       "index": 3,
       "type": "mechanism",
       "archetype": "vertical-milestone-spine",
-      "kicker": "THE MECHANISM / FOLLOW THE TIMING",
-      "headline": "Cash Arrives Before The Coffee",
-      "subheadline": "Prepayment funds Starbucks before product revenue gets recognized.",
+      "kicker": "BENEATH THE BALANCE",
+      "headline": "Prepayment Becomes Revenue In Stages",
+      "subheadline": "Redemption obligations and unclaimed-property rules constrain the mechanism.",
       "items": [
         {
-          "tag": "LOAD",
+          "tag": "01",
           "title": "CASH FIRST",
-          "body": "Loading creates **deferred revenue**, not immediate sales."
+          "body": "Customers **prepay**; Starbucks records a redemption obligation."
         },
         {
-          "tag": "REDEEM",
-          "title": "COFFEE LATER",
-          "body": "**Redemption generally triggers revenue** for purchased goods."
+          "tag": "02",
+          "title": "PURCHASE FULFILLED",
+          "body": "Redemptions **release deferred revenue** into reported sales."
         },
         {
-          "tag": "ESTIMATE",
-          "title": "ACCOUNTING VALVE",
-          "body": "**Estimated nonredemption** becomes revenue proportionately with redemptions."
+          "tag": "03",
+          "title": "NONREDEMPTION ESTIMATED",
+          "body": "**Estimated nonredemption** becomes revenue proportionally with redemptions."
         }
       ],
-      "telemetry": [
-        {
-          "badge": "1",
-          "label": "Year; historically, most stored-value cards redeemed within this period."
-        }
-      ],
+      "footer": "The Fine Print · thefineprint.co",
       "visualStyle": "vertical-milestone-spine",
       "layoutTopology": "vertical-milestone-spine",
-      "svgBlueprint": "Extend the cup reservoir vertically alongside the spine. At LOAD, solid red arrows carry dollars through the lid into 'customer prepayments'. At REDEEM, the lower outlet releases a coffee silhouette while a corresponding ledger entry reduces the obligation. At ESTIMATE, a dashed line passes through a square accounting valve into revenue, synchronized visually with redemption marks. Add a small branching line for applicable unclaimed-property remittances. Keep the Stars compartment detached. The breakage valve represents accounting recognition, not money disappearing from an individual card.",
-      "productionNotes": {
-        "recognitionRule": "Starbucks estimates nonredemption from historical redemption patterns and recognizes breakage in proportion to redemptions, incorporating applicable unclaimed-property remittances.",
-        "criticalDistinction": "No expiration does not prevent breakage recognition. Do not depict an expiration fee, interest income, or automatic cancellation of the customer's balance.​"
-      },
+      "svgBlueprint": "viewBox=\"0 0 952 480\" preserveAspectRatio=\"xMidYMid meet\". Draw one continuous 1px ink spine at x=52 from y=32 to y=448. Place 10px square milestone markers centered at y=76,240,404; the final square is #FF4D00, the others ink. Align monospace tags at x=90 and editorial copy at x=158, with identical baselines and ample vertical separation. In the far-right background, draw three isolated financial cross-sections at x=780..920: a closed card edge, an exposed two-layer liability section, and a narrow orange accounting slice. These are specimen elevations, not connected nodes. No arrows or branching lines. The spine communicates narrative order only, not elapsed time, expiration, or a forfeiture countdown.",
       "platform": "instagram-feed"
     },
     {
       "id": "slide-5",
       "index": 4,
       "type": "evidence",
-      "archetype": "hero-metric-placard",
-      "kicker": "THE RECEIPTS / FISCAL 2025",
-      "headline": "Unredeemed Value Becomes Reported Revenue",
-      "subheadline": "The filing separates breakage across two store channels.",
-      "heroMetric": {
-        "badge": "$222.4",
-        "label": "Million; calculated fiscal 2025 breakage revenue."
-      },
+      "archetype": "full-height-editorial-split",
+      "kicker": "FY2025 RECEIPTS",
+      "headline": "The Filing Reveals Breakage Revenue",
+      "subheadline": "Revenue, not interest income or pure net profit.",
       "items": [
         {
-          "title": "ACCOUNTING BENEFIT",
-          "body": "**Revenue**, not separately disclosed net profit."
+          "title": "COMPANY OPERATED",
+          "body": "**$200.4 million** came from company-operated store breakage."
+        },
+        {
+          "title": "LICENSED STORES",
+          "body": "**$22.0 million** came from licensed-store breakage."
         }
       ],
       "telemetry": [
         {
-          "badge": "$200.4",
-          "label": "Million; fiscal 2025 company-operated breakage revenue."
-        },
-        {
-          "badge": "$22.0",
-          "label": "Million; fiscal 2025 licensed-store breakage revenue."
+          "badge": "$222.4",
+          "label": "MILLION · CALCULATED TOTAL."
         }
       ],
-      "visualStyle": "hero-metric-placard",
-      "layoutTopology": "hero-metric-placard",
-      "svgBlueprint": "Draw two sharply outlined accounting channels labeled 'company-operated' and 'licensed'. Each terminates at a square ledger node, with numerals typeset separately from the drawing. Join them using a 1px summation brace beneath the monumental total. Place a tiny cutaway reservoir valve at the brace origin to connect this evidence to the previous slide. No profit icon, cash pile or proportionally sized reservoir: the total measures recognized revenue.",
-      "productionNotes": {
-        "calculation": "$200.4 million + $22.0 million = $222.4 million. The total is calculated from the two disclosed revenue categories.",
-        "comparativeUnits": "USD millions",
-        "comparativeCitation": "Disclosed components and calculated totals; revenue, not financing savings or net profit.",
-        "comparativeLedger": [
-          {
-            "year": "2025",
-            "companyOperated": "200.4",
-            "licensed": "22.0",
-            "calculatedTotal": "222.4"
-          },
-          {
-            "year": "2024",
-            "companyOperated": "187.6",
-            "licensed": "20.0",
-            "calculatedTotal": "207.6"
-          },
-          {
-            "year": "2023",
-            "companyOperated": "196.1",
-            "licensed": "18.9",
-            "calculatedTotal": "215.0"
-          }
-        ]
-      },
+      "period": "Year ended September 28, 2025",
+      "footer": "The Fine Print · thefineprint.co",
+      "visualStyle": "full-height-editorial-split",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "viewBox=\"0 0 448 370\" preserveAspectRatio=\"xMidYMid meet\". Divide the content field vertically 50/50 with a 1px hairline and a 40px gutter. The left half holds a uniformly scaled architectural section: a #161820 balance-sheet monolith at x=54,y=30,width=340,height=300, outlined in ink. Incise a narrow #FF4D00 vertical reveal at x=296, and detach one outlined rectangular section at x=318,y=98,width=76,height=144. Use capped dimension marks and four corner registration ticks only. This abstract specimen is not a chart and must not imply component proportions. The right half carries the two 1px-bordered ledger cards and the exact calculated total underneath. Keep the date visible in the footer; never label the total profit or interest.",
       "platform": "instagram-feed"
     },
     {
       "id": "slide-6",
       "index": 5,
       "type": "incentives",
-      "archetype": "monumental-editorial-cover",
-      "kicker": "WHO BENEFITS / THE RELOAD QUESTION",
-      "headline": "Reload Friction Can Preserve Prepayments",
-      "subheadline": "Starbucks gains payment timing; advocates challenged reload friction.",
-      "evidenceStatus": "ALLEGATIONS · DECEMBER 19, 2023",
+      "archetype": "three-row-verification-ledger",
+      "kicker": "FOLLOW THE ADVANTAGE",
+      "headline": "Starbucks Benefits Before You Spend",
       "items": [
         {
-          "title": "RELOAD FLOOR",
-          "body": "Alleged **$10.00 minimum**, with $5.00 increments."
+          "index": "",
+          "title": "FINANCING COST",
+          "body": "Starbucks receives prepayment; customers earn **no interest**.",
+          "badge": "0%",
+          "metricLabel": "Cardholder interest"
         },
         {
-          "title": "DEFAULT STEERING",
-          "body": "Alleged **$25.00 default**; $15.00 lowest displayed option."
+          "index": "",
+          "title": "DEPOSIT INSURANCE",
+          "body": "Your prepaid balance carries **no FDIC insurance**.",
+          "badge": "$0",
+          "metricLabel": "FDIC coverage"
         },
         {
-          "title": "TIP RESTRICTIONS",
-          "body": "Alleged options: **$0.50, $1.00, $2.00, $5.00 only**."
-        },
-        {
-          "title": "PAYMENT RESTRICTIONS",
-          "body": "Allegedly **no split payments** for in-app card orders."
+          "index": "",
+          "title": "BREAKAGE REVENUE",
+          "body": "Starbucks recognizes **estimated nonredemption** as additional revenue.",
+          "badge": "$222.4",
+          "metricLabel": "Million · FY2025"
         }
       ],
-      "visualStyle": "monumental-editorial-cover",
-      "layoutTopology": "monumental-editorial-cover",
-      "svgBlueprint": "Draw a plan-view reservoir with a residual-value pocket and a return pipe labeled 'reload'. An open coffee outlet sits beyond the pocket; a dashed route illustrates the coalition's alleged reload cycle. Use four square numbered callouts corresponding to the four entries, without recreating a present-day app interface. Give the entire alleged mechanism dashed outlines; reserve solid lines for the established prepayment reservoir. Keep Stars outside the cash circuit and avoid depicting deliberate intent as proven.",
-      "footer": "DATED ALLEGATIONS · NOT FINDINGS OR TODAY'S INTERFACE",
-      "productionNotes": {
-        "attribution": "The Washington Consumer Protection Coalition submitted these allegations on December 19, 2023. The complaint is evidence of what was alleged, not an adjudication.",
-        "minimumDistinction": "The complaint distinguishes a $10.00 actual minimum from the $15.00 lowest displayed option and $25.00 default.",
-        "institutionalIncentive": "Starbucks describes its card program as supporting convenient payment, gifting and increased store-visit frequency. Its accounting independently establishes payment before redemption; the complaint is not needed to prove that mechanism.",
-        "causationGuardrail": "Do not attribute the calculated fiscal 2025 breakage total to these alleged practices or suggest that this complaint verifies the current interface."
-      },
+      "footer": "The Fine Print · thefineprint.co",
+      "visualStyle": "three-row-verification-ledger",
+      "layoutTopology": "three-row-verification-ledger",
+      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Use exactly three ledger rows, the explicit structural exception to the deck's two-card limit. Draw 1px horizontal rules at y=0,140,280,420, with no filled row containers. Set indexes in a 70px monospace column, two-word labels and findings in the central column, and numerical metrics right-aligned at x=936. Metric units sit directly below their numbers. Behind the central column, place a very subdued vault-section contour: a single squared outer frame with one inset structural rectangle and one offset card edge, all at low ink opacity. No ornamental horizontal strokes resembling text. Orange is restricted to the numerical metrics and three tiny square index markers. Preserve clear separation between interest, insurance, and revenue; they are not comparable quantities.",
       "platform": "instagram-feed"
     },
     {
       "id": "slide-7",
       "index": 6,
       "type": "verdict",
-      "archetype": "three-row-verification-ledger",
-      "kicker": "THE VERDICT / PREPAYMENT, NOT BANKING",
-      "headline": "Interest-Free Funding. Not A Bank.",
-      "subheadline": "You surrender liquidity; Starbucks gains timing and breakage.",
+      "archetype": "asymmetric-editorial-cards",
+      "kicker": "THE REALITY CHECK",
+      "headline": "Retail Prepayment, Not A Bank",
+      "subheadline": "Starbucks benefits from early cash and estimated nonredemption.​",
       "items": [
         {
-          "index": "",
-          "title": "CUSTOMER TRADEOFF",
-          "body": "You receive **no interest or FDIC insurance**.",
-          "metric": {
-            "badge": "$0",
-            "label": "Interest paid on card value."
-          }
+          "title": "THE ADVANTAGE",
+          "body": "**Interest-free customer financing**, then revenue from estimated nonredemption.​"
         },
         {
-          "index": "",
-          "title": "LEGAL LIMITS",
-          "body": "Cash-redemption and unclaimed-property laws **still constrain prepayments**.​",
-          "metric": {
-            "badge": "2026",
-            "label": "California cash-out threshold increased April 1."
-          }
-        },
-        {
-          "index": "",
-          "title": "CALIFORNIA CASHOUT",
-          "body": "Eligible balances **under $15** qualify for cash.",
-          "metric": {
-            "badge": "$15",
-            "label": "Strictly less than; operative April 1, 2026."
-          }
+          "title": "YOUR LIMIT",
+          "body": "**Cash refunds generally restricted**; legal and contractual exceptions."
         }
       ],
-      "visualStyle": "three-row-verification-ledger",
-      "layoutTopology": "three-row-verification-ledger",
-      "svgBlueprint": "Resolve the recurring reservoir into a simplified architectural elevation. Label the main chamber 'retail prepayments'. Keep the coffee outlet and dashed breakage-recognition valve visible. Add a separate lawful cash-redemption exit with a square jurisdiction marker, not an unrestricted withdrawal tap. Draw the Stars compartment outside the chamber. Below, align three square verification marks with the ledger rows; no bank façade, shield of protection or alarmist disappearing-money effect.",
-      "footer": "THE FINE PRINT · thefineprint.co",
-      "productionNotes": {
-        "refundRule": "Card balances generally cannot be refunded or redeemed for cash unless law or the agreement permits.",
-        "californiaRule": "SB 22, Chapter 207, approved October 1, 2025, increased the statutory cash-out threshold from less than $10 to less than $15, operative April 1, 2026, and expressly included electronic gift cards.",
-        "specifiedExemption": "The cash-out provision exempts qualifying certificates donated to nonprofit or charitable organizations without consideration when they bear a noncash-redemption disclaimer in at least 10-point font.",
-        "finalGuardrail": "Interest-free customer financing is the economic interpretation of retail prepayment without customer interest. Do not characterize Starbucks as an entirely unregulated bank, combined liabilities as pure cash deposits, or breakage revenue as quantified net profit.​​"
-      },
+      "telemetry": [
+        {
+          "badge": "$222.4",
+          "label": "MILLION · FY2025 BREAKAGE REVENUE."
+        }
+      ],
+      "footer": "The Fine Print · thefineprint.co",
+      "visualStyle": "asymmetric-editorial-cards",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Reassemble the cover's financial specimen as a sharp architectural cross-section rather than another cover. Place a dominant #161820 panel at x=0,y=26,width=602,height=340 and a secondary outlined ledger at x=634,y=146,width=318,height=220. Behind them, show one intact stored-value-card perimeter spanning x=106..846,y=48..390, with a single #FF4D00 stripe exposed in the gutter. Add two disconnected balance-sheet strata beneath the perimeter, one ink and one orange; no connectors, arrows, bank facade, or implied reserve ratio. The hero panel carries the financing verdict and precise revenue telemetry; the smaller panel carries the cash-refund limitation. End with a full-width 1px footer rule and the publication ledger. The intact perimeter signifies surviving contractual obligations, not guaranteed repayment.",
       "platform": "instagram-feed"
     }
   ]
