@@ -225,7 +225,13 @@ export interface NarrativeIntelligence {
   hookHeadline: string; // 4-6 words
   valuePromise: string; // 8-12 words
   kicker: string; // CATEGORY / TENSION KICKER
-  visualMetaphor: string; // Physical visual anchor for the story (e.g. an unregulated bank vault disguised as a latte cup)
+  editorialTheme: string; // High-concept conceptual tone (e.g. "Forensic Financial Autopsy", "Tectonic Power Struggle", "Imperial Archaeological Monolith")
+  visualMetaphor?: string; // Optional legacy visual anchor
+  narrativeBeats: Array<{
+    beatTitle: string; // 2-3 word concept (e.g. "THE CATALYST", "THE BREAKAGE FLOAT")
+    takeaway: string; // 6-10 word crisp takeaway statement
+    keyReceipt: string; // Verified numerical data point or citation
+  }>;
   coreConflict: {
     claim: string; // Primary corporate or PR claim (e.g. "Convenient digital gifting")
     reality: string; // Forensic reality or regulatory concern (e.g. "Interest-free corporate financing float")
@@ -256,12 +262,9 @@ CRITICAL EDITORIAL & FACTUAL RULES:
    - "valuePromise": 8 to 12 words explaining the systemic mechanism revealed by swiping through.
    - "kicker": Category and tension pair in uppercase (e.g. "SHADOW BANKING / STORED VALUE", "CONSUMER FINANCE / EXPOSED").
 
-3. CENTRAL PHYSICAL VISUAL METAPHOR:
-   - Identify the tangible physical visual anchor that will drive the bespoke vector architectural illustrations across the carousel.
-   - EXAMPLES:
-     * "An industrial bank vault door disguised as a disposable coffee cup lid, with cash entering before coffee exits."
-     * "A fractured Roman aqueduct where the stone foundations break into empty space at a seismic fault line."
-     * "A dual-column balance sheet where customer liabilities transform into pure breakage profit."
+3. SLIDE-BY-SLIDE NARRATIVE BEATS:
+   - Map out the exact sequence of editorial narrative beats (The Hook, The Catalyst, The Scale, The Flow/Evolution, The Systemic Collision, The Receipts, The Strategic Verdict).
+   - STRICT BAN ON PROCESS DIAGRAMS OR CLIPART: DO NOT invent diagrams, pipes, conduits, or process flowcharts. Focus exclusively on authoritative journalism and tension-driven copy.
 
 4. STRUCTURED CORE CONFLICT & CATCHES:
    - Contrast the corporate PR claim against the forensic mechanism.
@@ -277,7 +280,12 @@ Return strictly valid JSON matching this exact structure:
   "hookHeadline": "4-6 word punchy hook headline",
   "valuePromise": "8-12 word narrative promise",
   "kicker": "CATEGORY / TENSION KICKER",
-  "visualMetaphor": "Tangible physical visual anchor for vector illustrations",
+  "editorialTheme": "Forensic Financial Autopsy",
+  "narrativeBeats": [
+    { "beatTitle": "THE HOOK", "takeaway": "Your prepaid card balances finance corporate operations interest-free.", "keyReceipt": "$1.8B float" },
+    { "beatTitle": "THE ILLUSION", "takeaway": "Convenience masks an interest-free loan with zero deposit insurance.", "keyReceipt": "0% interest" },
+    { "beatTitle": "THE BREAKAGE ENGINE", "takeaway": "Forgotten pocket change converts directly into pure corporate revenue.", "keyReceipt": "$222M annual breakage" }
+  ],
   "coreConflict": {
     "claim": "Primary public/PR claim",
     "reality": "Forensic reality or regulatory loophole"
@@ -590,19 +598,38 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
    - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
 
-3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE CATALOG:
-   Every slide in your JSON output MUST declare an explicit "archetype" chosen from this gold-standard catalog:
-   - "monumental-editorial-cover": (Slide 1 exclusively) Broadsheet magazine cover with monospace kicker + square accent dot, monumental 68px headline, 1px divider hairline, dominant architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger.
-   - "asymmetric-editorial-cards": High-contrast asymmetric multi-panel layout (e.g. 1 hero panel + 2 secondary ledger cards) with sharp 0px/2px corners, 1px hairlines, and inline technical SVG glyphs.
-   - "vertical-milestone-spine": Elegant continuous 1px vertical hairline spine with square milestone markers (rotate-45 or square), monospace timeline tags, and punchy 5-8 word impact bullets.
-   - "hero-metric-placard": Massive tabular numeral (96px-120px) in accent color, uppercase mono metric label, and an architectural SVG comparison scale or comparative ledger (NO HTML rounded progress bars!).
-   - "full-height-editorial-split": 50/50 or 60/40 vertical split: one half is a dominant bespoke architectural SVG vector illustration (isometric diagram, floorplan, elevation cross-section, coordinate grid); the other half is editorial typography with crisp 1px bordered ledger cards.
-   - "three-row-verification-ledger": Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
+3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE MAPPING:
+   Every slide in your JSON output MUST declare an explicit "archetype" following this strict, non-repeating catalog:
+   - Slide 1 EXCLUSIVELY: "monumental-editorial-cover"
+     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 68px headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger. NEVER use this on Slide 2+!
+   - Slide 2: "asymmetric-editorial-cards"
+     High-contrast asymmetric multi-panel layout (1 hero panel + 1 or 2 secondary ledger cards) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art.
+   - Slide 3: "hero-metric-placard"
+     Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (NO HTML rounded progress bars!).
+   - Slide 4: "vertical-milestone-spine"
+     Continuous 1px vertical hairline spine with square milestone markers (rotate-45 or square), monospace timeline tags, and punchy 5-8 word impact bullets.
+   - Slide 5: "full-height-editorial-split"
+     50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section; the other half is editorial typography with crisp 1px bordered ledger cards.
+   - Slide 6: "three-row-verification-ledger"
+     Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
+   - Slide 7: "asymmetric-editorial-cards"
+     Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.
 
-   STRICT ARCHETYPE DIVERSITY MANDATE: You MUST use at least 4 DIFFERENT archetypes across the ${count} slides. Never repeat the same archetype consecutively!
+   STRICT ARCHETYPE DIVERSITY MANDATE: Zero repetition! Never reuse "monumental-editorial-cover" after Slide 1!
 
-4. BESPOKE SVG VECTOR BLUEPRINT MANDATE:
-   Every slide MUST include a rich "svgBlueprint" describing a bespoke vector illustration that visually embodies the physical metaphor and technical mechanism (e.g. "Isometric cross-section of a disposable cup revealing multi-tiered vault chambers with coordinate grid and 1px flow arrows").
+4. ABSTRACT SCULPTURAL VECTOR ART BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO SVG TEXT):
+   - Every slide MUST include an "svgBlueprint" describing an ABSTRACT, SCULPTURAL vector artwork (inspired by gold standard 'tipaza').
+   - ABSOLUTE BAN: NEVER draw literal clipart (no coffee cups with lids, no smartphones with screens, no dollar bills falling).
+   - ABSOLUTE BAN: NEVER draw flowchart diagrams, pipes, conduits, process arrows, or labeled tanks!
+   - ABSOLUTE BAN: NEVER put text, words, or labels inside the SVG! All text belongs exclusively in HTML!
+   - MANDATORY ART DIRECTION:
+     * Slide 1: "600×750 viewBox; 40px safe margins. Dark paper field, orange kicker badge, large format condensed headline. Below, one monumental fractured-column or architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes."
+     * Slide 2: "600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Lower card carries a restrained architectural silhouette. Conceptual vector art, not a flowchart."
+     * Slide 3: "600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard's lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes."
+     * Slide 4: "600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only."
+     * Slide 5: "600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge. Bottom full-width rule holds closing takeaway."
+     * Slide 6: "600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks."
+     * Slide 7: "600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark."
 
 5. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
    * ${arcDescription}
@@ -628,7 +655,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
       { "badge": "$1.8B", "label": "Customer cash held on cards" },
       { "badge": "$222M", "label": "Annual profit from unused balances" }
     ],
-    "svgBlueprint": "Bespoke architectural isometric vector of a coffee cup sliced into balance sheet vault strata with 1px dimension lines and coordinates"
+    "svgBlueprint": "600×750 viewBox; 40px safe margins. Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract fractured-column or architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes."
   },
   {
     "id": "slide-2",
@@ -888,7 +915,9 @@ CRITICAL DESIGN & CODING RULES:
       - Monumental headline: 'text-[64px] to text-[72px] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--ink)] mt-4'
       - 1px hairline rule: '<div className="w-full border-b border-[var(--border)] my-6" />'
       - Subheadline: 'text-[24px] text-[var(--ink)]/80 leading-snug mb-8'
-      - DOMINANT BESPOKE SVG VECTOR CENTERPIECE: Must occupy 40%–55% of the vertical frame! Clean architectural line work (strokeWidth="1.5" or "2"), coordinates, geometric forms matching the narrative visual metaphor (e.g. coffee cup vault strata, financial ledger grid, architectural cross-section).
+      - DOMINANT ABSTRACT SCULPTURAL SVG VECTOR CENTERPIECE: Must occupy 40%–55% of the vertical frame!
+        Inspired by gold standard 'tipaza': A single monumental fractured monolith or architectural plinth silhouette in dark surface and ink, with an intense accent rupture ('fill="var(--accent)"'). Clean geometric linework (strokeWidth="1.5" or "2"), coordinate crosshairs, and registration ticks.
+        ABSOLUTELY NO DIAGRAMS, NO PIPES, NO FLOWCHARTS, NO <text> LABELS!
       - Footer metadata ledger: Clean 1px bordered split ledger at the bottom showing issue badge and numerical telemetry badges with 0px corners.
 
    B. "asymmetric-editorial-cards":
@@ -896,7 +925,7 @@ CRITICAL DESIGN & CODING RULES:
       - Asymmetric layout: Primary hero card (occupying 55%-60% of card space) paired with 1 or 2 secondary ledger cards.
       - Card styling: 'border border-[var(--border)] bg-[var(--surface)] p-8 rounded-none' (NO drop shadows, NO border-l-[6px]).
       - Primary card features a bold tabular metric ('text-[52px] font-bold text-[var(--accent)]') and 5-8 word punchline with bold anchors.
-      - Secondary cards feature monospace headers, 1px dividers, and inline technical SVG glyphs.
+      - Secondary cards feature monospace headers, 1px dividers, and subtle background architectural contour curves or stepped boundary lines. Zero text inside SVG.
 
    C. "vertical-milestone-spine":
       - Header zone: Monospace kicker + high-tension headline.
@@ -909,14 +938,14 @@ CRITICAL DESIGN & CODING RULES:
       - Header zone: Monospace kicker with square dot + headline.
       - Massive hero metric placard:
         'border border-[var(--border)] bg-[var(--surface)] p-9 rounded-none'
-        Hero tabular numeral: 'text-[96px] to text-[110px] font-bold tabular-nums text-[var(--accent)] leading-none'.
+        Hero tabular numeral: 'text-[96px] to text-[110px] font-bold tabular-nums text-[var(--accent)] leading-none' (rendered in HTML, NOT in SVG!).
         Monospace metric label: 'text-[20px] font-[var(--font-mono)] uppercase tracking-wider text-[var(--ink)]/70 mt-3'.
-      - Bespoke architectural SVG comparison gauge: An inline SVG scale or ratio ledger with 1px dimension lines, tick marks, and coordinate markers (NO rounded-full HTML progress bars!).
+      - Inline architectural vector accent: A 1px dimension hairline or sharp accent rupture intersecting the border. Zero chart axes, zero text.
       - Bottom editorial context placard: 1px hairline card with 5-8 word takeaway.
 
    E. "full-height-editorial-split":
       - 50/50 or 60/40 vertical or horizontal editorial split:
-      - Graphic half: Dominant architectural SVG vector diagram (occupying half the canvas) with rich technical linework, cross-hatching, dashed flow lines, and accent focal points.
+      - Graphic half: Dominant architectural elevation silhouette or tectonic section linework with 1px hairlines and accent focal point. Abstract conceptual art, no explanatory labels.
       - Editorial half: Monospace kicker with square dot, bold headline, and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
 
    F. "three-row-verification-ledger":
@@ -928,9 +957,12 @@ CRITICAL DESIGN & CODING RULES:
       - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
       - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[18px] text-[var(--accent)]').
 
-9. UNIFIED SVG & HTML COORDINATES (No Disconnected Callout Lines):
-   - NEVER draw hardcoded SVG connector lines pointing to disconnected HTML absolute <div>s!
-   - Use HTML flex/grid cards with inline SVG accent marks or unified layout.
+9. TOTAL BAN ON <text> AND <tspan> INSIDE <svg>:
+   - NEVER put <text>, <tspan>, or typography inside an <svg> tag!
+   - ALL titles, headlines, subheadlines, card copy, metric numerals, and badges MUST be rendered in HTML elements (<h1>, <h2>, <p>, <span>, <div>) styled with Tailwind CSS!
+   - The <svg> element must contain ONLY graphic shapes: <path>, <rect>, <circle>, <g>, <line>, <defs>, <pattern>.
+   - Rendering text inside SVG causes severe layout collisions, text clipping, and amateur rendering.
+   - BAN DIAGRAMS, PIPES, PROCESS ARROWS, AND CLIPART: The SVG must be abstract, sculptural editorial artwork (like Tipaza's fractured monolith, plinth, and contour lines), NEVER an explanatory flowchart.
    - BAN <foreignObject> inside SVGs: It causes text clipping, font-rendering glitches, and layout failure. Use pure Tailwind flex/grid cards for copy.
 
 10. SPACE BALANCE & OPTICAL BREATHING ROOM:

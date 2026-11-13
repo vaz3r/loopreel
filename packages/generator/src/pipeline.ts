@@ -211,6 +211,20 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/\bborder-l-[468]\b/g, 'border border-[var(--border)]');
   code = code.replace(/\brounded-(?:lg|xl|2xl|3xl)\b/g, 'rounded-none');
 
+  // 11. SVG text stripper: remove rogue <text>...</text> tags from inside <svg> blocks (Tipaza rule: all typography belongs in HTML)
+  code = code.replace(/<svg\b[^>]*>([\s\S]*?)<\/svg>/gi, (svgBlock) => {
+    return svgBlock.replace(/<text\b[^>]*>[\s\S]*?<\/text>/gi, '');
+  });
+
+  // 12. Fix dangling or double optional chaining:
+  // e.g. .split('/')?.?.trim() -> .split('/')?.[0]?.trim()
+  // e.g. telemetry?.; -> telemetry;
+  code = code.replace(/\?\.[\s]*\?\.+/g, '?.[0]?.');
+  code = code.replace(/\?\.[\s]*\?\.\[/g, '?.[');
+  code = code.replace(/\?\.[\s]*;/g, ';');
+  code = code.replace(/\?\.[\s]*\)/g, ')');
+  code = code.replace(/\?\.[\s]*,/g, ',');
+
   return code;
 }
 
@@ -548,8 +562,17 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       else archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
     }
 
-    // Slide 1 is always monumental-editorial-cover
-    if (idx === 0) archetype = 'monumental-editorial-cover';
+    // Slide 1 is ALWAYS monumental-editorial-cover; slides 2+ MUST NEVER use monumental-editorial-cover!
+    if (idx === 0) {
+      archetype = 'monumental-editorial-cover';
+    } else {
+      if (!archetype || archetype === 'monumental-editorial-cover') {
+        archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
+        if (archetype === 'monumental-editorial-cover') {
+          archetype = 'asymmetric-editorial-cards';
+        }
+      }
+    }
 
     // 2. Clamp and sanitize items body copy (Strict 10-word ceiling for mobile scannability)
     let sanitizedItems = s.items;
@@ -627,15 +650,33 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
   // Prepare slide design blueprints directly from Pass 3 content JSON
-  const blueprints: SlideDesignBlueprint[] = deck.slides.map((s) => ({
-    slideId: s.id,
-    type: s.type,
-    layoutStructure: s.archetype || s.layoutTopology || 'asymmetric-editorial-cards',
-    svgConcept: {
-      description: s.svgBlueprint || `Bespoke architectural SVG vector diagram matching ${s.archetype}`,
-      type: 'schematic',
-    },
-  }));
+  const defaultBlueprints = [
+    '600×750 viewBox; 40px safe margins. Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract fractured-column or architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
+    '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Lower card carries a restrained architectural silhouette. Conceptual vector art, not a flowchart.',
+    '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
+    '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
+    '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge. Bottom full-width rule holds closing takeaway.',
+    '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
+    '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
+  ];
+
+  const blueprints: SlideDesignBlueprint[] = deck.slides.map((s, idx) => {
+    let bp = s.svgBlueprint;
+    // Intercept literal flowchart/diagram/pipe blueprints and replace with Tipaza-grade abstract vector blueprints
+    if (!bp || /flowchart|diagram|pipe|valve|cutaway|conduit|tokens? enter|chamber|slot|app screen/i.test(bp)) {
+      bp = defaultBlueprints[idx % defaultBlueprints.length];
+    }
+
+    return {
+      slideId: s.id,
+      type: s.type,
+      layoutStructure: s.archetype || s.layoutTopology || 'asymmetric-editorial-cards',
+      svgConcept: {
+        description: bp || `Bespoke architectural abstract vector artwork matching ${s.archetype}`,
+        type: 'schematic',
+      },
+    };
+  });
 
   // ==========================================================================
   // PASS 4: SLIDES FINAL FORM SYNTHESIS & AUDIT (REACT + SVG CODEGEN & AUDIT)
