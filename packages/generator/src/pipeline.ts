@@ -257,6 +257,20 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/\?\.[\s]*\)/g, ')');
   code = code.replace(/\?\.[\s]*,/g, ',');
 
+  // 13. Telemetry double-indexing repair: prevent blank metric glitches where LLM writes
+  // const telemetry = slide.telemetry?.[0]; ... telemetry?.[0]?.badge
+  code = code.replace(/(\btelemetry\b)\?\.\[0\]\?\.\[0\]/g, '$1?.[0]');
+  code = code.replace(/(\btelemetry\b)\?\.\[(\d+)\]\?\.\[(\d+)\]/g, '$1?.[$2]');
+  code = code.replace(/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[(\d+)\];([\s\S]*?)\b\1\?\.\[\d+\]\?\.badge/g, 'const $1 = slide.telemetry?.[$2];$3$1?.badge');
+  if (/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[\d+\]/i.test(code)) {
+    const match = code.match(/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[\d+\]/i);
+    if (match) {
+      const varName = match[1];
+      const reg = new RegExp(`\\b${varName}\\?\\.\\[\\d+\\]\\?\\.(badge|label|value|qualifier|unit)`, 'g');
+      code = code.replace(reg, `${varName}?.$1`);
+    }
+  }
+
   return code;
 }
 
@@ -361,6 +375,60 @@ async function runConcurrentPool<T, R>(
   );
   await Promise.all(workers);
   return results;
+}
+
+export function getDomainSvgBlueprints(themeText: string): string[] {
+  const lower = themeText.toLowerCase();
+  const isFinance = /card|bank|float|interest|cash|dollar|fund|revenue|profit|asset|liability|balance|escrow|fintech|invest|corporate|seattle/i.test(lower);
+  const isTech = /chip|silicon|die|gpu|cpu|ai|model|llm|software|hardware|compute|latency|server|network|cloud|drone|robot/i.test(lower);
+  const isGeo = /geopolitic|military|territor|maritime|defense|war|treaty|border|corridor|soviet|sanction/i.test(lower);
+
+  if (isFinance) {
+    return [
+      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline, micro-coordinates [37°N 122°W], and subtle foil stamp registration crosshairs. Geometric editorial linework. No clipart, no flowchart pipes, zero text in SVG.',
+      '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart.',
+      '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
+      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
+      '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with corporate float ledger strata and 1px hairlines. Right: paper with verified badges. Bottom full-width rule holds closing takeaway.',
+      '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
+      '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle balance-sheet strata boundary mark.',
+    ];
+  }
+
+  if (isTech) {
+    return [
+      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, an imposing geometric silicon die section silhouette in dark surface and ink with 1px bus interconnect hairlines, micro-stepped cache strata, and registration crosshairs. Clean engineering linework. Zero text in SVG, zero flowchart pipes.',
+      '600×750 viewBox; 40px margins. Stack two offset cards. Subtle 1px bus traces and logic-gate coordinate ticks behind the cards. High precision technical linework, not a flowchart.',
+      '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Accent fracture line cutting across 1px dimension hairlines. Clean editorial layout, zero charts.',
+      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Precision micro-ticks and bus routing hairlines.',
+      '600×750 viewBox; 40px margins. Split diptych: Left dark surface with architectural wafer section silhouette and 1px hairlines. Right paper with verified specs.',
+      '600×750 viewBox; 40px margins. Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03], 1px dividers, and right-aligned metric badges.',
+      '600×750 viewBox; 40px margins. Final verdict diptych with closing takeaway and clean technical boundary marks.',
+    ];
+  }
+
+  if (isGeo) {
+    return [
+      '600×750 viewBox; 40px safe margins. Dark paper field. In the center, abstract territorial demarcation hairlines and maritime transit vectors in dark surface and accent ink. Zero cartoon maps, zero text in SVG.',
+      '600×750 viewBox; 40px margins. Stack two offset cards with subtle strategic coordinate crosshairs and 1px hairlines behind the cards.',
+      '600×750 viewBox; 40px margins. Massive metric placard with 1px border and focal vector accent. Clean editorial linework.',
+      '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine with registration ticks.',
+      '600×750 viewBox; 40px margins. Split diptych with strategic convergence axes on dark surface and verified policy ledger on paper.',
+      '600×750 viewBox; 40px margins. Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03] and metric badges.',
+      '600×750 viewBox; 40px margins. Final verdict diptych with closing takeaway and signature publication wordmark.',
+    ];
+  }
+
+  // Historical / Architectural / General
+  return [
+    '600×750 viewBox; 40px safe margins. Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
+    '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Restrained architectural silhouette.',
+    '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card.',
+    '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper.',
+    '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge.',
+    '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.',
+    '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
+  ];
 }
 
 export async function runTemplatePipeline(options: PipelineOptions): Promise<PipelineResult> {
@@ -615,21 +683,14 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
   // Prepare slide design blueprints directly from Pass 3 content JSON
-  const defaultBlueprints = [
-    '600×750 viewBox; 40px safe margins. Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract fractured-column or architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
-    '600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Lower card carries a restrained architectural silhouette. Conceptual vector art, not a flowchart.',
-    '600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
-    '600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
-    '600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge. Bottom full-width rule holds closing takeaway.',
-    '600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
-    '600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
-  ];
+  const domainThemeContext = `${brand.domain} ${brand.name} ${brand.vibe || ''} ${narrative.editorialTheme || ''} ${narrative.visualMetaphor || ''} ${narrative.articleTitle || ''} ${narrative.hookHeadline || ''}`;
+  const domainBlueprints = getDomainSvgBlueprints(domainThemeContext);
 
   const blueprints: SlideDesignBlueprint[] = deck.slides.map((s, idx) => {
     let bp = s.svgBlueprint;
-    // Intercept literal flowchart/diagram/pipe blueprints and replace with Tipaza-grade abstract vector blueprints
+    // Intercept literal flowchart/diagram/pipe blueprints and replace with domain-adaptive editorial vector blueprints
     if (!bp || /flowchart|diagram|pipe|valve|cutaway|conduit|tokens? enter|chamber|slot|app screen/i.test(bp)) {
-      bp = defaultBlueprints[idx % defaultBlueprints.length];
+      bp = domainBlueprints[idx % domainBlueprints.length];
     }
 
     return {
@@ -637,7 +698,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       type: s.type,
       layoutStructure: s.archetype || s.layoutTopology || 'asymmetric-editorial-cards',
       svgConcept: {
-        description: bp || `Bespoke architectural abstract vector artwork matching ${s.archetype}`,
+        description: bp || `Bespoke editorial abstract vector artwork matching ${s.archetype}`,
         type: 'schematic',
       },
     };
