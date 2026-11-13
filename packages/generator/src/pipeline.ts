@@ -49,13 +49,18 @@ function extractJson<T>(raw: string): T {
   return JSON.parse(cleaned) as T;
 }
 
-function extractTsx(raw: string): string {
+export function extractTsx(raw: string): string {
   let cleaned = raw.trim();
   const tsxMatch = cleaned.match(/```(?:tsx|typescript|jsx|javascript)?\s*([\s\S]*?)\s*```/);
   if (tsxMatch && tsxMatch[1]) {
     cleaned = tsxMatch[1].trim();
   }
   return cleaned;
+}
+
+function extractDesignThought(raw: string): string {
+  const match = raw.match(/<design_thought>([\s\S]*?)<\/design_thought>/i);
+  return match && match[1] ? match[1].trim() : '';
 }
 
 // ============================================================================
@@ -675,24 +680,37 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // ==========================================================================
   // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (BESPOKE SVG & SPATIAL BLUEPRINTS)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 5/7: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...`);
+  console.log(`[Pipeline] >>> Pass 5/7: Visual Art Director Designing Bespoke Base Styles & Blueprints...`);
   options.onProgress?.('Designing Bespoke Layout & SVG Infographic Blueprints', 5, 7);
 
   let blueprints: SlideDesignBlueprint[] = [];
+  let baseCss = `/* Bespoke styles for ${brand.name} */\n`;
   try {
     const blueprintResponse = await llm.generateJSON(
       buildVisualBlueprintSystemPrompt(deck.slides.length),
       buildVisualBlueprintUserPrompt(deck.slides, brand, dossier, strategy),
       0.5
     );
-    const parsedBlueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
-    if (Array.isArray(parsedBlueprints) && parsedBlueprints.length > 0) {
-      blueprints = parsedBlueprints;
-      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} bespoke slide visual blueprints generated.`);
+    const parsedData = extractJson<any>(blueprintResponse.text);
+    if (parsedData && typeof parsedData === 'object') {
+      if (typeof parsedData.baseCss === 'string' && parsedData.baseCss.trim().length > 0) {
+        baseCss = parsedData.baseCss.trim();
+      }
+      if (Array.isArray(parsedData.blueprints)) {
+        blueprints = parsedData.blueprints;
+      } else if (Array.isArray(parsedData)) {
+        blueprints = parsedData;
+      }
+    } else if (Array.isArray(parsedData)) {
+      blueprints = parsedData;
     }
+    console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} bespoke blueprints and ${baseCss.length} bytes of base CSS generated.`);
   } catch (err: any) {
     console.warn(`[Pipeline] Pass 5 blueprint generation note: ${err.message}`);
   }
+
+  // Persist bespoke styles.css
+  fs.writeFileSync(path.join(templateDir, 'styles.css'), baseCss, 'utf-8');
 
   blueprints = deck.slides.map((s, idx) => {
     const found = blueprints.find((b) => b.slideId === s.id || b.slideId === `slide-${idx + 1}`);
@@ -741,11 +759,11 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'blueprints.json'), JSON.stringify(blueprints, null, 2), 'utf-8');
 
   // ==========================================================================
-  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)
+  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION WITH CoT)
   // ==========================================================================
   const concurrency = options.concurrency || 3;
   console.log(
-    `[Pipeline] >>> Pass 6/7: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
+    `[Pipeline] >>> Pass 6/7: Synthesizing Slides Final Form with CoT (Concurrency: ${concurrency})...`
   );
   options.onProgress?.('Synthesizing Slide React Components', 6, 7);
 
@@ -759,15 +777,42 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filename = `${componentName}.tsx`;
     const filePath = path.join(slidesDir, filename);
 
+    // Cumulative deck memory
+    const precedingSlides = deck.slides.slice(0, i).map((s, idx) => ({
+      slideNumber: idx + 1,
+      type: s.type || 'slide',
+      headline: s.headline || '',
+      layoutStructure: blueprints[idx]?.layoutStructure,
+    }));
+    const upcomingSlides = deck.slides.slice(i + 1).map((s, idx) => ({
+      slideNumber: i + 2 + idx,
+      type: s.type || 'slide',
+      headline: s.headline || '',
+    }));
+
     console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
     options.onProgress?.(`Pass 6/7: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
       buildSingleSlideSystemPrompt(activePlatform),
-      buildSingleSlideUserPrompt(slideNumber, slideData, blueprint, brand),
+      buildSingleSlideUserPrompt({
+        slideNumber,
+        totalSlides: deck.slides.length,
+        slideData,
+        blueprint,
+        precedingSlides,
+        upcomingSlides,
+        baseCss,
+        brand,
+      }),
       0.6
     );
+
+    const designThought = extractDesignThought(slideResponse.text);
+    if (designThought) {
+      console.log(`[Pipeline]   💭 Design CoT [Slide ${slideNumber}]:\n${designThought.split('\n').map((l) => `      ${l}`).join('\n')}`);
+    }
 
     let code = sanitizeTsxCode(extractTsx(slideResponse.text));
 
@@ -835,6 +880,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 import type { TemplatePackage } from '../../src/skeleton/types';
 import brandData from './brand.json';
 import deckData from './deck.json';
+import './styles.css';
 
 ${indexImports}
 
@@ -848,6 +894,8 @@ ${indexArray}
 
 export default pkg;
 `;
+
+  fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 
   fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 

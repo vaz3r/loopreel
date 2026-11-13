@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "../../../packages/generator/src/editorial.css";
 @source "../../packages/generator/templates";
 @source "../../packages/generator/src";
 @source "../../../packages/generator/templates";

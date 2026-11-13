@@ -485,7 +485,7 @@ Output strictly the StoryStrategy JSON.`;
 }
 
 // ============================================================================
-// STAGE 4: SENIOR COPY EDITOR & LAYOUT ARCHITECT (LOCKED STORYBOARD + VISUAL STYLES)
+// STAGE 4: SENIOR COPY EDITOR & STORY ARCHITECT (DYNAMIC STORYBOARD)
 // ============================================================================
 
 export function buildStoryDeckSystemPrompt(
@@ -497,68 +497,48 @@ export function buildStoryDeckSystemPrompt(
 
   return `You are a World-Class Visual Journalism Creative Director and Senior Editor at The New York Times Graphics Desk, Reuters, Wired, and The Financial Times.
 You author scroll-stopping, high-impact editorial carousel content engineered for MOBILE INSTAGRAM (3-SECOND SCAN RULE).
-Every slide must look like an art-directed museum publication graphic (inspired by benchmark 'tipaza')—NEVER an off-the-shelf web UI, web dashboard, or corporate slide deck.
+Every slide must read like an art-directed editorial publication (The New York Times, Monocle, HBR, MoMA, Wired)—NEVER an off-the-shelf web UI, corporate pitch deck, or generic bullet list.
 
-CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
+CRITICAL EDITORIAL & COPY RULES:
 
 1. THE 3-SECOND MOBILE SCAN RULE (STRICT WORD BUDGETS):
    On a mobile smartphone screen, users swipe in 3 seconds. Dense text is an instant failure.
-   - HEADLINES: 4 to 6 words maximum. High-tension, active voice, zero passive jargon.
-   - SUBHEADLINES: 6 to 10 words maximum (1 clean sentence or omit if headline is self-explanatory).
-   - CARD / POINT BODY: STRICT 5 TO 8 WORDS MAXIMUM PER ITEM! Every word must hit like a punchy bullet.
+   - HEADLINES: 4 to 6 words maximum. High-tension, active voice, zero passive corporate jargon.
+   - SUBHEADLINES: 6 to 10 words maximum (1 punchy clarifying sentence or omit if headline is self-explanatory).
+   - CARD / POINT BODY: STRICT 6 TO 12 WORDS MAXIMUM PER ITEM! Every word must hit with surgical editorial precision.
      * BAD: "Starbucks receives prepayment. Customers receive spending value—not interest or FDIC insurance." (11 words)
      * GOOD: "You lend them cash. You earn **0% interest** with **zero FDIC insurance**." (8 words)
      * BAD: "Combined company-operated and licensed store breakage revenue calculated from segment disclosures." (12 words)
      * GOOD: "**$222M in pure profit** harvested from forgotten card change." (7 words)
-     * BAD: "Non-bank stored value falls outside federal reserve ratio requirements and deposit insurance frameworks." (13 words)
-     * GOOD: "**Zero reserve requirements.** If they fail, your balance vanishes." (7 words)
-   - CARD TITLES: 2 to 3 words maximum (e.g. "THE ILLUSION", "THE FINE PRINT", "THE FLOAT", "ZERO INSURANCE").
+   - CARD TITLES: 2 to 4 words maximum (e.g. "THE ILLUSION", "THE FINE PRINT", "THE FLOAT", "ZERO INSURANCE").
    - MANDATORY BOLD SKIM ANCHORS: You MUST bold the single highest-signal takeaway phrase in every point (e.g. **0% interest**, **$1.8B float**, **zero protection**).
 
-2. STRICT BAN ON WEB UI TROPES & DASHBOARD PATTERNS:
-   - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
-   - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
+2. RADICAL SLIDE DIVERSITY (NATURAL JOURNALISTIC ARC):
+   To guarantee high swipe engagement and eliminate layout fatigue, craft each slide with its distinct narrative purpose:
+   * Slide 1: Monumental Hook / Cover — Inciting event, massive stakes, hook headline, subheadline, issue badge, hero telemetry.
+   * Slide 2: The Conventional Myth / Belief vs Reality — PR spin or popular belief vs the forensic reality.
+   * Slide 3: The Core Mechanism / Hidden Dynamic — The engine or structural system making this happen.
+   * Slide 4: Monumental Telemetry / The Big Number — Dominant quantitative fact or regulatory threshold.
+   * Slide 5: The Systemic Process / Operational Pipeline — Step-by-step mechanism or ripple sequence.
+   * Slide 6: Evidence Ledger / Buried Receipts — Tabular forensic proof, contract clauses, or comparative data.
+   * Slide 7: The Verdict / Executive Playbook — Definitive conclusion, decision matrix, or final takeaway rule.
 
-3. MANDATORY 7-SLIDE ARCHETYPE SEQUENCE CONTRACT (ASC):
-   To guarantee radical swipe diversity and eliminate layout fatigue, EVERY deck must follow this exact editorial sequence:
-   - Slide 1: "monumental-editorial-cover"
-     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 64px headline, subheadline, issue badge, and hero telemetry. Dominant abstract architectural SVG vector centerpiece (viewBox="0 0 952 560"). ZERO body cards!
-   - Slide 2: "claim-vs-reality-diptych"
-     High-tension editorial confrontation. Top PR claim quote in serif italics vs bottom dark forensic reality box stamped with accent badge. ZERO SVG (pure typography)!
-   - Slide 3: "full-height-editorial-split"
-     50/50 vertical diptych. Left column (448px) = 46px headline + 2 stacked narrative cards; Right column (448px) = full-height 720px tall vertical cutaway SVG (viewBox="0 0 448 720")!
-   - Slide 4: "hero-metric-placard"
-     Monumental 110px tabular numeral in HTML commanding the page + uppercase mono metric label + punchy takeaway. ZERO SVG (the number is the hero graphic)!
-   - Slide 5: "systemic-mechanism-flow"
-     Wide horizontal flow SVG (viewBox="0 0 952 340") depicting 3 sequential stations + 3 step callout cards aligned directly below.
-   - Slide 6: "three-row-verification-ledger"
-     Clean institutional tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], findings with bold anchors, and right badges. ZERO SVG!
-   - Slide 7: "editorial-verdict-playbook"
-     Actionable 2-choice decision matrix ("Option A" vs "Option B") + closing authoritative verdict seal.
-
-4. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
+3. DYNAMIC NARRATIVE ARC (${count} SLIDES):
    * ${arcDescription}
 
-5. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
-   - Maximum 2 items per slide (Slide 5 flow and Slide 6 ledger: exactly 3 items; Slide 1: 0 items; Slide 4: 1 item).
-   - Total words per slide: STRICTLY 25 to 50 words across the entire slide.
-   - Headlines: Maximum 4–6 words.
-   - Subheadlines: Maximum 6–10 words.
-   - Card / item body: STRICT 5 TO 8 WORDS MAXIMUM PER ITEM! Every word must be punchy, high-signal, and editorial.
-   - Telemetry values: MUST be strictly numerical or signed badge ("$1.8B", "0%", "$222M", "+12%"). Qualifiers belong in label.
+4. DATA & METRIC DISCIPLINE:
+   - Telemetry values: MUST be strictly numerical or signed badge ("$1.8B", "0%", "$222M", "+12%", "400%"). Qualifiers belong in label.
+   - Total words per slide: strictly 25 to 55 words across the entire slide.
 
-Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL COPY ONLY — DO NOT WRITE SVG BLUEPRINTS):
+Return strictly a JSON array of exactly ${count} slide objects:
 [
   {
     "id": "slide-1",
     "index": 0,
     "type": "cover",
-    "archetype": "monumental-editorial-cover",
     "kicker": "FORENSIC INVESTIGATION",
     "headline": "The $4.2 Billion Seat Monopoly",
-    "subheadline": "How airlines sell 115% capacity and profit from calculated mathematical no-show margins.",
-    "visualStyle": "monumental-editorial-cover",
-    "layoutTopology": "monumental-editorial-cover",
+    "subheadline": "How airlines sell 115% capacity and profit from calculated no-show margins.",
     "issueBadge": "EXECUTIVE AUDIT · ${count} SLIDES",
     "telemetry": [
       { "badge": "$4.2B", "label": "Annual overbooking margin" },
@@ -569,10 +549,9 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
     "id": "slide-2",
     "index": 1,
     "type": "belief",
-    "archetype": "claim-vs-reality-diptych",
     "kicker": "THE CONVENTIONAL MYTH",
-    "headline": "The PR Pitch vs. The Mathematical Reality",
-    "subheadline": "Airlines frame overbooking as an efficiency savings passed on to travelers.",
+    "headline": "PR Pitch vs. Mathematical Reality",
+    "subheadline": "Airlines frame overbooking as efficiency savings passed on to travelers.",
     "claim": {
       "title": "THE CORPORATE POSITION",
       "body": "Overbooking keeps ticket prices affordable by compensating for inevitable no-shows."
@@ -581,30 +560,24 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
       "title": "THE FORENSIC REALITY",
       "body": "A calculated revenue engine where bumped seats generate **pure statistical margin** with zero liability risk.",
       "badge": "FORENSIC AUDIT"
-    },
-    "visualStyle": "claim-vs-reality-diptych",
-    "layoutTopology": "layout-claim-reality"
+    }
   },
   {
     "id": "slide-3",
     "index": 2,
     "type": "mechanism",
-    "archetype": "full-height-editorial-split",
     "kicker": "SYSTEM ARCHITECTURE",
     "headline": "Poisson Yield Curves",
     "subheadline": "Algorithms balance bumping penalties against unsold seat losses in real time.",
     "items": [
       { "title": "HISTORICAL NO-SHOWS", "body": "Routes average an expected **9.2% cancellation rate** on peak business flights." },
       { "title": "ASYMMETRIC MARGIN", "body": "Selling 15 extra seats nets **$4,500 upside** against a **$1,200 penalty risk**." }
-    ],
-    "visualStyle": "full-height-editorial-split",
-    "layoutTopology": "layout-split-diptych"
+    ]
   },
   {
     "id": "slide-4",
     "index": 3,
     "type": "telemetry",
-    "archetype": "hero-metric-placard",
     "kicker": "REGULATORY THRESHOLD",
     "headline": "The 400% Payout Cap",
     "subheadline": "Federal law mandates aggressive cash penalties for involuntary bumps.",
@@ -614,15 +587,12 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
     "items": [
       { "title": "THE VOUCHER TRAP", "body": "Carriers push **$800 travel credits** before disclosing your right to **$1,550 cash**." }
     ],
-    "footer": "14 CFR § 250.5 Federal Airline Consumer Protections.",
-    "visualStyle": "hero-metric-placard",
-    "layoutTopology": "hero-metric-placard"
+    "footer": "14 CFR § 250.5 Federal Airline Consumer Protections."
   },
   {
     "id": "slide-5",
     "index": 4,
     "type": "system",
-    "archetype": "systemic-mechanism-flow",
     "kicker": "OPERATIONAL SEQUENCE",
     "headline": "The Involuntary Bump Pipeline",
     "subheadline": "How automated airline algorithms triage candidates before boarding starts.",
@@ -630,15 +600,12 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
       { "title": "CHECK-IN GATE", "body": "Timestamp assigns default priority tier." },
       { "title": "FARE CLASS FILTER", "body": "Basic Economy tickets routed to bump pool." },
       { "title": "GATE AUCTION", "body": "Vouchers escalate until volunteers surrender seats." }
-    ],
-    "visualStyle": "systemic-mechanism-flow",
-    "layoutTopology": "layout-grid-3"
+    ]
   },
   {
     "id": "slide-6",
     "index": 5,
     "type": "ledger",
-    "archetype": "three-row-verification-ledger",
     "kicker": "AUDIT LEDGER",
     "headline": "Three Buried Contract Rules",
     "subheadline": "Contract of Carriage provisions carriers hope you never read.",
@@ -646,15 +613,12 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
       { "index": "01", "title": "CHECK-IN CUTOFF", "body": "Missing the **45-minute bag drop deadline** forfeits all denied boarding rights.", "badge": "RULE 14" },
       { "index": "02", "title": "PAYMENT METHOD", "body": "Airlines must pay **cash or check immediately at the gate**, not delayed travel credits.", "badge": "CFR 250" },
       { "index": "03", "title": "DOWNGAUGE EXCEPTION", "body": "Aircraft swaps for safety reasons **exempt carriers from cash liability**.", "badge": "SECTION 7" }
-    ],
-    "visualStyle": "three-row-verification-ledger",
-    "layoutTopology": "layout-ledger"
+    ]
   },
   {
     "id": "slide-7",
     "index": 6,
     "type": "verdict",
-    "archetype": "editorial-verdict-playbook",
     "kicker": "EXECUTIVE PLAYBOOK",
     "headline": "The Gate Counter Confrontation",
     "subheadline": "How to maximize leverage when a flight announces an involuntary bump.",
@@ -665,9 +629,7 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
     "verdict": {
       "title": "THE GOLDEN RULE",
       "takeaway": "Volunteering waives federal rights. Always force an involuntary denied boarding."
-    },
-    "visualStyle": "editorial-verdict-playbook",
-    "layoutTopology": "editorial-verdict-playbook"
+    }
   }
 ]`;
 }
@@ -691,7 +653,7 @@ export function buildStoryDeckUserPrompt(
   const verdict = strategy?.verdict || dossier.verdict || '';
   const metaphor = strategy?.visualMetaphor || dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
-  return `Author the ${count}-slide storyboard according to the Mandatory 7-Slide Archetype Sequence Contract (ASC):
+  return `Author the ${count}-slide storyboard for this editorial publication:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -703,21 +665,12 @@ Core Conflict: "${conflict}"
 Hidden Catches: "${catches}"
 Verdict: "${verdict}"
 
-MANDATORY ARCHETYPE SEQUENCE CONTRACT (ASC):
-- Slide 1: "monumental-editorial-cover" (Title, Kicker, Subheadline, Issue Badge, Hero Telemetry; NO body cards).
-- Slide 2: "claim-vs-reality-diptych" (claim vs reality confrontation; ZERO SVG).
-- Slide 3: "full-height-editorial-split" (50/50 vertical diptych; 2 items on left, 720px tall cutaway on right).
-- Slide 4: "hero-metric-placard" (Dominant 110px HTML number in telemetry[0] + 1 takeaway item; ZERO SVG).
-- Slide 5: "systemic-mechanism-flow" (3 sequential pipeline items).
-- Slide 6: "three-row-verification-ledger" (3 tabular findings with [01]-[03] indices and right badges; ZERO SVG).
-- Slide 7: "editorial-verdict-playbook" (2 comparative choices Option A vs Option B + closing verdict takeaway).
-
 Verified Data & Metrics:
 ${JSON.stringify(dossier.verifiedMetrics || [], null, 2)}
 Quotes:
 ${JSON.stringify(dossier.verifiedQuotes || [], null, 2)}
 
-Output strictly the JSON array of exactly ${count} slide objects following the ASC schema. Remember: PURE EDITORIAL COPY ONLY, MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, STRICT NUMERICAL TELEMETRY BADGES, AND ZERO WEB UI SHADOWS OR PILLS!`;
+Output strictly the JSON array of exactly ${count} slide objects. Remember: PURE EDITORIAL COPY ONLY, MAX 12 WORDS PER CARD BODY WITH **BOLD ANCHORS**, STRICT NUMERICAL TELEMETRY BADGES, AND ZERO CORPORATE FLUFF!`;
 }
 
 // Fallback for non-article briefs
@@ -740,7 +693,7 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// STAGE 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINTS)
+// STAGE 5: VISUAL ART DIRECTOR & DESIGN TECHNOLOGIST (BESPOKE CSS + BLUEPRINTS)
 // ============================================================================
 
 export interface SlideDesignBlueprint {
@@ -760,146 +713,56 @@ export interface SlideDesignBlueprint {
   spatialBalanceGuidance?: string;
 }
 
+export interface DeckArtDirection {
+  baseCss: string;
+  blueprints: SlideDesignBlueprint[];
+}
+
 export function buildVisualBlueprintSystemPrompt(targetSlideCount = 7): string {
   const count = Math.max(4, Math.min(14, targetSlideCount));
-  return `You are an Information Designer and Art Director at Pentagram, Monocle, Wired, and The New York Times Graphics Desk.
-Your task is to plan the bespoke visual layout architecture and detailed vector SVG infographic concept for each slide in an editorial carousel deck (${count} slides).
+  return `You are an Information Designer, Art Director, and Principal Design Technologist at Pentagram, Monocle, Wired, and The New York Times Graphics Desk.
+Your task is twofold:
+1. CRAFT A BESPOKE STYLESHEET (baseCss):
+   Author a story-tailored CSS stylesheet (styles.css) that gives the entire carousel a handcrafted, high-end editorial identity.
+   - Tailor the styling to the subject matter (e.g. aviation telemetry/tickets, microchip lithography, financial ledger, luxury retail, legal briefs).
+   - Use CSS custom properties provided by SlideFrame:
+     * var(--paper), var(--ink), var(--accent), var(--surface), var(--border), var(--subtle)
+     * var(--font-headline), var(--font-body), var(--font-mono)
+   - Define expressive, reusable CSS helper classes (e.g. custom card treatments, subtle tints, hairline dividers, callout borders, stat placards, quote containers, ledger rows, badges).
+   - Editorial Aesthetic Rules:
+     * Architectural 0px or 2px corners (never bloated web UI pill bubbles)
+     * Crisp 1px hairlines ('1px solid var(--border)')
+     * Rich tonal surface treatments (backgrounds using var(--surface) or subtle transparencies)
+     * Monospace tags and tabular telemetry styling
+     * Absolutely NO tacky drop-shadows or generic corporate boxes.
 
-CRITICAL VISUAL DESIGN PRINCIPLES:
-1. ARCHETYPE ASSET ALLOCATION CONTRACT (ELIMINATE WIREFRAME FATIGUE):
-   Never force an SVG onto every slide! The greatest editorial publications balance high-density graphics with bold, breathing typographic spreads:
-   - Slide 1 (Cover: "monumental-editorial-cover"):
-     Dominant monumental visual centerpiece (viewBox="0 0 952 560") occupying the center frame between header and issue badge. Layered vector elements depicting the core physical or systemic artifact (e.g., microchip die, aircraft fuselage cross-section, balance sheet reservoir, radar azimuth).
-   - Slide 2 (Debunking: "claim-vs-reality-diptych"):
-     PURE TYPOGRAPHIC TENSION. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! Pass 6 will render an authoritative high-contrast serif quote box vs dark reality container.
-   - Slide 3 (System Deep-Dive: "full-height-editorial-split"):
-     Full-Height Vertical Cutaway SVG (viewBox="0 0 448 720") rendered exclusively in the right 50% column. High-density vertical technical elevation, stacked architecture layers, or longitudinal cross-section.
-   - Slide 4 (Hero Metric: "hero-metric-placard"):
-     MASSIVE 110PX HTML NUMERAL DOMINATING CANVAS. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! The numeral itself is the hero graphic.
-   - Slide 5 (Sequence: "systemic-mechanism-flow"):
-     Wide Horizontal Flow SVG (viewBox="0 0 952 340") depicting 3 sequential numbered stations connected by pipeline trajectories.
-   - Slide 6 (Evidence: "three-row-verification-ledger"):
-     INSTITUTIONAL TABULAR LEDGER. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! Pass 6 will render the crisp hairline-separated data ledger.
-   - Slide 7 (Verdict: "editorial-verdict-playbook"):
-     Compact Decision Fork SVG (viewBox="0 0 952 220") or subtle branching pathways, or svgConcept: { "type": "none", "description": "none" }.
+2. ARCHITECT BESPOKE VISUAL BLUEPRINTS FOR EACH SLIDE (${count} SLIDES):
+   Plan the bespoke spatial layout architecture, typography scale, and inline SVG infographic concept for every slide.
+   - Radical swipe diversity: Alternate between visual centerpieces, pure high-contrast typography diptychs, tabular data ledgers, hero numerical placards, and technical cutaways.
+   - For slides requiring an SVG: viewBox matched to the container (e.g. 952x560 for cover, 448x720 for split diptych, 952x340 for horizontal flow). Layered surface fills (fill="var(--surface)"), stroke hairlines (stroke="var(--border)"), accent focal trajectories (stroke="var(--accent)"), zero clipart.
+   - For slides that are typography or tabular driven (e.g. myth vs reality, hero number, data ledger): set svgConcept: { "type": "none", "description": "none" }.
 
-2. Visual Contrast & Tonal Depth (For slides with SVGs):
-   - STRICT BAN on hollow 1px wireframes! Every SVG must use solid surface fills to create depth:
-     * Structural bounds & hairlines: stroke="var(--border)" or stroke="var(--ink)" strokeOpacity="0.25" with strokeWidth="1.5" or "2".
-     * Tonal surface fills: fill="var(--surface)" or fill="var(--ink)" fillOpacity="0.06".
-     * Focal gestures & trajectories: stroke="var(--accent)" strokeWidth="2.5" to "3.5", or fill="var(--accent)".
-     * Registration marks: crosshairs, corner ticks, and coordinate indices with strokeOpacity="0.4".
-
-3. Vector Typography & Diagrams in SVG:
-   - Body copy, titles, descriptions, and paragraphs belong strictly in HTML/Tailwind.
-   - Standalone vector callouts, numerical badges, degree marks, unit labels, or date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE', 'Dec 16') are encouraged inside SVG <text> elements with clean font classes and coordinates.
-   - ABSOLUTE BAN: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
-
-Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
-[
-  {
-    "slideId": "slide-1",
-    "type": "cover",
-    "layoutStructure": "monumental-editorial-cover",
-    "svgConcept": {
-      "type": "schematic",
-      "description": "viewBox='0 0 952 560'. Imposing geometric system centerpiece with layered surface fills (fill='var(--surface)'), 1.5px hairlines, accent focal trajectories, and micro-coordinates. 20+ geometric vector elements with architectural depth.",
-      "elements": ["primary-silhouette", "structural-elevation", "accent-trajectories", "micro-coordinates"]
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[26px]"
-    },
-    "spatialBalanceGuidance": "Header zone occupies top 200px; SVG centerpiece occupies middle 560px; bottom metadata ledger occupies bottom 80px. Fills 90% of vertical canvas."
-  },
-  {
-    "slideId": "slide-2",
-    "type": "belief",
-    "layoutStructure": "claim-vs-reality-diptych",
-    "svgConcept": {
-      "type": "none",
-      "description": "none"
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[26px]"
-    },
-    "spatialBalanceGuidance": "Pure typography diptych. Top quote card (40% height) vs bottom dark reality card (45% height). Zero SVG."
-  },
-  {
-    "slideId": "slide-3",
-    "type": "mechanism",
-    "layoutStructure": "full-height-editorial-split",
-    "svgConcept": {
-      "type": "schematic",
-      "description": "viewBox='0 0 448 720'. High-density vertical cutaway schematic occupying the right 50% column. Stacked technical layers, pipeline flows, and annotated component nodes.",
-      "elements": ["vertical-pipeline-spine", "annotated-stage-nodes", "accent-flow-arrows"]
-    },
-    "typographyScale": {
-      "headlineSize": "text-[46px]",
-      "subtitleSize": "text-[22px]"
-    },
-    "spatialBalanceGuidance": "50/50 vertical split. Left column 448px copy and 2 cards; right column 448px vertical 720px SVG cutaway."
-  },
-  {
-    "slideId": "slide-4",
-    "type": "telemetry",
-    "layoutStructure": "hero-metric-placard",
-    "svgConcept": {
-      "type": "none",
-      "description": "none"
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[26px]"
-    },
-    "spatialBalanceGuidance": "Massive 110px HTML tabular numeral in accent color commanding screen + uppercase label + context card. Zero SVG."
-  },
-  {
-    "slideId": "slide-5",
-    "type": "system",
-    "layoutStructure": "systemic-mechanism-flow",
-    "svgConcept": {
-      "type": "schematic",
-      "description": "viewBox='0 0 952 340'. Horizontal flow infographic with 3 sequential stations [01, 02, 03] linked by directional pipeline paths and status markers.",
-      "elements": ["flow-pipeline-tracks", "three-station-nodes", "status-indicators"]
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[24px]"
-    },
-    "spatialBalanceGuidance": "Header 180px; horizontal SVG flow 340px; 3-column step cards 280px directly aligned under stations."
-  },
-  {
-    "slideId": "slide-6",
-    "type": "ledger",
-    "layoutStructure": "three-row-verification-ledger",
-    "svgConcept": {
-      "type": "none",
-      "description": "none"
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[24px]"
-    },
-    "spatialBalanceGuidance": "Institutional tabular ledger with 3 rows divided by 1px hairlines. Zero SVG."
-  },
-  {
-    "slideId": "slide-7",
-    "type": "verdict",
-    "layoutStructure": "editorial-verdict-playbook",
-    "svgConcept": {
-      "type": "schematic",
-      "description": "viewBox='0 0 952 220'. Compact decision fork schematic showing branching paths between Option A and Option B.",
-      "elements": ["decision-branch-fork", "option-nodes"]
-    },
-    "typographyScale": {
-      "headlineSize": "text-[64px]",
-      "subtitleSize": "text-[24px]"
-    },
-    "spatialBalanceGuidance": "Header 180px; compact fork SVG 200px; 2 comparison cards 300px; verdict seal 100px."
-  }
-]`;
+Return strictly a JSON object matching this structure:
+{
+  "baseCss": "/* Story-tailored editorial stylesheet */\\n.deck-slide { ... }\\n.deck-card { ... }\\n...",
+  "blueprints": [
+    {
+      "slideId": "slide-1",
+      "type": "cover",
+      "layoutStructure": "Monumental cover with large headline, subheadline, hero metric badge, and dominant central visual artifact.",
+      "svgConcept": {
+        "type": "schematic",
+        "description": "viewBox='0 0 952 560'. Imposing geometric system centerpiece with layered surface fills (fill='var(--surface)'), 1.5px hairlines, accent focal trajectories, and micro-coordinates.",
+        "elements": ["primary-silhouette", "structural-elevation", "accent-trajectories", "micro-coordinates"]
+      },
+      "typographyScale": {
+        "headlineSize": "text-[64px]",
+        "subtitleSize": "text-[26px]"
+      },
+      "spatialBalanceGuidance": "Header zone occupies top 220px; SVG centerpiece occupies middle 540px; bottom metadata ledger occupies bottom 80px. Fills 90% of vertical canvas."
+    }
+  ]
+}`;
 }
 
 export function buildVisualBlueprintUserPrompt(
@@ -911,30 +774,43 @@ export function buildVisualBlueprintUserPrompt(
   const metaphor = strategy?.visualMetaphor || brand.vibe || dossier.visualMetaphor || dossier.editorialTheme || 'Technical editorial autopsy';
   const hook = strategy?.hookHeadline || dossier.hookHeadline || '';
 
-  return `Design the bespoke visual layout architecture and SVG infographic blueprints for these ${slides.length} slides:
+  return `Synthesize the bespoke base CSS stylesheet (baseCss) and visual blueprints (blueprints) for these ${slides.length} slides:
 
 Publication: "${brand.name}" (${brand.domain})
+Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}, Border ${brand.palette.border}
+Fonts: Headline "${brand.typography.headlineFont}", Body "${brand.typography.bodyFont}", Mono "${brand.typography.monoFont}"
 Visual Metaphor: "${metaphor}"
 Hook: "${hook}"
 
-MANDATORY ASSET ALLOCATION CONTRACT:
-- Slide 1 (Cover): viewBox="0 0 952 560" monumental centerpiece.
-- Slide 2: svgConcept: { "type": "none", "description": "none" } (PURE TYPOGRAPHY DIPTYCH).
-- Slide 3: viewBox="0 0 448 720" full-height vertical cutaway for right column.
-- Slide 4: svgConcept: { "type": "none", "description": "none" } (110PX HTML HERO METRIC).
-- Slide 5: viewBox="0 0 952 340" horizontal flow with 3 sequential stations.
-- Slide 6: svgConcept: { "type": "none", "description": "none" } (TABULAR VERIFICATION LEDGER).
-- Slide 7: viewBox="0 0 952 220" compact decision fork or "none".
-
-Slide Data to Architect:
+Editorial Slides to Blueprint:
 ${JSON.stringify(slides, null, 2)}
 
-Output strictly the JSON array of exactly ${slides.length} SlideDesignBlueprint objects.`;
+Output strictly valid JSON with keys "baseCss" and "blueprints" (containing exactly ${slides.length} SlideDesignBlueprint items).`;
 }
 
 // ============================================================================
-// STAGE 6: PRINCIPAL REACT ENGINEER (BESPOKE CODE GENERATION)
+// STAGE 6: PRINCIPAL REACT ENGINEER (BESPOKE CODE GENERATION WITH CoT)
 // ============================================================================
+
+export interface SlidePromptContext {
+  slideNumber: number;
+  totalSlides: number;
+  slideData: SlideData;
+  blueprint?: SlideDesignBlueprint;
+  precedingSlides: Array<{
+    slideNumber: number;
+    type: string;
+    headline: string;
+    layoutStructure?: string;
+  }>;
+  upcomingSlides: Array<{
+    slideNumber: number;
+    type: string;
+    headline: string;
+  }>;
+  baseCss?: string;
+  brand: BrandTokens;
+}
 
 export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): string {
   const isStories = platform === 'instagram-stories';
@@ -946,281 +822,151 @@ export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): strin
     : '1080x1350 canvas (4:5 portrait format), 952x1028 safe area';
 
   return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
-You write bespoke React TypeScript components using semantic editorial CSS classes and Tailwind utilities for publication-grade carousel slides (${safeAreaDesc}).
+You write bespoke React TypeScript components for publication-grade carousel slides (${safeAreaDesc}).
 
-SHARED EDITORIAL CSS ARCHITECTURE:
-All slides inherit from a single, shared, mathematically calibrated editorial stylesheet (editorial.css):
-* Root Container: className="editorial-slide" (guarantees flex flex-col justify-between h-full min-h-0 w-full gap-4)
-* Header Zone: className="editorial-header"
-  - Kicker: className="editorial-kicker" containing '<span className="editorial-kicker-dot" />' + '{slide.kicker}'
-  - Universal Headline: className="editorial-headline" (locked at 64px bold, line-height 1.04)
-  - Half-Width Split Headline: className="editorial-headline editorial-headline-split" (46px bold for 2-column diptychs)
-  - Subheadline: className="editorial-subheadline" (26px font-body)
-* Visual Frames (Container-Matched inline vector SVGs):
-  - Compact Visual Frame (when cards/ledgers follow): className="editorial-visual-frame editorial-visual-compact" (max-h: 320px)
-  - Monumental Visual Frame (cover hero): className="editorial-visual-frame editorial-visual-monumental" (max-h: 560px)
-  - Full-Height Split Frame (50/50 diptychs): className="editorial-visual-frame editorial-visual-split" (max-h: 720px)
-* Editorial Cards & Placards:
-  - Standard Card: className="editorial-card" (guarantees uniform 20px 24px padding, 1px border, surface background)
-  - Card Title: className="editorial-card-title" (28px font-headline font-semibold)
-  - Card Body: className="editorial-card-body" (22px font-body with <strong> emphasis)
-* Layout Topologies:
-  - 2-Column Equal Cards: className="layout-grid-2" (gap: 20px)
-  - 3-Column Equal Cards: className="layout-grid-3" (gap: 16px)
-  - 2-Row Vertical Stacked Cards: className="layout-grid-rows-2" (gap: 18px)
-  - 50/50 Vertical Diptych: className="layout-split-diptych" (gap: 28px)
-  - Claim vs Reality Diptych: className="layout-claim-reality" with 'editorial-quote-box' & 'editorial-reality-box'
-  - Tabular Verification Ledger: className="layout-ledger" with child className="layout-ledger-row"
-  - Milestone Spine: className="layout-spine" with child className="layout-spine-node" and bullet className="layout-spine-bullet"
-* Telemetry & Data Badges:
-  - Hero Tabular Numeral: className="editorial-metric-huge" (96px-110px bold font-mono)
-  - Telemetry Pill: className="editorial-metric-badge" (accent border, font-mono tabular numerals)
-  - Issue Badge: className="editorial-issue-badge"
-  - Verdict Seal: className="editorial-verdict-seal"
-  - Legal / Source Footnote: className="editorial-note"
+AUTONOMOUS HANDCRAFTED DESIGN (ZERO PREBUILT SKELETONS):
+You have complete creative autonomy to design this slide. There are NO rigid pre-canned layout templates or deterministic class names you are forced to use.
+Instead, compose with full editorial craftsmanship using Tailwind CSS utilities along with any custom classes available from the deck's bespoke stylesheet (styles.css).
 
-CRITICAL DESIGN & CODING RULES:
-1. STRICT ADHERENCE TO THE ASSIGNED ARCHETYPE (BAN MONOTONOUS STACKING):
-   You MUST write the exact JSX structure tailored to the assigned archetype. Strictly ban repeating "Header -> SVG -> 2 cards" across slides!
+CHAIN-OF-THOUGHT (CoT) REASONING MANDATE:
+Before emitting the tsx code block, you MUST provide an explicit <design_thought>...</design_thought> block detailing:
+1. Preceding Slides Harmony & Contrast: Review what slides 1 to i-1 have already built. What visual rhythm, density, and layouts were used? How does this slide introduce a fresh, scroll-stopping contrast while remaining part of the same publication?
+2. Narrative Role & Emotional Tension: What is the exact editorial mission of this slide in the story arc?
+3. Upcoming Slides Foresight: What information and visual punchlines are planned for upcoming slides? How do you ensure this slide doesn't steal their thunder or repeat their upcoming visual devices?
+4. Spatial Balance & Styling Strategy: How will your layout balance the vertical canvas (aiming for 75%–95% coverage, avoiding top-heavy voids) using Tailwind and the deck's bespoke styles.css?
 
-   - ARCHETYPE 1 ("monumental-editorial-cover"):
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="editorial-visual-frame editorial-visual-monumental">
-         <svg viewBox="0 0 952 560" role="img">...</svg>
-       </div>
-       <footer className="flex justify-between items-center border-t border-[var(--border)] pt-4">
-         <p className="editorial-issue-badge">{slide.issueBadge || 'SPECIAL REPORT'}</p>
-         {t0 && <div className="editorial-metric-badge">{t0.value} {t0.label}</div>}
-       </footer>
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 2 ("claim-vs-reality-diptych"): ZERO SVG!
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="layout-claim-reality">
-         <article className="editorial-card editorial-quote-box">
-           <div className="font-[family-name:var(--font-mono)] text-[18px] tracking-widest text-[var(--ink)] opacity-60 uppercase">[ {slide.claim?.title || 'THE CONVENTIONAL CLAIM'} ]</div>
-           <p className="editorial-quote-text">"{slide.claim?.body || items[0]?.body}"</p>
-         </article>
-         <article className="editorial-card editorial-reality-box">
-           <div className="flex justify-between items-center">
-             <div className="font-[family-name:var(--font-mono)] text-[18px] tracking-widest text-[var(--accent)] font-semibold uppercase">[ {slide.reality?.title || 'THE FORENSIC REALITY'} ]</div>
-             <span className="editorial-metric-badge !text-[16px]">{slide.reality?.badge || 'VERIFIED'}</span>
-           </div>
-           <p className="editorial-card-body !text-[24px] !leading-relaxed"><InlineEmphasis text={slide.reality?.body || items[1]?.body} /></p>
-         </article>
-       </div>
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 3 ("full-height-editorial-split"):
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <div className="layout-split-diptych">
-         <div className="flex flex-col justify-between h-full gap-4">
-           <header className="editorial-header">
-             <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-             <h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>
-             {slide.subheadline && <p className="editorial-subheadline !text-[22px]">{slide.subheadline}</p>}
-           </header>
-           <div className="flex flex-col gap-4">
-             {items.map((item: any, i: number) => (
-               <article key={i} className="editorial-card">
-                 <h2 className="editorial-card-title !text-[24px]">{item.title}</h2>
-                 <p className="editorial-card-body !text-[20px]"><InlineEmphasis text={item.body} /></p>
-               </article>
-             ))}
-           </div>
-         </div>
-         <div className="editorial-visual-frame editorial-visual-split border border-[var(--border)] bg-[var(--surface)] p-4">
-           <svg viewBox="0 0 448 720" role="img" className="w-full h-full">...</svg>
-         </div>
-       </div>
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 4 ("hero-metric-placard"): ZERO SVG!
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="editorial-card flex-1 flex flex-col justify-center items-center text-center p-12 !border-2 !border-[var(--accent)] gap-6">
-         <div className="editorial-metric-huge !text-[120px]">{t0?.value || '400%'}</div>
-         <div className="font-[family-name:var(--font-mono)] text-[22px] tracking-widest text-[var(--ink)] opacity-80 uppercase max-w-[600px]">{t0?.label || slide.subheadline}</div>
-         {items[0] && (
-           <p className="editorial-card-body !text-[26px] !leading-relaxed max-w-[700px] border-t border-[var(--border)] pt-6 mt-2">
-             <InlineEmphasis text={items[0].body} />
-           </p>
-         )}
-       </div>
-       {slide.footer && <p className="editorial-note"><InlineEmphasis text={slide.footer} /></p>}
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 5 ("systemic-mechanism-flow"):
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="editorial-visual-frame editorial-visual-compact">
-         <svg viewBox="0 0 952 340" role="img">...</svg>
-       </div>
-       <div className="layout-grid-3">
-         {items.map((item: any, i: number) => (
-           <article key={i} className="editorial-card !p-4 !gap-2">
-             <div className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--accent)] font-semibold">0{i + 1}</div>
-             <h2 className="editorial-card-title !text-[20px]">{item.title}</h2>
-             <p className="editorial-card-body !text-[18px]"><InlineEmphasis text={item.body} /></p>
-           </article>
-         ))}
-       </div>
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 6 ("three-row-verification-ledger"): ZERO SVG!
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="layout-ledger">
-         {items.map((item: any, i: number) => (
-           <div key={i} className="layout-ledger-row">
-             <span className="font-[family-name:var(--font-mono)] text-[22px] text-[var(--accent)] font-bold">[{item.index || '0' + (i + 1)}]</span>
-             <div className="flex-1 flex flex-col gap-1">
-               <span className="font-[family-name:var(--font-headline)] text-[22px] font-semibold text-[var(--ink)]">{item.title}</span>
-               <p className="editorial-card-body !text-[20px]"><InlineEmphasis text={item.body} /></p>
-             </div>
-             {item.badge && <span className="editorial-metric-badge !text-[18px]">{item.badge}</span>}
-           </div>
-         ))}
-       </div>
-     </section>
-     \`\`\`
-
-   - ARCHETYPE 7 ("editorial-verdict-playbook"):
-     \`\`\`tsx
-     <section className="editorial-slide">
-       <header className="editorial-header">
-         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
-         <h1 className="editorial-headline">{slide.headline}</h1>
-         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
-       </header>
-       <div className="layout-grid-2">
-         <article className="editorial-card !border-l-4 !border-l-[var(--border)]">
-           <h2 className="editorial-card-title">{items[0]?.title}</h2>
-           <p className="editorial-card-body"><InlineEmphasis text={items[0]?.body} /></p>
-         </article>
-         <article className="editorial-card !border-l-4 !border-l-[var(--accent)]">
-           <h2 className="editorial-card-title">{items[1]?.title}</h2>
-           <p className="editorial-card-body"><InlineEmphasis text={items[1]?.body} /></p>
-         </article>
-       </div>
-       <div className="editorial-verdict-seal">
-         <div className="font-[family-name:var(--font-mono)] text-[18px] text-[var(--accent)] font-bold uppercase tracking-wider">{slide.verdict?.title || 'FINAL VERDICT'}</div>
-         <p className="font-[family-name:var(--font-body)] text-[22px] font-semibold text-[var(--ink)] flex-1 text-right">
-           <InlineEmphasis text={slide.verdict?.takeaway || slide.footer || 'The bottom line takeaway.'} />
-         </p>
-       </div>
-     </section>
-     \`\`\`
-
-2. STRICT BAN ON DUPLICATE FOOTERS & AI DISCLAIMERS:
-   - SlideFrame ALREADY provides the outer magazine shell: publication masthead (top) and pagination bar (bottom: 01/07, progress dots, handle, swipe cue).
-   - DO NOT render a second outer footer ('border-t pt-4 ...'), duplicate pagination, or AI research caveats ('Independent editorial brief prepared for...')!
-   - Footnotes or legal references belong in '<p className="editorial-note">'.
-
-3. Creative Freedom & Architectural Information Design:
-   - For slides with SVGs: Pure geometry, layered surface fills, visible stroke hairlines, and focal accent trajectories. ZERO clipart!
-   - Standalone vector numerical callouts, degree marks, unit labels (e.g. '$250', '$1,000', '148°', '4K') are permitted in SVG <text>.
-   - BANNED: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
-
-4. Theme & Token Integration:
-   - STRICT NEGATIVE CONSTRAINT: DO NOT declare an inline theme object (e.g. 'const theme = { ... }' or 'const currentBrand = { ... }') and NEVER apply 'style={theme}'! The canvas CSS variables (--ink, --accent, --paper, --surface, --border, --font-headline, --font-body, --font-mono) are injected globally by SlideFrame.
-   - Use the semantic editorial classes. Use Tailwind utilities only for fine-grained alignment.
-
-5. Canonical Imports:
+CRITICAL EDITORIAL & TECHNICAL RULES:
+1. ROOT CONTAINER:
+   - Must fill the frame: <section className="w-full h-full flex flex-col justify-between ..."> or similar.
+   - Use flex flex-col justify-between with min-h-0 and gap utilities to distribute content harmoniously across the canvas.
+2. EDITORIAL EXCELLENCE:
+   - High-contrast typography: monumental headlines (text-[48px] to text-[64px] font-[family-name:var(--font-headline)]), crisp monospace kickers with letter-spacing, punchy subheadlines.
+   - Skim anchors: Wrap key takeaways in <InlineEmphasis text={...} /> or <strong>...</strong>.
+   - Tabular numerals: Use font-[family-name:var(--font-mono)] for metrics and badges.
+3. INLINE VECTOR GRAPHICS (IF SPECIFIED IN BLUEPRINT):
+   - When the blueprint specifies an SVG: render clean, high-precision inline SVG with viewBox matched to container dimensions. Use stroke="var(--border)", fill="var(--surface)", stroke="var(--accent)", fill="var(--ink)" fillOpacity="0.06".
+   - When blueprint specifies "none": DO NOT RENDER ANY SVG! Let typography, callout panels, ledgers, or hero metrics command the canvas.
+4. CANONICAL IMPORTS:
    \`\`\`tsx
    import React from 'react';
-   import { parseMetricBadge, InlineEmphasis, type SlideComponentProps } from '../../../src/skeleton/types';
+   import { InlineEmphasis, parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
    \`\`\`
-
-6. SIMPLICITY IN HEADLINE & TEXT RENDERING:
-   - NEVER write brittle word slicing/joining code (e.g. split(/\s+/).slice().join()).
-   - Always render \`{slide.headline}\` directly inside \`<h1 className="editorial-headline">{slide.headline}</h1>\` (or \`<h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>\`).
+5. ZERO HEADLINE STRIP/SPLIT BUGS:
+   - NEVER manually slice or join headline strings (e.g. split().slice().join()). Render \`{slide.headline}\` directly inside your headline tag.
+6. ZERO DUPLICATE SHELL ELEMENTS:
+   - SlideFrame already provides the outer publication masthead and pagination/swipe footer. Do NOT render duplicate outer headers or footers!
+7. TOKENS & STYLING:
+   - NEVER declare local theme objects (e.g. \`const theme = { ... }\`) or apply \`style={theme}\`. Use Tailwind classes, the deck's \`styles.css\` classes, and CSS variables \`var(--ink)\`, \`var(--paper)\`, \`var(--accent)\`, \`var(--surface)\`, \`var(--border)\`.
+8. ZERO OVERFLOW-HIDDEN:
+   - NEVER add 'overflow-hidden' or 'overflow: hidden' to the root <section> or container. It risks clipping cards or sub-elements and fails the automated visual audit. Size content naturally using flex-1, min-h-0, and appropriate gap sizes.
+9. HEADLINE WRAPPING & NO NARROW MAX-WIDTH:
+   - Headlines must be sized text-[48px] to text-[64px] (never larger than 64px) with [text-wrap:balance] and line-height between 1.0 and 1.1.
+   - NEVER constrain headlines with narrow pixel max-width (e.g. style={{ maxWidth: 660 }} or max-w-[600px]) that causes single words or lines to clip ('scrollWidth > clientWidth'). Allow headlines to span the full safe area width (952px) and wrap naturally.
 `;
 }
 
 export function buildSingleSlideUserPrompt(
-  slideNumber: number,
-  slideData: SlideData,
-  blueprint: SlideDesignBlueprint | undefined,
-  brand: BrandTokens
+  slideNumberOrContext: number | SlidePromptContext,
+  slideData?: SlideData,
+  blueprint?: SlideDesignBlueprint,
+  brand?: BrandTokens
 ): string {
-  const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'asymmetric-editorial-cards';
-  const chosenStyle = slideData.visualStyle || chosenArchetype;
-  const isSvgFree = ['claim-vs-reality-diptych', 'hero-metric-placard', 'three-row-verification-ledger'].includes(chosenArchetype) ||
-    blueprint?.svgConcept?.type === 'none' ||
-    blueprint?.svgConcept?.description === 'none';
+  let ctx: SlidePromptContext;
+  if (typeof slideNumberOrContext === 'object') {
+    ctx = slideNumberOrContext;
+  } else {
+    ctx = {
+      slideNumber: slideNumberOrContext,
+      totalSlides: 7,
+      slideData: slideData!,
+      blueprint,
+      precedingSlides: [],
+      upcomingSlides: [],
+      brand: brand!,
+    };
+  }
+
+  const { slideNumber, totalSlides, slideData: slide, blueprint: bp, precedingSlides, upcomingSlides, baseCss, brand: b } = ctx;
+  const isSvgFree = bp?.svgConcept?.type === 'none' || bp?.svgConcept?.description === 'none';
   const chosenSvg = isSvgFree
     ? 'NONE (PURE TYPOGRAPHY / DATA LAYOUT — DO NOT RENDER ANY SVG! Let the HTML copy, metric typography, or ledger table fill the canvas vertically.)'
-    : (slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype');
-  const spatialGuidance = blueprint?.spatialBalanceGuidance || 'Fill 85%-95% of vertical frame using flex-1 min-h-0 and justify-between. Zero dead bottom voids.';
-  const headlineSize = blueprint?.typographyScale?.headlineSize || (chosenArchetype === 'full-height-editorial-split' ? 'text-[44px] to text-[48px]' : 'text-[64px]');
+    : (slide.svgBlueprint || bp?.svgConcept?.description || 'Bespoke inline vector SVG matching blueprint');
 
-  return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
-Assigned Archetype: "${chosenArchetype}"
-Type: "${slideData.type}"
+  return `Generate the bespoke React + Tailwind component for Slide ${slideNumber} of ${totalSlides}:
 
-Slide Data (Locked Copy - Keep Ultra-Concise):
-${JSON.stringify(slideData, null, 2)}
+=== CUMULATIVE DECK CONTEXT (CHAIN-OF-THOUGHT MEMORY) ===
 
-CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
-- Visual Archetype: "${chosenArchetype}"
-- Visual Style: "${chosenStyle}"
-- Layout Topology: "${slideData.layoutTopology || chosenArchetype}"
+1. PRECEDING SLIDES (Already Planned / Generated in this Deck):
+${precedingSlides.length > 0
+  ? precedingSlides.map((s) => `   - Slide ${s.slideNumber} [${s.type}]: "${s.headline}" (${s.layoutStructure || 'Standard'})`).join('\n')
+  : '   (This is Slide 1 — The Monumental Opening Cover)'}
+
+2. CURRENT SLIDE TO GENERATE (Slide ${slideNumber}):
+   - Type: "${slide.type}"
+   - Kicker: "${slide.kicker || ''}"
+   - Headline: "${slide.headline}"
+   - Subheadline: "${slide.subheadline || ''}"
+   - Copy Data:
+${JSON.stringify(slide, null, 2)}
+
+3. UPCOMING SLIDES (Ahead in this Deck):
+${upcomingSlides.length > 0
+  ? upcomingSlides.map((s) => `   - Slide ${s.slideNumber} [${s.type}]: "${s.headline}"`).join('\n')
+  : '   (This is the final climax/verdict slide)'}
+
+=== VISUAL ARCHITECTURE & BLUEPRINT ===
+- Assigned Layout Structure: "${bp?.layoutStructure || slide.layoutTopology || 'Bespoke Editorial'}"
 - Bespoke Vector SVG: "${chosenSvg}"
-- Spatial Balance Guidance: "${spatialGuidance}"
-- Prescribed Headline Size: "${headlineSize}"
-Follow the assigned archetype blueprint strictly! Do NOT revert to a generic "Header -> SVG -> 2 cards" layout!
-Compose using the shared editorial CSS classes ('editorial-slide', 'editorial-header', 'editorial-kicker', 'editorial-headline', 'editorial-visual-frame', 'editorial-card', 'layout-grid-2', 'layout-grid-3', 'layout-claim-reality', 'layout-ledger', etc.).
-DO NOT render duplicate outer footers or brand mastheads—SlideFrame provides those.
-STRICT NEGATIVE CONSTRAINT: Never declare local theme objects (e.g. const theme = ...) or inline styles. Use var(--ink), var(--surface), var(--border), var(--accent).
+- Spatial Balance Guidance: "${bp?.spatialBalanceGuidance || 'Fill 75%-95% of vertical frame using flex-1 min-h-0 and justify-between. Avoid dead voids.'}"
+- Prescribed Headline Scale: "${bp?.typographyScale?.headlineSize || 'text-[52px] to text-[64px]'}"
 
-Brand Context:
-- Publication: "${brand.name}"
-- Domain: "${brand.domain}"
-- Accent: "${brand.palette.accent}"
-- Paper: "${brand.palette.paper}"
-- Surface: "${brand.palette.surface}"
-- Border: "${brand.palette.border}"
+=== BESPOKE DECK STYLESHEET (styles.css) ===
+${baseCss ? `The following custom classes and tokens were generated specifically for this deck:\n\`\`\`css\n${baseCss}\n\`\`\`` : '(Use Tailwind utilities and CSS custom properties)'}
 
-Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
+=== PUBLICATION & BRAND TOKENS ===
+- Publication: "${b.name}" (${b.domain})
+- Palette: Paper ${b.palette.paper}, Ink ${b.palette.ink}, Accent ${b.palette.accent}, Surface ${b.palette.surface}, Border ${b.palette.border}
+- Fonts: Headline "${b.typography.headlineFont}", Body "${b.typography.bodyFont}", Mono "${b.typography.monoFont}"
+
+MANDATORY INSTRUCTIONS:
+1. First, provide your explicit <design_thought> reasoning addressing:
+   - Harmony & visual contrast with Preceding Slides
+   - Narrative purpose of Current Slide
+   - Foresight regarding Upcoming Slides
+   - Spatial layout & styling execution plan (Tailwind + styles.css)
+2. Then, provide the complete, working React TypeScript component inside a \`\`\`tsx code block.`;
 }
 
 // ============================================================================
-// STAGE 7: COMPILER ERROR SELF-HEALING
+// STAGE 7: COMPILER & VISUAL AUDIT SELF-HEALING
 // ============================================================================
+
+export function buildVisualSelfHealingPrompt(
+  filename: string,
+  code: string,
+  visualError: string
+): string {
+  return `The following React component failed the Playwright Visual Audit:
+File: ${filename}
+Visual Audit Error:
+${visualError}
+
+Original Code:
+\`\`\`tsx
+${code}
+\`\`\`
+
+Instructions to Fix:
+1. If the error mentions "Main <section> has overflow:hidden":
+   - Remove "overflow-hidden" or "overflow: hidden" from the main/section element so elements size naturally.
+2. If the error mentions "Text clipped" or "scrollWidth > clientWidth":
+   - Remove narrow max-width constraints (e.g. maxWidth: 660 or max-w-[...]) from the clipped element.
+   - Sightly reduce headline font size (e.g. from 76px to 56px or 60px) and add [text-wrap:balance] so text wraps cleanly without clipping.
+3. If the error mentions "Element overflows canvas":
+   - Adjust padding, gap, or element height so all content fits within the canvas.
+
+Fix all visual issues. Return ONLY the corrected code in a \`\`\`tsx code block.`;
+}
 
 export function buildSelfHealingPrompt(
   filename: string,
@@ -1260,3 +1006,4 @@ Common Fix Guidelines:
 
 Fix all syntax and type errors completely. Return ONLY the corrected code in a \`\`\`tsx code block.`;
 }
+
