@@ -131,93 +131,10 @@ Return strictly valid JSON matching BrandTokens without markdown outside the jso
 }
 
 // ============================================================================
-// STAGE 2: GROUND TRUTH FACT EXTRACTION (ZERO HALLUCINATION)
+// STAGE 1: NARRATIVE & FACT INTELLIGENCE (UNIFIED DOSSIER)
 // ============================================================================
 
-export interface GroundTruthDossier {
-  articleTitle: string;
-  publisher: string;
-  byline: string;
-  summary: string;
-  entities: Array<{ name: string; type: string; role: string }>;
-  verifiedMetrics: Array<{ value: string; label: string; context: string }>;
-  verifiedQuotes: Array<{ quote: string; speaker: string; role: string; context: string }>;
-  hardwareSpecs: {
-    deviceA: { name: string; specs: string[]; price: string; availability: string };
-    deviceB?: { name: string; specs: string[]; price: string; availability: string };
-  };
-  coreControversy: {
-    corporateClaim: string;
-    criticismOrAlarm: string;
-    regulatoryOrHistoricalPrecedent: string;
-  };
-  hiddenCatchesAndLimits: string[];
-  editorialVerdict: {
-    avoidAdvice: string[];
-    fitAdvice: string[];
-  };
-}
-
-export function buildFactExtractionSystemPrompt(): string {
-  return `You are a Lead Investigative Researcher and Fact-Checker at Reuters, ProPublica, The Economist, and The New York Times.
-Your mission is to extract verified ground truth from reporting into a structured GroundTruthDossier JSON.
-
-CRITICAL FACT-CHECKING & JOURNALISTIC EXCELLENCE RULES:
-1. ZERO HALLUCINATION & ZERO META-COMMENTARY:
-   - Extract actual reported events, timeline dates, verified numbers, official claims, and dissenting perspectives.
-   - STRICTLY FORBIDDEN: Writing meta-critique of the source text (e.g. NEVER write "No hardware products supplied", "The supplied text ends mid-citation", "Dossier labels do not establish verification", or "sentence marked [update]"). Focus 100% on the factual subject matter!
-2. Domain-Adaptive Truth Extraction:
-   - For Geopolitical / Investigative News: Extract major actors/nations, chronological dates/milestones, official statements vs intelligence assessments, verified casualty/financial numbers, diplomatic efforts, and systemic consequences.
-   - For Technology / Hardware: Extract exact specifications, pricing, battery life, release dates, cloud dependencies, and privacy limits.
-   - For Markets / Business: Extract valuations, revenue/spending metrics, regulatory filings, and market impacts.
-3. Exact Metrics: Numbers, percentages, financial amounts, dates, and troop/casualty counts must be verbatim from the text.
-4. Exact Quotes & Attribution: Attribute quotes only to the actual persons or organizations named in the piece.
-
-Return strictly valid JSON matching this exact structure:
-{
-  "articleTitle": "Title of article",
-  "publisher": "Publisher name",
-  "byline": "Author name",
-  "summary": "2-sentence factual editorial summary of the subject matter",
-  "entities": [{ "name": "Entity Name", "type": "Country | Organization | Person | Company", "role": "Factual role in the event" }],
-  "verifiedMetrics": [{ "value": "$47.1B", "label": "Military spending estimate", "context": "Department of Defense figure" }],
-  "verifiedQuotes": [{ "quote": "...", "speaker": "...", "role": "...", "context": "..." }],
-  "hardwareSpecs": {
-    "deviceA": { "name": "Key Entity or Program A", "specs": ["Factual parameter 1", "Factual parameter 2"], "price": "Metric / Budget / N/A", "availability": "Date / Timeline / N/A" }
-  },
-  "coreControversy": {
-    "corporateClaim": "Primary official assertion, government rationale, or executive statement",
-    "criticismOrAlarm": "Opposing intelligence assessment, international criticism, or counter-evidence",
-    "regulatoryOrHistoricalPrecedent": "Key historical treaties, resolutions, or precedents cited"
-  },
-  "hiddenCatchesAndLimits": [
-    "High-signal caveat or tension 1 directly about the subject matter",
-    "High-signal caveat or tension 2 directly about the subject matter"
-  ],
-  "editorialVerdict": {
-    "avoidAdvice": ["Critical strategic or policy risk"],
-    "fitAdvice": ["Essential factual takeaway"]
-  }
-};`;
-}
-
-export function buildFactExtractionUserPrompt(article: ArticleIntel): string {
-  return `Extract the complete, verified GroundTruthDossier from this article:
-Title: "${article.title}"
-Publisher: "${article.publisher}"
-Author: "${article.byline || 'Staff Bureau'}"
-
-Raw Article Text:
-${article.cleanText.slice(0, 14000)}
-
-Output strictly the GroundTruthDossier JSON.`;
-}
-
-// ============================================================================
-// STAGE 1: NARRATIVE INTELLIGENCE & HOOK FORMULATION (FACTS + ANGLE)
-// ============================================================================
-
-export interface NarrativeIntelligence {
+export interface NarrativeDossier {
   articleTitle: string;
   publisher: string;
   byline: string;
@@ -226,7 +143,7 @@ export interface NarrativeIntelligence {
   valuePromise: string; // 8-12 words
   kicker: string; // CATEGORY / TENSION KICKER
   editorialTheme: string; // High-concept conceptual tone (e.g. "Forensic Financial Autopsy", "Tectonic Power Struggle", "Imperial Archaeological Monolith")
-  visualMetaphor?: string; // Optional legacy visual anchor
+  visualMetaphor?: string; // Optional visual anchor
   narrativeBeats: Array<{
     beatTitle: string; // 2-3 word concept (e.g. "THE CATALYST", "THE BREAKAGE FLOAT")
     takeaway: string; // 6-10 word crisp takeaway statement
@@ -241,6 +158,10 @@ export interface NarrativeIntelligence {
   verifiedQuotes: Array<{ quote: string; speaker: string; role?: string; context?: string }>;
   verdict: string; // Enduring consequence or takeaway
 }
+
+// Backward-compatible type aliases
+export type NarrativeIntelligence = NarrativeDossier;
+export type GroundTruthDossier = NarrativeDossier;
 
 export function buildNarrativeIntelligenceSystemPrompt(): string {
   return `You are a World-Class Investigative Journalist, Chief Financial Analyst, and Editorial Director at The Economist, ProPublica, Reuters, Bloomberg, and The New York Times Magazine.
@@ -549,16 +470,15 @@ Return strictly valid JSON matching this exact structure:
 }
 
 export function buildStoryStrategyUserPrompt(
-  dossier: GroundTruthDossier,
+  dossier: NarrativeDossier,
   _article?: ArticleIntel
 ): string {
   return `Formulate the EditorialStrategy using this verified ground truth:
 Article: "${dossier.articleTitle}" (${dossier.publisher})
 Summary: "${dossier.summary}"
-Controversy: ${JSON.stringify(dossier.coreControversy)}
-Specs: ${JSON.stringify(dossier.hardwareSpecs)}
+Conflict: ${JSON.stringify(dossier.coreConflict)}
 Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
-Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
+Catches: ${JSON.stringify(dossier.hiddenCatches)}
 
 Output strictly the StoryStrategy JSON.`;
 }
@@ -598,38 +518,30 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
    - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
 
-3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE MAPPING:
-   Every slide in your JSON output MUST declare an explicit "archetype" following this strict, non-repeating catalog:
-   - Slide 1 EXCLUSIVELY: "monumental-editorial-cover"
-     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 68px headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger. NEVER use this on Slide 2+!
-   - Slide 2: "asymmetric-editorial-cards"
+3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE CATALOG:
+   You will be provided with the exact pre-assigned archetype sequence for this deck. You MUST match each slide's assigned archetype:
+   - "monumental-editorial-cover" (Slide 1 EXCLUSIVELY):
+     Broadsheet magazine cover with monospace kicker + square accent dot, monumental condensed headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (40%-60% canvas), and a clean footer metadata ledger. NEVER use this on Slide 2+!
+   - "asymmetric-editorial-cards":
      High-contrast asymmetric multi-panel layout (1 hero panel + 1 or 2 secondary ledger cards) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art.
-   - Slide 3: "hero-metric-placard"
+   - "hero-metric-placard":
      Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (NO HTML rounded progress bars!).
-   - Slide 4: "vertical-milestone-spine"
-     Continuous 1px vertical hairline spine with square milestone markers (rotate-45 or square), monospace timeline tags, and punchy 5-8 word impact bullets.
-   - Slide 5: "full-height-editorial-split"
+   - "vertical-milestone-spine":
+     Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy 5-8 word impact bullets.
+   - "full-height-editorial-split":
      50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section; the other half is editorial typography with crisp 1px bordered ledger cards.
-   - Slide 6: "three-row-verification-ledger"
+   - "three-row-verification-ledger":
      Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
-   - Slide 7: "asymmetric-editorial-cards"
-     Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.
 
-   STRICT ARCHETYPE DIVERSITY MANDATE: Zero repetition! Never reuse "monumental-editorial-cover" after Slide 1!
-
-4. ABSTRACT SCULPTURAL VECTOR ART BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO SVG TEXT):
-   - Every slide MUST include an "svgBlueprint" describing an ABSTRACT, SCULPTURAL vector artwork (inspired by gold standard 'tipaza').
+4. ABSTRACT SCULPTURAL & TECHNICAL VECTOR BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO SVG TEXT):
+   - Every slide MUST include an "svgBlueprint" describing an ABSTRACT, SCULPTURAL or TECHNICAL vector artwork (inspired by gold standard 'tipaza').
    - ABSOLUTE BAN: NEVER draw literal clipart (no coffee cups with lids, no smartphones with screens, no dollar bills falling).
    - ABSOLUTE BAN: NEVER draw flowchart diagrams, pipes, conduits, process arrows, or labeled tanks!
    - ABSOLUTE BAN: NEVER put text, words, or labels inside the SVG! All text belongs exclusively in HTML!
-   - MANDATORY ART DIRECTION:
-     * Slide 1: "600×750 viewBox; 40px safe margins. Dark paper field, orange kicker badge, large format condensed headline. Below, one monumental fractured-column or architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes."
-     * Slide 2: "600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Lower card carries a restrained architectural silhouette. Conceptual vector art, not a flowchart."
-     * Slide 3: "600×750 viewBox; 40px margins. Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard's lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes."
-     * Slide 4: "600×750 viewBox; 40px margins. Three stacked milestones on a left-aligned 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only."
-     * Slide 5: "600×750 viewBox; 40px margins. Beneath a 44px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge. Bottom full-width rule holds closing takeaway."
-     * Slide 6: "600×750 viewBox; 40px margins. Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks."
-     * Slide 7: "600×750 viewBox; 40px margins. Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark."
+   - ART DIRECTION blueprinted around:
+     * Monumental fractured monolith or architectural plinth silhouettes in dark surface and ink, with an intense accent fracture.
+     * Restrained architectural section silhouettes with subtle topographic contours.
+     * Crisp 1px technical dimension hairlines, coordinate crosshairs, and registration ticks.
 
 5. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
    * ${arcDescription}
@@ -675,31 +587,34 @@ Return strictly a JSON array of exactly ${count} slide objects:
     ],
     "visualStyle": "asymmetric-editorial-cards",
     "layoutTopology": "asymmetric-editorial-cards",
-    "svgBlueprint": "Dual-node circuit diagram showing one-way customer cash transfer into zero-liability escrow"
+    "svgBlueprint": "600×750 viewBox; 40px margins. Stack two offset, full-width cards beneath a 44px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Restrained architectural silhouette."
   }
 ]`;
 }
 
 export function buildStoryDeckUserPrompt(
-  strategy: StoryStrategy | NarrativeIntelligence,
-  dossier: GroundTruthDossier | NarrativeIntelligence,
+  dossier: NarrativeDossier,
   brand: BrandTokens,
-  targetSlideCount = 7
+  targetSlideCount = 7,
+  assignedArchetypes: string[] = []
 ): string {
   const count = Math.max(4, Math.min(14, targetSlideCount));
-  const hook = (strategy as any).hookHeadline || (dossier as any).hookHeadline || 'Editorial Investigation';
-  const promise = (strategy as any).valuePromise || (dossier as any).valuePromise || '';
-  const kicker = (strategy as any).kicker || (dossier as any).kicker || 'SPECIAL REPORT';
-  const coreConflict = typeof (strategy as any).coreConflict === 'string'
-    ? (strategy as any).coreConflict
-    : JSON.stringify((strategy as any).coreConflict || (dossier as any).coreConflict || {});
-  const catchText = Array.isArray((dossier as any).hiddenCatches)
-    ? (dossier as any).hiddenCatches.join('; ')
-    : (strategy as any).hiddenCatch || '';
-  const verdict = (strategy as any).verdict || (dossier as any).verdict || '';
-  const metaphor = (strategy as any).visualMetaphor || (dossier as any).visualMetaphor || 'Architectural structural diagram';
+  const hook = dossier.hookHeadline || 'Editorial Investigation';
+  const promise = dossier.valuePromise || '';
+  const kicker = dossier.kicker || 'SPECIAL REPORT';
+  const conflict = dossier.coreConflict
+    ? `Claim: "${dossier.coreConflict.claim}" vs Reality: "${dossier.coreConflict.reality}"`
+    : '';
+  const catches = (dossier.hiddenCatches || []).join('; ');
+  const verdict = dossier.verdict || '';
+  const metaphor = dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
-  return `Author the ${count}-slide storyboard AND choose the distinct visual style, layout topology, and bespoke SVG blueprint for each slide:
+  const archetypeInstructions = assignedArchetypes.length > 0
+    ? `MANDATORY PRE-ASSIGNED ARCHETYPE SEQUENCE (YOU MUST MATCH EACH SLIDE'S ARCHETYPE EXACTLY):
+${assignedArchetypes.map((arch, idx) => `  * Slide ${idx + 1}: "${arch}"`).join('\n')}`
+    : `MANDATORY RULE: Slide 1 is exclusively "monumental-editorial-cover". Slides 2-${count} must use distinct non-repeating archetypes from: asymmetric-editorial-cards, hero-metric-placard, vertical-milestone-spine, full-height-editorial-split, three-row-verification-ledger.`;
+
+  return `Author the ${count}-slide storyboard and bespoke abstract SVG blueprints for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -707,14 +622,16 @@ Hook Headline: "${hook}"
 Value Promise: "${promise}"
 Kicker: "${kicker}"
 Core Visual Metaphor: "${metaphor}"
-Core Conflict: "${coreConflict}"
-Hidden Catch: "${catchText}"
+Core Conflict: "${conflict}"
+Hidden Catches: "${catches}"
 Verdict: "${verdict}"
 
+${archetypeInstructions}
+
 Verified Data & Metrics:
-${JSON.stringify((dossier as any).verifiedMetrics || [], null, 2)}
+${JSON.stringify(dossier.verifiedMetrics || [], null, 2)}
 Quotes:
-${JSON.stringify((dossier as any).verifiedQuotes || [], null, 2)}
+${JSON.stringify(dossier.verifiedQuotes || [], null, 2)}
 
 Output strictly the JSON array of exactly ${count} slide objects. Remember: MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, ZERO WEB UI SHADOWS OR PILLS, AND ARCHITECTURAL SVG BLUEPRINTS!`;
 }
@@ -739,7 +656,7 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// STAGE 5: VISUAL ART DIRECTOR (SPATIAL LAYOUT & SVG BLUEPRINT)
+// STAGE 5: SLIDE DESIGN BLUEPRINTS
 // ============================================================================
 
 export interface SlideDesignBlueprint {
@@ -757,40 +674,6 @@ export interface SlideDesignBlueprint {
   };
   accentPlacement?: string;
   spatialBalanceGuidance?: string;
-}
-
-export function buildVisualBlueprintSystemPrompt(): string {
-  return `You are an Information Designer and Art Director at Pentagram, Monocle, and The New York Times Graphics Desk.
-Your task is to plan the visual layout architecture and bespoke vector SVG concept for each slide in a carousel deck.
-
-CRITICAL VISUAL DESIGN PRINCIPLES:
-1. Bespoke Vector Art:
-   - Slide 1 (Cover): Conceptual floor plan showing rooms and dashed patrol routes, or hardware blueprint.
-   - Slide 2 (Brief): Custom spatial glyphs or boundary threshold markers for each item.
-   - Slide 3 (Hardware Specs): Drone elevation cross-section vs Rover periscope diagram.
-   - Slide 4 (Telemetry): Custom data visualization bars or metric ratio indicators.
-2. Space Balance:
-   - Every slide must fill 75%–90% of the vertical frame organically.
-   - Avoid top-heavy clumping. If content is short, center it optically with generous line heights and large typography.
-   - Multi-item slides must use equal height distribution or balanced multi-column grids.
-
-Return strictly a JSON array of 10 SlideDesignBlueprint objects: [ { "slideId": "slide-1", ... }, ... ]`;
-}
-
-export function buildVisualBlueprintUserPrompt(
-  slides: SlideData[],
-  brand: BrandTokens,
-  dossier: GroundTruthDossier
-): string {
-  return `Design the visual blueprints for these 10 slides:
-Publication: "${brand.name}" (${brand.domain})
-Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}
-Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
-
-Slides Content:
-${JSON.stringify(slides, null, 2)}
-
-Output strictly the JSON array of 10 SlideDesignBlueprint objects.`;
 }
 
 // ============================================================================
@@ -812,18 +695,45 @@ export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): strin
 You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (${safeAreaDesc}).
 
 CRITICAL DESIGN & CODING RULES:
-1. Component Signature:
+1. Component Signature & Explicit TypeScript Interfaces:
+   \`\`\`tsx
    import React from 'react';
-   import type { SlideComponentProps } from '../../../src/skeleton/types';
+   import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
      return ( ... );
    }
+   \`\`\`
 
-2. Creative Freedom & Architectural Topology:
-   - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
-   - STRICT BAN ON REPETITIVE 2-CARD LAYOUTS: Do NOT just render two rounded rectangles with text. If the layout topology says "hero-diagram-with-callouts", render a prominent custom inline vector SVG taking 40%-60% of the space with callout pointers. If it says "horizontal-timeline-cadence", render a multi-year horizontal Gantt timeline. If it says "hud-sensor-split", render a radar/target crosshair overlay.
-   - Author rich inline SVGs with crisp viewBoxes (e.g. orbital paths, launch trajectories, pad coordinates, timeline milestones, HUD reticles).
+   EXACT TYPESCRIPT DATA STRUCTURE:
+   \`\`\`tsx
+   export interface SlideData {
+     id: string;
+     index: number;
+     type: string;
+     archetype: 'monumental-editorial-cover' | 'asymmetric-editorial-cards' | 'hero-metric-placard' | 'vertical-milestone-spine' | 'full-height-editorial-split' | 'three-row-verification-ledger';
+     kicker?: string;
+     headline?: string;
+     subheadline?: string;
+     issueBadge?: string;
+     items?: Array<{
+       title?: string;
+       body?: string;
+       tag?: string;
+       metric?: { badge: string; label: string };
+     }>;
+     telemetry?: Array<{
+       badge: string;
+       label: string;
+     }>;
+     closingTakeaway?: string;
+   }
+   \`\`\`
+
+2. Creative Freedom & Architectural Art Direction:
+   - Implement the designated editorial archetype with abstract, sculptural or technical vector linework matching brand.aestheticPreset (or the prompt blueprint).
+   - Pure SVG geometry only: ZERO clipart, ZERO flowchart conduits/pipes/valves/arrows, ZERO <text> or <tspan> tags inside SVG!
+   - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
 
 3. Theme & Token Integration:
    - Use Tailwind utility classes with CSS variables:
@@ -911,7 +821,7 @@ CRITICAL DESIGN & CODING RULES:
 
    A. "monumental-editorial-cover":
       - Kicker: Monospace with square accent dot:
-        '<div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[18px] uppercase tracking-[0.2em] text-[var(--accent)]"><span className="inline-block w-2.5 h-2.5 bg-[var(--accent)]" /><span>{slide.kicker}</span></div>'
+        '<div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.2em] text-[var(--accent)]"><span className="inline-block w-2.5 h-2.5 bg-[var(--accent)]" /><span>{slide.kicker}</span></div>'
       - Monumental headline: 'text-[64px] to text-[72px] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--ink)] mt-4'
       - 1px hairline rule: '<div className="w-full border-b border-[var(--border)] my-6" />'
       - Subheadline: 'text-[24px] text-[var(--ink)]/80 leading-snug mb-8'
@@ -932,7 +842,7 @@ CRITICAL DESIGN & CODING RULES:
       - Continuous 1px vertical hairline spine:
         A vertical container with a continuous left border or central spine: 'border-l border-[var(--border)] pl-8 space-y-8 relative'.
       - Square milestone nodes: Each milestone has an absolute square marker: 'w-3 h-3 bg-[var(--accent)] -left-[6.5px] top-2 absolute' or 'rotate-45'.
-      - Milestone content: Monospace time/phase label ('text-[18px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**.
+      - Milestone content: Monospace time/phase label ('text-[20px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**.
 
    D. "hero-metric-placard":
       - Header zone: Monospace kicker with square dot + headline.
@@ -955,7 +865,7 @@ CRITICAL DESIGN & CODING RULES:
       - Each row: 'p-7 flex items-center justify-between gap-6'
       - Left column: Monospace index '[01]', '[02]', '[03]' in 'text-[var(--accent)] font-[var(--font-mono)] text-[20px] font-bold'.
       - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
-      - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[18px] text-[var(--accent)]').
+      - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[20px] text-[var(--accent)]').
 
 9. TOTAL BAN ON <text> AND <tspan> INSIDE <svg>:
    - NEVER put <text>, <tspan>, or typography inside an <svg> tag!

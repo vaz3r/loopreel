@@ -8,7 +8,7 @@ import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
   type TemplateBrief,
   type NarrativePreset,
-  type GroundTruthDossier,
+  type NarrativeDossier,
   type SlideDesignBlueprint,
   type NarrativeIntelligence,
   buildNarrativeIntelligenceSystemPrompt,
@@ -22,6 +22,38 @@ import {
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
 } from './prompt.js';
+
+export function getDeterministicArchetypeSequence(count: number): string[] {
+  const n = Math.max(4, Math.min(14, count));
+  const bodyPool = [
+    'asymmetric-editorial-cards',
+    'hero-metric-placard',
+    'vertical-milestone-spine',
+    'full-height-editorial-split',
+    'three-row-verification-ledger',
+  ];
+
+  const sequence: string[] = ['monumental-editorial-cover'];
+
+  for (let i = 1; i < n - 1; i++) {
+    const candidate = bodyPool[(i - 1) % bodyPool.length]!;
+    if (sequence[i - 1] === candidate) {
+      const alt = bodyPool[i % bodyPool.length]!;
+      sequence.push(alt);
+    } else {
+      sequence.push(candidate);
+    }
+  }
+
+  // Final slide: verdict / takeaway diptych (ensure not equal to previous)
+  const prev = sequence[sequence.length - 1];
+  const finalCandidate = prev === 'asymmetric-editorial-cards'
+    ? 'full-height-editorial-split'
+    : 'asymmetric-editorial-cards';
+  sequence.push(finalCandidate);
+
+  return sequence;
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_ROOT = path.resolve(__dirname, '../templates');
@@ -367,40 +399,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   console.log(`[Pipeline] Pass 1 Complete:`);
   console.log(`[Pipeline]   Hook:    "${narrative.hookHeadline}"`);
   console.log(`[Pipeline]   Promise: "${narrative.valuePromise}"`);
-  console.log(`[Pipeline]   Metaphor: "${narrative.visualMetaphor}"`);
+  console.log(`[Pipeline]   Metaphor: "${narrative.visualMetaphor || narrative.editorialTheme}"`);
 
-  // Backwards compatibility dossier object for disk persistence
-  const dossier: GroundTruthDossier = {
-    articleTitle: narrative.articleTitle,
-    publisher: narrative.publisher,
-    byline: narrative.byline,
-    summary: narrative.summary,
-    entities: [],
-    verifiedMetrics: (narrative.verifiedMetrics || []).map((m) => ({
-      value: m.value,
-      label: m.label,
-      context: m.context || '',
-    })),
-    verifiedQuotes: (narrative.verifiedQuotes || []).map((q) => ({
-      quote: q.quote,
-      speaker: q.speaker,
-      role: q.role || '',
-      context: q.context || '',
-    })),
-    hardwareSpecs: {
-      deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
-    },
-    coreControversy: {
-      corporateClaim: narrative.coreConflict?.claim || '',
-      criticismOrAlarm: narrative.coreConflict?.reality || '',
-      regulatoryOrHistoricalPrecedent: narrative.hiddenCatches?.join('; ') || '',
-    },
-    hiddenCatchesAndLimits: narrative.hiddenCatches || [],
-    editorialVerdict: {
-      avoidAdvice: [narrative.verdict || ''],
-      fitAdvice: [],
-    },
-  };
+  // Unified research dossier for disk persistence
+  const dossier: NarrativeDossier = narrative;
 
   // ==========================================================================
   // PASS 2: VISUAL CONFIG & BRAND THEME (THEME, STYLES & OPTIMAL PRESET)
@@ -469,6 +471,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       handle: b.handle || `@${slug.replace(/[^a-zA-Z0-9]/g, '')}`,
       texture: (b.texture as any) || 'grid',
       motif: (b.motif as any) || 'crosshair',
+      aestheticPreset: (b.aestheticPreset as any) || 'sculptural-monolith',
     };
   } else {
     const brandPrompt = article
@@ -477,7 +480,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
           ...brief,
           name: narrative.publisher || brief.name,
           domain: brief.domain || `${defaultSlug}.pub`,
-          vibe: `${narrative.visualMetaphor} - ${narrative.kicker}`,
+          vibe: `${narrative.visualMetaphor || narrative.editorialTheme} - ${narrative.kicker}`,
         });
 
     const brandResponse = await llm.generateJSON(
@@ -488,12 +491,13 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
     brand = extractJson<BrandTokens>(brandResponse.text);
     brand.slug = options.preset || brand.slug || defaultSlug;
+    brand.aestheticPreset = brand.aestheticPreset || 'sculptural-monolith';
   }
 
   brand.platform = options.platform || 'instagram-feed';
   const slug = options.preset || brand.slug || defaultSlug;
   brand.slug = slug;
-  console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
+  console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}, style: ${brand.aestheticPreset || 'default'}).`);
 
   const rawBrandKit = (options.brandKit as any) || {};
   const narrativePreset: NarrativePreset =
@@ -508,6 +512,9 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       ? rawBrandKit.targetSlideCount
       : 7;
 
+  // Programmatically assign non-repeating archetypes
+  const assignedArchetypes = getDeterministicArchetypeSequence(targetSlideCount);
+
   // ==========================================================================
   // PASS 3: SLIDES CONTENT & SPATIAL ELEMENTS JSON (CONTENT + CONFIG -> STORYBOARD)
   // ==========================================================================
@@ -516,7 +523,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   const deckResponse = await llm.generateJSON(
     buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-    buildStoryDeckUserPrompt(narrative, narrative, brand, targetSlideCount),
+    buildStoryDeckUserPrompt(narrative, brand, targetSlideCount, assignedArchetypes),
     0.6
   );
   let allSlides = extractJson<SlideData[]>(deckResponse.text);
@@ -527,52 +534,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   // Normalize slide schema and enforce strict editorial word budgets & visual archetypes
   const activePlatform = options.platform || 'instagram-feed';
-  const VALID_ARCHETYPES = [
-    'monumental-editorial-cover',
-    'asymmetric-editorial-cards',
-    'vertical-milestone-spine',
-    'hero-metric-placard',
-    'full-height-editorial-split',
-    'three-row-verification-ledger',
-  ];
-
-  const fallbackArchetypes = [
-    'monumental-editorial-cover',
-    'asymmetric-editorial-cards',
-    'vertical-milestone-spine',
-    'hero-metric-placard',
-    'full-height-editorial-split',
-    'three-row-verification-ledger',
-    'asymmetric-editorial-cards',
-  ];
 
   allSlides = allSlides.map((s, idx) => {
-    // 1. Resolve and normalize visual archetype
-    let rawArch = s.archetype || s.layoutTopology || s.visualStyle || '';
-    let archetype = VALID_ARCHETYPES.find((valid) => rawArch.toLowerCase().includes(valid.split('-')[1] || valid));
-
-    // Map legacy names if present
-    if (!archetype) {
-      if (/cover/i.test(rawArch)) archetype = 'monumental-editorial-cover';
-      else if (/myth|belief|contrast|cards/i.test(rawArch)) archetype = 'asymmetric-editorial-cards';
-      else if (/stat|metric|placard|hero/i.test(rawArch)) archetype = 'hero-metric-placard';
-      else if (/flow|step|chain|spine|timeline/i.test(rawArch)) archetype = 'vertical-milestone-spine';
-      else if (/split|diagram|schematic/i.test(rawArch)) archetype = 'full-height-editorial-split';
-      else if (/grid|ledger|numbers|receipt/i.test(rawArch)) archetype = 'three-row-verification-ledger';
-      else archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
-    }
-
-    // Slide 1 is ALWAYS monumental-editorial-cover; slides 2+ MUST NEVER use monumental-editorial-cover!
-    if (idx === 0) {
-      archetype = 'monumental-editorial-cover';
-    } else {
-      if (!archetype || archetype === 'monumental-editorial-cover') {
-        archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
-        if (archetype === 'monumental-editorial-cover') {
-          archetype = 'asymmetric-editorial-cards';
-        }
-      }
-    }
+    // 1. Programmatically assigned non-repeating archetype
+    const archetype = assignedArchetypes[idx] || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
 
     // 2. Clamp and sanitize items body copy (Strict 10-word ceiling for mobile scannability)
     let sanitizedItems = s.items;

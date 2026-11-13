@@ -25,6 +25,7 @@ export interface BrandTokens {
   handle: string;
   texture: 'washi' | 'grid' | 'dots' | 'blueprint' | 'none';
   motif: 'seal' | 'crosshair' | 'coord' | 'bracket' | 'none';
+  aestheticPreset?: 'sculptural-monolith' | 'technical-schematic' | 'forensic-ledger' | 'architectural-elevation';
 }
 
 export interface SlideData {
