@@ -8,7 +8,7 @@ import Slide02_Belief from './slides/Slide02_Belief';
 import Slide03_Anomaly from './slides/Slide03_Anomaly';
 import Slide04_Mechanism from './slides/Slide04_Mechanism';
 import Slide05_Evidence from './slides/Slide05_Evidence';
-import Slide06_Incentive from './slides/Slide06_Incentive';
+import Slide06_Incentives from './slides/Slide06_Incentives';
 import Slide07_Verdict from './slides/Slide07_Verdict';
 
 const pkg: TemplatePackage = {
@@ -20,7 +20,7 @@ const pkg: TemplatePackage = {
   Slide03_Anomaly,
   Slide04_Mechanism,
   Slide05_Evidence,
-  Slide06_Incentive,
+  Slide06_Incentives,
   Slide07_Verdict,
   ],
 };

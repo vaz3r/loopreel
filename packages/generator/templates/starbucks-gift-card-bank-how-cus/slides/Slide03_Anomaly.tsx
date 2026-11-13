@@ -4,46 +4,19 @@ import {
   type SlideComponentProps,
 } from '../../../src/skeleton/types';
 
-function Emphasis({ text }: { text?: string }) {
+function LockedCopy({ text }: { text?: string }) {
   return (
     <>
-      {(text ?? '').split(/(\*\*.*?\*\*)/g).map((part, index) =>
-        part.startsWith('**') && part.endsWith('**') ? (
+      {(text ?? '').split('**').map((part, index) =>
+        index % 2 === 1 ? (
           <strong key={index} className="font-semibold text-[var(--ink)]">
-            {part.slice(2, -2)}
+            {part}
           </strong>
         ) : (
           <React.Fragment key={index}>{part}</React.Fragment>
         ),
       )}
     </>
-  );
-}
-
-function Metric({ badge, label }: { badge: string; label: string }) {
-  const { qualifier, value: metric, unit } = parseMetricBadge(badge);
-
-  return (
-    <div className="flex flex-col items-end gap-1">
-      <div className="flex items-baseline justify-end gap-2 whitespace-nowrap text-[var(--accent)]">
-        {qualifier && (
-          <span className="font-[var(--font-body)] text-[22px]">
-            {qualifier}
-          </span>
-        )}
-        <span className="font-[var(--font-mono)] text-[52px] font-bold leading-none tracking-[-0.035em] tabular-nums">
-          {metric}
-        </span>
-        {unit && (
-          <span className="font-[var(--font-body)] text-[22px]">
-            {unit}
-          </span>
-        )}
-      </div>
-      <span className="font-[var(--font-mono)] text-[20px] leading-snug tracking-wider text-[var(--ink)]/70">
-        {label}
-      </span>
-    </div>
   );
 }
 
@@ -55,217 +28,316 @@ export default function Slide03({
   const items = slide.items ?? [];
   const item0 = items[0];
   const item1 = items[1];
-  const asOf = (
-    slide as SlideComponentProps['slide'] & { asOf?: string }
-  ).asOf;
+
+  const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
+  const t0 = telemetry ? parseMetricBadge(telemetry?.[0]?.badge) : null;
+  const t1 = telemetry ? parseMetricBadge(telemetry?.[1]?.badge) : null;
+
+  const total0 = t0
+    ? [t0.qualifier, t0.value, t0.unit].filter(Boolean).join(' ')
+    : '';
+  const total1 = t1
+    ? [t1.qualifier, t1.value, t1.unit].filter(Boolean).join(' ')
+    : '';
+
+  void brand;
+  void totalSlides;
 
   return (
-    <section
-      className="flex flex-col h-full min-h-0 w-full text-[var(--ink)] justify-between"
-      data-archetype="full-height-editorial-split"
-    >
-      <div className="my-6 grid min-h-0 flex-1 grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-7 border-y border-[var(--border)] py-6">
-        <div className="relative flex min-h-0 min-w-0 flex-col justify-between">
-          <div
-            aria-hidden="true"
-            className="h-8 w-8 shrink-0 border-l border-t border-[var(--border)]"
-          />
+    <section className="flex h-full min-h-0 w-full flex-col justify-between py-[24px] font-[var(--font-body)] text-[var(--ink)]">
+      <header className="flex h-[220px] shrink-0 flex-col justify-between border-b border-[var(--border)] pb-7">
+        <div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.2em] text-[var(--accent)]">
+          <span aria-hidden="true" className="h-2.5 w-2.5 bg-[var(--accent)]" />
+          <span>{slide.kicker}</span>
+        </div>
 
-          <div className="flex min-h-0 flex-1 items-center justify-center">
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              viewBox="0 0 448 370"
-              preserveAspectRatio="xMidYMid meet"
-              className="block h-auto w-full text-[var(--ink)]"
+        <h1 className="max-w-[800px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.04] tracking-[-0.04em]">
+          {slide.headline}
+        </h1>
+      </header>
+
+      <div className="relative mt-4 grid min-h-0 flex-1 grid-cols-2 gap-8">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-[var(--border)]"
+        />
+
+        <article className="grid min-h-0 min-w-0 grid-rows-[431.25px_minmax(0,1fr)] gap-4">
+          <svg
+            viewBox="0 0 448 420"
+            role="img"
+            aria-label="Cards and loyalty rewards converge into one combined liability ledger."
+            className="block h-[431.25px] w-full text-[var(--ink)]"
+          >
+            <g
               fill="none"
               stroke="currentColor"
-              strokeWidth="1"
+              strokeWidth="1.5"
+              opacity="0.25"
               strokeLinecap="square"
               strokeLinejoin="miter"
             >
-              {/* Chamfered stored-value card, inset edge, magnetic stripe. */}
-              <path
-                d="M34 42H180L198 60V146H34Z"
-                fill="var(--surface)"
-                strokeOpacity="0.75"
-              />
-              <path
-                d="M44 52H176L188 64V136H44Z"
-                strokeOpacity="0.3"
-              />
-              <rect
-                x="44"
-                y="72"
-                width="144"
-                height="17"
-                fill="currentColor"
-                fillOpacity="0.16"
-                stroke="none"
-              />
+              <path d="M20 36H30M38 18V28M418 36H428M410 18V28" />
+              <path d="M20 330H30M38 338V348M418 330H428M410 338V348" />
+              <path d="M38 54V330H410V54" />
+              <path d="M38 36H190L224 54L258 36H410V312H258L224 330L190 312H38Z" />
+              <path d="M224 54V330M214 59V316M234 59V316" />
+              <path d="M50 46V302H187L205 311M398 46V302H261L243 311" />
+              <path d="M224 330V340" />
+              <path d="M38 406H410M38 401V411M410 401V411" />
+            </g>
 
-              {/* Loyalty obligation: star and registration ring. */}
-              <path
-                d="M145 96L149.9 106.3L161.3 107.8L153 115.7L155 127L145 121.6L135 127L137 115.7L128.7 107.8L140.1 106.3Z"
-                fill="var(--accent)"
-                stroke="var(--accent)"
-              />
-              <circle
-                cx="145"
-                cy="113"
-                r="25"
-                stroke="var(--accent)"
-                strokeOpacity="0.55"
-              />
-
-              {/* Separate royalty document, folded corner, embossed seal. */}
-              <path
-                d="M264 62H335L366 93V193H264Z"
-                fill="var(--surface)"
-                strokeOpacity="0.75"
-              />
-              <path
-                d="M335 62V93H366"
-                strokeOpacity="0.65"
-              />
-              <circle
-                cx="315"
-                cy="147"
-                r="24"
-                fill="var(--accent)"
-                fillOpacity="0.14"
-                stroke="var(--accent)"
-                strokeWidth="2"
-              />
-
-              {/* Three mechanical alignment pins. */}
-              <path
-                d="M76 157V211M71 157H81M71 211H81"
-                strokeOpacity="0.35"
-              />
-              <path
-                d="M166 158V202M161 158H171M161 202H171"
-                strokeOpacity="0.35"
-              />
-              <path
-                d="M315 204V221M310 204H320M310 221H320"
-                strokeOpacity="0.35"
-              />
-
-              {/* Balance arm and central fulcrum; no quantitative scaling. */}
-              <path
-                d="M61 238H387"
-                strokeOpacity="0.85"
-              />
-              <path
-                d="M224 242L207 321H241Z"
-                fill="var(--surface)"
-                strokeOpacity="0.6"
-              />
-
-              {/* Paired suspension rods. */}
-              <path
-                d="M94 238V287M354 238V287"
-                strokeOpacity="0.6"
-              />
-
-              {/* Equal shallow mechanical weighing pans. */}
-              <path
-                d="M50 287H138L125 303H63Z"
-                fill="var(--surface)"
-                strokeOpacity="0.65"
-              />
-              <path
-                d="M310 287H398L385 303H323Z"
-                fill="var(--surface)"
-                strokeOpacity="0.65"
-              />
-
-              {/* Four fasteners. */}
-              <circle cx="61" cy="238" r="4" fill="var(--surface)" />
-              <circle cx="94" cy="238" r="4" fill="var(--surface)" />
-              <circle cx="354" cy="238" r="4" fill="var(--surface)" />
-              <circle cx="387" cy="238" r="4" fill="var(--surface)" />
-
-              {/* Baseline and four measurement ticks. */}
-              <path d="M34 341H414" strokeOpacity="0.35" />
-              <path d="M34 335V347" strokeOpacity="0.5" />
-              <path d="M160 337V345" strokeOpacity="0.5" />
-              <path d="M288 337V345" strokeOpacity="0.5" />
-              <path d="M414 335V347" strokeOpacity="0.5" />
-            </svg>
-          </div>
-
-          <div className="flex shrink-0 items-end justify-between gap-4 pt-6">
-            {asOf && (
-              <p className="max-w-[280px] font-[var(--font-mono)] text-[20px] leading-snug tracking-wide text-[var(--ink)]/65">
-                {asOf}
-              </p>
-            )}
-            <div
-              aria-hidden="true"
-              className="ml-auto h-8 w-8 shrink-0 border-b border-r border-[var(--border)]"
+            <path
+              d="M38 36H190L214 49V303L190 292H38Z"
+              fill="var(--surface)"
             />
-          </div>
-        </div>
+            <path
+              d="M234 49L258 36H410V292H258L234 303Z"
+              fill="var(--surface)"
+            />
 
-        <div className="flex min-h-0 min-w-0 flex-col justify-between gap-6">
-          <header className="shrink-0">
-            <div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.2em] text-[var(--accent)]">
-              <span
-                aria-hidden="true"
-                className="inline-block h-2.5 w-2.5 shrink-0 bg-[var(--accent)]"
-              />
-              <span>{slide.kicker}</span>
-            </div>
+            <g
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              opacity="0.25"
+            >
+              <rect x="58" y="106" width="120" height="80" rx="2" />
+              <path d="M58 127H178" />
+              <rect x="73" y="143" width="22" height="24" rx="2" />
+              <path d="M84 143V167M73 155H95" />
+              <circle cx="334" cy="147" r="48" />
+              <path d="M326 92H342M326 202H342M279 139V155M389 139V155" />
+            </g>
 
-            <h1 className="mt-4 font-[var(--font-headline)] text-[64px] font-bold leading-[1.08] tracking-[-0.035em]">
-              {slide.headline}
-            </h1>
+            <path
+              d="M334 113L343 134L366 137L349 153L353 177L334 165L314 177L318 153L301 137L325 134Z"
+              fill="var(--accent)"
+              fillOpacity="0.12"
+              stroke="var(--accent)"
+              strokeWidth="2"
+            />
 
-            {slide.subheadline && (
-              <p className="mt-4 font-[var(--font-body)] text-[26px] leading-snug text-[var(--ink)]/80">
-                {slide.subheadline}
-              </p>
-            )}
-          </header>
+            <g
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinejoin="miter"
+            >
+              <path d="M118 186V237H224V270" />
+              <path d="M334 195V237H224" />
+              <path d="M216 260L224 270L232 260" />
+            </g>
 
-          <div className="grid min-h-0 flex-1 grid-rows-2 gap-5">
-            <article className="flex min-h-0 flex-col justify-between gap-4 rounded-none border border-[var(--border)] bg-[var(--surface)] px-7 py-5">
-              <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-[1.08] tracking-[-0.025em]">
+            <rect
+              x="218"
+              y="272"
+              width="12"
+              height="12"
+              fill="var(--accent)"
+            />
+
+            <g
+              fill="currentColor"
+              textAnchor="middle"
+              className="font-[var(--font-mono)] text-[20px] tracking-[0.08em]"
+            >
+              <text x="118" y="82">CARDS</text>
+              <text x="334" y="82">REWARDS</text>
+            </g>
+
+            <rect
+              x="55"
+              y="340"
+              width="338"
+              height="58"
+              fill="var(--surface)"
+              stroke="var(--border)"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M55 340H91M357 398H393"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="3"
+            />
+            <text
+              x="224"
+              y="370"
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fill="var(--accent)"
+              className="font-[var(--font-mono)] text-[46px] font-bold tracking-[-0.045em] tabular-nums"
+            >
+              {total0}
+            </text>
+          </svg>
+
+          <div className="flex min-h-0 flex-col justify-between border-t border-[var(--border)] pb-5 pt-5">
+            <div>
+              <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-[1.1] tracking-[-0.025em]">
                 {item0?.title}
               </h2>
-
-              {item0?.metric && (
-                <Metric
-                  badge={item0.metric.badge}
-                  label={item0.metric.label}
-                />
-              )}
-
-              <p className="border-t border-[var(--border)] pt-4 font-[var(--font-body)] text-[24px] leading-snug text-[var(--ink)]/80">
-                <Emphasis text={item0?.body} />
+              <p className="mt-3 text-[26px] leading-snug text-[var(--ink)]/80">
+                <LockedCopy text={item0?.body} />
               </p>
-            </article>
+            </div>
 
-            <article className="flex min-h-0 flex-col justify-between gap-4 rounded-none border border-[var(--border)] px-7 py-5">
-              <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-[1.08] tracking-[-0.025em]">
+            <p className="max-w-[430px] font-[var(--font-mono)] text-[20px] leading-[1.45] text-[var(--ink)]/70">
+              {telemetry?.[0]?.label}
+            </p>
+          </div>
+        </article>
+
+        <article className="grid min-h-0 min-w-0 grid-rows-[431.25px_minmax(0,1fr)] gap-4">
+          <svg
+            viewBox="0 0 448 420"
+            role="img"
+            aria-label="Card loads and Stars earned enter the same deferral register, not a cash reservoir."
+            className="block h-[431.25px] w-full text-[var(--ink)]"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              opacity="0.25"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+            >
+              <path d="M17 46H27M35 28V38M421 46H431M413 28V38" />
+              <path d="M17 328H27M35 336V346M421 328H431M413 336V346" />
+              <rect x="35" y="46" width="378" height="282" rx="2" />
+              <path d="M49 60H399V314H49Z" />
+              <path d="M35 218H413" />
+              <circle cx="49" cy="60" r="3" />
+              <circle cx="399" cy="60" r="3" />
+              <circle cx="49" cy="314" r="3" />
+              <circle cx="399" cy="314" r="3" />
+              <path d="M224 328V340" />
+              <path d="M38 406H410M38 401V411M410 401V411" />
+            </g>
+
+            <rect
+              x="62"
+              y="108"
+              width="122"
+              height="90"
+              fill="var(--surface)"
+            />
+            <rect
+              x="264"
+              y="108"
+              width="122"
+              height="90"
+              fill="var(--surface)"
+            />
+
+            <g
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              opacity="0.25"
+            >
+              <path d="M72 180H174M274 180H376" />
+              <rect x="87" y="112" width="72" height="52" rx="2" />
+              <path d="M87 126H159" />
+              <circle cx="325" cy="140" r="31" />
+              <path d="M294 180V191H356V180" />
+              <rect x="114" y="252" width="220" height="58" rx="2" />
+              <circle cx="137" cy="281" r="8" />
+              <circle cx="311" cy="281" r="8" />
+              <path d="M160 264V298M288 264V298" />
+            </g>
+
+            <path
+              d="M325 119L331 132L346 134L335 145L338 160L325 153L312 160L315 145L304 134L319 132Z"
+              fill="var(--accent)"
+              fillOpacity="0.12"
+              stroke="var(--accent)"
+              strokeWidth="2"
+            />
+
+            <g
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinejoin="miter"
+            >
+              <path d="M123 180V232H224V271" />
+              <path d="M325 180V232H224" />
+              <path d="M216 261L224 271L232 261" />
+            </g>
+
+            <rect
+              x="218"
+              y="275"
+              width="12"
+              height="12"
+              fill="var(--accent)"
+            />
+
+            <g
+              fill="currentColor"
+              textAnchor="middle"
+              className="font-[var(--font-mono)] text-[20px] tracking-[0.08em]"
+            >
+              <text x="123" y="92">LOADS</text>
+              <text x="325" y="92">STARS</text>
+            </g>
+
+            <rect
+              x="55"
+              y="340"
+              width="338"
+              height="58"
+              fill="var(--surface)"
+              stroke="var(--border)"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M55 340H91M357 398H393"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="3"
+            />
+            <text
+              x="224"
+              y="370"
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fill="var(--accent)"
+              className="font-[var(--font-mono)] text-[46px] font-bold tracking-[-0.045em] tabular-nums"
+            >
+              {total1}
+            </text>
+          </svg>
+
+          <div className="flex min-h-0 flex-col justify-between border-t border-[var(--border)] pb-5 pt-5">
+            <div>
+              <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-[1.1] tracking-[-0.025em]">
                 {item1?.title}
               </h2>
-
-              {item1?.metric && (
-                <Metric
-                  badge={item1.metric.badge}
-                  label={item1.metric.label}
-                />
-              )}
-
-              <p className="border-t border-[var(--border)] pt-4 font-[var(--font-body)] text-[24px] leading-snug text-[var(--ink)]/80">
-                <Emphasis text={item1?.body} />
+              <p className="mt-3 text-[26px] leading-snug text-[var(--ink)]/80">
+                <LockedCopy text={item1?.body} />
               </p>
-            </article>
+            </div>
+
+            <p className="max-w-[430px] font-[var(--font-mono)] text-[20px] leading-[1.45] text-[var(--ink)]/70">
+              {telemetry?.[1]?.label}
+            </p>
           </div>
-        </div>
+        </article>
+      </div>
+
+      <div className="flex h-[60px] shrink-0 items-center gap-4 border-t border-[var(--border)]">
+        <span
+          aria-hidden="true"
+          className="h-2.5 w-2.5 shrink-0 bg-[var(--accent)]"
+        />
+        <p className="text-[24px] leading-snug">
+          Neither figure is a standalone measure of{' '}
+          <strong className="font-semibold">prepaid cash.</strong>
+        </p>
       </div>
     </section>
   );

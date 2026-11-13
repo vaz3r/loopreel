@@ -4,209 +4,74 @@ import {
   type SlideComponentProps,
 } from '../../../src/skeleton/types';
 
-interface EvidenceFields {
-  metric?: {
-    badge: string;
-    label: string;
-  };
-  asOf?: string;
-}
-
-interface BarcodeBar {
-  x: number;
-  width: number;
-}
-
-// Code 128 B patterns and modulo-103 checksum. 
-// Quiet zones are 10 modules on each side. 
-const BARCODE_PATTERNS: Readonly<Record<number, string>> = {
-  16: '123122',
-  18: '223211',
-  21: '213212',
-  38: '132311',
-  48: '313121',
-  52: '213311',
-  62: '431111',
-  104: '211214',
-  106: '2331112',
+type ReceiptSlideData = SlideComponentProps['slide'] & {
+  footer?: string;
 };
 
-function createReceiptBarcode(): BarcodeBar[] {
-  const data = Array.from('TFP2025', character => character.charCodeAt(0) - 32);
-  const checksum =
-    (104 + data.reduce((sum, value, index) => sum + value * (index + 1), 0)) %
-    103;
-
-  const symbols = [104, ...data, checksum, 106];
-  const bars: BarcodeBar[] = [];
-  let cursor = 20;
-
-  for (const symbol of symbols) {
-    const pattern = BARCODE_PATTERNS[symbol];
-
-    if (!pattern) {
-      throw new Error(`Missing Code 128 pattern: ${symbol}`);
-    }
-
-    Array.from(pattern).forEach((digit, index) => {
-      const width = Number(digit) * 2;
-
-      if (index % 2 === 0) {
-        bars.push({ x: cursor, width });
-      }
-
-      cursor += width;
-    });
-  }
-
-  return bars;
-}
-
-const RECEIPT_BARS = createReceiptBarcode();
-
-function renderEmphasis(text?: string): React.ReactNode {
-  return (text ?? '').split(/(\*\*[^*]+\*\*)/g).map((part, index) =>
-    part.startsWith('**') && part.endsWith('**') ? (
-      <strong key={index} className="font-semibold text-[var(--ink)]">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      <React.Fragment key={index}>{part}</React.Fragment>
-    ),
-  );
-}
-
-function ReceiptRegister() {
+function EmphasizedCopy({ text }: { text?: string }) {
   return (
-    <svg
-      viewBox="0 0 952 440"
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-      focusable="false"
-      className="block h-auto w-full"
-    >
-      <g
-        fill="none"
-        stroke="var(--border)"
-        strokeWidth="1"
-        strokeLinejoin="miter"
-      >
-        {/* 01–03: upper shell, lower shell, paper slot. */}
-        <path
-          d="M24 328 L70 284 H882 L928 328 V356 H24 Z"
-          fill="var(--surface)"
-        />
-        <path d="M24 356 H928 V412 H24 Z" fill="var(--surface)" />
-        <rect x="46" y="310" width="860" height="18" />
-
-        {/* 04–08: feed rollers, axle, bearing rings. */}
-        <rect x="108" y="369" width="318" height="28" rx="2" />
-        <rect x="526" y="369" width="318" height="28" rx="2" />
-        <path d="M74 383 H878" />
-        <circle cx="94" cy="383" r="14" />
-        <circle cx="858" cy="383" r="14" />
-
-        {/* 09: receipt perimeter; its upper edge is serrated below. */}
-        <path
-          d="M52 26 V310 H900 V26"
-          fill="var(--surface)"
-        />
-
-        {/* 10–17: eight individual serrated teeth. */}
-        {Array.from({ length: 8 }, (_, index) => {
-          const x = 52 + index * 106;
-
-          return (
-            <path
-              key={index}
-              d={`M${x} 26 L${x + 53} 14 L${x + 106} 26`}
-            />
-          );
-        })}
-
-        {/* 18–19: mounting screws. */}
-        <g>
-          <circle cx="48" cy="383" r="8" />
-          <path d="M44 387 L52 379" />
-        </g>
-        <g>
-          <circle cx="904" cy="383" r="8" />
-          <path d="M900 387 L908 379" />
-        </g>
-
-        {/* 20–22: dimension endpoints and connecting rule. */}
-        <path d="M24 422 V438" />
-        <path d="M928 422 V438" />
-        <path d="M24 430 H928" />
-
-        {/* 23–24: calculation alignment marks. */}
-        <path
-          d="M72 52 H88 M80 44 V60"
-          stroke="var(--accent)"
-        />
-        <path
-          d="M572 282 H588 M580 274 V290"
-          stroke="var(--accent)"
-        />
-
-        {/* 25: receipt return fold at the paper slot. */}
-        <path d="M52 310 L64 322 H888 L900 310" />
-      </g>
-
-      {/* Genuine barcode: 112 encoded modules plus two 10-module quiet zones. */}
-      <g transform="translate(616 166)">
-        <rect width="264" height="92" fill="#FFFFFF" />
-        <g fill="#000000" shapeRendering="crispEdges">
-          {RECEIPT_BARS.map(bar => (
-            <rect
-              key={bar.x}
-              x={bar.x}
-              y="12"
-              width={bar.width}
-              height="68"
-            />
-          ))}
-        </g>
-      </g>
-
-      <text
-        x="748"
-        y="287"
-        textAnchor="middle"
-        fill="var(--ink)"
-        className="font-[var(--font-mono)] text-[22px] tracking-[0.12em]"
-      >
-        TFP2025
-      </text>
-    </svg>
+    <>
+      {(text ?? '').split('**').map((part, index) =>
+        index % 2 === 1 ? (
+          <strong key={index} className="font-semibold">
+            {part}
+          </strong>
+        ) : (
+          <React.Fragment key={index}>{part}</React.Fragment>
+        ),
+      )}
+    </>
   );
 }
+
+// Valid Code 128-B geometry for FY2025; decorative, not a source identifier.
+const barcodePatterns = [
+  '211214',
+  '132311',
+  '312113',
+  '223211',
+  '123122',
+  '223211',
+  '213212',
+  '241211',
+  '2331112',
+];
+
+const barcodeBars: Array<{ x: number; width: number }> = [];
+let barcodeCursor = 0;
+
+barcodePatterns.forEach((pattern) => {
+  [...pattern].forEach((digit, index) => {
+    const width = Number(digit) * 1.45;
+    if (index % 2 === 0) {
+      barcodeBars.push({ x: barcodeCursor, width });
+    }
+    barcodeCursor += width;
+  });
+});
 
 export default function Slide05({
   slide,
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  // SlideFrame owns publication branding and pagination.
   void brand;
   void totalSlides;
 
-  const evidence = slide as SlideComponentProps['slide'] & EvidenceFields;
   const items = slide.items ?? [];
   const item0 = items[0];
   const item1 = items[1];
 
-  const hero = evidence.metric ?? {
-    badge: '$222.4',
-    label: 'million · Fiscal 2025 breakage revenue',
-  };
+  const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
+  const t0 = telemetry ? parseMetricBadge(telemetry?.[0]?.badge) : null;
 
-  const { qualifier, value: metric, unit } = parseMetricBadge(hero.badge);
-  const asOf = evidence.asOf ?? 'Year ended September 28, 2025';
+  const receiptSlide = slide as ReceiptSlideData;
+  const artworkTitleId = React.useId();
+  const artworkDescriptionId = React.useId();
 
   return (
-    <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)] justify-between">
-      <header className="shrink-0">
+    <section className="flex flex-col h-full min-h-0 w-full justify-between py-[24px] font-[var(--font-body)] text-[var(--ink)]">
+      <header className="h-[220px] shrink-0">
         <div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.2em] text-[var(--accent)]">
           <span
             aria-hidden="true"
@@ -215,82 +80,218 @@ export default function Slide05({
           <span>{slide.kicker}</span>
         </div>
 
-        <h1 className="mt-4 max-w-[920px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.04] tracking-[-0.04em]">
+        <h1 className="mt-4 max-w-[900px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.04] tracking-[-0.04em]">
           {slide.headline}
         </h1>
+
+        <p className="mt-4 text-[26px] leading-snug text-[var(--ink)]/80">
+          {slide.subheadline}
+        </p>
       </header>
 
-      <div className="my-6 flex min-h-0 flex-1 flex-col justify-between gap-7">
-        <div className="flex min-h-0 flex-1 flex-col justify-between rounded-none border border-[var(--border)] bg-[var(--surface)] p-9">
-          <div className="shrink-0">
-            <div
-              aria-label={hero.badge}
-              className="flex items-baseline gap-0 font-[var(--font-mono)] text-[110px] font-bold leading-none tracking-[-0.055em] text-[var(--accent)] tabular-nums"
+      <div className="flex min-h-0 flex-1 flex-col justify-between gap-4 pt-4">
+        <figure className="m-0 flex h-[420px] shrink-0 items-center justify-center">
+          <svg
+            viewBox="0 0 952 420"
+            role="img"
+            aria-labelledby={`${artworkTitleId} ${artworkDescriptionId}`}
+            className="block max-h-[380px] min-h-0 w-full text-[var(--ink)]"
+            fill="none"
+          >
+            <title id={artworkTitleId}>
+              {`${telemetry?.[1]?.badge ?? ''} ${telemetry?.[0]?.label ?? ''}`}
+            </title>
+            <desc id={artworkDescriptionId}>
+              Calculated revenue arithmetic, not an actual Starbucks receipt
+              or a separately reported profit measure. Barcode is decorative.
+            </desc>
+
+            {/* Attached source-entry tabs align with the HTML captions. */}
+            <g
+              fill="var(--surface)"
+              stroke="currentColor"
+              strokeOpacity="0.25"
+              strokeWidth="1"
             >
-              {qualifier && (
-                <span
-                  className={
-                    /^[\$£€¥]$/.test(qualifier)
-                      ? 'text-[110px]'
-                      : 'mr-3 font-[var(--font-body)] text-[22px] tracking-normal'
-                  }
-                >
-                  {qualifier}
-                </span>
-              )}
-              <span>{metric}</span>
-              {unit && (
-                <span className="ml-3 font-[var(--font-body)] text-[22px] font-normal tracking-normal">
-                  {unit}
-                </span>
-              )}
-            </div>
+              <path d="M146 366H322V414H146Z" />
+              <path d="M630 366H806V414H630Z" />
+            </g>
 
-            <p className="mt-3 font-[var(--font-mono)] text-[22px] uppercase leading-snug tracking-[0.07em]">
-              {hero.label}
-            </p>
+            {/* Thermal-paper perimeter, curled shoulders, serrated cut. */}
+            <path
+              d="M94 24H858
+                 Q882 24 882 48
+                 V384
+                 L868 396 854 384 840 396 826 384
+                 812 396 798 384 784 396 770 384
+                 756 396 742 384 728 396 714 384
+                 700 396 686 384 672 396 658 384
+                 644 396 630 384 616 396 602 384
+                 588 396 574 384 560 396 546 384
+                 532 396 518 384 504 396 490 384
+                 476 396 462 384 448 396 434 384
+                 420 396 406 384 392 396 378 384
+                 364 396 350 384 336 396 322 384
+                 308 396 294 384 280 396 266 384
+                 252 396 238 384 224 396 210 384
+                 196 396 182 384 168 396 154 384
+                 140 396 126 384 112 396 98 384
+                 84 396 70 384V48Q70 24 94 24Z"
+              fill="var(--surface)"
+              stroke="currentColor"
+              strokeOpacity="0.25"
+              strokeWidth="1"
+            />
+
+            <g
+              stroke="currentColor"
+              strokeOpacity="0.25"
+              strokeWidth="1"
+            >
+              <path d="M94 24Q110 38 94 56H70" />
+              <path d="M858 24Q842 38 858 56H882" />
+
+              {/* Subtotal rule and measurement bracket. */}
+              <path d="M118 148H834M118 141V155M834 141V155" />
+              <path d="M302 184H286V286H302" />
+              <path d="M650 184H666V286H650" />
+
+              {/* Registration marks, not placeholder text. */}
+              <path d="M40 24H56M48 16V32M896 24H912M904 16V32" />
+              <path d="M40 396H56M48 388V404M896 396H912M904 388V404" />
+              <path d="M476 16V32M468 24H484" />
+            </g>
+
+            <g
+              fill="currentColor"
+              className="font-[var(--font-mono)] text-[48px] tabular-nums"
+            >
+              <text x="150" y="112">
+                $200.4
+              </text>
+              <text x="407" y="112" fill="var(--accent)">
+                +
+              </text>
+              <text x="498" y="112">
+                $22.0
+              </text>
+            </g>
+
+            <text
+              x="686"
+              y="112"
+              fill="currentColor"
+              className="font-[var(--font-body)] text-[26px]"
+            >
+              million
+            </text>
+
+            <text
+              x="476"
+              y="258"
+              textAnchor="middle"
+              fill="currentColor"
+              className="font-[var(--font-mono)] text-[106px] font-bold tracking-[-0.05em] tabular-nums"
+            >
+              {t0 ? (
+                <>
+                  {t0.qualifier && <tspan>{t0.qualifier}</tspan>}
+                  <tspan>{t0.value}</tspan>
+                  {t0.unit && <tspan> {t0.unit}</tspan>}
+                </>
+              ) : null}
+            </text>
+
+            <path
+              d="M310 274H642"
+              stroke="var(--accent)"
+              strokeWidth="2"
+            />
+
+            <text
+              x="476"
+              y="309"
+              textAnchor="middle"
+              fill="currentColor"
+              className="font-[var(--font-body)] text-[26px]"
+            >
+              million
+            </text>
+
+            <g aria-hidden="true" fill="currentColor" fillOpacity="0.65">
+              {barcodeBars.map((bar, index) => (
+                <rect
+                  key={index}
+                  x={118 + bar.x}
+                  y="340"
+                  width={bar.width}
+                  height="28"
+                />
+              ))}
+            </g>
+
+            <rect
+              x="700"
+              y="334"
+              width="134"
+              height="38"
+              stroke="currentColor"
+              strokeOpacity="0.25"
+              strokeWidth="1"
+            />
+            <text
+              x="767"
+              y="361"
+              textAnchor="middle"
+              fill="currentColor"
+              className="font-[var(--font-mono)] text-[24px]"
+            >
+              FY2025
+            </text>
+
+            <path
+              d="M660 350L668 358L684 340"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="square"
+            />
+          </svg>
+        </figure>
+
+        <div className="flex min-h-[248px] flex-1 flex-col justify-between">
+          <div className="grid grid-cols-2 gap-6">
+            <article className="flex min-w-0 flex-col border-t border-[var(--border)] pt-5">
+              <h2 className="font-[var(--font-mono)] text-[20px] font-semibold leading-snug tracking-[0.1em]">
+                {item0?.title}
+              </h2>
+              <p className="mt-3 max-w-[420px] text-[26px] leading-snug text-[var(--ink)]/80">
+                <EmphasizedCopy text={item0?.body} />
+              </p>
+            </article>
+
+            <article className="flex min-w-0 flex-col border-t border-[var(--border)] pt-5">
+              <h2 className="font-[var(--font-mono)] text-[20px] font-semibold leading-snug tracking-[0.1em]">
+                {item1?.title}
+              </h2>
+              <p className="mt-3 max-w-[420px] text-[26px] leading-snug text-[var(--ink)]/80">
+                <EmphasizedCopy text={item1?.body} />
+              </p>
+            </article>
           </div>
 
-          <div className="relative mt-5 shrink-0">
-            <ReceiptRegister />
-
-            <div className="absolute left-[10%] top-[10%] flex w-[49%] flex-col">
-              <div className="pb-5">
-                <h2 className="font-[var(--font-mono)] text-[20px] font-semibold leading-snug tracking-[0.09em]">
-                  {item0?.title}
-                </h2>
-                <p className="mt-2 font-[var(--font-body)] text-[26px] leading-snug">
-                  {renderEmphasis(item0?.body)}
-                </p>
-              </div>
-
-              <div className="relative border-t border-[var(--border)] pt-5">
-                <span
-                  aria-hidden="true"
-                  className="absolute -left-8 top-4 font-[var(--font-mono)] text-[28px] leading-none text-[var(--accent)]"
-                >
-                  +
-                </span>
-                <h2 className="font-[var(--font-mono)] text-[20px] font-semibold leading-snug tracking-[0.09em]">
-                  {item1?.title}
-                </h2>
-                <p className="mt-2 font-[var(--font-body)] text-[26px] leading-snug">
-                  {renderEmphasis(item1?.body)}
-                </p>
-              </div>
-            </div>
-          </div>
+          <p className="border-t border-[var(--border)] pt-4 text-[24px] leading-snug">
+            Calculated breakage revenue from expected nonredemption—
+            <strong className="font-semibold">
+              not a separately reported profit measure.
+            </strong>
+          </p>
         </div>
-
-        <aside className="shrink-0 rounded-none border border-[var(--border)] bg-[var(--surface)] p-7">
-          <p className="font-[var(--font-body)] text-[28px] leading-snug">
-            {slide.subheadline}
-          </p>
-          <p className="mt-3 font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.03em]">
-            {asOf}
-          </p>
-        </aside>
       </div>
+
+      <p className="flex h-[60px] shrink-0 items-end text-[24px] leading-snug text-[var(--ink)]/80">
+        {receiptSlide.footer ??
+          'Disclosed components added—not separately reported profit.'}
+      </p>
     </section>
   );
 }

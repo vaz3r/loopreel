@@ -10,295 +10,326 @@ export default function Slide01({
   totalSlides,
 }: SlideComponentProps) {
   void brand;
-  void totalSlides;
+
+  const headlineLines =
+    slide.headline === 'Your Rewards. Their Interest-Free Financing.'
+      ? ['Your Rewards.', 'Their Interest-Free', 'Financing.']
+      : [slide.headline];
 
   const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
   const t0 = telemetry ? parseMetricBadge(telemetry?.[0]?.badge) : null;
 
-  const theme = {
-    '--paper': '#0D0E12',
-    '--ink': '#F1F3F9',
-    '--accent': '#FF4D00',
-    '--surface': '#161820',
-    '--border': '#262938',
-  } as React.CSSProperties;
+  const page = String(slide.index + 1).padStart(2, '0');
+  const pages = String(totalSlides || 7).padStart(2, '0');
 
   return (
-    <section
-      style={theme}
-      className="flex flex-col h-full min-h-0 w-full justify-between bg-[var(--paper)] text-[var(--ink)]"
-    >
-      <div className="shrink-0">
-        <div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.14em] text-[var(--accent)]">
+    <section className="flex h-full min-h-0 w-full flex-col justify-between py-[24px] text-[var(--ink)]">
+      <header className="flex h-[308px] shrink-0 flex-col gap-3">
+        <div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] leading-[24px] tracking-[0.2em] text-[var(--accent)]">
           <span
             aria-hidden="true"
-            className="inline-block h-2.5 w-2.5 shrink-0 bg-[var(--accent)]"
+            className="h-2.5 w-2.5 shrink-0 bg-[var(--accent)]"
           />
-          <span>{slide.kicker}</span>
+          <span>THE FINE PRINT</span>
         </div>
 
-        <h1 className="mt-4 max-w-[940px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.04] tracking-[-0.04em]">
-          {slide.headline}
+        <h1 className="font-[var(--font-headline)] text-[64px] font-bold leading-[1.02] tracking-[-0.04em]">
+          {headlineLines.map((line, index) => (
+            <span key={index} className="block">
+              {line}
+            </span>
+          ))}
         </h1>
 
-        <div
-          aria-hidden="true"
-          className="my-6 w-full border-b border-[var(--border)]"
-        />
-
-        <p className="max-w-[860px] font-[var(--font-body)] text-[28px] leading-snug text-[var(--ink)]/80">
+        <p className="max-w-[900px] font-[var(--font-body)] text-[26px] leading-[1.2] text-[var(--ink)]/80">
           {slide.subheadline}
         </p>
-      </div>
+      </header>
 
-      <div className="relative my-4 flex min-h-[460px] flex-1 items-center justify-center">
+      <figure className="my-3 flex min-h-0 flex-1 items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 952 650"
-          preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-label="Stored-value payments enter a reservoir while a closed outlet leaves the coffee cup empty. A timing metaphor, not a depiction of segregated reserves."
-          className="absolute inset-0 h-full w-full text-[var(--ink)]"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeLinecap="square"
-          strokeLinejoin="miter"
+          aria-label="Conceptual prepaid flow from a gift card into corporate cash, with a purchase outlet and a separate breakage accounting dial."
+          className="block h-full max-h-[568px] w-full max-w-[832px] text-[var(--ink)]"
         >
-          {/* Stored-value card: tipped toward the reservoir inlet. */}
-          <g transform="rotate(17 258 175)">
-            <path
-              data-part="01-card-perimeter"
-              d="M97 68 H419 L438 87 V263 L419 282 H97 L78 263 V87 Z"
+          {/* Registration marks frame the specimen, not a measurement scale. */}
+          <g
+            fill="none"
+            stroke="var(--ink)"
+            strokeWidth="1.5"
+            strokeOpacity="0.4"
+          >
+            <path d="M24 48H44M34 38V58" />
+            <path d="M898 48H918M908 38V58" />
+            <path d="M24 594H44M34 584V604" />
+            <path d="M898 594H918M908 584V604" />
+          </g>
+
+          {/* Closed-loop gift-card specimen: no chip or contactless marks. */}
+          <g transform="rotate(-12 227 190)">
+            <rect
+              x="52"
+              y="80"
+              width="350"
+              height="220"
+              rx="2"
               fill="var(--surface)"
-              strokeOpacity="0.8"
-            />
-            <path
-              data-part="02-inset-perimeter"
-              d="M105 80 H411 L426 95 V255 L411 270 H105 L90 255 V95 Z"
+              stroke="var(--ink)"
               strokeOpacity="0.25"
+              strokeWidth="2"
             />
+
             <path
-              data-part="03-magnetic-stripe"
-              d="M90 119 H426 V163 H90 Z"
+              d="M76 112V104H100M354 104H378V128M76 252V276H100M354 276H378V252"
+              fill="none"
+              stroke="var(--ink)"
+              strokeOpacity="0.4"
+              strokeWidth="1.5"
+            />
+
+            <g
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinejoin="miter"
+            >
+              <path d="M176 178A54 54 0 0 1 275 163" />
+              <path d="M260 158L278 165L280 146" />
+              <path d="M278 202A54 54 0 0 1 179 217" />
+              <path d="M194 222L176 215L174 234" />
+            </g>
+
+            <circle
+              cx="227"
+              cy="190"
+              r="22"
               fill="var(--paper)"
-              strokeOpacity="0.3"
+              stroke="var(--ink)"
+              strokeOpacity="0.25"
+              strokeWidth="1.5"
             />
-            <path
-              data-part="04-stripe-highlight"
-              d="M90 120 H426"
-              strokeOpacity="0.75"
-            />
-            <path
-              data-part="05-registration-notch"
-              d="M64 93 H78 M71 86 V100"
-              strokeOpacity="0.5"
-            />
-            <path
-              data-part="06-registration-notch"
-              d="M438 93 H452 M445 86 V100"
-              strokeOpacity="0.5"
-            />
-            <path
-              data-part="07-registration-notch"
-              d="M64 257 H78 M71 250 V264"
-              strokeOpacity="0.5"
-            />
-            <path
-              data-part="08-registration-notch"
-              d="M438 257 H452 M445 250 V264"
-              strokeOpacity="0.5"
+
+            <rect
+              x="250"
+              y="289"
+              width="28"
+              height="11"
+              fill="var(--accent)"
             />
           </g>
 
-          {/* Reservoir section: deliberately unnumbered and uncalibrated. */}
+          {/* Tank shell: elliptical ends establish cylindrical volume. */}
           <path
-            data-part="09-reservoir-shell"
-            d="M536 208
-               C536 178 844 178 844 208
-               V458
-               C844 516 536 516 536 458 Z"
+            d="M447 150V498
+               C447 520.1 532.1 538 637 538
+               C741.9 538 827 520.1 827 498
+               V150Z"
             fill="var(--surface)"
-            strokeOpacity="0.6"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="2"
           />
+
+          {/* Uncalibrated conceptual liquid; no balance or reserve scale. */}
+          <path
+            d="M447 324
+               C447 306.3 532.1 292 637 292
+               C741.9 292 827 306.3 827 324
+               V498
+               C827 520.1 741.9 538 637 538
+               C532.1 538 447 520.1 447 498Z"
+            fill="var(--accent)"
+            fillOpacity="0.12"
+          />
+
           <ellipse
-            data-part="10-upper-ellipse"
-            cx="690"
-            cy="208"
-            rx="154"
-            ry="39"
-            fill="var(--paper)"
-            strokeOpacity="0.8"
+            cx="637"
+            cy="324"
+            rx="190"
+            ry="32"
+            fill="var(--accent)"
+            fillOpacity="0.08"
+            stroke="var(--accent)"
+            strokeOpacity="0.65"
+            strokeWidth="1.5"
           />
 
-          <path
-            data-part="13-orange-liquid-body"
-            d="M548 339
-               C548 385 832 385 832 339
-               V453
-               C832 501 548 501 548 453 Z"
-            fill="var(--accent)"
-            fillOpacity="0.2"
-            stroke="var(--accent)"
-            strokeOpacity="0.55"
-          />
           <ellipse
-            data-part="12-liquid-surface"
-            cx="690"
-            cy="339"
-            rx="142"
-            ry="35"
-            fill="var(--accent)"
-            fillOpacity="0.48"
-            stroke="var(--accent)"
-          />
-          <ellipse
-            data-part="11-lower-ellipse"
-            cx="690"
-            cy="458"
-            rx="154"
-            ry="39"
-            strokeOpacity="0.5"
-          />
-
-          <path
-            data-part="14-sight-glass"
-            d="M787 262 H807 V435 H787 Z"
-            fill="var(--paper)"
-            strokeOpacity="0.75"
-          />
-          <path
-            data-part="15-graduation-tick"
-            d="M793 285 H801"
-            strokeOpacity="0.65"
-          />
-          <path
-            data-part="16-graduation-tick"
-            d="M793 310 H801"
-            strokeOpacity="0.65"
-          />
-          <path
-            data-part="17-graduation-tick"
-            d="M793 335 H801"
-            strokeOpacity="0.65"
-          />
-          <path
-            data-part="18-graduation-tick"
-            d="M793 360 H801"
-            strokeOpacity="0.65"
-          />
-          <path
-            data-part="19-graduation-tick"
-            d="M793 385 H801"
-            strokeOpacity="0.65"
-          />
-          <path
-            data-part="20-graduation-tick"
-            d="M793 410 H801"
-            strokeOpacity="0.65"
-          />
-
-          <path
-            data-part="21-inlet-lip"
-            d="M546 188 L566 226
-               Q605 243 644 226
-               L664 188
-               Q605 169 546 188 Z"
-            fill="var(--paper)"
-            strokeOpacity="0.9"
-          />
-
-          {/* Three discrete incoming payments; no outgoing stream. */}
-          <path
-            data-part="22-payment-sliver"
-            d="M456 151 L486 164 L481 177 L451 164 Z"
-            fill="var(--accent)"
-            stroke="var(--accent)"
-          />
-          <path
-            data-part="23-payment-sliver"
-            d="M502 164 L526 184 L518 195 L494 175 Z"
-            fill="var(--accent)"
-            stroke="var(--accent)"
-          />
-          <path
-            data-part="24-payment-sliver"
-            d="M551 178 L569 203 L558 211 L540 186 Z"
-            fill="var(--accent)"
-            stroke="var(--accent)"
-          />
-
-          {/* Closed outlet; the valve bar crosses the outlet axis. */}
-          <path
-            data-part="25-outlet-stem"
-            d="M536 416 H469
-               V465 H487
-               V434 H536 Z"
+            cx="637"
+            cy="150"
+            rx="190"
+            ry="40"
             fill="var(--surface)"
-            strokeOpacity="0.85"
-          />
-          <path
-            data-part="26-valve-wheel"
-            d="M528 387
-               A18 18 0 1 1 492 387
-               A18 18 0 1 1 528 387 Z
-               M492 387 H528
-               M510 369 V416"
-            fill="var(--paper)"
-            stroke="var(--accent)"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="2"
           />
 
-          {/* Empty cup sits visibly below—not connected to—the outlet. */}
-          <path
-            data-part="28-tapered-cup-body"
-            d="M416 537
-               L433 610
-               Q478 631 523 610
-               L540 537
-               Q478 565 416 537 Z"
-            fill="var(--surface)"
-            strokeOpacity="0.85"
-          />
           <ellipse
-            data-part="27-cup-rim"
-            cx="478"
-            cy="537"
-            rx="62"
-            ry="17"
-            fill="var(--paper)"
-            strokeOpacity="0.95"
+            cx="637"
+            cy="150"
+            rx="151"
+            ry="24"
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="1.5"
           />
+
+          <path
+            d="M447 150V498
+               C447 520.1 532.1 538 637 538
+               C741.9 538 827 520.1 827 498V150
+               M447 498
+               C447 475.9 532.1 458 637 458
+               C741.9 458 827 475.9 827 498"
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="2"
+          />
+
+          {/* Prepayment enters through a visibly flanged inlet. */}
+          <g
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+            strokeLinejoin="miter"
+          >
+            <path d="M284 291C284 335 335 342 380 342H447" />
+            <path d="M407 329V355M420 329V355" />
+            <path d="M431 335L440 342L431 349" />
+          </g>
+
+          <text
+            x="323"
+            y="390"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[24px] tracking-[0.08em]"
+          >
+            PREPAY
+          </text>
+
+          {/* Purchase is the solid lower flow outlet. */}
+          <g
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+            strokeLinejoin="miter"
+          >
+            <path d="M637 538V567Q637 585 619 585H386" />
+            <path d="M624 549H650M624 560H650" />
+            <path d="M400 577L386 585L400 593" />
+          </g>
+
+          <text
+            x="386"
+            y="627"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[24px] tracking-[0.08em]"
+          >
+            PURCHASE
+          </text>
+
+          {/* Dashed recognition branch terminates at a register dial. */}
+          <path
+            d="M827 360H858Q874 360 874 344V249"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+            strokeDasharray="7 7"
+          />
+
+          <rect
+            x="821"
+            y="354"
+            width="12"
+            height="12"
+            fill="var(--surface)"
+            stroke="var(--accent)"
+            strokeWidth="2"
+          />
+
+          <circle
+            cx="874"
+            cy="205"
+            r="44"
+            fill="var(--paper)"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="2"
+          />
+
+          <path
+            d="M847 219A30 30 0 1 1 901 219"
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.25"
+            strokeWidth="1.5"
+          />
+
+          <g
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.4"
+            strokeWidth="1.5"
+          >
+            <path d="M874 171V179" />
+            <path d="M850 181L856 187" />
+            <path d="M898 181L892 187" />
+            <path d="M840 205H848" />
+            <path d="M900 205H908" />
+          </g>
+
+          <path
+            d="M874 205L892 186"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+          />
+          <circle cx="874" cy="205" r="4" fill="var(--accent)" />
+
+          <text
+            x="914"
+            y="405"
+            textAnchor="end"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[24px] tracking-[0.08em]"
+          >
+            BREAKAGE
+          </text>
         </svg>
-      </div>
+      </figure>
 
-      <div className="mt-auto flex shrink-0 items-end justify-between gap-6 border-t border-[var(--border)] pt-5">
-        <p className="font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.1em] text-[var(--ink)]/70">
-          {slide.issueBadge}
-        </p>
+      <footer className="flex h-[80px] shrink-0 flex-col justify-between border-t border-[var(--border)] pt-3">
+        <div className="flex items-baseline justify-between gap-6 font-[var(--font-mono)] text-[20px] leading-[24px]">
+          <span>thefineprint.co</span>
+          {slide.issueBadge && (
+            <span className="tracking-[0.03em] text-[var(--ink)]/70">
+              {slide.issueBadge}
+            </span>
+          )}
+          <span className="shrink-0 tabular-nums text-[var(--accent)]">
+            {page} / {pages}
+          </span>
+        </div>
 
-        {t0 && (
-          <div className="shrink-0 border-l border-[var(--border)] pl-6">
-            <div className="flex items-baseline gap-2 text-[var(--accent)]">
-              {t0.qualifier && (
-                <span className="font-[var(--font-body)] text-[22px]">
-                  {t0.qualifier}
-                </span>
-              )}
-              <span className="font-[var(--font-mono)] text-[40px] font-bold leading-none tabular-nums">
-                {t0.value}
-              </span>
-              {t0.unit && (
-                <span className="font-[var(--font-body)] text-[22px]">
-                  {t0.unit}
-                </span>
-              )}
+        <div className="flex items-baseline justify-between gap-6">
+          <p className="font-[var(--font-body)] text-[22px] leading-[28px] text-[var(--ink)]/70">
+            Conceptual flow—not a segregated reserve.
+          </p>
+
+          {t0 && (
+            <div className="flex shrink-0 items-baseline gap-2 font-[var(--font-mono)] text-[22px] leading-[28px]">
+              {t0.qualifier && <span>{t0.qualifier}</span>}
+              <span className="font-bold tabular-nums">{t0.value}</span>
+              {t0.unit && <span>{t0.unit}</span>}
             </div>
-            <p className="mt-2 font-[var(--font-mono)] text-[20px] leading-snug text-[var(--ink)]/70">
-              {telemetry?.[0]?.label}
-            </p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </footer>
     </section>
   );
 }

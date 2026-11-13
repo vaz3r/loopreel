@@ -9,192 +9,177 @@
       "index": 0,
       "type": "cover",
       "archetype": "monumental-editorial-cover",
-      "kicker": "CONSUMER CONVENIENCE / CORPORATE FINANCING",
-      "headline": "Coffee Convenience. Interest-Free Corporate Funding.",
-      "subheadline": "Prepaid coffee funds Starbucks before your next order arrives.",
-      "issueBadge": "SPECIAL INVESTIGATION · 7 SLIDES",
-      "footer": "The Fine Print · thefineprint.co",
-      "visualStyle": "dark-paper architectural engraving",
-      "layoutTopology": "monumental-editorial-cover",
       "publication": "The Fine Print",
-      "palette": {
-        "paper": "#0D0E12",
-        "ink": "#F1F3F9",
-        "accent": "#FF4D00",
-        "surface": "#161820"
-      },
-      "production": {
-        "canvas": "1080 × 1350",
-        "sharedRules": "Apply this palette throughout. Use 64px condensed headlines, readable editorial body typography, monospace kickers with square indicators, and tabular numerals. Corners are 0px or 2px; borders are 1px ink hairlines. No shadows, pills, thick accent borders, progress bars, or simulated text. Production metadata and SVG instructions are not displayed. Render citation markers as compact source references. Add no unprovided display copy."
-      },
-      "svgBlueprint": "viewBox=\"0 0 952 650\" preserveAspectRatio=\"xMidYMid meet\". Reserve approximately half the canvas for a monumental sectional sculpture: a Starbucks stored-value card tipped toward an industrial cash reservoir, with an empty coffee cup below a closed outlet. Build 28 identifiable elements: chamfered card perimeter, inset perimeter, magnetic stripe, stripe highlight, four registration notches, reservoir shell, upper ellipse, lower ellipse, liquid surface, orange liquid body, sight glass, six graduation ticks, inlet lip, three falling orange payment slivers, outlet stem, valve wheel, cup rim, and tapered cup body. Payment slivers enter the reservoir while nothing reaches the cup. The reservoir is a timing metaphor, not a claimed segregated reserve; use no quantitative fill scale. Do not invent an EMV chip on the Starbucks card. Place the 64px headline above a hairline; finish with a quiet publication ledger.",
-      "platform": "instagram-feed"
+      "website": "thefineprint.co",
+      "kicker": "CONSUMER FINANCE / CONVENIENCE VS. CORPORATE FLOAT",
+      "headline": "Your Rewards. Their Interest-Free Financing.",
+      "subheadline": "Follow prepaid dollars into financing benefits and nonredemption revenue.",
+      "standfirst": "The pitch: **easier payments and more rewarding purchases**.",
+      "issueBadge": "SPECIAL INVESTIGATION · 7 SLIDES",
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 650'. Establish shared tokens: --accent:#FF4D00; --paper:#0D0E12; --surface:#161820; --ink:#F1F3F9; --border:#262938. Construct an original closed-loop gift-card specimen at x=52,y=80,w=350,h=220, rotated -12 degrees around its center. Connect its lower edge through a flanged orange inlet to a cylindrical corporate cash tank centered at x=637,y=325. Tank bounds are x=447–827,y=110–538, with elliptical ends, visible internal fluid, a lower purchase outlet and a separate accounting-recognition branch. The liquid is conceptual, not a measured liability balance or segregated cardholder reserve. Anchor short SVG callouts 'PREPAY', 'PURCHASE' and 'BREAKAGE' to their respective connectors; body explanation remains HTML. Do not depict an EMV chip or contactless capability as a factual feature of the Starbucks gift card. All dark surfaces require visible outlines: structural strokes use var(--ink) at 0.25 opacity and 1.5–2px width; accent pathways use 3px strokes; registration marks use 0.4 opacity. The breakage branch ends at a revenue-register dial rather than a cash outlet, distinguishing accounting recognition from physical cash movement."
     },
     {
       "id": "slide-2",
       "index": 1,
       "type": "belief",
       "archetype": "asymmetric-editorial-cards",
-      "kicker": "WHY IT WORKS",
-      "headline": "Convenience Makes Prepayment Feel Effortless",
-      "subheadline": "The customer benefits are real, not imaginary.",
+      "kicker": "THE REWARDS ENGINE",
+      "headline": "Convenience Keeps You Coming Back",
+      "subheadline": "The customer promise doubles as a business strategy.",
       "items": [
         {
-          "title": "DAILY DRAW",
-          "body": "Enjoy **convenience, rewards and nonexpiring card balances**."
+          "title": "THE PROMISE",
+          "body": "Starbucks markets **easier shopping and rewarding payments**."
         },
         {
-          "title": "FEE PROMISE",
-          "body": "No **activation, service, dormancy or inactivity fees**."
+          "title": "THE OBJECTIVE",
+          "body": "Starbucks explicitly targets **more frequent store visits**."
         }
       ],
-      "footer": "Card terms effective July 24, 2023.",
-      "visualStyle": "asymmetric specimen plates",
+      "visualStyle": "promise-versus-objective",
       "layoutTopology": "asymmetric-editorial-cards",
-      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Position a broad Surface hero panel at left and a smaller Paper ledger panel lower-right, both with 1px borders and square corners. Integrate an enlarged stored-value card behind the first item's typography and a thermal receipt silhouette behind the second. Use 26 structural elements: chamfered card outline, inset edge, magnetic stripe, four corner registration marks, two card-edge glints, receipt perimeter, eight serrated teeth, two feed rollers, roller axle, paper curl, and four optical registration marks. Add one genuine Code 128 barcode encoding TFP, generated with valid start, checksum, and stop symbols; treat it as an editorial specimen, never a usable payment credential. No fake receipt text. Keep all anatomy peripheral to the two short copy blocks.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Create one continuous checkout-and-return mechanism, not two floating icons. At x=65–335,y=80–340, a physical gift card enters a countertop reader with an angled face, card slot, display bezel and tactile keys. The reader connects to an arcing return rail that wraps around a recognizable café entrance at x=585–865,y=70–345. One orange outbound arrow represents the payment interaction; three ink return arrows describe repeated visits without suggesting a measured frequency. Place anchored labels 'PAYMENT' and 'RETURN VISIT' alongside the rail. The storefront has a door, handle, transom, threshold and striped awning, avoiding an empty rectangular building. Keep all explanatory copy in HTML. Use outlined var(--surface) shells, var(--ink) structural strokes at 0.25 opacity, 3px orange focal paths and registration marks at 0.4 opacity. Connect the two bottom editorial sections back to the reader and return rail with terminating leader dots."
     },
     {
       "id": "slide-3",
       "index": 2,
       "type": "anomaly",
       "archetype": "full-height-editorial-split",
-      "kicker": "THE ANOMALY",
-      "headline": "Those Billions Aren’t Bank Deposits",
-      "subheadline": "Two reported liabilities measure more than gift-card cash.​",
-      "asOf": "September 28, 2025",
+      "kicker": "THE ACCOUNTING CATCH",
+      "headline": "That Liability Is Not Cash",
       "items": [
         {
-          "title": "CARD/LOYALTY LIABILITY",
-          "body": "Includes **loyalty obligations**, not just purchased balances.",
-          "metric": {
-            "badge": "$1,751.7",
-            "label": "million"
-          }
+          "title": "BALANCE MIX",
+          "body": "The liability includes **loyalty rewards**, not cards alone."
         },
         {
-          "title": "BROADER CURRENT LIABILITY",
-          "body": "Includes **$177.0 million** Nestlé prepaid-royalty deferred revenue.",
-          "metric": {
-            "badge": "$1,840.6",
-            "label": "million"
-          }
+          "title": "FLOW MIX",
+          "body": "Deferrals include **Stars earned**, not just cash loads."
         }
       ],
-      "visualStyle": "sectional accounting anatomy",
+      "telemetry": [
+        {
+          "badge": "$1,751.7",
+          "label": "million · combined liability · September 28, 2025"
+        },
+        {
+          "badge": "$15,245.8",
+          "label": "million · fiscal 2025 card-and-loyalty deferrals"
+        }
+      ],
+      "visualStyle": "liability-versus-cash",
       "layoutTopology": "full-height-editorial-split",
-      "svgBlueprint": "viewBox=\"0 0 448 370\" preserveAspectRatio=\"xMidYMid meet\". Use a 40/60 split: a sectional financial specimen at left and two compact, hairline-bordered numerical ledgers at right. Draw a disassembled accounting instrument rather than two cash tanks. Its 25 elements comprise a chamfered stored-value card, inset edge, magnetic stripe, five-point loyalty star, star registration ring, royalty-document contour, folded corner, embossed circular seal, three alignment pins, balance-beam arm, fulcrum, two suspension rods, two shallow weighing pans, four fasteners, baseline, and four measurement ticks. Accent the star and document seal to expose obligations beyond purchased balances. Do not size specimens proportionally, add the two reported liabilities, or imply one is a fully nested subset of the other. Align exact metrics on their decimal points.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "Use two coordinated half-width SVG artboards, each viewBox='0 0 448 420'. Left artboard: construct a bound accounting ledger at x=38–410,y=36–330. A gift-card specimen enters one side; a star-shaped loyalty token enters the other. Both terminate at a single ledger binding, establishing that the reported liability combines cards and rewards. Mount '$1,751.7' on an integrated ledger total plate at x=224,y=370; the exact unit, label and date belong in the associated HTML caption. Right artboard: build a mechanical intake register at x=35–413,y=46–328, with one physical card-load inlet and one distinct Stars-earned inlet. Their traces converge on the register, not on a cash reservoir. Anchor '$15,245.8' below its counter housing. Do not assign proportions to either component, because component shares are not supplied. The paired instruments share one visual baseline but no equal-sign connector. Use real short SVG labels 'CARDS', 'REWARDS', 'LOADS' and 'STARS'; never represent ledger text with hatch marks. Structural strokes are 1.5–2px ink at 0.25 opacity; accent convergence traces are 3px."
     },
     {
       "id": "slide-4",
       "index": 3,
       "type": "mechanism",
       "archetype": "vertical-milestone-spine",
-      "kicker": "THE MECHANISM",
-      "headline": "Forgotten Money Becomes Reported Revenue",
-      "subheadline": "Nonexpiration and breakage can coexist without contradiction.​",
+      "kicker": "INSIDE THE TANK",
+      "headline": "Cash Arrives Before The Coffee",
       "items": [
         {
-          "title": "ESTIMATE NONREDEMPTION",
-          "body": "Historical patterns estimate **what customers won’t redeem**."
+          "title": "PAY FIRST",
+          "body": "Your **prepayment fills Starbucks’ cash tank** before fulfillment."
         },
         {
-          "title": "RECOGNIZE PROPORTIONATELY",
-          "body": "**Recognize breakage proportionately** as customers redeem balances."
+          "title": "BUY LATER",
+          "body": "Purchases **draw down balances**; cards never expire."
         },
         {
-          "title": "RESPECT CLAIMS",
-          "body": "Account for **applicable unclaimed-property remittances** when estimating."
+          "title": "RECOGNIZE BREAKAGE",
+          "body": "Expected nonredemption **becomes revenue proportionately with redemptions**."
         }
       ],
-      "footer": "Balances still never expire.",
-      "visualStyle": "accounting-process excavation",
+      "footer": "Accounting reflects required unclaimed-property remittances.",
+      "visualStyle": "prepayment-to-recognition",
       "layoutTopology": "vertical-milestone-spine",
-      "svgBlueprint": "viewBox=\"0 0 952 480\" preserveAspectRatio=\"xMidYMid meet\". Run one continuous 1px vertical spine through three square milestone markers. Place each compact title and finding beside its marker, never inside a card. Opposite the copy, develop three connected views of one receipt-accounting instrument. Use 27 elements: receipt outline, six serrated teeth, two feed rollers, axle, two bearing rings, three square milestone markers, spine, proportional recognition dial, dial needle, four radial ticks, stored-value card perimeter, magnetic stripe, remittance-document contour, folded corner, and circular seal. Orange appears only on the recognition needle and milestone markers. Keep the card contour intact through all stages: accounting recognition must not visually erase a customer's balance. No invented percentages or simulated text.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Place a continuous vertical process spine at x=92,y=32–388, with milestone nodes at y=74,210,346. A compact gift card at x=160,y=38 feeds a cylindrical tank bounded by x=390–650,y=48–337. The top inlet is orange and clearly enters before the purchase outlet. At y=245, the purchase branch runs to a cup at x=790,y=230; pair it with a narrow account-balance gauge showing drawdown without a numerical scale. At y=346, a dashed accounting branch links the redemption mechanism to a revenue-register wheel at x=784,y=345. This is not a literal cash drain: it encodes expected nonredemption recognized proportionately with redemptions. Show the retained prepaid-use zone with an outlined bracket, not an assertion that the entire tank is unredeemed card cash. Short anchored labels are '01', '02', '03', 'CASH IN', 'REDEEM' and 'RECOGNIZE'. Preserve clear separation between solid cash-flow piping, account-balance movement and dashed recognition linkage. All explanatory text belongs in the three HTML milestone rows below."
     },
     {
       "id": "slide-5",
       "index": 4,
       "type": "evidence",
       "archetype": "hero-metric-placard",
-      "kicker": "FORENSIC RECEIPTS",
-      "headline": "Breakage Is Revenue, Not Profit",
-      "subheadline": "Recognition brings no new cash into Starbucks.",
-      "metric": {
-        "badge": "$222.4",
-        "label": "million · Fiscal 2025 breakage revenue"
-      },
-      "asOf": "Year ended September 28, 2025",
+      "kicker": "THE RECEIPTS",
+      "headline": "Revenue Is Not Reported Profit",
+      "subheadline": "Fiscal year ended September 28, 2025.",
+      "telemetry": [
+        {
+          "badge": "$222.4",
+          "label": "million · calculated breakage revenue from expected nonredemption"
+        }
+      ],
       "items": [
         {
           "title": "COMPANY OPERATED",
-          "body": "**$200.4 million** recognized in company-operated-store revenue."
+          "body": "Company-operated stores recognized **$200.4 million** breakage revenue."
         },
         {
           "title": "LICENSED STORES",
-          "body": "**$22.0 million** recognized in licensed-store revenue."
+          "body": "Licensed stores recognized **$22.0 million** breakage revenue."
         }
       ],
-      "visualStyle": "oversized audit placard",
+      "footer": "Disclosed components added—not separately reported profit.",
+      "visualStyle": "breakage-revenue-placard",
       "layoutTopology": "hero-metric-placard",
-      "svgBlueprint": "viewBox=\"0 0 952 440\" preserveAspectRatio=\"xMidYMid meet\". Set $222.4 in 110px accent tabular numerals, with million and the uppercase mono revenue label directly beneath. Present the two disclosed components as a single open addition ledger below, not cards; the hero is their calculated sum. Behind the ledger, construct a thermal audit receipt emerging from a cutaway register. Use 25 structural elements: register upper shell, lower shell, paper slot, two feed rollers, axle, two bearing rings, receipt perimeter, eight serrated teeth, two mounting screws, two dimension endpoints, dimension rule, and two calculation alignment marks. Include a genuine Code 128 barcode encoding TFP2025, with checksum and quiet zones. Do not depict fresh money entering the receipt, a profit margin, or a quantitative reservoir level.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Build a wide thermal accounting receipt occupying x=70–882,y=24–396. Its silhouette has curled upper corners, a lightly tinted paper surface, visible perimeter and a serrated lower cut. Two attached source-entry tabs identify the inputs through HTML captions beneath the artwork; inside the receipt, place the arithmetic as genuine SVG text: '$200.4' at x=150,y=112, '+' at x=407,y=112 and '$22.0' at x=498,y=112. Place the anchored unit 'million' beside the input row. A ruled subtotal line leads to the dominant '$222.4' centered at x=476,y=258, with the anchored unit 'million' below. A precision bracket and registration marks make the total feel measured, not promotional. Add a real variable-width barcode in the lower-left receipt margin and a small 'FY2025' plate in the lower-right. Barcode is decorative, not a purported source-document identifier. This specimen represents calculated revenue arithmetic, not an actual Starbucks receipt or a separately reported profit measure. Structural lines use ink at 0.25 opacity; reserve orange for the plus sign, total underline and one verification mark."
     },
     {
       "id": "slide-6",
       "index": 5,
-      "type": "incentive",
+      "type": "incentives",
       "archetype": "conditional-release-rail",
       "kicker": "FOLLOW THE MONEY",
-      "headline": "Starbucks Gets Your Money First",
-      "subheadline": "Payment arrives before Starbucks fulfills your purchase.",
+      "headline": "Reloads Keep Their Tank Filled",
+      "subheadline": "Starbucks receives financing before fulfilling your prepaid purchases.",
       "items": [
         {
-          "title": "FUNDING ADVANTAGE",
-          "body": "Starbucks receives **prepayment without paying you interest**."
+          "title": "NEXT SCHEDULED RELOAD",
+          "body": "Cancel at least **twenty-four (24) hours** beforehand."
         },
         {
-          "title": "REFUND GATE",
-          "body": "**Refunds restricted**; law or agreement can permit."
+          "title": "COMPLETED LOADS",
+          "body": "This cancellation provision **cannot reverse completed loads**."
         }
       ],
-      "telemetry": [
-        {
-          "badge": "0%",
-          "label": "Cardholder interest"
-        }
-      ],
-      "footer": "Terms effective July 24, 2023.",
-      "visualStyle": "payment-timing engineering plate",
+      "footer": "Legal and contractual refund exceptions remain.",
+      "visualStyle": "reload-deadline-versus-completion",
       "layoutTopology": "conditional-release-rail",
-      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Build two horizontal timing tracks, not progress bars. The upper track carries a stored-value card toward a solid corporate receipt endpoint; the lower track has an open dashed cash-refund gate. Place the supplied terms date on a square-ended mono plate. Use 28 elements: two timing rails, two solid endpoints, four dashed gate segments, card perimeter, inset card edge, magnetic stripe, reservoir shell, upper ellipse, lower ellipse, sight glass, four graduation ticks, valve stem, valve wheel, empty cup rim, tapered cup body, cash-note contour, two note rosettes, and two dimension endpoints. Accent the completed prepayment endpoint; leave the refund gate conditional, not permanently locked. Avoid fabricated elapsed times, automatic-refund promises, or reserve-coverage implications.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Build a horizontal authorization rail at y=228 from x=58 to x=895. A scheduled-reload clock assembly sits at x=180,y=145; an adjustable cancellation gate crosses the rail at x=400; a completed-load ratchet sits at x=638; the rail then feeds a small cylindrical cash tank at x=790–910,y=145–345. Mark the scheduled reload as T at x=638 and the deadline as T − 24 h at x=400, with an anchored dimension bracket between them. Use an open gate and a return branch before the deadline. Beyond the completed-load ratchet, show a solid forward path and a small blocked reverse arrow tied specifically to this cancellation provision—not a universal prohibition on refunds or legal remedies. The tank is schematic, with no invented monetary scale. Render 'T − 24 h', 'T' and 'COMPLETED' as short anchored SVG labels; the exact contractual wording belongs in HTML. Use 3px orange for the release rail and deadline pointer, 1.5–2px ink structure at 0.25 opacity, and clearly outlined surface fills."
     },
     {
       "id": "slide-7",
       "index": 6,
       "type": "verdict",
       "archetype": "full-height-editorial-split",
-      "kicker": "THE VERDICT",
-      "headline": "Retail Funding, Not Unregulated Banking",
-      "subheadline": "Uninsured does not mean stripped of gift-card protections.​",
+      "kicker": "THE REALITY CHECK",
+      "headline": "Real Financing. Not An Unregulated Bank.",
+      "subheadline": "No interest. No FDIC insurance. Consumer-protection laws still apply.",
       "items": [
         {
-          "title": "DEPOSIT MYTH",
-          "body": "Your prepayment **is not a bank deposit**."
+          "title": "REFUND LIMITS",
+          "body": "Generally nonrefundable; **legal and contractual exceptions apply**."
         },
         {
-          "title": "LEGAL FLOOR",
-          "body": "Federal floor: **five years** after issuance/last-load."
+          "title": "EGIFT EXCEPTION",
+          "body": "Unused eGifts: **refunds require the original receipt**."
         }
       ],
-      "footer": "Starbucks balances never expire. No FDIC insurance.",
-      "visualStyle": "card-versus-vault editorial verdict",
+      "footer": "Prepayment buys future purchases—not an interest-bearing deposit.",
+      "visualStyle": "financing-benefit-versus-consumer-rights",
       "layoutTopology": "full-height-editorial-split",
-      "svgBlueprint": "viewBox=\"0 0 448 370\" preserveAspectRatio=\"xMidYMid meet\". Reverse slide 3's composition: use a 60/40 split with open, unboxed verdict typography at left and a dominant comparison engraving at right. No ledger cards. Draw an intact stored-value card in the foreground, separated by an orange architectural cut from a distant bank-vault elevation. Use 28 elements: card perimeter, inset edge, magnetic stripe, four registration notches, vault outer ring, inner ring, combination dial, dial pointer, eight radial ticks, four locking lugs, two hinges, separation cut, and two dimension endpoints. Keep the card intact and the vault neutral; do not use a broken shield, disappearing balance, or government guarantee symbol. The separation distinguishes retail prepayment from insured banking without depicting the product as lawless.",
-      "platform": "instagram-feed"
+      "platform": "instagram-feed",
+      "svgBlueprint": "Use two coordinated half-width SVG artboards, each viewBox='0 0 448 420'. Left artboard: a gift card at x=28,y=40 feeds a cutaway corporate reservoir bounded by x=157–384,y=82–340. Add a small financing-time dial, purchase outlet and retained-use bracket. Do not depict a bank charter, insured vault, FDIC seal or segregated reserve. Anchor short callouts 'NO INTEREST' and 'NO FDIC INSURANCE' to the card account, not to an institution-wide insurance assertion. Right artboard: construct a consumer-rights docket with layered sheets at x=42–300,y=36–350. An unused eGift voucher and original-receipt specimen meet at a hinged review gate at x=305,y=235. An open return arrow leaves the gate to show that exceptions exist, without depicting approval as automatic. The receipt has a serrated edge, variable-width barcode and a real short SVG label 'RECEIPT'. Add a small outlined 'UNUSED' status tab to the eGift specimen. All legal explanations remain HTML. Use visible 1.5–2px ink outlines at 0.25 opacity; orange highlights the financing inlet and the exception-review path, giving the two ideas equal visual legitimacy."
     }
   ]
 }

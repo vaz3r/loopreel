@@ -533,20 +533,10 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
      * "optical-sector-versus-scan-reticle": Circular instrument comparison field with accurate field-of-view arcs, rotation arrows, and resolution badges (viewBox="0 0 448 370" each or 952 420).
    TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 to 5 different layout topologies across the deck. Strictly ban repeating the same card layout across multiple slides!
 
-4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (TANGIBLE SPECIMENS, NO BARE BOXES):
-   - Every slide MUST include an "svgBlueprint" tailored to the story's actual domain, with explicit container-matched viewBoxes (viewBox="0 0 952 420" or viewBox="0 0 448 370"):
-     * For Financial / Corporate Forensics: Identifiable stored-value cards with EMV chip contact pads and magnetic hairlines, thermal cash register receipts with authentic 1D barcodes and serrated edges, bank vault doors with combination dials and locking lugs, fluid level liquidity reservoirs with graduated volumetric markings, asymmetric balance beams.
-     * For Technology / Systems: Silicon die floorplans, bus interconnect traces, multi-rotor drone schematics (rotors, hubs, motor arms), wheeled rover chassis, circular optical fields-of-view (148° sector arcs with lens rings).
-     * For Geopolitical / Policy: Territorial boundary hairlines, maritime transit corridors, radar focal rings, strategic convergence vectors.
-     * For History / Culture: Classical fluted architectural columns with capital, pedestal, and bold accent fracture lines, temple elevations, archaeological excavation grids.
-   - ABSOLUTE BAN: ZERO cheap cartoon clipart and ZERO bare empty rectangles! Every SVG must possess rich internal anatomy (e.g. 15-30 geometric elements including chamfers, pads, dials, conduits, serrations, or strata).
-   - ABSOLUTE BAN: ZERO fake text wireframe paths (never draw parallel horizontal lines or hatching to simulate text).
-   - Uniform scaling only (never preserveAspectRatio="none").
-
-5. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
+4. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
    * ${arcDescription}
 
-6. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
+5. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
    - Maximum 2 items per slide! (Milestone spine: max 3 compact milestones).
    - Total words per slide: STRICTLY 25 to 50 words across the entire slide.
    - Headlines: Maximum 4–6 words.
@@ -554,7 +544,7 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - Card / item body: STRICT 5 TO 8 WORDS MAXIMUM PER ITEM! Every word must be punchy, high-signal, and editorial.
    - Telemetry values: MUST be strictly numerical or signed badge ("$1.8B", "0%", "$222M", "+12%"). Qualifiers belong in label.
 
-Return strictly a JSON array of exactly ${count} slide objects:
+Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL COPY ONLY — DO NOT WRITE SVG BLUEPRINTS):
 [
   {
     "id": "slide-1",
@@ -570,8 +560,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
     "telemetry": [
       { "badge": "$1.8B", "label": "Customer cash held on cards" },
       { "badge": "$222M", "label": "Annual profit from unused balances" }
-    ],
-    "svgBlueprint": "viewBox=\"0 0 952 650\". Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline and micro-coordinates [37°N 122°W]. Geometric editorial linework. No clipart, no flowchart pipes, zero fake text wireframes."
+    ]
   },
   {
     "id": "slide-2",
@@ -590,8 +579,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
       { "badge": "0%", "label": "FDIC deposit protection" }
     ],
     "visualStyle": "asymmetric-editorial-cards",
-    "layoutTopology": "asymmetric-editorial-cards",
-    "svgBlueprint": "viewBox=\"0 0 952 420\". Stack two offset, full-width cards beneath a 64px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart."
+    "layoutTopology": "asymmetric-editorial-cards"
   }
 ]`;
 }
@@ -615,7 +603,7 @@ export function buildStoryDeckUserPrompt(
   const verdict = strategy?.verdict || dossier.verdict || '';
   const metaphor = strategy?.visualMetaphor || dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
-  return `Author the ${count}-slide storyboard, choosing diverse layout topologies and bespoke SVG blueprints for each slide:
+  return `Author the ${count}-slide storyboard, crafting pure editorial copy and assigning diverse layout topologies for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -628,7 +616,7 @@ Hidden Catches: "${catches}"
 Verdict: "${verdict}"
 
 TOPOLOGY DIVERSITY MANDATE:
-- Slide 1: "monumental-editorial-cover" with dominant vector centerpiece (viewBox="0 0 952 650").
+- Slide 1: "monumental-editorial-cover" (broadsheet magazine cover).
 - Slides 2-${count}: Autonomously select AT LEAST 4 to 5 DIFFERENT layout topologies from:
   * "asymmetric-editorial-cards"
   * "hero-metric-placard"
@@ -644,7 +632,7 @@ ${JSON.stringify(dossier.verifiedMetrics || [], null, 2)}
 Quotes:
 ${JSON.stringify(dossier.verifiedQuotes || [], null, 2)}
 
-Output strictly the JSON array of exactly ${count} slide objects. Remember: MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, ZERO WEB UI SHADOWS OR PILLS, AND ARCHITECTURAL SVG BLUEPRINTS!`;
+Output strictly the JSON array of exactly ${count} slide objects. Remember: PURE EDITORIAL COPY ONLY, MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, STRICT NUMERICAL TELEMETRY BADGES, AND ZERO WEB UI SHADOWS OR PILLS!`;
 }
 
 // Fallback for non-article briefs
@@ -732,17 +720,44 @@ CRITICAL VISUAL DESIGN PRINCIPLES:
    - However, standalone vector callouts, numerical badges, degree marks, unit labels, or date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE', 'Dec 16') are encouraged inside SVG <text> elements with clean font classes and coordinates.
    - ABSOLUTE BAN: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
 
+5. STRICT VIEWBOX HEIGHT & VERTICAL CANVAS BUDGET (Anti-Overflow Law):
+   The interior safe area height is strictly 1028px. All slides MUST conform to these viewBox height limits:
+   - Slide 1 (Cover): viewBox="0 0 952 650" (dominant cover specimen; minimal footer metadata).
+   - Slides 2–${count} WITH BOTTOM CARDS OR LEDGER: viewBox MUST BE BETWEEN 952×360 AND 952×420 (e.g. viewBox="0 0 952 380" or viewBox="0 0 952 400").
+     STRICTLY FORBIDDEN: Using a 650px–700px height viewBox when cards or ledger rows are rendered beneath the SVG! A 650px SVG plus cards forces vertical canvas overflow and fails the visual audit!
+   - Half-Width Columns (full-height-editorial-split): viewBox="0 0 448 370" to viewBox="0 0 448 420".
+
 Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
 [
   {
     "slideId": "slide-1",
     "type": "cover",
-    "layoutStructure": "airborne-grounded-editorial-hero",
+    "layoutStructure": "monumental-editorial-cover",
     "svgConcept": {
       "type": "schematic",
-      "description": "viewBox='0 0 952 700'. Two diagonal device glyphs with curved accent trajectory vectors connecting to price plates. 40px safe margins."
+      "description": "viewBox='0 0 952 650'. Imposing geometric stored-value card silhouette or physical specimen with gold EMV chip (6 contact pads), 1px magnetic stripe hairline, fluid liquidity reservoir watermark, and micro-coordinates [37°N 122°W]. 20+ geometric vector elements with layered surface fills and border hairlines.",
+      "elements": ["stored-value-card-silhouette", "emv-contact-pad-grid", "magnetic-stripe-hairline", "micro-coordinates"]
     },
-    "spatialBalanceGuidance": "Headline and subheadline occupy top 240px; SVG centerpiece occupies middle 450px; bottom telemetry ledger occupies bottom 100px."
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[26px]"
+    },
+    "spatialBalanceGuidance": "Header zone occupies top 220px; SVG centerpiece occupies middle 500px; bottom metadata ledger occupies bottom 100px. Fills 90% of vertical canvas."
+  },
+  {
+    "slideId": "slide-2",
+    "type": "editorial",
+    "layoutStructure": "asymmetric-editorial-cards",
+    "svgConcept": {
+      "type": "schematic",
+      "description": "viewBox='0 0 952 420'. Subtle geometric balance-sheet grid with 1px hairlines, crosshair registration marks, and fluid float conduit behind cards. Layered architectural linework.",
+      "elements": ["balance-sheet-grid", "registration-crosshairs", "float-conduit-trace"]
+    },
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[26px]"
+    },
+    "spatialBalanceGuidance": "Header zone 180px; two full-height asymmetric cards occupy remaining 760px using grid-rows-2 with p-8 padding."
   }
 ]`;
 }
@@ -861,6 +876,7 @@ CRITICAL DESIGN & CODING RULES:
    - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
 
 3. Theme & Token Integration:
+   - STRICT NEGATIVE CONSTRAINT: DO NOT declare an inline theme object (e.g. 'const theme = { ... }' or 'const currentBrand = { ... }') and NEVER apply 'style={theme}' or inline style objects! The canvas CSS variables (--ink, --accent, --paper, --surface, --border, --font-headline, --font-body, --font-mono) are injected globally by SlideFrame.
    - Use Tailwind utility classes with CSS variables:
      * text-[var(--ink)] for primary text
      * text-[var(--accent)] or bg-[var(--accent)] for focal points, badges, highlights
@@ -902,6 +918,7 @@ CRITICAL DESIGN & CODING RULES:
    - Outer wrapper signature: className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
    - Multi-card grids: Use 'gap-5' or 'gap-6', card padding 'py-5 px-7' or 'py-6 px-8'.
    - Limit items to 2 or 3 per slide so the larger 24px-28px body text fits effortlessly without overflow.
+   - SVG CONTAINER HEIGHT CONSTRAINT: When an SVG is paired with bottom cards, articles, or ledgers, ALWAYS constrain the SVG's height with 'max-h-[360px]' or 'max-h-[380px]' (e.g. className="block w-full max-h-[380px] min-h-0 text-[var(--ink)]"). Never let an unconstrained 650px tall SVG push bottom cards beyond the 1028px canvas safe area!
    - AutoFit scale MUST remain 1.000 (no scaling needed).
    - Always respect the locked text provided—do not invent new text or exceed word counts.
 
@@ -924,6 +941,10 @@ CRITICAL DESIGN & CODING RULES:
      const t0 = telemetry[0] ? parseMetricBadge(telemetry[0].badge) : null;
      const t1 = telemetry[1] ? parseMetricBadge(telemetry[1].badge) : null;
      CRITICAL: NEVER write 'const telemetry = slide.telemetry?.[0]; ... telemetry?.[0]?.badge;'! That double-indexes, evaluates to undefined, and makes the metric BLANK!
+   - SPLIT ARRAYS & STRING METHODS:
+     * If you do 'const parts = (label ?? "").split(...)', 'parts' is an ARRAY of strings.
+     * Always index explicitly: 'parts[0]', 'parts[1]', 'parts[0]?.toLowerCase()'.
+     * STRICTLY FORBIDDEN: Writing 'parts?.toLowerCase()' or 'const val = parts;'! In JavaScript, an Array has no .toLowerCase() method. Doing so causes fatal runtime crash: 'TypeError: parts.toLowerCase is not a function'.
    - If rendering separate cards, columns, or rows by position, you MUST access items by index:
      * CORRECT:
        const items = slide.items ?? [];
@@ -1053,6 +1074,8 @@ export function buildSingleSlideUserPrompt(
   const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'asymmetric-editorial-cards';
   const chosenStyle = slideData.visualStyle || chosenArchetype;
   const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype';
+  const spatialGuidance = blueprint?.spatialBalanceGuidance || 'Fill 85%-95% of vertical frame using flex-1 min-h-0 and justify-between. Zero dead bottom voids.';
+  const headlineSize = blueprint?.typographyScale?.headlineSize || (chosenArchetype === 'full-height-editorial-split' ? 'text-[44px] to text-[48px]' : 'text-[64px]');
 
   return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
 Assigned Archetype: "${chosenArchetype}"
@@ -1066,7 +1089,10 @@ CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
 - Visual Style: "${chosenStyle}"
 - Layout Topology: "${slideData.layoutTopology || chosenArchetype}"
 - Bespoke Vector SVG: "${chosenSvg}"
+- Spatial Balance Guidance: "${spatialGuidance}"
+- Prescribed Headline Size: "${headlineSize}"
 Follow the assigned archetype blueprint strictly! Do NOT revert to generic identical grey boxes.
+STRICT NEGATIVE CONSTRAINT: Never declare local theme objects (e.g. const theme = ...) or inline styles. Use var(--ink), var(--surface), var(--border), var(--accent).
 
 Brand Context:
 - Publication: "${brand.name}"

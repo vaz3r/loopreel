@@ -168,6 +168,9 @@ export function sanitizeTsxCode(rawCode: string): string {
   // e.g. [guardrails, guardrails] -> [guardrails[0], guardrails[1]]
   // e.g. [items, items, items] -> [items[0], items[1], items[2]]
   code = code.replace(/\[\s*([a-zA-Z0-9_$]+)\s*(?:,\s*\1\s*)+(?:,\s*)?\]/g, (fullMatch, ident) => {
+    if (/^(?:number|string|boolean|any|unknown|never|void|undefined|null|object|symbol|bigint)$/.test(ident)) {
+      return fullMatch;
+    }
     let count = 0;
     return fullMatch.replace(new RegExp(`\\b${ident}\\b(?!\\s*\\[)`, 'g'), () => {
       return `${ident}[${count++}]`;
@@ -204,8 +207,8 @@ export function sanitizeTsxCode(rawCode: string): string {
   code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
   code = code.replace(/\bAccording\s+to\s+(?:the\s+)?(?:article|piece|report|text|source|account),\s*/gi, '');
 
-  // 7. Auto-protect and promote main H1 headline to canonical editorial text-[64px]
-  code = code.replace(/(<h1\b[^>]*\bclassName="[^"]*?)\btext-\[(?:2[0-9]|3[0-9]|4[0-9]|5[0-2])px\]/g, '$1text-[64px]');
+  // 7. Auto-protect and promote main H1 headline to canonical editorial text-[64px] (except deliberate half-width headlines at 44px-48px)
+  code = code.replace(/(<h1\b[^>]*\bclassName="[^"]*?)\btext-\[(?:2[0-9]|3[0-6])px\]/g, '$1text-[64px]');
 
   // 8. Fix unindexed array assignment to metric variables:
   // e.g. const metric = hasQualifier ? remainingWords : firstWord;
@@ -244,6 +247,31 @@ export function sanitizeTsxCode(rawCode: string): string {
       code = code.replace(reg, `${varName}?.$1`);
     }
   }
+
+  // 14. SVG height constraint when paired with bottom cards: prevent vertical overflow
+  if (/<(?:article|div)\b[^>]*\b(?:grid-cols|divide-y|border-t|gap-)\b/.test(code)) {
+    code = code.replace(
+      /(<svg\b[^>]*\bviewBox="0 0 952 (?:5[0-9]{2}|6[0-9]{2}|7[0-9]{2})"[^>]*\bclassName=")([^"]*?)(")/g,
+      (_m, prefix, cls, suffix) => {
+        if (cls.includes('max-h-') || cls.includes('h-[')) return `${prefix}${cls}${suffix}`;
+        return `${prefix}${cls} max-h-[380px]${suffix}`;
+      }
+    );
+  }
+
+  // 15. Fix unindexed string methods called on array variables created by split or ending with Parts/Words/Lines/Tokens
+  code = code.replace(/(\b[a-zA-Z0-9_$]*(?:Parts|Words|Lines|Tokens|List|Segments))\??\.(toLowerCase|toUpperCase|trim|slice|replace|startsWith|endsWith)\b/g, '$1[0]?.$2');
+  const partAssignCounts: Record<string, number> = {};
+  code = code.replace(/(const\s+[a-zA-Z0-9_$]+\s*=\s*)([a-zA-Z0-9_$]*(?:Parts|Words|Lines|Tokens|Segments))\s*;/g, (_m, prefix, arr) => {
+    const idx = partAssignCounts[arr] ?? 0;
+    partAssignCounts[arr] = idx + 1;
+    return `${prefix}${arr}[${idx}] ?? '';`;
+  });
+  // Protect split calls against undefined
+  code = code.replace(/(\b[a-zA-Z0-9_$.?\[\]]+\??\.(?:label|title|body|headline|badge|kicker|text))\??\.split\(/g, '($1 ?? "").split(');
+
+  // 16. Ensure space between metric and unit spans in parseMetricBadge renders
+  code = code.replace(/(<span\b[^>]*\btabular-nums[^>]*>[^<]+<\/span>)\s*(\{unit &&)/g, "$1{' '}$2");
 
   return code;
 }
@@ -626,9 +654,25 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
         type: found?.svgConcept?.type || 'schematic',
         elements: found?.svgConcept?.elements || [],
       },
+      typographyScale: found?.typographyScale,
+      accentPlacement: found?.accentPlacement,
       spatialBalanceGuidance: found?.spatialBalanceGuidance,
     };
   });
+
+  // Attach blueprint svg descriptions and layout structure to deck slides
+  deck.slides = deck.slides.map((s, idx) => {
+    const bp = blueprints[idx];
+    return {
+      ...s,
+      svgBlueprint: bp?.svgConcept?.description || s.svgBlueprint,
+      layoutTopology: bp?.layoutStructure || s.layoutTopology,
+    };
+  });
+
+  // Persist updated deck.json and blueprints.json
+  fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
+  fs.writeFileSync(path.join(templateDir, 'blueprints.json'), JSON.stringify(blueprints, null, 2), 'utf-8');
 
   // ==========================================================================
   // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)

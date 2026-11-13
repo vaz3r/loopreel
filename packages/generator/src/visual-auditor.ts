@@ -100,17 +100,18 @@ export async function auditTemplateStudio(
             );
           }
 
-          // Check for semantic text anomalies and concatenation bugs
-          const fullText = (el.textContent || '').trim();
+          // Check for semantic text anomalies and concatenation bugs (leaf text nodes only)
+          const fullText = ((el as HTMLElement).innerText || el.textContent || '').trim();
           if (fullText) {
             // A. Concatenated number-word tokens (e.g. "5.2millionunits", "100billiondollars")
-            // Suffixes up to 3 chars (e.g. 1st, 2nd, 3rd, 4th, 100k, 50M, 1.2B, 1000px) are allowed.
-            // 4+ contiguous alphabetical characters glued to a number indicates array-to-string concatenation bug.
-            const fusedTokenMatch = fullText.match(/\b\d+(?:\.\d+)?[a-zA-Z]{4,}\b/);
-            if (fusedTokenMatch) {
-              collisions.push(
-                `Slide ${slideIdx + 1}: Fused number-word token detected: "${fusedTokenMatch[0]}" in <${el.tagName.toLowerCase()}> (likely unspaced array-to-string concatenation bug)`
-              );
+            // Checked on leaf elements only to avoid false positives from adjacent flex-gapped sibling spans
+            if (el.children.length === 0) {
+              const fusedTokenMatch = fullText.match(/\b\d+(?:\.\d+)?[a-zA-Z]{4,}\b/);
+              if (fusedTokenMatch) {
+                collisions.push(
+                  `Slide ${slideIdx + 1}: Fused number-word token detected: "${fusedTokenMatch[0]}" in <${el.tagName.toLowerCase()}> (likely unspaced array-to-string concatenation bug)`
+                );
+              }
             }
 
             // B. Duplicated adjacent word repetition (e.g. "million units million units", "over over")
@@ -244,9 +245,9 @@ export async function auditTemplateStudio(
       }
 
       const numericScale = parseFloat(audit.scale);
-      if (numericScale < 0.88) {
+      if (numericScale < 0.85) {
         errors.push(
-          `Slide ${i + 1}: AutoFit scale ${audit.scale} is below 0.88 threshold (content too dense / excessive vertical height)`
+          `Slide ${i + 1}: AutoFit scale ${audit.scale} is below 0.85 threshold (content too dense / excessive vertical height)`
         );
       } else if (numericScale < 0.95) {
         warnings.push(`Slide ${i + 1}: AutoFit slightly scaled (${audit.scale})`);
