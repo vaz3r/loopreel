@@ -1,0 +1,200 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "starbucks-gift-card-bank-how-cus",
+  "domain": "thefineprint.co",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "archetype": "monumental-editorial-cover",
+      "publication": "The Fine Print",
+      "kicker": "CONSUMER FINANCE / THE COFFEE FLOAT",
+      "headline": "Your Unspent Money Finances Starbucks",
+      "subheadline": "The promise: **convenient, rewarding payments**. The mechanism: customer prepayments.",
+      "issueBadge": "FINANCIAL AUTOPSY · 7 SLIDES",
+      "telemetry": [
+        {
+          "badge": "0%",
+          "label": "Cardholder interest"
+        }
+      ],
+      "footer": "thefineprint.co",
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "designSystem": {
+        "canvas": "1080 × 1350",
+        "palette": {
+          "paper": "#0D0E12",
+          "ink": "#F1F3F9",
+          "accent": "#FF4D00",
+          "surface": "#161820",
+          "border": "#44464E"
+        },
+        "typography": "Condensed editorial headlines; readable sans-serif bodies; monospace kickers and tabular numerals. Bold anchors render as actual bold.",
+        "geometry": "64px safe margins, 0px corners, 1px hairlines, square indicators. No shadows, pills, progress bars or thick accent borders.",
+        "production": "Apply throughout. Word budgets cover visible editorial copy, not blueprint instructions. Render citation markers as discreet linked references."
+      },
+      "svgBlueprint": "viewBox=\"0 0 952 650\" preserveAspectRatio=\"xMidYMid meet\". Occupy 50% of the canvas with a monumental stored-value-card specimen. Construct a sharp rectangular surface at x=126 y=100 width=700 height=420; separate its lower edge into three offset architectural strata, suggesting a forensic section through prepaid value. One vermilion magnetic-stripe hairline crosses the upper third. Add sparse measurement ticks and four square registration marks, never invented coordinates. Above: square-dot monospace kicker, 64px condensed headline, 1px divider. Below: clean publication and interest ledger. No clipart, arrows, conduits, hatching or simulated text.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "belief",
+      "archetype": "asymmetric-editorial-cards",
+      "kicker": "THE REASSURANCE",
+      "headline": "Convenience Makes Prepayment Feel Harmless",
+      "subheadline": "Card and value never expire. Cash access differs.",
+      "items": [
+        {
+          "title": "THE PROMISE",
+          "body": "**No activation, service, dormancy or inactivity fees**."
+        },
+        {
+          "title": "THE LIMIT",
+          "body": "Cash redemption restricted; **legal exceptions still apply**."
+        }
+      ],
+      "footer": "thefineprint.co",
+      "visualStyle": "contract-specimen-asymmetry",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Place a dominant 580×310 surface panel at x=0 y=20 and a secondary 330×220 paper panel at x=622 y=170. Give each a 1px hairline perimeter and square corners. Behind them, expose the outline of a single oversized stored-value card, interrupted by the panels as though its terms are being dissected. One magnetic-stripe rule and sparse perimeter measurement ticks establish the financial specimen. Set the promise large in the hero panel; isolate the cash restriction in the lower ledger. No additional SVG text, decorative text lines, arrows or shadows.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "anomaly",
+      "archetype": "full-height-editorial-split",
+      "kicker": "MIXED OBLIGATIONS",
+      "headline": "The Headline Float Mixes Obligations",
+      "subheadline": "The $1,840.6 million current line also mixes obligations.",
+      "items": [
+        {
+          "title": "YEAR-END BALANCE",
+          "body": "**Cards plus loyalty**, not exclusively customer cash.",
+          "badge": "$1,751.7",
+          "label": "Million dollars"
+        },
+        {
+          "title": "ANNUAL DEFERRALS",
+          "body": "**Activations, reloads and Stars** aren't all cash.",
+          "badge": "$15,245.8",
+          "label": "Million dollars / fiscal 2025"
+        }
+      ],
+      "footer": "September 28, 2025 · thefineprint.co",
+      "visualStyle": "balance-sheet-section",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "viewBox=\"0 0 448 370\" preserveAspectRatio=\"xMidYMid meet\". Use a 40/60 split: architectural section left, two tightly edited ledger entries right. Build two overlapping rectangular liability slabs at x=38 y=54 width=292 height=184 and x=110 y=132 width=292 height=184. Separate their shared edge with a vermilion hairline to expose mixed accounting categories. Shapes are explicitly conceptual, not proportional amounts or an additive comparison. A single vertical 1px divider separates illustration and typography. Keep exact figures unabridged in tabular type; put million-dollar units directly beneath. No cash-reserve implication, proportional bars or invented component shares.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanism",
+      "archetype": "vertical-milestone-spine",
+      "kicker": "BREAKAGE ACCOUNTING",
+      "headline": "Never Expires. Still Becomes Revenue.",
+      "items": [
+        {
+          "title": "ESTIMATE NONREDEMPTION",
+          "body": "Historical patterns estimate **balances unlikely to redeem**."
+        },
+        {
+          "title": "RECOGNIZE PROPORTIONATELY",
+          "body": "**Recognize proportionately** as other card balances redeem."
+        },
+        {
+          "title": "PRESERVE DISTINCTIONS",
+          "body": "Recognition **doesn't expire balances**; unclaimed-property remittances matter.​"
+        }
+      ],
+      "footer": "Revenue recognition ≠ balance cancellation · thefineprint.co",
+      "visualStyle": "accounting-stratigraphy",
+      "layoutTopology": "vertical-milestone-spine",
+      "svgBlueprint": "viewBox=\"0 0 952 480\" preserveAspectRatio=\"xMidYMid meet\". Draw one continuous 1px vertical examination spine at x=70 from y=34 to y=442, with square markers at y=78, 240 and 402. Align the three findings at x=112. Behind the far-right margin, show three detached rectangular cross-sections of the same stored-value card: intact outline, exposed accounting layer, intact contractual perimeter. Only the middle accounting layer receives accent color; the final perimeter remains unbroken. Markers are reading anchors, not dated events. No connecting arrows, process pipes, fake transaction marks or implied expiration.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "evidence",
+      "archetype": "conditional-release-rail",
+      "kicker": "JANUARY 2024 / DISPUTED CLAIM",
+      "headline": "Spending Access Isn't Cash Access",
+      "subheadline": "Washington Consumer Protection Coalition challenged app reloads.",
+      "items": [
+        {
+          "title": "THE COMPLAINT",
+          "body": "**$5 increments; $10 minimum** allegedly trapped balances."
+        },
+        {
+          "title": "STARBUCKS RESPONDS",
+          "body": "**Spend remainder**, then pay difference cash in-store."
+        }
+      ],
+      "footer": "Allegation, not adjudicated finding · thefineprint.co",
+      "visualStyle": "contested-access-rails",
+      "layoutTopology": "conditional-release-rail",
+      "svgBlueprint": "viewBox=\"0 0 952 420\" preserveAspectRatio=\"xMidYMid meet\". Arrange two horizontal evidence tracks at y=106 and y=304, separated by generous negative space rather than cards. The complaint track contains a stored-value-card outline with an open dashed boundary, signifying a contested restriction. The response track terminates at a solid square beside a card perimeter with an open corner, signifying the stated in-store spending option—not cash withdrawal. Use 1px rules without arrowheads; place the date in a sharp rectangular plate. Keep both parties equally legible. No locked-padlock icon, quantified captivity graphic or suggestion that the complaint established liability.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "beneficiary",
+      "archetype": "hero-metric-placard",
+      "kicker": "THE BENEFICIARY",
+      "headline": "Starbucks Books Revenue From Nonredemption",
+      "subheadline": "Breakage is revenue, not separately audited profit.",
+      "telemetry": [
+        {
+          "badge": "$222.4",
+          "label": "Million dollars / calculated fiscal 2025 breakage"
+        }
+      ],
+      "items": [
+        {
+          "title": "COMPANY OPERATED",
+          "body": "**$200.4 million** recognized as company-operated store revenue."
+        },
+        {
+          "title": "LICENSED STORES",
+          "body": "**$22.0 million** recognized as licensed store revenue."
+        }
+      ],
+      "footer": "thefineprint.co",
+      "visualStyle": "breakage-revenue-placard",
+      "layoutTopology": "hero-metric-placard",
+      "svgBlueprint": "viewBox=\"0 0 952 440\" preserveAspectRatio=\"xMidYMid meet\". Set $222.4 in 110px accent-colored tabular numerals, with its million-dollar and fiscal-year label immediately below. Under the numeral, draw a single straight-edged 800px accounting beam divided into adjacent segments: 720.86px for company-operated revenue and 79.14px for licensed revenue, calculated from 200.4 and 22.0. Use ink and accent outlines with surface fill, square ends and no progress-track background. Position the two exact component figures beneath their respective sections. A 1px dimension bracket spans the total. This is a revenue composition, never a profit or cash-reserve graphic.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "archetype": "full-height-editorial-split",
+      "kicker": "THE VERDICT",
+      "headline": "Retail Float, Not A Bank",
+      "subheadline": "Customer prepayments finance Starbucks without paying customers interest.",
+      "items": [
+        {
+          "title": "FINANCING ADVANTAGE",
+          "body": "Cash arrives first; **fulfillment still costs Starbucks**.​"
+        },
+        {
+          "title": "LEGAL REALITY",
+          "body": "**No FDIC insurance** doesn't erase consumer-protection law."
+        }
+      ],
+      "footer": "thefineprint.co",
+      "visualStyle": "closed-autopsy-verdict",
+      "layoutTopology": "full-height-editorial-split",
+      "svgBlueprint": "viewBox=\"0 0 448 370\" preserveAspectRatio=\"xMidYMid meet\". Reverse slide 3's hierarchy: dedicate 60% to a dominant reconstructed stored-value-card elevation and 40% to the verdict. Draw one intact card perimeter at x=24 y=48 width=400 height=258, with its previously separated accounting strata now visible through a narrow central sectional opening. Keep the external contractual boundary continuous. A vermilion vertical examination rule stops at the card's edges; it is not a border accent on text. Set the two findings as open typography separated by one 1px horizontal ledger rule, not repeated cards. No bank-building silhouette, insurance shield, arrows or decorative numeric labels.",
+      "platform": "instagram-feed"
+    }
+  ]
+}

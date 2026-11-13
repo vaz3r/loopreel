@@ -11,11 +11,14 @@ import {
   type NarrativeDossier,
   type SlideDesignBlueprint,
   type NarrativeIntelligence,
+  type StoryStrategy,
   buildNarrativeIntelligenceSystemPrompt,
   buildNarrativeIntelligenceUserPrompt,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
   buildArticleBrandUserPrompt,
+  buildStoryStrategySystemPrompt,
+  buildStoryStrategyUserPrompt,
   buildStoryDeckSystemPrompt,
   buildStoryDeckUserPrompt,
   buildVisualBlueprintSystemPrompt,
@@ -24,38 +27,6 @@ import {
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
 } from './prompt.js';
-
-export function getDeterministicArchetypeSequence(count: number): string[] {
-  const n = Math.max(4, Math.min(14, count));
-  const bodyPool = [
-    'asymmetric-editorial-cards',
-    'hero-metric-placard',
-    'vertical-milestone-spine',
-    'full-height-editorial-split',
-    'three-row-verification-ledger',
-  ];
-
-  const sequence: string[] = ['monumental-editorial-cover'];
-
-  for (let i = 1; i < n - 1; i++) {
-    const candidate = bodyPool[(i - 1) % bodyPool.length]!;
-    if (sequence[i - 1] === candidate) {
-      const alt = bodyPool[i % bodyPool.length]!;
-      sequence.push(alt);
-    } else {
-      sequence.push(candidate);
-    }
-  }
-
-  // Final slide: verdict / takeaway diptych (ensure not equal to previous)
-  const prev = sequence[sequence.length - 1];
-  const finalCandidate = prev === 'asymmetric-editorial-cards'
-    ? 'full-height-editorial-split'
-    : 'asymmetric-editorial-cards';
-  sequence.push(finalCandidate);
-
-  return sequence;
-}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_ROOT = path.resolve(__dirname, '../templates');
@@ -380,60 +351,6 @@ async function runConcurrentPool<T, R>(
   return results;
 }
 
-export function getDomainSvgBlueprints(themeText: string): string[] {
-  const lower = themeText.toLowerCase();
-  const isFinance = /card|bank|float|interest|cash|dollar|fund|revenue|profit|asset|liability|balance|escrow|fintech|invest|corporate|seattle/i.test(lower);
-  const isTech = /chip|silicon|die|gpu|cpu|ai|model|llm|software|hardware|compute|latency|server|network|cloud|drone|robot/i.test(lower);
-  const isGeo = /geopolitic|military|territor|maritime|defense|war|treaty|border|corridor|soviet|sanction/i.test(lower);
-
-  if (isFinance) {
-    return [
-      'viewBox="0 0 952 650". Dark paper field. In the center, an imposing geometric stored-value card silhouette in dark surface and ink with a 1px vermilion magnetic stripe hairline, micro-coordinates [37°N 122°W], and subtle foil stamp registration crosshairs. Geometric editorial linework. No clipart, no flowchart pipes, zero fake text wireframes.',
-      'viewBox="0 0 952 420". Stack two offset, full-width cards beneath a 64px headline. Subtle geometric balance-sheet grid with 1px hairlines and crosshair registration marks behind the cards. Clean graphic precision, not a flowchart.',
-      'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card. Exactly two content groups; no decorative chart axes.',
-      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper; each panel contains its date/tag, short title, and body only.',
-      'viewBox="0 0 952 440". Beneath a 64px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with corporate float ledger strata and 1px hairlines. Right: paper with verified badges. Bottom full-width rule holds closing takeaway.',
-      'viewBox="0 0 952 420". Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges. Clean technical registration marks.',
-      'viewBox="0 0 952 420". Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle balance-sheet strata boundary mark.',
-    ];
-  }
-
-  if (isTech) {
-    return [
-      'viewBox="0 0 952 650". Dark paper field. In the center, an imposing geometric silicon die section silhouette in dark surface and ink with 1px bus interconnect hairlines, micro-stepped cache strata, and registration crosshairs. Clean engineering linework. Zero fake text wireframes, zero flowchart pipes.',
-      'viewBox="0 0 952 420". Stack two offset cards. Subtle 1px bus traces and logic-gate coordinate ticks behind the cards. High precision technical linework, not a flowchart.',
-      'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Accent fracture line cutting across 1px dimension hairlines. Clean editorial layout, zero charts.',
-      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Precision micro-ticks and bus routing hairlines.',
-      'viewBox="0 0 952 440". Split diptych: Left dark surface with architectural wafer section silhouette and 1px hairlines. Right paper with verified specs.',
-      'viewBox="0 0 952 420". Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03], 1px dividers, and right-aligned metric badges.',
-      'viewBox="0 0 952 420". Final verdict diptych with closing takeaway and clean technical boundary marks.',
-    ];
-  }
-
-  if (isGeo) {
-    return [
-      'viewBox="0 0 952 650". Dark paper field. In the center, abstract territorial demarcation hairlines and maritime transit vectors in dark surface and accent ink. Zero cartoon maps, zero fake text wireframes.',
-      'viewBox="0 0 952 420". Stack two offset cards with subtle strategic coordinate crosshairs and 1px hairlines behind the cards.',
-      'viewBox="0 0 952 440". Massive metric placard with 1px border and focal vector accent. Clean editorial linework.',
-      'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine with registration ticks.',
-      'viewBox="0 0 952 440". Split diptych with strategic convergence axes on dark surface and verified policy ledger on paper.',
-      'viewBox="0 0 952 420". Clean 3-row tabular verification ledger with monospace indexes [01], [02], [03] and metric badges.',
-      'viewBox="0 0 952 420". Final verdict diptych with closing takeaway and signature publication wordmark.',
-    ];
-  }
-
-  // Historical / Architectural / General
-  return [
-    'viewBox="0 0 952 650". Dark paper field, accent kicker badge, large format condensed headline. Below, one monumental abstract architectural plinth silhouette in dark surface and ink, with an intense accent fracture. Pure sculptural vector artwork. No diagrams, arrows, or callout boxes.',
-    'viewBox="0 0 952 420". Stack two offset, full-width cards beneath a 64px headline. A faint topographic contour curve becomes a rigid accent boundary behind the upper card. Restrained architectural silhouette.',
-    'viewBox="0 0 952 440". Dark paper field with a full-width surface metric placard. Render massive numeral in ink, with attribution below. An accent fracture interrupts the placard’s lower border, leading into one compact consequence card.',
-    'viewBox="0 0 952 480". Stacked milestone timeline on a clean 1px hairline spine. Use accent broken segments for catalysts; clean surface milestone panels. Background dark paper.',
-    'viewBox="0 0 952 440". Beneath a 64px headline, divide the body into two tall panels separated by an accent discontinuity. Left: dark surface with a fragmented architectural elevation. Right: paper with a quiet contour arc and verified badge.',
-    'viewBox="0 0 952 420". Clean 3-row tabular ledger divided by 1px hairlines with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.',
-    'viewBox="0 0 952 420". Final asymmetric verdict diptych with monumental closing takeaway, signature publication wordmark, and subtle architectural boundary mark.',
-  ];
-}
-
 export async function runTemplatePipeline(options: PipelineOptions): Promise<PipelineResult> {
   const brief = options.brief || {};
   const provider = options.provider || 'copilot';
@@ -451,10 +368,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   }
 
   // ==========================================================================
-  // PASS 1: CONTENT & HOOK INTELLIGENCE (SPECIALIZED CONTENT / HOOK ANALYSIS)
+  // PASS 1: INVESTIGATIVE FACT-CHECKER & CONTENT DOSSIER (ZERO HALLUCINATION)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 1/5: Analyzing Content & Formulating Hook Intelligence...');
-  options.onProgress?.('Analyzing Content & Hook Intelligence', 1, 5);
+  console.log('[Pipeline] >>> Pass 1/7: Analyzing Content & Formulating Ground Truth Dossier...');
+  options.onProgress?.('Extracting Ground Truth & Content Intelligence', 1, 7);
 
   const narrativeResponse = await llm.generateJSON(
     buildNarrativeIntelligenceSystemPrompt(),
@@ -476,10 +393,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   const dossier: NarrativeDossier = narrative;
 
   // ==========================================================================
-  // PASS 2: VISUAL CONFIG & BRAND THEME (THEME, STYLES & OPTIMAL PRESET)
+  // PASS 2: CREATIVE DIRECTOR ART DIRECTION & BRAND IDENTITY
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 2/5: Creating Visual Theme, Styles & Optimal Config...');
-  options.onProgress?.('Creating Visual Theme & Config', 2, 5);
+  console.log('[Pipeline] >>> Pass 2/7: Establishing Bespoke Brand Identity & Publication Masthead...');
+  options.onProgress?.('Establishing Editorial Masthead & Design System', 2, 7);
 
   const defaultSlug = (narrative.articleTitle || article?.title || brief.name || 'story')
     .toLowerCase()
@@ -576,25 +493,51 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     rawBrandKit.narrativePreset ||
     'storytelling';
 
-  const targetSlideCount: number =
+    const targetSlideCount: number =
     typeof options.targetSlideCount === 'number'
       ? options.targetSlideCount
       : typeof rawBrandKit.targetSlideCount === 'number'
       ? rawBrandKit.targetSlideCount
       : 7;
 
-  // Programmatically assign non-repeating archetypes
-  const assignedArchetypes = getDeterministicArchetypeSequence(targetSlideCount);
+  // ==========================================================================
+  // PASS 3: EDITORIAL STRATEGIST (HOOK & TENSION FORMULA)
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 3/7: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
+  options.onProgress?.('Formulating Narrative Strategy & Tension Formula', 3, 7);
+
+  let strategy: StoryStrategy;
+  try {
+    const strategyResponse = await llm.generateJSON(
+      buildStoryStrategySystemPrompt(narrativePreset),
+      buildStoryStrategyUserPrompt(dossier, article),
+      0.5
+    );
+    strategy = extractJson<StoryStrategy>(strategyResponse.text);
+    console.log(`[Pipeline] Pass 3 complete: Hook "${strategy.hookHeadline}", Promise "${strategy.valuePromise}".`);
+  } catch (err: any) {
+    console.warn(`[Pipeline] Pass 3 note: ${err.message}, using dossier defaults.`);
+    strategy = {
+      hookHeadline: narrative.hookHeadline || 'The Investigation',
+      valuePromise: narrative.valuePromise || 'Essential systemic findings',
+      kicker: narrative.kicker || 'SPECIAL REPORT',
+      coreConflict: narrative.coreConflict ? `${narrative.coreConflict.claim} vs ${narrative.coreConflict.reality}` : 'Underlying corporate trade-offs',
+      hiddenCatch: (narrative.hiddenCatches || []).join('; ') || 'Critical regulatory loopholes',
+      verdict: narrative.verdict || 'The permanent shift in the landscape',
+      keyMetrics: (narrative.verifiedMetrics || []).map((m) => ({ value: m.value, label: m.label, context: m.context || '' })),
+      keyQuotes: (narrative.verifiedQuotes || []).map((q) => ({ quote: q.quote, speaker: q.speaker, role: q.role || '' })),
+    };
+  }
 
   // ==========================================================================
-  // PASS 3: SLIDES CONTENT & SPATIAL ELEMENTS JSON (CONTENT + CONFIG -> STORYBOARD)
+  // PASS 4: SENIOR COPY EDITOR (DYNAMIC STORYBOARD WITH CONTENT-DRIVEN TOPOLOGY)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 3/5: Authoring ${targetSlideCount}-Slide Content & Elements JSON (${narrativePreset})...`);
-  options.onProgress?.('Authoring Slides Content JSON', 3, 5);
+  console.log(`[Pipeline] >>> Pass 4/7: Senior Copy Editor Authoring ${targetSlideCount}-Slide Storyboard...`);
+  options.onProgress?.('Authoring Storyboard & Editorial Copy', 4, 7);
 
   const deckResponse = await llm.generateJSON(
     buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-    buildStoryDeckUserPrompt(narrative, brand, targetSlideCount, assignedArchetypes),
+    buildStoryDeckUserPrompt(dossier, brand, targetSlideCount),
     0.6
   );
   let allSlides = extractJson<SlideData[]>(deckResponse.text);
@@ -603,60 +546,22 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     allSlides = (allSlides as any)?.slides || [];
   }
 
-  // Normalize slide schema and enforce strict editorial word budgets & visual archetypes
+  // Normalize slide schema and ensure unique IDs, indexes, and archetypes
   const activePlatform = options.platform || 'instagram-feed';
 
   allSlides = allSlides.map((s, idx) => {
-    // 1. Programmatically assigned or content-driven layout topology
-    const chosenTopology = s.layoutTopology || s.visualStyle || assignedArchetypes[idx] || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
+    const chosenTopology = s.layoutTopology || s.visualStyle || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
     const chosenStyle = s.visualStyle || chosenTopology;
-    const archetype = assignedArchetypes[idx] || chosenTopology;
-
-    // 2. Clamp and sanitize items body copy (Strict 10-word ceiling for mobile scannability)
-    let sanitizedItems = s.items;
-    if (Array.isArray(sanitizedItems)) {
-      sanitizedItems = sanitizedItems.map((item: any) => {
-        if (typeof item === 'object' && item !== null && typeof item.body === 'string') {
-          const rawWords = item.body.trim().split(/\s+/);
-          if (rawWords.length > 10) {
-            console.log(`[Pipeline] Trimming verbose item body on slide ${idx + 1} from ${rawWords.length} words to 10 words.`);
-            item.body = rawWords.slice(0, 10).join(' ') + '…';
-          }
-        }
-        return item;
-      });
-    }
-
-    // 3. Clamp headlines to max 8 words
-    let sanitizedHeadline = s.headline;
-    if (sanitizedHeadline) {
-      const headlineWords = sanitizedHeadline.trim().split(/\s+/);
-      if (headlineWords.length > 8) {
-        console.log(`[Pipeline] Trimming verbose headline on slide ${idx + 1} from ${headlineWords.length} to 8 words.`);
-        sanitizedHeadline = headlineWords.slice(0, 8).join(' ');
-      }
-    }
-
-    // 4. Clamp subheadline to max 12 words
-    let sanitizedSubheadline = s.subheadline;
-    if (sanitizedSubheadline) {
-      const subheadlineWords = sanitizedSubheadline.trim().split(/\s+/);
-      if (subheadlineWords.length > 12) {
-        sanitizedSubheadline = subheadlineWords.slice(0, 12).join(' ');
-      }
-    }
+    const archetype = s.archetype || chosenTopology;
 
     return {
       ...s,
       id: s.id || `slide-${idx + 1}`,
       index: typeof s.index === 'number' ? s.index : idx,
-      type: s.type || (s as any).archetype || 'editorial',
+      type: s.type || (s as any).archetype || (idx === 0 ? 'cover' : 'editorial'),
       archetype,
       layoutTopology: chosenTopology,
       visualStyle: chosenStyle,
-      headline: sanitizedHeadline,
-      subheadline: sanitizedSubheadline,
-      items: sanitizedItems,
       platform: activePlatform,
     };
   });
@@ -668,7 +573,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     platform: activePlatform,
     slides: allSlides,
   };
-  console.log(`[Pipeline] Pass 3 complete: Storyboard authored with ${deck.slides.length} slides.`);
+  console.log(`[Pipeline] Pass 4 complete: Storyboard authored with ${deck.slides.length} slides.`);
 
   // Create isolated template folder in apps/generator/templates/<slug>/
   const templateDir = path.join(TEMPLATES_ROOT, slug);
@@ -688,10 +593,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
   // ==========================================================================
-  // PASS 4: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINT)
+  // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (BESPOKE SVG & SPATIAL BLUEPRINTS)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 4/5: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...`);
-  options.onProgress?.('Designing Bespoke Layout & SVG Blueprints', 4, 5);
+  console.log(`[Pipeline] >>> Pass 5/7: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...`);
+  options.onProgress?.('Designing Bespoke Layout & SVG Infographic Blueprints', 5, 7);
 
   let blueprints: SlideDesignBlueprint[] = [];
   try {
@@ -703,25 +608,21 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const parsedBlueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
     if (Array.isArray(parsedBlueprints) && parsedBlueprints.length > 0) {
       blueprints = parsedBlueprints;
-      console.log(`[Pipeline] Pass 4 complete: ${blueprints.length} bespoke slide visual blueprints generated.`);
+      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} bespoke slide visual blueprints generated.`);
     }
   } catch (err: any) {
-    console.warn(`[Pipeline] Pass 4 blueprint generation note: ${err.message}`);
+    console.warn(`[Pipeline] Pass 5 blueprint generation note: ${err.message}`);
   }
-
-  // Ensure every slide has a rich blueprint
-  const domainThemeContext = `${brand.domain} ${brand.name} ${brand.vibe || ''} ${narrative.editorialTheme || ''} ${narrative.visualMetaphor || ''} ${narrative.articleTitle || ''} ${narrative.hookHeadline || ''}`;
-  const domainBlueprints = getDomainSvgBlueprints(domainThemeContext);
 
   blueprints = deck.slides.map((s, idx) => {
     const found = blueprints.find((b) => b.slideId === s.id || b.slideId === `slide-${idx + 1}`);
-    const fallbackSvg = s.svgBlueprint || domainBlueprints[idx % domainBlueprints.length] || 'Bespoke editorial vector concept';
+    const svgDescription = found?.svgConcept?.description || s.svgBlueprint || 'Bespoke editorial vector infographic matching slide thesis';
     return {
       slideId: s.id,
       type: s.type,
       layoutStructure: found?.layoutStructure || s.layoutTopology || s.archetype || 'asymmetric-editorial-cards',
       svgConcept: {
-        description: found?.svgConcept?.description || fallbackSvg,
+        description: svgDescription,
         type: found?.svgConcept?.type || 'schematic',
         elements: found?.svgConcept?.elements || [],
       },
@@ -730,13 +631,13 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   });
 
   // ==========================================================================
-  // PASS 5: SLIDES FINAL FORM SYNTHESIS & AUDIT (REACT + SVG CODEGEN & AUDIT)
+  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)
   // ==========================================================================
   const concurrency = options.concurrency || 3;
   console.log(
-    `[Pipeline] >>> Pass 5/5: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
+    `[Pipeline] >>> Pass 6/7: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
   );
-  options.onProgress?.('Synthesizing Slides Final Form', 5, 5);
+  options.onProgress?.('Synthesizing Slide React Components', 6, 7);
 
   const slideTasks = deck.slides.map((slideData, i) => async () => {
     const slideNumber = i + 1;
@@ -749,7 +650,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filePath = path.join(slidesDir, filename);
 
     console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Pass 5/5: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
+    options.onProgress?.(`Pass 6/7: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
@@ -809,8 +710,11 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   const slideExports = await runConcurrentPool(slideTasks, concurrency, (task) => task());
 
-  // Assemble template package entry point (index.ts)
-  console.log('[Pipeline] >>> Pass 4: Assembling template package entry point (index.ts)...');
+  // ==========================================================================
+  // PASS 7: TEMPLATE ENTRYPOINT ASSEMBLY & TYPESCRIPT COMPILER VERIFICATION
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 7/7: Assembling template package entry point (index.ts) and verifying TypeScript integrity...');
+  options.onProgress?.('Assembling Template Entry Point', 7, 7);
   const indexImports = slideExports
     .map((s) => `import ${s.componentName} from './slides/${s.filename.replace('.tsx', '')}';`)
     .join('\n');
@@ -837,8 +741,8 @@ export default pkg;
 
   fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 
-  console.log(`[Pipeline] >>> Pass 4: Verifying TypeScript compiler integrity for template ${slug}...`);
-  options.onProgress?.('Verifying TypeScript & Visual Integrity', 4, 4);
+  console.log(`[Pipeline] >>> Pass 7/7: Verifying TypeScript compiler integrity for template ${slug}...`);
+  options.onProgress?.('Verifying Template Integrity & TypeScript Verification', 7, 7);
 
   const initialCheck = validateTemplateTypeScript(templateDir);
   if (initialCheck.valid) {
@@ -878,7 +782,7 @@ export default pkg;
     }
   }
 
-  options.onProgress?.('Complete', 15, 15);
+  options.onProgress?.('Complete', 7, 7);
   return {
     templateSlug: slug,
     templateDir,

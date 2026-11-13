@@ -518,20 +518,19 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
    - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
 
-3. MANDATORY EDITORIAL PUBLICATION ARCHETYPE CATALOG:
-   You will be provided with the exact pre-assigned archetype sequence for this deck. You MUST match each slide's assigned archetype:
-   - "monumental-editorial-cover" (Slide 1 EXCLUSIVELY):
+3. AUTONOMOUS DYNAMIC ARCHETYPE & TOPOLOGY SELECTION:
+   For EACH slide, you MUST choose a bespoke archetype, visual style, and spatial layout topology that best dramatizes what that slide proves:
+   - Slide 1 (EXCLUSIVELY): "monumental-editorial-cover"
      Broadsheet magazine cover with monospace kicker + square accent dot, monumental 64px condensed headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (45%-55% canvas, viewBox="0 0 952 650"), and a clean footer metadata ledger. NEVER use this on Slide 2+!
-   - "asymmetric-editorial-cards":
-     High-contrast asymmetric multi-panel layout (1 hero panel + 1 secondary ledger card, MAX 2 cards total) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art (viewBox="0 0 952 420").
-   - "hero-metric-placard":
-     Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (viewBox="0 0 952 440").
-   - "vertical-milestone-spine":
-     Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy 5-8 word impact bullets (MAX 3 milestones total, viewBox="0 0 952 480").
-   - "full-height-editorial-split":
-     50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section (viewBox="0 0 448 370"); the other half is editorial typography with crisp 1px bordered ledger cards.
-   - "three-row-verification-ledger":
-     Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
+   - Slides 2–${count}: Autonomously select from rich editorial archetypes:
+     * "asymmetric-editorial-cards": High-contrast asymmetric multi-panel layout (1 hero panel + 1 secondary ledger card) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art (viewBox="0 0 952 420").
+     * "hero-metric-placard": Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (viewBox="0 0 952 440").
+     * "vertical-milestone-spine": Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy impact bullets (MAX 3 milestones total, viewBox="0 0 952 480").
+     * "full-height-editorial-split": 50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section (viewBox="0 0 448 370"); the other half is editorial typography with crisp 1px bordered ledger cards.
+     * "three-row-verification-ledger": Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
+     * "conditional-release-rail": Stacked horizontal cadence tracks with solid shipping endpoints vs open dashed authorization gates and date plates (viewBox="0 0 952 420").
+     * "optical-sector-versus-scan-reticle": Circular instrument comparison field with accurate field-of-view arcs, rotation arrows, and resolution badges (viewBox="0 0 448 370" each or 952 420).
+   TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 to 5 different layout topologies across the deck. Strictly ban repeating the same card layout across multiple slides!
 
 4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO FAKE TEXT):
    - Every slide MUST include an "svgBlueprint" tailored to the story's actual domain, with explicit container-matched viewBoxes (viewBox="0 0 952 420" or viewBox="0 0 448 370"):
@@ -600,8 +599,7 @@ Return strictly a JSON array of exactly ${count} slide objects:
 export function buildStoryDeckUserPrompt(
   dossier: NarrativeDossier,
   brand: BrandTokens,
-  targetSlideCount = 7,
-  assignedArchetypes: string[] = []
+  targetSlideCount = 7
 ): string {
   const count = Math.max(4, Math.min(14, targetSlideCount));
   const hook = dossier.hookHeadline || 'Editorial Investigation';
@@ -614,12 +612,7 @@ export function buildStoryDeckUserPrompt(
   const verdict = dossier.verdict || '';
   const metaphor = dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
-  const archetypeInstructions = assignedArchetypes.length > 0
-    ? `MANDATORY PRE-ASSIGNED ARCHETYPE SEQUENCE (YOU MUST MATCH EACH SLIDE'S ARCHETYPE EXACTLY):
-${assignedArchetypes.map((arch, idx) => `  * Slide ${idx + 1}: "${arch}"`).join('\n')}`
-    : `MANDATORY RULE: Slide 1 is exclusively "monumental-editorial-cover". Slides 2-${count} must use distinct non-repeating archetypes from: asymmetric-editorial-cards, hero-metric-placard, vertical-milestone-spine, full-height-editorial-split, three-row-verification-ledger.`;
-
-  return `Author the ${count}-slide storyboard and bespoke abstract SVG blueprints for each slide:
+  return `Author the ${count}-slide storyboard, choosing diverse layout topologies and bespoke SVG blueprints for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -631,7 +624,17 @@ Core Conflict: "${conflict}"
 Hidden Catches: "${catches}"
 Verdict: "${verdict}"
 
-${archetypeInstructions}
+TOPOLOGY DIVERSITY MANDATE:
+- Slide 1: "monumental-editorial-cover" with dominant vector centerpiece (viewBox="0 0 952 650").
+- Slides 2-${count}: Autonomously select AT LEAST 4 to 5 DIFFERENT layout topologies from:
+  * "asymmetric-editorial-cards"
+  * "hero-metric-placard"
+  * "vertical-milestone-spine"
+  * "full-height-editorial-split"
+  * "three-row-verification-ledger"
+  * "conditional-release-rail"
+  * "optical-sector-versus-scan-reticle"
+Strictly ban repeating the same card layout across multiple slides!
 
 Verified Data & Metrics:
 ${JSON.stringify(dossier.verifiedMetrics || [], null, 2)}
@@ -709,9 +712,10 @@ CRITICAL VISUAL DESIGN PRINCIPLES:
    - The visual graphic or infographic centerpiece must occupy 40%–60% of the frame, giving the editorial copy strong visual support.
    - BAN crude rectangular bar chart blocks and tiny isolated wireframe icons! All graphics must be unified, cohesive vector illustrations with deliberate viewBox coordinates.
 
-4. Pure SVG Geometry (Zero Text in SVG):
-   - All titles, descriptions, and numbers belong exclusively in HTML/Tailwind.
-   - SVG must contain strictly geometric shapes (<path>, <rect>, <circle>, <line>, <g>, <ellipse>). NEVER put <text> or <tspan> inside <svg>!
+4. Vector Typography & Diagrams in SVG:
+   - Body copy, titles, descriptions, and paragraphs belong strictly in HTML/Tailwind.
+   - However, standalone vector callouts, numerical badges, degree marks, unit labels, or date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE', 'Dec 16') are encouraged inside SVG <text> elements with clean font classes and coordinates.
+   - ABSOLUTE BAN: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
 
 Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
 [
@@ -823,7 +827,7 @@ CRITICAL DESIGN & CODING RULES:
      * "vertical-milestone-spine": render a continuous 1px hairline spine with milestone nodes.
      * "hero-metric-placard": render a massive tabular numeral (96px–110px) with attribution cards and dimension hairlines.
      * "three-row-verification-ledger": render a clean 3-row tabular ledger divided by 1px hairlines with monospace indexes.
-   - Pure SVG geometry only: ZERO clipart, ZERO <text> or <tspan> tags inside SVG! All copy, titles, and metrics belong exclusively in HTML/Tailwind.
+   - Pure SVG geometry & vector callouts: ZERO clipart! All body copy, titles, and descriptions belong in HTML/Tailwind. Standalone vector numerical callouts, degree marks, unit labels, or compact date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE') are permitted and encouraged in SVG <text> elements with clean font classes and coordinates. BANNED: Never draw fake text wireframe paths (d="M...H...") or long multi-sentence paragraphs in SVG.
    - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
 
 3. Theme & Token Integration:
