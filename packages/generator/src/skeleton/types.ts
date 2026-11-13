@@ -76,5 +76,20 @@ export interface TemplatePackage {
   slides: SlideComponent[];
 }
 
+export function InlineEmphasis({ text }: { text?: string }): React.ReactElement | null {
+  if (!text) return null;
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return React.createElement(
+    React.Fragment,
+    null,
+    ...parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return React.createElement('strong', { key: i, className: 'font-semibold text-[var(--ink)] opacity-100' }, part.slice(2, -2));
+      }
+      return part;
+    })
+  );
+}
+
 export * from './badge.js';
 

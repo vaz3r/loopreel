@@ -519,25 +519,28 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
    - FORBIDDEN: Drop shadows ('shadow-lg', 'shadow-md'), pill badges on kickers/cards ('rounded-full'), thick left accent borders ('border-l-[6px]'), HTML progress bars with rounded indicators.
    - REQUIREMENT: Sharp architectural 0px/2px corners, crisp 1px hairline borders ('border border-[var(--border)]'), monospace kickers with square indicator dots, and pure tabular telemetry.
 
-3. AUTONOMOUS DYNAMIC ARCHETYPE & TOPOLOGY SELECTION:
-   For EACH slide, you MUST choose a bespoke archetype, visual style, and spatial layout topology that best dramatizes what that slide proves:
-   - Slide 1 (EXCLUSIVELY): "monumental-editorial-cover"
-     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 64px condensed headline, 1px divider hairline, dominant abstract architectural SVG vector centerpiece (45%-55% canvas, viewBox="0 0 952 650"), and a clean footer metadata ledger. NEVER use this on Slide 2+!
-   - Slides 2–${count}: Autonomously select from rich editorial archetypes:
-     * "asymmetric-editorial-cards": High-contrast asymmetric multi-panel layout (1 hero panel + 1 secondary ledger card) with sharp 0px/2px corners, 1px hairlines, and background architectural vector line art (viewBox="0 0 952 420").
-     * "hero-metric-placard": Massive tabular numeral (96px-110px) in accent color, uppercase mono metric label, and an architectural abstract SVG dimension rule or rupture (viewBox="0 0 952 440").
-     * "vertical-milestone-spine": Continuous 1px vertical hairline spine with square milestone markers, monospace timeline tags, and punchy impact bullets (MAX 3 milestones total, viewBox="0 0 952 480").
-     * "full-height-editorial-split": 50/50 or 60/40 vertical split: one half is a dominant abstract architectural vector elevation or tectonic section (viewBox="0 0 448 370"); the other half is editorial typography with crisp 1px bordered ledger cards.
-     * "three-row-verification-ledger": Clean 3-row tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], 2-word labels, 5-8 word findings with bold anchors, and right-aligned metric badges.
-     * "conditional-release-rail": Stacked horizontal cadence tracks with solid shipping endpoints vs open dashed authorization gates and date plates (viewBox="0 0 952 420").
-     * "optical-sector-versus-scan-reticle": Circular instrument comparison field with accurate field-of-view arcs, rotation arrows, and resolution badges (viewBox="0 0 448 370" each or 952 420).
-   TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 to 5 different layout topologies across the deck. Strictly ban repeating the same card layout across multiple slides!
+3. MANDATORY 7-SLIDE ARCHETYPE SEQUENCE CONTRACT (ASC):
+   To guarantee radical swipe diversity and eliminate layout fatigue, EVERY deck must follow this exact editorial sequence:
+   - Slide 1: "monumental-editorial-cover"
+     Broadsheet magazine cover with monospace kicker + square accent dot, monumental 64px headline, subheadline, issue badge, and hero telemetry. Dominant abstract architectural SVG vector centerpiece (viewBox="0 0 952 560"). ZERO body cards!
+   - Slide 2: "claim-vs-reality-diptych"
+     High-tension editorial confrontation. Top PR claim quote in serif italics vs bottom dark forensic reality box stamped with accent badge. ZERO SVG (pure typography)!
+   - Slide 3: "full-height-editorial-split"
+     50/50 vertical diptych. Left column (448px) = 46px headline + 2 stacked narrative cards; Right column (448px) = full-height 720px tall vertical cutaway SVG (viewBox="0 0 448 720")!
+   - Slide 4: "hero-metric-placard"
+     Monumental 110px tabular numeral in HTML commanding the page + uppercase mono metric label + punchy takeaway. ZERO SVG (the number is the hero graphic)!
+   - Slide 5: "systemic-mechanism-flow"
+     Wide horizontal flow SVG (viewBox="0 0 952 340") depicting 3 sequential stations + 3 step callout cards aligned directly below.
+   - Slide 6: "three-row-verification-ledger"
+     Clean institutional tabular ledger divided by 1px hairlines ('divide-y divide-[var(--border)]') with monospace indexes [01], [02], [03], findings with bold anchors, and right badges. ZERO SVG!
+   - Slide 7: "editorial-verdict-playbook"
+     Actionable 2-choice decision matrix ("Option A" vs "Option B") + closing authoritative verdict seal.
 
 4. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
    * ${arcDescription}
 
 5. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
-   - Maximum 2 items per slide! (Milestone spine: max 3 compact milestones).
+   - Maximum 2 items per slide (Slide 5 flow and Slide 6 ledger: exactly 3 items; Slide 1: 0 items; Slide 4: 1 item).
    - Total words per slide: STRICTLY 25 to 50 words across the entire slide.
    - Headlines: Maximum 4–6 words.
    - Subheadlines: Maximum 6–10 words.
@@ -551,35 +554,120 @@ Return strictly a JSON array of exactly ${count} slide objects (PURE EDITORIAL C
     "index": 0,
     "type": "cover",
     "archetype": "monumental-editorial-cover",
-    "kicker": "CONSUMER FINANCE / EXPOSED",
-    "headline": "The $1.8 Billion Coffee Bank",
-    "subheadline": "How unspent gift card balances created an unregulated, interest-free corporate float.",
+    "kicker": "FORENSIC INVESTIGATION",
+    "headline": "The $4.2 Billion Seat Monopoly",
+    "subheadline": "How airlines sell 115% capacity and profit from calculated mathematical no-show margins.",
     "visualStyle": "monumental-editorial-cover",
     "layoutTopology": "monumental-editorial-cover",
-    "issueBadge": "SPECIAL INVESTIGATION · ${count} SLIDES",
+    "issueBadge": "EXECUTIVE AUDIT · ${count} SLIDES",
     "telemetry": [
-      { "badge": "$1.8B", "label": "Customer cash held on cards" },
-      { "badge": "$222M", "label": "Annual profit from unused balances" }
+      { "badge": "$4.2B", "label": "Annual overbooking margin" },
+      { "badge": "400%", "label": "Federal cash penalty cap" }
     ]
   },
   {
     "id": "slide-2",
     "index": 1,
     "type": "belief",
-    "archetype": "asymmetric-editorial-cards",
-    "kicker": "THE ILLUSION",
-    "headline": "Convenience Hides The Tradeoff",
-    "subheadline": "Customers pay cash before purchasing a single item.",
+    "archetype": "claim-vs-reality-diptych",
+    "kicker": "THE CONVENTIONAL MYTH",
+    "headline": "The PR Pitch vs. The Mathematical Reality",
+    "subheadline": "Airlines frame overbooking as an efficiency savings passed on to travelers.",
+    "claim": {
+      "title": "THE CORPORATE POSITION",
+      "body": "Overbooking keeps ticket prices affordable by compensating for inevitable no-shows."
+    },
+    "reality": {
+      "title": "THE FORENSIC REALITY",
+      "body": "A calculated revenue engine where bumped seats generate **pure statistical margin** with zero liability risk.",
+      "badge": "FORENSIC AUDIT"
+    },
+    "visualStyle": "claim-vs-reality-diptych",
+    "layoutTopology": "layout-claim-reality"
+  },
+  {
+    "id": "slide-3",
+    "index": 2,
+    "type": "mechanism",
+    "archetype": "full-height-editorial-split",
+    "kicker": "SYSTEM ARCHITECTURE",
+    "headline": "Poisson Yield Curves",
+    "subheadline": "Algorithms balance bumping penalties against unsold seat losses in real time.",
     "items": [
-      { "title": "WHAT YOU THINK", "body": "Gift cards are **convenient digital cash** for coffee." },
-      { "title": "WHAT IT ACTUALLY IS", "body": "An **unregulated interest-free loan** to Starbucks." }
+      { "title": "HISTORICAL NO-SHOWS", "body": "Routes average an expected **9.2% cancellation rate** on peak business flights." },
+      { "title": "ASYMMETRIC MARGIN", "body": "Selling 15 extra seats nets **$4,500 upside** against a **$1,200 penalty risk**." }
     ],
+    "visualStyle": "full-height-editorial-split",
+    "layoutTopology": "layout-split-diptych"
+  },
+  {
+    "id": "slide-4",
+    "index": 3,
+    "type": "telemetry",
+    "archetype": "hero-metric-placard",
+    "kicker": "REGULATORY THRESHOLD",
+    "headline": "The 400% Payout Cap",
+    "subheadline": "Federal law mandates aggressive cash penalties for involuntary bumps.",
     "telemetry": [
-      { "badge": "$0", "label": "Interest paid to cardholders" },
-      { "badge": "0%", "label": "FDIC deposit protection" }
+      { "badge": "400%", "label": "Cash compensation multiplier for delays exceeding 2 hours" }
     ],
-    "visualStyle": "asymmetric-editorial-cards",
-    "layoutTopology": "asymmetric-editorial-cards"
+    "items": [
+      { "title": "THE VOUCHER TRAP", "body": "Carriers push **$800 travel credits** before disclosing your right to **$1,550 cash**." }
+    ],
+    "footer": "14 CFR § 250.5 Federal Airline Consumer Protections.",
+    "visualStyle": "hero-metric-placard",
+    "layoutTopology": "hero-metric-placard"
+  },
+  {
+    "id": "slide-5",
+    "index": 4,
+    "type": "system",
+    "archetype": "systemic-mechanism-flow",
+    "kicker": "OPERATIONAL SEQUENCE",
+    "headline": "The Involuntary Bump Pipeline",
+    "subheadline": "How automated airline algorithms triage candidates before boarding starts.",
+    "items": [
+      { "title": "CHECK-IN GATE", "body": "Timestamp assigns default priority tier." },
+      { "title": "FARE CLASS FILTER", "body": "Basic Economy tickets routed to bump pool." },
+      { "title": "GATE AUCTION", "body": "Vouchers escalate until volunteers surrender seats." }
+    ],
+    "visualStyle": "systemic-mechanism-flow",
+    "layoutTopology": "layout-grid-3"
+  },
+  {
+    "id": "slide-6",
+    "index": 5,
+    "type": "ledger",
+    "archetype": "three-row-verification-ledger",
+    "kicker": "AUDIT LEDGER",
+    "headline": "Three Buried Contract Rules",
+    "subheadline": "Contract of Carriage provisions carriers hope you never read.",
+    "items": [
+      { "index": "01", "title": "CHECK-IN CUTOFF", "body": "Missing the **45-minute bag drop deadline** forfeits all denied boarding rights.", "badge": "RULE 14" },
+      { "index": "02", "title": "PAYMENT METHOD", "body": "Airlines must pay **cash or check immediately at the gate**, not delayed travel credits.", "badge": "CFR 250" },
+      { "index": "03", "title": "DOWNGAUGE EXCEPTION", "body": "Aircraft swaps for safety reasons **exempt carriers from cash liability**.", "badge": "SECTION 7" }
+    ],
+    "visualStyle": "three-row-verification-ledger",
+    "layoutTopology": "layout-ledger"
+  },
+  {
+    "id": "slide-7",
+    "index": 6,
+    "type": "verdict",
+    "archetype": "editorial-verdict-playbook",
+    "kicker": "EXECUTIVE PLAYBOOK",
+    "headline": "The Gate Counter Confrontation",
+    "subheadline": "How to maximize leverage when a flight announces an involuntary bump.",
+    "items": [
+      { "title": "OPTION A: TAKE THE DEAL", "body": "Volunteer only if vouchers exceed **$1,500+ with confirmed seat** on next departure." },
+      { "title": "OPTION B: FORCE INVOLUNTARY", "body": "Never volunteer. Demand **400% cash payout up to $1,550** immediately." }
+    ],
+    "verdict": {
+      "title": "THE GOLDEN RULE",
+      "takeaway": "Volunteering waives federal rights. Always force an involuntary denied boarding."
+    },
+    "visualStyle": "editorial-verdict-playbook",
+    "layoutTopology": "editorial-verdict-playbook"
   }
 ]`;
 }
@@ -603,7 +691,7 @@ export function buildStoryDeckUserPrompt(
   const verdict = strategy?.verdict || dossier.verdict || '';
   const metaphor = strategy?.visualMetaphor || dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
-  return `Author the ${count}-slide storyboard, crafting pure editorial copy and assigning diverse layout topologies for each slide:
+  return `Author the ${count}-slide storyboard according to the Mandatory 7-Slide Archetype Sequence Contract (ASC):
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
@@ -615,24 +703,21 @@ Core Conflict: "${conflict}"
 Hidden Catches: "${catches}"
 Verdict: "${verdict}"
 
-TOPOLOGY DIVERSITY MANDATE:
-- Slide 1: "monumental-editorial-cover" (broadsheet magazine cover).
-- Slides 2-${count}: Autonomously select AT LEAST 4 to 5 DIFFERENT layout topologies from:
-  * "asymmetric-editorial-cards"
-  * "hero-metric-placard"
-  * "vertical-milestone-spine"
-  * "full-height-editorial-split"
-  * "three-row-verification-ledger"
-  * "conditional-release-rail"
-  * "optical-sector-versus-scan-reticle"
-Strictly ban repeating the same card layout across multiple slides!
+MANDATORY ARCHETYPE SEQUENCE CONTRACT (ASC):
+- Slide 1: "monumental-editorial-cover" (Title, Kicker, Subheadline, Issue Badge, Hero Telemetry; NO body cards).
+- Slide 2: "claim-vs-reality-diptych" (claim vs reality confrontation; ZERO SVG).
+- Slide 3: "full-height-editorial-split" (50/50 vertical diptych; 2 items on left, 720px tall cutaway on right).
+- Slide 4: "hero-metric-placard" (Dominant 110px HTML number in telemetry[0] + 1 takeaway item; ZERO SVG).
+- Slide 5: "systemic-mechanism-flow" (3 sequential pipeline items).
+- Slide 6: "three-row-verification-ledger" (3 tabular findings with [01]-[03] indices and right badges; ZERO SVG).
+- Slide 7: "editorial-verdict-playbook" (2 comparative choices Option A vs Option B + closing verdict takeaway).
 
 Verified Data & Metrics:
 ${JSON.stringify(dossier.verifiedMetrics || [], null, 2)}
 Quotes:
 ${JSON.stringify(dossier.verifiedQuotes || [], null, 2)}
 
-Output strictly the JSON array of exactly ${count} slide objects. Remember: PURE EDITORIAL COPY ONLY, MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, STRICT NUMERICAL TELEMETRY BADGES, AND ZERO WEB UI SHADOWS OR PILLS!`;
+Output strictly the JSON array of exactly ${count} slide objects following the ASC schema. Remember: PURE EDITORIAL COPY ONLY, MAX 8 WORDS PER CARD BODY WITH **BOLD ANCHORS**, STRICT NUMERICAL TELEMETRY BADGES, AND ZERO WEB UI SHADOWS OR PILLS!`;
 }
 
 // Fallback for non-article briefs
@@ -681,51 +766,34 @@ export function buildVisualBlueprintSystemPrompt(targetSlideCount = 7): string {
 Your task is to plan the bespoke visual layout architecture and detailed vector SVG infographic concept for each slide in an editorial carousel deck (${count} slides).
 
 CRITICAL VISUAL DESIGN PRINCIPLES:
-1. Bespoke Editorial Information Design (Tangible Specimens & Infographics - NEVER Bare Rectangles):
-   - Slide 1 (Cover): Dominant visual centerpiece occupying 45%–55% of the frame (e.g. diagonal dual trajectories with price plates, fluted column elevation section, physical EMV chip stored-value card specimen, circular bank vault door, or hardware schematic).
-   - Slides 2–${count}: Each slide MUST have a tailored visual architecture depicting concrete, recognizable physical or technical artifacts matching its content:
-     * For Financial & Corporate Forensics:
-       - Physical payment / gift card with gold EMV microchip (6 contact pads), contactless wave arcs, embossed numbers, and magnetic stripe.
-       - Thermal cash register receipt specimen with authentic barcode stripes (1px to 5px widths) and serrated cut edge.
-       - Heavy circular bank vault door with radiating locking lugs, combination dial ticks, and central wheel.
-       - Fluid liquidity reservoir tank with graduated volumetric capacity ticks ($0 to $1.8B), inlet wallet pipe, float retention zone, and breakage drainage trap.
-       - Asymmetric balance beam scale with triangular fulcrum tipped by corporate float.
-     * For Technology & Systems:
-       - Schematic multi-rotor drone with motor arms, rotor hubs, 4 propeller ellipses, and camera gimbal.
-       - Wheeled rover robot with chassis, lens mast, and treaded wheels.
-       - Circular optical camera sector arc (148° wedge, lens circles, LED sensor marks).
-       - Silicon die floorplans, bus interconnect traces, and latency benchmark scales.
-     * For History, Politics & Architecture:
-       - Classical Corinthian or Doric fluted column with base, capital, and jagged accent fracture line.
-       - Harbor breakwater, maritime coastline contours, or archaeological basilica floorplans.
-     * For Timelines & Sequences: Horizontal release tracks with authorization gates, or continuous vertical hairline spines with beveled milestone panels.
-     * For Metrics & Placards: Massive tabular numerals with attribution cards, registration crosshairs, and 1px dimension hairlines.
-   - ABSOLUTE BAN: ZERO bare empty rectangles! Every SVG blueprint must instruct the engineer to construct at least 15–30 detailed vector elements depicting the specimen's internal anatomy.
+1. ARCHETYPE ASSET ALLOCATION CONTRACT (ELIMINATE WIREFRAME FATIGUE):
+   Never force an SVG onto every slide! The greatest editorial publications balance high-density graphics with bold, breathing typographic spreads:
+   - Slide 1 (Cover: "monumental-editorial-cover"):
+     Dominant monumental visual centerpiece (viewBox="0 0 952 560") occupying the center frame between header and issue badge. Layered vector elements depicting the core physical or systemic artifact (e.g., microchip die, aircraft fuselage cross-section, balance sheet reservoir, radar azimuth).
+   - Slide 2 (Debunking: "claim-vs-reality-diptych"):
+     PURE TYPOGRAPHIC TENSION. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! Pass 6 will render an authoritative high-contrast serif quote box vs dark reality container.
+   - Slide 3 (System Deep-Dive: "full-height-editorial-split"):
+     Full-Height Vertical Cutaway SVG (viewBox="0 0 448 720") rendered exclusively in the right 50% column. High-density vertical technical elevation, stacked architecture layers, or longitudinal cross-section.
+   - Slide 4 (Hero Metric: "hero-metric-placard"):
+     MASSIVE 110PX HTML NUMERAL DOMINATING CANVAS. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! The numeral itself is the hero graphic.
+   - Slide 5 (Sequence: "systemic-mechanism-flow"):
+     Wide Horizontal Flow SVG (viewBox="0 0 952 340") depicting 3 sequential numbered stations connected by pipeline trajectories.
+   - Slide 6 (Evidence: "three-row-verification-ledger"):
+     INSTITUTIONAL TABULAR LEDGER. Must output svgConcept: { "type": "none", "description": "none" }. DO NOT GENERATE AN SVG! Pass 6 will render the crisp hairline-separated data ledger.
+   - Slide 7 (Verdict: "editorial-verdict-playbook"):
+     Compact Decision Fork SVG (viewBox="0 0 952 220") or subtle branching pathways, or svgConcept: { "type": "none", "description": "none" }.
 
-2. Visual Contrast & Tonal Depth:
-   - STRICT BAN on invisible dark-on-dark fills (never use #141418 on #0A0A0C without visible strokes).
-   - Use layered architectural linework:
+2. Visual Contrast & Tonal Depth (For slides with SVGs):
+   - STRICT BAN on hollow 1px wireframes! Every SVG must use solid surface fills to create depth:
      * Structural bounds & hairlines: stroke="var(--border)" or stroke="var(--ink)" strokeOpacity="0.25" with strokeWidth="1.5" or "2".
      * Tonal surface fills: fill="var(--surface)" or fill="var(--ink)" fillOpacity="0.06".
      * Focal gestures & trajectories: stroke="var(--accent)" strokeWidth="2.5" to "3.5", or fill="var(--accent)".
      * Registration marks: crosshairs, corner ticks, and coordinate indices with strokeOpacity="0.4".
 
-3. Space Balance & Composition:
-   - Content must organically fill 80%–95% of the vertical canvas height.
-   - The visual graphic or infographic centerpiece must occupy 40%–60% of the frame, giving the editorial copy strong visual support.
-   - BAN crude rectangular bar chart blocks and tiny isolated wireframe icons! All graphics must be unified, cohesive vector illustrations with deliberate viewBox coordinates.
-
-4. Vector Typography & Diagrams in SVG:
+3. Vector Typography & Diagrams in SVG:
    - Body copy, titles, descriptions, and paragraphs belong strictly in HTML/Tailwind.
-   - However, standalone vector callouts, numerical badges, degree marks, unit labels, or date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE', 'Dec 16') are encouraged inside SVG <text> elements with clean font classes and coordinates.
+   - Standalone vector callouts, numerical badges, degree marks, unit labels, or date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE', 'Dec 16') are encouraged inside SVG <text> elements with clean font classes and coordinates.
    - ABSOLUTE BAN: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
-
-5. STRICT VIEWBOX HEIGHT & VERTICAL CANVAS BUDGET (Anti-Overflow Law):
-   The interior safe area height is strictly 1028px. All slides MUST conform to these viewBox height limits:
-   - Slide 1 (Cover): viewBox="0 0 952 650" (dominant cover specimen; minimal footer metadata).
-   - Slides 2–${count} WITH BOTTOM CARDS OR LEDGER: viewBox MUST BE BETWEEN 952×360 AND 952×420 (e.g. viewBox="0 0 952 380" or viewBox="0 0 952 400").
-     STRICTLY FORBIDDEN: Using a 650px–700px height viewBox when cards or ledger rows are rendered beneath the SVG! A 650px SVG plus cards forces vertical canvas overflow and fails the visual audit!
-   - Half-Width Columns (full-height-editorial-split): viewBox="0 0 448 370" to viewBox="0 0 448 420".
 
 Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
 [
@@ -735,29 +803,101 @@ Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
     "layoutStructure": "monumental-editorial-cover",
     "svgConcept": {
       "type": "schematic",
-      "description": "viewBox='0 0 952 650'. Imposing geometric stored-value card silhouette or physical specimen with gold EMV chip (6 contact pads), 1px magnetic stripe hairline, fluid liquidity reservoir watermark, and micro-coordinates [37°N 122°W]. 20+ geometric vector elements with layered surface fills and border hairlines.",
-      "elements": ["stored-value-card-silhouette", "emv-contact-pad-grid", "magnetic-stripe-hairline", "micro-coordinates"]
+      "description": "viewBox='0 0 952 560'. Imposing geometric system centerpiece with layered surface fills (fill='var(--surface)'), 1.5px hairlines, accent focal trajectories, and micro-coordinates. 20+ geometric vector elements with architectural depth.",
+      "elements": ["primary-silhouette", "structural-elevation", "accent-trajectories", "micro-coordinates"]
     },
     "typographyScale": {
       "headlineSize": "text-[64px]",
       "subtitleSize": "text-[26px]"
     },
-    "spatialBalanceGuidance": "Header zone occupies top 220px; SVG centerpiece occupies middle 500px; bottom metadata ledger occupies bottom 100px. Fills 90% of vertical canvas."
+    "spatialBalanceGuidance": "Header zone occupies top 200px; SVG centerpiece occupies middle 560px; bottom metadata ledger occupies bottom 80px. Fills 90% of vertical canvas."
   },
   {
     "slideId": "slide-2",
-    "type": "editorial",
-    "layoutStructure": "asymmetric-editorial-cards",
+    "type": "belief",
+    "layoutStructure": "claim-vs-reality-diptych",
     "svgConcept": {
-      "type": "schematic",
-      "description": "viewBox='0 0 952 420'. Subtle geometric balance-sheet grid with 1px hairlines, crosshair registration marks, and fluid float conduit behind cards. Layered architectural linework.",
-      "elements": ["balance-sheet-grid", "registration-crosshairs", "float-conduit-trace"]
+      "type": "none",
+      "description": "none"
     },
     "typographyScale": {
       "headlineSize": "text-[64px]",
       "subtitleSize": "text-[26px]"
     },
-    "spatialBalanceGuidance": "Header zone 180px; two full-height asymmetric cards occupy remaining 760px using grid-rows-2 with p-8 padding."
+    "spatialBalanceGuidance": "Pure typography diptych. Top quote card (40% height) vs bottom dark reality card (45% height). Zero SVG."
+  },
+  {
+    "slideId": "slide-3",
+    "type": "mechanism",
+    "layoutStructure": "full-height-editorial-split",
+    "svgConcept": {
+      "type": "schematic",
+      "description": "viewBox='0 0 448 720'. High-density vertical cutaway schematic occupying the right 50% column. Stacked technical layers, pipeline flows, and annotated component nodes.",
+      "elements": ["vertical-pipeline-spine", "annotated-stage-nodes", "accent-flow-arrows"]
+    },
+    "typographyScale": {
+      "headlineSize": "text-[46px]",
+      "subtitleSize": "text-[22px]"
+    },
+    "spatialBalanceGuidance": "50/50 vertical split. Left column 448px copy and 2 cards; right column 448px vertical 720px SVG cutaway."
+  },
+  {
+    "slideId": "slide-4",
+    "type": "telemetry",
+    "layoutStructure": "hero-metric-placard",
+    "svgConcept": {
+      "type": "none",
+      "description": "none"
+    },
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[26px]"
+    },
+    "spatialBalanceGuidance": "Massive 110px HTML tabular numeral in accent color commanding screen + uppercase label + context card. Zero SVG."
+  },
+  {
+    "slideId": "slide-5",
+    "type": "system",
+    "layoutStructure": "systemic-mechanism-flow",
+    "svgConcept": {
+      "type": "schematic",
+      "description": "viewBox='0 0 952 340'. Horizontal flow infographic with 3 sequential stations [01, 02, 03] linked by directional pipeline paths and status markers.",
+      "elements": ["flow-pipeline-tracks", "three-station-nodes", "status-indicators"]
+    },
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[24px]"
+    },
+    "spatialBalanceGuidance": "Header 180px; horizontal SVG flow 340px; 3-column step cards 280px directly aligned under stations."
+  },
+  {
+    "slideId": "slide-6",
+    "type": "ledger",
+    "layoutStructure": "three-row-verification-ledger",
+    "svgConcept": {
+      "type": "none",
+      "description": "none"
+    },
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[24px]"
+    },
+    "spatialBalanceGuidance": "Institutional tabular ledger with 3 rows divided by 1px hairlines. Zero SVG."
+  },
+  {
+    "slideId": "slide-7",
+    "type": "verdict",
+    "layoutStructure": "editorial-verdict-playbook",
+    "svgConcept": {
+      "type": "schematic",
+      "description": "viewBox='0 0 952 220'. Compact decision fork schematic showing branching paths between Option A and Option B.",
+      "elements": ["decision-branch-fork", "option-nodes"]
+    },
+    "typographyScale": {
+      "headlineSize": "text-[64px]",
+      "subtitleSize": "text-[24px]"
+    },
+    "spatialBalanceGuidance": "Header 180px; compact fork SVG 200px; 2 comparison cards 300px; verdict seal 100px."
   }
 ]`;
 }
@@ -774,22 +914,20 @@ export function buildVisualBlueprintUserPrompt(
   return `Design the bespoke visual layout architecture and SVG infographic blueprints for these ${slides.length} slides:
 
 Publication: "${brand.name}" (${brand.domain})
-Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}, Ink ${brand.palette.ink}, Border ${brand.palette.border}
-Theme / Metaphor: "${metaphor}"
-Hook Headline: "${hook}"
-Key Metrics: ${JSON.stringify(dossier.verifiedMetrics || [])}
+Visual Metaphor: "${metaphor}"
+Hook: "${hook}"
 
-Slides Content & Intent:
-${JSON.stringify(slides.map(s => ({
-  id: s.id,
-  type: s.type,
-  headline: s.headline,
-  subheadline: s.subheadline,
-  items: s.items,
-  telemetry: s.telemetry,
-  visualStyle: s.visualStyle,
-  layoutTopology: s.layoutTopology
-})), null, 2)}
+MANDATORY ASSET ALLOCATION CONTRACT:
+- Slide 1 (Cover): viewBox="0 0 952 560" monumental centerpiece.
+- Slide 2: svgConcept: { "type": "none", "description": "none" } (PURE TYPOGRAPHY DIPTYCH).
+- Slide 3: viewBox="0 0 448 720" full-height vertical cutaway for right column.
+- Slide 4: svgConcept: { "type": "none", "description": "none" } (110PX HTML HERO METRIC).
+- Slide 5: viewBox="0 0 952 340" horizontal flow with 3 sequential stations.
+- Slide 6: svgConcept: { "type": "none", "description": "none" } (TABULAR VERIFICATION LEDGER).
+- Slide 7: viewBox="0 0 952 220" compact decision fork or "none".
+
+Slide Data to Architect:
+${JSON.stringify(slides, null, 2)}
 
 Output strictly the JSON array of exactly ${slides.length} SlideDesignBlueprint objects.`;
 }
@@ -828,62 +966,184 @@ All slides inherit from a single, shared, mathematically calibrated editorial st
   - Card Body: className="editorial-card-body" (22px font-body with <strong> emphasis)
 * Layout Topologies:
   - 2-Column Equal Cards: className="layout-grid-2" (gap: 20px)
+  - 3-Column Equal Cards: className="layout-grid-3" (gap: 16px)
   - 2-Row Vertical Stacked Cards: className="layout-grid-rows-2" (gap: 18px)
   - 50/50 Vertical Diptych: className="layout-split-diptych" (gap: 28px)
+  - Claim vs Reality Diptych: className="layout-claim-reality" with 'editorial-quote-box' & 'editorial-reality-box'
   - Tabular Verification Ledger: className="layout-ledger" with child className="layout-ledger-row"
   - Milestone Spine: className="layout-spine" with child className="layout-spine-node" and bullet className="layout-spine-bullet"
 * Telemetry & Data Badges:
-  - Hero Tabular Numeral: className="editorial-metric-huge" (96px bold font-mono)
+  - Hero Tabular Numeral: className="editorial-metric-huge" (96px-110px bold font-mono)
   - Telemetry Pill: className="editorial-metric-badge" (accent border, font-mono tabular numerals)
   - Issue Badge: className="editorial-issue-badge"
+  - Verdict Seal: className="editorial-verdict-seal"
   - Legal / Source Footnote: className="editorial-note"
 
 CRITICAL DESIGN & CODING RULES:
-1. Canonical Component Signature:
-   \`\`\`tsx
-   import React from 'react';
-   import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
+1. STRICT ADHERENCE TO THE ASSIGNED ARCHETYPE (BAN MONOTONOUS STACKING):
+   You MUST write the exact JSX structure tailored to the assigned archetype. Strictly ban repeating "Header -> SVG -> 2 cards" across slides!
 
-   export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
-     const items = slide.items ?? [];
-     const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
-     const t0 = telemetry[0] ? parseMetricBadge(telemetry[0].badge) : null;
+   - ARCHETYPE 1 ("monumental-editorial-cover"):
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="editorial-visual-frame editorial-visual-monumental">
+         <svg viewBox="0 0 952 560" role="img">...</svg>
+       </div>
+       <footer className="flex justify-between items-center border-t border-[var(--border)] pt-4">
+         <p className="editorial-issue-badge">{slide.issueBadge || 'SPECIAL REPORT'}</p>
+         {t0 && <div className="editorial-metric-badge">{t0.value} {t0.label}</div>}
+       </footer>
+     </section>
+     \`\`\`
 
-     return (
-       <section className="editorial-slide">
-         <header className="editorial-header">
-           <div className="editorial-kicker">
-             <span className="editorial-kicker-dot" />
-             <span>{slide.kicker}</span>
+   - ARCHETYPE 2 ("claim-vs-reality-diptych"): ZERO SVG!
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="layout-claim-reality">
+         <article className="editorial-card editorial-quote-box">
+           <div className="font-[family-name:var(--font-mono)] text-[18px] tracking-widest text-[var(--ink)] opacity-60 uppercase">[ {slide.claim?.title || 'THE CONVENTIONAL CLAIM'} ]</div>
+           <p className="editorial-quote-text">"{slide.claim?.body || items[0]?.body}"</p>
+         </article>
+         <article className="editorial-card editorial-reality-box">
+           <div className="flex justify-between items-center">
+             <div className="font-[family-name:var(--font-mono)] text-[18px] tracking-widest text-[var(--accent)] font-semibold uppercase">[ {slide.reality?.title || 'THE FORENSIC REALITY'} ]</div>
+             <span className="editorial-metric-badge !text-[16px]">{slide.reality?.badge || 'VERIFIED'}</span>
            </div>
-           <h1 className="editorial-headline">{slide.headline}</h1>
-           {slide.subheadline && (
-             <p className="editorial-subheadline">{slide.subheadline}</p>
-           )}
-         </header>
+           <p className="editorial-card-body !text-[24px] !leading-relaxed"><InlineEmphasis text={slide.reality?.body || items[1]?.body} /></p>
+         </article>
+       </div>
+     </section>
+     \`\`\`
 
-         {/* Visual Zone (Bespoke inline vector SVG matching archetype) */}
-         <div className="editorial-visual-frame editorial-visual-compact">
-           <svg viewBox="0 0 952 420" role="img">
-             ...
-           </svg>
+   - ARCHETYPE 3 ("full-height-editorial-split"):
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <div className="layout-split-diptych">
+         <div className="flex flex-col justify-between h-full gap-4">
+           <header className="editorial-header">
+             <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+             <h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>
+             {slide.subheadline && <p className="editorial-subheadline !text-[22px]">{slide.subheadline}</p>}
+           </header>
+           <div className="flex flex-col gap-4">
+             {items.map((item: any, i: number) => (
+               <article key={i} className="editorial-card">
+                 <h2 className="editorial-card-title !text-[24px]">{item.title}</h2>
+                 <p className="editorial-card-body !text-[20px]"><InlineEmphasis text={item.body} /></p>
+               </article>
+             ))}
+           </div>
          </div>
+         <div className="editorial-visual-frame editorial-visual-split border border-[var(--border)] bg-[var(--surface)] p-4">
+           <svg viewBox="0 0 448 720" role="img" className="w-full h-full">...</svg>
+         </div>
+       </div>
+     </section>
+     \`\`\`
 
-         {/* Archetype Layout Topology */}
-         <div className="layout-grid-2">
-           <article className="editorial-card">
-             <h2 className="editorial-card-title">{items[0]?.title}</h2>
-             <p className="editorial-card-body">{items[0]?.body}</p>
+   - ARCHETYPE 4 ("hero-metric-placard"): ZERO SVG!
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="editorial-card flex-1 flex flex-col justify-center items-center text-center p-12 !border-2 !border-[var(--accent)] gap-6">
+         <div className="editorial-metric-huge !text-[120px]">{t0?.value || '400%'}</div>
+         <div className="font-[family-name:var(--font-mono)] text-[22px] tracking-widest text-[var(--ink)] opacity-80 uppercase max-w-[600px]">{t0?.label || slide.subheadline}</div>
+         {items[0] && (
+           <p className="editorial-card-body !text-[26px] !leading-relaxed max-w-[700px] border-t border-[var(--border)] pt-6 mt-2">
+             <InlineEmphasis text={items[0].body} />
+           </p>
+         )}
+       </div>
+       {slide.footer && <p className="editorial-note"><InlineEmphasis text={slide.footer} /></p>}
+     </section>
+     \`\`\`
+
+   - ARCHETYPE 5 ("systemic-mechanism-flow"):
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="editorial-visual-frame editorial-visual-compact">
+         <svg viewBox="0 0 952 340" role="img">...</svg>
+       </div>
+       <div className="layout-grid-3">
+         {items.map((item: any, i: number) => (
+           <article key={i} className="editorial-card !p-4 !gap-2">
+             <div className="font-[family-name:var(--font-mono)] text-[16px] text-[var(--accent)] font-semibold">0{i + 1}</div>
+             <h2 className="editorial-card-title !text-[20px]">{item.title}</h2>
+             <p className="editorial-card-body !text-[18px]"><InlineEmphasis text={item.body} /></p>
            </article>
-           <article className="editorial-card">
-             <h2 className="editorial-card-title">{items[1]?.title}</h2>
-             <p className="editorial-card-body">{items[1]?.body}</p>
-           </article>
-         </div>
-       </section>
-     );
-   }
-   \`\`\`
+         ))}
+       </div>
+     </section>
+     \`\`\`
+
+   - ARCHETYPE 6 ("three-row-verification-ledger"): ZERO SVG!
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="layout-ledger">
+         {items.map((item: any, i: number) => (
+           <div key={i} className="layout-ledger-row">
+             <span className="font-[family-name:var(--font-mono)] text-[22px] text-[var(--accent)] font-bold">[{item.index || '0' + (i + 1)}]</span>
+             <div className="flex-1 flex flex-col gap-1">
+               <span className="font-[family-name:var(--font-headline)] text-[22px] font-semibold text-[var(--ink)]">{item.title}</span>
+               <p className="editorial-card-body !text-[20px]"><InlineEmphasis text={item.body} /></p>
+             </div>
+             {item.badge && <span className="editorial-metric-badge !text-[18px]">{item.badge}</span>}
+           </div>
+         ))}
+       </div>
+     </section>
+     \`\`\`
+
+   - ARCHETYPE 7 ("editorial-verdict-playbook"):
+     \`\`\`tsx
+     <section className="editorial-slide">
+       <header className="editorial-header">
+         <div className="editorial-kicker"><span className="editorial-kicker-dot" /><span>{slide.kicker}</span></div>
+         <h1 className="editorial-headline">{slide.headline}</h1>
+         {slide.subheadline && <p className="editorial-subheadline">{slide.subheadline}</p>}
+       </header>
+       <div className="layout-grid-2">
+         <article className="editorial-card !border-l-4 !border-l-[var(--border)]">
+           <h2 className="editorial-card-title">{items[0]?.title}</h2>
+           <p className="editorial-card-body"><InlineEmphasis text={items[0]?.body} /></p>
+         </article>
+         <article className="editorial-card !border-l-4 !border-l-[var(--accent)]">
+           <h2 className="editorial-card-title">{items[1]?.title}</h2>
+           <p className="editorial-card-body"><InlineEmphasis text={items[1]?.body} /></p>
+         </article>
+       </div>
+       <div className="editorial-verdict-seal">
+         <div className="font-[family-name:var(--font-mono)] text-[18px] text-[var(--accent)] font-bold uppercase tracking-wider">{slide.verdict?.title || 'FINAL VERDICT'}</div>
+         <p className="font-[family-name:var(--font-body)] text-[22px] font-semibold text-[var(--ink)] flex-1 text-right">
+           <InlineEmphasis text={slide.verdict?.takeaway || slide.footer || 'The bottom line takeaway.'} />
+         </p>
+       </div>
+     </section>
+     \`\`\`
 
 2. STRICT BAN ON DUPLICATE FOOTERS & AI DISCLAIMERS:
    - SlideFrame ALREADY provides the outer magazine shell: publication masthead (top) and pagination bar (bottom: 01/07, progress dots, handle, swipe cue).
@@ -891,106 +1151,24 @@ CRITICAL DESIGN & CODING RULES:
    - Footnotes or legal references belong in '<p className="editorial-note">'.
 
 3. Creative Freedom & Architectural Information Design:
-   - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
-   - Pure SVG geometry & vector callouts: ZERO clipart! All body copy, titles, and descriptions belong in HTML.
-   - Standalone vector numerical callouts, degree marks, unit labels, or compact date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE') are permitted and encouraged in SVG <text> elements with clean font classes and coordinates. BANNED: Never draw fake text wireframe paths (d="M...H...") or long multi-sentence paragraphs in SVG.
-   - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
+   - For slides with SVGs: Pure geometry, layered surface fills, visible stroke hairlines, and focal accent trajectories. ZERO clipart!
+   - Standalone vector numerical callouts, degree marks, unit labels (e.g. '$250', '$1,000', '148°', '4K') are permitted in SVG <text>.
+   - BANNED: Never draw fake text wireframe paths (d="M...H..."). Never simulate text with hatching lines!
 
 4. Theme & Token Integration:
    - STRICT NEGATIVE CONSTRAINT: DO NOT declare an inline theme object (e.g. 'const theme = { ... }' or 'const currentBrand = { ... }') and NEVER apply 'style={theme}'! The canvas CSS variables (--ink, --accent, --paper, --surface, --border, --font-headline, --font-body, --font-mono) are injected globally by SlideFrame.
-   - Use the semantic editorial classes. Use Tailwind utilities only for fine-grained alignment (e.g. 'text-[var(--accent)]', 'tabular-nums', 'gap-4').
+   - Use the semantic editorial classes. Use Tailwind utilities only for fine-grained alignment.
 
-5. MOBILE INSTAGRAM LEGIBILITY (0.36x Phone Scaling Law):
-   - TEXT UNDER 20px IS STRICTLY FORBIDDEN!
-   - MANDATORY FONT SIZE SCALE:
-     * Universal main headlines: Locked via 'editorial-headline' at 64px bold!
-     * Half-width split headlines: Locked via 'editorial-headline-split' at 46px bold.
-     * Subheadlines: Locked via 'editorial-subheadline' at 26px.
-     * Card titles: Locked via 'editorial-card-title' at 28px.
-     * Body copy: Locked via 'editorial-card-body' at 22px.
-     * Kickers, badges, tags: Locked via 'editorial-kicker' / 'editorial-issue-badge' at 20px.
-     * Hero metrics: Locked via 'editorial-metric-huge' at 96px tabular numerals!
-     * Metric badges: Locked via 'editorial-metric-badge' at 22px tabular numerals!
+5. Canonical Imports:
+   \`\`\`tsx
+   import React from 'react';
+   import { parseMetricBadge, InlineEmphasis, type SlideComponentProps } from '../../../src/skeleton/types';
+   \`\`\`
 
-6. ZERO-OVERFLOW & NATURAL FLOW:
-   - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.
-   - NEVER put 'overflow-hidden' on the top-level <section>!
-   - By using the shared CSS classes ('editorial-card', 'editorial-visual-compact', 'editorial-header'), the layout is mathematically guaranteed to fit within the 1,022px inner container with scale = 1.000!
-
-7. CANONICAL DATA BINDING (BAN UNINDEXED & DOUBLE-INDEXED ACCESS):
-   - 'slide.items' is an ARRAY of objects [{ title: "...", body: "...", tag: "..." }, ...].
-     Always bind as:
-     const items = slide.items ?? [];
-     const item0 = items[0];
-     const item1 = items[1];
-     Access in JSX: {item0?.title}, {item0?.body}, {item1?.title}, {item1?.body}.
-     STRICTLY FORBIDDEN: Writing {items?.title} or {items?.body}! An Array has no .title or .body.
-   - 'slide.telemetry' is an ARRAY of objects [{ badge: "...", label: "..." }, ...].
-     Always bind cleanly:
-     const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
-     const t0 = telemetry[0] ? parseMetricBadge(telemetry[0].badge) : null;
-     const t1 = telemetry[1] ? parseMetricBadge(telemetry[1].badge) : null;
-     CRITICAL: NEVER write 'const telemetry = slide.telemetry?.[0]; ... telemetry?.[0]?.badge;'! That double-indexes, evaluates to undefined, and makes the metric BLANK!
-
-8. EDITORIAL PUBLICATION ARCHETYPE BLUEPRINTS:
-   You MUST implement the designated archetype for this slide following handcrafted editorial standards:
-
-   A. "monumental-editorial-cover":
-      - Outer container: className="editorial-slide"
-      - Header zone: className="editorial-header" with kicker, headline, and subheadline.
-      - Hero visual frame: className="editorial-visual-frame editorial-visual-monumental" (max-h: 560px)
-        Follow the slide's designated 'svgBlueprint' (viewBox="0 0 952 650").
-        Pure sculptural vector linework with coordinate crosshairs and registration ticks.
-        ZERO cards below!
-      - Issue badge bar: '<p className="editorial-issue-badge">{slide.issueBadge}</p>'
-
-   B. "asymmetric-editorial-cards":
-      - Header zone: className="editorial-header"
-      - Compact visual frame: className="editorial-visual-frame editorial-visual-compact" (max-h: 320px, viewBox="0 0 952 420")
-      - 2-card layout: className="layout-grid-2" (or className="layout-grid-rows-2")
-        Primary card: className="editorial-card", with metric badge or bold skim anchors.
-        Secondary card: className="editorial-card", with monospace tag and body.
-
-   C. "vertical-milestone-spine":
-      - Header zone: className="editorial-header"
-      - Layout container: className="layout-spine"
-      - 3 Milestone nodes: Each has className="layout-spine-node" with '<span className="layout-spine-bullet" />', monospace time/phase label, bold 2-word title, and punchy 5-8 word body.
-
-   D. "hero-metric-placard":
-      - Header zone: className="editorial-header"
-      - Top hero placard: className="editorial-card flex-1" with '<div className="editorial-metric-huge">{t0?.value}</div>' and label.
-      - Bottom context card: className="editorial-card shrink-0" with 5-8 word takeaway.
-
-   E. "full-height-editorial-split":
-      - Layout container: className="layout-split-diptych"
-      - Left column: flex flex-col justify-between containing:
-        * className="editorial-kicker"
-        * '<h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>'
-        * 2 stacked cards: className="editorial-card"
-      - Right column: className="editorial-visual-frame editorial-visual-split" with full-height vertical SVG (viewBox="0 0 448 720").
-
-   F. "three-row-verification-ledger":
-      - Header zone: className="editorial-header"
-      - Tabular ledger: className="layout-ledger"
-      - 3 rows: Each className="layout-ledger-row" with monospace index '[01]', title + 5-8 word finding, and right-aligned '<span className="editorial-metric-badge">{badge}</span>'.
-
-   G. "conditional-release-rail":
-      - Header zone: className="editorial-header"
-      - Compact rail visual: className="editorial-visual-frame editorial-visual-compact" (max-h: 320px, viewBox="0 0 952 420") with stacked release rails.
-      - Bottom decision split: className="layout-grid-2" with 2 decision cards (className="editorial-card").
-
-   H. "optical-sector-versus-scan-reticle":
-      - Header zone: className="editorial-header"
-      - Split instrument layout: className="layout-split-diptych"
-        Left: className="editorial-visual-frame editorial-visual-compact" with calibrated sector arc (viewBox="0 0 448 370").
-        Right: className="layout-grid-rows-2" with 2 telemetry cards (className="editorial-card").
-
-9. GRAPHIC VECTOR SVG STANDARDS & BAN ON FAKE TEXT SKELETONS:
-   - ABSOLUTE BAN ON FAKE TEXT PATHS: Strictly forbidden to draw parallel horizontal lines, dashes, or hatching (<path d="M106 529H276 M106 542H245" />) to mimic placeholder text!
-   - ALL editorial copy, descriptions, titles, subheadlines, and card bodies MUST be authored in HTML elements styled with editorial CSS classes!
-   - Standalone vector numerals, degree marks, unit labels (e.g. "148°", "$250", "430 CE") MAY be rendered inside SVG <text>.
-   - BAN <foreignObject> inside SVGs.
-   - CONTAINER-MATCHED VIEWBOXES: Full-width SVGs viewBox="0 0 952 <height>" (420 or 650); half-width column SVGs viewBox="0 0 448 <height>". NEVER use preserveAspectRatio="none".`;
+6. SIMPLICITY IN HEADLINE & TEXT RENDERING:
+   - NEVER write brittle word slicing/joining code (e.g. split(/\s+/).slice().join()).
+   - Always render \`{slide.headline}\` directly inside \`<h1 className="editorial-headline">{slide.headline}</h1>\` (or \`<h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>\`).
+`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -1001,7 +1179,12 @@ export function buildSingleSlideUserPrompt(
 ): string {
   const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'asymmetric-editorial-cards';
   const chosenStyle = slideData.visualStyle || chosenArchetype;
-  const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype';
+  const isSvgFree = ['claim-vs-reality-diptych', 'hero-metric-placard', 'three-row-verification-ledger'].includes(chosenArchetype) ||
+    blueprint?.svgConcept?.type === 'none' ||
+    blueprint?.svgConcept?.description === 'none';
+  const chosenSvg = isSvgFree
+    ? 'NONE (PURE TYPOGRAPHY / DATA LAYOUT — DO NOT RENDER ANY SVG! Let the HTML copy, metric typography, or ledger table fill the canvas vertically.)'
+    : (slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype');
   const spatialGuidance = blueprint?.spatialBalanceGuidance || 'Fill 85%-95% of vertical frame using flex-1 min-h-0 and justify-between. Zero dead bottom voids.';
   const headlineSize = blueprint?.typographyScale?.headlineSize || (chosenArchetype === 'full-height-editorial-split' ? 'text-[44px] to text-[48px]' : 'text-[64px]');
 
@@ -1019,8 +1202,8 @@ CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
 - Bespoke Vector SVG: "${chosenSvg}"
 - Spatial Balance Guidance: "${spatialGuidance}"
 - Prescribed Headline Size: "${headlineSize}"
-Follow the assigned archetype blueprint strictly! Do NOT revert to generic identical grey boxes.
-Compose using the shared editorial CSS classes ('editorial-slide', 'editorial-header', 'editorial-kicker', 'editorial-headline', 'editorial-visual-frame', 'editorial-card', 'layout-grid-2', etc.).
+Follow the assigned archetype blueprint strictly! Do NOT revert to a generic "Header -> SVG -> 2 cards" layout!
+Compose using the shared editorial CSS classes ('editorial-slide', 'editorial-header', 'editorial-kicker', 'editorial-headline', 'editorial-visual-frame', 'editorial-card', 'layout-grid-2', 'layout-grid-3', 'layout-claim-reality', 'layout-ledger', etc.).
 DO NOT render duplicate outer footers or brand mastheads—SlideFrame provides those.
 STRICT NEGATIVE CONSTRAINT: Never declare local theme objects (e.g. const theme = ...) or inline styles. Use var(--ink), var(--surface), var(--border), var(--accent).
 
@@ -1071,6 +1254,9 @@ Common Fix Guidelines:
    - A property was accessed directly on an array. Index into it first: change \`cards?.telemetryRef\` to \`cards[0]?.telemetryRef\` or \`card?.telemetryRef\`.
 5. Comparison with array:
    - If \`words = str.split(...)\`, compare \`words[0] === '...'\` rather than \`words === '...'\`.
+6. "Property 'join' does not exist on type 'string'":
+   - \`.join()\` was called on a string instead of an array.
+   - If \`words = str.split(/\s+/)\`, \`words[0]\` is a string! Change \`words[0]?.slice(...).join(' ')\` to \`words.slice(...).join(' ')\`, or better yet, simply render \`{slide.headline}\` directly without splitting!
 
 Fix all syntax and type errors completely. Return ONLY the corrected code in a \`\`\`tsx code block.`;
 }

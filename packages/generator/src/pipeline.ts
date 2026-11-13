@@ -696,16 +696,29 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   blueprints = deck.slides.map((s, idx) => {
     const found = blueprints.find((b) => b.slideId === s.id || b.slideId === `slide-${idx + 1}`);
-    const svgDescription = found?.svgConcept?.description || s.svgBlueprint || 'Bespoke editorial vector infographic matching slide thesis';
+    const layout = found?.layoutStructure || s.layoutTopology || s.archetype || 'asymmetric-editorial-cards';
+    const isSvgFreeArchetype = ['claim-vs-reality-diptych', 'hero-metric-placard', 'three-row-verification-ledger'].includes(layout);
+
+    let svgConcept = found?.svgConcept;
+    if (isSvgFreeArchetype || found?.svgConcept?.type === 'none' || found?.svgConcept?.description === 'none') {
+      svgConcept = {
+        description: 'none',
+        type: 'none',
+        elements: [],
+      };
+    } else if (!svgConcept) {
+      svgConcept = {
+        description: s.svgBlueprint || 'Bespoke editorial vector infographic matching slide thesis',
+        type: 'schematic',
+        elements: [],
+      };
+    }
+
     return {
       slideId: s.id,
       type: s.type,
-      layoutStructure: found?.layoutStructure || s.layoutTopology || s.archetype || 'asymmetric-editorial-cards',
-      svgConcept: {
-        description: svgDescription,
-        type: found?.svgConcept?.type || 'schematic',
-        elements: found?.svgConcept?.elements || [],
-      },
+      layoutStructure: layout,
+      svgConcept,
       typographyScale: found?.typographyScale,
       accentPlacement: found?.accentPlacement,
       spatialBalanceGuidance: found?.spatialBalanceGuidance,
@@ -715,9 +728,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // Attach blueprint svg descriptions and layout structure to deck slides
   deck.slides = deck.slides.map((s, idx) => {
     const bp = blueprints[idx];
+    const isNone = bp?.svgConcept?.type === 'none' || bp?.svgConcept?.description === 'none';
     return {
       ...s,
-      svgBlueprint: bp?.svgConcept?.description || s.svgBlueprint,
+      svgBlueprint: isNone ? undefined : (bp?.svgConcept?.description || s.svgBlueprint),
       layoutTopology: bp?.layoutStructure || s.layoutTopology,
     };
   });
