@@ -656,7 +656,7 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// STAGE 5: SLIDE DESIGN BLUEPRINTS
+// STAGE 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINTS)
 // ============================================================================
 
 export interface SlideDesignBlueprint {
@@ -674,6 +674,81 @@ export interface SlideDesignBlueprint {
   };
   accentPlacement?: string;
   spatialBalanceGuidance?: string;
+}
+
+export function buildVisualBlueprintSystemPrompt(targetSlideCount = 7): string {
+  const count = Math.max(4, Math.min(14, targetSlideCount));
+  return `You are an Information Designer and Art Director at Pentagram, Monocle, Wired, and The New York Times Graphics Desk.
+Your task is to plan the bespoke visual layout architecture and detailed vector SVG infographic concept for each slide in an editorial carousel deck (${count} slides).
+
+CRITICAL VISUAL DESIGN PRINCIPLES:
+1. Bespoke Editorial Information Design:
+   - Slide 1 (Cover): Dominant visual centerpiece occupying 45%–55% of the frame (e.g. diagonal dual trajectories with price plates, fluted column elevation section, imposing stored-value card silhouette with magnetic stripe hairlines, or hardware schematic).
+   - Slides 2–${count}: Each slide MUST have a tailored visual architecture matching its content:
+     * For Timelines & Sequences: Horizontal timeline release tracks with authorization gates, or continuous vertical hairline spines with beveled milestone panels.
+     * For Comparisons & Dualities: Dual circular instrument fields (e.g. optical sector pie wedge vs scan reticle), or 50/50 split diptychs with tectonic strata.
+     * For Spatial & Environmental Topics: 2D architectural floorplans showing mapped patrol routes, or 3D isometric room cutaways with callout pointers.
+     * For Financial & Corporate Forensics: Stored-value card geometry, float ratio comparison scales, escrow liability strata sections, and tabular ledgers.
+     * For Metrics & Placards: Massive tabular numerals with attribution cards, registration crosshairs, and 1px dimension hairlines.
+
+2. Visual Contrast & Tonal Depth:
+   - STRICT BAN on invisible dark-on-dark fills (never use #141418 on #0A0A0C without visible strokes).
+   - Use layered architectural linework:
+     * Structural bounds & hairlines: stroke="var(--border)" or stroke="var(--ink)" strokeOpacity="0.25" with strokeWidth="1.5" or "2".
+     * Tonal surface fills: fill="var(--surface)" or fill="var(--ink)" fillOpacity="0.06".
+     * Focal gestures & trajectories: stroke="var(--accent)" strokeWidth="2.5" to "3.5", or fill="var(--accent)".
+     * Registration marks: crosshairs, corner ticks, and coordinate indices with strokeOpacity="0.4".
+
+3. Space Balance & Composition:
+   - Content must organically fill 80%–95% of the vertical canvas height.
+   - The visual graphic or infographic centerpiece must occupy 40%–60% of the frame, giving the editorial copy strong visual support.
+   - BAN crude rectangular bar chart blocks and tiny isolated wireframe icons! All graphics must be unified, cohesive vector illustrations with deliberate viewBox coordinates.
+
+4. Pure SVG Geometry (Zero Text in SVG):
+   - All titles, descriptions, and numbers belong exclusively in HTML/Tailwind.
+   - SVG must contain strictly geometric shapes (<path>, <rect>, <circle>, <line>, <g>, <ellipse>). NEVER put <text> or <tspan> inside <svg>!
+
+Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
+[
+  {
+    "slideId": "slide-1",
+    "type": "cover",
+    "layoutStructure": "airborne-grounded-editorial-hero",
+    "svgConcept": {
+      "type": "schematic",
+      "description": "viewBox='0 0 952 700'. Two diagonal device glyphs with curved accent trajectory vectors connecting to price plates. 40px safe margins."
+    },
+    "spatialBalanceGuidance": "Headline and subheadline occupy top 240px; SVG centerpiece occupies middle 450px; bottom telemetry ledger occupies bottom 100px."
+  }
+]`;
+}
+
+export function buildVisualBlueprintUserPrompt(
+  slides: SlideData[],
+  brand: BrandTokens,
+  dossier: NarrativeDossier
+): string {
+  return `Design the bespoke visual layout architecture and SVG infographic blueprints for these ${slides.length} slides:
+
+Publication: "${brand.name}" (${brand.domain})
+Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}, Ink ${brand.palette.ink}, Border ${brand.palette.border}
+Theme / Metaphor: "${brand.vibe || dossier.visualMetaphor || dossier.editorialTheme || 'Technical editorial autopsy'}"
+Hook Headline: "${dossier.hookHeadline || ''}"
+Key Metrics: ${JSON.stringify(dossier.verifiedMetrics || [])}
+
+Slides Content & Intent:
+${JSON.stringify(slides.map(s => ({
+  id: s.id,
+  type: s.type,
+  headline: s.headline,
+  subheadline: s.subheadline,
+  items: s.items,
+  telemetry: s.telemetry,
+  visualStyle: s.visualStyle,
+  layoutTopology: s.layoutTopology
+})), null, 2)}
+
+Output strictly the JSON array of exactly ${slides.length} SlideDesignBlueprint objects.`;
 }
 
 // ============================================================================
@@ -730,9 +805,20 @@ CRITICAL DESIGN & CODING RULES:
    }
    \`\`\`
 
-2. Creative Freedom & Architectural Art Direction:
-   - Implement the designated editorial archetype with abstract, sculptural or technical vector linework matching brand.aestheticPreset (or the prompt blueprint).
-   - Pure SVG geometry only: ZERO clipart, ZERO flowchart conduits/pipes/valves/arrows, ZERO <text> or <tspan> tags inside SVG!
+2. Creative Freedom & Architectural Information Design:
+   - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
+   - STRICT BAN ON REPETITIVE WIREFRAME BOXES: Do NOT just render identical grey cards on every slide.
+   - If the layout topology is:
+     * "airborne-grounded-editorial-hero" or "diagonal-dual-trajectory": render prominent custom inline vector SVGs taking 40%–60% of vertical space with curved accent trajectory arrows, device glyphs, price plates, and registration crosshairs.
+     * "conditional-release-rail" or "horizontal-release-tracks": render stacked horizontal release timeline tracks with authorization gates and status endpoint panels.
+     * "optical-sector-versus-scan-reticle" or circular instrument layouts: render circular instrument fields with field-of-view pie wedges and location scan reticles.
+     * "floorplan-convergence-diagram": render an architectural 2D floorplan with convergence paths and room patrol points.
+     * "architectural-material-hazard-section" or isometric cutaways: render a 3D isometric room cutaway with callout pointers.
+     * "stored-value-escrow-strata" or "asymmetric-editorial-cards": render stacked asymmetric ledger cards with staggered offsets ('mr-10' on top, 'ml-10' on bottom), internal breathing spacers ('<div aria-hidden="true" className="h-[120px] shrink-0" />'), and balance-sheet strata linework.
+     * "vertical-milestone-spine": render a continuous 1px hairline spine with milestone nodes.
+     * "hero-metric-placard": render a massive tabular numeral (96px–110px) with attribution cards and dimension hairlines.
+     * "three-row-verification-ledger": render a clean 3-row tabular ledger divided by 1px hairlines with monospace indexes.
+   - Pure SVG geometry only: ZERO clipart, ZERO <text> or <tspan> tags inside SVG! All copy, titles, and metrics belong exclusively in HTML/Tailwind.
    - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
 
 3. Theme & Token Integration:

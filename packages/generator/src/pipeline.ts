@@ -18,6 +18,8 @@ import {
   buildArticleBrandUserPrompt,
   buildStoryDeckSystemPrompt,
   buildStoryDeckUserPrompt,
+  buildVisualBlueprintSystemPrompt,
+  buildVisualBlueprintUserPrompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -450,8 +452,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // ==========================================================================
   // PASS 1: CONTENT & HOOK INTELLIGENCE (SPECIALIZED CONTENT / HOOK ANALYSIS)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 1/4: Analyzing Content & Formulating Hook Intelligence...');
-  options.onProgress?.('Analyzing Content & Hook Intelligence', 1, 4);
+  console.log('[Pipeline] >>> Pass 1/5: Analyzing Content & Formulating Hook Intelligence...');
+  options.onProgress?.('Analyzing Content & Hook Intelligence', 1, 5);
 
   const narrativeResponse = await llm.generateJSON(
     buildNarrativeIntelligenceSystemPrompt(),
@@ -475,8 +477,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // ==========================================================================
   // PASS 2: VISUAL CONFIG & BRAND THEME (THEME, STYLES & OPTIMAL PRESET)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 2/4: Creating Visual Theme, Styles & Optimal Config...');
-  options.onProgress?.('Creating Visual Theme & Config', 2, 4);
+  console.log('[Pipeline] >>> Pass 2/5: Creating Visual Theme, Styles & Optimal Config...');
+  options.onProgress?.('Creating Visual Theme & Config', 2, 5);
 
   const defaultSlug = (narrative.articleTitle || article?.title || brief.name || 'story')
     .toLowerCase()
@@ -586,8 +588,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // ==========================================================================
   // PASS 3: SLIDES CONTENT & SPATIAL ELEMENTS JSON (CONTENT + CONFIG -> STORYBOARD)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 3/4: Authoring ${targetSlideCount}-Slide Content & Elements JSON (${narrativePreset})...`);
-  options.onProgress?.('Authoring Slides Content JSON', 3, 4);
+  console.log(`[Pipeline] >>> Pass 3/5: Authoring ${targetSlideCount}-Slide Content & Elements JSON (${narrativePreset})...`);
+  options.onProgress?.('Authoring Slides Content JSON', 3, 5);
 
   const deckResponse = await llm.generateJSON(
     buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
@@ -604,8 +606,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   const activePlatform = options.platform || 'instagram-feed';
 
   allSlides = allSlides.map((s, idx) => {
-    // 1. Programmatically assigned non-repeating archetype
-    const archetype = assignedArchetypes[idx] || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
+    // 1. Programmatically assigned or content-driven layout topology
+    const chosenTopology = s.layoutTopology || s.visualStyle || assignedArchetypes[idx] || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
+    const chosenStyle = s.visualStyle || chosenTopology;
+    const archetype = assignedArchetypes[idx] || chosenTopology;
 
     // 2. Clamp and sanitize items body copy (Strict 10-word ceiling for mobile scannability)
     let sanitizedItems = s.items;
@@ -647,8 +651,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       index: typeof s.index === 'number' ? s.index : idx,
       type: s.type || (s as any).archetype || 'editorial',
       archetype,
-      layoutTopology: archetype,
-      visualStyle: archetype,
+      layoutTopology: chosenTopology,
+      visualStyle: chosenStyle,
       headline: sanitizedHeadline,
       subheadline: sanitizedSubheadline,
       items: sanitizedItems,
@@ -682,36 +686,56 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
-  // Prepare slide design blueprints directly from Pass 3 content JSON
+  // ==========================================================================
+  // PASS 4: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINT)
+  // ==========================================================================
+  console.log(`[Pipeline] >>> Pass 4/5: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...`);
+  options.onProgress?.('Designing Bespoke Layout & SVG Blueprints', 4, 5);
+
+  let blueprints: SlideDesignBlueprint[] = [];
+  try {
+    const blueprintResponse = await llm.generateJSON(
+      buildVisualBlueprintSystemPrompt(deck.slides.length),
+      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
+      0.5
+    );
+    const parsedBlueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
+    if (Array.isArray(parsedBlueprints) && parsedBlueprints.length > 0) {
+      blueprints = parsedBlueprints;
+      console.log(`[Pipeline] Pass 4 complete: ${blueprints.length} bespoke slide visual blueprints generated.`);
+    }
+  } catch (err: any) {
+    console.warn(`[Pipeline] Pass 4 blueprint generation note: ${err.message}`);
+  }
+
+  // Ensure every slide has a rich blueprint
   const domainThemeContext = `${brand.domain} ${brand.name} ${brand.vibe || ''} ${narrative.editorialTheme || ''} ${narrative.visualMetaphor || ''} ${narrative.articleTitle || ''} ${narrative.hookHeadline || ''}`;
   const domainBlueprints = getDomainSvgBlueprints(domainThemeContext);
 
-  const blueprints: SlideDesignBlueprint[] = deck.slides.map((s, idx) => {
-    let bp = s.svgBlueprint;
-    // Intercept literal flowchart/diagram/pipe blueprints and replace with domain-adaptive editorial vector blueprints
-    if (!bp || /flowchart|diagram|pipe|valve|cutaway|conduit|tokens? enter|chamber|slot|app screen/i.test(bp)) {
-      bp = domainBlueprints[idx % domainBlueprints.length];
-    }
-
+  blueprints = deck.slides.map((s, idx) => {
+    const found = blueprints.find((b) => b.slideId === s.id || b.slideId === `slide-${idx + 1}`);
+    const fallbackSvg = s.svgBlueprint || domainBlueprints[idx % domainBlueprints.length] || 'Bespoke editorial vector concept';
     return {
       slideId: s.id,
       type: s.type,
-      layoutStructure: s.archetype || s.layoutTopology || 'asymmetric-editorial-cards',
+      layoutStructure: found?.layoutStructure || s.layoutTopology || s.archetype || 'asymmetric-editorial-cards',
       svgConcept: {
-        description: bp || `Bespoke editorial abstract vector artwork matching ${s.archetype}`,
-        type: 'schematic',
+        description: found?.svgConcept?.description || fallbackSvg,
+        type: found?.svgConcept?.type || 'schematic',
+        elements: found?.svgConcept?.elements || [],
       },
+      spatialBalanceGuidance: found?.spatialBalanceGuidance,
     };
   });
 
   // ==========================================================================
-  // PASS 4: SLIDES FINAL FORM SYNTHESIS & AUDIT (REACT + SVG CODEGEN & AUDIT)
+  // PASS 5: SLIDES FINAL FORM SYNTHESIS & AUDIT (REACT + SVG CODEGEN & AUDIT)
   // ==========================================================================
   const concurrency = options.concurrency || 3;
   console.log(
-    `[Pipeline] >>> Pass 4/4: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
+    `[Pipeline] >>> Pass 5/5: Synthesizing Slides Final Form in Parallel (Concurrency: ${concurrency})...`
   );
-  options.onProgress?.('Synthesizing Slides Final Form', 4, 4);
+  options.onProgress?.('Synthesizing Slides Final Form', 5, 5);
 
   const slideTasks = deck.slides.map((slideData, i) => async () => {
     const slideNumber = i + 1;
@@ -724,7 +748,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filePath = path.join(slidesDir, filename);
 
     console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Pass 4/4: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
+    options.onProgress?.(`Pass 5/5: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
