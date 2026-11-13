@@ -64,7 +64,7 @@ async function main() {
     const job = await statusRes.json();
     console.log(`[${attempts * 5}s] Job ${jobId} status: ${job.status}`);
 
-    if (job.status === 'completed') {
+    if (job.status === 'completed' || job.status === 'complete') {
       console.log('>>> Job completed successfully! <<<');
       console.log(`Admin URL: http://localhost:5175/jobs/${jobId}`);
       process.exit(0);
