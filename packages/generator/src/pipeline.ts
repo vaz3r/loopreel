@@ -537,7 +537,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   const deckResponse = await llm.generateJSON(
     buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-    buildStoryDeckUserPrompt(dossier, brand, targetSlideCount),
+    buildStoryDeckUserPrompt(dossier, brand, targetSlideCount, strategy),
     0.6
   );
   let allSlides = extractJson<SlideData[]>(deckResponse.text);
@@ -602,7 +602,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   try {
     const blueprintResponse = await llm.generateJSON(
       buildVisualBlueprintSystemPrompt(deck.slides.length),
-      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
+      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier, strategy),
       0.5
     );
     const parsedBlueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);

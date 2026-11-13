@@ -263,6 +263,7 @@ export interface StoryStrategy {
   hookHeadline: string;
   valuePromise: string;
   kicker: string;
+  visualMetaphor?: string;
   coreConflict: string;
   hiddenCatch: string;
   verdict: string;
@@ -532,14 +533,13 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
      * "optical-sector-versus-scan-reticle": Circular instrument comparison field with accurate field-of-view arcs, rotation arrows, and resolution badges (viewBox="0 0 448 370" each or 952 420).
    TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 to 5 different layout topologies across the deck. Strictly ban repeating the same card layout across multiple slides!
 
-4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (NO FLOWCHARTS, NO CLIPART, NO FAKE TEXT):
+4. DOMAIN-ADAPTIVE EDITORIAL VECTOR BLUEPRINTS (TANGIBLE SPECIMENS, NO BARE BOXES):
    - Every slide MUST include an "svgBlueprint" tailored to the story's actual domain, with explicit container-matched viewBoxes (viewBox="0 0 952 420" or viewBox="0 0 448 370"):
-     * For Financial / Corporate Forensics: Imposing geometric silhouettes of stored-value cards, magnetic stripe hairlines, micro-embossed coordinate ticks, dual balance-sheet strata, capital float comparison bars, vault elevation contours.
-     * For Technology / Systems: Silicon die floorplans, bus interconnect traces, latency benchmark scales, pipeline data strata.
+     * For Financial / Corporate Forensics: Identifiable stored-value cards with EMV chip contact pads and magnetic hairlines, thermal cash register receipts with authentic 1D barcodes and serrated edges, bank vault doors with combination dials and locking lugs, fluid level liquidity reservoirs with graduated volumetric markings, asymmetric balance beams.
+     * For Technology / Systems: Silicon die floorplans, bus interconnect traces, multi-rotor drone schematics (rotors, hubs, motor arms), wheeled rover chassis, circular optical fields-of-view (148° sector arcs with lens rings).
      * For Geopolitical / Policy: Territorial boundary hairlines, maritime transit corridors, radar focal rings, strategic convergence vectors.
-     * For History / Culture: Monument elevations, architectural pediments, fluted archaeological contours.
-   - ABSOLUTE BAN: ZERO clipart (no coffee cups with lids, no cartoon dollar bills, no phones with screens).
-   - ABSOLUTE BAN: ZERO flowchart pipes, conduits, valves, or process arrows.
+     * For History / Culture: Classical fluted architectural columns with capital, pedestal, and bold accent fracture lines, temple elevations, archaeological excavation grids.
+   - ABSOLUTE BAN: ZERO cheap cartoon clipart and ZERO bare empty rectangles! Every SVG must possess rich internal anatomy (e.g. 15-30 geometric elements including chamfers, pads, dials, conduits, serrations, or strata).
    - ABSOLUTE BAN: ZERO fake text wireframe paths (never draw parallel horizontal lines or hatching to simulate text).
    - Uniform scaling only (never preserveAspectRatio="none").
 
@@ -549,9 +549,9 @@ CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
 6. STRICT WORD BUDGET & ANTI-CRAMMING (Anti-Overflow Guardrail):
    - Maximum 2 items per slide! (Milestone spine: max 3 compact milestones).
    - Total words per slide: STRICTLY 25 to 50 words across the entire slide.
-   - Headlines: Maximum 5–7 words.
-   - Subheadlines: Maximum 8–12 words.
-   - Card / item body: Maximum 10–14 words per item! Every word must be punchy, high-signal, and editorial.
+   - Headlines: Maximum 4–6 words.
+   - Subheadlines: Maximum 6–10 words.
+   - Card / item body: STRICT 5 TO 8 WORDS MAXIMUM PER ITEM! Every word must be punchy, high-signal, and editorial.
    - Telemetry values: MUST be strictly numerical or signed badge ("$1.8B", "0%", "$222M", "+12%"). Qualifiers belong in label.
 
 Return strictly a JSON array of exactly ${count} slide objects:
@@ -599,18 +599,21 @@ Return strictly a JSON array of exactly ${count} slide objects:
 export function buildStoryDeckUserPrompt(
   dossier: NarrativeDossier,
   brand: BrandTokens,
-  targetSlideCount = 7
+  targetSlideCount = 7,
+  strategy?: StoryStrategy
 ): string {
   const count = Math.max(4, Math.min(14, targetSlideCount));
-  const hook = dossier.hookHeadline || 'Editorial Investigation';
-  const promise = dossier.valuePromise || '';
-  const kicker = dossier.kicker || 'SPECIAL REPORT';
-  const conflict = dossier.coreConflict
+  const hook = strategy?.hookHeadline || dossier.hookHeadline || 'Editorial Investigation';
+  const promise = strategy?.valuePromise || dossier.valuePromise || '';
+  const kicker = strategy?.kicker || dossier.kicker || 'SPECIAL REPORT';
+  const conflict = strategy?.coreConflict
+    ? strategy.coreConflict
+    : dossier.coreConflict
     ? `Claim: "${dossier.coreConflict.claim}" vs Reality: "${dossier.coreConflict.reality}"`
     : '';
-  const catches = (dossier.hiddenCatches || []).join('; ');
-  const verdict = dossier.verdict || '';
-  const metaphor = dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
+  const catches = strategy?.hiddenCatch || (dossier.hiddenCatches || []).join('; ');
+  const verdict = strategy?.verdict || dossier.verdict || '';
+  const metaphor = strategy?.visualMetaphor || dossier.visualMetaphor || dossier.editorialTheme || 'Architectural structural silhouettes';
 
   return `Author the ${count}-slide storyboard, choosing diverse layout topologies and bespoke SVG blueprints for each slide:
 
@@ -690,14 +693,26 @@ export function buildVisualBlueprintSystemPrompt(targetSlideCount = 7): string {
 Your task is to plan the bespoke visual layout architecture and detailed vector SVG infographic concept for each slide in an editorial carousel deck (${count} slides).
 
 CRITICAL VISUAL DESIGN PRINCIPLES:
-1. Bespoke Editorial Information Design:
-   - Slide 1 (Cover): Dominant visual centerpiece occupying 45%–55% of the frame (e.g. diagonal dual trajectories with price plates, fluted column elevation section, imposing stored-value card silhouette with magnetic stripe hairlines, or hardware schematic).
-   - Slides 2–${count}: Each slide MUST have a tailored visual architecture matching its content:
-     * For Timelines & Sequences: Horizontal timeline release tracks with authorization gates, or continuous vertical hairline spines with beveled milestone panels.
-     * For Comparisons & Dualities: Dual circular instrument fields (e.g. optical sector pie wedge vs scan reticle), or 50/50 split diptychs with tectonic strata.
-     * For Spatial & Environmental Topics: 2D architectural floorplans showing mapped patrol routes, or 3D isometric room cutaways with callout pointers.
-     * For Financial & Corporate Forensics: Stored-value card geometry, float ratio comparison scales, escrow liability strata sections, and tabular ledgers.
+1. Bespoke Editorial Information Design (Tangible Specimens & Infographics - NEVER Bare Rectangles):
+   - Slide 1 (Cover): Dominant visual centerpiece occupying 45%–55% of the frame (e.g. diagonal dual trajectories with price plates, fluted column elevation section, physical EMV chip stored-value card specimen, circular bank vault door, or hardware schematic).
+   - Slides 2–${count}: Each slide MUST have a tailored visual architecture depicting concrete, recognizable physical or technical artifacts matching its content:
+     * For Financial & Corporate Forensics:
+       - Physical payment / gift card with gold EMV microchip (6 contact pads), contactless wave arcs, embossed numbers, and magnetic stripe.
+       - Thermal cash register receipt specimen with authentic barcode stripes (1px to 5px widths) and serrated cut edge.
+       - Heavy circular bank vault door with radiating locking lugs, combination dial ticks, and central wheel.
+       - Fluid liquidity reservoir tank with graduated volumetric capacity ticks ($0 to $1.8B), inlet wallet pipe, float retention zone, and breakage drainage trap.
+       - Asymmetric balance beam scale with triangular fulcrum tipped by corporate float.
+     * For Technology & Systems:
+       - Schematic multi-rotor drone with motor arms, rotor hubs, 4 propeller ellipses, and camera gimbal.
+       - Wheeled rover robot with chassis, lens mast, and treaded wheels.
+       - Circular optical camera sector arc (148° wedge, lens circles, LED sensor marks).
+       - Silicon die floorplans, bus interconnect traces, and latency benchmark scales.
+     * For History, Politics & Architecture:
+       - Classical Corinthian or Doric fluted column with base, capital, and jagged accent fracture line.
+       - Harbor breakwater, maritime coastline contours, or archaeological basilica floorplans.
+     * For Timelines & Sequences: Horizontal release tracks with authorization gates, or continuous vertical hairline spines with beveled milestone panels.
      * For Metrics & Placards: Massive tabular numerals with attribution cards, registration crosshairs, and 1px dimension hairlines.
+   - ABSOLUTE BAN: ZERO bare empty rectangles! Every SVG blueprint must instruct the engineer to construct at least 15–30 detailed vector elements depicting the specimen's internal anatomy.
 
 2. Visual Contrast & Tonal Depth:
    - STRICT BAN on invisible dark-on-dark fills (never use #141418 on #0A0A0C without visible strokes).
@@ -735,14 +750,18 @@ Return strictly a JSON array of exactly ${count} SlideDesignBlueprint objects:
 export function buildVisualBlueprintUserPrompt(
   slides: SlideData[],
   brand: BrandTokens,
-  dossier: NarrativeDossier
+  dossier: NarrativeDossier,
+  strategy?: StoryStrategy
 ): string {
+  const metaphor = strategy?.visualMetaphor || brand.vibe || dossier.visualMetaphor || dossier.editorialTheme || 'Technical editorial autopsy';
+  const hook = strategy?.hookHeadline || dossier.hookHeadline || '';
+
   return `Design the bespoke visual layout architecture and SVG infographic blueprints for these ${slides.length} slides:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}, Ink ${brand.palette.ink}, Border ${brand.palette.border}
-Theme / Metaphor: "${brand.vibe || dossier.visualMetaphor || dossier.editorialTheme || 'Technical editorial autopsy'}"
-Hook Headline: "${dossier.hookHeadline || ''}"
+Theme / Metaphor: "${metaphor}"
+Hook Headline: "${hook}"
 Key Metrics: ${JSON.stringify(dossier.verifiedMetrics || [])}
 
 Slides Content & Intent:
@@ -795,7 +814,18 @@ CRITICAL DESIGN & CODING RULES:
      id: string;
      index: number;
      type: string;
-     archetype: 'monumental-editorial-cover' | 'asymmetric-editorial-cards' | 'hero-metric-placard' | 'vertical-milestone-spine' | 'full-height-editorial-split' | 'three-row-verification-ledger';
+     archetype:
+       | 'monumental-editorial-cover'
+       | 'asymmetric-editorial-cards'
+       | 'hero-metric-placard'
+       | 'vertical-milestone-spine'
+       | 'full-height-editorial-split'
+       | 'three-row-verification-ledger'
+       | 'conditional-release-rail'
+       | 'optical-sector-versus-scan-reticle';
+     layoutTopology?: string;
+     visualStyle?: string;
+     svgBlueprint?: string;
      kicker?: string;
      headline?: string;
      subheadline?: string;
@@ -846,7 +876,8 @@ CRITICAL DESIGN & CODING RULES:
      * NEVER use 'text-xs' (12px), 'text-sm' (14px), 'text-base' (16px), or 'text-lg' (18px) for readable content!
      * On a phone screen, 14px becomes 5.0px (unreadable), and 18px becomes 6.5px (squinting).
    - MANDATORY FONT SIZE SCALE:
-     * Universal main headlines: MUST be locked at text-[64px] (font-headline font-bold leading-[1.02] to leading-[1.05] tracking-[-0.04em]) across ALL slides! Never shrink headlines below text-[56px].
+     * Universal main headlines: MUST be locked at text-[64px] (font-headline font-bold leading-[1.02] to leading-[1.05] tracking-[-0.04em]) across full-width layouts! Never shrink full-width headlines below text-[56px].
+     * HALF-WIDTH HEADLINE EXCEPTION (full-height-editorial-split): In half-width columns (~448px in grid-cols-2), main headlines MUST be sized between text-[44px] and text-[48px] (leading-[1.08] tracking-[-0.035em]) to prevent vertical crowding, 4-line wrapping, and crushing cards below.
      * Subheadlines: MUST be text-[26px] to text-[28px] (leading-snug text-[var(--ink)]/80).
      * Body copy & descriptions: MUST be text-[24px] to text-[28px] (leading-snug / leading-normal).
      * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
@@ -969,8 +1000,8 @@ CRITICAL DESIGN & CODING RULES:
 
    E. "full-height-editorial-split":
       - Layout container: MUST use 'my-6 grid min-h-0 flex-1 grid-cols-2 gap-7 border-y border-[var(--border)] py-6'. Spans the entire height!
-      - Graphic half: Dominant domain-adaptive vector silhouette or technical section linework with 1px hairlines and accent focal point. Abstract conceptual art, no explanatory labels.
-      - Editorial half: 'flex flex-col justify-between': Monospace kicker with square dot, bold 64px headline, and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
+      - Graphic half: Dominant domain-adaptive vector silhouette or technical section linework with 1px hairlines and accent focal point.
+      - Editorial half: 'flex flex-col justify-between': Monospace kicker with square dot, locked half-width headline ('text-[44px] to text-[48px] font-bold leading-[1.08] tracking-[-0.035em]'), and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
 
    F. "three-row-verification-ledger":
       - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
@@ -979,6 +1010,17 @@ CRITICAL DESIGN & CODING RULES:
       - Left column: Monospace index '[01]', '[02]', '[03]' in 'text-[var(--accent)] font-[var(--font-mono)] text-[20px] font-bold'.
       - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
       - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[22px] text-[var(--accent)]').
+
+   G. "conditional-release-rail":
+      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
+      - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between gap-6'. Spans the entire height!
+      - Horizontal cadence tracks: Stacked release rails with solid shipping endpoints versus open dashed authorization gates, status milestone nodes, and date plates (viewBox="0 0 952 420").
+      - Bottom verification cards: 2-card horizontal split with 5-8 word takeaways and bold skim anchors.
+
+   H. "optical-sector-versus-scan-reticle":
+      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
+      - Layout container: MUST use 'my-6 grid min-h-0 flex-1 grid-cols-2 gap-7 items-center'.
+      - Circular instrument fields: Left field shows calibrated optical sector arc with degree callout (e.g. 148° wedge, camera lens circle, LED sensor ticks, viewBox="0 0 448 370"); right field shows scanning reticle or comparative metric cards with 5-8 word punchlines.
 
 9. GRAPHIC VECTOR SVG STANDARDS & BAN ON FAKE TEXT SKELETONS:
    - ABSOLUTE BAN ON FAKE TEXT PATHS: Strictly forbidden to draw parallel horizontal lines, dashes, or hatching (<path d="M106 529H276 M106 542H245" /> or lines with dx/dy) to mimic placeholder text or wireframe greeking! That looks broken and amateur.
@@ -1008,7 +1050,7 @@ export function buildSingleSlideUserPrompt(
   blueprint: SlideDesignBlueprint | undefined,
   brand: BrandTokens
 ): string {
-  const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'myth-vs-reality';
+  const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'asymmetric-editorial-cards';
   const chosenStyle = slideData.visualStyle || chosenArchetype;
   const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype';
 

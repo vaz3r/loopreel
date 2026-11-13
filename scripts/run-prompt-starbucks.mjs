@@ -53,7 +53,7 @@ async function main() {
 
   // Poll for completion
   let attempts = 0;
-  const maxAttempts = 120; // 10 minutes max
+  const maxAttempts = 180; // 15 minutes max
   while (attempts < maxAttempts) {
     await new Promise((r) => setTimeout(r, 5000));
     attempts++;
