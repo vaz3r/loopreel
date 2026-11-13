@@ -4,142 +4,188 @@ import {
   type SlideComponentProps,
 } from '../../../src/skeleton/types';
 
+type VerdictItem = {
+  title?: string;
+  metric?: {
+    badge?: string;
+    unit?: string;
+    qualifier?: string;
+    label?: string;
+  };
+  body?: string;
+};
+
 export default function Slide07({
   slide,
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  void brand;
-  void totalSlides;
-
-  const items = slide.items ?? [];
-  const financial = items[0];
-  const cashOut = items[1];
-  const rewards = items[2];
-
-  const metrics = slide.metrics ?? [];
-  const threshold = metrics[0];
-  const effectiveDate = metrics[1];
-
-  const {
-    qualifier,
-    value: metric,
-    unit,
-  } = parseMetricBadge(threshold?.badge ?? '$15');
+  const items = (slide.items ?? []) as unknown as VerdictItem[];
+  const cards = [items[0], items[1], items[2]];
+  const headline = slide.headline ?? '';
+  const highlightedPhrase = 'Real Breakage';
+  const highlightIndex = headline.indexOf(highlightedPhrase);
+  const effectiveDate = 'April 1, 2026';
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
       <header className="shrink-0">
-        <p className="font-[var(--font-mono)] text-[20px] leading-[26px] tracking-[0.12em] text-[var(--accent)]">
-          {slide.kicker}
-        </p>
+        <div className="flex items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="h-[12px] w-[12px] shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase leading-[1.3] tracking-[0.10em] text-[var(--accent)]">
+            {slide.kicker}
+          </p>
+        </div>
 
-        <h1 className="mt-3 max-w-[940px] font-[var(--font-headline)] text-[54px] font-bold leading-[1.02] tracking-[-0.04em]">
-          {slide.headline}
+        <h1 className="mt-5 max-w-[940px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.04] tracking-[-0.045em]">
+          {highlightIndex >= 0 ? (
+            <>
+              {headline.slice(0, highlightIndex)}
+              <span className="text-[var(--accent)]">
+                {highlightedPhrase}
+              </span>
+              {headline.slice(
+                highlightIndex + highlightedPhrase.length,
+              )}
+            </>
+          ) : (
+            headline
+          )}
         </h1>
 
-        <p className="mt-3 max-w-[920px] font-[var(--font-body)] text-[28px] leading-[35px]">
+        <p className="mt-5 max-w-[920px] font-[var(--font-body)] text-[26px] leading-[1.35]">
           {slide.subheadline}
         </p>
       </header>
 
-      <div className="mt-5 flex min-h-0 flex-1 flex-col justify-between gap-4">
-        <article className="shrink-0 border border-[var(--border)] bg-[var(--surface)] px-6 py-4">
-          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-[32px] tracking-[-0.02em]">
-            {financial?.title || financial?.label}
-          </h2>
-          <p className="mt-2 font-[var(--font-body)] text-[28px] leading-[34px]">
-            {financial?.body}
-          </p>
-        </article>
+      <div className="mt-7 flex min-h-0 flex-1 flex-col gap-5">
+        {cards.map((item, index) => {
+          const {
+            qualifier: parsedQualifier,
+            value: metric,
+            unit: parsedUnit,
+          } = parseMetricBadge(item?.metric?.badge ?? '');
 
-        <article className="relative flex shrink-0 flex-col items-center border-y-2 border-[var(--accent)] px-6 py-4 text-center">
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 32 32"
-            className="absolute left-0 top-0 h-8 w-8 text-[var(--accent)]"
-            fill="none"
-          >
-            <path
-              d="M1 31V1H31"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 32 32"
-            className="absolute bottom-0 right-0 h-8 w-8 text-[var(--accent)]"
-            fill="none"
-          >
-            <path
-              d="M1 31H31V1"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
+          const qualifier = item?.metric?.qualifier || parsedQualifier;
+          const unit = item?.metric?.unit || parsedUnit;
+          const isCalifornia = index === 2;
+          const body = item?.body ?? '';
+          const dateIndex = body.indexOf(effectiveDate);
 
-          <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-[38px] tracking-[-0.02em]">
-            {cashOut?.title || cashOut?.label}
-          </h2>
+          return (
+            <article
+              key={`${slide.id}-right-${index}`}
+              className={`relative grid min-h-[204px] flex-1 grid-cols-[190px_minmax(0,1fr)] items-center gap-7 bg-[var(--surface)] px-7 py-5 ${
+                isCalifornia
+                  ? 'border border-transparent'
+                  : 'border border-[var(--border)]'
+              }`}
+            >
+              {isCalifornia && (
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 540 800"
+                  preserveAspectRatio="none"
+                  className="pointer-events-none absolute inset-0 h-full w-full text-[var(--accent)]"
+                  fill="none"
+                >
+                  <rect
+                    x="1"
+                    y="1"
+                    width="538"
+                    height="798"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <path
+                    d="M1 90V1H52 M488 799H539V710"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+              )}
 
-          <p className="mt-2 font-[var(--font-mono)] text-[22px] leading-[28px] tracking-[0.08em] text-[var(--accent)]">
-            {threshold?.qualifier || qualifier}
-          </p>
+              <div className="flex min-w-0 flex-col items-start justify-center self-stretch border-r border-[var(--border)] pr-6">
+                {qualifier && (
+                  <span className="font-[var(--font-body)] text-[22px] leading-snug">
+                    {qualifier}
+                  </span>
+                )}
 
-          <div className="flex shrink-0 items-baseline justify-center gap-2 text-[var(--accent)]">
-            <span className="font-[var(--font-mono)] text-[84px] font-bold leading-none tracking-[-0.06em] tabular-nums">
-              {metric}
-            </span>
-            {unit && (
-              <span className="font-[var(--font-body)] text-[28px] leading-[34px]">
-                {unit}
-              </span>
-            )}
-          </div>
+                <div className="mt-1 flex shrink-0 items-baseline gap-2">
+                  <span
+                    className={`font-[var(--font-mono)] text-[42px] font-bold leading-[1.15] tracking-[-0.05em] tabular-nums ${
+                      isCalifornia ? 'text-[var(--accent)]' : ''
+                    }`}
+                  >
+                    {metric}
+                  </span>
+                  {unit && (
+                    <span className="font-[var(--font-body)] text-[22px] leading-snug">
+                      {unit}
+                    </span>
+                  )}
+                </div>
 
-          <p className="mt-2 border border-[var(--border)] bg-[var(--surface)] px-4 py-1 font-[var(--font-mono)] text-[20px] leading-[26px]">
-            {effectiveDate?.label}
-          </p>
+                <span
+                  aria-hidden="true"
+                  className={`mt-5 h-[3px] ${
+                    index === 0
+                      ? 'w-8 bg-[var(--border)]'
+                      : index === 1
+                        ? 'w-14 bg-[var(--border)]'
+                        : 'w-20 bg-[var(--accent)]'
+                  }`}
+                />
+              </div>
 
-          <p className="mt-2 font-[var(--font-mono)] text-[20px] leading-[26px]">
-            {threshold?.label}
-          </p>
+              <div className="min-w-0">
+                <h2
+                  className={`font-[var(--font-headline)] text-[26px] font-semibold leading-[1.15] tracking-[-0.025em] ${
+                    isCalifornia ? 'text-[var(--accent)]' : ''
+                  }`}
+                >
+                  {item?.title}
+                </h2>
 
-          <p className="mt-2 max-w-[850px] font-[var(--font-body)] text-[28px] leading-[34px]">
-            {cashOut?.body}
-          </p>
-        </article>
+                {item?.metric?.label && (
+                  <p className="mt-2 font-[var(--font-body)] text-[24px] font-medium leading-[1.25]">
+                    {item.metric.label}
+                  </p>
+                )}
 
-        <article className="shrink-0 border border-[var(--border)] bg-[var(--surface)] px-6 py-4">
-          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-[32px] tracking-[-0.02em]">
-            {rewards?.title || rewards?.label}
-          </h2>
-          <p className="mt-2 font-[var(--font-body)] text-[28px] leading-[34px]">
-            {rewards?.body}
-          </p>
-        </article>
+                <p className="mt-2 font-[var(--font-body)] text-[24px] leading-[1.3]">
+                  {isCalifornia && dateIndex >= 0 ? (
+                    <>
+                      {body.slice(0, dateIndex)}
+                      <strong className="font-semibold text-[var(--accent)]">
+                        {effectiveDate}
+                      </strong>
+                      {body.slice(dateIndex + effectiveDate.length)}
+                    </>
+                  ) : (
+                    body
+                  )}
+                </p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
 
-        <div className="flex shrink-0 items-center gap-5">
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 640 4"
-            preserveAspectRatio="none"
-            className="h-1 min-w-0 flex-1 text-[var(--accent)]"
-          >
-            <path
-              d="M0 2H640"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-          </svg>
-          <p className="shrink-0 font-[var(--font-headline)] text-[32px] font-bold leading-[38px] tracking-[-0.04em]">
-            The Fine Print
-          </p>
-        </div>
+      <div className="mt-5 flex shrink-0 items-center gap-5">
+        <div
+          aria-hidden="true"
+          className="h-px flex-1 bg-[var(--border)]"
+        />
+        <p className="font-[var(--font-headline)] text-[32px] font-bold leading-none tracking-[-0.045em]">
+          The Fine Print<span className="text-[var(--accent)]">.</span>
+        </p>
       </div>
     </section>
   );

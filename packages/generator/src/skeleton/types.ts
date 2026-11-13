@@ -31,6 +31,7 @@ export interface SlideData {
   id: string;
   index: number;
   type: string;
+  archetype?: string;
   platform?: string;
   title?: string;
   headline?: string;

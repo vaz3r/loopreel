@@ -1,0 +1,243 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "starbucks-gift-card-bank-how-unspent-balances-create-an-interest-free-unregulated-float",
+  "domain": "thefineprint.co",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "archetype": "monumental-cover",
+      "publication": "The Fine Print",
+      "website": "thefineprint.co",
+      "palette": {
+        "paper": "#0A0A0C",
+        "ink": "#F5F5F7",
+        "accent": "#FF2A2A",
+        "surface": "#141418"
+      },
+      "kicker": "CONSUMER FINANCE / CONVENIENCE VERSUS CUSTOMER CREDIT",
+      "headline": "Convenient Gifting. Interest-Free Financing For Starbucks.",
+      "subheadline": "Your prepayment finances Starbucks before your first sip.",
+      "issueBadge": "THE FINE PRINT · 7 SLIDES",
+      "telemetry": [
+        {
+          "badge": "0%",
+          "label": "Interest earned on your card balance"
+        },
+        {
+          "badge": "2025",
+          "label": "Fiscal evidence—not a live balance"
+        }
+      ],
+      "visualStyle": "monumental-cover",
+      "layoutTopology": "monumental-cover",
+      "svgBlueprint": "Use a 1080×1350 viewBox with 72px safe margins. Fill background #0A0A0C. Set headline in #F5F5F7 at 100px across four lines; emphasize Interest-Free in #FF2A2A. Draw a tilted #141418 gift card whose ribbon becomes a red arrow toward a coffee cup. Place two telemetry badges below. Keep source references in a separate footer rail.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "belief",
+      "archetype": "myth-vs-reality",
+      "kicker": "WHY IT FEELS HARMLESS",
+      "headline": "Convenience Makes Prepayment Feel Invisible",
+      "subheadline": "Easy gifting disguises who receives the money first.",
+      "items": [
+        {
+          "title": "THE APPEAL",
+          "body": "Give coffee easily. **Keep payment simple**."
+        },
+        {
+          "title": "THE TRADEOFF",
+          "body": "Starbucks gets **cash before delivering goods**."
+        },
+        {
+          "title": "THE CATCH",
+          "body": "**Generally nonrefundable credit**, with cash-out exceptions."
+        }
+      ],
+      "visualStyle": "myth-vs-reality",
+      "layoutTopology": "myth-vs-reality",
+      "svgBlueprint": "Use the shared 1080×1350 canvas and palette. Put THE APPEAL inside an ink-colored upper panel with dark type and a ribbon icon. Place THE TRADEOFF in a dark lower panel with a red cash arrow entering a storefront before a cup exits. Set body copy at 44px. Add THE CATCH as a full-width surface-colored strip, not a third equal card.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "anomaly",
+      "archetype": "by-the-numbers-grid",
+      "kicker": "THE NUMBER PROBLEM",
+      "headline": "Neither Balance Is Gift-Card Cash",
+      "subheadline": "Both totals mix cards with other obligations.",
+      "scope": "September 28, 2025",
+      "telemetry": [
+        {
+          "badge": "$1,840.6 million",
+          "label": "Mixed obligations"
+        },
+        {
+          "badge": "$1,751.7 million",
+          "label": "Cards/rewards combined"
+        },
+        {
+          "badge": "$177.0 million",
+          "label": "Business prepayment"
+        },
+        {
+          "badge": "2025",
+          "label": "Fiscal snapshot"
+        }
+      ],
+      "verdictStamp": "**NOT CARD-ONLY TOTALS**",
+      "sourceNotes": [
+        "The $1,840.6 million balance-sheet category combines stored-value-card liability and current deferred revenue, including $177.0 million of current Nestlé prepaid royalty. The $1,751.7 million disclosure combines stored-value cards and loyalty-program obligations."
+      ],
+      "visualStyle": "by-the-numbers-grid",
+      "layoutTopology": "by-the-numbers-grid",
+      "svgBlueprint": "Draw a 2×2 matrix using thin ink rules, not boxed dashboard widgets. Split each monetary display into a large exact number and smaller million unit without changing precision. Use red brackets around both headline totals. Connect the $177.0 million cell only to the $1,840.6 million cell. Do not subtract the two totals or imply identical coverage. Keep the detailed source note outside the main visual.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanism",
+      "archetype": "step-flow-chain",
+      "kicker": "HOW THE MONEY MOVES",
+      "headline": "Financing Starts Before Revenue Appears",
+      "subheadline": "Upfront cash and unspent-balance revenue are separate benefits.",
+      "items": [
+        {
+          "step": "01",
+          "title": "LOAD MONEY",
+          "body": "Your payment gives Starbucks **cash upfront**."
+        },
+        {
+          "step": "02",
+          "title": "BUY COFFEE",
+          "body": "Redeeming credit turns prepayment into **purchase revenue**."
+        },
+        {
+          "step": "03",
+          "title": "ESTIMATE NONUSE",
+          "body": "**Estimated nonuse becomes revenue** proportionately with redemptions."
+        }
+      ],
+      "callout": {
+        "title": "NO CANCELLATION",
+        "body": "Recording that revenue **doesn't expire your balance**.​"
+      },
+      "sourceNotes": [
+        "Nonredemption estimates reflect historical redemption patterns and applicable payments to government agencies under unclaimed-property laws."
+      ],
+      "visualStyle": "step-flow-chain",
+      "layoutTopology": "step-flow-chain",
+      "svgBlueprint": "Place 01 and 02 on a solid red vertical path, representing loading then purchasing. Branch a dotted path from redemption activity toward 03, showing an estimate rather than another customer payment. Use a wallet, cup, and calculation icon. Keep each body on two lines at 42px. Put NO CANCELLATION in an outlined bottom strip; never depict balances being erased.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "evidence",
+      "archetype": "receipt-highlight",
+      "kicker": "THE CONTRACT RECEIPT",
+      "headline": "Your Balance Earns You Nothing",
+      "subheadline": "No interest, no deposit insurance—but no expiration.",
+      "items": [
+        {
+          "title": "NO INTEREST",
+          "body": "Your card balance **earns no interest**."
+        },
+        {
+          "title": "NO INSURANCE",
+          "body": "Your card value has **no FDIC insurance**."
+        },
+        {
+          "title": "NO EXPIRATION",
+          "body": "**Neither card nor loaded value expires**."
+        }
+      ],
+      "documentLabel": "Starbucks Card Terms · Effective July 24, 2023",
+      "verdictStamp": "**MERCHANDISE CREDIT, NOT SAVINGS**",
+      "visualStyle": "receipt-highlight",
+      "layoutTopology": "receipt-highlight",
+      "svgBlueprint": "Draw a large #F5F5F7 receipt polygon on #0A0A0C with a serrated lower edge. Use dark receipt text at 44px and red highlight bands behind the three bold anchors. Identify findings as paraphrases, not quotations. Place the contract date near the receipt header. Overlay a red outlined verdict stamp at the lower right without obscuring text.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "incentives",
+      "archetype": "hero-stat-bar",
+      "kicker": "WHO BENEFITS",
+      "headline": "Starbucks Benefits Before And After",
+      "subheadline": "Customer financing comes first; estimated nonuse adds revenue.​",
+      "heroStat": {
+        "value": "$222.4 million",
+        "label": "Calculated fiscal 2025 gift-card nonredemption revenue"
+      },
+      "comparisonBar": {
+        "label": "Fiscal year ended September 28, 2025",
+        "segments": [
+          {
+            "value": "$200.4 million",
+            "label": "Company-operated stores"
+          },
+          {
+            "value": "$22.0 million",
+            "label": "Licensed stores"
+          }
+        ]
+      },
+      "items": [
+        {
+          "title": "EARLIER BENEFIT",
+          "body": "Prepayments finance Starbucks **before customers redeem**.​"
+        },
+        {
+          "title": "SEPARATE BENEFIT",
+          "body": "**Nonredemption revenue**, not interest or fresh cash."
+        }
+      ],
+      "visualStyle": "hero-stat-bar",
+      "layoutTopology": "hero-stat-bar",
+      "svgBlueprint": "Set $222.4 as a monumental tabular figure with million immediately underneath. Draw an 840px stacked bar with segment widths calculated from 200.4 and 22.0; use ink and red respectively. Put exact segment amounts in external labels with leader lines. Position two brief benefit captions below. Never label the total profit, interest, or newly received cash.",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "archetype": "myth-vs-reality",
+      "kicker": "THE REALITY CHECK",
+      "headline": "Prepaid Coffee Is Not A Bank",
+      "subheadline": "Interest-free financing is real. The bank analogy misleads.​",
+      "items": [
+        {
+          "title": "THE FINANCING",
+          "body": "Customers supply **interest-free cash before purchases**."
+        },
+        {
+          "title": "THE PROTECTION",
+          "body": "**Gift-card protections apply**, not bank-deposit insurance.​"
+        },
+        {
+          "title": "YOUR MOVE",
+          "body": "**Preload intended purchases**, not your savings."
+        }
+      ],
+      "cashOut": {
+        "title": "CALIFORNIA CASH-OUT",
+        "body": "Qualifying balances **below $15** are cash-redeemable.",
+        "effectiveDate": "April 1, 2026",
+        "qualification": "Physical and electronic cards; exactly $15 excluded."
+      },
+      "verdictStamp": "**FINANCING ≠ BREAKAGE ≠ BANK DEPOSITS**",
+      "visualStyle": "myth-vs-reality",
+      "layoutTopology": "myth-vs-reality",
+      "svgBlueprint": "Use a narrow left column for THE FINANCING and a wider right column for THE PROTECTION, separated by a red rule. Place YOUR MOVE beneath both in large ink type. Add a surface-colored California strip with below $15 highlighted red, the effective date directly beneath, and the exact-threshold exclusion visible. Finish with the verdict stamp and thefineprint.co.",
+      "platform": "instagram-feed"
+    }
+  ]
+}

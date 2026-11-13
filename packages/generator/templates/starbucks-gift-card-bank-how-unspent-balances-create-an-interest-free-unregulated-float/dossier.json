@@ -1,0 +1,130 @@
+{
+  "articleTitle": "Starbucks Gift Card Bank: How Customer Prepayments Create Interest-Free Float",
+  "publisher": "thefineprint.co / Research Desk",
+  "byline": "Senior Investigative Bureau",
+  "summary": "Starbucks receives customers’ money before supplying their purchases, pays no interest on card balances, and recognized $222.4 million in gift-card breakage revenue in fiscal 2025, calculated from its disclosed company-operated and licensed-store amounts.​ This creates an interest-free customer-financing mechanism, but the balances are merchandise prepayments rather than insured bank deposits, and federal gift-card rules and state cash-redemption laws mean the arrangement is not literally unregulated.​​",
+  "entities": [
+    {
+      "name": "Starbucks Corporation",
+      "type": "Company",
+      "role": "Issues Starbucks Cards and records customer loads as deferred revenue until redemption or recognition of estimated breakage.​"
+    },
+    {
+      "name": "Starbucks Card",
+      "type": "Product",
+      "role": "Prepaid purchasing instrument whose balance earns no interest, has no FDIC insurance, and generally cannot be redeemed for cash except where law or the agreement permits."
+    },
+    {
+      "name": "Consumer Financial Protection Bureau",
+      "type": "Agency",
+      "role": "Publishes Regulation E, 12 CFR § 1005.20, governing covered gift-card expiration dates, fees, and disclosures."
+    },
+    {
+      "name": "Federal Deposit Insurance Corporation",
+      "type": "Agency",
+      "role": "Does not insure Starbucks Card balances, according to Starbucks’ card agreement."
+    },
+    {
+      "name": "Nestlé",
+      "type": "Company",
+      "role": "Its prepaid Global Coffee Alliance royalty contributes to Starbucks’ deferred revenue; $177.0 million was classified as current at September 28, 2025, illustrating why the broader balance-sheet line is not exclusively customer gift-card money."
+    }
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "$1,840.6 million",
+      "label": "Stored value card liability and current portion of deferred revenue",
+      "context": "Consolidated balance-sheet amount at September 28, 2025, versus $1,781.2 million at September 29, 2024. This combined accounting category must not be presented as a standalone measure of unspent gift-card balances."
+    },
+    {
+      "value": "$1,751.7 million",
+      "label": "Stored-value cards and loyalty-program deferred revenue",
+      "context": "Note 11 balance at September 28, 2025, versus $1,718.7 million at September 29, 2024. Includes loyalty obligations as well as stored-value cards; approximately $1.6 billion was current at each year-end."
+    },
+    {
+      "value": "$15,245.8 million",
+      "label": "Fiscal 2025 deferred-revenue additions",
+      "context": "Complete Note 11 rollforward, in millions: opening balance $1,718.7; card activations, reloads and Stars earned $15,245.8; card and Stars redemptions and breakage ($15,199.5); other changes ($13.3); closing balance $1,751.7. Other changes primarily reflect foreign-currency translation. Additions include Stars earned and therefore are not a pure cash-load figure."
+    },
+    {
+      "value": "$222.4 million",
+      "label": "Fiscal 2025 total gift-card breakage revenue",
+      "context": "Calculated sum of $200.4 million recognized in company-operated store revenues and $22.0 million in licensed store revenues for the year ended September 28, 2025. This is revenue recognized from estimated nonredemption, not interest income or new cash received when the accounting entry is made."
+    },
+    {
+      "value": "$207.6 million",
+      "label": "Fiscal 2024 total gift-card breakage revenue",
+      "context": "Calculated sum of $187.6 million in company-operated store revenues and $20.0 million in licensed store revenues for the year ended September 29, 2024."
+    },
+    {
+      "value": "$215.0 million",
+      "label": "Fiscal 2023 total gift-card breakage revenue",
+      "context": "Calculated sum of $196.1 million in company-operated store revenues and $18.9 million in licensed store revenues for the year ended October 1, 2023."
+    },
+    {
+      "value": "$3,219.8 million",
+      "label": "Corporate cash and cash equivalents",
+      "context": "Consolidated balance-sheet amount at September 28, 2025, versus $3,286.2 million at September 29, 2024. These are company-wide cash balances, not a disclosed dedicated reserve for gift-card holders."
+    },
+    {
+      "value": "Within one year",
+      "label": "Historical redemption horizon",
+      "context": "Starbucks states that the majority of stored-value cards historically are redeemed within one year. The outstanding liability therefore should not be treated as money that every customer leaves untouched indefinitely."
+    },
+    {
+      "value": "Less than $15",
+      "label": "California mandatory cash-redemption threshold",
+      "context": "SB 22, Chapter 207, approved October 01, 2025, increased the qualifying gift-certificate cash-out threshold from less than $10 to less than $15, operative April 1, 2026, and expressly included electronic gift cards. Exactly $15 does not meet the less-than-$15 threshold."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "The value on your Starbucks Card is not insured by the Federal Deposit Insurance Corporation (FDIC), nor does it earn interest.",
+      "speaker": "Starbucks Corporation",
+      "role": "Card issuer",
+      "context": "Starbucks Card Terms & Conditions, effective July 24, 2023, About Your Account."
+    },
+    {
+      "quote": "Amounts loaded onto stored value cards are initially recorded as deferred revenue and recognized as revenue upon redemption.",
+      "speaker": "Starbucks Corporation",
+      "role": "SEC reporting company",
+      "context": "Fiscal 2025 annual report, Note 1, stored-value-card accounting policy."
+    }
+  ],
+  "hardwareSpecs": {
+    "deviceA": {
+      "name": "Starbucks Card prepaid-balance and breakage mechanism",
+      "specs": [
+        "Financial mechanism, not banking hardware: money is received at loading; purchase revenue is recognized upon redemption; estimated breakage is recognized proportionately as cards are redeemed.",
+        "Maximum balance: $500 per card. Maximum activity: $2,000 per card in a single day. Aggregate daily loads and new-card purchases: $10,000. Typical minimum load: $5. The agreement permits changes to these amounts without notice.",
+        "Automatic reload can use a selected date or balance trigger. Preference changes can take twenty-four (24) hours; cancellation must occur at least twenty-four (24) hours before the next scheduled reload. The agreement says completed loads cannot be reversed.",
+        "No activation, service, dormancy or inactivity fees; neither the card nor its loaded value expires."
+      ],
+      "price": "No interest paid to cardholders; $1,751.7 million in combined stored-value-card and loyalty-program deferred revenue at September 28, 2025—not a card-only deposit total.​",
+      "availability": "Available through participating Starbucks locations and digital channels; some Starbucks-branded airport, grocery and bookstore locations, and stores in Guam, may not accept the card."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "Starbucks describes the card program as providing convenient payment, supporting gifting, and increasing cardholders’ store-visit frequency.",
+    "criticismOrAlarm": "Customers exchange cash for generally nonrefundable purchasing credit that pays no interest and carries no FDIC insurance, while Starbucks receives the money before fulfilling purchases.​ Separately, estimated nonredemption generated $222.4 million in calculated fiscal 2025 breakage revenue; that accounting benefit is distinct from the financing benefit of holding money before redemption.",
+    "regulatoryOrHistoricalPrecedent": "This is not an absence-of-regulation arrangement. Regulation E, 12 CFR § 1005.20, generally protects covered underlying gift-card funds until at least the later of five years after issuance or last loading, as applicable, and the card’s expiration date; dormancy, inactivity and service fees require a one-year period without activity, specified disclosures, and no more than one such fee in a calendar month. Starbucks contractually goes further by charging none of those fees and imposing no expiration. California Civil Code § 1749.5, as amended by SB 22, requires cash redemption of qualifying balances below $15 from April 1, 2026; a specified exception covers donated nonprofit or charitable gift certificates bearing a non-cash-redemption disclaimer in at least 10-point font."
+  },
+  "hiddenCatchesAndLimits": [
+    "The headline balance is not all gift-card float: $1,840.6 million combines stored-value liabilities with current deferred revenue, including $177.0 million of current Nestlé prepaid royalty; the narrower $1,751.7 million disclosure still combines cards and loyalty obligations.",
+    "No expiration does not prevent breakage revenue. Starbucks estimates nonredemption from historical patterns and recognizes breakage proportionately with redemptions, considering remittances required under applicable unclaimed-property laws; this is not a contractual cancellation of customers’ balances.​",
+    "Cash-out is constrained, not universally prohibited. The agreement generally bars cash redemption but preserves legal and contractual exceptions, including refunds for unused eGifts with the original receipt; California separately requires qualifying balances below $15 to be redeemable for cash from April 1, 2026.​",
+    "Automatic reload can replenish a balance before it is exhausted. Customers select the trigger and amount, but stopping the next scheduled reload requires at least twenty-four (24) hours’ notice, and completed loads are described as irreversible.",
+    "Lost-card protection is conditional. Replacement requires prior registration and protects only the balance remaining when Starbucks is notified; the agreement assigns responsibility for unauthorized transactions to the customer. Billing-error review also requires sufficient notice within sixty (60) days of the transaction."
+  ],
+  "editorialVerdict": {
+    "avoidAdvice": [
+      "Do not treat a Starbucks balance as savings: it earns no interest, lacks FDIC insurance, and generally buys participating-store goods rather than providing on-demand cash withdrawal.",
+      "Avoid describing the entire $1,840.6 million balance-sheet category as customer deposits or the $222.4 million calculated breakage total as interest earned; the filing classifies them differently."
+    ],
+    "fitAdvice": [
+      "The supported financial thesis is customer-funded working capital plus a separate nonredemption revenue stream: cash arrives before product delivery, while estimated breakage is recognized over time.",
+      "For consumers seeking liquidity, limit preloads to intended purchases, review automatic-reload settings, register cards before loss, and exercise applicable cash-out rights—including California’s qualifying less-than-$15 rule effective April 1, 2026.​",
+      "Use the fiscal 2025 figures as dated evidence, not as a November 2026 live balance; distinguish merchandise prepayments, loyalty obligations, prepaid royalties and insured bank deposits throughout the investigation.​"
+    ]
+  }
+}

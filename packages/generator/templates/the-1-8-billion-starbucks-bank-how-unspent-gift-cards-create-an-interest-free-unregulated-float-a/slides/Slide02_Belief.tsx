@@ -10,145 +10,123 @@ export default function Slide02({
   totalSlides,
 }: SlideComponentProps) {
   const items = slide.items ?? [];
-  const metrics = slide.metrics ?? [];
+  const reassurance = items[0];
+  const exchange = items[1];
 
-  const panels = [
-    { item: items[0], evidence: metrics[0], kind: 'promise' },
-    { item: items[1], evidence: metrics[1], kind: 'contract' },
-  ] as const;
+  const reassuranceMetric = parseMetricBadge(
+    reassurance?.metric?.badge ?? '',
+  );
+  const exchangeMetric = parseMetricBadge(exchange?.metric?.badge ?? '');
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <header className="shrink-0">
-        <p className="font-[var(--font-mono)] text-[22px] uppercase leading-snug tracking-[0.12em] text-[var(--accent)]">
-          {slide.kicker}
-        </p>
+      <header className="flex shrink-0 flex-col gap-5">
+        <div className="flex items-center gap-5">
+          <span
+            aria-hidden="true"
+            className="h-[2px] w-12 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[22px] uppercase leading-tight tracking-[0.16em] text-[var(--accent)]">
+            {slide.kicker}
+          </p>
+        </div>
 
-        <h1 className="mt-5 max-w-[920px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
+        <h1 className="max-w-[920px] font-[var(--font-headline)] text-[64px] font-bold leading-[1.04] tracking-[-0.04em]">
           {slide.headline}
         </h1>
 
-        <p className="mt-5 max-w-[900px] font-[var(--font-body)] text-[28px] leading-snug">
+        <p className="max-w-[860px] font-[var(--font-body)] text-[28px] leading-snug">
           {slide.subheadline}
         </p>
       </header>
 
-      <div className="mt-8 grid min-h-0 flex-1 grid-cols-2 border-y border-[var(--border)]">
-        {panels.map(({ item, evidence, kind }) => {
-          const { qualifier, value: metric, unit } = parseMetricBadge(
-            evidence?.badge ?? '',
-          );
-          const isPromise = kind === 'promise';
+      <div className="mt-10 flex shrink-0 flex-col">
+        <article className="flex min-h-[272px] w-[calc(100%-56px)] flex-col justify-center gap-6 border border-[var(--ink)] bg-[var(--surface)] px-8 py-7">
+          <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.02em]">
+            {reassurance?.title}
+          </h2>
 
-          return (
-            <article
-              key={kind}
-              className={`flex min-h-0 min-w-0 flex-col px-8 py-7 ${
-                isPromise
-                  ? 'bg-[var(--surface)]'
-                  : 'border-l border-[var(--accent)]'
-              }`}
-            >
-              <div className="flex h-[120px] shrink-0 items-center">
-                {isPromise ? (
-                  <svg
-                    viewBox="0 0 240 140"
-                    className="h-[112px] w-[192px]"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <rect
-                      x="14"
-                      y="20"
-                      width="212"
-                      height="108"
-                      rx="5"
-                      stroke="var(--ink)"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M78 20V128M14 61H226"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M78 61C61 60 45 50 48 39C51 28 74 34 78 61ZM78 61C81 39 96 30 105 38C116 49 96 61 78 61Z"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M158 96H200M180 108H200"
-                      stroke="var(--ink)"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    viewBox="0 0 240 140"
-                    className="h-[112px] w-[192px]"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M66 15H28V127H66M174 15H212V127H174"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                      strokeLinecap="square"
-                    />
-                    <path
-                      d="M64 43H176M64 64H157M64 85H176"
-                      stroke="var(--ink)"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M64 107H116"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                    />
-                  </svg>
+          <div className="grid grid-cols-[178px_minmax(0,1fr)] items-start gap-7">
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex items-baseline gap-2">
+                {reassuranceMetric.qualifier && (
+                  <span className="font-[var(--font-body)] text-[22px]">
+                    {reassuranceMetric.qualifier}
+                  </span>
+                )}
+                <span className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.05em] tabular-nums">
+                  {reassuranceMetric.value}
+                </span>
+                {reassuranceMetric.unit && (
+                  <span className="font-[var(--font-body)] text-[22px]">
+                    {reassuranceMetric.unit}
+                  </span>
                 )}
               </div>
 
-              <h2 className="mt-6 font-[var(--font-headline)] text-[34px] font-semibold leading-tight tracking-[-0.025em]">
-                {item?.title || item?.label}
-              </h2>
-
-              <p className="mt-5 font-[var(--font-body)] text-[28px] leading-[1.35]">
-                {item?.body}
+              <p className="font-[var(--font-mono)] text-[22px] leading-snug">
+                {reassurance?.metric?.label}
               </p>
+            </div>
 
-              {evidence && (
-                <div className="mt-auto pt-7">
-                  <div className="border-t border-[var(--border)] pt-5">
-                    <div className="flex items-baseline gap-2">
-                      {qualifier && (
-                        <span className="font-[var(--font-body)] text-[22px]">
-                          {qualifier}
-                        </span>
-                      )}
+            <p className="min-w-0 border-l border-[var(--border)] pl-7 font-[var(--font-body)] text-[26px] leading-snug">
+              {reassurance?.body}
+            </p>
+          </div>
+        </article>
 
-                      <span className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.04em] text-[var(--accent)] tabular-nums">
-                        {metric}
-                      </span>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 540 800"
+          preserveAspectRatio="none"
+          className="block h-[52px] w-full shrink-0 text-[var(--accent)]"
+          fill="none"
+        >
+          <path
+            d="M 480 0 C 480 400, 64 400, 64 800"
+            stroke="currentColor"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
 
-                      {unit && (
-                        <span className="font-[var(--font-body)] text-[22px]">
-                          {unit}
-                        </span>
-                      )}
-                    </div>
+        <article className="ml-[56px] flex min-h-[272px] w-[calc(100%-56px)] flex-col justify-center gap-6 border border-[var(--border)] border-l-[4px] border-l-[var(--accent)] bg-[var(--surface)] px-8 py-7">
+          <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.02em]">
+            {exchange?.title}
+          </h2>
 
-                    <p className="mt-3 font-[var(--font-mono)] text-[20px] leading-snug tracking-[0.015em]">
-                      {evidence.label}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </article>
-          );
-        })}
+          <div className="grid grid-cols-[178px_minmax(0,1fr)] items-start gap-7">
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex items-baseline gap-2 text-[var(--accent)]">
+                {exchangeMetric.qualifier && (
+                  <span className="font-[var(--font-body)] text-[22px]">
+                    {exchangeMetric.qualifier}
+                  </span>
+                )}
+                <span className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.05em] tabular-nums">
+                  {exchangeMetric.value}
+                </span>
+                {exchangeMetric.unit && (
+                  <span className="font-[var(--font-body)] text-[22px]">
+                    {exchangeMetric.unit}
+                  </span>
+                )}
+              </div>
+
+              <p className="font-[var(--font-mono)] text-[22px] leading-snug">
+                {exchange?.metric?.label}
+              </p>
+            </div>
+
+            <p className="min-w-0 border-l border-[var(--border)] pl-7 font-[var(--font-body)] text-[26px] leading-snug">
+              {exchange?.body}
+            </p>
+          </div>
+        </article>
       </div>
+
+      <div aria-hidden="true" className="min-h-8 flex-1" />
     </section>
   );
 }

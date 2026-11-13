@@ -9,131 +9,129 @@ export default function Slide03({
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  void brand;
-  void totalSlides;
-
   const items = slide.items ?? [];
-  const metrics = slide.metrics ?? [];
-
-  const cutaways = [
-    {
-      item: items[0],
-      metric: metrics[0],
-      position: 'mr-auto w-[920px]',
-      height: 'min-h-[300px]',
-    },
-    {
-      item: items[1],
-      metric: metrics[1],
-      position: 'ml-auto w-[840px]',
-      height: 'min-h-[286px]',
-    },
-  ];
+  const panels = [items[0], items[1]];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-5 flex items-center gap-4">
-          <span
-            aria-hidden="true"
-            className="h-[2px] w-10 shrink-0 bg-[var(--accent)]"
-          />
-          <p className="font-[var(--font-mono)] text-[20px] leading-[26px] tracking-[0.12em] text-[var(--accent)]">
-            {slide.kicker}
-          </p>
-        </div>
+      <header className="flex h-[366px] shrink-0 flex-col pb-7">
+        <p className="font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.16em] text-[var(--accent)]">
+          {slide.kicker}
+        </p>
 
-        <h1 className="max-w-[920px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
+        <h1 className="mt-5 max-w-[940px] font-[var(--font-headline)] text-[62px] font-bold leading-[1.03] tracking-[-0.04em]">
           {slide.headline}
         </h1>
 
-        <p className="mt-5 max-w-[900px] font-[var(--font-body)] text-[28px] leading-[1.3]">
+        <p className="mt-5 max-w-[880px] font-[var(--font-body)] text-[28px] leading-snug">
           {slide.subheadline}
+        </p>
+
+        <p className="mt-auto pt-5 font-[var(--font-mono)] text-[22px] leading-snug tracking-[0.04em]">
+          {slide.asOf}
         </p>
       </header>
 
-      <div className="mt-9 flex flex-col gap-8">
-        {cutaways.map(({ item, metric, position, height }, index) => {
-          const {
-            qualifier,
-            value,
-            unit: parsedUnit,
-          } = parseMetricBadge(metric?.badge ?? '');
+      <div className="relative isolate grid min-h-0 flex-1 grid-cols-2 gap-[56px] px-[56px]">
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          className="pointer-events-none absolute inset-0 -z-10 h-full w-full"
+          viewBox="0 285 540 515"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <path
+            d="M0 285H540"
+            stroke="var(--border)"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
 
-          const unit = metric?.unit || parsedUnit;
+          <g
+            stroke="var(--border)"
+            strokeWidth="1"
+            opacity="0.48"
+          >
+            <path d="M32 370H254 M286 370H508" />
+            <path d="M32 425H254 M286 425H508" />
+            <path d="M32 480H254 M286 480H508" />
+            <path d="M32 535H254 M286 535H508" />
+            <path d="M32 590H254 M286 590H508" />
+            <path d="M32 645H254 M286 645H508" />
+            <path d="M32 700H254 M286 700H508" />
+            <path d="M32 755H254 M286 755H508" />
+          </g>
+
+          <path
+            d="M270 285V800"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+
+          <path
+            d="M263 285H277 M263 800H277"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+
+          <path
+            d="M32 800H254 M286 800H508"
+            stroke="var(--border)"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {panels.map((item, index) => {
+          if (!item) return null;
+
+          const { qualifier, value: metric, unit } = parseMetricBadge(
+            item.metric?.badge ?? ''
+          );
+          const metricUnit = item.metric?.unit || unit;
 
           return (
-            <div
-              key={index}
-              className={`relative isolate shrink-0 max-w-full pb-[22px] pr-[22px] ${position}`}
+            <article
+              key={`${slide.id}-${index}`}
+              className="flex min-w-0 flex-col pb-9 pt-9"
             >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                className="pointer-events-none absolute inset-0 h-full w-full text-[var(--border)]"
-                viewBox="0 0 920 330"
-                preserveAspectRatio="none"
-                fill="none"
-              >
-                <path
-                  d="M12 10H908V318H12Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  vectorEffect="non-scaling-stroke"
-                />
-                <path
-                  d="M24 22H919V329H24Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  vectorEffect="non-scaling-stroke"
-                />
-                <path
-                  d="M884 329H919V294"
-                  stroke="var(--accent)"
-                  strokeWidth="2"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
+              <h2 className="min-h-[88px] font-[var(--font-headline)] text-[32px] font-semibold leading-[1.15] tracking-[-0.025em]">
+                {item.title || item.label}
+              </h2>
 
-              <article
-                className={`relative flex flex-col border border-[var(--border)] bg-[var(--surface)] px-8 py-7 ${height}`}
-              >
-                <div className="flex items-center gap-4">
-                  <span
-                    aria-hidden="true"
-                    className="h-7 w-[6px] shrink-0 bg-[var(--accent)]"
-                  />
-                  <h2 className="font-[var(--font-mono)] text-[20px] font-semibold leading-[26px] tracking-[0.08em] text-[var(--accent)]">
-                    {item?.title || item?.label}
-                  </h2>
-                </div>
-
-                <div
-                  aria-label={metric?.label}
-                  className="mt-4 flex shrink-0 flex-wrap items-baseline gap-x-3 gap-y-1"
-                >
+              <div className="mt-6">
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   {qualifier && (
                     <span className="font-[var(--font-body)] text-[22px] leading-snug">
                       {qualifier}
                     </span>
                   )}
 
-                  <span className="font-[var(--font-mono)] text-[52px] font-bold leading-[1.2] tracking-[-0.04em] tabular-nums">
-                    {value}
+                  <span className="whitespace-nowrap font-[var(--font-mono)] text-[44px] font-bold leading-[1.1] tracking-[-0.04em] tabular-nums">
+                    {metric}
                   </span>
-
-                  {unit && (
-                    <span className="font-[var(--font-body)] text-[24px] leading-snug">
-                      {unit}
-                    </span>
-                  )}
                 </div>
 
-                <p className="mt-4 font-[var(--font-body)] text-[28px] leading-[1.3]">
-                  {item?.body}
-                </p>
-              </article>
-            </div>
+                {metricUnit && (
+                  <p className="mt-2 font-[var(--font-mono)] text-[22px] leading-snug">
+                    {metricUnit}
+                  </p>
+                )}
+              </div>
+
+              <p className="mt-7 min-h-[66px] max-w-[350px] font-[var(--font-body)] text-[24px] leading-snug">
+                {item.metric?.label}
+              </p>
+
+              <div className="mt-8 h-[3px] w-10 shrink-0 bg-[var(--accent)]" />
+
+              <p className="mt-6 font-[var(--font-body)] text-[26px] leading-[1.4]">
+                {item.body}
+              </p>
+            </article>
           );
         })}
       </div>

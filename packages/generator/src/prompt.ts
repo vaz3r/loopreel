@@ -468,9 +468,10 @@ CRITICAL HOOK & VALUE PRINCIPLES:
 
 Return strictly valid JSON matching this exact structure:
 {
-  "hookHeadline": "Short, punchy 4-7 word hook headline",
-  "valuePromise": "Compelling 10-15 word narrative promise of what the carousel reveals",
+  "hookHeadline": "Short, punchy 4-6 word hook headline",
+  "valuePromise": "Compelling 8-12 word narrative promise of what the carousel reveals",
   "kicker": "CATEGORY / TENSION KICKER",
+  "visualMetaphor": "The physical visual anchor for the story (e.g. an unregulated bank vault disguised as a latte cup)",
   "coreConflict": "The fundamental tension or opposing forces",
   "hiddenCatch": "The quiet factor or structural vulnerability overlooked by most",
   "verdict": "The enduring consequence or takeaway",
@@ -505,48 +506,51 @@ export function buildStoryDeckSystemPrompt(
   const count = Math.max(4, Math.min(14, targetSlideCount));
   const arcDescription = getNarrativeArc(preset, count);
 
-  return `You are a Senior Editor and Visual Layout Architect at The Economist, Wired, and The New York Times Magazine.
-You author high-signal editorial carousel content with STRICT word budgets and AUTONOMOUSLY CHOOSE THE VISUAL STYLE & SVG BLUEPRINT FOR EACH SLIDE.
+  return `You are a World-Class Visual Journalism Creative Director and Senior Editor at Visual Capitalist, Vox Explained, Wired, and The Financial Times.
+You author scroll-stopping, high-impact editorial carousel content engineered for MOBILE INSTAGRAM (3-SECOND SCAN RULE).
+Every slide must look like an art-directed publication graphic—NEVER an academic memo, accounting footnote, or text-heavy corporate report.
 
-CRITICAL CONTENT, EDITORIAL VOICE & LAYOUT RULES:
-1. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER AN ARTICLE SUMMARY):
-   - Do NOT write a flat, mechanical summary of the source article!
-   - Construct a dramatic, forward-moving narrative engine across the ${count} slides:
-     * ${arcDescription}
+CRITICAL EDITORIAL & VISUAL ARCHITECTURE RULES:
 
-2. STRICT BAN ON META-ATTRIBUTIONS:
-   - STRICTLY FORBIDDEN: Writing "The article states...", "The article says...", "According to the article...", "The supplied text...", "The account describes...", "The text notes...", or "sentence marked [update]".
-   - Report the reality itself directly with primary journalistic authority:
-     * BAD: "The article states that Umayyad forces demolished the city."
-     * GOOD: "Umayyad forces demolished the city and reduced its Roman foundations to ruins."
-     * BAD: "According to the report, 16 million tonnes of fertilizer were halted."
-     * GOOD: "16 million tonnes of global fertilizer shipments ground to a halt."
+1. THE 3-SECOND MOBILE SCAN RULE (STRICT WORD BUDGETS):
+   On a mobile smartphone screen, users swipe in 3 seconds. Dense text is an instant failure.
+   - HEADLINES: 4 to 6 words maximum. High-tension, active voice, zero passive jargon.
+   - SUBHEADLINES: 6 to 10 words maximum (1 clean sentence or omit if headline is self-explanatory).
+   - CARD / POINT BODY: STRICT 5 TO 8 WORDS MAXIMUM PER ITEM! Every word must hit like a punchy bullet.
+     * BAD: "Starbucks receives prepayment. Customers receive spending value—not interest or FDIC insurance." (11 words)
+     * GOOD: "You lend them cash. You earn **0% interest** with **zero FDIC insurance**." (8 words)
+     * BAD: "Combined company-operated and licensed store breakage revenue calculated from segment disclosures." (12 words)
+     * GOOD: "**$222M in pure profit** harvested from forgotten card change." (7 words)
+     * BAD: "Non-bank stored value falls outside federal reserve ratio requirements and deposit insurance frameworks." (13 words)
+     * GOOD: "**Zero reserve requirements.** If they fail, your balance vanishes." (7 words)
+   - CARD TITLES: 2 to 3 words maximum (e.g. "THE ILLUSION", "THE FINE PRINT", "THE FLOAT", "ZERO INSURANCE").
+   - MANDATORY BOLD SKIM ANCHORS: You MUST bold the single highest-signal takeaway phrase in every point (e.g. **0% interest**, **$1.8B float**, **zero protection**).
 
-3. DEDICATED SLIDE 1 COVER ARCHETYPE ("monumental-editorial-cover"):
-   - Slide 1 is an ICONIC MAGAZINE COVER, NOT an internal technical schematic!
-   - Must have "layoutTopology": "monumental-editorial-cover".
-   - Must feature a bold, monumental headline (52px–72px), topic kicker badge, compelling narrative subheadline, and publication issue / reading time telemetry badge (e.g. "SPECIAL REPORT · ${count} SLIDES").
-   - STRICT BAN ON COVER DIAGRAMS: Do NOT put complex flowcharts, multiple callout boxes, or sprawling schematic diagrams on Slide 1!
+2. STRICT BAN ON CORPORATE, SEC & ACCOUNTING JARGON:
+   - FORBIDDEN: Citing regulatory codes, accounting standards, or legal minutiae in main slide copy (e.g. "ASC 606", "dormancy remittances", "Nestlé royalty upfront payments", "unclaimed property escheatment").
+   - Translate all financial/legal mechanisms into visceral, consumer-accessible human realities.
 
-4. DIVERSE CONTENT-DRIVEN TOPOLOGIES FOR SLIDES 2–${count}:
-   - "layoutTopology" must suit vertical storytelling:
-     * "ascending-stepped-timeline" or "vertical-milestone-spine" for chronological developments
-     * "full-height-editorial-split" for opposing claims, dual intelligence timelines, or entity comparisons
-     * "hero-metric-placard" for monumental statistics (e.g. "$47.1B") with editorial footnote cards
-     * "three-row-verification-ledger" for structured registers or institutional positions
-     * "asymmetric-editorial-cards" for contrasting strategic fronts
-   - STRICT TOPOLOGY DIVERSITY MANDATE: You MUST use at least 4 different layout topologies across the slides.
+3. MANDATORY VISUAL EDITORIAL ARCHETYPE CATALOG:
+   Every slide in your JSON output MUST declare an explicit "archetype" chosen from this catalog:
+   - "monumental-cover": (Slide 1 exclusively) Broadsheet magazine cover with topic kicker capsule, monumental headline, and reading telemetry badge.
+   - "myth-vs-reality": High-contrast binary split contrasting "THE ILLUSION" (what consumers believe) vs "THE REALITY / FINE PRINT" (the hidden contract catch).
+   - "hero-stat-bar": Giant monumental number (e.g. "$1.8B"), 1-line plain-English label, and an editorial comparison bar (e.g. "Larger than 85% of US commercial banks").
+   - "step-flow-chain": 3 numbered step nodes ([01] Reload Cash -> [02] Forgotten $2.40 -> [03] 100% Margin Float) connected by visual arrows.
+   - "receipt-highlight": A stylized contract / receipt card featuring a marker-highlighted clause in accent color and a bottom verdict stamp.
+   - "by-the-numbers-grid": A 2x2 or 3-column data matrix of bold tabular numbers and 2-word labels (ZERO paragraphs!).
 
-5. RULE OF 3 ANTI-CRAMMING:
-   - Maximum 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
-   - Telemetry: Exactly 2 or 3 key metrics with signed numerical badges (e.g. "$47.1B", "2026", "2035", "+18%").
+   STRICT ARCHETYPE DIVERSITY MANDATE: You MUST use at least 4 DIFFERENT archetypes across the ${count} slides. Never repeat the same archetype consecutively!
 
-6. STRICT WORD & SIZE LIMITS (Anti-Overflow Guardrail):
-   - Headlines: Maximum 6–8 words.
-   - Subheadlines: Maximum 10–14 words.
-   - Cards / Points: Maximum 12–16 words per item! Every word must be punchy and high-signal.
-   - MULTI-COLUMN FONT CEILING: In 2-column or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly reserved for full-width hero placards.
-   - BADGE STRUCTURE & TELEMETRY: Numerical values must be clean signed numbers, currencies, or dates (e.g. "$47.1B", "+18%", "5.2", "1998"). Qualifiers ("over", "under", "nearly", "approx") must be separated or parsed using parseMetricBadge(badge). Never jam qualifiers into numerical spans.
+4. DYNAMIC NARRATIVE ARC (${count} SLIDES — NEVER A FLAT SUMMARY):
+   * ${arcDescription}
+
+5. STRICT BAN ON META-ATTRIBUTIONS:
+   - FORBIDDEN: "The article states...", "According to the report...", "The text notes...", "sentence marked [update]".
+   - State the reality with primary journalistic authority!
+
+6. TELEMETRY & METRIC VALUES:
+   - Numerical values must be strictly clean numbers, currencies, percentages, or years (e.g. "$1.8B", "0%", "2025", "+18%").
+   - Put qualifiers ("calculated", "estimated", "annual") strictly into the "label" field.
 
 Return strictly a JSON array of exactly ${count} slide objects:
 [
@@ -554,14 +558,39 @@ Return strictly a JSON array of exactly ${count} slide objects:
     "id": "slide-1",
     "index": 0,
     "type": "cover",
-    "kicker": "GEOPOLITICS / IN FOCUS",
-    "headline": "War During Nuclear Talks",
-    "subheadline": "How strategic miscalculations unravelled regional deterrence across the Middle East.",
-    "visualStyle": "monumental-editorial-cover",
-    "layoutTopology": "monumental-editorial-cover",
-    "svgBlueprint": "Clean Swiss architectural rule with minimal geometric focal emblem"
+    "archetype": "monumental-cover",
+    "kicker": "CONSUMER FINANCE / EXPOSED",
+    "headline": "The $1.8 Billion Coffee Bank",
+    "subheadline": "How unspent gift card balances created an unregulated, interest-free corporate float.",
+    "visualStyle": "monumental-cover",
+    "layoutTopology": "monumental-cover",
+    "issueBadge": "SPECIAL INVESTIGATION · ${count} SLIDES",
+    "telemetry": [
+      { "badge": "$1.8B", "label": "Customer cash held on cards" },
+      { "badge": "$222M", "label": "Annual profit from unused balances" }
+    ],
+    "svgBlueprint": "Clean Swiss architectural rule with minimal geometric focal card emblem"
   },
-  ...
+  {
+    "id": "slide-2",
+    "index": 1,
+    "type": "belief",
+    "archetype": "myth-vs-reality",
+    "kicker": "THE ILLUSION",
+    "headline": "Convenience Hides The Tradeoff",
+    "subheadline": "Customers pay cash before purchasing a single item.",
+    "items": [
+      { "title": "WHAT YOU THINK", "body": "Gift cards are **convenient digital cash** for coffee." },
+      { "title": "WHAT IT ACTUALLY IS", "body": "An **unregulated interest-free loan** to Starbucks." }
+    ],
+    "telemetry": [
+      { "badge": "$0", "label": "Interest paid to cardholders" },
+      { "badge": "0%", "label": "FDIC deposit protection" }
+    ],
+    "visualStyle": "myth-vs-reality",
+    "layoutTopology": "myth-vs-reality",
+    "svgBlueprint": "High-contrast dual panel comparing the PR illusion against the contract reality"
+  }
 ]`;
 }
 
@@ -777,26 +806,59 @@ CRITICAL DESIGN & CODING RULES:
        </div>
      ))}
 
-8. COVER SLIDE DEDICATED ARCHITECTURE (Slide 1):
-   - If slide.type === 'cover' or slideNumber === 1:
-     * Render an iconic broadsheet magazine cover layout!
-     * Topic Kicker badge (font-mono uppercase tracking-[0.16em] text-[var(--accent)]).
-     * Monumental headline (56px–72px, leading-[1.02] tracking-[-0.04em]).
-     * Narrative subheadline (26px–30px, leading-snug).
-     * Reading telemetry badge (e.g. 'SPECIAL REPORT · 10 SLIDES').
-     * Subtle Swiss architectural hairline, border, or minimal geometric focal mark.
-     * STRICT BAN ON COVER DIAGRAMS: Do NOT render technical flowcharts, callout boxes, or complex multi-node graphs on Slide 1!
+8. VISUAL EDITORIAL ARCHETYPE BLUEPRINTS (MANDATORY ARCHITECTURE PATTERNS):
+   You MUST implement the designated archetype for this slide:
+
+   A. "monumental-cover":
+      - Kicker capsule: 'inline-flex px-5 py-2.5 rounded-full border border-[var(--accent)] bg-[var(--surface)] font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em] text-[var(--accent)]'
+      - Monumental headline: 'text-[60px] to text-[72px] font-bold leading-[1.04] tracking-[-0.04em]'
+      - Subheadline: 'text-[26px] to text-[28px] text-[var(--ink)]/80 leading-snug mt-6'
+      - Focal visual: Crisp inline SVG emblem matching subject (e.g. geometric card perimeter, vault seal, radar ring).
+      - Footer metadata: 2 compact telemetry cards + issue pill ('SPECIAL INVESTIGATION · 7 SLIDES').
+
+   B. "myth-vs-reality":
+      - Two distinct, vertically stacked or side-by-side high-contrast panels:
+        * Card 1 (THE ILLUSION): 'bg-[var(--surface)]/50 border border-[var(--border)] p-7 rounded-lg'. Header tagged with muted text or alert tag. Body describes the consumer illusion in 6-8 words.
+        * Card 2 (THE FINE PRINT / REALITY): 'bg-[var(--surface)] border border-[var(--accent)] border-l-[6px] p-7 rounded-lg shadow-lg'. Header tagged with 'text-[var(--accent)] font-bold'. Large stat badge ('text-[48px]') and bolded reality punchline.
+        * Connect the two with an inline SVG indicator or contrast badge.
+
+   C. "hero-stat-bar":
+      - Massive hero stat placard: Tabular numeral 'text-[96px] font-bold text-[var(--accent)] leading-none'.
+      - Single-line uppercase label 'text-[22px] font-[var(--font-mono)] tracking-wider text-[var(--ink)]/70'.
+      - Visual comparison / ratio bar:
+        '<div className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-full h-5 p-1 mt-6 flex"><div className="bg-[var(--accent)] h-full rounded-full" style={{ width: "82%" }} /></div>'
+      - Comparison label underneath: 'text-[24px] font-medium text-[var(--ink)] mt-3'.
+      - 1 or 2 high-contrast secondary cards below for the systemic takeaway.
+
+   D. "step-flow-chain":
+      - 3 connected sequential steps (e.g. [01] Cash In -> [02] Forgotten Card -> [03] 100% Margin Float).
+      - Each step features a circular/pill index: 'w-12 h-12 rounded-full border-2 border-[var(--accent)] text-[var(--accent)] font-[var(--font-mono)] font-bold text-[22px] flex items-center justify-center shrink-0'.
+      - Connected with crisp SVG downward/forward chevrons or line dividers.
+      - Step body copy: strictly 5-8 punchy words with bolded anchors!
+
+   E. "receipt-highlight":
+      - A stylized document/receipt placard: 'border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 rounded-lg relative'.
+      - Monospace document stamp header: 'DOCUMENT EXCERPT // SEC NOTE 14'.
+      - Highlighted contract clause callout: 'border-l-4 border-[var(--accent)] bg-[var(--accent)]/10 px-6 py-5 rounded-r my-6' with italicized locked contract quote.
+      - Bottom official verdict badge: 'inline-flex px-4 py-2 border border-[var(--accent)] text-[var(--accent)] font-[var(--font-mono)] text-[20px] uppercase font-bold tracking-wider'.
+
+   F. "by-the-numbers-grid":
+      - 2x2 grid or 3-column ledger of pure telemetry data.
+      - Each quadrant: 'border border-[var(--border)] bg-[var(--surface)] p-7 rounded-lg flex flex-col justify-between'.
+      - Huge numerals: 'text-[56px] font-bold tabular-nums text-[var(--accent)]'.
+      - Clean 2-to-3 word label: 'text-[22px] font-[var(--font-mono)] uppercase tracking-wider text-[var(--ink)]'.
+      - ZERO paragraph text in telemetry cells! Pure high-signal data.
 
 9. UNIFIED SVG & HTML COORDINATES (No Disconnected Callout Lines):
    - NEVER draw hardcoded SVG connector lines pointing to disconnected HTML absolute <div>s!
    - Use HTML flex/grid cards with inline SVG accent marks or unified layout.
    - BAN <foreignObject> inside SVGs: It causes text clipping, font-rendering glitches, and layout failure. Use pure Tailwind flex/grid cards for copy.
 
-10. SPACE BALANCE RULE (75%–90% Frame Utilization):
-   - For 9:16 vertical stories (1596px safe area), distribute content vertically with balance:
-     * Card padding: 'p-7' to 'p-10' (or 'px-8 py-7').
-     * Vertical gaps between sections: 'gap-7' to 'gap-10'.
-     * Avoid massive empty voids (e.g. do NOT leave 800px of white space below a single short paragraph).`;
+10. SPACE BALANCE & OPTICAL BREATHING ROOM:
+   - Zero top-heavy clumping or crowded wireframes. Distribute content vertically across the frame.
+   - Generous card padding: 'p-8' to 'p-9'.
+   - Balanced vertical gaps: 'gap-6' to 'gap-8'.
+   - Content must feel like an art-directed editorial graphic with intentional whitespace.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -805,21 +867,23 @@ export function buildSingleSlideUserPrompt(
   blueprint: SlideDesignBlueprint | undefined,
   brand: BrandTokens
 ): string {
-  const chosenStyle = slideData.visualStyle || blueprint?.layoutStructure || 'bespoke-editorial';
-  const chosenTopology = slideData.layoutTopology || blueprint?.layoutStructure || 'hero-diagram-with-callouts';
-  const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Custom inline vector SVG matching topic';
+  const chosenArchetype = slideData.archetype || slideData.layoutTopology || blueprint?.layoutStructure || 'myth-vs-reality';
+  const chosenStyle = slideData.visualStyle || chosenArchetype;
+  const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Bespoke inline vector SVG matching archetype';
 
   return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
-Archetype: "${slideData.type}"
+Assigned Archetype: "${chosenArchetype}"
+Type: "${slideData.type}"
 
-Slide Data (Locked Copy):
+Slide Data (Locked Copy - Keep Ultra-Concise):
 ${JSON.stringify(slideData, null, 2)}
 
 CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
+- Visual Archetype: "${chosenArchetype}"
 - Visual Style: "${chosenStyle}"
-- Layout Topology: "${chosenTopology}"
+- Layout Topology: "${slideData.layoutTopology || chosenArchetype}"
 - Bespoke Vector SVG: "${chosenSvg}"
-Follow this layout topology strictly! Do NOT revert to generic rounded cards.
+Follow the assigned archetype blueprint strictly! Do NOT revert to generic identical grey boxes.
 
 Brand Context:
 - Publication: "${brand.name}"
@@ -854,7 +918,8 @@ ${code}
 Common Fix Guidelines:
 1. "Property 'value' does not exist on type '...[]'" or "Property 'title' does not exist on type '...[]'":
    - An entire array was assigned where a single object was expected.
-   - If stages/columns/strata are declared: change \`{ card: cards, inventory: telemetry }\` or \`{ card: cards, metric: telemetry }\` to \`{ card: cards[0], inventory: telemetry[0] }\` OR change \`[cards, cards, cards]\` to \`[cards[0], cards[1], cards[2]]\`. Never pass an unindexed array inside a column/stage helper object!
+   - If stages/columns/strata/boundaries are declared: change \`{ card: cards, inventory: telemetry }\` to \`{ card: cards[0], inventory: telemetry[0] }\` OR change \`[cards, cards]\` or \`[guardrails, guardrails]\` to \`[guardrails[0], guardrails[1]]\`.
+   - Never write \`const boundaries = [guardrails, guardrails];\` — that creates an array of arrays (\`Guardrail[][]\`), so mapping gives an array instead of an object!
    - If numbered variables are declared: change \`const item0 = items;\` to \`const item0 = items[0];\`
    - If accessed in JSX: change \`{telemetry?.value}\` to \`{telemetry?.[0]?.value}\` or map over the array.
 2. "Identifier expected":

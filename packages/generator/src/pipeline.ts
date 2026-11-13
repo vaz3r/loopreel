@@ -165,14 +165,13 @@ export function sanitizeTsxCode(rawCode: string): string {
     return `${prefix}${arr}[${count}]`;
   });
 
-  // 4b. Fix array literals with unindexed repeated collections: e.g. [cards, cards, cards] -> [cards[0], cards[1], cards[2]]
-  code = code.replace(/\[\s*(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)([^\]]*?)\]/g, (fullMatch) => {
-    const colRegex = /\b(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)/g;
-    const counters: Record<string, number> = {};
-    return fullMatch.replace(colRegex, (m) => {
-      const idx = counters[m] ?? 0;
-      counters[m] = idx + 1;
-      return `${m}[${idx}]`;
+  // 4b. Fix array literals with unindexed repeated identifiers:
+  // e.g. [guardrails, guardrails] -> [guardrails[0], guardrails[1]]
+  // e.g. [items, items, items] -> [items[0], items[1], items[2]]
+  code = code.replace(/\[\s*([a-zA-Z0-9_$]+)\s*(?:,\s*\1\s*)+(?:,\s*)?\]/g, (fullMatch, ident) => {
+    let count = 0;
+    return fullMatch.replace(new RegExp(`\\b${ident}\\b(?!\\s*\\[)`, 'g'), () => {
+      return `${ident}[${count++}]`;
     });
   });
 
@@ -554,15 +553,81 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     allSlides = (allSlides as any)?.slides || [];
   }
 
-  // Normalize slide schema ensuring id, index, and type are guaranteed
+  // Normalize slide schema and enforce strict editorial word budgets & visual archetypes
   const activePlatform = options.platform || 'instagram-feed';
-  allSlides = allSlides.map((s, idx) => ({
-    ...s,
-    id: s.id || `slide-${idx + 1}`,
-    index: typeof s.index === 'number' ? s.index : idx,
-    type: s.type || (s as any).archetype || 'editorial',
-    platform: activePlatform,
-  }));
+  const VALID_ARCHETYPES = [
+    'monumental-cover',
+    'myth-vs-reality',
+    'hero-stat-bar',
+    'step-flow-chain',
+    'receipt-highlight',
+    'by-the-numbers-grid',
+  ];
+
+  allSlides = allSlides.map((s, idx) => {
+    // 1. Resolve visual archetype
+    let archetype = s.archetype || s.layoutTopology || s.visualStyle;
+    if (!VALID_ARCHETYPES.some((valid) => archetype?.includes(valid))) {
+      const fallbackArchetypes = [
+        'monumental-cover',
+        'myth-vs-reality',
+        'hero-stat-bar',
+        'step-flow-chain',
+        'receipt-highlight',
+        'by-the-numbers-grid',
+        'myth-vs-reality',
+      ];
+      archetype = fallbackArchetypes[idx % fallbackArchetypes.length]!;
+    }
+
+    // 2. Clamp and sanitize items body copy (Hard 10-word ceiling for mobile scannability)
+    let sanitizedItems = s.items;
+    if (Array.isArray(sanitizedItems)) {
+      sanitizedItems = sanitizedItems.map((item: any) => {
+        if (typeof item === 'object' && item !== null && typeof item.body === 'string') {
+          const rawWords = item.body.trim().split(/\s+/);
+          if (rawWords.length > 10) {
+            console.log(`[Pipeline] Trimming verbose item body on slide ${idx + 1} from ${rawWords.length} words to 10 words.`);
+            item.body = rawWords.slice(0, 10).join(' ') + '…';
+          }
+        }
+        return item;
+      });
+    }
+
+    // 3. Clamp headlines to max 8 words
+    let sanitizedHeadline = s.headline;
+    if (sanitizedHeadline) {
+      const headlineWords = sanitizedHeadline.trim().split(/\s+/);
+      if (headlineWords.length > 8) {
+        console.log(`[Pipeline] Trimming verbose headline on slide ${idx + 1} from ${headlineWords.length} to 8 words.`);
+        sanitizedHeadline = headlineWords.slice(0, 8).join(' ');
+      }
+    }
+
+    // 4. Clamp subheadline to max 12 words
+    let sanitizedSubheadline = s.subheadline;
+    if (sanitizedSubheadline) {
+      const subheadlineWords = sanitizedSubheadline.trim().split(/\s+/);
+      if (subheadlineWords.length > 12) {
+        sanitizedSubheadline = subheadlineWords.slice(0, 12).join(' ');
+      }
+    }
+
+    return {
+      ...s,
+      id: s.id || `slide-${idx + 1}`,
+      index: typeof s.index === 'number' ? s.index : idx,
+      type: s.type || (s as any).archetype || 'editorial',
+      archetype,
+      layoutTopology: archetype,
+      visualStyle: archetype,
+      headline: sanitizedHeadline,
+      subheadline: sanitizedSubheadline,
+      items: sanitizedItems,
+      platform: activePlatform,
+    };
+  });
 
   const deck: DeckData = {
     templateName: brand.name,

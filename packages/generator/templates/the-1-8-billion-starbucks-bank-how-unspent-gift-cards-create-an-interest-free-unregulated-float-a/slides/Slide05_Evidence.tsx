@@ -4,138 +4,196 @@ import {
   type SlideComponentProps,
 } from '../../../src/skeleton/types';
 
+type ReceiptItem = {
+  role?: string;
+  title?: string;
+  metric?: {
+    badge?: string;
+    unit?: string;
+    label?: string;
+  };
+  body?: string;
+};
+
+function RevenueMetric({
+  item,
+  hero = false,
+}: {
+  item: ReceiptItem | undefined;
+  hero?: boolean;
+}) {
+  const { qualifier, value: metric, unit } = parseMetricBadge(
+    item?.metric?.badge ?? '',
+  );
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="flex items-baseline justify-center gap-2">
+        {qualifier && (
+          <span className="font-[var(--font-body)] text-[22px]">
+            {qualifier}
+          </span>
+        )}
+        <span
+          className={`font-[var(--font-mono)] font-bold leading-none tracking-[-0.05em] tabular-nums ${
+            hero ? 'text-[56px]' : 'text-[40px]'
+          }`}
+        >
+          {metric}
+        </span>
+      </div>
+      {(item?.metric?.unit || unit) && (
+        <span
+          className={`mt-1 font-[var(--font-body)] leading-tight ${
+            hero ? 'text-[28px]' : 'text-[24px]'
+          }`}
+        >
+          {item?.metric?.unit || unit}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function Slide05({
   slide,
   brand,
   totalSlides,
 }: SlideComponentProps) {
-  const items = slide.items ?? [];
-  const metrics = slide.metrics ?? [];
+  const items = (slide.items ?? []) as unknown as readonly ReceiptItem[];
+  const hero = items[0];
+  const company = items[1];
+  const licensed = items[2];
+  const period = (slide as typeof slide & { period?: string }).period;
 
-  const rows = [
-    { item: items[0], metric: metrics[0] },
-    { item: items[1], metric: metrics[1] },
-    { item: items[2], metric: metrics[2] },
-  ];
+  // Publication furniture is supplied by SlideFrame.
+  void brand;
+  void totalSlides;
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <header className="shrink-0 border-t border-[var(--border)] pt-6">
-        <p className="font-[var(--font-mono)] text-[20px] leading-normal tracking-[0.12em]">
-          {slide.kicker}
-        </p>
+      <header className="shrink-0">
+        <div className="flex items-center gap-4">
+          <p className="font-[var(--font-mono)] text-[20px] leading-[26px] tracking-[0.16em] text-[var(--accent)]">
+            {slide.kicker}
+          </p>
+          <span
+            aria-hidden="true"
+            className="h-px flex-1 bg-[var(--border)]"
+          />
+        </div>
 
-        <h1 className="mt-5 max-w-[920px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.04] tracking-[-0.04em]">
+        <h1 className="mt-4 max-w-[920px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.02] tracking-[-0.04em]">
           {slide.headline}
         </h1>
 
-        <p className="mt-5 max-w-[850px] font-[var(--font-body)] text-[28px] leading-snug">
+        <p className="mt-4 max-w-[900px] font-[var(--font-body)] text-[26px] leading-snug">
           {slide.subheadline}
         </p>
       </header>
 
-      <div className="mt-9 grid min-h-0 flex-1 grid-rows-[1fr_1fr_1.4fr]">
-        {rows.map(({ item, metric: metricData }, index) => {
-          const isTotal = index === 2;
-          const { qualifier, value: metric, unit } = parseMetricBadge(
-            metricData?.badge ?? '',
-          );
-          const displayedUnit = metricData?.unit || unit;
+      <div className="relative mt-6 flex min-h-0 flex-1 flex-col justify-center">
+        {/* Receipt-edge registration marks: decorative, not callout lines. */}
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 540 800"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-0 h-full w-full text-[var(--border)]"
+          fill="none"
+        >
+          <path
+            d="M0 24V0H22 M518 0H540V24 M0 776V800H22 M518 800H540V776"
+            stroke="currentColor"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M0 112H7 M0 128H7 M0 144H7 M533 112H540 M533 128H540 M533 144H540"
+            stroke="currentColor"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
 
-          return (
-            <article
-              key={index}
-              className={`relative flex min-w-0 flex-col justify-center px-7 py-6 ${
-                isTotal
-                  ? 'bg-[var(--surface)]'
-                  : 'border-t border-[var(--border)]'
-              }`}
-            >
-              {index === 1 && (
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 28 28"
-                  className="absolute -top-[14px] left-7 h-7 w-7 text-[var(--ink)]"
-                  fill="none"
-                >
-                  <path
-                    d="M14 5V23M5 14H23"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="square"
-                  />
-                </svg>
-              )}
+        <div className="relative px-7 pt-5 text-center">
+          <h2 className="font-[var(--font-headline)] text-[32px] font-semibold leading-tight tracking-[-0.02em]">
+            {hero?.title}
+          </h2>
 
-              {isTotal && (
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 952 8"
-                  preserveAspectRatio="none"
-                  className="absolute inset-x-0 top-0 h-2 w-full text-[var(--accent)]"
-                  fill="none"
-                >
-                  <path
-                    d="M0 1H952M0 7H952"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                </svg>
-              )}
+          <p className="mt-1 font-[var(--font-mono)] text-[20px] leading-[26px] tracking-wide">
+            {hero?.metric?.label}
+          </p>
 
-              <div className="grid grid-cols-[minmax(0,1fr)_240px] items-start gap-8">
-                <div className="min-w-0">
-                  <h2
-                    className={`font-[var(--font-headline)] text-[26px] font-semibold leading-tight tracking-[-0.015em] ${
-                      isTotal ? 'text-[var(--accent)]' : ''
-                    }`}
-                  >
-                    {item?.title || item?.label}
-                  </h2>
+          <div className="mt-3 text-[var(--accent)]">
+            <RevenueMetric item={hero} hero />
+          </div>
 
-                  <p className="mt-3 font-[var(--font-body)] text-[28px] leading-snug">
-                    {item?.body}
-                  </p>
+          <p className="mx-auto mt-4 max-w-[820px] font-[var(--font-body)] text-[24px] leading-snug">
+            {hero?.body}
+          </p>
+        </div>
+
+        <div className="relative mt-5">
+          <div
+            aria-hidden="true"
+            className="h-[2px] w-full bg-[var(--accent)]"
+          />
+
+          {/* The bracket is part of the same grid as its component cards. */}
+          <div aria-hidden="true" className="grid h-10 grid-cols-2 gap-6">
+            <div className="relative ml-[50%] border-b border-[var(--border)]">
+              <span className="absolute bottom-0 left-0 h-3 border-l border-[var(--border)]" />
+            </div>
+            <div className="relative mr-[50%] border-b border-[var(--border)]">
+              <span className="absolute bottom-0 right-0 h-3 border-r border-[var(--border)]" />
+            </div>
+
+            <div className="absolute left-1/2 top-[2px] flex h-10 -translate-x-1/2 flex-col items-center">
+              <span className="h-3 border-l border-[var(--border)]" />
+              <svg
+                viewBox="0 0 24 24"
+                className="h-6 w-6 text-[var(--accent)]"
+                fill="none"
+              >
+                <path
+                  d="M12 5V19M5 12H19"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            {[company, licensed].map((item, index) => (
+              <article
+                key={index}
+                className="flex min-w-0 flex-col border-t border-[var(--border)] bg-[var(--surface)] px-7 py-5"
+              >
+                <h3 className="min-h-[76px] font-[var(--font-headline)] text-[32px] font-semibold leading-[1.16] tracking-[-0.025em]">
+                  {item?.title}
+                </h3>
+
+                <div className="mt-3 self-start">
+                  <RevenueMetric item={item} />
                 </div>
 
-                <div
-                  className={`flex min-w-0 flex-col items-end border-l border-[var(--border)] pl-6 ${
-                    isTotal ? 'text-[var(--accent)]' : ''
-                  }`}
-                >
-                  <div className="flex shrink-0 items-baseline gap-2 whitespace-nowrap">
-                    {qualifier && (
-                      <span className="font-[var(--font-body)] text-[22px]">
-                        {qualifier}
-                      </span>
-                    )}
-                    <span className="font-[var(--font-mono)] text-[42px] font-bold leading-none tracking-[-0.04em] tabular-nums">
-                      {metric}
-                    </span>
-                  </div>
-
-                  {displayedUnit && (
-                    <span className="mt-3 font-[var(--font-body)] text-[22px] leading-normal">
-                      {displayedUnit}
-                    </span>
-                  )}
-
-                  {isTotal && (
-                    <span className="mt-6 inline-flex border-2 border-[var(--accent)] px-3 py-2 font-[var(--font-mono)] text-[20px] leading-none tracking-[0.12em]">
-                      REVENUE
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {isTotal && metricData?.label && (
-                <p className="mt-6 border-t border-[var(--border)] pt-4 font-[var(--font-mono)] text-[20px] leading-normal">
-                  {metricData.label}
+                <p className="mt-2 font-[var(--font-mono)] text-[20px] leading-[26px]">
+                  {item?.metric?.label}
                 </p>
-              )}
-            </article>
-          );
-        })}
+
+                <p className="mt-3 font-[var(--font-body)] text-[24px] leading-snug">
+                  {item?.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <p className="relative mt-5 pb-5 text-center font-[var(--font-mono)] text-[20px] leading-[28px] tracking-wide">
+          {period}
+        </p>
       </div>
     </section>
   );

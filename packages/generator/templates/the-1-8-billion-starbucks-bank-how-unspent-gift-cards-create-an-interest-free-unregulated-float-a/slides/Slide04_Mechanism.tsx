@@ -10,160 +10,151 @@ export default function Slide04({
   totalSlides,
 }: SlideComponentProps) {
   const items = slide.items ?? [];
-  const item0 = items[0];
-  const item1 = items[1];
-  const item2 = items[2];
-  const metrics = (slide.metrics ?? []).slice(0, 2);
+  const telemetry = slide.telemetry ?? [];
 
   const stages = [
-    { item: item0, placement: 'col-start-2 row-start-1' },
-    { item: item1, placement: 'col-start-2 row-start-2' },
-    { item: item2, placement: 'col-start-2 row-start-3' },
+    { item: items[0], placement: 'row-start-2' },
+    { item: items[1], placement: 'row-start-4' },
+    { item: items[2], placement: 'row-start-6' },
   ];
+
+  const reporting = [telemetry[0], telemetry[1]];
 
   return (
     <section className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]">
-      <header className="shrink-0">
-        <p className="font-[var(--font-mono)] text-[20px] leading-[1.3] tracking-[0.12em] text-[var(--accent)]">
-          {slide.kicker}
-        </p>
-
-        <h1 className="mt-4 max-w-[920px] font-[var(--font-headline)] text-[54px] font-bold leading-[1.04] tracking-[-0.04em]">
-          {slide.headline}
-        </h1>
-
-        <p className="mt-5 max-w-[900px] font-[var(--font-body)] text-[28px] leading-snug">
-          {slide.subheadline}
-        </p>
-      </header>
-
-      <div className="mt-8 grid h-[528px] shrink-0 grid-cols-[112px_minmax(0,1fr)] grid-rows-[166px_136px_226px] gap-x-6">
+      <div className="isolate grid h-full min-h-0 w-full grid-cols-[94fr_446fr] grid-rows-[300fr_130fr_57.5fr_130fr_57.5fr_125fr]">
+        {/* Artwork and copy share one coordinate grid; no absolute callouts. */}
         <svg
-          className="col-start-1 row-start-1 row-span-3 h-[528px] w-[112px]"
-          viewBox="0 0 112 528"
-          fill="none"
           aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 540 800"
+          preserveAspectRatio="none"
+          className="pointer-events-none z-0 col-start-1 col-end-3 row-start-1 row-end-7 h-full min-h-0 w-full text-[var(--accent)]"
         >
-          {/* All junctions and the proportional-recognition branch share
-              one coordinate system. */}
           <path
-            d="M40 22V324"
-            stroke="#FFFFFF"
-            strokeWidth="3"
+            d="M58 315V690"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
           />
 
-          <path
-            d="M40 188H69C85 188 94 197 94 213V279C94 297 84 310 67 317L51 324"
-            stroke="var(--accent)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {/* Compensated radii retain circular nodes on the 952 × 1028 grid. */}
+          <ellipse
+            cx="58"
+            cy="315"
+            rx="7"
+            ry="9.72"
+            fill="currentColor"
           />
 
-          <path
-            d="M64 313L51 324L68 327"
-            stroke="var(--accent)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <ellipse
+            cx="58"
+            cy="502.5"
+            rx="7"
+            ry="9.72"
+            fill="var(--surface)"
+            stroke="currentColor"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
           />
 
-          <circle
-            cx="40"
-            cy="22"
-            r="13"
-            fill="var(--surface)"
-            stroke="#FFFFFF"
-            strokeWidth="3"
-          />
-          <circle
-            cx="40"
-            cy="188"
-            r="13"
-            fill="var(--surface)"
-            stroke="#FFFFFF"
-            strokeWidth="3"
-          />
-          <circle
-            cx="40"
-            cy="324"
-            r="13"
-            fill="var(--surface)"
-            stroke="var(--accent)"
-            strokeWidth="3"
-          />
-          <circle
-            cx="40"
-            cy="324"
-            r="4"
-            fill="var(--accent)"
-          />
+          <g>
+            <ellipse
+              cx="58"
+              cy="690"
+              rx="7"
+              ry="9.72"
+              fill="var(--surface)"
+            />
+            <path
+              d="M58 680.28A7 9.72 0 0 0 58 699.72Z"
+              fill="currentColor"
+            />
+            <ellipse
+              cx="58"
+              cy="690"
+              rx="7"
+              ry="9.72"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
         </svg>
 
-        {stages.map(({ item, placement }, index) => (
-          <article
-            key={index}
-            className={`${placement} min-w-0 pr-3 pt-1`}
-          >
-            <h2
-              className={`font-[var(--font-headline)] text-[28px] font-semibold leading-[36px] tracking-[0.025em] ${
-                index === 2
-                  ? 'text-[var(--accent)]'
-                  : 'text-[var(--ink)]'
-              }`}
-            >
-              {item?.title || item?.label}
-            </h2>
+        <header className="z-10 col-start-1 col-end-3 row-start-1 flex min-w-0 flex-col gap-2">
+          <p className="font-[var(--font-mono)] text-[20px] leading-[24px] tracking-[0.16em] text-[var(--accent)]">
+            {slide.kicker}
+          </p>
 
-            <p className="mt-3 max-w-[790px] font-[var(--font-body)] text-[28px] leading-snug">
-              {item?.body}
-            </p>
-          </article>
-        ))}
-      </div>
+          <h1 className="max-w-[900px] font-[var(--font-headline)] text-[56px] font-bold leading-[1.02] tracking-[-0.04em]">
+            {slide.headline}
+          </h1>
 
-      <div className="mt-auto grid shrink-0 grid-cols-2 gap-6 border-t border-[var(--border)] pt-6">
-        {metrics.map((item, index) => {
-          const {
-            qualifier: parsedQualifier,
-            value: metric,
-            unit: parsedUnit,
-          } = parseMetricBadge(item.badge);
+          <p className="max-w-[920px] font-[var(--font-body)] text-[26px] leading-[32px]">
+            {slide.subheadline}
+          </p>
 
-          const qualifier = item.qualifier || parsedQualifier;
-          const unit = item.unit || parsedUnit;
+          <div className="grid grid-cols-[300px_minmax(0,1fr)] gap-7 border-t border-[var(--border)] pt-2">
+            {reporting.map((entry, index) => {
+              if (!entry) return null;
+
+              const {
+                qualifier,
+                value: metric,
+                unit: parsedUnit,
+              } = parseMetricBadge(entry.badge);
+
+              const unit = entry.unit || parsedUnit;
+
+              return (
+                <div
+                  key={index}
+                  className="flex min-w-0 items-start gap-3"
+                >
+                  <div className="flex shrink-0 items-baseline gap-2 border border-[var(--border)] bg-[var(--surface)] px-3 py-1">
+                    {qualifier && (
+                      <span className="font-[var(--font-body)] text-[22px] leading-[28px]">
+                        {qualifier}
+                      </span>
+                    )}
+                    <span className="font-[var(--font-mono)] text-[26px] font-bold leading-[30px] tabular-nums text-[var(--accent)]">
+                      {metric}
+                    </span>
+                    {unit && (
+                      <span className="font-[var(--font-body)] text-[22px] leading-[28px]">
+                        {unit}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="min-w-0 font-[var(--font-body)] text-[20px] leading-[22px]">
+                    {entry.label}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </header>
+
+        {stages.map(({ item, placement }, index) => {
+          if (!item) return null;
 
           return (
-            <div
+            <article
               key={index}
-              className={`min-w-0 ${
-                index === 1
-                  ? 'border-l border-[var(--border)] pl-6'
-                  : ''
-              }`}
+              className={`z-10 col-start-2 min-h-0 min-w-0 ${placement}`}
             >
-              <div className="flex items-baseline gap-3">
-                {qualifier && (
-                  <span className="font-[var(--font-body)] text-[22px] leading-snug">
-                    {qualifier}
-                  </span>
-                )}
+              <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-[34px] tracking-[-0.015em]">
+                {item.title || item.label}
+              </h2>
 
-                <span className="font-[var(--font-mono)] text-[48px] font-bold leading-none tracking-[-0.04em] tabular-nums">
-                  {metric}
-                </span>
-
-                {unit && (
-                  <span className="font-[var(--font-body)] text-[22px] leading-snug">
-                    {unit}
-                  </span>
-                )}
-              </div>
-
-              <p className="mt-3 font-[var(--font-body)] text-[24px] leading-snug">
-                {item.label}
+              <p className="mt-2 max-w-[760px] font-[var(--font-body)] text-[26px] leading-[34px]">
+                {item.body}
               </p>
-            </div>
+            </article>
           );
         })}
       </div>
