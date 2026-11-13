@@ -160,7 +160,12 @@ export async function auditTemplateStudio(
         const allElements = canvas.querySelectorAll('h1, h2, h3, h4, p, div, span, blockquote, article, section');
         allElements.forEach((node) => {
           const el = node as HTMLElement;
-          if (el.classList.contains('sr-only') || el.closest('.sr-only')) return;
+          if (
+            el.classList.contains('sr-only') ||
+            el.closest('.sr-only') ||
+            el.getAttribute('aria-hidden') === 'true' ||
+            el.closest('[aria-hidden="true"]')
+          ) return;
           const rect = el.getBoundingClientRect();
           if (rect.right > canvasRect.right + 6) {
             collisions.push(
@@ -182,7 +187,13 @@ export async function auditTemplateStudio(
             const cardChildren = card.querySelectorAll('h1, h2, h3, h4, p, span');
             cardChildren.forEach((child) => {
               const el = child as HTMLElement;
-              if (el.classList.contains('sr-only') || el.closest('.sr-only')) return;
+              if (
+                el.classList.contains('sr-only') ||
+                el.closest('.sr-only') ||
+                el.getAttribute('aria-hidden') === 'true' ||
+                el.closest('[aria-hidden="true"]') ||
+                (!el.textContent?.trim() && !el.children.length)
+              ) return;
               const childRect = el.getBoundingClientRect();
               if (childRect.right > cardRect.right + 8) {
                 collisions.push(

@@ -1,0 +1,172 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "why-airlines-overbook-the-probab",
+  "domain": "why-airlines-overbook-the-probab.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "archetype": "monumental-editorial-cover",
+      "kicker": "AIR TRAVEL / RELIABILITY VS. PROBABILITY",
+      "headline": "Airlines Oversell. Your Rights Have Limits.",
+      "subheadline": "The no-show gamble makes compensation conditional—not overselling illegal.",
+      "publication": "The Fine Print",
+      "issueBadge": "PASSENGER RIGHTS · 7 SLIDES",
+      "footer": "Not every airline overbooks.",
+      "visualStyle": "monumental-editorial-cover",
+      "layoutTopology": "monumental-editorial-cover",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 650'. Build a monumental three-quarter airplane-seat specimen centered at (490,325), bounded by x=310–735 and y=48–594. Two oversized, opposing boarding passes approach the same cushion: left pass within x=42–383, y=172–350, rotated −12 degrees; right pass within x=627–906, y=100–278, rotated 12 degrees. Both carry the fictional seat label '12A'. Orange trajectories converge at the cushion without implying that either passenger has already boarded. The near armrest projects toward (752,440), exposing an inset, three-tier compensation plate. Print only '$0', '200%' and '400%' on this teaser plate; the complete eligibility and cap schedule appears on slide 5. Construct at least 60 primitives, including variable-width illustrative barcode stripes measuring 1–5px. Clip those stripes inside the pass stock, not across typography. Keep all transformed corners inside a 24px SVG inset."
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "flashpoint",
+      "archetype": "asymmetric-editorial-cards",
+      "kicker": "PREDICTION FAILS",
+      "headline": "Too Many Passengers Show Up",
+      "subheadline": "Airlines must seek volunteers before forcing anyone off.",
+      "items": [
+        {
+          "title": "YOUR LEVERAGE",
+          "body": "**Uncapped negotiation**; require compensation and voucher disclosures."
+        },
+        {
+          "title": "YOUR CHECKLIST",
+          "body": "Confirm **replacement seat**, meals, hotel, transfers, voucher restrictions."
+        }
+      ],
+      "footer": "Check voucher expiration, holiday restrictions, international usability.",
+      "visualStyle": "asymmetric-editorial-cards",
+      "layoutTopology": "asymmetric-editorial-cards",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Draw a continuous gate-counter assembly rather than separate icons. At x=50–310, two overlapping boarding passes feed toward a scanner at (365,205). A curved volunteer-return channel runs from the scanner to a perforated offer voucher at x=430–645, y=60–205. The boarding lane continues toward a detailed seat at x=735–887, y=100–344, but a hinged mechanical gate at x=690 remains closed until the volunteer stage is considered. Orange identifies the negotiation channel, not an automatic payment. A tall voucher specimen links visually to the larger left HTML card; a luggage-tag-shaped checklist specimen links to the narrower right card. Construct at least 55 primitives. Add labels '01' and '02' at the branch junctions; explain their meaning in HTML."
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "hidden-dynamic",
+      "archetype": "full-height-editorial-split",
+      "kicker": "ELIGIBILITY GATES",
+      "headline": "Losing Your Seat Isn't Enough",
+      "subheadline": "Involuntary compensation requires these conditions, subject to exclusions.",
+      "items": [
+        {
+          "title": "PASSENGER REQUIREMENTS",
+          "body": "Confirmed reservation; **timely check-in and gate arrival**."
+        },
+        {
+          "title": "FLIGHT REQUIREMENTS",
+          "body": "**U.S. departure**; arrival delay exceeding 1 hour."
+        }
+      ],
+      "visualStyle": "full-height-editorial-split",
+      "layoutTopology": "full-height-editorial-split",
+      "platform": "instagram-feed",
+      "svgBlueprint": "Use two coordinated SVGs, each viewBox='0 0 448 420', rendered side by side in 448px columns separated by 56px. Left: a boarding pass mounted in a gate-validation cradle at x=44–400, y=72–320. Its notched paper body, barcode and three inspection anchors correspond to reservation, check-in and gate arrival. A clock at (338,94), radius 54, represents timeliness without inventing a universal check-in deadline. Right: an aircraft-window-shaped inspection plate at x=38–410, y=28–390. A technical airplane profile crosses a U.S.-departure origin marker and ends beside a destination clock at (300,255), radius 86. Add the anchored label '>1 h' and a separate open eligibility latch; do not use a green approval badge or imply these checks override exclusions. Connect both specimens across the gutter with one HTML-positioned hairline and an AND label. Draw at least 35 primitives in each SVG."
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "collision",
+      "archetype": "conditional-release-rail",
+      "kicker": "PROTECTION EXCLUSIONS",
+      "headline": "Operational Exceptions Block Compensation Claims",
+      "items": [
+        {
+          "title": "OPERATIONAL EXCLUSIONS",
+          "body": "**Operational/safety** smaller-aircraft substitutions; weight/balance restrictions, aircraft ≤60 seats."
+        },
+        {
+          "title": "EXCLUDED FLIGHTS",
+          "body": "**Charters, foreign departures**, scheduled aircraft below 30 seats."
+        }
+      ],
+      "footer": "Downgrade? **Fare-difference refund**, not denied-boarding compensation.",
+      "visualStyle": "conditional-release-rail",
+      "layoutTopology": "conditional-release-rail",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Run a double technical release rail from (44,240) to (908,240). At x=100–335, show a larger aircraft cabin section above a smaller replacement section, connected by a downward exchange arrow and an interrupted authorization gate. At x=370–625, show a compact aircraft fuselage on a load-and-balance inspection rig: wing spar, paired load points, center-of-gravity crosshair and a dimension bracket labeled '≤60 seats'. At x=674–900, show a departure-document stack beside a compact cabin cross-section labeled '<30 seats'; a globe-origin ring identifies the foreign-departure exclusion without implying those flights have no rights under other laws. Three orange physical stop tabs intersect the rail. Number the stations 01–03 and map their meanings in HTML. Draw at least 65 primitives; cabin seat modules indicate aircraft anatomy, not literal seat counts."
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "turning-point",
+      "archetype": "vertical-milestone-spine",
+      "kicker": "CASH THRESHOLDS",
+      "headline": "Delay Turns Displacement Into Cash",
+      "subheadline": "Eligible involuntary bumping: percentages apply to one-way fares.",
+      "items": [
+        {
+          "title": "WITHIN 1 HOUR",
+          "body": "**$0 compensation** for either destination category."
+        },
+        {
+          "title": "SHORTER DELAYS",
+          "body": "**200%**, capped $1,075: domestic >1–<2h; international >1–<4h."
+        },
+        {
+          "title": "LONGER DELAYS",
+          "body": "**400%**, capped $2,150: domestic ≥2h; international ≥4h."
+        }
+      ],
+      "footer": "International: U.S. departures. Airlines may pay more.",
+      "visualStyle": "vertical-milestone-spine",
+      "layoutTopology": "vertical-milestone-spine",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Enlarge the cover seat's armrest into a top-down technical specimen spanning x=88–864, y=30–390. Show its rounded outer molding, recessed compensation plate, side release button, pivot bracket and exposed mounting screws. The inset plate contains a continuous vertical milestone spine at x=210, y=104–334, with three anchored nodes at y=120, 220 and 320. At x=278–815, bevel three populated milestone panels into the plate. Panel 1: '$0' and '≤1 h'. Panel 2: '200%', 'CAP $1,075', 'D: 1<h<2', 'I: 1<h<4'. Panel 3: '400%', 'CAP $2,150', 'D: h≥2', 'I: h≥4'. Use 34px percentage labels and 23px range labels. SVG contains only these anchored numerical labels; explain D, I and h directly below in HTML. Preserve all three tiers at equal physical panel heights: this is a schedule, not a magnitude chart. Draw at least 45 primitives."
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "ground-reality",
+      "archetype": "hero-metric-placard",
+      "kicker": "MEASURED DISPLACEMENT",
+      "headline": "Rare Doesn't Mean It Disappears",
+      "subheadline": "Fourth quarter 2024; 10 U.S. reporting marketing carriers.",
+      "telemetry": [
+        {
+          "badge": "0.25",
+          "label": "Involuntarily denied boarding per 10,000 passengers"
+        }
+      ],
+      "items": [
+        {
+          "title": "COMPARISON POINTS",
+          "body": "Versus **0.20** (Q4 2023); 0.28 (Q3 2024)."
+        }
+      ],
+      "footer": "Bumping frequency—not the percentage of tickets oversold.",
+      "visualStyle": "hero-metric-placard",
+      "layoutTopology": "hero-metric-placard",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Build an airport gate tally instrument with a chamfered body at x=50–902, y=28–388, a recessed optical counter window at x=90–504, y=58–256, and a curved seat-profile mounting bracket on the right. Anchor the real SVG text '0.25' inside the counter window at (112,225), using 174px tabular numerals. Engrave '/10,000' beneath it at (126,278); the complete metric name remains in HTML. Below, integrate a calibrated horizontal comparison track from x=156 to x=816 at y=324, spanning 0.00–0.30. Place 0.20 at x=596, 0.25 at x=706 and 0.28 at x=772; use a hollow circle, orange ring and diamond respectively. Stagger leaders to prevent date-label collisions. Label the markers 'Q4 2023', 'Q4 2024' and 'Q3 2024'. This is a shared numerical scale, not a chronological line chart. Draw at least 55 primitives, including 31 calibration ticks."
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "archetype": "conditional-release-rail",
+      "kicker": "BEFORE ACCEPTING",
+      "headline": "Know Which Deal You're Taking",
+      "subheadline": "A negotiated surrender isn't an automatic cash entitlement.",
+      "items": [
+        {
+          "title": "VOLUNTEER DEAL",
+          "body": "Trade your seat only for **acceptable terms**."
+        },
+        {
+          "title": "ELIGIBLE INVOLUNTARY",
+          "body": "**Cash or immediately negotiable check**, same-day, same-place."
+        }
+      ],
+      "footer": "Replacement departs before payment? Deadline: **24 hours**.",
+      "visualStyle": "conditional-release-rail",
+      "layoutTopology": "conditional-release-rail",
+      "platform": "instagram-feed",
+      "svgBlueprint": "viewBox='0 0 952 420'. Resolve the cover's competing-pass motif with a mechanical sorting rail, not a moral good/bad split. At x=42–230, y=104–306, draw two stacked notched boarding passes carrying '12A'. A selector junction at (310,210) branches into two physically distinct routes. The upper route ends in a perforated negotiated-voucher specimen at x=456–878, y=32–178; the lower ends in an immediately negotiable check specimen at x=456–878, y=224–372. Use equally legible ink outlines for both artifacts. Orange emphasizes the selector and the payment timing exception, not one passenger's superiority. Integrate a clock at (378,316), radius 53, with an anchored '24 h' plate and a dashed leader to the lower route; HTML must explicitly explain that this is an exception, not the normal deadline. Include recognizable check security rosette, bank-seal geometry and signature baseline, but no fake bank details, invented amount or simulated writing. Draw at least 60 primitives."
+    }
+  ]
+}

@@ -195,7 +195,7 @@ CRITICAL EDITORIAL & FACTUAL RULES:
 Return strictly valid JSON matching this exact structure:
 {
   "articleTitle": "Title of the investigation",
-  "publisher": "Publisher name",
+  "publisher": "Clean 2-4 word publication masthead name (e.g. 'The Fine Print', 'The Financial Autopsy', 'The Daily Briefing'). BANNED: Never write AI disclaimers, meta-qualifiers, or 'not a verified publication'!",
   "byline": "Author / Bureau",
   "summary": "2-sentence factual editorial summary of the core thesis and mechanism",
   "hookHeadline": "4-6 word punchy hook headline",
@@ -801,8 +801,6 @@ Output strictly the JSON array of exactly ${slides.length} SlideDesignBlueprint 
 export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): string {
   const isStories = platform === 'instagram-stories';
   const isSquare = platform === 'instagram-square';
-  const canvasWidth = 1080;
-  const canvasHeight = isStories ? 1920 : isSquare ? 1080 : 1350;
   const safeAreaDesc = isStories
     ? '1080x1920 canvas (9:16 vertical stories format), 952x1596 safe area'
     : isSquare
@@ -810,122 +808,114 @@ export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): strin
     : '1080x1350 canvas (4:5 portrait format), 952x1028 safe area';
 
   return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
-You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (${safeAreaDesc}).
+You write bespoke React TypeScript components using semantic editorial CSS classes and Tailwind utilities for publication-grade carousel slides (${safeAreaDesc}).
+
+SHARED EDITORIAL CSS ARCHITECTURE:
+All slides inherit from a single, shared, mathematically calibrated editorial stylesheet (editorial.css):
+* Root Container: className="editorial-slide" (guarantees flex flex-col justify-between h-full min-h-0 w-full gap-4)
+* Header Zone: className="editorial-header"
+  - Kicker: className="editorial-kicker" containing '<span className="editorial-kicker-dot" />' + '{slide.kicker}'
+  - Universal Headline: className="editorial-headline" (locked at 64px bold, line-height 1.04)
+  - Half-Width Split Headline: className="editorial-headline editorial-headline-split" (46px bold for 2-column diptychs)
+  - Subheadline: className="editorial-subheadline" (26px font-body)
+* Visual Frames (Container-Matched inline vector SVGs):
+  - Compact Visual Frame (when cards/ledgers follow): className="editorial-visual-frame editorial-visual-compact" (max-h: 320px)
+  - Monumental Visual Frame (cover hero): className="editorial-visual-frame editorial-visual-monumental" (max-h: 560px)
+  - Full-Height Split Frame (50/50 diptychs): className="editorial-visual-frame editorial-visual-split" (max-h: 720px)
+* Editorial Cards & Placards:
+  - Standard Card: className="editorial-card" (guarantees uniform 20px 24px padding, 1px border, surface background)
+  - Card Title: className="editorial-card-title" (28px font-headline font-semibold)
+  - Card Body: className="editorial-card-body" (22px font-body with <strong> emphasis)
+* Layout Topologies:
+  - 2-Column Equal Cards: className="layout-grid-2" (gap: 20px)
+  - 2-Row Vertical Stacked Cards: className="layout-grid-rows-2" (gap: 18px)
+  - 50/50 Vertical Diptych: className="layout-split-diptych" (gap: 28px)
+  - Tabular Verification Ledger: className="layout-ledger" with child className="layout-ledger-row"
+  - Milestone Spine: className="layout-spine" with child className="layout-spine-node" and bullet className="layout-spine-bullet"
+* Telemetry & Data Badges:
+  - Hero Tabular Numeral: className="editorial-metric-huge" (96px bold font-mono)
+  - Telemetry Pill: className="editorial-metric-badge" (accent border, font-mono tabular numerals)
+  - Issue Badge: className="editorial-issue-badge"
+  - Legal / Source Footnote: className="editorial-note"
 
 CRITICAL DESIGN & CODING RULES:
-1. Component Signature & Explicit TypeScript Interfaces:
+1. Canonical Component Signature:
    \`\`\`tsx
    import React from 'react';
    import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
-     return ( ... );
+     const items = slide.items ?? [];
+     const telemetry = Array.isArray(slide.telemetry) ? slide.telemetry : [];
+     const t0 = telemetry[0] ? parseMetricBadge(telemetry[0].badge) : null;
+
+     return (
+       <section className="editorial-slide">
+         <header className="editorial-header">
+           <div className="editorial-kicker">
+             <span className="editorial-kicker-dot" />
+             <span>{slide.kicker}</span>
+           </div>
+           <h1 className="editorial-headline">{slide.headline}</h1>
+           {slide.subheadline && (
+             <p className="editorial-subheadline">{slide.subheadline}</p>
+           )}
+         </header>
+
+         {/* Visual Zone (Bespoke inline vector SVG matching archetype) */}
+         <div className="editorial-visual-frame editorial-visual-compact">
+           <svg viewBox="0 0 952 420" role="img">
+             ...
+           </svg>
+         </div>
+
+         {/* Archetype Layout Topology */}
+         <div className="layout-grid-2">
+           <article className="editorial-card">
+             <h2 className="editorial-card-title">{items[0]?.title}</h2>
+             <p className="editorial-card-body">{items[0]?.body}</p>
+           </article>
+           <article className="editorial-card">
+             <h2 className="editorial-card-title">{items[1]?.title}</h2>
+             <p className="editorial-card-body">{items[1]?.body}</p>
+           </article>
+         </div>
+       </section>
+     );
    }
    \`\`\`
 
-   EXACT TYPESCRIPT DATA STRUCTURE:
-   \`\`\`tsx
-   export interface SlideData {
-     id: string;
-     index: number;
-     type: string;
-     archetype:
-       | 'monumental-editorial-cover'
-       | 'asymmetric-editorial-cards'
-       | 'hero-metric-placard'
-       | 'vertical-milestone-spine'
-       | 'full-height-editorial-split'
-       | 'three-row-verification-ledger'
-       | 'conditional-release-rail'
-       | 'optical-sector-versus-scan-reticle';
-     layoutTopology?: string;
-     visualStyle?: string;
-     svgBlueprint?: string;
-     kicker?: string;
-     headline?: string;
-     subheadline?: string;
-     issueBadge?: string;
-     items?: Array<{
-       title?: string;
-       body?: string;
-       tag?: string;
-       metric?: { badge: string; label: string };
-     }>;
-     telemetry?: Array<{
-       badge: string;
-       label: string;
-     }>;
-     closingTakeaway?: string;
-   }
-   \`\`\`
+2. STRICT BAN ON DUPLICATE FOOTERS & AI DISCLAIMERS:
+   - SlideFrame ALREADY provides the outer magazine shell: publication masthead (top) and pagination bar (bottom: 01/07, progress dots, handle, swipe cue).
+   - DO NOT render a second outer footer ('border-t pt-4 ...'), duplicate pagination, or AI research caveats ('Independent editorial brief prepared for...')!
+   - Footnotes or legal references belong in '<p className="editorial-note">'.
 
-2. Creative Freedom & Architectural Information Design:
+3. Creative Freedom & Architectural Information Design:
    - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
-   - STRICT BAN ON REPETITIVE WIREFRAME BOXES: Do NOT just render identical grey cards on every slide.
-   - If the layout topology is:
-     * "airborne-grounded-editorial-hero" or "diagonal-dual-trajectory": render prominent custom inline vector SVGs taking 40%–60% of vertical space with curved accent trajectory arrows, device glyphs, price plates, and registration crosshairs.
-     * "conditional-release-rail" or "horizontal-release-tracks": render stacked horizontal release timeline tracks with authorization gates and status endpoint panels.
-     * "optical-sector-versus-scan-reticle" or circular instrument layouts: render circular instrument fields with field-of-view pie wedges and location scan reticles.
-     * "floorplan-convergence-diagram": render an architectural 2D floorplan with convergence paths and room patrol points.
-     * "architectural-material-hazard-section" or isometric cutaways: render a 3D isometric room cutaway with callout pointers.
-     * "stored-value-escrow-strata" or "asymmetric-editorial-cards": render stacked asymmetric ledger cards with staggered offsets ('mr-10' on top, 'ml-10' on bottom), internal breathing spacers ('<div aria-hidden="true" className="h-[120px] shrink-0" />'), and balance-sheet strata linework.
-     * "vertical-milestone-spine": render a continuous 1px hairline spine with milestone nodes.
-     * "hero-metric-placard": render a massive tabular numeral (96px–110px) with attribution cards and dimension hairlines.
-     * "three-row-verification-ledger": render a clean 3-row tabular ledger divided by 1px hairlines with monospace indexes.
-   - Pure SVG geometry & vector callouts: ZERO clipart! All body copy, titles, and descriptions belong in HTML/Tailwind. Standalone vector numerical callouts, degree marks, unit labels, or compact date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE') are permitted and encouraged in SVG <text> elements with clean font classes and coordinates. BANNED: Never draw fake text wireframe paths (d="M...H...") or long multi-sentence paragraphs in SVG.
+   - Pure SVG geometry & vector callouts: ZERO clipart! All body copy, titles, and descriptions belong in HTML.
+   - Standalone vector numerical callouts, degree marks, unit labels, or compact date plates directly anchored to the vector artwork (e.g. '$250', '$1,000', '148°', '4K', '430 CE') are permitted and encouraged in SVG <text> elements with clean font classes and coordinates. BANNED: Never draw fake text wireframe paths (d="M...H...") or long multi-sentence paragraphs in SVG.
    - Frame your layouts with sharp 0px/2px corners, 1px hairlines, and spacious asymmetric grids.
 
-3. Theme & Token Integration:
-   - STRICT NEGATIVE CONSTRAINT: DO NOT declare an inline theme object (e.g. 'const theme = { ... }' or 'const currentBrand = { ... }') and NEVER apply 'style={theme}' or inline style objects! The canvas CSS variables (--ink, --accent, --paper, --surface, --border, --font-headline, --font-body, --font-mono) are injected globally by SlideFrame.
-   - Use Tailwind utility classes with CSS variables:
-     * text-[var(--ink)] for primary text
-     * text-[var(--accent)] or bg-[var(--accent)] for focal points, badges, highlights
-     * bg-[var(--surface)] for card backgrounds and elevation
-     * border-[var(--border)] for hairlines and borders
-     * font-[var(--font-headline)] for titles, quotes, hero numbers
-     * font-[var(--font-body)] for body copy and descriptions
-     * font-[var(--font-mono)] for metrics, tags, numbers
+4. Theme & Token Integration:
+   - STRICT NEGATIVE CONSTRAINT: DO NOT declare an inline theme object (e.g. 'const theme = { ... }' or 'const currentBrand = { ... }') and NEVER apply 'style={theme}'! The canvas CSS variables (--ink, --accent, --paper, --surface, --border, --font-headline, --font-body, --font-mono) are injected globally by SlideFrame.
+   - Use the semantic editorial classes. Use Tailwind utilities only for fine-grained alignment (e.g. 'text-[var(--accent)]', 'tabular-nums', 'gap-4').
 
-4. MOBILE INSTAGRAM LEGIBILITY (0.36x Phone Scaling Law):
-   When viewed on a smartphone (390px mobile Instagram / LinkedIn viewport), canvas elements scale down by 0.36x.
+5. MOBILE INSTAGRAM LEGIBILITY (0.36x Phone Scaling Law):
    - TEXT UNDER 20px IS STRICTLY FORBIDDEN!
-     * NEVER use 'text-xs' (12px), 'text-sm' (14px), 'text-base' (16px), or 'text-lg' (18px) for readable content!
-     * On a phone screen, 14px becomes 5.0px (unreadable), and 18px becomes 6.5px (squinting).
    - MANDATORY FONT SIZE SCALE:
-     * Universal main headlines: MUST be locked at text-[64px] (font-headline font-bold leading-[1.02] to leading-[1.05] tracking-[-0.04em]) across full-width layouts! Never shrink full-width headlines below text-[56px].
-     * HALF-WIDTH HEADLINE EXCEPTION (full-height-editorial-split): In half-width columns (~448px in grid-cols-2), main headlines MUST be sized between text-[44px] and text-[48px] (leading-[1.08] tracking-[-0.035em]) to prevent vertical crowding, 4-line wrapping, and crushing cards below.
-     * Subheadlines: MUST be text-[26px] to text-[28px] (leading-snug text-[var(--ink)]/80).
-     * Body copy & descriptions: MUST be text-[24px] to text-[28px] (leading-snug / leading-normal).
-     * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
-     * Kickers, badges, tags, metadata: MUST be text-[20px] to text-[22px] (font-mono tracking-wider).
-     * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold) ONLY when full-width (hero-metric-placard)!
-     * MULTI-COLUMN FONT CEILING: In 2-column, 3-column, or split diptychs, metric numerals MUST NOT exceed text-[48px] to text-[56px]! text-[84px] is strictly forbidden inside half-width columns because it causes horizontal clipping and overflows into adjacent columns.
-     * MULTI-ROW LEDGER CEILING: In 3-row stacked ledgers (grid-rows-3), metric numerals MUST NOT exceed text-[38px] to text-[42px], and card titles MUST NOT exceed text-[26px] to text-[28px]! This guarantees zero vertical crowding and ample breathing room.
-     * CANONICAL BADGE PARSING: Always parse badges cleanly using parseMetricBadge:
-       import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';
-       const { qualifier, value: metric, unit } = parseMetricBadge(item.badge);
-       // In JSX:
-       <div className="flex shrink-0 items-baseline gap-2">
-         {qualifier && <span className="font-[var(--font-body)] text-[22px]">{qualifier}</span>}
-         <span className="font-[var(--font-mono)] text-[40px] font-bold tabular-nums">{metric}</span>
-         {unit && <span className="font-[var(--font-body)] text-[22px]">{unit}</span>}
-       </div>
-       STRICTLY FORBIDDEN: Writing 'const metric = remainingWords;' or rendering unindexed array slices in JSX! In JavaScript, an array rendered in JSX concatenates into a collapsed token (e.g. "5.2millionunits") without spaces.
+     * Universal main headlines: Locked via 'editorial-headline' at 64px bold!
+     * Half-width split headlines: Locked via 'editorial-headline-split' at 46px bold.
+     * Subheadlines: Locked via 'editorial-subheadline' at 26px.
+     * Card titles: Locked via 'editorial-card-title' at 28px.
+     * Body copy: Locked via 'editorial-card-body' at 22px.
+     * Kickers, badges, tags: Locked via 'editorial-kicker' / 'editorial-issue-badge' at 20px.
+     * Hero metrics: Locked via 'editorial-metric-huge' at 96px tabular numerals!
+     * Metric badges: Locked via 'editorial-metric-badge' at 22px tabular numerals!
 
-5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
+6. ZERO-OVERFLOW & NATURAL FLOW:
    - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.
-   - NEVER put 'overflow-hidden' on the top-level <section>! 'overflow-hidden' clips content and conceals overflow.
-   - Outer wrapper signature: className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
-   - Multi-card grids: Use 'gap-5' or 'gap-6', card padding 'py-5 px-7' or 'py-6 px-8'.
-   - Limit items to 2 or 3 per slide so the larger 24px-28px body text fits effortlessly without overflow.
-   - SVG CONTAINER HEIGHT CONSTRAINT: When an SVG is paired with bottom cards, articles, or ledgers, ALWAYS constrain the SVG's height with 'max-h-[360px]' or 'max-h-[380px]' (e.g. className="block w-full max-h-[380px] min-h-0 text-[var(--ink)]"). Never let an unconstrained 650px tall SVG push bottom cards beyond the 1028px canvas safe area!
-   - AutoFit scale MUST remain 1.000 (no scaling needed).
-   - Always respect the locked text provided—do not invent new text or exceed word counts.
-
-6. Technical Constraints:
-   - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
-   - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
-   - Do NOT output the outer ${canvasWidth}x${canvasHeight} wrapper or header/footer—SlideFrame provides those.
+   - NEVER put 'overflow-hidden' on the top-level <section>!
+   - By using the shared CSS classes ('editorial-card', 'editorial-visual-compact', 'editorial-header'), the layout is mathematically guaranteed to fit within the 1,022px inner container with scale = 1.000!
 
 7. CANONICAL DATA BINDING (BAN UNINDEXED & DOUBLE-INDEXED ACCESS):
    - 'slide.items' is an ARRAY of objects [{ title: "...", body: "...", tag: "..." }, ...].
@@ -941,128 +931,66 @@ CRITICAL DESIGN & CODING RULES:
      const t0 = telemetry[0] ? parseMetricBadge(telemetry[0].badge) : null;
      const t1 = telemetry[1] ? parseMetricBadge(telemetry[1].badge) : null;
      CRITICAL: NEVER write 'const telemetry = slide.telemetry?.[0]; ... telemetry?.[0]?.badge;'! That double-indexes, evaluates to undefined, and makes the metric BLANK!
-   - SPLIT ARRAYS & STRING METHODS:
-     * If you do 'const parts = (label ?? "").split(...)', 'parts' is an ARRAY of strings.
-     * Always index explicitly: 'parts[0]', 'parts[1]', 'parts[0]?.toLowerCase()'.
-     * STRICTLY FORBIDDEN: Writing 'parts?.toLowerCase()' or 'const val = parts;'! In JavaScript, an Array has no .toLowerCase() method. Doing so causes fatal runtime crash: 'TypeError: parts.toLowerCase is not a function'.
-   - If rendering separate cards, columns, or rows by position, you MUST access items by index:
-     * CORRECT:
-       const items = slide.items ?? [];
-       const item0 = items[0];
-       const item1 = items[1];
-       // then render:
-       <h2>{item0?.label || item0?.title}</h2>
-       <p>{item0?.body}</p>
-       <h2>{item1?.label || item1?.title}</h2>
-       <p>{item1?.body}</p>
-     * STRICTLY FORBIDDEN: Writing '{items?.label}', '{items?.body}', '{items?.metric}', or '{items?.metric?.badge}'! In JavaScript/TypeScript, an Array object has NO .label, .body, or .metric property. Doing so causes fatal TypeScript compilation failure ("Property 'metric' does not exist on type 'Item[]'").
-     * When accessing item metrics or badges: ALWAYS index explicitly: '{items[0]?.metric?.badge}', '{items[1]?.metric?.badge}', or '{rows[0]?.item?.metric?.badge}'.
-   - WHEN CREATING HELPER ARRAYS (e.g. columns, stages, rows):
-     * You MUST index elements individually:
-       const stages = [
-         { card: cards[0], metric: telemetry[0], offset: 'ml-[224px]' },
-         { card: cards[1], metric: telemetry[1], offset: 'ml-[112px]' },
-         { card: cards[2], metric: telemetry[2], offset: 'ml-0' },
-       ];
-     * NEVER write '{ card: cards }' or '{ item: items }' or '{ metric: telemetry }' or 'const item0 = items;'! Passing an Array object instead of an element causes TypeScript failure: "Property 'title' does not exist on type 'Item[]'".
-     * NEVER call array methods like .find() on an individual array element (e.g. NEVER write 'telemetry[0].find(...)')! If matching telemetry, call .find() on the array: 'telemetry.find(t => t.id === cards[0]?.telemetryRef)' or use indexing 'telemetry[0]'.
-   - If mapping dynamically:
-     {items.map((item: any, index: number) => (
-       <div key={index}>
-         <h2>{item.label || item.title}</h2>
-         <p>{item.body}</p>
-       </div>
-     ))}
 
-8. EDITORIAL PUBLICATION ARCHETYPE BLUEPRINTS (PRINT STANDARDS — ZERO WEB UI TROPES):
-   You MUST implement the designated archetype for this slide following handcrafted editorial standards (inspired by gold standard 'tipaza'):
-   * ABSOLUTE BAN: NEVER use 'shadow-lg', 'shadow-md', 'shadow-sm', 'rounded-full' on cards or kickers, 'border-l-[6px]', or HTML progress bars!
-   * MANDATORY: Sharp 0px or 2px corners ('rounded-none' or 'rounded-sm'), 1px hairlines ('border border-[var(--border)]'), monospace kickers with square accent dots, and bespoke domain-adaptive vector SVG illustrations.
-   * MANDATORY FULL-HEIGHT CANVAS FILL: Every archetype MUST fill 85%–95% of the vertical canvas height using 'flex-1 min-h-0' and 'justify-between'. ZERO dead bottom voids!
+8. EDITORIAL PUBLICATION ARCHETYPE BLUEPRINTS:
+   You MUST implement the designated archetype for this slide following handcrafted editorial standards:
 
    A. "monumental-editorial-cover":
-      - Outer container: 'flex flex-col h-full min-h-0 w-full justify-between'
-      - Header zone: Monospace kicker with square accent dot:
-        '<div className="flex items-center gap-2.5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.2em] text-[var(--accent)]"><span className="inline-block w-2.5 h-2.5 bg-[var(--accent)]" /><span>{slide.kicker}</span></div>'
-      - Monumental headline: 'text-[64px] to text-[72px] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--ink)] mt-4'
-      - 1px hairline rule: '<div className="w-full border-b border-[var(--border)] my-6" />'
-      - Subheadline: 'text-[24px] text-[var(--ink)]/80 leading-snug mb-4'
-      - DOMINANT DOMAIN-ADAPTIVE EDITORIAL VECTOR CENTERPIECE: Must occupy 45%–55% of the vertical frame ('my-4 flex min-h-[460px] flex-1 items-center justify-center')!
-        Follow the slide's designated 'svgBlueprint'.
-        For corporate finance/forensics: Imposing geometric stored-value card silhouette or balance-sheet vault strata with 1px magnetic hairlines, micro-coordinates, and accent foil blocks.
-        For tech: Silicon die layout, wafer bus traces, or logic gate strata.
-        For history/culture: Monument elevation, architectural pediments, fluted column contours.
+      - Outer container: className="editorial-slide"
+      - Header zone: className="editorial-header" with kicker, headline, and subheadline.
+      - Hero visual frame: className="editorial-visual-frame editorial-visual-monumental" (max-h: 560px)
+        Follow the slide's designated 'svgBlueprint' (viewBox="0 0 952 650").
         Pure sculptural vector linework with coordinate crosshairs and registration ticks.
-        NO CLIPART, NO FLOWCHART PIPES, ZERO FAKE TEXT WIREFRAME PATHS!
-      - Footer metadata ledger: Clean 1px bordered split ledger pinned to bottom ('mt-auto border-t border-[var(--border)] pt-5') showing issue badge and numerical telemetry badges with 0px corners.
+        ZERO cards below!
+      - Issue badge bar: '<p className="editorial-issue-badge">{slide.issueBadge}</p>'
 
    B. "asymmetric-editorial-cards":
-      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'grid min-h-0 flex-1 grid-rows-2 gap-7 my-6' so cards span the ENTIRE vertical space!
-        Zero 300px dead bottom voids! Do NOT use unconstrained 'items-start'.
-      - Each card: 'border border-[var(--border)] bg-[var(--surface)] p-8 rounded-none flex flex-col justify-between'
-        Primary hero card features a bold tabular metric ('text-[52px] font-bold text-[var(--accent)] leading-none') and 5-8 word punchline with bold anchors.
-        Secondary card features monospace tag, 1px divider, and subtle graphic linework. Zero fake text wireframes.
+      - Header zone: className="editorial-header"
+      - Compact visual frame: className="editorial-visual-frame editorial-visual-compact" (max-h: 320px, viewBox="0 0 952 420")
+      - 2-card layout: className="layout-grid-2" (or className="layout-grid-rows-2")
+        Primary card: className="editorial-card", with metric badge or bold skim anchors.
+        Secondary card: className="editorial-card", with monospace tag and body.
 
    C. "vertical-milestone-spine":
-      - Header zone: Monospace kicker + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'relative my-6 flex min-h-0 flex-1 flex-col justify-between border-l-2 border-[var(--border)] pl-8 py-4'.
-        Spans the full height between header and bottom!
-      - Square milestone nodes: Each milestone has an absolute square marker: 'w-3 h-3 bg-[var(--accent)] -left-[33px] top-2 absolute'.
-      - Milestone content: Monospace time/phase label ('text-[20px] font-[var(--font-mono)] text-[var(--accent)] tracking-wider'), bold 2-word title, and punchy 5-8 word body with **bold anchors**. Maximum 3 milestones total.
+      - Header zone: className="editorial-header"
+      - Layout container: className="layout-spine"
+      - 3 Milestone nodes: Each has className="layout-spine-node" with '<span className="layout-spine-bullet" />', monospace time/phase label, bold 2-word title, and punchy 5-8 word body.
 
    D. "hero-metric-placard":
-      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between gap-7'. Spans the entire height!
-      - Massive hero metric placard ('flex-1 min-h-0 border border-[var(--border)] bg-[var(--surface)] p-9 rounded-none flex flex-col justify-between'):
-        Hero tabular numeral: 'text-[96px] to text-[110px] font-bold tabular-nums text-[var(--accent)] leading-none' (rendered in HTML, NOT in SVG!).
-        Monospace metric label: 'text-[22px] font-[var(--font-mono)] uppercase tracking-wider text-[var(--ink)]/70 mt-3'.
-      - Bottom editorial context placard ('shrink-0 border border-[var(--border)] bg-[var(--surface)] p-7 rounded-none'): 1px hairline card with 5-8 word takeaway.
+      - Header zone: className="editorial-header"
+      - Top hero placard: className="editorial-card flex-1" with '<div className="editorial-metric-huge">{t0?.value}</div>' and label.
+      - Bottom context card: className="editorial-card shrink-0" with 5-8 word takeaway.
 
    E. "full-height-editorial-split":
-      - Layout container: MUST use 'my-6 grid min-h-0 flex-1 grid-cols-2 gap-7 border-y border-[var(--border)] py-6'. Spans the entire height!
-      - Graphic half: Dominant domain-adaptive vector silhouette or technical section linework with 1px hairlines and accent focal point.
-      - Editorial half: 'flex flex-col justify-between': Monospace kicker with square dot, locked half-width headline ('text-[44px] to text-[48px] font-bold leading-[1.08] tracking-[-0.035em]'), and a 2-card 1px hairline ledger with verified metrics and 5-8 word takeaways.
+      - Layout container: className="layout-split-diptych"
+      - Left column: flex flex-col justify-between containing:
+        * className="editorial-kicker"
+        * '<h1 className="editorial-headline editorial-headline-split">{slide.headline}</h1>'
+        * 2 stacked cards: className="editorial-card"
+      - Right column: className="editorial-visual-frame editorial-visual-split" with full-height vertical SVG (viewBox="0 0 448 720").
 
    F. "three-row-verification-ledger":
-      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between divide-y divide-[var(--border)] border border-[var(--border)] bg-[var(--surface)] rounded-none'.
-      - Each row: 'p-7 flex items-center justify-between gap-6 flex-1'
-      - Left column: Monospace index '[01]', '[02]', '[03]' in 'text-[var(--accent)] font-[var(--font-mono)] text-[20px] font-bold'.
-      - Middle column: 2-word title + 5-8 word finding with **bold skim anchors**.
-      - Right column: Clean tabular numerical badge in sharp 1px hairline badge (e.g. 'border border-[var(--accent)]/40 px-3.5 py-1.5 font-[var(--font-mono)] text-[22px] text-[var(--accent)]').
+      - Header zone: className="editorial-header"
+      - Tabular ledger: className="layout-ledger"
+      - 3 rows: Each className="layout-ledger-row" with monospace index '[01]', title + 5-8 word finding, and right-aligned '<span className="editorial-metric-badge">{badge}</span>'.
 
    G. "conditional-release-rail":
-      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'my-6 flex min-h-0 flex-1 flex-col justify-between gap-6'. Spans the entire height!
-      - Horizontal cadence tracks: Stacked release rails with solid shipping endpoints versus open dashed authorization gates, status milestone nodes, and date plates (viewBox="0 0 952 420").
-      - Bottom verification cards: 2-card horizontal split with 5-8 word takeaways and bold skim anchors.
+      - Header zone: className="editorial-header"
+      - Compact rail visual: className="editorial-visual-frame editorial-visual-compact" (max-h: 320px, viewBox="0 0 952 420") with stacked release rails.
+      - Bottom decision split: className="layout-grid-2" with 2 decision cards (className="editorial-card").
 
    H. "optical-sector-versus-scan-reticle":
-      - Header zone: Monospace kicker with square dot + locked 64px headline ('text-[64px] font-bold leading-[1.04] tracking-[-0.04em]').
-      - Layout container: MUST use 'my-6 grid min-h-0 flex-1 grid-cols-2 gap-7 items-center'.
-      - Circular instrument fields: Left field shows calibrated optical sector arc with degree callout (e.g. 148° wedge, camera lens circle, LED sensor ticks, viewBox="0 0 448 370"); right field shows scanning reticle or comparative metric cards with 5-8 word punchlines.
+      - Header zone: className="editorial-header"
+      - Split instrument layout: className="layout-split-diptych"
+        Left: className="editorial-visual-frame editorial-visual-compact" with calibrated sector arc (viewBox="0 0 448 370").
+        Right: className="layout-grid-rows-2" with 2 telemetry cards (className="editorial-card").
 
 9. GRAPHIC VECTOR SVG STANDARDS & BAN ON FAKE TEXT SKELETONS:
-   - ABSOLUTE BAN ON FAKE TEXT PATHS: Strictly forbidden to draw parallel horizontal lines, dashes, or hatching (<path d="M106 529H276 M106 542H245" /> or lines with dx/dy) to mimic placeholder text or wireframe greeking! That looks broken and amateur.
-   - ALL editorial copy, long descriptions, titles, subheadlines, and card bodies MUST be authored in HTML elements (<h1>, <h2>, <p>, <span>) styled with Tailwind CSS!
-   - Standalone chart/vector numerals, degree symbols, dates, or concise 2-3 word unit labels (e.g. "148°", "360°", "8 min", "$250", "430 CE") MAY be rendered inside SVG <text> with font-[var(--font-mono)] or font-[var(--font-headline)], exactly as done in publication benchmarks 'tipaza' and 'the-threshold-review'.
-   - BAN <foreignObject> inside SVGs: It causes rendering glitches and layout failure.
-   - CONTAINER-MATCHED VIEWBOXES (BAN 600×750 and BAN preserveAspectRatio="none"):
-     * The interior canvas safe area is strictly 952px wide.
-     * Full-width SVGs MUST use viewBox="0 0 952 <height>" (e.g. viewBox="0 0 952 420" or viewBox="0 0 952 650").
-     * Half-width column SVGs MUST use viewBox="0 0 448 <height>" (e.g. viewBox="0 0 448 370").
-     * NEVER use preserveAspectRatio="none" or arbitrary scale transforms (scale(1.15 2.21)). All geometry must scale uniformly and remain undistorted.
-
-10. MANDATORY SPACE BALANCE & VERTICAL CANVAS SATURATION (ZERO BOTTOM VOIDS):
-   - ABSOLUTE BAN: ZERO 300px–500px dead pitch-black bottom voids! A layout that hugs the top and leaves empty black space at the bottom looks like an unfinished wireframe and will be rejected instantly!
-   - Canvas fill requirement: Content MUST fill 85%–95% of the vertical safe area (or be optically centered vertically).
-   - Architectural pattern: Always use 'flex flex-col h-full min-h-0 w-full justify-between' on the top-level section.
-   - Child containers MUST use 'flex-1 min-h-0' so cards, spines, splits, and ledgers stretch to occupy the full height between the slide header and footer.
-   - Inside cards: Use 'flex flex-col justify-between' so the card's header, body, and metrics distribute cleanly across the card's height.
-   - Generous card padding: 'p-8' to 'p-9'.
-   - Balanced vertical gaps: 'gap-6' to 'gap-8'.
-   - Publication-grade typography and balanced vertical rhythm matching benchmark 'tipaza'.`;
+   - ABSOLUTE BAN ON FAKE TEXT PATHS: Strictly forbidden to draw parallel horizontal lines, dashes, or hatching (<path d="M106 529H276 M106 542H245" />) to mimic placeholder text!
+   - ALL editorial copy, descriptions, titles, subheadlines, and card bodies MUST be authored in HTML elements styled with editorial CSS classes!
+   - Standalone vector numerals, degree marks, unit labels (e.g. "148°", "$250", "430 CE") MAY be rendered inside SVG <text>.
+   - BAN <foreignObject> inside SVGs.
+   - CONTAINER-MATCHED VIEWBOXES: Full-width SVGs viewBox="0 0 952 <height>" (420 or 650); half-width column SVGs viewBox="0 0 448 <height>". NEVER use preserveAspectRatio="none".`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -1092,6 +1020,8 @@ CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
 - Spatial Balance Guidance: "${spatialGuidance}"
 - Prescribed Headline Size: "${headlineSize}"
 Follow the assigned archetype blueprint strictly! Do NOT revert to generic identical grey boxes.
+Compose using the shared editorial CSS classes ('editorial-slide', 'editorial-header', 'editorial-kicker', 'editorial-headline', 'editorial-visual-frame', 'editorial-card', 'layout-grid-2', etc.).
+DO NOT render duplicate outer footers or brand mastheads—SlideFrame provides those.
 STRICT NEGATIVE CONSTRAINT: Never declare local theme objects (e.g. const theme = ...) or inline styles. Use var(--ink), var(--surface), var(--border), var(--accent).
 
 Brand Context:

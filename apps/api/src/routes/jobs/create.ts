@@ -58,8 +58,9 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
 
     const { sourceUrl, prompt, platform, engine, templateId, brandKit, narrativePreset, targetSlideCount, generateText } = parse.data;
 
-    const isPromptMode = (!sourceUrl || sourceUrl.trim().length === 0) && !!prompt && prompt.trim().length > 0;
-    const effectiveSourceUrl = isPromptMode ? `prompt:${prompt!.trim()}` : sourceUrl!.trim();
+    const isPromptMode = ((!sourceUrl || sourceUrl.trim().length === 0) && !!prompt && prompt.trim().length > 0) || (!!sourceUrl && sourceUrl.startsWith('prompt:'));
+    const effectivePrompt = prompt?.trim() || (sourceUrl?.startsWith('prompt:') ? sourceUrl.replace(/^prompt:\s*/, '').trim() : undefined);
+    const effectiveSourceUrl = isPromptMode ? `prompt:${effectivePrompt}` : sourceUrl!.trim();
     const sourceType = isPromptMode ? 'prompt' : determineSourceType(sourceUrl!);
 
     const targetTemplateId = engine === 'bespoke'

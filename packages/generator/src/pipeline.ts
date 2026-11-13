@@ -58,6 +58,42 @@ function extractTsx(raw: string): string {
   return cleaned;
 }
 
+// ============================================================================
+// PUBLICATION WORDMARK SANITIZER
+// Guarantees clean, authoritative editorial mastheads (zero AI caveats/disclaimers)
+// ============================================================================
+
+export function sanitizePublicationWordmark(raw?: string, fallback = 'THE FINE PRINT'): { name: string; wordmark: string } {
+  if (!raw) return { name: fallback, wordmark: fallback };
+  let cleaned = raw
+    .replace(/independent editorial brief prepared for/gi, '')
+    .replace(/not a verified publication/gi, '')
+    .replace(/ai-assisted research/gi, '')
+    .replace(/research brief/gi, '')
+    .replace(/unpublished brief/gi, '')
+    .replace(/[;\,\.\:\/\-]+/g, ' ')
+    .trim();
+
+  if (cleaned.length === 0 || cleaned.length > 32) {
+    const domainMatch = raw.match(/([a-z0-9\-]+)\.(co|com|org|io|pub)/i);
+    if (domainMatch && domainMatch[1] && domainMatch[1].length <= 25) {
+      cleaned = domainMatch[1].replace(/-/g, ' ');
+    } else {
+      cleaned = fallback;
+    }
+  }
+
+  const titleCase = cleaned
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+
+  return {
+    name: titleCase,
+    wordmark: titleCase.toUpperCase(),
+  };
+}
+
 export function sanitizeTsxCode(rawCode: string): string {
   let code = rawCode;
 
@@ -273,6 +309,15 @@ export function sanitizeTsxCode(rawCode: string): string {
   // 16. Ensure space between metric and unit spans in parseMetricBadge renders
   code = code.replace(/(<span\b[^>]*\btabular-nums[^>]*>[^<]+<\/span>)\s*(\{unit &&)/g, "$1{' '}$2");
 
+  // 17. Clean up bloated card padding: replace p-7, p-8, p-9 with compact editorial p-5
+  code = code.replace(/(<article\b[^>]*\bclassName="[^"]*?)\bp-[789]\b/g, '$1p-5');
+
+  // 18. Strip redundant AI disclaimers hallucinated into slide footers or paragraphs
+  code = code.replace(/<p\b[^>]*>[^<]*(?:not a verified publication|independent editorial brief prepared for)[^<]*<\/p>/gi, '');
+
+  // 19. Prevent margin collision with SlideFrame: soften my-6/my-8 on inner top-level wrappers
+  code = code.replace(/(<section\b[^>]*>[\s\S]*?<div\b[^>]*\bclassName="[^"]*?)\bmy-[68]\b/g, '$1gap-4');
+
   return code;
 }
 
@@ -460,7 +505,9 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
     }
 
-    const name = b.name || b.wordmark || narrative.publisher || 'Custom Brand';
+    const sanitized = sanitizePublicationWordmark(b.name || b.wordmark || narrative.publisher || 'The Fine Print');
+    const name = b.name && b.name.length <= 32 && !/not a verified|independent editorial/i.test(b.name) ? b.name : sanitized.name;
+    const wordmark = b.wordmark && b.wordmark.length <= 32 && !/not a verified|independent editorial/i.test(b.wordmark) ? b.wordmark : sanitized.wordmark;
     const slug = options.preset || defaultSlug;
 
     brand = {
@@ -482,7 +529,7 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
         monoFont,
         googleFontsUrl,
       },
-      wordmark: b.wordmark || name.toUpperCase(),
+      wordmark,
       wordmarkStyle: (b.wordmarkStyle as any) || 'sans',
       handle: b.handle || `@${slug.replace(/[^a-zA-Z0-9]/g, '')}`,
       texture: (b.texture as any) || 'grid',
@@ -506,6 +553,11 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     );
 
     brand = extractJson<BrandTokens>(brandResponse.text);
+    const sanitized = sanitizePublicationWordmark(brand.wordmark || brand.name || narrative.publisher || 'The Fine Print');
+    if (!brand.wordmark || brand.wordmark.length > 32 || /not a verified|independent editorial/i.test(brand.wordmark)) {
+      brand.wordmark = sanitized.wordmark;
+      brand.name = sanitized.name;
+    }
     brand.slug = options.preset || brand.slug || defaultSlug;
     brand.aestheticPreset = brand.aestheticPreset || 'sculptural-monolith';
   }

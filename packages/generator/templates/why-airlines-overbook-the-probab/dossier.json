@@ -1,0 +1,121 @@
+{
+  "articleTitle": "Why Airlines Overbook: The Probability Bet Behind Your Seat—and Your Cash Rights",
+  "publisher": "The Fine Print",
+  "byline": "Transport & Consumer Finance Bureau",
+  "summary": "Airlines legally sell more reservations than available seats to offset predicted no-shows, leaving passengers exposed when more travelers arrive than the aircraft can accommodate. Eligible involuntarily bumped passengers can receive 400% of their one-way fare, subject to a $2,150 cap, but the proposed $4.2 billion overbooking windfall and routine 115% peak-route booking rate were not substantiated by this investigation.",
+  "hookHeadline": "Airlines Sell Seats They Lack",
+  "valuePromise": "Understand the probability bet—and when airlines owe you cash.",
+  "kicker": "AIRLINE ECONOMICS / PASSENGER RIGHTS",
+  "editorialTheme": "Forensic Financial Autopsy",
+  "narrativeBeats": [
+    {
+      "beatTitle": "THE HOOK",
+      "takeaway": "An airline can legally accept more reservations than its aircraft has seats. The bet is that enough passengers will fail to appear; when that prediction fails, someone must travel later.",
+      "keyReceipt": "Overselling is legal; airlines must seek volunteers before involuntarily bumping passengers."
+    },
+    {
+      "beatTitle": "THE CATALYST",
+      "takeaway": "The crucial moment is not buying the ticket but resolving an oversold departure. Volunteering means negotiating compensation; involuntary denial can trigger a legally prescribed cash payment. Those are different transactions, not interchangeable labels.​",
+      "keyReceipt": "400% of the one-way fare, capped at $2,150, for qualifying arrival delays exceeding 2 hours domestically or 4 hours internationally from a U.S. airport."
+    },
+    {
+      "beatTitle": "THE SCALE",
+      "takeaway": "The $4.2 billion figure has a verifiable meaning: 2024 after-tax domestic net income for 25 scheduled U.S. passenger airlines—not identified overbooking revenue. Their domestic operating revenue was $184.0 billion and domestic net margin was 2.3%.",
+      "keyReceipt": "$4.2 billion domestic net income; no verified $4.2 billion overbooking windfall."
+    },
+    {
+      "beatTitle": "THE FLOW / EVOLUTION",
+      "takeaway": "Illustrative arithmetic—not a documented airline policy: selling 115 tickets for 100 seats requires at least 15 ticket holders not to board for everyone else to fit. Expected attendance is not a guarantee. The commercial calculation weighs the benefit of filling otherwise empty seats against the consequences of too many arrivals; the underlying practice explicitly anticipates no-shows.",
+      "keyReceipt": "115 tickets / 100 seats is an illustration, not a verified peak-route booking rate."
+    },
+    {
+      "beatTitle": "THE SYSTEMIC COLLISION",
+      "takeaway": "The passenger experiences a disrupted trip; the compensation formula measures the one-way fare and arrival delay. Domestic arrival within 1 hour earns no denied-boarding compensation; more than 1 hour through 2 hours earns 200%, capped at $1,075; more than 2 hours earns 400%, capped at $2,150. For international departures from the United States, the corresponding thresholds are within 1 hour, more than 1 hour through 4 hours, and more than 4 hours.",
+      "keyReceipt": "A 400% entitlement is conditional—not an automatic quadruple refund for every overbooked flight."
+    },
+    {
+      "beatTitle": "THE RECEIPTS",
+      "takeaway": "The distinction between volunteers and involuntarily displaced passengers has already produced enforcement action. DOT Order 2020-6-5 assessed Spirit Airlines a $350,000 compromise civil penalty for oversales violations that included misclassifying and misreporting involuntarily denied passengers as volunteers.",
+      "keyReceipt": "$350,000 penalty; Order 2020-6-5."
+    },
+    {
+      "beatTitle": "THE STRATEGIC VERDICT",
+      "takeaway": "Overbooking is an expressly permitted commercial practice, not a secret mathematical exemption. The passenger's leverage depends on the reason for denial, eligibility, arrival delay and whether the seat was surrendered voluntarily; eligible involuntary compensation must be tendered in cash or an immediately negotiable check.​",
+      "keyReceipt": "Payment at the airport that day; within 24 hours if substitute transportation departs before payment can be prepared."
+    }
+  ],
+  "coreConflict": {
+    "claim": "The customer-facing promise is reliable transportation: Delta positions industry-leading reliability as the foundation of its brand promise and efficiency.",
+    "reality": "Across the industry, the law permits airlines to sell reservations beyond available seats to offset no-shows. The resulting passenger protection is conditional compensation, not a prohibition on overselling; this establishes the structural tension without implying that every airline overbooks or performs equally."
+  },
+  "hiddenCatches": [
+    "Volunteering changes the deal. Airlines must seek volunteers first, disclose applicable involuntary compensation and explain restrictions on offered vouchers. Volunteer compensation is negotiable without an upper limit; confirm the replacement seat, meals, hotel, transfers, voucher expiration, holiday restrictions and international usability before accepting.",
+    "Eligibility is narrower than being left behind. You need a confirmed reservation, timely check-in, timely gate arrival, a U.S.-airport departure and an arrival delay exceeding 1 hour. Exclusions include operational or safety-related substitution of a smaller aircraft; operational or safety weight-and-balance restrictions on aircraft with 60 or fewer seats; charter flights; scheduled aircraft holding fewer than 30 passengers; and departures from foreign airports. A cabin downgrade instead entitles the passenger to the fare difference.",
+    "Unused tickets and overbooking are different accounting mechanisms. Delta held $7.1 billion in aggregate air traffic liability at December 31, 2024, primarily future travel and credits, and recognized estimated unused-ticket breakage revenue at the scheduled flight date. A hypothetical 10% change in estimated tickets expiring unused would affect total operating revenue by less than 1%; neither that liability nor that sensitivity measures overbooking profit."
+  ],
+  "verifiedMetrics": [
+    {
+      "value": "$4.2 billion",
+      "label": "Domestic airline net income—not overbooking revenue",
+      "context": "2024 after-tax domestic net income for 25 scheduled U.S. passenger airlines; $4.3 billion in 2023. This figure cannot substantiate the proposed overbooking windfall."
+    },
+    {
+      "value": "$184.0 billion; 2.3%",
+      "label": "Domestic revenue and net margin",
+      "context": "2024 domestic operating revenue and domestic net income margin for the 25 scheduled U.S. passenger airlines."
+    },
+    {
+      "value": "$7.1 billion",
+      "label": "Delta aggregate air traffic liability",
+      "context": "December 31, 2024 balance covering primarily future passenger travel and travel credits. Advance ticket cash is initially deferred revenue, not immediate earned revenue."
+    },
+    {
+      "value": "10%; less than 1%",
+      "label": "Delta unused-ticket breakage sensitivity",
+      "context": "A hypothetical 10% change in tickets estimated to expire unused would affect 2024 total operating revenue by less than 1%. This is a sensitivity disclosure, not an annual breakage amount or overbooking return."
+    },
+    {
+      "value": "0.25 per 10,000 passengers",
+      "label": "Involuntary denied-boarding rate",
+      "context": "Fourth quarter of 2024 for the 10 U.S. reporting marketing carriers, versus 0.20 in the fourth quarter of 2023 and 0.28 in the third quarter of 2024. This measures involuntary bumping, not the percentage of tickets oversold."
+    },
+    {
+      "value": "$0",
+      "label": "Arrival delay within 1 hour",
+      "context": "No denied-boarding compensation when alternative transportation gets an otherwise eligible passenger to the destination within 1 hour of the original arrival time, domestically or internationally from the United States."
+    },
+    {
+      "value": "200%; $1,075",
+      "label": "Shorter-delay compensation",
+      "context": "200% of the one-way fare, capped at $1,075: domestic arrival more than 1 hour through 2 hours late; international arrival more than 1 hour through 4 hours late on departures from the United States."
+    },
+    {
+      "value": "400%; $2,150",
+      "label": "Longer-delay compensation",
+      "context": "400% of the one-way fare, capped at $2,150: domestic arrival more than 2 hours late; international arrival more than 4 hours late on departures from the United States. Airlines may voluntarily pay more."
+    },
+    {
+      "value": "Same day; 24 hours",
+      "label": "Cash-payment deadline",
+      "context": "14 CFR 250.8 requires cash or an immediately negotiable check at the time and place of denial; payment within 24 hours is permitted when substitute transportation departs before payment can be prepared."
+    },
+    {
+      "value": "$350,000",
+      "label": "Spirit oversales enforcement penalty",
+      "context": "DOT Order 2020-6-5 assessed a compromise civil penalty for oversales violations, including misclassification and misreporting of involuntarily denied passengers as volunteers; the order summary was updated June 19, 2020."
+    }
+  ],
+  "verifiedQuotes": [
+    {
+      "quote": "The business practice of bumping is not illegal.",
+      "speaker": "U.S. Department of Transportation",
+      "role": "Federal aviation consumer-protection authority, Bumping & Oversales guidance."
+    },
+    {
+      "quote": "There is no limit to the amount of money or vouchers that the airline may offer, and passengers are free to negotiate with the airline.",
+      "speaker": "U.S. Department of Transportation",
+      "role": "Federal guidance on voluntarily surrendering a seat."
+    }
+  ],
+  "verdict": "Airlines can legally bet on passenger absences; passengers should not mistake a voucher negotiation for their statutory entitlement. Establish whether the denial is involuntary, request the written rights statement, document the arrival delay and insist on the cash-or-check option when eligible.​ The defensible investigation is about permitted overselling and conditional protection—not an unverified $4.2 billion windfall or a purported industry-standard 115% booking rate."
+}

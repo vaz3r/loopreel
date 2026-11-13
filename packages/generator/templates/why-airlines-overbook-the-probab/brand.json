@@ -1,0 +1,27 @@
+{
+  "name": "The Fine Print",
+  "slug": "why-airlines-overbook-the-probab",
+  "vibe": "Curated Editorial Publication",
+  "domain": "why-airlines-overbook-the-probab.pub",
+  "palette": {
+    "paper": "#0D0E12",
+    "ink": "#F1F3F9",
+    "accent": "#FF4D00",
+    "surface": "#161820",
+    "border": "#F1F3F925",
+    "subtle": "#F1F3F980"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Inter",
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains%20Mono:wght@400;500;600;700;800&display=swap"
+  },
+  "wordmark": "THE FINE PRINT",
+  "wordmarkStyle": "sans",
+  "handle": "@whyairlinesoverbooktheprobab",
+  "texture": "grid",
+  "motif": "crosshair",
+  "aestheticPreset": "sculptural-monolith",
+  "platform": "instagram-feed"
+}
