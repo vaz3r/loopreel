@@ -1,196 +1,190 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
+import {
+  ArrowDownToLine,
+  Bookmark,
+  Check,
+  FileText,
+  Scale,
+} from 'lucide-react';
 
-export default function Slide07({ slide, brand, totalSlides }: SlideComponentProps) {
+export default function Slide07({
+  slide,
+  brand,
+  totalSlides,
+}: SlideComponentProps) {
   const items = slide.items ?? [];
-  const item0 = items[0]!;
-  const item1 = items[0]!;
-
-  void brand;
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between gap-4 text-[var(--ink)]">
+    <section className="flex h-full min-h-0 w-full flex-col justify-between py-8 px-2 text-[var(--ink)]">
       <header className="shrink-0">
-        <div className="mb-3 flex items-center justify-between border-b border-[var(--border)] pb-3">
-          <p className="font-[var(--font-headline)] text-[22px] font-bold tracking-[0.16em]">
-            THE FINE PRINT
+        <div className="mb-5 flex items-center justify-between border-b border-[var(--border)] pb-4">
+          <p className="font-[var(--font-mono)] text-[20px] font-medium uppercase tracking-[0.14em] text-[var(--accent)]">
+            THE CONSUMER PLAYBOOK
           </p>
-          <p className="font-[var(--font-mono)] text-[20px] text-[var(--accent)]">
-            VERDICT / 07
-          </p>
+          <span className="font-[var(--font-mono)] text-[20px] tabular-nums">
+            07 / {String(totalSlides).padStart(2, '0')}
+          </span>
         </div>
 
-        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.02] tracking-tight">
-          Audit Consent Before
+        <h1 className="max-w-[880px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          Save the Click.
           <br />
-          Claiming Control
+          Question Its Reach.
         </h1>
 
-        <p className="mt-3 font-[var(--font-body)] text-[26px] leading-snug">
-          Neither outcome validates the theory; no confirmed payout.
+        <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug">
+          Scrutinize the route to accountability, not just possible damages.
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <svg
-          viewBox="0 0 952 460"
-          className="h-full max-h-[460px] w-full"
-          role="img"
-          aria-label="An editorial diagram placing an audit of consent between terms and a claim."
+          viewBox="0 0 952 420"
           preserveAspectRatio="xMidYMid meet"
+          className="h-full max-h-[420px] w-full"
+          fill="none"
+          role="img"
+          aria-label="A preserved agreement leads to scrutiny of the legal process, represented by balanced scales."
         >
-          <path
-            d="M0 58H952 M0 402H952"
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth="1"
+          {/* A folded agreement, with a retained copy underneath. */}
+          <g transform="rotate(-6 245 175)">
+            <path
+              d="M143 74H312L355 117V300H143Z"
+              className="stroke-[var(--border)]"
+              strokeWidth="2"
+            />
+            <path
+              d="M159 57H323L368 102V284H159Z"
+              className="fill-[var(--surface)] stroke-[var(--ink)]"
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M323 57V102H368"
+              className="stroke-[var(--ink)]"
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+
+            <FileText
+              x={185}
+              y={83}
+              width={48}
+              height={48}
+              strokeWidth={1.5}
+              className="text-[var(--ink)]"
+            />
+
+            <path
+              d="M185 157H338M185 181H323M185 229H306M185 253H278"
+              className="stroke-[var(--border)]"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path
+              d="M182 205H329"
+              className="stroke-[var(--accent)]"
+              strokeWidth="13"
+              opacity="0.2"
+            />
+            <path
+              d="M185 205H326"
+              className="stroke-[var(--accent)]"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </g>
+
+          {/* The evidence is retained; its legal reach is questioned. */}
+          <ArrowDownToLine
+            x={308}
+            y={249}
+            width={54}
+            height={54}
+            strokeWidth={1.5}
+            className="text-[var(--accent)]"
           />
 
-          <g
-            fill="none"
-            stroke="var(--ink)"
+          <path
+            d="M410 173C464 140 508 140 558 173"
+            className="stroke-[var(--accent)]"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M544 156L559 174L537 179"
+            className="stroke-[var(--accent)]"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-          >
-            <circle cx="130" cy="230" r="59" />
-            <path d="M189 230H310 M298 220L310 230L298 240" />
-
-            <path d="M642 230H763 M751 220L763 230L751 240" />
-            <path d="M822 164L888 230L822 296L756 230Z" />
-
-            <path d="M106 214H154 M106 230H154 M106 246H138" />
-            <path d="M803 230H841 M829 218L841 230L829 242" />
-          </g>
-
-          <circle
-            cx="476"
-            cy="230"
-            r="142"
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="3"
-          />
-          <circle
-            cx="476"
-            cy="230"
-            r="130"
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="1"
           />
 
+          <Scale
+            x={612}
+            y={76}
+            width={190}
+            height={190}
+            strokeWidth={1.15}
+            className="text-[var(--ink)]"
+          />
           <path
-            d="M334 230H350 M602 230H618 M476 88V104 M476 356V372"
-            stroke="var(--accent)"
+            d="M611 287H803"
+            className="stroke-[var(--border)]"
             strokeWidth="2"
           />
-
-          <g fill="var(--accent)">
-            <circle cx="310" cy="230" r="5" />
-            <circle cx="642" cy="230" r="5" />
-            <path d="M130 122V153H133V143H166L158 133L166 122Z" />
-            <path d="M822 122V153H825V143H858L850 133L858 122Z" />
-          </g>
-
-          <g
-            fill="var(--ink)"
-            textAnchor="middle"
-            className="font-[var(--font-mono)]"
-          >
-            <text x="130" y="337" fontSize="24" letterSpacing="3">
-              TERMS
-            </text>
-            <text x="822" y="337" fontSize="24" letterSpacing="3">
-              CLAIM
-            </text>
-          </g>
-
-          <g fill="var(--accent)" textAnchor="middle">
-            <text
-              x="476"
-              y="182"
-              fontSize="20"
-              letterSpacing="4"
-              className="font-[var(--font-mono)]"
-            >
-              THE GUARDRAIL
-            </text>
-            <text
-              x="476"
-              y="237"
-              fontSize="48"
-              fontWeight="700"
-              className="font-[var(--font-headline)]"
-            >
-              Audit
-            </text>
-            <text
-              x="476"
-              y="285"
-              fontSize="48"
-              fontWeight="700"
-              className="font-[var(--font-headline)]"
-            >
-              Consent
-            </text>
-          </g>
+          <path
+            d="M679 287H735"
+            className="stroke-[var(--accent)]"
+            strokeWidth="3"
+          />
         </svg>
+
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <div className="rotate-[-2deg] whitespace-nowrap border-2 border-[var(--accent)] bg-[var(--paper,#0B0E14)] px-5 py-2 font-[var(--font-mono)] text-[24px] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
+            Question the reach
+          </div>
+        </div>
       </div>
 
-      <div className="shrink-0">
-        <div className="divide-y divide-[var(--border)] border-t border-[var(--border)] bg-[var(--surface)]">
-          {[item0, item1].map((item, index) => (
-            <article
-              key={index}
-              className="grid grid-cols-[300px_1fr] items-baseline gap-6 px-4 py-3"
+      <footer className="shrink-0">
+        <div className="border-t border-[var(--border)]">
+          {items.map((item, index) => (
+            <div
+              key={`${index}-${item.label}`}
+              className="grid grid-cols-[36px_210px_minmax(0,1fr)] items-start gap-x-5 border-b border-[var(--border)] py-5"
             >
-              <h2 className="font-[var(--font-headline)] text-[26px] font-semibold leading-tight">
-                {item?.label ??
-                  (index === 0
-                    ? 'Arbitration Waiver'
-                    : 'Voluntary Dismissal')}
+              <Check
+                aria-hidden="true"
+                className="mt-1 h-7 w-7 text-[var(--accent)]"
+                strokeWidth={1.75}
+              />
+              <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+                {item.label}
               </h2>
-              <p className="font-[var(--font-body)] text-[22px] leading-snug">
-                {item?.body ??
-                  (index === 0
-                    ? 'August 19, 2024: Disney announced its waiver.'
-                    : 'February 27, 2026: Piccolo dismissed with prejudice.')}
+              <p className="font-[var(--font-body)] text-[24px] leading-snug">
+                {item.body}
               </p>
-            </article>
+            </div>
           ))}
         </div>
 
-        <aside
-          aria-label="Consumer guardrail"
-          className="mt-4 flex items-center justify-between gap-7 border-t border-[var(--border)] pt-4"
-        >
-          <p className="inline-block shrink-0 rotate-[-2deg] border-2 border-[var(--accent)] px-3 py-1 font-[var(--font-mono)] text-[24px] font-bold uppercase text-[var(--accent)]">
-            [No confirmed payout]
-          </p>
-          <p className="max-w-[390px] font-[var(--font-body)] text-[24px] leading-snug">
-            Neither outcome validates the theory.
-          </p>
-        </aside>
-
-        <footer className="mt-5 flex items-center justify-between gap-5 border-t border-[var(--border)] pt-3 font-[var(--font-mono)] text-[20px]">
-          <p className="flex items-center gap-3 text-[var(--accent)]">
-            <svg
-              viewBox="0 0 24 30"
-              className="h-[28px] w-[22px] shrink-0"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
+        <div className="flex items-center justify-between gap-5 pt-5">
+          <div className="flex items-center gap-3">
+            <Bookmark
               aria-hidden="true"
-            >
-              <path d="M4 2H20V27L12 21L4 27Z" />
-            </svg>
-            BOOKMARK THE GUARDRAIL
-          </p>
-          <p>thefineprint.pub</p>
-          <p>07 / {String(totalSlides).padStart(2, '0')}</p>
-        </footer>
-      </div>
+              className="h-6 w-6 shrink-0 text-[var(--accent)]"
+              strokeWidth={1.75}
+            />
+            <span className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.06em]">
+              Save this playbook
+            </span>
+          </div>
+          <span className="font-[var(--font-mono)] text-[20px]">
+            thefineprint.pub
+          </span>
+        </div>
+      </footer>
     </section>
   );
 }

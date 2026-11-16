@@ -9,83 +9,50 @@
   "systemMechanisms": [
     {
       "step": 1,
-      "name": "Capture consent during a low-friction transaction",
-      "operation": "The customer creates a streaming account using an Agree & Continue control next to a linked Subscriber Agreement. Disney later retrieves enrollment records to establish the date and asserted assent.​",
-      "valueTransferred": "The relevant asset is evidence of contractual acceptance, not a demonstrated payment for the free trial."
+      "mechanism": "Capture agreement during an ordinary streaming signup.",
+      "operation": "Disney said account creation required clicking “Agree & Continue” beside a hyperlink to the Subscriber Agreement. That agreement also referred users to the broader Disney Terms of Use.​",
+      "plainEnglish": "A click made to access entertainment became evidence Disney later offered in a dispute about a fatal restaurant visit.",
+      "disputedPoint": "Piccolo’s lawyers argued that the broader Terms of Use were linked inside another linked document, rather than conspicuously presented on the registration screen."
     },
     {
       "step": 2,
-      "name": "Incorporate broader terms",
-      "operation": "The Subscriber Agreement incorporates Disney Terms of Use governing other Disney services. Those broader terms define disputes to include specified controversies involving Disney services or the agreement, including related disputes involving Disney affiliates.",
-      "contestedBoundary": "Piccolo argued that the broader terms were linked inside another linked document and that accepting streaming terms did not establish informed assent to the claimed cross-service reach."
+      "mechanism": "Connect the streaming account to other Disney businesses.",
+      "operation": "Section 7 of the broader Terms of Use addressed disputes involving The Walt Disney Company or its affiliates and defined covered disputes by reference to Disney Services or the agreement, including claims in contract, tort, warranty, statute, regulation or another legal or equitable basis.​",
+      "plainEnglish": "Disney sought to make the account’s legal terms travel across its corporate family.",
+      "scopeCaution": "The clause was broad but not literally unlimited: its text retained a connection to Disney Services or the agreement. Disney argued that the complaint’s reliance on its website supplied that connection."
     },
     {
       "step": 3,
-      "name": "Carry the account into a parks transaction",
-      "operation": "Disney relied additionally on My Disney Experience acceptance and park-ticket purchasing. Its motion cited language purporting to cover the account holder and people for whom benefits were purchased or managed.",
-      "contestedBoundary": "Piccolo argued that his individual transactions could not bind his wife’s subsequently created estate and that the parks terms expressly contemplated Orange County litigation."
+      "mechanism": "Add the park-ticket transaction as another contractual connection.",
+      "operation": "Disney cited Piccolo’s acceptance of My Disney Experience terms, his ticket purchase and his registration of Tangsuan as a guest. The quoted terms purported to cover the account holder and people for whom the holder secured or managed benefits, and stated that they applied in addition to the Disney Terms of Use.",
+      "plainEnglish": "Disney did not rely solely on a streaming trial. It also used the family’s vacation-planning transactions to argue that the broader terms governed."
     },
     {
       "step": 4,
-      "name": "Connect the tort allegations to a digital service",
-      "operation": "The complaint alleged reliance on Disney’s online allergy-related representations. Disney argued that this connection to its website brought the negligence and agency claims within the contractual definition of a dispute.",
-      "editorialSignificance": "The website was both part of the plaintiff’s asserted basis for liability and part of Disney’s proposed route to arbitration."
+      "mechanism": "Apply the account holder’s agreement to an estate’s wrongful-death action.",
+      "operation": "Disney asked to compel Piccolo, acting as personal representative, to arbitrate all claims against Disney. The opposition distinguished Piccolo personally from the estate and invoked Fla. Stat. § 768.20, arguing that his individual agreements could not bind his wife’s estate.​",
+      "plainEnglish": "The contested leap was from a husband’s personal clicks to the legal rights asserted after his wife’s death."
     },
     {
       "step": 5,
-      "name": "Move the dispute over scope toward the arbitrator",
-      "operation": "Disney invoked a delegation clause giving an arbitrator authority over interpretation, applicability and enforceability. Piccolo answered that the court first had to decide whether a valid agreement bound the relevant parties.​"
+      "mechanism": "Ask an arbitrator to decide whether arbitration applies.",
+      "operation": "Disney relied on a delegation clause giving an arbitrator exclusive authority over interpretation, applicability, enforceability and arbitrability. The plaintiff argued that the court first had to determine whether the relevant agreement existed at all.​",
+      "plainEnglish": "Disney wanted even much of the argument about the proper forum decided inside arbitration."
     },
     {
       "step": 6,
-      "name": "Replace the requested jury forum with individual arbitration",
-      "operation": "Disney requested arbitration of claims against it and a stay of the court action, including a discretionary stay of the related restaurant claims. The terms also prohibited class or combined proceedings absent specified consent.​",
-      "intendedCorporateBenefit": "Control over dispute procedure and forum. The documents do not quantify a financial saving or establish that arbitration would have eliminated liability.",
-      "importantDistinction": "The estate’s wrongful-death action was not a proposed class action. The class waiver and arbitration requirement were separate contractual features."
+      "mechanism": "Replace courtroom adjudication with individual arbitration.",
+      "operation": "The court-filed terms required attempted informal resolution for sixty (60) days before commencing arbitration, preserved eligible small-claims proceedings, excluded disputes over ownership or enforcement of intellectual-property rights, and otherwise specified individual JAMS arbitration under its Streamlined Arbitration Rules and Procedures. They waived class proceedings and described only limited appeal rights.",
+      "plainEnglish": "The central change was the decision-maker and procedure: an arbitrator instead of a judge or jury deciding the merits. The terms expressly permitted individual damages and declaratory or injunctive relief; arbitration was not automatic immunity."
     },
     {
       "step": 7,
-      "name": "Preserve potential remedies despite the forum change",
-      "operation": "The court-filed terms expressly allowed an arbitrator to award individual damages and declaratory or injunctive relief. JAMS consumer standards also require preservation of otherwise available legal remedies or access to court for unavailable remedies.​",
-      "importantDistinction": "Arbitration is not synonymous with a liability release."
-    },
-    {
-      "step": 8,
-      "name": "Abandon arbitration, then resolve the litigation",
-      "operation": "Following public backlash, Disney announced its arbitration waiver on August 19, 2024. Litigation continued before Piccolo’s February 27, 2026, voluntary dismissal with prejudice. The retrieved reporting does not establish the financial terms, if any, of the resolution.​​"
+      "mechanism": "Pause the lawsuit while arbitration proceeds.",
+      "operation": "Disney invoked 9 U.S.C. § 3 to request a stay of the claims against it. It also sought a discretionary stay of the restaurant claims, arguing that overlapping facts could produce inconsistent decisions.",
+      "plainEnglish": "Success could have redirected the Disney claims and delayed the related court case against the restaurant. That was requested relief, not an outcome Disney obtained."
     }
   ],
-  "comparisons": [
-    {
-      "subject": "Disney’s broader Terms of Use",
-      "benchmark": "Disney’s My Disney Experience Terms and Conditions",
-      "comparison": "The broader terms prescribed individual arbitration. The parks terms, as quoted in Piccolo’s opposition, required covered lawsuits to be filed in Orange County, Florida, and stated that their provisions prevailed over conflicting Disney Terms of Use. This was a conflict between documents in the same 3-document contractual chain—not simply an absent arbitration clause.",
-      "qualification": "Piccolo argued the conflict defeated enforcement. His position was advocacy, not a reported ruling."
-    },
-    {
-      "subject": "Disney’s proposed arbitration",
-      "benchmark": "JAMS Consumer Minimum Standards updated May 1, 2024",
-      "comparison": "The baseline requires reciprocal obligations, clear notice and preservation of remedies. A consumer initiating a covered arbitration owes a $250 arbitration fee; the company bears the other specified arbitration costs. If the company initiates against the consumer, it bears all arbitration costs.",
-      "qualification": "JAMS is a private arbitration provider, not a government regulator. Its policy does not establish the fee or process actually applied to this estate."
-    },
-    {
-      "subject": "Discovery objection in Piccolo’s case",
-      "benchmark": "The rule language quoted by Piccolo and JAMS consumer safeguards",
-      "comparison": "Piccolo criticized a 14-calendar-day exchange target, but the quoted rule allowed additional exchange based on reasonable need as determined by the arbitrator. JAMS consumer standards independently require discovery or exchange of relevant, non-privileged information.​",
-      "qualification": "Do not describe arbitration here as categorically permitting no discovery."
-    },
-    {
-      "subject": "Disney’s reliance on Piccolo’s individual assent",
-      "benchmark": "Florida nursing-home estate cases cited by Piccolo",
-      "comparison": "The opposition contrasted Laizure v. Avante at Leesburg, Inc. (2013), involving the effect of a decedent’s own agreement on a derivative wrongful-death claim, with Sovereign Healthcare of Tampa, LLC v. Estate of Yarawsky (2014), involving a spouse signing individually without binding the resident’s estate. The disputed distinction was whose consent could bind whose claim.",
-      "qualification": "These precedents are characterized here as presented in the filed opposition; their opinions were not independently reviewed."
-    },
-    {
-      "subject": "The relief requested in Disney’s motion",
-      "benchmark": "The relief requested in the complaint",
-      "comparison": "The complaint sought damages in excess of $50,000.00 and a jury trial. Disney’s arbitration motion sought a change of forum and a stay. Neither request establishes the eventual compensation, and the subsequent dismissal reporting supplies no confirmed settlement amount.​​​"
-    }
-  ],
+  "comparisons": [],
   "coreControversy": {
     "corporateClaim": "Customer convenience and loyalty incentives",
     "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",

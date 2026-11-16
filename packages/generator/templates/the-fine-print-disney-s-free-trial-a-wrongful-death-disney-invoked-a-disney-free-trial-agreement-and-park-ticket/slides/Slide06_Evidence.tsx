@@ -1,197 +1,198 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
+import { FileText, FileX2, ArrowUpLeft, ArrowRight } from 'lucide-react';
 
 export default function Slide06({ slide, brand, totalSlides }: SlideComponentProps) {
   const items = slide.items ?? [];
-  const item0 = items[0]!;
-  const item1 = items[0]!;
-
-  void brand;
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between gap-6 text-[var(--ink)]">
-      <header className="shrink-0 border-t-2 border-[var(--ink)] pt-5">
-        <div className="flex items-center justify-between font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em]">
-          <span className="text-[var(--accent)]">THE SAFEGUARDS</span>
-          <span>The Fine Print</span>
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
+      <header className="shrink-0">
+        <div className="mb-7 flex items-center gap-4">
+          <span className="h-2 w-2 shrink-0 bg-[var(--accent)]" />
+          <p className="font-[var(--font-mono)] text-[20px] font-medium uppercase tracking-[0.16em] text-[var(--accent)]">
+            TWO SEPARATE DEVELOPMENTS
+          </p>
         </div>
 
-        <h1 className="mt-7 max-w-[900px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.02] tracking-tight">
-          Arbitration Is Not Immunity
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          First Retreat.
+          <br />
+          Then Dismissal.
         </h1>
 
-        <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug">
-          JAMS is a private provider, not a government regulator.
+        <p className="mt-6 max-w-[800px] font-[var(--font-body)] text-[28px] leading-snug">
+          The later dismissal was{' '}
+          <span className="underline decoration-[var(--accent)] decoration-2 underline-offset-8">
+            not an arbitration victory.
+          </span>
         </p>
       </header>
 
-      <figure
-        className="relative flex min-h-[440px] max-h-[500px] flex-1 items-center justify-center"
-        aria-label="Two connected safeguards: remedies preserved and information exchange."
-      >
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <svg
-          className="block h-full max-h-[460px] w-full"
-          viewBox="0 0 952 460"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 952 420"
+          className="block max-h-full w-full"
           role="img"
-          aria-labelledby="slide06-diagram-title"
+          aria-label="Timeline: Disney dropped its arbitration bid in August 2024. Piccolo permanently dismissed the lawsuit on February 27, 2026."
         >
-          <title id="slide06-diagram-title">
-            Connected safeguards: remedies preserved and information exchange
-          </title>
+          <text
+            x="84"
+            y="57"
+            fill="var(--accent)"
+            fontFamily="var(--font-mono)"
+            fontSize="25"
+          >
+            AUGUST 2024
+          </text>
+          <text
+            x="560"
+            y="57"
+            fill="var(--ink)"
+            fontFamily="var(--font-mono)"
+            fontSize="25"
+          >
+            FEBRUARY 27, 2026
+          </text>
 
+          {/* The two filings occupy distinct points on one chronological rail. */}
           <path
-            d="M0 35H952M0 425H952"
+            d="M 84 242 H 888"
+            fill="none"
             stroke="var(--border)"
-            strokeWidth="1"
-          />
-
-          <path
-            d="M40 230H912M238 70V390M714 70V390"
-            stroke="var(--border)"
-            strokeWidth="1"
-            strokeDasharray="3 9"
-          />
-
-          <path
-            d="M92 230H158M318 230H418M534 230H634M794 230H860"
-            stroke="var(--ink)"
-            strokeWidth="2"
-          />
-
-          <path
-            d="M290 170C385 78 567 78 662 170"
-            stroke="var(--ink)"
-            strokeWidth="2"
+            strokeWidth="3"
           />
           <path
-            d="M662 290C567 382 385 382 290 290"
-            stroke="var(--ink)"
-            strokeWidth="2"
-          />
-
-          <path
-            d="M644 166L663 171L660 151M308 294L289 289L292 309"
+            d="M 84 242 H 170"
+            fill="none"
             stroke="var(--accent)"
             strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          />
+          <ArrowRight
+            x={862}
+            y={226}
+            width={32}
+            height={32}
+            stroke="var(--ink)"
+            strokeWidth={1.5}
           />
 
-          <circle
-            cx="238"
-            cy="230"
-            r="80"
-            fill="var(--surface)"
+          {/* Withdrawal: a document with an outward-pointing arrow. */}
+          <FileText
+            x={130}
+            y={112}
+            width={76}
+            height={88}
             stroke="var(--ink)"
-            strokeWidth="2"
+            strokeWidth={1.35}
           />
-          <circle
-            cx="714"
-            cy="230"
-            r="80"
-            fill="var(--surface)"
-            stroke="var(--ink)"
-            strokeWidth="2"
-          />
-
-          <path
-            d="M476 172L534 230L476 288L418 230Z"
-            fill="var(--surface)"
-            stroke="var(--ink)"
-            strokeWidth="2"
-          />
-
-          <path
-            d="M455 220H497M455 240H497"
+          <ArrowUpLeft
+            x={205}
+            y={100}
+            width={46}
+            height={46}
             stroke="var(--accent)"
-            strokeWidth="5"
+            strokeWidth={1.7}
           />
-
-          <text
-            x="238"
-            y="246"
-            textAnchor="middle"
-            fill="var(--ink)"
-            className="font-[var(--font-mono)] text-[48px] font-bold"
-          >
-            01
-          </text>
-          <text
-            x="714"
-            y="246"
-            textAnchor="middle"
-            fill="var(--ink)"
-            className="font-[var(--font-mono)] text-[48px] font-bold"
-          >
-            02
-          </text>
-
           <path
-            d="M238 150V94M714 150V94"
+            d="M 168 205 V 231"
             stroke="var(--accent)"
             strokeWidth="2"
           />
-          <path
-            d="M238 94H276L265 108L276 122H238Z"
+          <circle
+            cx="168"
+            cy="242"
+            r="10"
             fill="var(--accent)"
-          />
-          <path
-            d="M714 94H752L741 108L752 122H714Z"
-            fill="var(--accent)"
+            stroke="var(--paper, #0B0E14)"
+            strokeWidth="4"
           />
 
-          <circle cx="92" cy="230" r="5" fill="var(--accent)" />
-          <circle cx="860" cy="230" r="5" fill="var(--accent)" />
-
+          {/* Dismissal: a closed-out filing, not a victory trophy or gavel. */}
+          <FileX2
+            x={606}
+            y={112}
+            width={76}
+            height={88}
+            stroke="var(--ink)"
+            strokeWidth={1.35}
+          />
           <path
-            d="M238 310V365M714 310V365M222 365H254M698 365H730"
+            d="M 644 205 V 231"
             stroke="var(--ink)"
             strokeWidth="2"
           />
+          <circle
+            cx="644"
+            cy="242"
+            r="10"
+            fill="var(--ink)"
+            stroke="var(--paper, #0B0E14)"
+            strokeWidth="4"
+          />
+
+          <text
+            x="84"
+            y="307"
+            fill="var(--ink)"
+            fontFamily="var(--font-headline)"
+            fontSize="32"
+            fontWeight="600"
+          >
+            {items[0]?.label ?? 'Disney Retreats'}
+          </text>
+          <text
+            x="560"
+            y="307"
+            fill="var(--ink)"
+            fontFamily="var(--font-headline)"
+            fontSize="32"
+            fontWeight="600"
+          >
+            {items[0]?.label ?? 'Piccolo Dismisses'}
+          </text>
+
+          <text
+            x="84"
+            y="353"
+            fill="var(--accent)"
+            fontFamily="var(--font-mono)"
+            fontSize="22"
+          >
+            01 / ARBITRATION BID
+          </text>
+          <text
+            x="560"
+            y="353"
+            fill="var(--ink)"
+            fontFamily="var(--font-mono)"
+            fontSize="22"
+          >
+            02 / LAWSUIT
+          </text>
         </svg>
-      </figure>
-
-      <div className="flex shrink-0 divide-x divide-[var(--border)] border-t border-[var(--border)] pt-6">
-        <div className="w-1/2 pr-8">
-          <div className="mb-3 flex items-baseline gap-4">
-            <span className="font-[var(--font-mono)] text-[20px] text-[var(--accent)]">
-              01
-            </span>
-            <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-              {item0?.label ?? 'Remedies Preserved'}
-            </h2>
-          </div>
-
-          <p className="min-h-[112px] font-[var(--font-body)] text-[24px] leading-snug first-letter:float-left first-letter:mr-3 first-letter:font-[var(--font-headline)] first-letter:text-[76px] first-letter:font-bold first-letter:leading-none first-letter:text-[var(--accent)]">
-            {item0?.body ??
-              'Preserve available remedies; court for unavailable remedies.'}
-          </p>
-        </div>
-
-        <div className="w-1/2 pl-8">
-          <div className="mb-3 flex items-baseline gap-4">
-            <span className="font-[var(--font-mono)] text-[20px] text-[var(--accent)]">
-              02
-            </span>
-            <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-              {item1?.label ?? 'Information Exchange'}
-            </h2>
-          </div>
-
-          <p className="min-h-[112px] font-[var(--font-body)] text-[24px] leading-snug first-letter:float-left first-letter:mr-3 first-letter:font-[var(--font-headline)] first-letter:text-[76px] first-letter:font-bold first-letter:leading-none first-letter:text-[var(--accent)]">
-            {item1?.body ??
-              'Relevant, non-privileged information must be exchanged.'}
-          </p>
-        </div>
       </div>
 
-      <footer className="flex shrink-0 items-center justify-between border-t border-[var(--border)] pt-4 font-[var(--font-mono)] text-[20px]">
-        <span>thefineprint.pub</span>
-        <span className="tabular-nums">
-          06 / {String(totalSlides).padStart(2, '0')}
-        </span>
+      <footer className="shrink-0 border-t border-[var(--border)]">
+        <div className="flex items-start gap-7 border-b border-[var(--border)] py-6">
+          <span className="w-12 shrink-0 pt-1 font-[var(--font-mono)] text-[22px] text-[var(--accent)]">
+            01
+          </span>
+          <p className="max-w-[790px] font-[var(--font-body)] text-[24px] leading-snug">
+            {items[0]?.body ??
+              'Disney dropped its arbitration bid in August 2024 after backlash.'}
+          </p>
+        </div>
+
+        <div className="flex items-start gap-7 py-6">
+          <span className="w-12 shrink-0 pt-1 font-[var(--font-mono)] text-[22px] text-[var(--accent)]">
+            02
+          </span>
+          <p className="max-w-[790px] font-[var(--font-body)] text-[24px] leading-snug">
+            {items[0]?.body ??
+              'Piccolo permanently dismissed the lawsuit on February 27, 2026.'}
+          </p>
+        </div>
       </footer>
     </section>
   );

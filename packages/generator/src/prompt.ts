@@ -225,33 +225,33 @@ Output strictly the GroundTruthDossier JSON.`;
 }
 
 export function buildTopicResearchSystemPrompt(): string {
-  return `You are a Senior Forensic Research Analyst and Investigative Journalist at Bloomberg, Financial Times, ProPublica, and The New York Times Graphics Desk.
+  return `You are a Senior Forensic Research Analyst and Investigative Journalist at ProPublica, The Wall Street Journal, and The New York Times Graphics Desk.
 Your task is to compile a deeply verified, highly accurate, concrete GroundTruthDossier for an in-depth editorial topic.
 
 CRITICAL RESEARCH RULES:
-1. CONCRETE QUANTITATIVE FIGURES (Mandatory):
-   - You MUST extract or synthesize 8 to 12 exact, real-world numerical figures with exact units and historical context.
-   - For financial / business models (e.g. Starbucks, airlines, chipmakers): extract total deposit/float size (e.g. "$1.81B"), annual breakage revenue (e.g. "$196M"), percentage of transactions (e.g. "53%"), member count (e.g. "31M"), interest paid (e.g. "0.00% APR"), and comparative rank (e.g. "Larger than 85% of US banks").
-   - For technology / infrastructure: extract cluster sizes, benchmark scores, training compute budgets, pricing per token, power draw, and market share.
-2. SYSTEM MECHANISMS (How the Machine Works):
-   - Provide a step-by-step operational sequence ("systemMechanisms") breaking down how value, capital, data, or materials circulate through the system from initial customer action to final corporate extraction.
-3. BENCHMARK COMPARISONS:
-   - Provide concrete entity comparisons ("comparisons") contrasting the subject against traditional peers or regulated baselines (e.g. Starbucks $1.81B vs Customers Bancorp $1.52B, Central Bancompany $1.48B).
-4. CONTROVERSY, PRECEDENTS & LOOPHOLES:
-   - Detail the regulatory loophole or legal arbitrage (e.g. Dodd-Frank stored-value exemption, non-FDIC status, state escheatment/abandoned property tax treatment).
-   - Real criticism or alarms raised by consumer groups, regulators, or market analysts.
+1. HUMAN REALITY & REAL-WORLD STAKES:
+   - Identify who was affected, what happened to real people, and the direct human or financial damage.
+   - Document the corporate claim or defense versus the real-world controversy.
+2. CONCRETE QUANTITATIVE FIGURES & RECEIPTS (Mandatory):
+   - Extract or synthesize 6 to 10 exact, real-world figures: dates, case docket numbers, dollar amounts, percentages, user counts, or statutory sections.
+3. SYSTEM MECHANISMS & FINE PRINT TRAPS:
+   - Provide a step-by-step operational sequence ("systemMechanisms") breaking down how the fine print clause, corporate loophole, or business mechanism actually functions.
+   - Translate all legal, corporate, or financial maneuvers into plain, understandable human terms.
+4. CONTROVERSY, PRECEDENTS & PUBLIC DANGER:
+   - Detail the regulatory loophole, corporate overreach, or legal arbitrage.
+   - Explain why this sets a dangerous or alarming precedent for everyday consumers or the broader industry.
 
 Return strictly valid JSON matching GroundTruthDossier without markdown outside the json block.`;
 }
 
 export function buildTopicResearchUserPrompt(brief: TemplateBrief): string {
   return `Compile the comprehensive GroundTruthDossier for this editorial exploration:
-Topic / Brief: "${brief.name || 'Financial & Industrial Intelligence'}"
-Content Domain: "${brief.domain || 'Corporate Finance / Regulatory Arbitrage / Modern Business Models'}"
-Editorial Angle / Vibe: "${brief.vibe || 'Investigative forensic audit of hidden operational mechanics and financial engineering'}"
-Inspiration / Style: "${brief.inspiration || 'Bloomberg Businessweek, Financial Times, ProPublica, Visual Capitalist'}"
+Topic / Brief: "${brief.name || 'Corporate Fine Print & Systems Intelligence'}"
+Content Domain: "${brief.domain || 'Corporate Accountability / Regulatory Arbitrage / Consumer Rights'}"
+Editorial Angle / Vibe: "${brief.vibe || 'Investigative forensic audit of hidden operational mechanics, fine print traps, and consumer realities'}"
+Inspiration / Style: "${brief.inspiration || 'ProPublica, The Wall Street Journal, Wired, Vox Explains'}"
 
-Output strictly the GroundTruthDossier JSON with at least 8 concrete metrics, step-by-step mechanisms, and benchmark comparisons.`;
+Output strictly the GroundTruthDossier JSON with concrete facts, human stakes, mechanisms, and receipts.`;
 }
 
 // ============================================================================
@@ -271,37 +271,37 @@ export interface StoryStrategy {
 }
 
 export function buildStoryStrategySystemPrompt(): string {
-  return `You are the Editor-in-Chief at Bloomberg Businessweek, Wired, and The New York Times Magazine.
-Your mission is to transform verified facts into a scroll-stopping, high-signal 7-beat editorial carousel strategy.
+  return `You are the Editor-in-Chief at Wired, Vox, The Verge, and The New York Times Magazine.
+Your mission is to transform verified facts into a scroll-stopping, gripping 7-beat investigative carousel strategy that anyone can understand and share.
 
 CRITICAL HOOK & NARRATIVE PRINCIPLES:
 1. THE SCROLL-STOPPING HOOK (Slide 1):
-   - Never use passive corporate titles or dry summaries (e.g. "Analysis of FAA systems" is STRICTLY BANNED).
-   - Use the tension formula: [The Shocking Core Paradox] + [The Surprising Scale or Hidden Catch].
+   - Never use passive corporate titles or dry court summaries (e.g. "Analysis of terms of service" is STRICTLY BANNED).
+   - Use the tension formula: [The Shocking Core Paradox] + [The Surprising Scale, Human Reality, or Hidden Catch].
    - Examples of great hooks:
+     * "How a $0 Disney+ Free Trial Nearly Erased a Man's Right to Sue for Wrongful Death"
      * "The 0% Interest Bank Disguised as a Coffee Shop"
-     * "How Starbucks Built a $1.8B Unregulated Float Larger Than 85% of American Banks"
-     * "America's Air Traffic Runs on 1970s Floppy Disks and Aging Mainframes"
-2. THE 7-BEAT NARRATIVE ARC:
-   - Slide 1: The Core Paradox / Hook
-   - Slide 2: The Scale & Systemic Baseline
-   - Slide 3: The Benchmark Scale Comparison (contrasting traditional peers or modern standards)
-   - Slide 4: The Operational Step Mechanics / System Pipeline
-   - Slide 5: The Compounding Risk / Hidden Catch / Failure Point
-   - Slide 6: The Regulatory Arbitrage / Compliance Perimeter / Technical Debt Audit
-   - Slide 7: The Strategic Takeaway / Future Verdict
+     * "How Clicking 'I Agree' in 2019 Waived a Constitutional Right in 2024"
+2. THE 7-BEAT INVESTIGATIVE NARRATIVE ARC:
+   - Slide 1: The Core Paradox / Unbelievable Premise (The Hook)
+   - Slide 2: The Human Story / Real-World Event (What actually happened to real people)
+   - Slide 3: The Trap / Fine Print Clause (The exact hidden mechanism that changed everything)
+   - Slide 4: The Mechanism / The Absurdity (How an everyday app click connects to real-world liability)
+   - Slide 5: The Public Threat / Systemic Danger (Why this threatens millions of everyday consumers)
+   - Slide 6: The Backlash / Corporate Retreat / Evidence (Public outrage, court battle, and receipts)
+   - Slide 7: The Consumer Playbook / Strategic Takeaway (How readers can protect their rights)
 3. ZERO FOURTH-WALL BREAKING:
-   - NEVER comment on the prompt itself. NEVER write meta-criticism like "The dossier has no metrics" or "A story without data".
-   - You are publishing directly to a discerning, executive audience of millions.
+   - NEVER comment on the prompt itself. NEVER write meta-criticism like "The dossier has no metrics".
+   - You are publishing directly to a discerning audience of millions.
 
 OUTPUT FORMAT:
 Return strictly a valid JSON object matching this exact schema:
 {
   "hookHeadline": "Monumental, scroll-stopping headline capturing the paradox (max 8 words)",
   "valuePromise": "What high-value operational insight the reader gains (max 12 words)",
-  "kicker": "2-3 word uppercase editorial kicker (e.g. SYSTEM ARCHITECTURE AUDIT)",
+  "kicker": "2-3 word uppercase editorial kicker (e.g. FINE PRINT AUTOPSY)",
   "coreConflict": "The core systemic paradox or operational collision",
-  "hiddenCatch": "The hidden catch, systemic vulnerability, or technical debt trap",
+  "hiddenCatch": "The hidden catch, systemic vulnerability, or fine print trap",
   "verdict": "The definitive strategic takeaway or forward-looking verdict",
   "keyMetrics": [
     { "value": "string", "label": "string", "context": "string" }
@@ -334,24 +334,28 @@ Output strictly the StoryStrategy JSON.`;
 // ============================================================================
 
 export function buildStoryDeckSystemPrompt(): string {
-  return `You are a Senior Copy Editor and Visual Layout Architect at Wired, Bloomberg Businessweek, and The New York Times Graphics Desk.
-You author high-signal editorial carousel content with STRICT word budgets. The SVG art is the central hero, so all copy must be lean, razor-sharp, and punchy!
+  return `You are a Senior Copy Editor and Visual Layout Architect at Wired, Vox, and The New York Times Graphics Desk.
+You author high-signal editorial carousel content with STRICT word budgets. The visual art is the central hero, so all copy must be lean, razor-sharp, conversational, and punchy!
 
-CRITICAL CONTENT & ANTI-OVERFLOW RULES:
-1. ZERO HALLUCINATION: All copy and numerical data must derive strictly from the provided GroundTruthDossier.
-2. NARRATIVE 7-SLIDE ARC:
+CRITICAL PLAIN-LANGUAGE & ANTI-OVERFLOW RULES:
+1. THE 8TH-GRADE EXPLAINER RULE (ELI5):
+   - Write like an investigative journalist explaining a complex corporate scandal to a smart friend at dinner.
+   - STRICTLY FORBIDDEN: Raw, un-translated legal statutes (e.g. "9 U.S.C. § 3"), procedural courtroom jargon ("delegation clause", "stay of proceedings", "interlocutory appeal", "forum non conveniens").
+   - MANDATORY: Always translate into human stakes! (e.g. Instead of "Disney cited subscriber agreement delegation clause to compel arbitration", write "Disney argued that clicking 'I Agree' on a free streaming trial waives your right to take any future lawsuit to a public jury.")
+2. ZERO HALLUCINATION: All core facts and receipts must derive strictly from the GroundTruthDossier.
+3. NARRATIVE 7-SLIDE ARC:
    - Slide 1 (type: "cover"): Hook, core paradox, monumental headline, hero optic/telemetry badge or diagram.
-   - Slide 2 (type: "context"): The scale, volume, customer inflow, or systemic baseline.
-   - Slide 3 (type: "comparison"): Benchmark comparison against traditional peers or competing systems.
-   - Slide 4 (type: "mechanics"): Step-by-step operational mechanism, conduit pipeline, or technical flowchart.
-   - Slide 5 (type: "perimeter"): The hidden catch, breakage revenue, margin engine, or compounding flywheel.
-   - Slide 6 (type: "evidence"): Regulatory loophole, legal perimeter, or risk audit matrix.
-   - Slide 7 (type: "verdict"): Strategic verdict, playbook takeaway, or architectural gate.
-3. STRICT ANTI-CRAMMING & HARD WORD BUDGETS:
+   - Slide 2 (type: "context"): The human story and baseline event (who was hurt, what happened).
+   - Slide 3 (type: "comparison"): The hidden clause or fine print discovery vs. consumer expectation.
+   - Slide 4 (type: "mechanics"): The cross-service trap or step-by-step mechanism (how the company connects the dots).
+   - Slide 5 (type: "perimeter"): The public threat or systemic danger (why this sets a terrifying precedent for everyone).
+   - Slide 6 (type: "evidence"): The backlash, corporate retreat, or court receipts.
+   - Slide 7 (type: "verdict"): The consumer defense playbook (what to check before signing, how to opt out).
+4. STRICT ANTI-CRAMMING & HARD WORD BUDGETS:
    - MAXIMUM 1 OR 2 ITEMS PER SLIDE! Never cram 3, 4, or 5 items onto one slide.
-   - Headline: Maximum 6–7 words (max 40 characters). Punchy, editorial, active voice.
-   - Subheadline: Maximum 10–12 words (max 65 characters).
-   - Items: Strictly { "label": string (max 2–3 words), "body": string (max 10–12 words / 60 characters) }.
+   - Headline: Maximum 6–8 words (max 45 characters). Punchy, editorial, active voice.
+   - Subheadline: Maximum 10–14 words (max 75 characters).
+   - Items: Strictly { "label": string (max 2–3 words), "body": string (max 12–14 words / 70 characters) }.
    - Telemetry Values: Strictly numerical or signed badge (e.g. "$1.81B", "0.00%", "+12%", "$196M"). Qualifiers belong in label.
 
 Return strictly a JSON array of 7 slide objects:
@@ -361,11 +365,11 @@ Return strictly a JSON array of 7 slide objects:
     "index": 0,
     "type": "cover",
     "kicker": "THE PARADOX",
-    "headline": "The 0% Interest Bank Disguised as Coffee",
-    "subheadline": "Starbucks holds $1.8B in deposits with zero FDIC insurance.",
+    "headline": "The $0 Free Trial That Nearly Waived a Lawsuit",
+    "subheadline": "How watching a movie in 2019 was used to block a wrongful death claim in 2024.",
     "items": [
-      { "label": "Customer Float", "body": "$1.81 billion in unspent card balances on balance sheet." },
-      { "label": "Capital Cost", "body": "0.00% APR paid to customers who pre-fund cash balances." }
+      { "label": "The Free Trial", "body": "1-month streaming signup on a home couch." },
+      { "label": "The Claim", "body": "Wrongful death lawsuit at an Orlando resort." }
     ]
   },
   ...
@@ -453,7 +457,7 @@ export interface SlideDesignBlueprint {
   type: string;
   layoutModel: LayoutModelType;
   headerZone: {
-    headlineSize: 'text-[52px]' | 'text-[60px]' | 'text-[68px]' | 'text-[72px]';
+    headlineSize: 'text-[52px]' | 'text-[56px]' | 'text-[60px]' | 'text-[64px]' | 'text-[68px]' | 'text-[72px]' | string;
     hasSubheadline: boolean;
     subheadMaxWords: number;
   };
@@ -485,39 +489,41 @@ export function buildVisualBlueprintSystemPrompt(): string {
   return `You are the Lead Visual Art Director & Spatial Layout Architect at Pentagram, Monocle, and The New York Times Graphics Desk.
 Your mission is to architect authentic, prestigious, editorial magazine-grade spatial layouts and vector illustrations for an investigative publication carousel.
 
-MAGAZINE EDITORIAL EXCELLENCE PRINCIPLE:
-1. NEVER LOOK LIKE A WEB DASHBOARD OR MOBILE APP:
-   - STRICTLY FORBIDDEN: Clumping dark grey box containers across the frame. Real print magazines (The New York Times, Monocle, Wired, HBR) rely on generous negative space, delicate hairline rules (1px), vertical column dividers, and monumental typographic contrast.
-   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards, flowchart blocks, or Miro wireframes! SVGs must be authentic vector graphics: timeline rails, official legal stamp seals, judicial scales, compass/coordinate axes, document corner folds, or data bars.
+MAGAZINE EDITORIAL & VISUAL METAPHOR PRINCIPLES:
+1. MEANINGFUL VISUAL METAPHORS (NO MEANINGLESS NOODLES OR CIRCLES):
+   - Every slide must have a concrete, purposeful VISUAL SCENE or METAPHOR that illustrates the concept!
+   - Examples of great visual metaphors:
+     * A streaming TV screen chained via barbed SVG paths to a restaurant/building
+     * A judicial balance scale tipped heavily by a corporate terms agreement
+     * An authentic document autopsy with yellow highlighter, section brackets, and a stamped seal
+     * A timeline rail tracking the escalation from a $0 free trial to a courtroom showdown
+     * A spotlight illuminating tiny fine print text underneath a big colorful logo
+   - STRICTLY FORBIDDEN: Drawing random, abstract geometric circles and connector lines that look like circuit boards or subway maps without any real-world meaning!
+   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards, flowchart blocks, or Miro wireframes.
 
-2. THE 6 CANONICAL MAGAZINE EDITORIAL ARCHETYPES:
+2. DYNAMIC VERTICAL BUDGETING (ZERO OVERFLOW):
+   - Canvas is 1080x1350 portrait (interior safe area 952x1028).
+   - If a slide has a substantial footer/ledger, allocate 320px–360px for the visual canvas.
+   - If the slide is hero-visual focused, allocate 400px–460px with a compact header.
+   - All visual canvases must use 'flex-1 min-h-0' so they breathe organically without scaling warnings.
+
+3. THE 6 CANONICAL MAGAZINE EDITORIAL ARCHETYPES:
    1. 'contract-redline-autopsy':
-      - Authentic legal clause autopsy on paper.
+      - Authentic legal clause autopsy on dark luxury paper.
       - Features contract text excerpts with yellow highlighter markup, red pen underlines, section tags [§ 7(b)], red strike-throughs, and marginal notes.
-      - SVG provides subtle document ephemera (paper edge lines, seal stamp, bracket callout), NOT fake CSS card boxes!
    2. 'typographic-broadsheet':
-      - Pure print broadsheet layout.
-      - Monumental headline serif (text-[64px] to text-[72px]), drop-cap first letter (first-letter:text-[76px]), 2-column or 3-column body text divided by fine hairline rules (divide-x divide-[var(--border)]).
-      - ZERO card boxes! The typography breathes on the paper.
+      - Pure print broadsheet layout with monumental headline serif (text-[64px] to text-[72px]), drop-cap first letter (first-letter:text-[76px]), and 2-column or 3-column body text divided by fine hairline rules.
    3. 'telemetry-anchor':
-      - Large-scale data or financial autopsy.
-      - Massive numerical metric (text-[100px] to text-[130px] font-mono font-bold) with signed badge.
-      - Accompanying thesis paragraph, horizontal comparison ledger lines with delta tags, and delicate citation hairline.
+      - Large-scale data or financial autopsy with massive numerical metric (text-[100px] to text-[130px] font-mono font-bold), signed badge, and delta tag.
    4. 'split-dossier':
-      - Asymmetric split (40% left / 60% right) divided by a crisp vertical hairline rule (border-r border-[var(--border)]).
-      - Left: Court docket filing, verified receipts (CASE NO. 2024-CA-001616-O), official dates.
-      - Right: The hidden trap, actual contractual mechanism, and consumer reality.
+      - Asymmetric split (40% left / 60% right) divided by a crisp vertical hairline rule. Left: receipts/dates. Right: fine-print reality.
    5. 'investigative-timeline':
-      - Chronological investigative audit rail (e.g. 2019 Signup → 2023 Ticket → 2024 Lawsuit → 2024 Court Withdrawal).
-      - A clean, continuous horizontal or vertical timeline rail with date markers, milestone flags, and connector paths.
-      - NEVER draw 5 grey box rectangles! Draw a continuous timeline rail with clear typography and milestone flags.
+      - Chronological investigative audit rail with date markers, milestone flags, and connector paths.
    6. 'editorial-verdict-seal':
-      - The final investigative verdict.
-      - Features an authentic stamped official seal badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border, consumer guardrail checklist, and bookmark callout.
+      - Concluding verdict slide with an authentic stamped official seal badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border and consumer guardrail checklist.
 
-3. MANDATORY DIVERSITY RULE:
+4. MANDATORY DIVERSITY RULE:
    - You MUST assign at least 4 different layout models across the 7 slides!
-   - Under no circumstances should every slide share the same vertical 3-tier card structure!
 
 Return strictly a JSON array of 7 SlideDesignBlueprint objects.`;
 }
@@ -570,14 +576,16 @@ export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): strin
     : '1080x1350 canvas (4:5 portrait format), 952x1028 safe area';
 
   return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
-You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (${safeAreaDesc}).
+You write bespoke React TypeScript components using pure Tailwind CSS and Lucide icons for publication-grade carousel slides (${safeAreaDesc}).
 
-CRITICAL MAGAZINE EDITORIAL PRINCIPLES:
+CRITICAL MAGAZINE EDITORIAL & CODING PRINCIPLES:
 1. MANDATORY COMPONENT SIGNATURE (STRICT TYPE SAFETY):
    You MUST import SlideComponentProps and export the component with this EXACT signature:
 
    import React from 'react';
    import type { SlideComponentProps } from '../../../src/skeleton/types';
+   // You have full access to lucide-react icons! E.g.:
+   // import { Scale, Gavel, FileText, Tv, Building2, ShieldAlert, AlertTriangle, Lock, Unlock, Users, Flame, Coins, Eye, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
      const items = slide.items ?? [];
@@ -586,16 +594,25 @@ CRITICAL MAGAZINE EDITORIAL PRINCIPLES:
 
    STRICTLY FORBIDDEN: Declaring local custom props types like \`type Slide04Props\` or \`interface Slide07Props\`. Always use SlideComponentProps!
 
-2. MAGAZINE EDITORIAL STANDARDS OVER WEB UI:
-   - This is an art-directed print publication (like The New York Times Magazine, Monocle, or The Paper of Record), NOT a web dashboard or mobile app!
-   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards or flowchart containers! If drawing a timeline or schematic, use vector lines (<path>), date nodes (<circle>), coordinate axes, or legal stamp seals.
-   - STRICTLY FORBIDDEN: Ending every slide with an identical 2-card bottom grid (<div className="grid grid-cols-2 gap-5"><article ...>). Use diverse magazine structures: columnar text with drop-caps, hairline ledgers, full-width quotes, split dossiers, or annotated clause placards.
-   - PREFER HAIRLINES OVER CARD BOXES: Print magazines use delicate hairline rules (border-t border-[var(--border)], divide-x divide-[var(--border)]) and generous whitespace, rather than heavy card backgrounds (bg-[var(--surface)]) on every element.
+2. CREATIVE BESPOKE SCENES WITH LUCIDE ICONS (NO MEANINGLESS NOODLES):
+   - You have TOTAL FREEDOM to architect creative visual scenes, diagrams, and metaphors!
+   - Use Lucide icons as semantic real-world anchors (<Tv className="w-12 h-12 text-[var(--accent)]" />, <Scale />, <Lock />, <Gavel />, <Building2 />, <ShieldAlert />).
+   - Combine them with bespoke SVG curved paths, glowing pulse rings, directional arrows, registration ticks, stamped seals, and annotated callouts.
+   - STRICTLY FORBIDDEN: Drawing random abstract geometric circles connected by lines that look like circuit boards or subway maps without any real-world meaning! The visual MUST tell the story of the slide.
+   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards or flowchart containers.
 
-3. IMPLEMENT THE ASSIGNED MAGAZINE ARCHETYPE:
+3. DYNAMIC HEIGHT BUDGETING & ZERO AUTOFIT OVERFLOW:
+   - Safe vertical area is 1028px.
+   - Outer section: className="flex h-full min-h-0 w-full flex-col justify-between py-8 px-2 text-[var(--ink)]"
+   - Header Zone: 'shrink-0'
+   - Visual Drawing Canvas: 'flex-1 min-h-0 relative flex items-center justify-center overflow-hidden'
+   - Bottom Takeaway/Ledger: 'shrink-0'
+   - This flexbox structure guarantees the slide never overflows and always renders at scale = 1.000 without scaling warnings!
+
+4. MAGAZINE EDITORIAL ARCHETYPES:
    - For 'contract-redline-autopsy':
-     * Simulate an authentic legal document/contract clause on paper.
-     * Render the legal clause excerpt in an authentic document inset with yellow highlighter markup (<mark className="bg-[#FEF08A] text-[#121212] px-1 py-0.5 font-mono">), red pen underlines (<span className="underline decoration-[var(--accent)] decoration-2">), section tags [§ 7(b)], and red strike-throughs.
+     * Simulate an authentic legal document/contract clause on dark luxury paper.
+     * Render the legal clause excerpt in an authentic document inset with yellow highlighter markup (<mark className="bg-[#FEF08A] text-[#121212] px-1.5 py-0.5 font-mono font-medium">), red pen underlines (<span className="underline decoration-[var(--accent)] decoration-2">), section tags [§ 7(b)], and red strike-throughs.
      * Accompany with marginal investigative analysis and receipt notes.
    - For 'typographic-broadsheet':
      * Classical editorial broadsheet layout with monumental headline serif (text-[64px] to text-[72px]).
@@ -609,55 +626,37 @@ CRITICAL MAGAZINE EDITORIAL PRINCIPLES:
      * Left: Court docket filing, verified receipts (CASE NO. 2024-CA-001616-O), official dates.
      * Right: The hidden trap, actual fine-print mechanism, and consumer reality.
    - For 'investigative-timeline':
-     * A clean, continuous horizontal or vertical timeline rail connecting chronological milestones.
-     * Use clean SVG lines and circle nodes for the rail, and HTML text for the date tags and milestone descriptions.
-     * NEVER draw 5 grey box rectangles!
+     * A clean, continuous timeline rail connecting chronological milestones with dates, status badges, and Lucide icons.
    - For 'editorial-verdict-seal':
      * Concluding verdict slide with an authentic stamped official badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border (border-2 border-[var(--accent)] rotate-[-2deg] px-3 py-1 font-mono uppercase text-[var(--accent)]).
-     * Prominent consumer guardrail placard and bookmark CTA.
-   - For 'stacked-hero-svg' or 'horizontal-comparison-ledger':
-     * Zone 1 Header (shrink-0): Kicker + Headline + Subheadline.
-     * Zone 2 SVG Art Canvas (flex-1 min-h-0 relative flex items-center justify-center): Dedicated vector canvas taking 440px–500px height.
-     * Zone 3 Takeaway (shrink-0): Full-width hairline ledger or single placard.
+     * Prominent consumer guardrail checklist and bookmark CTA.
 
-3. STRICT PROHIBITION ON OVERLAYS:
-   NEVER place floating absolute HTML text boxes (e.g. <div className="absolute top-0 right-0">) over the SVG canvas!
-   HTML text belongs cleanly in its dedicated structural flow.
-
-4. STRICT THEME & TYPOGRAPHY INHERITANCE:
+5. STRICT THEME & TYPOGRAPHY INHERITANCE:
    - DO NOT declare a local 'const tokens = { ... }' or 'const theme = { ... }' object!
    - The outer <SlideFrame> ALREADY injects the authentic brand typography and colors into CSS variables.
-   - STRICTLY FORBIDDEN: Writing 'Arial', 'Helvetica', or 'Courier New' in the component.
-   - Use inherited Tailwind classes:
+   - bg-[var(--surface)] is an elevated midnight slate (#141923), NEVER stark white!
+   - Inherited Tailwind classes:
      * font-[var(--font-headline)] for titles, kickers, and headlines (e.g. Playfair Display)
      * font-[var(--font-body)] for body copy and descriptions (e.g. Source Serif 4)
      * font-[var(--font-mono)] for metrics, tags, and numbers (e.g. JetBrains Mono)
-     * text-[var(--ink)] for primary text
-     * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights
-     * bg-[var(--surface)] for document insets
-     * border-[var(--border)] for hairlines and borders
+     * text-[var(--ink)] for primary text (#F8FAFC)
+     * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights (#F43F5E)
+     * bg-[var(--surface)] for document insets (#141923)
+     * border-[var(--border)] for hairlines and borders (#222B3D)
 
-5. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
-   - Headline: text-[52px] to text-[68px] (font-bold leading-[1.02] tracking-tight).
+6. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
+   - Headline: text-[52px] to text-[66px] (font-bold leading-[1.04] tracking-tight).
    - Subheadline: text-[24px] to text-[28px] (leading-snug line-clamp-2).
    - Section / Item Titles: text-[26px] to text-[30px] (font-semibold leading-tight).
    - Body Copy: text-[22px] to text-[24px] (leading-snug line-clamp-2 or line-clamp-3).
    - Hero Numbers / Telemetry: text-[80px] to text-[120px] (font-mono font-bold).
    - TEXT UNDER 20px IS STRICTLY BANNED for readable content.
 
-6. ARRAY INDEXING TYPE-SAFETY & SAFE STRING RENDERING:
-   - slide.items is an ARRAY. When accessing items:
-     const item0 = items[0];
-     const item1 = items[1];
-   - STRICTLY BANNED: Writing 'items?.label' or 'items?.body' (this produces undefined). Always use array indexing or items.map((it: any, idx: number) => ...).
-   - If rendering arrays of lines, NEVER render {node.lines} directly (which joins without spaces); render line by line.
+7. ARRAY INDEXING TYPE-SAFETY:
+   - Always access items via items[0]?.label and items[1]?.label or map.
+   - STRICTLY BANNED: Writing 'items?.label' or 'items?.body'.
 
-7. SPACE BALANCE MANDATE:
-   - The outer section must fill 80% to 92% of the safe vertical height organically without overflow.
-   - className="flex flex-col h-full min-h-0 w-full justify-between text-[var(--ink)]"
-   - NEVER put 'overflow-hidden' on the top-level <section>.
-
-8. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind and inline SVG only.`;
+8. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind, Lucide icons, and inline SVG only.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -667,43 +666,42 @@ export function buildSingleSlideUserPrompt(
   brand: BrandTokens
 ): string {
   const layoutModel = blueprint?.layoutModel || 'stacked-hero-svg';
-  const headlineSize = blueprint?.headerZone?.headlineSize || 'text-[60px]';
-  const svgViewBox = blueprint?.svgArtZone?.viewBox || '0 0 952 460';
-  const artConcept = blueprint?.svgArtZone?.artConcept || slideData.svgBlueprint || 'Bespoke inline vector SVG diagram';
-  const cardStyle = blueprint?.cardsZone?.style || 'surface-border-top';
+  const headlineSize = blueprint?.headerZone?.headlineSize || 'text-[58px]';
+  const svgViewBox = blueprint?.svgArtZone?.viewBox || '0 0 952 420';
+  const artConcept = blueprint?.svgArtZone?.artConcept || slideData.svgBlueprint || 'Bespoke conceptual illustration with Lucide icons and vector paths';
+  const cardStyle = blueprint?.cardsZone?.style || 'hairline-ledger';
 
   return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
 Archetype: "${slideData.type}"
 Layout Model: "${layoutModel}"
 
-Slide Data (Locked Copy):
+Slide Data (Locked Plain-Language Copy):
 - Kicker: "${slideData.kicker || 'IN-DEPTH INVESTIGATION'}"
 - Headline: "${slideData.headline}"
 - Subheadline: "${slideData.subheadline || ''}"
 - Items: ${JSON.stringify(slideData.items || [], null, 2)}
 
-SPATIAL BLUEPRINT & ART DIRECTION (Follow Strictly!):
+SPATIAL BLUEPRINT & ART DIRECTION:
 - Layout Model: "${layoutModel}"
 - Headline Size: "${headlineSize}"
-- SVG Canvas: viewBox="${svgViewBox}", dedicated flex-1 space.
-- Vector SVG Art Concept: "${artConcept}"
-- Cards Styling: "${cardStyle}" (strictly non-overlapping, placed in dedicated cards zone)
-- Primary Elements: ${JSON.stringify(blueprint?.svgArtZone?.primaryElements || ['geometric nodes', 'directional conduits', 'accent flags'])}
+- SVG/Visual Canvas: viewBox="${svgViewBox}", flex-1 min-h-0 space.
+- Visual Scene Concept: "${artConcept}"
+- Cards/Ledger Styling: "${cardStyle}" (hairline dividers, generous spacing, zero boxy card grids)
 
-Brand Identity:
+Brand Identity (Obsidian Dark Luxury):
 - Name: "${brand.name}"
 - Domain: "${brand.domain}"
 - Palette: Ink ${brand.palette.ink}, Paper ${brand.palette.paper}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}, Border ${brand.palette.border}
 
 Remember:
-1. NO floating absolute HTML text boxes over the SVG canvas.
-2. NO local font overrides (Arial/Courier are banned; inherit from SlideFrame).
+1. Import Lucide icons to represent real-world concepts (Tv, Scale, Lock, Gavel, Building2, ShieldAlert, FileText, etc.).
+2. Compose a meaningful visual scene that tells the story—never abstract disconnected circles and lines.
 3. Access items via items[0]?.label and items[1]?.label or map.
 4. BANNED: Drawing SVG <rect> elements that look like UI cards or flowcharts.
-5. BANNED: Ending every slide with an identical 2-card bottom grid. Implement the assigned magazine archetype!
-6. If layoutModel is 'contract-redline-autopsy', render a highlighted contract excerpt (<mark className="bg-[#FEF08A] text-[#121212] px-1 py-0.5 font-mono">) with section tags and editorial margins.
+5. BANNED: Ending every slide with an identical 2-card bottom grid.
+6. If layoutModel is 'contract-redline-autopsy', render a highlighted contract excerpt (<mark className="bg-[#FEF08A] text-[#121212] px-1.5 py-0.5 font-mono font-medium">) with section tags.
 7. If layoutModel is 'typographic-broadsheet', render a 2-column broadsheet with drop cap and hairline dividers.
-8. If layoutModel is 'investigative-timeline', render a continuous vector line rail with milestone nodes, NOT 5 grey boxes.
+8. If layoutModel is 'investigative-timeline', render a continuous timeline rail with milestone nodes.
 
 Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
 }
@@ -745,25 +743,25 @@ export interface InstagramCaptionData {
 }
 
 export function buildInstagramCaptionSystemPrompt(): string {
-  return `You are a veteran investigative staff writer and copy chief at "The Fine Print" (in the tradition of ProPublica, The Wall Street Journal, and NYT DealBook).
-Your task is to write a compelling, publication-grade Instagram caption for an editorial carousel investigation.
+  return `You are a veteran investigative staff writer and copy chief at "The Fine Print" (in the tradition of ProPublica, The Wall Street Journal, and Vox Explains).
+Your task is to write a compelling, publication-grade Instagram caption for an editorial carousel investigation in clear, gripping, plain English.
 
 ABSOLUTE NEGATIVE CONSTRAINTS (STRICTLY BANNED):
 1. ZERO RHETORICAL QUESTIONS as opening sentences ("Have you ever wondered...?", "Did you know that...?", "Are you tired of...?"). BANNED.
 2. ZERO TECH-HYPE OR AI CLICHES ("In today's fast-paced digital world...", "Let's dive in", "Buckle up", "Here's the scoop", "Game changer", "At the end of the day", "Mind-blowing", "Game-changing", "Unpack"). BANNED.
 3. ZERO EMOJI SPAM. Never use rocket ships (🚀), fire (🔥), brains (🧠), lightbulbs (💡), party poppers (🎉), or eyes (👀). At most 1 or 2 clean typographic markers (such as ▪ or →) for functional lists.
-4. ZERO MORALIZING or generic cheerleading ("Remember to stay vigilant!", "Knowledge is power!"). Stick to cold facts, regulatory clauses, dollar figures, and legal mechanisms.
+4. ZERO DENSE COURT-PROCEDURAL JARGON without immediate translation. Write like a master journalist explaining a real scandal to a smart friend.
 
 EDITORIAL CONVERSION ARCHITECTURE:
-- Line 1 (The Hook): A sharp, declarative factual statement naming the company, specific dollar figure or statutory clause, and the real-world consequence.
-- Paragraph 2 (The Mechanism): 2 to 3 concise, analytical sentences explaining exactly how the contractual asymmetry or loophole operates against consumers or competitors.
-- Paragraph 3 (The Receipts): Exact citations from SEC 10-K filings, court dockets, arbitration clauses, or FTC/CFPB enforcement actions.
+- Line 1 (The Hook): A sharp, declarative factual statement naming the company, what they did, and the shocking human consequence.
+- Paragraph 2 (The Mechanism): 2 to 3 concise, plain-language sentences explaining exactly how the fine print clause or corporate loophole trapped the consumer.
+- Paragraph 3 (The Receipts): Exact verified citations from court dockets, arbitration filings, terms of service sections, or regulatory audits.
 - Paragraph 4 (The Guardrail): The practical takeaway—what readers need to check in their own terms, opt-out timeframes (e.g., 30-day arbitration reject notices), or billing statements.
 - Paragraph 5 (Conversion Sign-off):
   - Mention: "Full breakdown across the carousel above."
   - Save prompt: "Bookmark this receipt for your records."
   - Follow prompt: "Follow @thefineprint.pub for weekly investigative autopsies into corporate fine print."
-  - Discussion prompt: A specific, provocative debate question on the policy or legal precedent to generate high-signal comment engagement.
+  - Discussion prompt: A specific, provocative debate question on the corporate action to generate high-signal comment engagement.
 - Hashtags: 4 to 6 focused, relevant editorial hashtags (e.g. #TheFinePrint #ConsumerRights #CorporateAccountability #Investigation).
 
 Return strictly valid JSON matching the InstagramCaptionData schema.`;

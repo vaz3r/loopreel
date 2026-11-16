@@ -583,13 +583,13 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   } catch (err: any) {
     console.warn(`[Pipeline] Spatial blueprint generation fallback: ${err.message}`);
     const fallbackModels: LayoutModelType[] = [
+      'typographic-broadsheet',
+      'split-dossier',
+      'contract-redline-autopsy',
+      'investigative-timeline',
+      'telemetry-anchor',
       'stacked-hero-svg',
-      'horizontal-comparison-ledger',
-      'split-column-50-50',
-      'stepped-pipeline-flow',
-      'stacked-hero-svg',
-      'stacked-hero-svg',
-      'editorial-verdict-gate',
+      'editorial-verdict-seal',
     ];
     blueprints = deck.slides.map((s, idx) => ({
       slideId: s.id,
@@ -601,17 +601,17 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
         subheadMaxWords: 12,
       },
       svgArtZone: {
-        viewBox: idx === 2 ? '0 0 500 760' : '0 0 952 460',
-        allocatedHeightPx: 460,
-        artConcept: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
-        primaryElements: ['geometric nodes', 'directional conduits', 'accent flags'],
-        negativeSpaceBufferPx: 32,
+        viewBox: '0 0 952 420',
+        allocatedHeightPx: 380,
+        artConcept: s.svgBlueprint || 'Bespoke conceptual illustration with recognizable icons and vector paths',
+        primaryElements: ['vector scene', 'icon anchors', 'annotated connectors'],
+        negativeSpaceBufferPx: 24,
       },
       cardsZone: {
-        placement: 'bottom-2-col',
+        placement: 'hairline-columns',
         cardCount: s.items?.length || 2,
-        maxWordsPerBody: 12,
-        style: 'surface-border-top',
+        maxWordsPerBody: 14,
+        style: 'hairline-ledger',
       },
       spacing: {
         zoneGap: 'gap-6',

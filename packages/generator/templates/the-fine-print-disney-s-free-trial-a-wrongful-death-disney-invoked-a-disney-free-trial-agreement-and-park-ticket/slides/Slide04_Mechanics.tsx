@@ -1,228 +1,243 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
+import {
+  Ticket,
+  FileText,
+  UserRound,
+  MousePointer2,
+  Scale,
+  Bookmark,
+} from 'lucide-react';
 
-export default function Slide04({ slide, brand, totalSlides }: SlideComponentProps) {
+export default function Slide04({
+  slide,
+  brand,
+  totalSlides,
+}: SlideComponentProps) {
   const items = slide.items ?? [];
-  const item0 = items[0]!;
-  const item1 = items[0]!;
-
-  const connection = {
-    label: item0?.label ?? 'Build Connection',
-    body:
-      item0?.body ??
-      'Capture assent → incorporate terms → reinforce through parks.',
-  };
-
-  const forum = {
-    label: item1?.label ?? 'Shift Forum',
-    body:
-      item1?.body ??
-      'Link website allegations → invoke delegation → seek a stay.',
-  };
-
-  const connectionSteps = connection.body.replace(/\.$/, '').split('→');
-  const forumSteps = forum.body.replace(/\.$/, '').split('→').reverse();
-
-  const nodes = [
-    { x: 110, y: 100, number: '01' },
-    { x: 476, y: 100, number: '02' },
-    { x: 842, y: 100, number: '03' },
-    { x: 842, y: 360, number: '04' },
-    { x: 476, y: 360, number: '05' },
-    { x: 110, y: 360, number: '06' },
-  ];
-
-  void brand;
 
   return (
-    <section
-      aria-label={`Slide 4 of ${totalSlides}: The contractual pipeline`}
-      className="flex h-full min-h-0 w-full flex-col justify-between text-[var(--ink)]"
-    >
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
       <header className="shrink-0">
-        <div className="mb-5 flex items-center gap-4">
-          <span
-            aria-hidden="true"
-            className="h-3 w-3 shrink-0 bg-[var(--accent)]"
-          />
-          <p className="font-[var(--font-headline)] text-[22px] font-bold uppercase tracking-[0.12em] text-[var(--accent)]">
-            {slide.kicker ?? 'THE CONTRACTUAL PIPELINE'}
+        <div className="mb-6 flex items-center gap-4">
+          <span className="h-[2px] w-12 bg-[var(--accent)]" />
+          <p className="font-[var(--font-mono)] text-[20px] font-medium uppercase tracking-[0.16em] text-[var(--accent)]">
+            THE CONTRACTUAL LEAP
           </p>
         </div>
 
-        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[60px] font-bold leading-[1.02] tracking-tight">
-          {slide.headline ?? 'Build The Chain. Request Arbitration.'}
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          His Clicks.
+          <br />
+          Her Estate’s Rights.
         </h1>
 
-        <p className="mt-5 line-clamp-2 max-w-[900px] font-[var(--font-body)] text-[26px] leading-snug">
-          {slide.subheadline ??
-            'Disney sought arbitration and a stay of the court action.'}
+        <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug">
+          Disney wanted an arbitrator to decide whether arbitration applied.
         </p>
       </header>
 
-      <figure
-        aria-label="Six-step contractual pipeline, read clockwise from the upper left."
-        className="my-5 flex min-h-0 flex-1 flex-col justify-center"
-      >
-        <ol className="grid shrink-0 grid-cols-3 gap-8">
-          {connectionSteps.map((step, index) => (
-            <li
-              key={`connection-${index}`}
-              className={`font-[var(--font-body)] text-[22px] leading-snug ${
-                index === 0
-                  ? 'text-left'
-                  : index === 1
-                    ? 'text-center'
-                    : 'text-right'
-              }`}
-            >
-              {step.trim()}
-            </li>
-          ))}
-        </ol>
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-8 left-[40%] top-8 border-r border-[var(--border)]"
+        />
 
-        <div className="relative flex max-h-[460px] min-h-[440px] flex-1 items-center justify-center">
-          <svg
-            viewBox="0 0 952 460"
-            preserveAspectRatio="xMidYMid meet"
-            aria-hidden="true"
-            className="block h-full max-h-[460px] w-full"
-            fill="none"
-          >
-            {/* One continuous rail: left to right, then right to left. */}
-            <path
-              d="M110 100H842C898 100 918 130 918 184V276C918 330 898 360 842 360H110"
-              stroke="var(--border)"
-              strokeWidth="3"
-            />
-
-            <path
-              d="M842 100C898 100 918 130 918 184V276C918 330 898 360 842 360H110"
-              stroke="var(--accent)"
-              strokeWidth="3"
-            />
-
-            {/* Directional conduits, never container boxes. */}
-            <g
-              stroke="var(--ink)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M281 91L293 100L281 109" />
-              <path d="M647 91L659 100L647 109" />
-            </g>
-
-            <g
-              stroke="var(--accent)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M909 224L918 236L927 224" />
-              <path d="M671 351L659 360L671 369" />
-              <path d="M305 351L293 360L305 369" />
-            </g>
-
-            {/* Fine registration ticks connect the rail to its HTML labels. */}
-            <g stroke="var(--border)" strokeWidth="1">
-              <path d="M110 8V55M476 8V55M842 8V55" />
-              <path d="M110 405V452M476 405V452M842 405V452" />
-            </g>
-
-            {nodes.map((node, index) => (
-              <g key={node.number}>
-                <circle
-                  cx={node.x}
-                  cy={node.y}
-                  r="39"
-                  fill="var(--surface)"
-                  stroke={index >= 3 ? 'var(--accent)' : 'var(--ink)'}
-                  strokeWidth={index === 5 ? '3' : '2'}
-                />
-
-                {index === 5 && (
-                  <circle
-                    cx={node.x}
-                    cy={node.y}
-                    r="47"
-                    stroke="var(--accent)"
-                    strokeWidth="1"
-                  />
-                )}
-
-                <text
-                  x={node.x}
-                  y={node.y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fill={index >= 3 ? 'var(--accent)' : 'var(--ink)'}
-                  className="font-[var(--font-mono)] text-[26px] font-bold"
-                >
-                  {node.number}
-                </text>
-              </g>
-            ))}
-
-            {/* Editorial accent flags mark entry and requested exit. */}
-            <path
-              d="M110 61V24H142L132 35L142 46H110"
-              stroke="var(--accent)"
-              strokeWidth="2"
-              fill="var(--accent)"
-            />
-            <path
-              d="M110 313V276H142L132 287L142 298H110"
-              stroke="var(--accent)"
-              strokeWidth="2"
-              fill="var(--accent)"
-            />
-          </svg>
-        </div>
-
-        <ol
-          reversed
-          start={6}
-          className="grid shrink-0 grid-cols-3 gap-8"
+        <svg
+          viewBox="0 0 952 420"
+          className="relative block max-h-full w-full"
+          role="img"
+          aria-label="Tickets, account terms and guest registration on Piccolo’s side. A disputed connection extends toward his wife’s estate and arbitration."
+          preserveAspectRatio="xMidYMid meet"
         >
-          {forumSteps.map((step, index) => (
-            <li
-              key={`forum-${index}`}
-              className={`font-[var(--font-body)] text-[22px] leading-snug text-[var(--accent)] ${
-                index === 0
-                  ? 'text-left'
-                  : index === 1
-                    ? 'text-center'
-                    : 'text-right'
-              }`}
-            >
-              {step.trim()}
-            </li>
-          ))}
-        </ol>
-      </figure>
-
-      <footer className="shrink-0 bg-[var(--surface)]">
-        {[connection, forum].map((item, index) => (
-          <article
-            key={item.label}
-            className="flex items-start gap-6 border-t border-[var(--border)] py-4"
+          <text
+            x="32"
+            y="57"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[20px] tracking-[0.12em]"
           >
-            <span className="w-[76px] shrink-0 pt-1 font-[var(--font-mono)] text-[20px] text-[var(--accent)]">
-              {index === 0 ? '01—03' : '04—06'}
-            </span>
+            01 / HIS CLICKS
+          </text>
+          <text
+            x="426"
+            y="57"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[20px] tracking-[0.12em]"
+          >
+            02 / HER ESTATE’S RIGHTS
+          </text>
 
-            <div className="min-w-0">
-              <h2 className="font-[var(--font-headline)] text-[26px] font-semibold leading-tight">
-                {item.label}
-              </h2>
-              <p className="mt-1 line-clamp-2 font-[var(--font-body)] text-[22px] leading-snug">
-                {item.body}
-              </p>
-            </div>
-          </article>
-        ))}
-      </footer>
+          <path
+            d="M45 105 H335 M45 211 H335"
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="1"
+          />
+
+          <Ticket
+            x={53}
+            y={132}
+            width={60}
+            height={60}
+            stroke="var(--ink)"
+            strokeWidth={1.4}
+          />
+          <FileText
+            x={160}
+            y={130}
+            width={60}
+            height={64}
+            stroke="var(--ink)"
+            strokeWidth={1.4}
+          />
+          <UserRound
+            x={267}
+            y={133}
+            width={58}
+            height={58}
+            stroke="var(--ink)"
+            strokeWidth={1.4}
+          />
+
+          <path
+            d="M190 212 V247"
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
+
+          <MousePointer2
+            x={162}
+            y={248}
+            width={66}
+            height={66}
+            stroke="var(--accent)"
+            strokeWidth={1.5}
+          />
+
+          <path
+            d="M237 278 H461"
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.65"
+            strokeWidth="2"
+          />
+          <path
+            d="M535 278 H690"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            strokeDasharray="8 9"
+          />
+          <path
+            d="M678 269 L691 278 L678 287"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          <path
+            d="M478 255 L465 301 M503 255 L490 301"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="3"
+          />
+
+          <text
+            x="483"
+            y="238"
+            textAnchor="middle"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[24px] font-bold"
+          >
+            ?
+          </text>
+
+          <path
+            d="M711 116 H785 L820 151 V305 H711 Z"
+            fill="var(--surface)"
+            stroke="var(--ink)"
+            strokeWidth="2"
+          />
+          <path
+            d="M785 116 V151 H820 M733 174 H794 M733 192 H775"
+            fill="none"
+            stroke="var(--ink)"
+            strokeOpacity="0.65"
+            strokeWidth="2"
+          />
+
+          <Scale
+            x={734}
+            y={221}
+            width={65}
+            height={65}
+            stroke="var(--accent)"
+            strokeWidth={1.5}
+          />
+
+          <text
+            x="190"
+            y="365"
+            textAnchor="middle"
+            fill="var(--ink)"
+            className="font-[var(--font-body)] text-[24px]"
+          >
+            Vacation Links
+          </text>
+          <text
+            x="693"
+            y="365"
+            textAnchor="middle"
+            fill="var(--ink)"
+            className="font-[var(--font-body)] text-[24px]"
+          >
+            Contested Reach
+          </text>
+        </svg>
+      </div>
+
+      <div className="shrink-0">
+        <dl className="border-t border-[var(--border)]">
+          <div className="grid grid-cols-[40%_60%] border-b border-[var(--border)] py-5">
+            <dt className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+              {items[0]?.label ?? 'Vacation Links'}
+            </dt>
+            <dd className="pl-8 font-[var(--font-body)] text-[24px] leading-snug">
+              {items[0]?.body ??
+                'Disney also cited tickets, account terms and guest registration.'}
+            </dd>
+          </div>
+
+          <div className="grid grid-cols-[40%_60%] border-b border-[var(--border)] py-5">
+            <dt className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight text-[var(--accent)]">
+              {items[0]?.label ?? 'Contested Reach'}
+            </dt>
+            <dd className="pl-8 font-[var(--font-body)] text-[24px] leading-snug">
+              {items[0]?.body ??
+                'Piccolo disputed that his clicks could bind his wife’s estate.'}
+            </dd>
+          </div>
+        </dl>
+
+        <footer className="flex items-center justify-between pt-6 font-[var(--font-mono)] text-[20px]">
+          <div className="flex items-center gap-3">
+            <Bookmark
+              className="h-5 w-5 text-[var(--accent)]"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
+            <span>thefineprint.pub</span>
+          </div>
+          <span className="tabular-nums">
+            <span className="text-[var(--accent)]">04</span>
+            <span className="mx-3 opacity-50">/</span>
+            {String(totalSlides).padStart(2, '0')}
+          </span>
+        </footer>
+      </div>
     </section>
   );
 }
