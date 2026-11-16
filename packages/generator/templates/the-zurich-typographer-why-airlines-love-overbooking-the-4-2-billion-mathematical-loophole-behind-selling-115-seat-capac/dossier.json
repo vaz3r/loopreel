@@ -1,0 +1,201 @@
+{
+  "articleTitle": "Why Airlines Love Overbooking: The $4.2 Billion mathematical loophole behind selling 115% seat capac",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "Why Airlines Love Overbooking: The $4.2 Billion mathematical loophole behind selling 115% seat capacity on peak routes and legal rights to 400% cash payouts.",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "name": "Sell confirmed travel",
+      "operation": "A customer purchases travel, but some booked customers later change flights or fail to appear. Flexible-ticket changes are one reason a nominally full booking list can produce empty seats.",
+      "economicMeaning": "Booking demand and the number of passengers who actually board are different quantities."
+    },
+    {
+      "step": 2,
+      "name": "Forecast missing passengers",
+      "operation": "The airline predicts no-shows and sells additional reservations to offset them. DOT identifies this as the purpose of overselling.",
+      "economicMeaning": "Extra reservations can fill seats that otherwise would depart empty."
+    },
+    {
+      "step": 3,
+      "name": "Balance revenue against displacement costs",
+      "operation": "The economic rationale is that compensating some displaced customers can cost less than repeatedly leaving seats empty. DOT identifies revenue enhancement and operational efficiency as benefits of the permitted practice.​",
+      "economicMeaning": "Analytical synthesis: additional retained revenue must be evaluated against compensation, alternative transportation and other incremental costs. None of the retrieved evidence establishes a $4.2 billion net benefit."
+    },
+    {
+      "step": 4,
+      "name": "Resolve actual attendance",
+      "operation": "When more passengers are ready to fly than available seats, the airline must first solicit volunteers before involuntarily denying boarding.",
+      "economicMeaning": "The uncertain booking decision becomes an immediate capacity problem."
+    },
+    {
+      "step": 5,
+      "name": "Negotiate voluntary displacement",
+      "operation": "Passengers can negotiate money or vouchers for surrendering their seats. There is no limit on the amount an airline may offer volunteers; voucher restrictions must be disclosed.",
+      "economicMeaning": "The airline obtains a seat through a negotiated agreement rather than automatically applying the involuntary-compensation schedule."
+    },
+    {
+      "step": 6,
+      "name": "Apply boarding priorities if volunteers are insufficient",
+      "operation": "The airline may select passengers using fair boarding priorities, including check-in time, fare paid or frequent-flyer status. It must provide involuntarily bumped passengers a written explanation of their rights and its selection criteria.",
+      "economicMeaning": "The remaining capacity shortfall is allocated to specific passengers."
+    },
+    {
+      "step": 7,
+      "name": "Pay eligible compensation",
+      "operation": "Calculate compensation using the applicable fare and the planned arrival time of offered substitute transportation. Offer payment at the airport that day; if substitute transportation leaves before payment can be made, pay within 24 hours of the incident.​",
+      "economicMeaning": "Statutory compensation is a cost of eligible involuntary displacement, not a universal payment for every oversold booking."
+    },
+    {
+      "step": 8,
+      "name": "Report the outcome accurately",
+      "operation": "Reporting carriers submit quarterly denied-boarding information. Accepting a voucher after involuntary denial does not convert the passenger into a volunteer; DOT enforced this distinction against Spirit.",
+      "economicMeaning": "Classification affects both the passenger-rights record and public comparisons of airline performance."
+    }
+  ],
+  "comparisons": {
+    "carrierBenchmark": {
+      "period": "January–March 2024",
+      "basis": "Reporting marketing carriers, including branded codeshare partners where applicable",
+      "rateUnit": "Involuntary denied-boardings per 10,000 enplaned passengers",
+      "source": "",
+      "rows": [
+        {
+          "carrier": "Delta Air Lines Network",
+          "voluntary": 23699,
+          "involuntary": 0,
+          "enplanedPassengers": 41561632,
+          "publishedRate": "0.00"
+        },
+        {
+          "carrier": "Allegiant Air",
+          "voluntary": 233,
+          "involuntary": 0,
+          "enplanedPassengers": 4104860,
+          "publishedRate": "0.00"
+        },
+        {
+          "carrier": "Hawaiian Airlines",
+          "voluntary": 216,
+          "involuntary": 1,
+          "enplanedPassengers": 2504470,
+          "publishedRate": "0.00",
+          "verificationNote": "The involuntary count is derived: the published total of 5,542 minus 5,541 across the other carriers. The retrieved table text omitted this cell; verify it against the original rendered table before reproducing the count."
+        },
+        {
+          "carrier": "United Airlines Network",
+          "voluntary": 9446,
+          "involuntary": 75,
+          "enplanedPassengers": 35035347,
+          "publishedRate": "0.02"
+        },
+        {
+          "carrier": "Alaska Airlines Network",
+          "voluntary": 4154,
+          "involuntary": 97,
+          "enplanedPassengers": 9124931,
+          "publishedRate": "0.11"
+        },
+        {
+          "carrier": "JetBlue Airways",
+          "voluntary": 1511,
+          "involuntary": 94,
+          "enplanedPassengers": 8255372,
+          "publishedRate": "0.11"
+        },
+        {
+          "carrier": "Southwest Airlines",
+          "voluntary": 11940,
+          "involuntary": 675,
+          "enplanedPassengers": 40485380,
+          "publishedRate": "0.17"
+        },
+        {
+          "carrier": "Spirit Airlines",
+          "voluntary": 3761,
+          "involuntary": 424,
+          "enplanedPassengers": 10137110,
+          "publishedRate": "0.42"
+        },
+        {
+          "carrier": "American Airlines Network",
+          "voluntary": 14199,
+          "involuntary": 3061,
+          "enplanedPassengers": 47975945,
+          "publishedRate": "0.64"
+        },
+        {
+          "carrier": "Frontier Airlines",
+          "voluntary": 407,
+          "involuntary": 1115,
+          "enplanedPassengers": 6729177,
+          "publishedRate": "1.66"
+        }
+      ],
+      "total": {
+        "voluntary": 69566,
+        "involuntary": 5542,
+        "enplanedPassengers": 205914224,
+        "publishedRate": "0.27"
+      },
+      "interpretation": [
+        "Frontier's published involuntary rate was 1.66 versus American Airlines Network's 0.64 per 10,000 passengers. Compare rates rather than raw counts when assessing passenger exposure.",
+        "Delta Air Lines Network reported 23,699 voluntary and 0 involuntary denied-boardings; Frontier reported 407 voluntary and 1,115 involuntary denied-boardings. Zero involuntary bumping does not mean zero displacement.",
+        "These figures measure denied-boarding outcomes, not the percentage of flights overbooked, the booking-to-seat ratio, or overbooking profit."
+      ]
+    },
+    "regulatedPaymentBenchmark": {
+      "timingBasis": "Planned arrival of substitute transportation when the arrangement is made, compared with the original planned arrival—not simply time spent waiting at the gate.",
+      "rows": [
+        {
+          "departureType": "Domestic U.S.",
+          "arrivalDelay": "Not more than 1 hour",
+          "requiredCompensation": "$0"
+        },
+        {
+          "departureType": "Domestic U.S.",
+          "arrivalDelay": "More than 1 hour but less than 2 hours",
+          "requiredCompensation": "At least the lesser of 200% of applicable one-way fare and $1,075"
+        },
+        {
+          "departureType": "Domestic U.S.",
+          "arrivalDelay": "2 hours or more, or no qualifying substitute transportation offered",
+          "requiredCompensation": "At least the lesser of 400% of applicable one-way fare and $2,150"
+        },
+        {
+          "departureType": "International departing a U.S. airport",
+          "arrivalDelay": "Not more than 1 hour",
+          "requiredCompensation": "$0"
+        },
+        {
+          "departureType": "International departing a U.S. airport",
+          "arrivalDelay": "More than 1 hour but less than 4 hours",
+          "requiredCompensation": "At least the lesser of 200% of applicable one-way fare and $1,075"
+        },
+        {
+          "departureType": "International departing a U.S. airport",
+          "arrivalDelay": "4 hours or more, or no qualifying substitute transportation offered",
+          "requiredCompensation": "At least the lesser of 400% of applicable one-way fare and $2,150"
+        }
+      ],
+      "source": "",
+      "qualification": "All rows remain subject to eligibility and exceptions. Larger payments are permitted."
+    }
+  },
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "summary": "Overbooking is a documented, explicitly regulated business practice—not a newly discovered legal loophole. Airlines sell beyond physical capacity to offset anticipated no-shows, then seek volunteers or compensate eligible passengers when too many arrive. The proposed $4.2 billion revenue figure and 115% peak-route booking claim were not substantiated by this research.​",
+    "recommendedHeadline": "More Tickets Than Seats: Why Airlines Overbook—and When They Owe You 400%",
+    "publicationStatus": "Publish with the corrected headline and the qualifications below.",
+    "jurisdiction": "United States. The compensation rules described here concern covered departures from U.S. airports, not universal passenger rights or Swiss law.",
+    "historicalDataScope": "Carrier comparisons use January–March 2024, published in the May 2024 Air Travel Consumer Report. They are a historical benchmark, not a current airline ranking."
+  }
+}

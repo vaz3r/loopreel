@@ -1,0 +1,190 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-fine-print-the-disney-fine-print-trap-how-a-2019-free-trial-created-a-corporate-shield-against-a-2024-wrongfu",
+  "domain": "thefineprint.co",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "CONSENT BOUNDARY AUDIT",
+      "headline": "A Free Trial, a Wrongful-Death Defense",
+      "subheadline": "Disney sought arbitration—not automatic immunity from damages.",
+      "items": [
+        {
+          "label": "2019 signup",
+          "body": "Disney invoked Piccolo’s Disney+ trial in a 2024 lawsuit."
+        },
+        {
+          "label": "Requested relief",
+          "body": "Compel arbitration and stay the court action."
+        }
+      ],
+      "visualStyle": "Monumental editorial typography with a fractured procedural shield.",
+      "layoutTopology": "Top-heavy cover: headline above an oversized central hero; two compact footnotes below.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "A signup card feeds an incomplete shield. Its open perimeter signals attempted protection, not immunity.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><rect x=\"70\" y=\"195\" width=\"290\" height=\"210\" rx=\"16\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M110 245H260M110 275H310\" stroke=\"#F5F5F7\" stroke-width=\"8\"/><rect x=\"110\" y=\"320\" width=\"175\" height=\"42\" rx=\"5\" fill=\"#FF2A2A\"/><path d=\"M360 300H510\" stroke=\"#FF2A2A\" stroke-width=\"5\" stroke-dasharray=\"10 10\"/><path d=\"M650 85L855 160V285Q855 425 650 525Q445 425 445 285V160Z\" fill=\"#141418\"/><path d=\"M650 85L855 160V285M800 405Q740 480 650 525Q445 425 445 285V160L585 109\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"8\"/><path d=\"M650 235V365M585 300H715\" stroke=\"#FF2A2A\" stroke-width=\"10\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "THE CONTRACTUAL BASELINE",
+      "headline": "Three Documents. Two Assent Episodes.",
+      "subheadline": "Disney built its argument across products and transactions.",
+      "items": [
+        {
+          "label": "3 linked documents",
+          "body": "Disney relied on linked agreements, not one isolated click."
+        },
+        {
+          "label": "2 alleged assents",
+          "body": "Disney cited a 2019 trial and September 2023 tickets."
+        }
+      ],
+      "visualStyle": "Oversized numerical typography paired with a document-stack schematic.",
+      "layoutTopology": "Asymmetric split: document stack at left, paired assent nodes at right; one caption beneath each.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "Three overlapping document outlines face two connected assent nodes. Numerals encode counts, not scale.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><rect x=\"175\" y=\"80\" width=\"270\" height=\"370\" rx=\"8\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"2\"/><rect x=\"135\" y=\"115\" width=\"270\" height=\"370\" rx=\"8\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"2\"/><rect x=\"95\" y=\"150\" width=\"270\" height=\"370\" rx=\"8\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><text x=\"230\" y=\"405\" text-anchor=\"middle\" font-family=\"Arial,sans-serif\" font-size=\"220\" font-weight=\"700\" fill=\"#F5F5F7\">3</text><path d=\"M500 300H605M730 155V445\" stroke=\"#FF2A2A\" stroke-width=\"4\"/><circle cx=\"730\" cy=\"155\" r=\"30\" fill=\"#FF2A2A\"/><circle cx=\"730\" cy=\"445\" r=\"30\" fill=\"#FF2A2A\"/><rect x=\"630\" y=\"205\" width=\"200\" height=\"190\" fill=\"#0A0A0C\"/><text x=\"730\" y=\"370\" text-anchor=\"middle\" font-family=\"Arial,sans-serif\" font-size=\"210\" font-weight=\"700\" fill=\"#F5F5F7\">2</text></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "comparison",
+      "kicker": "THE COINBASE BOUNDARY",
+      "headline": "Delegation Has a Judicial Boundary",
+      "subheadline": "Coinbase, May 23, 2024: a unanimous Court addressed 2 agreements.",
+      "items": [
+        {
+          "label": "Coinbase ruling",
+          "body": "A court decides which conflicting agreement governs."
+        },
+        {
+          "label": "Disney distinction",
+          "body": "It did not resolve estate-binding or restaurant injuries."
+        }
+      ],
+      "visualStyle": "Spare judicial schematic with mirrored contract panels and a central decision gate.",
+      "layoutTopology": "Bilateral comparison: equal-width panels flank a narrow judicial gate; distinction runs below.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "Two conflicting contract paths converge at a judicial gate rather than bypassing it. This depicts Coinbase, not a Disney ruling.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><rect x=\"80\" y=\"120\" width=\"280\" height=\"340\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><rect x=\"640\" y=\"120\" width=\"280\" height=\"340\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M125 185H310M125 230H285M125 275H310M685 185H870M685 230H845M685 275H870\" stroke=\"#F5F5F7\" stroke-width=\"6\"/><path d=\"M360 355H455M640 355H545\" stroke=\"#FF2A2A\" stroke-width=\"5\"/><path d=\"M440 460V200H560V460M420 200L500 140L580 200\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"6\"/><path d=\"M500 240V420\" stroke=\"#FF2A2A\" stroke-width=\"8\"/><path d=\"M480 505H520\" stroke=\"#F5F5F7\" stroke-width=\"4\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanics",
+      "kicker": "THE PROPOSED PIPELINE",
+      "headline": "From Signup to Forum Control",
+      "subheadline": "Disney proposed these links; enforceability remained contested.",
+      "items": [
+        {
+          "label": "Build assent",
+          "body": "Signup → linked terms → September 2023 ticket purchase."
+        },
+        {
+          "label": "Redirect dispute",
+          "body": "Website claims → delegation → arbitration and stay."
+        }
+      ],
+      "visualStyle": "Technical conduit diagram with two broad process lanes and dashed proposed connections.",
+      "layoutTopology": "Horizontal sequence: two stacked lanes, each paired with exactly one compact process caption.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "Two continuous conduits encode the two captioned phases. A dashed return connects assent-building to the attempted forum shift.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><rect x=\"70\" y=\"90\" width=\"860\" height=\"160\" rx=\"24\" fill=\"#141418\"/><rect x=\"70\" y=\"350\" width=\"860\" height=\"160\" rx=\"24\" fill=\"#141418\"/><path d=\"M130 170H850\" stroke=\"#F5F5F7\" stroke-width=\"8\"/><path d=\"M825 145L850 170L825 195\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"8\"/><path d=\"M850 250V300H130V350\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"4\" stroke-dasharray=\"10 10\"/><path d=\"M130 430H850\" stroke=\"#FF2A2A\" stroke-width=\"8\" stroke-dasharray=\"18 10\"/><path d=\"M825 405L850 430L825 455\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"8\"/><circle cx=\"130\" cy=\"170\" r=\"17\" fill=\"#FF2A2A\"/><circle cx=\"130\" cy=\"430\" r=\"17\" fill=\"#F5F5F7\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "perimeter",
+      "kicker": "THE MISSING CONNECTIONS",
+      "headline": "The Clicker Was Not the Estate",
+      "subheadline": "Guest-consent language did not establish authority to bind it.",
+      "items": [
+        {
+          "label": "Whose consent?",
+          "body": "Piccolo’s assent did not establish estate-binding authority."
+        },
+        {
+          "label": "Which claims?",
+          "body": "Disney used website allergy claims as its proposed bridge."
+        }
+      ],
+      "visualStyle": "Negative-space perimeter map with disconnected identity and claim boundaries.",
+      "layoutTopology": "Offset islands: identity occupies the upper-left; estate perimeter sits lower-right; captions follow each boundary.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "The consenting account and estate remain separate enclosures. A broken connector marks the unestablished legal connection.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><circle cx=\"260\" cy=\"230\" r=\"155\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><circle cx=\"260\" cy=\"190\" r=\"42\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"6\"/><path d=\"M180 300Q180 245 260 245Q340 245 340 300\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"6\"/><rect x=\"610\" y=\"245\" width=\"285\" height=\"245\" rx=\"20\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M665 310H835M665 355H805M665 400H835\" stroke=\"#F5F5F7\" stroke-width=\"7\"/><path d=\"M415 230H485V365H520M575 365H610\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"5\" stroke-dasharray=\"9 9\"/><path d=\"M535 340L550 365L535 390M550 340L565 365L550 390\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"4\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "evidence",
+      "kicker": "THE STATUTORY PERIMETER",
+      "headline": "The Mortgage Ban Is Not Universal",
+      "subheadline": "The CFPB’s 2015 fact sheet identifies a sector-specific ban.",
+      "items": [
+        {
+          "label": "Mortgage contracts",
+          "body": "Dodd-Frank prohibits arbitration clauses in these contracts."
+        },
+        {
+          "label": "Disney agreements",
+          "body": "That mortgage prohibition does not cover these agreements."
+        }
+      ],
+      "visualStyle": "Two-row legal audit matrix with a hard statutory stop and an unresolved contractual route.",
+      "layoutTopology": "Ledger composition: two full-width rows, labels at left and distinct perimeter symbols at right.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "The mortgage row terminates at a solid barrier. The Disney row ends at an open contour—not an approval mark.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><rect x=\"75\" y=\"90\" width=\"850\" height=\"180\" fill=\"#141418\"/><rect x=\"75\" y=\"330\" width=\"850\" height=\"180\" fill=\"#141418\"/><path d=\"M75 300H925\" stroke=\"#F5F5F7\" stroke-width=\"2\"/><path d=\"M125 180H710M125 420H710\" stroke=\"#F5F5F7\" stroke-width=\"5\"/><path d=\"M745 125V235\" stroke=\"#FF2A2A\" stroke-width=\"18\"/><path d=\"M705 125L735 155M705 165L735 195M705 205L735 235\" stroke=\"#FF2A2A\" stroke-width=\"3\"/><path d=\"M805 365H745V475H805\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"5\"/><path d=\"M805 420H875\" stroke=\"#FF2A2A\" stroke-width=\"4\" stroke-dasharray=\"8 8\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "THE FINE PRINT · THEFINEPRINT.CO",
+      "headline": "Audit Consent Before Claiming Cover",
+      "subheadline": "Public backlash preceded Disney’s retreat—not a merits ruling.",
+      "items": [
+        {
+          "label": "Consent audit",
+          "body": "Check who assented, governing terms, claims, and who decides."
+        },
+        {
+          "label": "Unrealized advantage",
+          "body": "Disney withdrew without securing the requested arbitration."
+        }
+      ],
+      "visualStyle": "Architectural gate rendered as a stark closing emblem, with the proposed route turning back.",
+      "layoutTopology": "Bottom-weighted finale: compact verdict above a monumental gate; two audit captions form the footer.",
+      "svgBlueprint": {
+        "viewBox": "0 0 1000 600",
+        "description": "A route retreats before crossing the contractual gate. The gate remains standing: withdrawal did not invalidate the terms.",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"><rect width=\"1000\" height=\"600\" fill=\"#0A0A0C\"/><path d=\"M570 510V100H850V510\" fill=\"#141418\" stroke=\"#F5F5F7\" stroke-width=\"7\"/><path d=\"M625 510V160H795V510\" fill=\"#0A0A0C\" stroke=\"#F5F5F7\" stroke-width=\"2\"/><path d=\"M90 510H925\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M120 285H450Q505 285 505 340Q505 395 450 395H205\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"10\"/><path d=\"M235 365L205 395L235 425\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"10\"/><path d=\"M710 205V455\" stroke=\"#F5F5F7\" stroke-width=\"2\" stroke-dasharray=\"8 12\"/></svg>"
+      },
+      "platform": "instagram-feed"
+    }
+  ]
+}

@@ -134,6 +134,21 @@ Return strictly valid JSON matching BrandTokens without markdown outside the jso
 // STAGE 2: GROUND TRUTH FACT EXTRACTION (ZERO HALLUCINATION)
 // ============================================================================
 
+export interface SystemMechanismStep {
+  step: number;
+  title: string;
+  description: string;
+}
+
+export interface EntityComparison {
+  entityA: string;
+  entityB: string;
+  dimension: string;
+  metricA: string;
+  metricB: string;
+  takeaway: string;
+}
+
 export interface GroundTruthDossier {
   articleTitle: string;
   publisher: string;
@@ -142,7 +157,9 @@ export interface GroundTruthDossier {
   entities: Array<{ name: string; type: string; role: string }>;
   verifiedMetrics: Array<{ value: string; label: string; context: string }>;
   verifiedQuotes: Array<{ quote: string; speaker: string; role: string; context: string }>;
-  hardwareSpecs: {
+  systemMechanisms?: SystemMechanismStep[];
+  comparisons?: EntityComparison[];
+  hardwareSpecs?: {
     deviceA: { name: string; specs: string[]; price: string; availability: string };
     deviceB?: { name: string; specs: string[]; price: string; availability: string };
   };
@@ -165,37 +182,33 @@ Your mission is to extract verified ground truth from a news article into a stru
 CRITICAL FACT-CHECKING RULES:
 1. ZERO HALLUCINATION: You must ONLY extract facts, quotes, specs, numbers, and precedents explicitly stated in the article.
 2. Exact Metrics: Numbers, prices, dates, flight times, and retention days must be verbatim from the text.
-3. Exact Quotes & Attribution: Attribute quotes only to the actual persons or organizations named in the piece (e.g. Amazon, FTC, EFF).
-4. Extract Hardware Specs: Detail dimensions, battery life, camera resolution, flight limits, coverage area, and floor restrictions.
-5. Extract Hidden Catches: Note subscriptions required, cloud dependencies, key retention policies, and FCC approval statuses.
+3. Exact Quotes & Attribution: Attribute quotes only to the actual persons or organizations named in the piece (e.g. FAA, DOT, Airlines).
+4. System Mechanisms & Catches: Extract step-by-step operations, dependencies, failure risks, and key restrictions.
 
-Return strictly valid JSON matching this exact structure:
+Return strictly valid JSON matching this schema:
 {
-  "articleTitle": "Title of article",
-  "publisher": "Publisher name",
-  "byline": "Author name",
-  "summary": "2-sentence factual summary",
-  "entities": [{ "name": "Amazon", "type": "Company", "role": "Hardware creator" }],
-  "verifiedMetrics": [{ "value": "$249.99", "label": "Drone Cam starting price", "context": "Target shipping Jan 2027" }],
-  "verifiedQuotes": [{ "quote": "...", "speaker": "...", "role": "...", "context": "..." }],
-  "hardwareSpecs": {
-    "deviceA": { "name": "Ring Drone Cam", "specs": ["2K video", "148 deg FOV", "8 min flight"], "price": "$249.99", "availability": "Jan 27, 2027" },
-    "deviceB": { "name": "Ring Rover Cam", "specs": ["4K livestream", "single floor", "5000 sq ft"], "price": "$999.99", "availability": "Dec 16, 2026" }
-  },
-  "coreControversy": {
-    "corporateClaim": "Amazon claims privacy and security without compromise",
-    "criticismOrAlarm": "EFF says TAKE falls short of end-to-end encryption",
-    "regulatoryOrHistoricalPrecedent": "FTC 2023 complaint cited 55,000 compromised accounts and employee access"
-  },
-  "hiddenCatchesAndLimits": [
-    "AI Pilot relies on cloud processing, not local-only",
-    "Scheduled patrols require Ring Protect subscription",
-    "Rover cannot climb stairs or cross thresholds > 1.375 in"
+  "articleTitle": "string",
+  "publisher": "string",
+  "byline": "string",
+  "summary": "string (concise 2-3 sentence overview)",
+  "verifiedMetrics": [
+    { "value": "string (e.g. 1970s, 45,000, $5B)", "label": "string", "context": "string" }
   ],
-  "editorialVerdict": {
-    "avoidAdvice": ["Privacy-first homes requiring local-only processing"],
-    "fitAdvice": ["Single-floor business facilities needing mobile patrols"]
-  }
+  "verifiedQuotes": [
+    { "quote": "string", "speaker": "string", "role": "string", "context": "string" }
+  ],
+  "systemMechanisms": [
+    { "stepNumber": 1, "title": "string", "description": "string", "operationalDetail": "string" }
+  ],
+  "comparisons": [
+    { "entityA": "string", "entityB": "string", "dimension": "string", "metricA": "string", "metricB": "string", "takeaway": "string" }
+  ],
+  "coreControversy": {
+    "corporateClaim": "string",
+    "criticismOrAlarm": "string",
+    "regulatoryOrHistoricalPrecedent": "string"
+  },
+  "hiddenCatchesAndLimits": ["string"]
 }`;
 }
 
@@ -212,25 +225,33 @@ Output strictly the GroundTruthDossier JSON.`;
 }
 
 export function buildTopicResearchSystemPrompt(): string {
-  return `You are a Lead AI Research Analyst at SemiAnalysis, Epoch AI, and MIT Technology Review.
-Your task is to compile a verified, highly accurate GroundTruthDossier for an in-depth editorial topic.
+  return `You are a Senior Forensic Research Analyst and Investigative Journalist at Bloomberg, Financial Times, ProPublica, and The New York Times Graphics Desk.
+Your task is to compile a deeply verified, highly accurate, concrete GroundTruthDossier for an in-depth editorial topic.
 
-CRITICAL RULES:
-1. Grounded Technical Reality: Use real, verified technical facts, actual model names, verified benchmark scores (e.g. MMLU, GSM8K, MATH), exact hardware specs (H100/H800 cluster sizes, active vs total parameters), and published research innovations (Multi-head Latent Attention, DeepSeekMoE, GRPO).
-2. Exact Metrics: Training cost figures, parameter counts, context window sizes, and API pricing per million tokens.
-3. Real Industry Context: Real companies, researchers, and market reactions (OpenAI, DeepSeek, Meta Llama, US export controls).
+CRITICAL RESEARCH RULES:
+1. CONCRETE QUANTITATIVE FIGURES (Mandatory):
+   - You MUST extract or synthesize 8 to 12 exact, real-world numerical figures with exact units and historical context.
+   - For financial / business models (e.g. Starbucks, airlines, chipmakers): extract total deposit/float size (e.g. "$1.81B"), annual breakage revenue (e.g. "$196M"), percentage of transactions (e.g. "53%"), member count (e.g. "31M"), interest paid (e.g. "0.00% APR"), and comparative rank (e.g. "Larger than 85% of US banks").
+   - For technology / infrastructure: extract cluster sizes, benchmark scores, training compute budgets, pricing per token, power draw, and market share.
+2. SYSTEM MECHANISMS (How the Machine Works):
+   - Provide a step-by-step operational sequence ("systemMechanisms") breaking down how value, capital, data, or materials circulate through the system from initial customer action to final corporate extraction.
+3. BENCHMARK COMPARISONS:
+   - Provide concrete entity comparisons ("comparisons") contrasting the subject against traditional peers or regulated baselines (e.g. Starbucks $1.81B vs Customers Bancorp $1.52B, Central Bancompany $1.48B).
+4. CONTROVERSY, PRECEDENTS & LOOPHOLES:
+   - Detail the regulatory loophole or legal arbitrage (e.g. Dodd-Frank stored-value exemption, non-FDIC status, state escheatment/abandoned property tax treatment).
+   - Real criticism or alarms raised by consumer groups, regulators, or market analysts.
 
 Return strictly valid JSON matching GroundTruthDossier without markdown outside the json block.`;
 }
 
 export function buildTopicResearchUserPrompt(brief: TemplateBrief): string {
-  return `Compile the GroundTruthDossier for this editorial exploration:
-Topic/Name: "${brief.name || 'AI Frontier & Open Weights'}"
-Domain: "${brief.domain || 'Artificial Intelligence / Open Weights / Frontier Compute'}"
-Vibe/Angle: "${brief.vibe || 'The open-source revolution, reasoning models (DeepSeek-R1), and the collapse of proprietary AI moats'}"
-Inspiration: "${brief.inspiration || 'SemiAnalysis, Epoch AI, MIT Technology Review, Wired'}"
+  return `Compile the comprehensive GroundTruthDossier for this editorial exploration:
+Topic / Brief: "${brief.name || 'Financial & Industrial Intelligence'}"
+Content Domain: "${brief.domain || 'Corporate Finance / Regulatory Arbitrage / Modern Business Models'}"
+Editorial Angle / Vibe: "${brief.vibe || 'Investigative forensic audit of hidden operational mechanics and financial engineering'}"
+Inspiration / Style: "${brief.inspiration || 'Bloomberg Businessweek, Financial Times, ProPublica, Visual Capitalist'}"
 
-Output strictly the GroundTruthDossier JSON.`;
+Output strictly the GroundTruthDossier JSON with at least 8 concrete metrics, step-by-step mechanisms, and benchmark comparisons.`;
 }
 
 // ============================================================================
@@ -246,38 +267,63 @@ export interface StoryStrategy {
   verdict: string;
   keyMetrics: Array<{ value: string; label: string; context: string }>;
   keyQuotes: Array<{ quote: string; speaker: string; role: string }>;
+  storySpine?: Array<{ slideIndex: number; role: string; theme: string }>;
 }
 
 export function buildStoryStrategySystemPrompt(): string {
-  return `You are the Editor-in-Chief at Wired, The New York Times Magazine, and Vox.
-Your mission is to transform verified facts into a scroll-stopping, high-signal editorial carousel strategy.
+  return `You are the Editor-in-Chief at Bloomberg Businessweek, Wired, and The New York Times Magazine.
+Your mission is to transform verified facts into a scroll-stopping, high-signal 7-beat editorial carousel strategy.
 
-CRITICAL HOOK & VALUE PRINCIPLES:
+CRITICAL HOOK & NARRATIVE PRINCIPLES:
 1. THE SCROLL-STOPPING HOOK (Slide 1):
-   - Never use passive corporate titles (e.g. "Amazon puts Ring cameras on patrol" is BANNED).
-   - Use the tension formula: [Surprising Action] + [The Hidden Catch / Stakes].
+   - Never use passive corporate titles or dry summaries (e.g. "Analysis of FAA systems" is STRICTLY BANNED).
+   - Use the tension formula: [The Shocking Core Paradox] + [The Surprising Scale or Hidden Catch].
    - Examples of great hooks:
-     * "Amazon Put Wings on Ring Cameras. Here’s What They Aren’t Telling You."
-     * "Your Next Security Guard Flies Inside Your House. Why Civil Rights Groups Are Terrified."
-     * "The $1,000 Indoor Drone: What Amazon’s Patent Disclosures Actually Reveal."
-2. THE VALUE PROPOSITION:
-   - State clearly why the reader must swipe through (e.g. "3 critical findings: The $1,000 price tag, interior mapping, and the 180-day retention loop.").
-3. HIGH-SIGNAL EXTRACTION:
-   - Ground strictly in the provided GroundTruthDossier.
+     * "The 0% Interest Bank Disguised as a Coffee Shop"
+     * "How Starbucks Built a $1.8B Unregulated Float Larger Than 85% of American Banks"
+     * "America's Air Traffic Runs on 1970s Floppy Disks and Aging Mainframes"
+2. THE 7-BEAT NARRATIVE ARC:
+   - Slide 1: The Core Paradox / Hook
+   - Slide 2: The Scale & Systemic Baseline
+   - Slide 3: The Benchmark Scale Comparison (contrasting traditional peers or modern standards)
+   - Slide 4: The Operational Step Mechanics / System Pipeline
+   - Slide 5: The Compounding Risk / Hidden Catch / Failure Point
+   - Slide 6: The Regulatory Arbitrage / Compliance Perimeter / Technical Debt Audit
+   - Slide 7: The Strategic Takeaway / Future Verdict
+3. ZERO FOURTH-WALL BREAKING:
+   - NEVER comment on the prompt itself. NEVER write meta-criticism like "The dossier has no metrics" or "A story without data".
+   - You are publishing directly to a discerning, executive audience of millions.
 
-Return strictly valid JSON matching StoryStrategy.`;
+OUTPUT FORMAT:
+Return strictly a valid JSON object matching this exact schema:
+{
+  "hookHeadline": "Monumental, scroll-stopping headline capturing the paradox (max 8 words)",
+  "valuePromise": "What high-value operational insight the reader gains (max 12 words)",
+  "kicker": "2-3 word uppercase editorial kicker (e.g. SYSTEM ARCHITECTURE AUDIT)",
+  "coreConflict": "The core systemic paradox or operational collision",
+  "hiddenCatch": "The hidden catch, systemic vulnerability, or technical debt trap",
+  "verdict": "The definitive strategic takeaway or forward-looking verdict",
+  "keyMetrics": [
+    { "value": "string", "label": "string", "context": "string" }
+  ],
+  "keyQuotes": [
+    { "quote": "string", "speaker": "string", "role": "string" }
+  ]
+}`;
 }
 
 export function buildStoryStrategyUserPrompt(
   dossier: GroundTruthDossier,
+  _brief?: TemplateBrief,
   _article?: ArticleIntel
 ): string {
   return `Formulate the EditorialStrategy using this verified ground truth:
-Article: "${dossier.articleTitle}" (${dossier.publisher})
+Topic / Article: "${dossier.articleTitle}" (${dossier.publisher})
 Summary: "${dossier.summary}"
 Controversy: ${JSON.stringify(dossier.coreControversy)}
-Specs: ${JSON.stringify(dossier.hardwareSpecs)}
 Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
+Mechanisms: ${JSON.stringify(dossier.systemMechanisms || [])}
+Comparisons: ${JSON.stringify(dossier.comparisons || [])}
 Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
 
 Output strictly the StoryStrategy JSON.`;
@@ -289,40 +335,38 @@ Output strictly the StoryStrategy JSON.`;
 
 export function buildStoryDeckSystemPrompt(): string {
   return `You are a Senior Copy Editor and Visual Layout Architect at Wired, Bloomberg Businessweek, and The New York Times Graphics Desk.
-You author high-signal editorial carousel content with STRICT word budgets and AUTONOMOUSLY CHOOSE THE VISUAL STYLE & SVG BLUEPRINT FOR EACH SLIDE.
+You author high-signal editorial carousel content with STRICT word budgets. The SVG art is the central hero, so all copy must be lean, razor-sharp, and punchy!
 
-CRITICAL CONTENT, LAYOUT & ANTI-OVERFLOW RULES:
+CRITICAL CONTENT & ANTI-OVERFLOW RULES:
 1. ZERO HALLUCINATION: All copy and numerical data must derive strictly from the provided GroundTruthDossier.
-2. CONTENT-DRIVEN VISUAL STYLE PER SLIDE:
-   For EACH slide, you MUST choose a bespoke visual style and spatial topology directly reflecting what that slide communicates:
-   - "visualStyle": e.g. "orbital-trajectory-hero", "asymmetric-capital-split", "horizontal-cadence-gantt", "hud-radar-reticle", "monumental-editorial-split", "stepped-ladder-matrix".
-   - "layoutTopology": Spatial architecture (e.g. "hero-diagram-with-callouts", "left-metric-placard-right-stack", "horizontal-timeline-cadence", "hud-sensor-split", "full-height-editorial-split").
-   - "svgBlueprint": Detailed instruction for the custom inline vector SVG diagram to render on this slide.
-   CRITICAL TOPOLOGY DIVERSITY MANDATE: You MUST use at least 5 different layout topologies across the 10 slides. Strictly ban repeating the same 2-card layout across multiple slides!
-3. DYNAMIC ARCHETYPE SELECTION (Tailored to the Story):
-   Dramatize this specific journalistic story across 10 slides (e.g. cover, procurement-split, demand-curve, transition-timeline, vehicle-matrix, infrastructure-map, unit-economics, critical-bottleneck, leadership-debrief, strategic-cta).
-4. RULE OF 3 ANTI-CRAMMING (Prevent Overcrowding):
-   - MAXIMUM 2 to 3 items per slide! Never cram 4 or 5 items onto one slide.
-   - Telemetry: Exactly 2 or 3 key metrics with signed numerical badges (e.g. "$5.6B", "2028", "2033", "+35%").
-   - Comparisons: Exactly 2 contrasting entities.
-5. STRICT WORD LIMITS (Anti-Overflow Guardrail):
-   - Headlines: Maximum 6–8 words.
-   - Subheadlines: Maximum 12–14 words.
-   - Cards / Points: Maximum 10–13 words per item! Every word must be punchy and high-signal.
-   - Telemetry Values: MUST be strictly numerical or signed badge.
+2. NARRATIVE 7-SLIDE ARC:
+   - Slide 1 (type: "cover"): Hook, core paradox, monumental headline, hero optic/telemetry badge or diagram.
+   - Slide 2 (type: "context"): The scale, volume, customer inflow, or systemic baseline.
+   - Slide 3 (type: "comparison"): Benchmark comparison against traditional peers or competing systems.
+   - Slide 4 (type: "mechanics"): Step-by-step operational mechanism, conduit pipeline, or technical flowchart.
+   - Slide 5 (type: "perimeter"): The hidden catch, breakage revenue, margin engine, or compounding flywheel.
+   - Slide 6 (type: "evidence"): Regulatory loophole, legal perimeter, or risk audit matrix.
+   - Slide 7 (type: "verdict"): Strategic verdict, playbook takeaway, or architectural gate.
+3. STRICT ANTI-CRAMMING & HARD WORD BUDGETS:
+   - MAXIMUM 1 OR 2 ITEMS PER SLIDE! Never cram 3, 4, or 5 items onto one slide.
+   - Headline: Maximum 6–7 words (max 40 characters). Punchy, editorial, active voice.
+   - Subheadline: Maximum 10–12 words (max 65 characters).
+   - Items: Strictly { "label": string (max 2–3 words), "body": string (max 10–12 words / 60 characters) }.
+   - Telemetry Values: Strictly numerical or signed badge (e.g. "$1.81B", "0.00%", "+12%", "$196M"). Qualifiers belong in label.
 
-Return strictly a JSON array of 10 slide objects:
+Return strictly a JSON array of 7 slide objects:
 [
   {
     "id": "slide-1",
     "index": 0,
     "type": "cover",
-    "kicker": "...",
-    "headline": "...",
-    "subheadline": "...",
-    "visualStyle": "full-bleed-trajectory-hero",
-    "layoutTopology": "hero-diagram-with-callouts",
-    "svgBlueprint": "Elliptical orbital trajectory arc with dashed apogee burns and coordinate markers"
+    "kicker": "THE PARADOX",
+    "headline": "The 0% Interest Bank Disguised as Coffee",
+    "subheadline": "Starbucks holds $1.8B in deposits with zero FDIC insurance.",
+    "items": [
+      { "label": "Customer Float", "body": "$1.81 billion in unspent card balances on balance sheet." },
+      { "label": "Capital Cost", "body": "0.00% APR paid to customers who pre-fund cash balances." }
+    ]
   },
   ...
 ]`;
@@ -333,25 +377,39 @@ export function buildStoryDeckUserPrompt(
   dossier: GroundTruthDossier,
   brand: BrandTokens
 ): string {
-  return `Author the 10-slide narrative storyboard AND choose the distinct visual style, layout topology, and SVG blueprint for each slide:
+  const clean = (val: string | undefined, fallback: string) =>
+    val && val !== 'undefined' && val !== 'null' && val.trim().length > 0 ? val.trim() : fallback;
+
+  const hookHeadline = clean(strategy?.hookHeadline, dossier?.articleTitle || 'The Critical Investigation');
+  const valuePromise = clean(strategy?.valuePromise, 'Essential architectural breakdown and operational risk analysis.');
+  const kicker = clean(strategy?.kicker, 'INVESTIGATIVE DOSSIER');
+  const coreConflict = clean(strategy?.coreConflict, dossier?.summary?.slice(0, 120) || 'Operational friction and systemic technical debt.');
+  const hiddenCatch = clean(
+    strategy?.hiddenCatch,
+    dossier?.hiddenCatchesAndLimits?.[0] || 'The risk and complexity of modernizing live safety-critical infrastructure.'
+  );
+  const verdict = clean(strategy?.verdict, 'Comprehensive long-term architectural modernisation is urgent and mandatory.');
+
+  return `Author the 7-slide narrative storyboard AND choose the distinct visual style, layout topology, and bespoke SVG blueprint for each slide:
 
 Publication: "${brand.name}" (${brand.domain})
 Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
-Hook Headline: "${strategy.hookHeadline}"
-Value Promise: "${strategy.valuePromise}"
-Kicker: "${strategy.kicker}"
-Core Conflict: "${strategy.coreConflict}"
-Hidden Catch: "${strategy.hiddenCatch}"
-Verdict: "${strategy.verdict}"
+Hook Headline: "${hookHeadline}"
+Value Promise: "${valuePromise}"
+Kicker: "${kicker}"
+Core Conflict: "${coreConflict}"
+Hidden Catch: "${hiddenCatch}"
+Verdict: "${verdict}"
 
-Verified Dossier:
-Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
+Verified Intelligence:
 Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
-Quotes: ${JSON.stringify(dossier.verifiedQuotes)}
+Mechanisms: ${JSON.stringify(dossier.systemMechanisms || [])}
+Comparisons: ${JSON.stringify(dossier.comparisons || [])}
+Controversy: ${JSON.stringify(dossier.coreControversy)}
 Catches: ${JSON.stringify(dossier.hiddenCatchesAndLimits)}
-Verdict Advice: ${JSON.stringify(dossier.editorialVerdict)}
+Hardware: ${JSON.stringify(dossier.hardwareSpecs || {})}
 
-Output strictly the JSON array of 10 slide objects. Remember: MAX 18 WORDS PER CARD BODY, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
+Output strictly the JSON array of 7 slide objects. Remember: MAX 13 WORDS (65 CHARS) PER ITEM BODY, 2-3 ITEMS PER SLIDE, AND CHOOSE DIVERSE LAYOUT TOPOLOGIES!`;
 }
 
 // Fallback for non-article briefs
@@ -374,42 +432,84 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// STAGE 5: VISUAL ART DIRECTOR (SPATIAL LAYOUT & SVG BLUEPRINT)
+// STAGE 5: VISUAL ART DIRECTOR & SPATIAL LAYOUT ARCHITECT (WHERE EVERYTHING FALLS)
 // ============================================================================
+
+export type LayoutModelType =
+  | 'stacked-hero-svg'
+  | 'split-column-50-50'
+  | 'horizontal-comparison-ledger'
+  | 'editorial-verdict-gate'
+  | 'stepped-pipeline-flow';
 
 export interface SlideDesignBlueprint {
   slideId: string;
   type: string;
-  layoutStructure: string;
+  layoutModel: LayoutModelType;
+  headerZone: {
+    headlineSize: 'text-[52px]' | 'text-[60px]' | 'text-[68px]';
+    hasSubheadline: boolean;
+    subheadMaxWords: number;
+  };
+  svgArtZone: {
+    viewBox: string;
+    allocatedHeightPx: number;
+    artConcept: string;
+    primaryElements: string[];
+    negativeSpaceBufferPx: number;
+  };
+  cardsZone: {
+    placement: 'bottom-2-col' | 'stacked-placard' | 'left-column-cards' | 'none';
+    cardCount: number;
+    maxWordsPerBody: number;
+    style: 'surface-border-top' | 'border-left-accent' | 'hairline-ledger';
+  };
+  spacing: {
+    zoneGap: 'gap-6' | 'gap-8';
+  };
+  // Backward compatibility fields
+  layoutStructure?: string;
   svgConcept?: {
     description: string;
     type: 'floorplan' | 'schematic' | 'telemetry-bars' | 'contrast-icons' | 'spatial-glyphs' | 'none';
-    elements?: string[];
   };
-  typographyScale?: {
-    headlineSize: string;
-    subtitleSize?: string;
-  };
-  accentPlacement?: string;
-  spatialBalanceGuidance?: string;
 }
 
 export function buildVisualBlueprintSystemPrompt(): string {
-  return `You are an Information Designer and Art Director at Pentagram, Monocle, and The New York Times Graphics Desk.
-Your task is to plan the visual layout architecture and bespoke vector SVG concept for each slide in a carousel deck.
+  return `You are the Lead Visual Art Director & Spatial Layout Architect at Pentagram, Monocle, and The New York Times Graphics Desk.
+Your mission is to architect the exact spatial layout, coordinate distribution, text sizing, and bespoke vector SVG art for each slide in an editorial carousel.
 
-CRITICAL VISUAL DESIGN PRINCIPLES:
-1. Bespoke Vector Art:
-   - Slide 1 (Cover): Conceptual floor plan showing rooms and dashed patrol routes, or hardware blueprint.
-   - Slide 2 (Brief): Custom spatial glyphs or boundary threshold markers for each item.
-   - Slide 3 (Hardware Specs): Drone elevation cross-section vs Rover periscope diagram.
-   - Slide 4 (Telemetry): Custom data visualization bars or metric ratio indicators.
-2. Space Balance:
-   - Every slide must fill 75%–90% of the vertical frame organically.
-   - Avoid top-heavy clumping. If content is short, center it optically with generous line heights and large typography.
-   - Multi-item slides must use equal height distribution or balanced multi-column grids.
+CRITICAL ARCHITECTURAL MISSION:
+The bespoke inline SVG vector art is the central hero of Loopreel!
+You must ensure that text and SVG never collide, that elements are never crammed in tight spaces, and that every slide fills 80%–92% of the vertical canvas with balanced editorial elegance.
 
-Return strictly a JSON array of 10 SlideDesignBlueprint objects: [ { "slideId": "slide-1", ... }, ... ]`;
+THE 5 CANONICAL LAYOUT MODELS:
+1. 'stacked-hero-svg':
+   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]) + Subhead (text-[24px]).
+   - SVG Art Zone (flex-1, dedicated 440px–500px height, viewBox="0 0 952 460"): Pure vector art with ample breathing room. NO absolute HTML text floating over the art!
+   - Cards Zone (shrink-0, ~180px): Exactly 2 cards in a clean 2-column grid (grid grid-cols-2 gap-5). Max 12 words per card body!
+2. 'split-column-50-50':
+   - Left Column (w-[420px], shrink-0): Kicker + Headline (text-[52px]) + Subhead + 1 clean thesis card.
+   - Right Column (w-[500px], flex-1): Dedicated tall vertical vector art (viewBox="0 0 500 760", height 760px) from top to bottom with zero text interference!
+3. 'horizontal-comparison-ledger':
+   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]) + Subhead.
+   - SVG Art Zone (flex-1, height ~420px, viewBox="0 0 952 420"): 2 proportional comparative horizontal ledger channels with delta tags and scale indicators.
+   - Cards Zone (shrink-0, ~160px): 1 full-width baseline scope placard.
+4. 'stepped-pipeline-flow':
+   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]).
+   - SVG Art Zone (flex-1, height ~460px, viewBox="0 0 952 460"): 3 connected operational pipeline nodes with directional conduits and metric flags.
+   - Cards Zone (shrink-0, ~180px): 2 or 3 takeaway cards neatly aligned below.
+5. 'editorial-verdict-gate':
+   - Header (shrink-0, ~200px): Kicker + Monumental Headline (text-[64px]) + Subhead.
+   - SVG Art Zone (flex-1, height ~420px, viewBox="0 0 952 420"): Monumental open threshold gate with directional pathways and milestone markers.
+   - Cards Zone (shrink-0, ~180px): Strategic takeaway card with colored indicator rail.
+
+MANDATORY SPATIAL RULES:
+1. STRICT ZERO-OVERLAY RULE: The SVG Art Canvas is a sacred visual space! Never place absolute HTML text boxes on top of the SVG art. HTML text lives cleanly in Zone 1 (Header) or Zone 3 (Cards).
+2. DIVERSITY MANDATE: You MUST use at least 4 distinct layout models across the 7 slides (e.g. Slide 1: stacked-hero-svg, Slide 2: horizontal-comparison-ledger, Slide 3: split-column-50-50, Slide 4: stepped-pipeline-flow, Slide 7: editorial-verdict-gate).
+3. HARD WORD BUDGETS: Cards must strictly contain max 12 words per body. Subhead max 12 words.
+
+Return strictly a JSON array of 7 SlideDesignBlueprint objects.`;
 }
 
 export function buildVisualBlueprintUserPrompt(
@@ -417,15 +517,33 @@ export function buildVisualBlueprintUserPrompt(
   brand: BrandTokens,
   dossier: GroundTruthDossier
 ): string {
-  return `Design the visual blueprints for these 10 slides:
+  return `Architect the spatial layout and bespoke SVG art for these 7 slides:
+
 Publication: "${brand.name}" (${brand.domain})
-Palette: Accent ${brand.palette.accent}, Paper ${brand.palette.paper}, Surface ${brand.palette.surface}
-Hardware: ${JSON.stringify(dossier.hardwareSpecs)}
+Palette: Paper ${brand.palette.paper}, Ink ${brand.palette.ink}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}
+Canvas: 1080x1350 portrait (952x1028 interior safe area)
 
-Slides Content:
-${JSON.stringify(slides, null, 2)}
+Verified Intel:
+Metrics: ${JSON.stringify(dossier.verifiedMetrics)}
+Mechanisms: ${JSON.stringify(dossier.systemMechanisms || [])}
+Comparisons: ${JSON.stringify(dossier.comparisons || [])}
 
-Output strictly the JSON array of 10 SlideDesignBlueprint objects.`;
+Slides Content to Architect:
+${JSON.stringify(
+  slides.map((s, idx) => ({
+    id: s.id || `slide-${idx + 1}`,
+    index: idx,
+    type: s.type,
+    kicker: s.kicker,
+    headline: s.headline,
+    subheadline: s.subheadline,
+    items: s.items,
+  })),
+  null,
+  2
+)}
+
+Output strictly the JSON array of 7 SlideDesignBlueprint objects. Ensure layoutModel diversity across all 7 slides!`;
 }
 
 // ============================================================================
@@ -435,8 +553,6 @@ Output strictly the JSON array of 10 SlideDesignBlueprint objects.`;
 export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): string {
   const isStories = platform === 'instagram-stories';
   const isSquare = platform === 'instagram-square';
-  const canvasWidth = 1080;
-  const canvasHeight = isStories ? 1920 : isSquare ? 1080 : 1350;
   const safeAreaDesc = isStories
     ? '1080x1920 canvas (9:16 vertical stories format), 952x1596 safe area'
     : isSquare
@@ -452,57 +568,68 @@ CRITICAL DESIGN & CODING RULES:
    import type { SlideComponentProps } from '../../../src/skeleton/types';
 
    export default function SlideNN({ slide, brand, totalSlides }: SlideComponentProps) {
+     const items = slide.items ?? [];
      return ( ... );
    }
 
-2. Creative Freedom & Architectural Topology:
-   - You MUST implement the specific "Visual Style", "Layout Topology", and "Bespoke SVG Blueprint" assigned to this slide!
-   - STRICT BAN ON REPETITIVE 2-CARD LAYOUTS: Do NOT just render two rounded rectangles with text. If the layout topology says "hero-diagram-with-callouts", render a prominent custom inline vector SVG taking 40%-60% of the space with callout pointers. If it says "horizontal-timeline-cadence", render a multi-year horizontal Gantt timeline. If it says "hud-sensor-split", render a radar/target crosshair overlay.
-   - Author rich inline SVGs with crisp viewBoxes (e.g. orbital paths, launch trajectories, pad coordinates, timeline milestones, HUD reticles).
+2. THE SVG ART IS THE HERO — DEDICATED NON-OVERLAPPING ZONES:
+   The bespoke vector SVG art is the core selling point of Loopreel!
+   You MUST implement the assigned Layout Model from the Spatial Blueprint:
+   - For 'stacked-hero-svg':
+     * Zone 1 Header (shrink-0): Kicker + Headline + Subheadline.
+     * Zone 2 SVG Art Canvas (flex-1 min-h-0 relative flex items-center justify-center): Dedicated vector canvas taking 440px–500px height.
+     * Zone 3 Cards (shrink-0): Clean bottom 2-column grid (grid grid-cols-2 gap-5).
+   - For 'split-column-50-50':
+     * Outer container: flex flex-row h-full min-h-0 w-full gap-8.
+     * Left Column (w-[420px] shrink-0): Kicker, headline, subhead, and 1 thesis card.
+     * Right Column (flex-1 min-h-0 relative): Dedicated vertical vector SVG art taking the entire height.
+   - For 'horizontal-comparison-ledger':
+     * Zone 1 Header (shrink-0).
+     * Zone 2 SVG Comparative Ledger (flex-1 min-h-0): Proportional horizontal channel bars with delta flags and metric callouts.
+     * Zone 3 Scope Placard (shrink-0): Full-width footnote card.
+   - For 'editorial-verdict-gate':
+     * Zone 1 Header (shrink-0).
+     * Zone 2 Monumental Gate (flex-1 min-h-0): SVG architectural threshold gate with directional pathways.
+     * Zone 3 Strategic Takeaway (shrink-0): Takeaway card with colored indicator rail.
 
-3. Theme & Token Integration:
-   - Use Tailwind utility classes with CSS variables:
-     * text-[var(--ink)] for primary text
-     * text-[var(--accent)] or bg-[var(--accent)] for focal points, badges, highlights
-     * bg-[var(--surface)] for card backgrounds and elevation
-     * border-[var(--border)] for hairlines and borders
-     * font-[var(--font-headline)] for titles, quotes, hero numbers
+   STRICT PROHIBITION ON OVERLAYS:
+   NEVER place floating absolute HTML text boxes (e.g. <div className="absolute top-0 right-0">) over the SVG canvas!
+   HTML text belongs exclusively in Zone 1 (Header) or Zone 3 (Cards). The SVG canvas is dedicated solely to vector art!
+
+3. STRICT THEME & TYPOGRAPHY INHERITANCE:
+   - DO NOT declare a local 'const tokens = { ... }' or 'const theme = { ... }' object!
+   - The outer <SlideFrame> ALREADY injects the authentic brand typography and colors into CSS variables.
+   - STRICTLY FORBIDDEN: Writing 'Arial', 'Helvetica', or 'Courier New' in the component.
+   - Use inherited Tailwind classes:
+     * font-[var(--font-headline)] for titles, kickers, and headlines
      * font-[var(--font-body)] for body copy and descriptions
-     * font-[var(--font-mono)] for metrics, tags, numbers
+     * font-[var(--font-mono)] for metrics, tags, and numbers
+     * text-[var(--ink)] for primary text
+     * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights
+     * bg-[var(--surface)] for card backgrounds
+     * border-[var(--border)] for hairlines and borders
 
-4. MOBILE INSTAGRAM LEGIBILITY (0.36x Phone Scaling Law):
-   When viewed on a smartphone (390px mobile Instagram / LinkedIn viewport), canvas elements scale down by 0.36x.
-   - TEXT UNDER 20px IS STRICTLY FORBIDDEN!
-     * NEVER use 'text-xs' (12px), 'text-sm' (14px), 'text-base' (16px), or 'text-lg' (18px) for readable content!
-     * On a phone screen, 14px becomes 5.0px (unreadable), and 18px becomes 6.5px (squinting).
-   - MANDATORY FONT SIZE SCALE:
-     * Body copy & descriptions: MUST be text-[24px] to text-[28px] (leading-snug / leading-normal).
-     * Card / section titles: MUST be text-[32px] to text-[38px] (font-semibold).
-     * Kickers, badges, tags, metadata: MUST be text-[20px] to text-[22px] (font-mono tracking-wider).
-     * Major headlines: MUST be text-[52px] to text-[68px] (font-headline font-bold).
-     * Monumental hero metrics: text-[84px] to text-[112px] (font-mono font-bold).
+4. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
+   - Headline: text-[52px] to text-[64px] (font-bold leading-[1.02] tracking-tight).
+   - Subheadline: text-[24px] to text-[26px] (leading-snug line-clamp-2).
+   - Card Titles: text-[26px] to text-[30px] (font-semibold leading-tight).
+   - Card Body: text-[22px] to text-[24px] (leading-snug line-clamp-2 or line-clamp-3).
+   - Hero Numbers / Telemetry: text-[80px] to text-[100px] (font-mono font-bold).
+   - TEXT UNDER 22px IS STRICTLY BANNED for readable content.
 
-5. ZERO-OVERFLOW & NATURAL FLOW (Ban overflow-hidden):
-   - The interior safe area is strictly ${isStories ? '952px wide by 1596px high' : isSquare ? '952px wide by 758px high' : '952px wide by 1028px high'}.
-   - NEVER put 'overflow-hidden' on the top-level <section>! 'overflow-hidden' clips content and conceals overflow.
-   - Outer wrapper signature: className="flex flex-col h-full min-h-0 w-full text-[var(--ink)]"
-   - Multi-card grids: Use 'gap-5' or 'gap-6', card padding 'py-5 px-7' or 'py-6 px-8'.
-   - Limit items to 2 or 3 per slide so the larger 24px-28px body text fits effortlessly without overflow.
-   - AutoFit scale MUST remain 1.000 (no scaling needed).
-   - Always respect the locked text provided—do not invent new text or exceed word counts.
+5. ARRAY INDEXING TYPE-SAFETY:
+   - slide.items is an ARRAY. When accessing items:
+     const item0 = items[0];
+     const item1 = items[1];
+   - STRICTLY BANNED: Writing 'items?.label' or 'items?.body' (this produces undefined). Always use array indexing or items.map((it: any, idx: number) => ...).
 
-6. Technical Constraints:
-   - Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block.
-   - Pure Tailwind and SVG only (NO external icon libraries, no lucide-react).
-   - Do NOT output the outer ${canvasWidth}x${canvasHeight} wrapper or header/footer—SlideFrame provides those.
+6. SPACE BALANCE MANDATE:
+   - The outer section must fill 80% to 92% of the safe vertical height organically without overflow.
+   - className="flex flex-col h-full min-h-0 w-full justify-between text-[var(--ink)]"
+   - Make the SVG canvas expand with flex-1.
+   - NEVER put 'overflow-hidden' on the top-level <section>.
 
-7. TypeScript Type Safety, Array Indexing & Syntax Constraints:
-   - When accessing array elements by index, ALWAYS use standard indexing or valid optional indexing:
-     * CORRECT: slide.items?.[0]?.title, slide.items?.[1]?.body, or const items = slide.items ?? [];
-     * STRICTLY FORBIDDEN: Never write trailing dot optional chaining like 'slide.items?.' or 'slide.items?.?.title'. This causes an immediate JavaScript syntax error!
-   - When mapping over dynamic arrays (e.g. slide.items, slide.points, slide.timeline, slide.metrics), ALWAYS explicitly annotate parameter types:
-     (item: any, index: number) => ( ... )
-   - Never pass an array to a prop expecting a single item (e.g. if a row subcomponent expects a single object prop, pass item={items[0]!} NOT item={items}).`;
+7. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind and inline SVG only.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -511,29 +638,39 @@ export function buildSingleSlideUserPrompt(
   blueprint: SlideDesignBlueprint | undefined,
   brand: BrandTokens
 ): string {
-  const chosenStyle = slideData.visualStyle || blueprint?.layoutStructure || 'bespoke-editorial';
-  const chosenTopology = slideData.layoutTopology || blueprint?.layoutStructure || 'hero-diagram-with-callouts';
-  const chosenSvg = slideData.svgBlueprint || blueprint?.svgConcept?.description || 'Custom inline vector SVG matching topic';
+  const layoutModel = blueprint?.layoutModel || 'stacked-hero-svg';
+  const headlineSize = blueprint?.headerZone?.headlineSize || 'text-[60px]';
+  const svgViewBox = blueprint?.svgArtZone?.viewBox || '0 0 952 460';
+  const artConcept = blueprint?.svgArtZone?.artConcept || slideData.svgBlueprint || 'Bespoke inline vector SVG diagram';
+  const cardStyle = blueprint?.cardsZone?.style || 'surface-border-top';
 
   return `Generate the bespoke React + Tailwind component for Slide ${slideNumber}:
 Archetype: "${slideData.type}"
+Layout Model: "${layoutModel}"
 
 Slide Data (Locked Copy):
-${JSON.stringify(slideData, null, 2)}
+- Kicker: "${slideData.kicker || 'IN-DEPTH INVESTIGATION'}"
+- Headline: "${slideData.headline}"
+- Subheadline: "${slideData.subheadline || ''}"
+- Items: ${JSON.stringify(slideData.items || [], null, 2)}
 
-CHOSEN VISUAL ARCHITECTURE & BLUEPRINT:
-- Visual Style: "${chosenStyle}"
-- Layout Topology: "${chosenTopology}"
-- Bespoke Vector SVG: "${chosenSvg}"
-Follow this layout topology strictly! Do NOT revert to generic rounded cards.
+SPATIAL BLUEPRINT & ART DIRECTION (Follow Strictly!):
+- Layout Model: "${layoutModel}"
+- Headline Size: "${headlineSize}"
+- SVG Canvas: viewBox="${svgViewBox}", dedicated flex-1 space.
+- Vector SVG Art Concept: "${artConcept}"
+- Cards Styling: "${cardStyle}" (strictly non-overlapping, placed in dedicated cards zone)
+- Primary Elements: ${JSON.stringify(blueprint?.svgArtZone?.primaryElements || ['geometric nodes', 'directional conduits', 'accent flags'])}
 
-Brand Context:
-- Publication: "${brand.name}"
+Brand Identity:
+- Name: "${brand.name}"
 - Domain: "${brand.domain}"
-- Accent: "${brand.palette.accent}"
-- Paper: "${brand.palette.paper}"
-- Surface: "${brand.palette.surface}"
-- Border: "${brand.palette.border}"
+- Palette: Ink ${brand.palette.ink}, Paper ${brand.palette.paper}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}, Border ${brand.palette.border}
+
+Remember:
+1. NO floating absolute HTML text boxes over the SVG canvas.
+2. NO local font overrides (Arial/Courier are banned; inherit from SlideFrame).
+3. Access items via items[0]?.label and items[1]?.label or map.
 
 Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
 }

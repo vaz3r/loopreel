@@ -86,7 +86,7 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
 
     if (isPromptMode) {
       // In prompt mode, skip ingest entirely and route straight to structure worker
-      const structurePayload = { jobId, rawText: prompt!.trim(), engine };
+      const structurePayload = { jobId, rawText: (effectivePrompt || prompt || '').trim(), engine };
       await OutboxRepository.create({
         queueName: 'structure',
         jobPayload: structurePayload,

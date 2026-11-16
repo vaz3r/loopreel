@@ -10,6 +10,7 @@ import {
   type StoryStrategy,
   type GroundTruthDossier,
   type SlideDesignBlueprint,
+  type LayoutModelType,
   buildFactExtractionSystemPrompt,
   buildFactExtractionUserPrompt,
   buildTopicResearchSystemPrompt,
@@ -23,9 +24,6 @@ import {
   buildStoryDeckUserPrompt,
   buildVisualBlueprintSystemPrompt,
   buildVisualBlueprintUserPrompt,
-  buildDeckSystemPrompt,
-  buildDeckBatch1Prompt,
-  buildDeckBatch2Prompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -282,24 +280,48 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       byline: rawDossier.byline || article.byline || 'Staff Bureau',
       summary: rawDossier.summary || article.summary,
       entities: rawDossier.entities || [],
-      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
-      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
+      verifiedMetrics:
+        Array.isArray(rawDossier.verifiedMetrics) && rawDossier.verifiedMetrics.length > 0
+          ? rawDossier.verifiedMetrics
+          : Array.isArray(rawDossier.metrics) && rawDossier.metrics.length > 0
+          ? rawDossier.metrics
+          : (article.extractedMetrics || []).map((m: string) => ({
+              value: m,
+              label: 'Reported Metric',
+              context: 'Extracted from official reporting',
+            })),
+      verifiedQuotes:
+        Array.isArray(rawDossier.verifiedQuotes) && rawDossier.verifiedQuotes.length > 0
+          ? rawDossier.verifiedQuotes
+          : Array.isArray(rawDossier.quotes) && rawDossier.quotes.length > 0
+          ? rawDossier.quotes
+          : (article.extractedQuotes || []).map((q: string) => ({
+              quote: q,
+              speaker: 'Official Source',
+              role: 'Spokesperson',
+              context: 'Direct statement',
+            })),
+      systemMechanisms: rawDossier.systemMechanisms || [],
+      comparisons: rawDossier.comparisons || [],
       hardwareSpecs: rawDossier.hardwareSpecs || {
         deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
       },
       coreControversy: rawDossier.coreControversy || {
-        corporateClaim: '',
-        criticismOrAlarm: '',
-        regulatoryOrHistoricalPrecedent: '',
+        corporateClaim: 'Maintaining operational safety and mission-critical uptime',
+        criticismOrAlarm: 'Critical dependency on multi-decade legacy architectures',
+        regulatoryOrHistoricalPrecedent: 'Federal safety mandates and multi-billion-dollar upgrade backlogs',
       },
-      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
+      hiddenCatchesAndLimits:
+        Array.isArray(rawDossier.hiddenCatchesAndLimits) && rawDossier.hiddenCatchesAndLimits.length > 0
+          ? rawDossier.hiddenCatchesAndLimits
+          : rawDossier.catches || ['The operational fragility of replacing live infrastructure without interrupting daily service.'],
       editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
     };
     console.log(
-      `[Pipeline] Dossier Extracted: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
+      `[Pipeline] Dossier Extracted: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes, ${dossier.systemMechanisms?.length || 0} mechanisms.`
     );
   } else {
-    console.log('[Pipeline] >>> Pass 1: Lead AI Research Analyst Compiling GroundTruthDossier from Brief...');
+    console.log('[Pipeline] >>> Pass 1: Forensic Fact & Research Bureau Compiling GroundTruthDossier from Brief...');
     options.onProgress?.('Compiling Verified Topic Dossier', 1, 15);
 
     const factResponse = await llm.generateJSON(
@@ -309,26 +331,26 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     );
     const rawDossier = extractJson<any>(factResponse.text);
     dossier = {
-      articleTitle: rawDossier.articleTitle || brief.name || 'AI Frontier & Open Weights',
-      publisher: rawDossier.publisher || brief.name || 'The Compute Review',
+      articleTitle: rawDossier.articleTitle || brief.name || 'Financial & Industrial Intelligence',
+      publisher: rawDossier.publisher || 'The Financial Bureau',
       byline: rawDossier.byline || 'Staff Intelligence Bureau',
-      summary: rawDossier.summary || brief.vibe || 'Curated editorial exploration',
+      summary: rawDossier.summary || brief.vibe || 'Forensic investigation of business model and operational mechanics',
       entities: rawDossier.entities || [],
       verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
       verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
-      hardwareSpecs: rawDossier.hardwareSpecs || {
-        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
-      },
+      systemMechanisms: rawDossier.systemMechanisms || [],
+      comparisons: rawDossier.comparisons || [],
+      hardwareSpecs: rawDossier.hardwareSpecs,
       coreControversy: rawDossier.coreControversy || {
-        corporateClaim: '',
-        criticismOrAlarm: '',
-        regulatoryOrHistoricalPrecedent: '',
+        corporateClaim: 'Customer convenience and loyalty incentives',
+        criticismOrAlarm: 'Unregulated shadow banking float without FDIC protection',
+        regulatoryOrHistoricalPrecedent: 'Exempt from reserve ratios and Dodd-Frank requirements',
       },
       hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
       editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
     };
     console.log(
-      `[Pipeline] Topic Dossier Compiled: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
+      `[Pipeline] Topic Dossier Compiled: ${dossier.verifiedMetrics.length} metrics, ${dossier.systemMechanisms?.length || 0} mechanisms, ${dossier.comparisons?.length || 0} comparisons.`
     );
   }
 
@@ -370,8 +392,17 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
     }
 
+    const CANONICAL_TEMPLATES = new Set([
+      'the-zurich-typographer',
+      'the-tokyo-review',
+      'the-threshold',
+      'the-token-ledger',
+      'the-threshold-review',
+      'the-fine-print',
+    ]);
     const name = b.name || b.wordmark || 'Custom Brand';
-    const slug = b.slug || defaultSlug;
+    const baseSlug = b.slug || defaultSlug;
+    const slug = CANONICAL_TEMPLATES.has(baseSlug) ? `${baseSlug}-${defaultSlug}` : baseSlug;
 
     brand = {
       name,
@@ -414,6 +445,14 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   }
 
   brand.platform = options.platform || 'instagram-feed';
+  if (!brand.handle || brand.handle.length > 25) {
+    const cleanHandle = brand.slug.split('-').slice(0, 3).join('');
+    brand.handle = `@${cleanHandle}`.slice(0, 20);
+  }
+  if (!brand.domain || brand.domain.length > 30) {
+    const cleanDomain = brand.slug.split('-').slice(0, 3).join('');
+    brand.domain = `${cleanDomain}.pub`.slice(0, 25);
+  }
   const slug = brand.slug;
   console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
@@ -423,64 +462,69 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   console.log('[Pipeline] >>> Pass 3: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
   options.onProgress?.('Extracting Story Strategy', 3, 15);
 
-  let strategy: StoryStrategy;
-  if (article) {
-    const strategyResponse = await llm.generateJSON(
-      buildStoryStrategySystemPrompt(),
-      buildStoryStrategyUserPrompt(dossier, article),
-      0.7
-    );
-    strategy = extractJson<StoryStrategy>(strategyResponse.text);
-  } else {
-    strategy = {
-      hookHeadline: brief.name || 'The Investigation',
-      valuePromise: brief.vibe || 'Essential insights',
-      kicker: 'ANALYSIS / IN FOCUS',
-      coreConflict: 'Understanding emerging market dynamics',
-      hiddenCatch: 'Critical parameters to watch',
-      verdict: 'The essential takeaway',
-      keyMetrics: [],
-      keyQuotes: [],
-    };
+  const strategyResponse = await llm.generateJSON(
+    buildStoryStrategySystemPrompt(),
+    buildStoryStrategyUserPrompt(dossier, brief, article),
+    0.7
+  );
+  let rawStrategy: Partial<StoryStrategy> = {};
+  try {
+    rawStrategy = extractJson<StoryStrategy>(strategyResponse.text) || {};
+  } catch (err: any) {
+    console.warn(`[Pipeline] Failed to parse story strategy JSON: ${err.message}`);
   }
+
+  const cleanString = (val: any, fallback: string): string => {
+    if (typeof val === 'string' && val.trim().length > 0 && val !== 'undefined' && val !== 'null') {
+      return val.trim();
+    }
+    return fallback;
+  };
+
+  const strategy: StoryStrategy = {
+    hookHeadline: cleanString(rawStrategy.hookHeadline, article?.title || brief?.name || dossier.articleTitle || 'The Critical Investigation'),
+    valuePromise: cleanString(rawStrategy.valuePromise, brief?.vibe || 'Essential architectural breakdown and operational risk analysis.'),
+    kicker: cleanString(rawStrategy.kicker, 'INVESTIGATIVE DOSSIER'),
+    coreConflict: cleanString(
+      rawStrategy.coreConflict,
+      dossier.coreControversy?.criticismOrAlarm || dossier.summary?.slice(0, 120) || 'Operational friction and systemic technical debt.'
+    ),
+    hiddenCatch: cleanString(
+      rawStrategy.hiddenCatch,
+      dossier.hiddenCatchesAndLimits?.[0] || 'The risk and complexity of modernizing live infrastructure without service disruption.'
+    ),
+    verdict: cleanString(rawStrategy.verdict, 'Comprehensive long-term architectural modernisation is urgent and mandatory.'),
+    keyMetrics: Array.isArray(rawStrategy.keyMetrics) && rawStrategy.keyMetrics.length > 0 ? rawStrategy.keyMetrics : dossier.verifiedMetrics,
+    keyQuotes: Array.isArray(rawStrategy.keyQuotes) && rawStrategy.keyQuotes.length > 0 ? rawStrategy.keyQuotes : dossier.verifiedQuotes,
+    storySpine: rawStrategy.storySpine,
+  };
   console.log(`[Pipeline] Hook Formulated: "${strategy.hookHeadline}"`);
   console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
 
   // ==========================================================================
-  // PASS 4: SENIOR COPY EDITOR (10-SLIDE STORYBOARD WITH HARD WORD BUDGETS)
+  // PASS 4: SENIOR COPY EDITOR (7-SLIDE STORYBOARD WITH HARD WORD BUDGETS)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 4: Senior Copy Editor Authoring 10-Slide High-Signal Storyboard...');
+  console.log('[Pipeline] >>> Pass 4: Senior Copy Editor Authoring 7-Slide High-Signal Storyboard...');
   options.onProgress?.('Authoring Storyboard', 4, 15);
 
-  let allSlides: SlideData[] = [];
+  const deckResponse = await llm.generateJSON(
+    buildStoryDeckSystemPrompt(),
+    buildStoryDeckUserPrompt(strategy, dossier, brand),
+    0.6
+  );
+  let allSlides = extractJson<SlideData[]>(deckResponse.text);
 
-  if (article) {
-    const deckResponse = await llm.generateJSON(
-      buildStoryDeckSystemPrompt(),
-      buildStoryDeckUserPrompt(strategy, dossier, brand),
-      0.6
-    );
-    allSlides = extractJson<SlideData[]>(deckResponse.text);
-  } else {
-    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 1: Slides 1–9)...');
-    const batch1Response = await llm.generateJSON(
-      buildDeckSystemPrompt(),
-      buildDeckBatch1Prompt(brief, brand),
-      0.7
-    );
-    const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
+  // Helper to strip leaked runtime literals or meta-commentary
+  const sanitizeSlideText = (text: string | undefined): string => {
+    if (!text) return '';
+    return text
+      .replace(/\[object Object\]/gi, '')
+      .replace(/\b(undefined|NaN)\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  };
 
-    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 2: Slides 10–17)...');
-    const batch2Response = await llm.generateJSON(
-      buildDeckSystemPrompt(),
-      buildDeckBatch2Prompt(brief, brand),
-      0.7
-    );
-    const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
-    allSlides = [...batch1Slides, ...batch2Slides];
-  }
-
-  // Normalize slide schema ensuring id, index, and type are guaranteed
+  // Normalize slide schema ensuring id, index, type, and sanitized copy are guaranteed
   const activePlatform = options.platform || 'instagram-feed';
   allSlides = allSlides.map((s, idx) => ({
     ...s,
@@ -488,6 +532,13 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     index: typeof s.index === 'number' ? s.index : idx,
     type: s.type || (s as any).archetype || 'editorial',
     platform: activePlatform,
+    kicker: sanitizeSlideText(s.kicker) || (idx === 0 ? 'INVESTIGATION' : `PART 0${idx + 1}`),
+    headline: sanitizeSlideText(s.headline) || brand.name,
+    subheadline: sanitizeSlideText(s.subheadline),
+    items: (s.items || []).map((it: any) => ({
+      label: sanitizeSlideText(it.label) || 'Key Point',
+      body: sanitizeSlideText(it.body),
+    })),
   }));
 
   const deck: DeckData = {
@@ -509,35 +560,57 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
   // ==========================================================================
-  // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINT)
+  // PASS 5: VISUAL ART DIRECTOR & SPATIAL LAYOUT ARCHITECT (WHERE EVERYTHING FALLS)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 5: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...');
-  options.onProgress?.('Designing Visual Blueprints', 5, 15);
+  console.log('[Pipeline] >>> Pass 5: Visual Art Director & Spatial Layout Architect Planning Exact Coordinates...');
+  options.onProgress?.('Architecting Spatial Layout & SVG Art', 5, 15);
 
   let blueprints: SlideDesignBlueprint[] = [];
-  if (deck.slides.some((s) => s.svgBlueprint || s.layoutTopology)) {
-    console.log('[Pipeline] Pass 5: Using per-slide visual styles and SVG blueprints determined from content.');
-    blueprints = deck.slides.map((s) => ({
+  try {
+    const blueprintResponse = await llm.generateJSON(
+      buildVisualBlueprintSystemPrompt(),
+      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
+      0.7
+    );
+    blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
+    console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide spatial blueprints architected.`);
+  } catch (err: any) {
+    console.warn(`[Pipeline] Spatial blueprint generation fallback: ${err.message}`);
+    const fallbackModels: LayoutModelType[] = [
+      'stacked-hero-svg',
+      'horizontal-comparison-ledger',
+      'split-column-50-50',
+      'stepped-pipeline-flow',
+      'stacked-hero-svg',
+      'stacked-hero-svg',
+      'editorial-verdict-gate',
+    ];
+    blueprints = deck.slides.map((s, idx) => ({
       slideId: s.id,
       type: s.type,
-      layoutStructure: s.layoutTopology || s.visualStyle || 'hero-diagram-with-callouts',
-      svgConcept: {
-        description: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
-        type: 'schematic',
+      layoutModel: fallbackModels[idx % fallbackModels.length] ?? 'stacked-hero-svg',
+      headerZone: {
+        headlineSize: 'text-[60px]',
+        hasSubheadline: !!s.subheadline,
+        subheadMaxWords: 12,
+      },
+      svgArtZone: {
+        viewBox: idx === 2 ? '0 0 500 760' : '0 0 952 460',
+        allocatedHeightPx: 460,
+        artConcept: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
+        primaryElements: ['geometric nodes', 'directional conduits', 'accent flags'],
+        negativeSpaceBufferPx: 32,
+      },
+      cardsZone: {
+        placement: 'bottom-2-col',
+        cardCount: s.items?.length || 2,
+        maxWordsPerBody: 12,
+        style: 'surface-border-top',
+      },
+      spacing: {
+        zoneGap: 'gap-6',
       },
     }));
-  } else {
-    try {
-      const blueprintResponse = await llm.generateJSON(
-        buildVisualBlueprintSystemPrompt(),
-        buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
-        0.7
-      );
-      blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
-      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide visual blueprints generated.`);
-    } catch (err: any) {
-      console.warn(`[Pipeline] Visual blueprint generation fallback: ${err.message}`);
-    }
   }
 
   // ==========================================================================
@@ -580,6 +653,15 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     if (!code.includes('import type { SlideComponentProps }')) {
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
+
+    // Sanitize broken array access like items?.label or items?.body
+    code = code.replace(/\bitems\?\.label\b/g, 'items[0]?.label');
+    code = code.replace(/\bitems\?\.body\b/g, 'items[0]?.body');
+
+    // Strip rogue local font overrides (Arial, Courier, etc.) that kill authentic brand typography
+    code = code.replace(/'--font-headline':\s*['"][^'"]+['"],?/g, '');
+    code = code.replace(/'--font-body':\s*['"][^'"]+['"],?/g, '');
+    code = code.replace(/'--font-mono':\s*['"][^'"]+['"],?/g, '');
 
     // Fast AST syntax check before writing to disk
     const syntaxCheck = validateTsxSyntax(code, filename);

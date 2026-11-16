@@ -1,0 +1,26 @@
+{
+  "name": "The Zurich Typographer",
+  "slug": "the-zurich-typographer-why-airlines-love-overbooking-the-4-2-billion-mathematical-loophole-behind-selling-115-seat-capac",
+  "vibe": "Swiss International Style, Pure Grid Geometry & Clean Discipline",
+  "domain": "zurichtypo.ch",
+  "palette": {
+    "paper": "#FFFFFF",
+    "ink": "#000000",
+    "accent": "#E60000",
+    "surface": "#F5F5F5",
+    "border": "#E5E5E5",
+    "subtle": "#666666"
+  },
+  "typography": {
+    "headlineFont": "Syne",
+    "bodyFont": "Plus Jakarta Sans",
+    "monoFont": "Space Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap"
+  },
+  "wordmark": "ZÜRICH TYPO",
+  "wordmarkStyle": "sans",
+  "handle": "@thezurichtypographe",
+  "texture": "grid",
+  "motif": "bracket",
+  "platform": "instagram-feed"
+}

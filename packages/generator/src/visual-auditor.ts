@@ -100,7 +100,10 @@ export async function auditTemplateStudio(
           const style = window.getComputedStyle(el);
           if (style.display === 'none' || style.visibility === 'hidden') return;
 
-          if (el.scrollWidth > el.clientWidth + 4) {
+          // Check text clipping on content inside main (skip intentional truncate/ellipsis)
+          const isInsideMain = !!el.closest('main');
+          const isEllipsis = style.textOverflow === 'ellipsis' || el.classList.contains('truncate');
+          if (isInsideMain && !isEllipsis && el.scrollWidth > el.clientWidth + 4) {
             collisions.push(
               `Slide ${slideIdx + 1}: Text clipped in <${el.tagName.toLowerCase()}> "${el.textContent?.slice(0, 30)}..." (scrollWidth ${el.scrollWidth} > clientWidth ${el.clientWidth})`
             );
@@ -139,7 +142,6 @@ export async function auditTemplateStudio(
           // Check mobile legibility floor (0.36x phone scale rule: font < 12px is illegible on mobile)
           const text = el.childNodes.length === 1 && el.childNodes[0]?.nodeType === 3 ? el.textContent?.trim() : '';
           // Ignore frame header and footer elements outside main content
-          const isInsideMain = !!el.closest('main');
           if (isInsideMain && text && text.length > 1) {
             const fontSize = parseFloat(style.fontSize);
             if (fontSize < 12) {

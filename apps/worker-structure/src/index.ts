@@ -75,6 +75,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     const generatorOptions: any = {
       platform: existing.platform,
       brandKit: rawBrandKit,
+      templateId: existing.template_id,
       narrativePreset,
       targetSlideCount,
     };

@@ -84,7 +84,7 @@ export function SlideFrame({
       case 'coord':
         return (
           <span
-            className="text-[11px] font-mono tracking-widest uppercase px-2 py-0.5 rounded border"
+            className="text-[16px] font-mono tracking-widest uppercase px-3 py-1 rounded border"
             style={{
               borderColor: brand.palette.border,
               color: brand.palette.subtle || brand.palette.ink,
@@ -96,7 +96,7 @@ export function SlideFrame({
         );
       case 'bracket':
         return (
-          <span className="font-mono text-xs opacity-60" style={{ color: brand.palette.accent }}>
+          <span className="font-mono text-[16px] opacity-75" style={{ color: brand.palette.accent }}>
             [ SYS_{String(slideIndex + 1).padStart(2, '0')} ]
           </span>
         );
@@ -108,15 +108,15 @@ export function SlideFrame({
   const getWordmarkClass = () => {
     switch (brand.wordmarkStyle) {
       case 'serif':
-        return 'font-headline font-bold italic tracking-tight text-2xl';
+        return 'font-headline font-bold italic tracking-tight text-3xl';
       case 'sans':
-        return 'font-body font-extrabold tracking-widest uppercase text-xl';
+        return 'font-body font-extrabold tracking-widest uppercase text-2xl';
       case 'mono':
-        return 'font-mono font-bold tracking-widest uppercase text-lg';
+        return 'font-mono font-bold tracking-widest uppercase text-xl';
       case 'small-caps':
-        return 'font-headline font-semibold tracking-[0.2em] uppercase text-xl';
+        return 'font-headline font-semibold tracking-[0.2em] uppercase text-2xl';
       default:
-        return 'font-headline font-bold text-2xl';
+        return 'font-headline font-bold text-3xl';
     }
   };
 
@@ -154,23 +154,23 @@ export function SlideFrame({
         className="w-full flex items-center justify-between pb-8 border-b shrink-0 z-10"
         style={{ borderColor: brand.palette.border }}
       >
-        <div className="flex items-center gap-4">
-          <span className={getWordmarkClass()}>{brand.wordmark}</span>
+        <div className="flex items-center gap-4 min-w-0 shrink">
+          <span className={`${getWordmarkClass()} shrink-0`}>{brand.wordmark}</span>
           <span
-            className="w-1.5 h-1.5 rounded-full"
+            className="w-1.5 h-1.5 rounded-full shrink-0"
             style={{ backgroundColor: brand.palette.accent }}
           />
           <span
-            className="text-xs font-mono tracking-widest uppercase opacity-75"
+            className="text-[18px] font-mono tracking-widest uppercase opacity-75 truncate max-w-[360px]"
             style={{ color: brand.palette.subtle || brand.palette.ink }}
           >
             {slide.tag || brand.domain}
           </span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4 shrink-0">
           {renderMotif()}
           <span
-            className="text-xs font-mono font-medium px-2.5 py-1 rounded border tracking-wider"
+            className="text-[16px] font-mono font-medium px-3 py-1 rounded border tracking-wider"
             style={{
               borderColor: brand.palette.border,
               backgroundColor: brand.palette.surface,
@@ -183,7 +183,7 @@ export function SlideFrame({
       </header>
 
       {/* FRAME CONTENT SAFE AREA */}
-      <main className="w-full flex-1 my-10 relative overflow-hidden flex flex-col justify-center z-10">
+      <main className="w-full flex-1 my-8 relative overflow-hidden flex flex-col justify-center z-10">
         <AutoFit verticalAlign="center" paddingBuffer={24}>
           {children}
         </AutoFit>
@@ -196,22 +196,22 @@ export function SlideFrame({
       >
         <div className="flex items-center gap-3">
           <span
-            className="text-sm font-mono font-bold tracking-wider"
+            className="text-[24px] font-mono font-bold tracking-wider"
             style={{ color: brand.palette.accent }}
           >
             {String(slideIndex + 1).padStart(2, '0')}
           </span>
-          <span className="text-xs font-mono opacity-40">/</span>
-          <span className="text-xs font-mono opacity-50">
+          <span className="text-[18px] font-mono opacity-40">/</span>
+          <span className="text-[18px] font-mono opacity-60">
             {String(totalSlides).padStart(2, '0')}
           </span>
-          <div className="flex gap-1 ml-3">
+          <div className="flex gap-1.5 ml-3">
             {Array.from({ length: totalSlides }).map((_, i) => (
               <span
                 key={i}
-                className="h-1 rounded-full transition-all duration-200"
+                className="h-1.5 rounded-full transition-all duration-200"
                 style={{
-                  width: i === slideIndex ? '20px' : '4px',
+                  width: i === slideIndex ? '24px' : '6px',
                   backgroundColor:
                     i === slideIndex ? brand.palette.accent : `${brand.palette.ink}25`,
                 }}
@@ -220,16 +220,16 @@ export function SlideFrame({
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 min-w-0 shrink">
           <span
-            className="text-xs font-mono tracking-wider opacity-60"
+            className="text-[18px] font-mono tracking-wider opacity-65 truncate max-w-[260px]"
             style={{ color: brand.palette.ink }}
           >
             {brand.handle}
           </span>
           <span
-            className="text-[11px] font-mono tracking-widest uppercase px-2 py-0.5 rounded opacity-50"
-            style={{ backgroundColor: `${brand.palette.ink}10` }}
+            className="text-[16px] font-mono font-semibold tracking-widest uppercase px-3 py-1 rounded opacity-75 shrink-0"
+            style={{ backgroundColor: `${brand.palette.ink}15` }}
           >
             SWIPE ➔
           </span>

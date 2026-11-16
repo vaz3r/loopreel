@@ -1,0 +1,85 @@
+{
+  "articleTitle": "The Disney+ Fine Print Trap: How a 2019 Free Trial Created a Corporate Shield Against a 2024 Wrongfu",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "The Disney+ Fine Print Trap: How a 2019 Free Trial Created a Corporate Shield Against a 2024 Wrongful Death Lawsuit—and Exposed the Legal Limits of Clickwrap Arbitration.",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "name": "Capture assent at an ordinary signup",
+      "operation": "Disney said account registration required personal information, a password, and selection of Agree & Continue beside a hyperlink to the Subscriber Agreement.",
+      "valueTransfer": "The customer receives account access; the company obtains a record it can later present as evidence of contractual assent."
+    },
+    {
+      "step": 2,
+      "name": "Link the streaming agreement to broader terms",
+      "operation": "The Subscriber Agreement referred users to Disney’s Terms of Use governing other Disney services. Disney relied on Section 7, titled Binding Arbitration and Class Action Waiver.",
+      "valueTransfer": "The legal argument moves beyond the immediate streaming transaction through incorporated documents and affiliate language."
+    },
+    {
+      "step": 3,
+      "name": "Reinforce the argument through a later transaction",
+      "operation": "Disney cited the September 2023 My Disney Experience acceptance and ticket purchase. Those terms purported to cover the purchaser and people whose benefits the purchaser managed, with a representation of necessary rights and consents.",
+      "valueTransfer": "Disney obtained a second asserted assent event and an argument concerning Tangsuan’s inclusion as a guest. This was an asserted contractual basis, not proof that Piccolo legally bound her estate."
+    },
+    {
+      "step": 4,
+      "name": "Connect an offline injury to online representations",
+      "operation": "Piccolo’s case relied partly on allergy-related representations on Disney’s website. Disney argued that the Terms of Use covered that website and therefore the negligence and agency claims.",
+      "valueTransfer": "The website allegations became Disney’s proposed bridge between digital terms and the restaurant-related claim. The motion was more specific than merely asserting that every Disney+ subscriber must arbitrate every conceivable injury."
+    },
+    {
+      "step": 5,
+      "name": "Delegate the threshold dispute",
+      "operation": "Disney invoked language giving the arbitrator exclusive authority over interpretation, applicability, enforceability, and arbitrability, alongside incorporated JAMS rules.",
+      "valueTransfer": "The company sought to have an arbitrator decide whether the claim belonged in arbitration, rather than having the court decide the entire scope dispute."
+    },
+    {
+      "step": 6,
+      "name": "Seek arbitration and pause the court case",
+      "operation": "Disney requested an order compelling arbitration of the claims against it and staying the action. It also sought a discretionary stay of claims against Great Irish Pubs because the claims shared facts.",
+      "valueTransfer": "The targeted advantage was a different forum and avoidance of parallel litigation, not automatic elimination of damages liability. Disney identified avoiding heavy litigation costs as arbitration’s principal benefit.​"
+    },
+    {
+      "step": 7,
+      "name": "Abandon the strategy after public backlash",
+      "operation": "Disney withdrew the arbitration effort and allowed the matter to proceed in court.",
+      "valueTransfer": "The procedural advantage sought was not realized through this motion. The later voluntary dismissal is a separate event and should not be portrayed as Disney winning its arbitration argument."
+    }
+  ],
+  "comparisons": [
+    {
+      "subject": "Disney versus Coinbase",
+      "disney": "Disney relied on 3 linked contractual documents and 2 alleged assent episodes, then withdrew its arbitration effort.​",
+      "benchmark": "In Coinbase, Inc. v. Suski, decided May 23, 2024, the Supreme Court addressed 2 agreements: an account agreement delegating arbitrability to an arbitrator and sweepstakes rules specifying California courts. A unanimous Court held that a court must decide which agreement governs.",
+      "meaning": "An arbitration delegation clause does not automatically displace judicial examination of conflicting agreements. Coinbase is a genuine legal boundary, but it did not decide Disney’s estate-binding or restaurant-injury questions."
+    },
+    {
+      "subject": "Disney versus regulated mortgage contracts",
+      "disney": "Disney sought enforcement under the Federal Arbitration Act and its consumer agreements.",
+      "benchmark": "The CFPB’s 2015 fact sheet states that the Dodd-Frank Act prohibits arbitration clauses in mortgage contracts.",
+      "meaning": "The relevant contrast is between a sector-specific statutory prohibition and Disney’s reliance on generally enforceable arbitration contracts—not a stored-value, FDIC, or abandoned-property loophole.​"
+    },
+    {
+      "subject": "Disney’s individual wrongful-death claim versus financial-sector enforcement patterns",
+      "disney": "Disney sought arbitration of an individual estate’s wrongful-death claims, not merely the defeat of a class action.",
+      "benchmark": "The CFPB reported arbitration invocation in 65 percent of class actions against credit-card issuers with clauses, compared with less than one percent of 1,200 individual lawsuits examined from 2010 to 2012.",
+      "meaning": "The study makes Disney’s use of the clause in an individual injury case a useful contrast. It does not establish how frequently entertainment companies arbitrate injury claims."
+    }
+  ],
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "finding": "Disney tried to use a November 2019 Disney+ signup, reinforced by a September 2023 park-ticket transaction, to move a wrongful-death claim into arbitration. Its motion sought arbitration and a stay—not a ruling that Disney could never be liable. Disney abandoned that effort in August 2024 following public backlash.​",
+    "essentialCorrection": "The streaming agreement was an attempted procedural shield, not a judicially validated immunity. The withdrawal did not establish that the arbitration argument was enforceable or unenforceable.​",
+    "currentDisposition": "The story now has a later ending: Jeffrey Piccolo voluntarily dismissed the lawsuit with prejudice on February 27, 2026, according to Allergic Living’s reporting on the notice. Florida Politics independently reported the voluntary dismissal on March 4, 2026. Neither report established a financial settlement amount.​",
+    "recommendedAngle": "A consumer’s account-creation history became evidence for a cross-business arbitration argument. Public pressure stopped that attempt in this case; it did not resolve the underlying questions of consent, contractual scope, or authority to bind an estate.​​"
+  }
+}
