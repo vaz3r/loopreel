@@ -1,178 +1,150 @@
 import React from 'react';
-import { Utensils, Scale } from 'lucide-react';
+import { Wine } from 'lucide-react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
 
-export default function Slide02({
-  slide,
-  brand,
-  totalSlides,
-}: SlideComponentProps) {
+export default function Slide02({ slide, brand, totalSlides }: SlideComponentProps) {
   const items = slide.items ?? [];
-  void brand;
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-7 flex items-center justify-between border-b border-[var(--border)] pb-4">
-          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.18em] text-[var(--accent)]">
-            THE HUMAN COST
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-1 py-5 text-[var(--ink)]">
+      <header className="mb-3 shrink-0">
+        <div className="mb-6 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="h-2.5 w-2.5 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.18em]">
+            {slide.kicker ?? 'THE HUMAN COST'}
           </p>
-          <span className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.1em]">
-            The Fine Print
-          </span>
         </div>
 
-        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
-          A Dinner. A Death.
-          <br />
-          A Lawsuit.
+        <h1 className="max-w-[880px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          {slide.headline ?? 'Dinner Ended in a Death'}
         </h1>
 
-        <p className="mt-5 font-[var(--font-body)] text-[28px] leading-snug">
-          She ate at Raglan Road in Disney Springs.
+        <p className="mt-5 max-w-[790px] font-[var(--font-body)] text-[26px] leading-snug line-clamp-2">
+          {slide.subheadline ??
+            'Dr. Kanokporn Tangsuan died on October 5, 2023, after dining.'}
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+      <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 952 420"
-          className="absolute inset-0 h-full w-full"
+          className="h-full max-h-[420px] w-full"
           preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-labelledby="slide02-scene-title slide02-scene-description"
+          aria-label="An empty dinner plate between a fork, knife, and wine glass."
         >
-          <title id="slide02-scene-title">From a dinner to a lawsuit</title>
-          <desc id="slide02-scene-description">
-            An empty dinner plate and utensils lead toward scales of justice.
-            A broken plate rim marks the loss at the center of the story.
-          </desc>
-
-          {/* An actual place setting, not a diagram node. */}
+          {/* Empty place setting: the absence is the focal point. */}
           <ellipse
-            cx="255"
-            cy="205"
-            rx="112"
-            ry="115"
+            cx="476"
+            cy="223"
+            rx="170"
+            ry="162"
             fill="var(--surface)"
           />
-          <path
-            d="M 284 95 A 114 114 0 1 0 352 265"
+          <ellipse
+            cx="476"
+            cy="210"
+            rx="168"
+            ry="160"
             fill="none"
             stroke="var(--ink)"
-            strokeWidth="2"
-            opacity="0.65"
-          />
-          <path
-            d="M 307 103 A 114 114 0 0 1 366 232"
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="3"
+            strokeWidth="1.5"
+            opacity="0.52"
           />
           <ellipse
-            cx="255"
-            cy="205"
-            rx="79"
-            ry="81"
+            cx="476"
+            cy="210"
+            rx="146"
+            ry="139"
             fill="none"
             stroke="var(--border)"
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
-          <path
-            d="M 309 107 L 291 140 L 309 158 L 283 187"
+          <ellipse
+            cx="476"
+            cy="210"
+            rx="114"
+            ry="108"
             fill="none"
-            stroke="var(--accent)"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-
-          <Utensils
-            x={56}
-            y={155}
-            width={86}
-            height={100}
             stroke="var(--ink)"
-            strokeWidth={1.2}
+            strokeWidth="1"
+            opacity="0.22"
           />
 
-          {/* A restrained narrative arrow connects dinner and legal action. */}
-          <path
-            d="M 405 205 C 462 205 490 205 553 205"
+          {/* Bespoke fork silhouette. */}
+          <g
             fill="none"
-            stroke="var(--accent)"
-            strokeWidth="2"
-          />
-          <path
-            d="M 542 197 L 554 205 L 542 213"
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="2"
+            stroke="var(--ink)"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-          />
-
-          <Scale
-            x={628}
-            y={111}
-            width={190}
-            height={190}
-            stroke="var(--ink)"
-            strokeWidth={1}
-          />
-
-          <path
-            d="M 618 320 H 830"
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth="2"
-          />
-
-          <g
-            fill="var(--ink)"
-            className="font-[var(--font-mono)] text-[20px]"
-            letterSpacing="3"
-            textAnchor="middle"
+            opacity="0.72"
           >
-            <text x="255" y="369">
-              DINNER
-            </text>
-            <text x="723" y="369">
-              LAWSUIT
-            </text>
+            <path d="M242 103V160Q242 185 262 193V322Q262 330 268 330Q274 330 274 322V193Q294 185 294 160V103" />
+            <path d="M259 103V158M277 103V158" />
+
+            {/* Dinner knife, with a distinct blade and handle. */}
+            <path d="M696 103Q674 138 674 195Q674 210 691 210V322Q691 330 697 330Q703 330 703 322V103Z" />
+          </g>
+
+          <Wine
+            x={757}
+            y={82}
+            width={76}
+            height={108}
+            stroke="var(--ink)"
+            strokeWidth={0.8}
+            opacity={0.5}
+            aria-hidden="true"
+          />
+
+          {/* A restrained redline on the plate rim. */}
+          <path
+            d="M379 341A168 160 0 0 0 531 361"
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+
+          {/* Print registration marks, not a second frame. */}
+          <g
+            stroke="var(--border)"
+            strokeWidth="1"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M95 210H119M107 198V222" />
+            <path d="M833 299H857M845 287V311" />
           </g>
         </svg>
       </div>
 
-      <div className="shrink-0">
-        <div className="grid grid-cols-2 divide-x divide-[var(--border)] border-y border-[var(--border)] py-7">
-          <article className="pr-9">
-            <h2 className="mb-5 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-              {items[0]?.label ?? 'Her Death'}
+      <div className="shrink-0 border-t border-[var(--border)] pt-4">
+        <div className="grid grid-cols-2 divide-x divide-[var(--border)]">
+          <article className="pr-8">
+            <h2 className="mb-4 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+              {items[0]?.label ?? 'Jeffrey Piccolo'}
             </h2>
             <p className="flow-root font-[var(--font-body)] text-[24px] leading-snug first-letter:float-left first-letter:mr-3 first-letter:font-[var(--font-headline)] first-letter:text-[76px] first-letter:font-bold first-letter:leading-none first-letter:text-[var(--accent)]">
               {items[0]?.body ??
-                'Dr. Kanokporn Tangsuan died on October 5, 2023.'}
+                'Her husband alleged staff promised to exclude her allergens.'}
             </p>
           </article>
 
-          <article className="pl-9">
-            <h2 className="mb-5 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-              {items[0]?.label ?? 'Husband’s Allegations'}
+          <article className="pl-8">
+            <h2 className="mb-4 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+              {items[1]?.label ?? 'Disney Springs'}
             </h2>
             <p className="font-[var(--font-body)] text-[24px] leading-snug">
-              {items[0]?.body ??
-                'Staff repeatedly assured them food would suit her allergies.'}
+              {items[1]?.body ??
+                'Raglan Road was independent; Disney was its landlord.'}
             </p>
           </article>
         </div>
-
-        <footer className="flex items-center justify-between pt-5 font-[var(--font-mono)] text-[20px]">
-          <span>thefineprint.pub</span>
-          <span>
-            <span className="text-[var(--accent)]">02</span>
-            <span className="mx-3 opacity-50">/</span>
-            {String(totalSlides).padStart(2, '0')}
-          </span>
-        </footer>
       </div>
     </section>
   );

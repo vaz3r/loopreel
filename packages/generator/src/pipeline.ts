@@ -660,9 +660,11 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
 
-    // Sanitize broken array access like items?.label or items?.body
-    code = code.replace(/\bitems\?\.label\b/g, 'items[0]?.label');
-    code = code.replace(/\bitems\?\.body\b/g, 'items[0]?.body');
+    // Sanitize broken array access like items?.label or items?.body sequentially (items[0], items[1], ...)
+    let labelIdx = 0;
+    code = code.replace(/\bitems\?\.label\b/g, () => `items[${labelIdx++}]?.label`);
+    let bodyIdx = 0;
+    code = code.replace(/\bitems\?\.body\b/g, () => `items[${bodyIdx++}]?.body`);
 
     // Strip rogue local font overrides (Arial, Courier, etc.) that kill authentic brand typography
     code = code.replace(/'--font-headline':\s*['"][^'"]+['"],?/g, '');

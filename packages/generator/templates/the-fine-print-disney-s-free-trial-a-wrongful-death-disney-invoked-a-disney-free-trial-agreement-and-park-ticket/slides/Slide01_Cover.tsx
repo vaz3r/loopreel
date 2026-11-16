@@ -1,220 +1,241 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
-import { MousePointer2, FileText, Scale, Gavel } from 'lucide-react';
+import { Tv, FileText, Gavel, Landmark } from 'lucide-react';
 
 export default function Slide01({ slide, brand, totalSlides }: SlideComponentProps) {
   const items = slide.items ?? [];
+  const sceneId = React.useId().replace(/:/g, '');
+
   void brand;
+  void totalSlides;
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-6 flex items-center justify-between border-b border-[var(--border)] pb-4">
-          <p className="font-[var(--font-mono)] text-[20px] font-medium tracking-[0.16em] text-[var(--accent)]">
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-1 py-5 text-[var(--ink)]">
+      <header className="mb-3 shrink-0">
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="h-3 w-3 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em]">
             FINE PRINT AUTOPSY
           </p>
-          <span className="font-[var(--font-mono)] text-[20px]">
-            FILE / 01
-          </span>
         </div>
 
-        <h1 className="max-w-[880px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
-          Disney Used Clicks
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          Disney’s Free Trial
           <br />
-          Against a Widower
+          Became a Court Fight
         </h1>
 
-        <p className="mt-5 max-w-[790px] font-[var(--font-body)] text-[26px] leading-snug">
-          How everyday clicks became arguments against courtroom access.
+        <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug line-clamp-2">
+          Disney wanted a private decision-maker, not a courtroom hearing.
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+      <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-6 left-0 w-[40%] border-r border-[var(--border)] pr-8"
+        />
+
         <svg
           viewBox="0 0 952 420"
-          className="h-full max-h-[420px] w-full"
+          preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-labelledby="slide01-visual-title slide01-visual-description"
+          aria-labelledby={`${sceneId}-title ${sceneId}-description`}
+          className="relative h-full max-h-[420px] w-full"
+          fill="none"
         >
-          <title id="slide01-visual-title">
-            Everyday clicks and the argument for arbitration
+          <title id={`${sceneId}-title`}>
+            From streaming terms to a disputed legal forum
           </title>
-          <desc id="slide01-visual-description">
-            An illustrated document highlights arbitration and crosses out court.
-            Marginal annotations contrast courtroom access with an arbitrator.
-            This illustration is not a verbatim contract excerpt.
+          <desc id={`${sceneId}-description`}>
+            A television and account document on the left. A crimson route
+            leads toward a private decision-maker on the right, while a muted
+            branch leads toward a courthouse.
           </desc>
 
+          <defs>
+            <marker
+              id={`${sceneId}-arrow`}
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="8"
+              markerHeight="8"
+              orient="auto"
+            >
+              <path d="M1 1L8 5L1 9" stroke="var(--accent)" strokeWidth="1.5" />
+            </marker>
+          </defs>
+
+          {/* Left dossier: the screen and the terms beneath it. */}
           <path
-            d="M20 49V23H46 M602 23H628V49 M20 367V393H46"
-            fill="none"
+            d="M60 64V46H78 M310 46H328V64 M60 332V350H78"
             stroke="var(--border)"
             strokeWidth="2"
           />
 
-          <foreignObject x="40" y="36" width="578" height="352">
-            <div className="h-full bg-[var(--surface)] px-7 py-6">
-              <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
-                <div className="flex items-center gap-3">
-                  <FileText
-                    className="h-7 w-7 text-[var(--accent)]"
-                    strokeWidth={1.5}
-                  />
-                  <span className="font-[var(--font-mono)] text-[22px]">
-                    [§ CONCEPT]
-                  </span>
-                </div>
-                <MousePointer2
-                  className="h-8 w-8 text-[var(--ink)]"
-                  strokeWidth={1.5}
-                />
-              </div>
-
-              <p className="mt-5 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.08em] text-[var(--accent)]">
-                Disney’s Bid
-              </p>
-
-              <p className="mt-3 font-[var(--font-body)] text-[34px] leading-[1.45]">
-                Move the{' '}
-                <span className="underline decoration-[var(--accent)] decoration-2 underline-offset-[7px]">
-                  death claim
-                </span>
-                <br />
-                from{' '}
-                <span className="line-through decoration-[var(--accent)] decoration-[3px]">
-                  court
-                </span>{' '}
-                to
-                <br />
-                <mark className="bg-[#FEF08A] px-1.5 py-0.5 font-mono font-medium text-[#121212]">
-                  arbitration.
-                </mark>
-              </p>
-
-              <p className="mt-5 font-[var(--font-mono)] text-[20px] leading-snug opacity-70">
-                Illustration · not verbatim contract text
-              </p>
-            </div>
-          </foreignObject>
-
-          <Scale
-            x={696}
-            y={45}
-            width={54}
-            height={54}
+          <Tv
+            x={103}
+            y={54}
+            width={154}
+            height={126}
             stroke="var(--ink)"
-            strokeWidth={1.5}
+            strokeWidth={1.1}
           />
-          <text
-            x="696"
-            y="133"
-            fill="var(--ink)"
-            className="font-[var(--font-mono)] text-[22px]"
-          >
-            COURTROOM
-          </text>
+
           <path
-            d="M688 142L871 120"
+            d="M180 185V211"
+            stroke="var(--ink)"
+            strokeOpacity="0.35"
+            strokeWidth="2"
+            strokeDasharray="3 7"
+          />
+
+          <g transform="rotate(-7 186 276)">
+            <path
+              d="M129 219H217L245 247V330H129Z"
+              fill="var(--surface)"
+              stroke="var(--ink)"
+              strokeOpacity="0.45"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M217 219V247H245"
+              stroke="var(--ink)"
+              strokeOpacity="0.45"
+              strokeWidth="1.5"
+            />
+            <FileText
+              x={144}
+              y={237}
+              width={42}
+              height={42}
+              stroke="var(--ink)"
+              strokeWidth={1.2}
+            />
+            <path
+              d="M148 292H224 M148 307H203"
+              stroke="var(--ink)"
+              strokeOpacity="0.35"
+              strokeWidth="2"
+            />
+            <path
+              d="M145 296L226 293"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </g>
+
+          <text
+            x="180"
+            y="386"
+            textAnchor="middle"
+            fill="var(--ink)"
+            className="font-[var(--font-mono)] text-[20px] tracking-[0.16em]"
+          >
+            TERMS
+          </text>
+
+          {/* Right dossier: a redirection, not an adjudicated outcome. */}
+          <path
+            d="M264 282C358 282 421 278 466 226S571 112 680 112"
+            stroke="var(--accent)"
+            strokeOpacity="0.08"
+            strokeWidth="18"
+            strokeLinecap="round"
+          />
+          <path
+            d="M264 282C358 282 421 278 466 226S571 112 680 112"
             stroke="var(--accent)"
             strokeWidth="3"
             strokeLinecap="round"
+            markerEnd={`url(#${sceneId}-arrow)`}
           />
 
           <path
-            d="M586 300C644 300 632 225 692 225H725"
-            fill="none"
-            stroke="var(--accent)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+            d="M464 230C519 288 579 314 681 314"
+            stroke="var(--ink)"
+            strokeOpacity="0.22"
+            strokeWidth="2"
+            strokeDasharray="6 9"
           />
+
           <path
-            d="M715 217L727 225L715 233"
-            fill="none"
+            d="M699 67A78 78 0 0 1 834 121"
             stroke="var(--accent)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
           />
 
           <Gavel
-            x={748}
-            y={196}
-            width={62}
-            height={62}
+            x={714}
+            y={66}
+            width={100}
+            height={100}
             stroke="var(--accent)"
-            strokeWidth={1.5}
+            strokeWidth={1.3}
+          />
+          <path
+            d="M717 175H815"
+            stroke="var(--accent)"
+            strokeWidth="2"
           />
           <text
-            x="696"
-            y="299"
+            x="765"
+            y="208"
+            textAnchor="middle"
             fill="var(--accent)"
-            className="font-[var(--font-mono)] text-[22px]"
+            className="font-[var(--font-mono)] text-[22px] tracking-[0.12em]"
           >
-            ARBITRATOR
+            PRIVATE
           </text>
+
+          <Landmark
+            x={724}
+            y={268}
+            width={82}
+            height={82}
+            stroke="var(--ink)"
+            strokeOpacity="0.4"
+            strokeWidth={1.2}
+          />
           <text
-            x="696"
-            y="334"
+            x="765"
+            y="386"
+            textAnchor="middle"
             fill="var(--ink)"
-            className="font-[var(--font-body)] text-[24px]"
+            fillOpacity="0.65"
+            className="font-[var(--font-mono)] text-[20px] tracking-[0.16em]"
           >
-            Different
-          </text>
-          <text
-            x="696"
-            y="365"
-            fill="var(--ink)"
-            className="font-[var(--font-body)] text-[24px]"
-          >
-            decision-maker.
+            COURT
           </text>
         </svg>
       </div>
 
-      <div className="shrink-0">
-        <div className="border-t border-[var(--border)]">
-          {[
-            {
-              label: items[0]?.label ?? 'Disney’s Bid',
-              body:
-                items[0]?.body ??
-                'Move the death claim from court to arbitration.',
-            },
-            {
-              label: items[0]?.label ?? 'Different Decision-Maker',
-              body:
-                items[0]?.body ??
-                'An arbitrator instead of a judge or jury.',
-            },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-[44px_310px_1fr] items-start gap-x-5 border-b border-[var(--border)] py-5"
-            >
-              <span className="pt-1 font-[var(--font-mono)] text-[20px] text-[var(--accent)]">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <h2 className="font-[var(--font-headline)] text-[26px] font-semibold leading-tight">
-                {item.label}
-              </h2>
-              <p className="font-[var(--font-body)] text-[24px] leading-snug">
-                {item.body}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className="shrink-0 border-t border-[var(--border)] pt-4">
+        <article className="grid grid-cols-[2fr_3fr] items-start pb-5">
+          <h2 className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+            {items[0]?.label ?? 'Streaming signup'}
+          </h2>
+          <p className="pl-8 font-[var(--font-body)] text-[24px] leading-snug line-clamp-3">
+            {items[0]?.body ??
+              'Disney said account terms reached beyond watching TV.'}
+          </p>
+        </article>
 
-        <footer className="flex items-center justify-between pt-5">
-          <p className="font-[var(--font-headline)] text-[22px] font-semibold">
-            The Fine Print
+        <article className="grid grid-cols-[2fr_3fr] items-start border-t border-[var(--border)] pt-5">
+          <h2 className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+            {items[1]?.label ?? 'Wrongful-death claim'}
+          </h2>
+          <p className="pl-8 font-[var(--font-body)] text-[24px] leading-snug line-clamp-3">
+            {items[1]?.body ??
+              'Her husband sued; Disney sought a different decision-maker.'}
           </p>
-          <p className="font-[var(--font-mono)] text-[20px] opacity-70">
-            thefineprint.pub
-          </p>
-          <p className="font-[var(--font-mono)] text-[20px]">
-            01 / {String(totalSlides).padStart(2, '0')}
-          </p>
-        </footer>
+        </article>
       </div>
     </section>
   );

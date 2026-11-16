@@ -594,22 +594,36 @@ CRITICAL MAGAZINE EDITORIAL & CODING PRINCIPLES:
 
    STRICTLY FORBIDDEN: Declaring local custom props types like \`type Slide04Props\` or \`interface Slide07Props\`. Always use SlideComponentProps!
 
-2. CREATIVE BESPOKE SCENES WITH LUCIDE ICONS (NO MEANINGLESS NOODLES):
+2. ZERO DUPLICATE CHROME & NO REDUNDANT TOP/BOTTOM BARS:
+   - The outer <SlideFrame> wrapper ALREADY renders:
+     * TOP BAR: Publication wordmark (e.g. "THE FINE PRINT"), domain ("thefineprint.pub"), motif, and volume tag ("VOL. 01") with a bottom border rule.
+     * BOTTOM BAR: Slide counter ("01 / 07"), progress dots, Instagram handle, and "SWIPE ➔" with a top border rule.
+   - THEREFORE, YOUR SLIDE COMPONENT MUST NEVER RENDER:
+     * Any top bar with the publication name, domain, file tag, or volume.
+     * Any bottom footer bar with pagination, domain name, Instagram handle, or swipe CTA.
+     * Any inner duplicate borders at the very top or bottom of the component.
+   - Your component is STRICTLY the editorial body content inside the frame:
+     1. Slide Header: Kicker (uppercase mono with accent square pip) + Headline (bold) + Subheadline (snug).
+     2. Middle: Visual scene canvas (viewBox="0 0 952 420", flex-1 min-h-0).
+     3. Bottom: Content takeaway cards or ledger (hairline dividers).
+
+3. CREATIVE BESPOKE SCENES WITH LUCIDE ICONS (NO DUPLICATE TEXT IN SVG):
    - You have TOTAL FREEDOM to architect creative visual scenes, diagrams, and metaphors!
    - Use Lucide icons as semantic real-world anchors (<Tv className="w-12 h-12 text-[var(--accent)]" />, <Scale />, <Lock />, <Gavel />, <Building2 />, <ShieldAlert />).
    - Combine them with bespoke SVG curved paths, glowing pulse rings, directional arrows, registration ticks, stamped seals, and annotated callouts.
-   - STRICTLY FORBIDDEN: Drawing random abstract geometric circles connected by lines that look like circuit boards or subway maps without any real-world meaning! The visual MUST tell the story of the slide.
+   - STRICTLY FORBIDDEN: Drawing random abstract geometric circles connected by lines that look like circuit boards without any real-world meaning!
    - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards or flowchart containers.
+   - STRICTLY FORBIDDEN: Repeating paragraph text or takeaway card titles inside SVG <text> elements! The SVG is for visual diagrams; the HTML below is for reading copy. Short anchor labels ("COURT", "ARBITRATION", "2019", "2023") are allowed only to anchor diagrams.
 
-3. DYNAMIC HEIGHT BUDGETING & ZERO AUTOFIT OVERFLOW:
+4. DYNAMIC HEIGHT BUDGETING & ZERO AUTOFIT OVERFLOW:
    - Safe vertical area is 1028px.
-   - Outer section: className="flex h-full min-h-0 w-full flex-col justify-between py-8 px-2 text-[var(--ink)]"
-   - Header Zone: 'shrink-0'
-   - Visual Drawing Canvas: 'flex-1 min-h-0 relative flex items-center justify-center overflow-hidden'
-   - Bottom Takeaway/Ledger: 'shrink-0'
+   - Outer section: className="flex h-full min-h-0 w-full flex-col justify-between py-5 px-1 text-[var(--ink)]"
+   - Header Zone: 'shrink-0 mb-3'
+   - Visual Drawing Canvas: 'flex-1 min-h-0 relative flex items-center justify-center my-3 overflow-hidden'
+   - Bottom Takeaway/Ledger: 'shrink-0 border-t border-[var(--border)] pt-4'
    - This flexbox structure guarantees the slide never overflows and always renders at scale = 1.000 without scaling warnings!
 
-4. MAGAZINE EDITORIAL ARCHETYPES:
+5. MAGAZINE EDITORIAL ARCHETYPES:
    - For 'contract-redline-autopsy':
      * Simulate an authentic legal document/contract clause on dark luxury paper.
      * Render the legal clause excerpt in an authentic document inset with yellow highlighter markup (<mark className="bg-[#FEF08A] text-[#121212] px-1.5 py-0.5 font-mono font-medium">), red pen underlines (<span className="underline decoration-[var(--accent)] decoration-2">), section tags [§ 7(b)], and red strike-throughs.
@@ -631,20 +645,20 @@ CRITICAL MAGAZINE EDITORIAL & CODING PRINCIPLES:
      * Concluding verdict slide with an authentic stamped official badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border (border-2 border-[var(--accent)] rotate-[-2deg] px-3 py-1 font-mono uppercase text-[var(--accent)]).
      * Prominent consumer guardrail checklist and bookmark CTA.
 
-5. STRICT THEME & TYPOGRAPHY INHERITANCE:
+6. STRICT THEME & TYPOGRAPHY INHERITANCE (PURE PITCH BLACK):
    - DO NOT declare a local 'const tokens = { ... }' or 'const theme = { ... }' object!
    - The outer <SlideFrame> ALREADY injects the authentic brand typography and colors into CSS variables.
-   - bg-[var(--surface)] is an elevated midnight slate (#141923), NEVER stark white!
+   - bg-[var(--surface)] is deep pitch charcoal (#141418), NEVER stark white or slate navy!
    - Inherited Tailwind classes:
      * font-[var(--font-headline)] for titles, kickers, and headlines (e.g. Playfair Display)
      * font-[var(--font-body)] for body copy and descriptions (e.g. Source Serif 4)
      * font-[var(--font-mono)] for metrics, tags, and numbers (e.g. JetBrains Mono)
-     * text-[var(--ink)] for primary text (#F8FAFC)
-     * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights (#F43F5E)
-     * bg-[var(--surface)] for document insets (#141923)
-     * border-[var(--border)] for hairlines and borders (#222B3D)
+     * text-[var(--ink)] for primary text (#F5F5F7)
+     * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights (#FF2A2A)
+     * bg-[var(--surface)] for document insets (#141418)
+     * border-[var(--border)] for hairlines and borders (#26262E)
 
-6. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
+7. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
    - Headline: text-[52px] to text-[66px] (font-bold leading-[1.04] tracking-tight).
    - Subheadline: text-[24px] to text-[28px] (leading-snug line-clamp-2).
    - Section / Item Titles: text-[26px] to text-[30px] (font-semibold leading-tight).
@@ -652,11 +666,15 @@ CRITICAL MAGAZINE EDITORIAL & CODING PRINCIPLES:
    - Hero Numbers / Telemetry: text-[80px] to text-[120px] (font-mono font-bold).
    - TEXT UNDER 20px IS STRICTLY BANNED for readable content.
 
-7. ARRAY INDEXING TYPE-SAFETY:
-   - Always access items via items[0]?.label and items[1]?.label or map.
+8. STRICT MULTI-ITEM ARRAY INDEXING (NO COPY-PASTE BUG):
+   - When rendering 2 takeaway cards:
+     * Card 1 MUST use items[0]?.label and items[0]?.body (fallback to distinct title 1).
+     * Card 2 MUST use items[1]?.label and items[1]?.body (fallback to distinct title 2).
+     * NEVER evaluate items[0] for both cards!
+     * Or map over the array: {items.map((item, idx) => ( ... ))}
    - STRICTLY BANNED: Writing 'items?.label' or 'items?.body'.
 
-8. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind, Lucide icons, and inline SVG only.`;
+9. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind, Lucide icons, and inline SVG only.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -688,20 +706,19 @@ SPATIAL BLUEPRINT & ART DIRECTION:
 - Visual Scene Concept: "${artConcept}"
 - Cards/Ledger Styling: "${cardStyle}" (hairline dividers, generous spacing, zero boxy card grids)
 
-Brand Identity (Obsidian Dark Luxury):
+Brand Identity (Pitch Black Void Luxury):
 - Name: "${brand.name}"
 - Domain: "${brand.domain}"
-- Palette: Ink ${brand.palette.ink}, Paper ${brand.palette.paper}, Accent ${brand.palette.accent}, Surface ${brand.palette.surface}, Border ${brand.palette.border}
+- Palette: Paper ${brand.palette.paper} (deep void black), Surface ${brand.palette.surface} (pitch charcoal), Accent ${brand.palette.accent} (crimson redline), Ink ${brand.palette.ink} (crisp ivory), Border ${brand.palette.border} (charcoal hairline)
 
-Remember:
-1. Import Lucide icons to represent real-world concepts (Tv, Scale, Lock, Gavel, Building2, ShieldAlert, FileText, etc.).
-2. Compose a meaningful visual scene that tells the story—never abstract disconnected circles and lines.
-3. Access items via items[0]?.label and items[1]?.label or map.
+CRITICAL EXECUTION RULES:
+1. STRICT CHROME SEPARATION: Outer <SlideFrame> ALREADY renders the top bar (publication name, domain, volume) and bottom bar (01/07, dots, handle, swipe). DO NOT render your own top publication bar or bottom pagination/swipe bar! Your slide has ONLY: Header (kicker+headline+subheadline), Middle (visual scene), and Bottom (takeaway cards).
+2. NO DUPLICATE TEXT IN SVG: Use Lucide icons and vector paths for visual scenes. NEVER place paragraph copy or duplicate card titles inside SVG <text> elements!
+3. STRICT ARRAY INDEXING: First card MUST use items[0]?.label and items[0]?.body. Second card MUST use items[1]?.label and items[1]?.body. NEVER use items[0] for both cards! Or use {items.map((item, idx) => ...)}.
 4. BANNED: Drawing SVG <rect> elements that look like UI cards or flowcharts.
-5. BANNED: Ending every slide with an identical 2-card bottom grid.
-6. If layoutModel is 'contract-redline-autopsy', render a highlighted contract excerpt (<mark className="bg-[#FEF08A] text-[#121212] px-1.5 py-0.5 font-mono font-medium">) with section tags.
-7. If layoutModel is 'typographic-broadsheet', render a 2-column broadsheet with drop cap and hairline dividers.
-8. If layoutModel is 'investigative-timeline', render a continuous timeline rail with milestone nodes.
+5. If layoutModel is 'contract-redline-autopsy', render a highlighted contract excerpt (<mark className="bg-[#FEF08A] text-[#121212] px-1.5 py-0.5 font-mono font-medium">) with section tags.
+6. If layoutModel is 'typographic-broadsheet', render a 2-column broadsheet with drop cap and hairline dividers.
+7. If layoutModel is 'investigative-timeline', render a continuous timeline rail with milestone nodes.
 
 Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
 }

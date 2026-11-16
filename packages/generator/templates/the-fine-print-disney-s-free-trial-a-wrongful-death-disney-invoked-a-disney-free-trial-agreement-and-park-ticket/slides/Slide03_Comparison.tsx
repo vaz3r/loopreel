@@ -1,150 +1,172 @@
 import React from 'react';
+import { Building2, FileText, MousePointer2, Tv } from 'lucide-react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
-import { FileText, Link2, MousePointer2, Scale, ArrowDownRight } from 'lucide-react';
 
 export default function Slide03({ slide, brand, totalSlides }: SlideComponentProps) {
   const items = slide.items ?? [];
   void brand;
+  void totalSlides;
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-5 flex items-center gap-3 text-[20px] uppercase tracking-[0.16em] text-[var(--accent)] font-[var(--font-mono)]">
-          <Link2 className="h-6 w-6" strokeWidth={1.6} aria-hidden="true" />
-          <span>{slide.kicker ?? 'THE LINKED TERMS'}</span>
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-1 py-5 text-[var(--ink)]">
+      <header className="mb-3 shrink-0">
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="h-3 w-3 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em]">
+            {slide.kicker ?? 'THE HIDDEN REACH'}
+          </p>
         </div>
 
-        <h1 className="max-w-[880px] text-[58px] font-bold leading-[1.04] tracking-tight font-[var(--font-headline)]">
-          {slide.headline ?? 'One Click, More Than Streaming'}
+        <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
+          {slide.headline ?? 'One Click. More Than Streaming.'}
         </h1>
 
-        <p className="mt-5 max-w-[850px] text-[26px] leading-snug font-[var(--font-body)]">
+        <p className="mt-5 max-w-[860px] font-[var(--font-body)] text-[26px] leading-snug line-clamp-2">
           {slide.subheadline ??
-            'Disney said linked terms required arbitration and barred group claims.'}
+            'Disney said “Agree & Continue” accepted linked, broader terms.'}
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
-        <div className="relative isolate w-full">
+      <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+        <div className="relative h-[420px] max-h-full w-full">
           <svg
-            viewBox="0 0 952 420"
-            preserveAspectRatio="none"
-            className="pointer-events-none absolute inset-0 -z-10 h-full w-full text-[var(--accent)]"
-            fill="none"
             aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            viewBox="0 0 952 420"
+            fill="none"
+            preserveAspectRatio="xMidYMid meet"
           >
+            {/* A red editorial leader follows the linked terms outward. */}
             <path
-              d="M24 20H64M24 20V48M928 372V400H888"
-              stroke="var(--border)"
+              d="M 483 248 C 610 248 620 300 716 300"
+              stroke="var(--accent)"
               strokeWidth="2"
+              strokeLinecap="round"
             />
             <path
-              d="M590 240C640 240 635 155 687 155"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeDasharray="5 6"
-            />
-            <path
-              d="M677 147L688 155L677 163"
-              stroke="currentColor"
+              d="m 704 292 12 8-12 8"
+              stroke="var(--accent)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
+
+            {/* Proofreader’s bracket, not a flowchart container. */}
+            <path
+              d="M 586 92 h 13 v 227 h -13"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M 10 35 h 16 M 18 27 v 16 M 620 373 h 16 M 628 365 v 16"
+              stroke="var(--border)"
+              strokeWidth="1.5"
+            />
           </svg>
 
-          <div className="grid grid-cols-[minmax(0,1fr)_250px] items-center gap-12 px-6 py-5">
-            <article
-              aria-label="Illustrative agreement excerpt; paraphrase, not original contract wording"
-              className="relative bg-[var(--surface)] px-8 py-7"
-            >
-              <div className="mb-6 flex items-center justify-between gap-3 border-b border-[var(--border)] pb-4 text-[20px] font-[var(--font-mono)]">
-                <FileText
-                  className="h-7 w-7 shrink-0 text-[var(--accent)]"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-                <span className="uppercase tracking-[0.08em]">Linked agreement</span>
-                <span className="text-[var(--accent)]"></span>
-              </div>
-
-              <p className="mb-5 text-[20px] leading-snug text-[var(--accent)] font-[var(--font-mono)]">
-                Disney’s position · paraphrase
-              </p>
-
-              <p className="text-[28px] leading-[1.65] font-[var(--font-body)]">
-                Linked terms{' '}
-                <mark className="bg-[#FEF08A] px-1.5 py-0.5 font-mono font-medium text-[#121212]">
-                  required arbitration
-                </mark>{' '}
-                and{' '}
-                <span className="underline decoration-[var(--accent)] decoration-2 underline-offset-[7px]">
-                  barred group claims.
+          <div className="relative grid h-full grid-cols-[64%_36%] items-center">
+            <article className="relative ml-8 mr-7 -rotate-[1deg] border-l-2 border-[var(--border)] bg-[var(--surface)] px-8 py-7">
+              <div className="mb-7 flex items-center justify-between gap-4 text-[var(--ink)]/65">
+                <span className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.08em]">
+                  [§] Consent
                 </span>
+                <FileText
+                  aria-hidden="true"
+                  className="h-7 w-7"
+                  strokeWidth={1.5}
+                />
+              </div>
+
+              <p className="font-[var(--font-body)] text-[30px] leading-[1.6]">
+                <mark className="bg-[#FEF08A] px-1.5 py-0.5 font-mono font-medium text-[#121212]">
+                  Agree &amp; Continue
+                </mark>
               </p>
 
-              <div className="mt-6 flex items-center gap-3 border-t border-[var(--border)] pt-4 text-[20px] font-[var(--font-mono)]">
+              <div className="mt-6 flex items-start gap-4">
                 <MousePointer2
-                  className="h-6 w-6 shrink-0 text-[var(--accent)]"
-                  strokeWidth={1.6}
                   aria-hidden="true"
+                  className="mt-1 h-8 w-8 shrink-0 text-[var(--accent)]"
+                  strokeWidth={1.5}
                 />
-                <span>“Agree &amp; Continue”</span>
+                <p className="max-w-[340px] font-[var(--font-body)] text-[28px] leading-snug">
+                  Linked,{' '}
+                  <span className="underline decoration-[var(--accent)] decoration-2 underline-offset-[7px]">
+                    broader terms
+                  </span>
+                </p>
               </div>
+
+              <p className="mt-8 font-[var(--font-mono)] text-[20px] leading-snug text-[var(--ink)]/60">
+                Argument schematic
+                <br />
+                Not a contract reproduction
+              </p>
             </article>
 
-            <aside className="border-l border-[var(--border)] pl-6">
-              <Scale
-                className="mb-5 h-12 w-12 text-[var(--accent)]"
-                strokeWidth={1.3}
-                aria-hidden="true"
-              />
-              <p className="mb-4 text-[20px] uppercase tracking-[0.08em] text-[var(--accent)] font-[var(--font-mono)]">
-                 Disputed
-              </p>
-              <h2 className="text-[29px] font-semibold leading-tight font-[var(--font-headline)]">
-                Behind another link.
-              </h2>
-              <p className="mt-4 text-[22px] leading-snug font-[var(--font-body)]">
-                Piccolo’s lawyers disputed the visibility of broader terms.
-              </p>
-              <ArrowDownRight
-                className="mt-5 h-8 w-8 text-[var(--accent)]"
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
+            <aside
+              aria-label="The asserted reach beyond streaming"
+              className="flex h-full flex-col justify-center gap-12 pl-12 pr-3"
+            >
+              <div className="flex items-center gap-4">
+                <Tv
+                  aria-hidden="true"
+                  className="h-12 w-12 shrink-0 text-[var(--ink)]/70"
+                  strokeWidth={1.4}
+                />
+                <span className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.06em] text-[var(--ink)]/70">
+                  Streaming
+                </span>
+              </div>
+
+              <div className="relative pl-3">
+                <span
+                  aria-hidden="true"
+                  className="absolute -left-4 top-1 h-full w-px bg-[var(--accent)]"
+                />
+                <Building2
+                  aria-hidden="true"
+                  className="mb-4 h-16 w-16 text-[var(--accent)]"
+                  strokeWidth={1.3}
+                />
+                <p className="font-[var(--font-mono)] text-[20px] uppercase leading-snug tracking-[0.06em]">
+                  Disney
+                  <br />
+                  affiliates
+                </p>
+                <p className="mt-3 font-[var(--font-body)] text-[22px] italic leading-snug text-[var(--ink)]/65">
+                  The asserted reach
+                </p>
+              </div>
             </aside>
           </div>
         </div>
       </div>
 
-      <footer className="shrink-0">
-        <div className="border-t border-[var(--border)]">
-          {items.map((item, index) => (
-            <div
-              key={`${index}-${item.label}`}
-              className="grid grid-cols-[48px_245px_minmax(0,1fr)] items-start gap-4 border-b border-[var(--border)] py-5"
-            >
-              <span className="pt-1 text-[20px] text-[var(--accent)] font-[var(--font-mono)]">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <h3 className="text-[26px] font-semibold leading-tight font-[var(--font-headline)]">
-                {item.label}
-              </h3>
-              <p className="text-[23px] leading-snug font-[var(--font-body)]">
-                {item.body}
-              </p>
-            </div>
-          ))}
+      <div className="shrink-0 border-t border-[var(--border)] pt-4">
+        <div className="grid grid-cols-[300px_minmax(0,1fr)] items-baseline gap-8 pb-5">
+          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+            {items[0]?.label ?? 'Expected scope'}
+          </h2>
+          <p className="font-[var(--font-body)] text-[24px] leading-snug line-clamp-2">
+            {items[0]?.body ?? 'A streaming account.'}
+          </p>
         </div>
 
-        <div className="mt-5 flex items-center justify-between text-[20px] font-[var(--font-mono)]">
-          <span>thefineprint.pub</span>
-          <span className="text-[var(--accent)]">
-            03 / {String(totalSlides).padStart(2, '0')}
-          </span>
+        <div className="grid grid-cols-[300px_minmax(0,1fr)] items-baseline gap-8 border-t border-[var(--border)] pt-5">
+          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight text-[var(--accent)]">
+            {items[1]?.label ?? 'Disney’s argument'}
+          </h2>
+          <p className="font-[var(--font-body)] text-[24px] leading-snug line-clamp-3">
+            {items[1]?.body ??
+              'Terms reaching related disputes involving Disney affiliates.'}
+          </p>
         </div>
-      </footer>
+      </div>
     </section>
   );
 }

@@ -9,25 +9,30 @@
       "index": 0,
       "type": "cover",
       "publication": "The Fine Print",
+      "domain": "thefineprint.pub",
       "kicker": "FINE PRINT AUTOPSY",
-      "headline": "Disney Used Clicks Against a Widower",
-      "subheadline": "How everyday clicks became arguments against courtroom access.",
+      "headline": "Disney’s Free Trial Became a Court Fight",
+      "subheadline": "Disney wanted a private decision-maker, not a courtroom hearing.",
       "items": [
         {
-          "label": "Disney’s Bid",
-          "body": "Move the death claim from court to arbitration."
+          "label": "Streaming signup",
+          "body": "Disney said account terms reached beyond watching TV."
         },
         {
-          "label": "Different Decision-Maker",
-          "body": "An arbitrator instead of a judge or jury."
+          "label": "Wrongful-death claim",
+          "body": "Her husband sued; Disney sought a different decision-maker."
         }
       ],
-      "visual_style": "Monumental editorial typography with a stark consent-to-court diagram.",
-      "layout_topology": "Oversized headline above a central hero; two compact captions below.",
-      "svg_blueprint": {
-        "concept": "A streaming window connects toward a courthouse through a broken accent path, signaling an attempted move rather than an achieved outcome.",
-        "placement": "Central hero occupying half the slide.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><rect x='18' y='65' width='124' height='100' rx='10' fill='#141923' stroke='#F8FAFC' stroke-width='2'/><path d='M70 89L101 108L70 127Z' fill='#F8FAFC'/><rect x='43' y='143' width='74' height='8' rx='4' fill='#F43F5E'/><path d='M153 115H202' stroke='#F43F5E' stroke-width='3' stroke-dasharray='6 7'/><path d='M192 105L202 115L192 125' stroke='#F43F5E' stroke-width='3'/><path d='M223 91L281 57L339 91Z' fill='#141923' stroke='#F8FAFC' stroke-width='2'/><path d='M237 103V161M266 103V161M295 103V161M324 103V161M223 173H339M216 184H346' stroke='#F8FAFC' stroke-width='5'/></svg>"
+      "visual": {
+        "style": "Monumental editorial typography with a stark contract-cutaway illustration.",
+        "layoutTopology": "Oversized headline across the top; diagonal hero dominates the center; two compact captions anchor opposite bottom corners.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='A streaming screen connected to a legal document by a red thread'><rect width='600' height='600' fill='#0A0A0C'/><rect x='40' y='80' width='320' height='210' rx='16' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M170 135L170 235L250 185Z' fill='#F5F5F7'/><path d='M330 260H490L550 320V540H330Z' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M490 260V320H550M365 365H510M365 395H510M365 425H465' fill='none' stroke='#F5F5F7' stroke-width='4'/><path d='M200 290V470H330' fill='none' stroke='#FF2A2A' stroke-width='12'/><circle cx='200' cy='290' r='10' fill='#FF2A2A'/><path d='M305 450L330 470L305 490' fill='none' stroke='#FF2A2A' stroke-width='8'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -36,24 +41,28 @@
       "index": 1,
       "type": "context",
       "kicker": "THE HUMAN COST",
-      "headline": "A Dinner. A Death. A Lawsuit.",
-      "subheadline": "She ate at Raglan Road in Disney Springs.",
+      "headline": "Dinner Ended in a Death",
+      "subheadline": "Dr. Kanokporn Tangsuan died on October 5, 2023, after dining.",
       "items": [
         {
-          "label": "Her Death",
-          "body": "Dr. Kanokporn Tangsuan died on October 5, 2023."
+          "label": "Jeffrey Piccolo",
+          "body": "Her husband alleged staff promised to exclude her allergens."
         },
         {
-          "label": "Husband’s Allegations",
-          "body": "Staff repeatedly assured them food would suit her allergies."
+          "label": "Disney Springs",
+          "body": "Raglan Road was independent; Disney was its landlord."
         }
       ],
-      "visual_style": "Restrained memorial still life; no reconstructed portrait or scene.",
-      "layout_topology": "Asymmetric split: empty place setting left, human-story copy right.",
-      "svg_blueprint": {
-        "concept": "An empty plate and an interrupted place-setting line establish loss without depicting the death.",
-        "placement": "Tall left-side visual with generous negative space.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><circle cx='171' cy='117' r='82' fill='#141923'/><circle cx='171' cy='117' r='66' stroke='#F8FAFC' stroke-width='2'/><circle cx='171' cy='117' r='49' stroke='#F8FAFC' stroke-opacity='.25'/><path d='M56 48V100Q56 116 69 116Q82 116 82 100V48M69 48V192M56 78H82' stroke='#F8FAFC' stroke-width='3'/><path d='M285 49V192M285 49Q309 77 285 112' stroke='#F8FAFC' stroke-width='3'/><path d='M105 218H160M181 218H237' stroke='#F43F5E' stroke-width='2'/></svg>"
+      "visual": {
+        "style": "Quiet memorial still life; restrained linework, generous negative space, no reconstructed scene.",
+        "layoutTopology": "Asymmetric diptych: copy in a narrow left column; an oversized empty place setting fills the right.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='An empty place setting, a symbolic memorial rather than a reconstruction'><rect width='600' height='600' fill='#0A0A0C'/><ellipse cx='310' cy='330' rx='220' ry='230' fill='#141418'/><circle cx='310' cy='310' r='155' fill='#0A0A0C' stroke='#F5F5F7' stroke-width='3'/><circle cx='310' cy='310' r='120' fill='none' stroke='#F5F5F7' stroke-width='2'/><path d='M95 190V285Q95 310 115 310Q135 310 135 285V190M115 190V470M505 190V340H485V470' fill='none' stroke='#F5F5F7' stroke-width='5'/><path d='M265 510H355' stroke='#FF2A2A' stroke-width='5'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -61,25 +70,29 @@
       "id": "slide-3",
       "index": 2,
       "type": "comparison",
-      "kicker": "THE LINKED TERMS",
-      "headline": "One Click, More Than Streaming",
-      "subheadline": "Disney said linked terms required arbitration and barred group claims.",
+      "kicker": "THE HIDDEN REACH",
+      "headline": "One Click. More Than Streaming.",
+      "subheadline": "Disney said “Agree & Continue” accepted linked, broader terms.",
       "items": [
         {
-          "label": "Signup Screen",
-          "body": "“Agree & Continue” linked to the Subscriber Agreement."
+          "label": "Expected scope",
+          "body": "A streaming account."
         },
         {
-          "label": "Disputed Visibility",
-          "body": "Piccolo’s lawyers said broader terms sat behind another link."
+          "label": "Disney’s argument",
+          "body": "Terms reaching related disputes involving Disney affiliates."
         }
       ],
-      "visual_style": "Interface archaeology: clean signup card contrasted with nested documents.",
-      "layout_topology": "Side-by-side comparison panels with matched caption positions.",
-      "svg_blueprint": {
-        "concept": "A simple signup surface faces a stack of linked documents. The interface is schematic, not a screenshot.",
-        "placement": "Wide comparison band between headline and captions.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><rect x='18' y='35' width='136' height='170' rx='8' fill='#141923'/><path d='M42 64H111M42 82H130' stroke='#F8FAFC' stroke-width='3'/><rect x='40' y='118' width='92' height='34' rx='4' fill='#F43F5E'/><path d='M52 176H120' stroke='#F8FAFC' stroke-width='2'/><path d='M180 25V215' stroke='#F8FAFC' stroke-opacity='.2'/><rect x='207' y='35' width='104' height='141' rx='3' stroke='#F8FAFC' stroke-opacity='.3'/><rect x='220' y='49' width='104' height='141' rx='3' fill='#141923' stroke='#F8FAFC' stroke-opacity='.6'/><rect x='233' y='63' width='104' height='141' rx='3' fill='#141923' stroke='#F8FAFC'/><path d='M249 89H320M249 107H312M249 125H320M249 161H314' stroke='#F8FAFC' stroke-width='2'/><path d='M249 139H320' stroke='#F43F5E' stroke-width='5'/></svg>"
+      "visual": {
+        "style": "Expectation-versus-argument cutaway, using an unfolding contract as the central metaphor.",
+        "layoutTopology": "Vertical split: a small streaming card on the left; expanding contract sheets on the right; one caption beneath each.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='A compact streaming signup contrasted with expanding linked agreements'><rect width='600' height='600' fill='#0A0A0C'/><path d='M290 65V535' stroke='#F5F5F7' stroke-opacity='.25' stroke-width='2'/><rect x='45' y='205' width='200' height='175' rx='12' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M120 240V300L170 270Z' fill='#F5F5F7'/><rect x='80' y='330' width='130' height='20' rx='10' fill='#FF2A2A'/><path d='M330 160L400 120L470 160L550 120V445L470 485L400 445L330 485Z' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M400 120V445M470 160V485' stroke='#F5F5F7' stroke-opacity='.4' stroke-width='2'/><path d='M345 225L385 205M415 205L455 225M485 225L535 200M345 270L385 250M415 250L455 270M485 270L535 245' stroke='#F5F5F7' stroke-width='4'/><path d='M245 340H330' stroke='#FF2A2A' stroke-width='6' stroke-dasharray='9 9'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -87,25 +100,29 @@
       "id": "slide-4",
       "index": 3,
       "type": "mechanics",
-      "kicker": "THE CONTRACTUAL LEAP",
-      "headline": "His Clicks. Her Estate’s Rights.",
-      "subheadline": "Disney wanted an arbitrator to decide whether arbitration applied.",
+      "kicker": "THE CONTRACTUAL CHAIN",
+      "headline": "How Disney Connected the Dots",
+      "subheadline": "Disney cited website reliance, then a later park-ticket purchase.",
       "items": [
         {
-          "label": "Vacation Links",
-          "body": "Disney also cited tickets, account terms and guest registration."
+          "label": "Website bridge",
+          "body": "Disney linked the claim to alleged reliance on its website."
         },
         {
-          "label": "Contested Reach",
-          "body": "Piccolo disputed that his clicks could bind his wife’s estate."
+          "label": "Ticket terms",
+          "body": "Disney said later ticket terms reinforced agreement to arbitrate."
         }
       ],
-      "visual_style": "Technical argument map with a visibly disputed connection.",
-      "layout_topology": "Converging paths: transaction symbols feed one dashed bridge; captions flank it.",
-      "svg_blueprint": {
-        "concept": "Streaming and ticket records converge toward an estate document. The final connection remains dashed to distinguish Disney’s argument from a ruling.",
-        "placement": "Full-width horizontal mechanism diagram.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><rect x='20' y='29' width='95' height='64' rx='7' fill='#141923' stroke='#F8FAFC'/><path d='M58 46L80 61L58 76Z' fill='#F8FAFC'/><path d='M20 150H115V169Q101 178 115 187V208H20V187Q34 178 20 169Z' fill='#141923' stroke='#F8FAFC'/><path d='M88 157V201' stroke='#F8FAFC' stroke-dasharray='3 5'/><path d='M115 61H151V120H179M115 178H151V120' stroke='#F8FAFC' stroke-width='2'/><circle cx='179' cy='120' r='5' fill='#F43F5E'/><path d='M192 120H250' stroke='#F43F5E' stroke-width='3' stroke-dasharray='5 7'/><path d='M241 111L250 120L241 129' stroke='#F43F5E' stroke-width='2'/><path d='M269 65H318L340 87V177H269Z' fill='#141923' stroke='#F8FAFC' stroke-width='2'/><path d='M318 65V87H340M282 111H326M282 129H326M282 147H310' stroke='#F8FAFC' stroke-width='2'/></svg>"
+      "visual": {
+        "style": "Investigative connection diagram; dashed red paths distinguish asserted links from established findings.",
+        "layoutTopology": "Two input cards sit above a central convergence point; the hero flows downward into one proposed destination. Captions flank their respective inputs.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='Website and ticket arguments converge toward Disney’s requested private proceeding; dashed links indicate contested claims'><rect width='600' height='600' fill='#0A0A0C'/><rect x='45' y='80' width='210' height='165' rx='10' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M45 115H255M75 145H220M75 175H190M75 205H210' stroke='#F5F5F7' stroke-width='3'/><path d='M365 85H535V135Q505 150 535 165V225H365V165Q395 150 365 135Z' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M480 100V210' stroke='#F5F5F7' stroke-width='2' stroke-dasharray='5 7'/><path d='M150 245V305L300 365M450 225V305L300 365V420' fill='none' stroke='#FF2A2A' stroke-width='6' stroke-dasharray='10 10'/><circle cx='300' cy='365' r='12' fill='#FF2A2A'/><rect x='205' y='430' width='190' height='115' rx='12' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><circle cx='300' cy='465' r='13' fill='#F5F5F7'/><path d='M270 510Q300 475 330 510' fill='none' stroke='#F5F5F7' stroke-width='5'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -113,25 +130,29 @@
       "id": "slide-5",
       "index": 4,
       "type": "perimeter",
-      "kicker": "THE PUBLIC STAKES",
-      "headline": "A Click Could Change the Forum",
-      "subheadline": "Disney’s attempted use here remained untested, not court-approved.",
+      "kicker": "WHY IT MATTERS",
+      "headline": "A Different Referee. Not Immunity.",
+      "subheadline": "The danger: account terms invoked far beyond their apparent purpose.",
       "items": [
         {
-          "label": "Not Limitless",
-          "body": "Coverage still required a Disney Services or agreement connection."
+          "label": "Disney’s demand",
+          "body": "Individual arbitration instead of a courtroom hearing."
         },
         {
-          "label": "Not Immunity",
-          "body": "Arbitration still allowed individual damages; it was not immunity."
+          "label": "Contested reach",
+          "body": "Piccolo disputed coverage; no ruling endorsed Disney’s theory."
         }
       ],
-      "visual_style": "Boundary cartography: a bounded field, not an all-consuming trap.",
-      "layout_topology": "Large central perimeter graphic with two opposing marginal captions.",
-      "svg_blueprint": {
-        "concept": "A consent symbol sits inside a defined perimeter. A dashed route approaches an opening, emphasizing the disputed route to a decision-maker.",
-        "placement": "Centered circular hero with copy outside its boundary.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><circle cx='180' cy='120' r='89' fill='#141923'/><path d='M267 101A89 89 0 1 0 267 139' stroke='#F8FAFC' stroke-width='2'/><circle cx='180' cy='120' r='61' stroke='#F8FAFC' stroke-opacity='.2' stroke-dasharray='3 7'/><rect x='157' y='97' width='46' height='46' rx='5' stroke='#F8FAFC' stroke-width='2'/><path d='M168 120L177 129L194 110' stroke='#F8FAFC' stroke-width='3'/><path d='M211 120H310' stroke='#F43F5E' stroke-width='3' stroke-dasharray='5 7'/><path d='M300 110L310 120L300 130M262 101H274M262 139H274' stroke='#F43F5E' stroke-width='3'/></svg>"
+      "visual": {
+        "style": "Expanding-boundary map, emphasizing disputed contractual reach rather than a proven universal rule.",
+        "layoutTopology": "Concentric hero occupies the center; headline above; two opposing marginal captions distinguish the demand from its disputed status.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='A streaming account inside expanding, contested contractual boundaries'><rect width='600' height='600' fill='#0A0A0C'/><circle cx='300' cy='300' r='230' fill='#141418'/><circle cx='300' cy='300' r='220' fill='none' stroke='#FF2A2A' stroke-width='3' stroke-dasharray='12 14'/><circle cx='300' cy='300' r='160' fill='none' stroke='#FF2A2A' stroke-width='3' stroke-dasharray='8 10'/><circle cx='300' cy='300' r='100' fill='#0A0A0C' stroke='#F5F5F7' stroke-width='3'/><rect x='245' y='260' width='110' height='75' rx='6' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M285 277V318L320 298Z' fill='#F5F5F7'/><path d='M370 230L455 145M430 145H455V170' fill='none' stroke='#FF2A2A' stroke-width='6'/><path d='M140 405L195 350M405 405L460 460' stroke='#F5F5F7' stroke-opacity='.35' stroke-width='2'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -139,25 +160,29 @@
       "id": "slide-6",
       "index": 5,
       "type": "evidence",
-      "kicker": "TWO SEPARATE DEVELOPMENTS",
-      "headline": "First Retreat. Then Dismissal.",
-      "subheadline": "The later dismissal was not an arbitration victory.",
+      "kicker": "THE ACTUAL OUTCOME",
+      "headline": "Disney Backed Down. The Case Ended.",
+      "subheadline": "Disney abandoned its arbitration demand after public backlash.",
       "items": [
         {
-          "label": "Disney Retreats",
-          "body": "Disney dropped its arbitration bid in August 2024 after backlash."
+          "label": "August 2024",
+          "body": "Disney dropped its demand for arbitration."
         },
         {
-          "label": "Piccolo Dismisses",
-          "body": "Piccolo permanently dismissed the lawsuit on February 27, 2026."
+          "label": "February 27, 2026",
+          "body": "Piccolo voluntarily dropped the lawsuit; it cannot be refiled."
         }
       ],
-      "visual_style": "Documentary timeline with distinct event markers and restrained redaction-like bars.",
-      "layout_topology": "Two stacked event bands beside a vertical chronological spine.",
-      "svg_blueprint": {
-        "concept": "Two separated document cards distinguish the withdrawn arbitration request from the later permanent dismissal. No simulated court stamps or signatures.",
-        "placement": "Vertical spine alongside the two event captions.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><path d='M54 32V207' stroke='#F8FAFC' stroke-opacity='.3' stroke-width='2'/><circle cx='54' cy='66' r='9' fill='#F43F5E'/><circle cx='54' cy='176' r='9' fill='#0B0E14' stroke='#F8FAFC' stroke-width='3'/><path d='M68 66H94M68 176H94' stroke='#F8FAFC' stroke-width='2'/><rect x='95' y='28' width='238' height='76' rx='3' fill='#141923'/><path d='M118 50H248M118 69H309M118 87H217' stroke='#F8FAFC' stroke-width='2'/><path d='M111 76L317 58' stroke='#F43F5E' stroke-width='3'/><rect x='95' y='138' width='238' height='76' rx='3' fill='#141923'/><path d='M118 158H263M118 176H309' stroke='#F8FAFC' stroke-width='2'/><path d='M118 197H309' stroke='#F8FAFC' stroke-width='5'/></svg>"
+      "visual": {
+        "style": "Restrained archival timeline with abstract document silhouettes, not fabricated court receipts.",
+        "layoutTopology": "Two stacked chronological bands connected by a thin vertical spine; each band pairs one date-caption with one large document symbol.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='Two chronological events: withdrawal of Disney’s arbitration demand, followed by the plaintiff’s final dismissal'><rect width='600' height='600' fill='#0A0A0C'/><path d='M110 90V510' stroke='#F5F5F7' stroke-width='3'/><circle cx='110' cy='170' r='13' fill='#FF2A2A'/><circle cx='110' cy='430' r='13' fill='#F5F5F7'/><path d='M123 170H220M123 430H220' stroke='#F5F5F7' stroke-width='2'/><rect x='220' y='65' width='270' height='205' rx='5' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M255 110H455M255 145H455M255 180H405' stroke='#F5F5F7' stroke-width='4'/><path d='M250 225L460 95' stroke='#FF2A2A' stroke-width='8'/><path d='M220 350H325L350 375H490V530H220Z' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M250 420H460M250 455H420' stroke='#F5F5F7' stroke-width='4'/><path d='M250 495H460' stroke='#FF2A2A' stroke-width='8'/></svg>"
       },
       "platform": "instagram-feed"
     },
@@ -165,25 +190,29 @@
       "id": "slide-7",
       "index": 6,
       "type": "verdict",
-      "kicker": "THE CONSUMER PLAYBOOK",
-      "headline": "Save the Click. Question Its Reach.",
-      "subheadline": "Scrutinize the route to accountability, not just possible damages.",
+      "kicker": "YOUR DEFENSE",
+      "headline": "A Demand Is Not a Ruling",
+      "subheadline": "Spot when account terms reach beyond the service you bought.",
       "items": [
         {
-          "label": "Save Receipts",
-          "body": "Keep signup screens, linked agreements and ticket terms."
+          "label": "Save the record",
+          "body": "Keep terms and signup screens; inspect linked agreements."
         },
         {
-          "label": "Check Reach",
-          "body": "Ask counsel who is bound, which disputes count and who decides."
+          "label": "Check the reach",
+          "body": "Check affiliate language; get legal advice before conceding."
         }
       ],
-      "visual_style": "Practical evidence kit: archived records paired with a focused inspection lens.",
-      "layout_topology": "Two large action tiles above a compact closing headline.",
-      "svg_blueprint": {
-        "concept": "A document folder and magnifying glass turn the closing slide into a preservation-and-review playbook without inventing an opt-out right.",
-        "placement": "Paired icons occupying the upper half; action copy directly underneath.",
-        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 240' fill='none' aria-hidden='true'><rect width='360' height='240' fill='#0B0E14'/><rect x='16' y='27' width='155' height='186' rx='9' fill='#141923'/><rect x='189' y='27' width='155' height='186' rx='9' fill='#141923'/><path d='M39 100V74H82L96 89H148V166H39Z' stroke='#F8FAFC' stroke-width='2'/><path d='M59 105V60H121V105M72 75H108M72 88H108' stroke='#F8FAFC' stroke-width='2'/><path d='M39 110H148L137 177H48Z' fill='#141923' stroke='#F8FAFC' stroke-width='2'/><path d='M80 143L91 154L114 129' stroke='#F43F5E' stroke-width='4'/><circle cx='260' cy='108' r='37' stroke='#F8FAFC' stroke-width='3'/><path d='M286 136L320 173' stroke='#F43F5E' stroke-width='9'/><path d='M239 96H281M239 108H281M239 120H269' stroke='#F8FAFC' stroke-width='2'/></svg>"
+      "visual": {
+        "style": "Practical inspection-desk illustration: preserved documents under a magnifying lens, not a promise of automatic protection.",
+        "layoutTopology": "Large inspection hero across the upper field; headline acts as a horizontal divider; two equal action cards form the bottom row.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' role='img' aria-label='Saved account documents inspected through a magnifying glass'><rect width='600' height='600' fill='#0A0A0C'/><rect x='105' y='115' width='280' height='365' rx='6' fill='#141418' stroke='#F5F5F7' stroke-opacity='.4' stroke-width='2'/><rect x='75' y='85' width='280' height='365' rx='6' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M115 140H310M115 180H310M115 220H270M115 260H290M115 300H250' stroke='#F5F5F7' stroke-width='4'/><path d='M270 85V145L292 128L315 145V85' fill='#FF2A2A'/><circle cx='360' cy='325' r='110' fill='#0A0A0C' stroke='#F5F5F7' stroke-width='7'/><path d='M440 405L535 500' stroke='#FF2A2A' stroke-width='24' stroke-linecap='round'/><path d='M290 295H425M290 325H425M290 355H385' stroke='#F5F5F7' stroke-width='6'/><path d='M290 370H390' stroke='#FF2A2A' stroke-width='5'/></svg>"
       },
       "platform": "instagram-feed"
     }

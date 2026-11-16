@@ -1,13 +1,6 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
-import {
-  Ticket,
-  FileText,
-  UserRound,
-  MousePointer2,
-  Scale,
-  Bookmark,
-} from 'lucide-react';
+import { Globe2, Ticket, Scale, ArrowDownRight } from 'lucide-react';
 
 export default function Slide04({
   slide,
@@ -17,120 +10,50 @@ export default function Slide04({
   const items = slide.items ?? [];
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between px-2 py-8 text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-6 flex items-center gap-4">
-          <span className="h-[2px] w-12 bg-[var(--accent)]" />
-          <p className="font-[var(--font-mono)] text-[20px] font-medium uppercase tracking-[0.16em] text-[var(--accent)]">
-            THE CONTRACTUAL LEAP
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-1 py-5 text-[var(--ink)]">
+      <header className="mb-3 shrink-0">
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="h-3 w-3 shrink-0 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.16em] text-[var(--accent)]">
+            THE CONTRACTUAL CHAIN
           </p>
         </div>
 
         <h1 className="max-w-[900px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
-          His Clicks.
-          <br />
-          Her Estate’s Rights.
+          How Disney Connected the Dots
         </h1>
 
-        <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug">
-          Disney wanted an arbitrator to decide whether arbitration applied.
+        <p className="mt-4 max-w-[850px] font-[var(--font-body)] text-[26px] leading-snug">
+          Disney cited website reliance, then a later park-ticket purchase.
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-8 left-[40%] top-8 border-r border-[var(--border)]"
-        />
-
+      <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 952 420"
-          className="relative block max-h-full w-full"
-          role="img"
-          aria-label="Tickets, account terms and guest registration on Piccolo’s side. A disputed connection extends toward his wife’s estate and arbitration."
           preserveAspectRatio="xMidYMid meet"
+          className="h-full w-full"
+          role="img"
+          aria-label="Disney’s asserted contractual chain: website reliance, a later ticket purchase, and arbitration."
         >
-          <text
-            x="32"
-            y="57"
-            fill="var(--accent)"
-            className="font-[var(--font-mono)] text-[20px] tracking-[0.12em]"
-          >
-            01 / HIS CLICKS
-          </text>
-          <text
-            x="426"
-            y="57"
-            fill="var(--accent)"
-            className="font-[var(--font-mono)] text-[20px] tracking-[0.12em]"
-          >
-            02 / HER ESTATE’S RIGHTS
-          </text>
-
+          {/* A single continuous rail carries the asserted sequence. */}
           <path
-            d="M45 105 H335 M45 211 H335"
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth="1"
-          />
-
-          <Ticket
-            x={53}
-            y={132}
-            width={60}
-            height={60}
-            stroke="var(--ink)"
-            strokeWidth={1.4}
-          />
-          <FileText
-            x={160}
-            y={130}
-            width={60}
-            height={64}
-            stroke="var(--ink)"
-            strokeWidth={1.4}
-          />
-          <UserRound
-            x={267}
-            y={133}
-            width={58}
-            height={58}
-            stroke="var(--ink)"
-            strokeWidth={1.4}
-          />
-
-          <path
-            d="M190 212 V247"
+            d="M64 250 H888"
             fill="none"
             stroke="var(--border)"
             strokeWidth="2"
           />
-
-          <MousePointer2
-            x={162}
-            y={248}
-            width={66}
-            height={66}
-            stroke="var(--accent)"
-            strokeWidth={1.5}
-          />
-
           <path
-            d="M237 278 H461"
-            fill="none"
-            stroke="var(--ink)"
-            strokeOpacity="0.65"
-            strokeWidth="2"
-          />
-          <path
-            d="M535 278 H690"
+            d="M156 250 H796"
             fill="none"
             stroke="var(--accent)"
-            strokeWidth="2"
-            strokeDasharray="8 9"
+            strokeWidth="3"
           />
           <path
-            d="M678 269 L691 278 L678 287"
+            d="m462 243 9 7-9 7 M782 243 l9 7-9 7"
             fill="none"
             stroke="var(--accent)"
             strokeWidth="2"
@@ -138,105 +61,171 @@ export default function Slide04({
             strokeLinejoin="round"
           />
 
+          {/* Website milestone. */}
+          <text
+            x="156"
+            y="65"
+            textAnchor="middle"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[22px]"
+          >
+            01
+          </text>
+          <Globe2
+            x={106}
+            y={110}
+            width={100}
+            height={100}
+            stroke="var(--ink)"
+            strokeWidth={1.2}
+          />
           <path
-            d="M478 255 L465 301 M503 255 L490 301"
-            fill="none"
+            d="M156 218 V238"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
+          <circle
+            cx="156"
+            cy="250"
+            r="9"
+            fill="var(--surface)"
             stroke="var(--accent)"
             strokeWidth="3"
           />
-
           <text
-            x="483"
-            y="238"
+            x="156"
+            y="310"
+            textAnchor="middle"
+            fill="var(--ink)"
+            className="font-[var(--font-mono)] text-[22px] tracking-[0.12em]"
+          >
+            WEBSITE
+          </text>
+
+          {/* Later purchase milestone. */}
+          <text
+            x="476"
+            y="65"
             textAnchor="middle"
             fill="var(--accent)"
-            className="font-[var(--font-mono)] text-[24px] font-bold"
+            className="font-[var(--font-mono)] text-[22px]"
           >
-            ?
+            02
           </text>
-
+          <g transform="rotate(-12 476 160)">
+            <Ticket
+              x={420}
+              y={104}
+              width={112}
+              height={112}
+              stroke="var(--ink)"
+              strokeWidth={1.2}
+            />
+          </g>
           <path
-            d="M711 116 H785 L820 151 V305 H711 Z"
+            d="M476 218 V238"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
+          <circle
+            cx="476"
+            cy="250"
+            r="9"
             fill="var(--surface)"
-            stroke="var(--ink)"
-            strokeWidth="2"
+            stroke="var(--accent)"
+            strokeWidth="3"
+          />
+          <text
+            x="476"
+            y="310"
+            textAnchor="middle"
+            fill="var(--ink)"
+            className="font-[var(--font-mono)] text-[22px] tracking-[0.12em]"
+          >
+            TICKETS
+          </text>
+
+          {/* Claimed destination—not a judicial finding. */}
+          <text
+            x="796"
+            y="65"
+            textAnchor="middle"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[22px]"
+          >
+            03
+          </text>
+          <Scale
+            x={742}
+            y={106}
+            width={108}
+            height={108}
+            stroke="var(--accent)"
+            strokeWidth={1.2}
           />
           <path
-            d="M785 116 V151 H820 M733 174 H794 M733 192 H775"
-            fill="none"
-            stroke="var(--ink)"
-            strokeOpacity="0.65"
+            d="M796 218 V238"
+            stroke="var(--border)"
             strokeWidth="2"
           />
-
-          <Scale
-            x={734}
-            y={221}
-            width={65}
-            height={65}
+          <circle
+            cx="796"
+            cy="250"
+            r="18"
+            fill="none"
             stroke="var(--accent)"
-            strokeWidth={1.5}
+            strokeWidth="1"
+            opacity="0.35"
           />
+          <circle cx="796" cy="250" r="9" fill="var(--accent)" />
+          <text
+            x="796"
+            y="310"
+            textAnchor="middle"
+            fill="var(--accent)"
+            className="font-[var(--font-mono)] text-[22px] tracking-[0.08em]"
+          >
+            ARBITRATION
+          </text>
 
-          <text
-            x="190"
-            y="365"
-            textAnchor="middle"
-            fill="var(--ink)"
-            className="font-[var(--font-body)] text-[24px]"
-          >
-            Vacation Links
-          </text>
-          <text
-            x="693"
-            y="365"
-            textAnchor="middle"
-            fill="var(--ink)"
-            className="font-[var(--font-body)] text-[24px]"
-          >
-            Contested Reach
-          </text>
+          {/* Editorial bracket marks the argument as a connected chain. */}
+          <path
+            d="M156 342 V356 H796 V342"
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="1.5"
+          />
         </svg>
       </div>
 
-      <div className="shrink-0">
-        <dl className="border-t border-[var(--border)]">
-          <div className="grid grid-cols-[40%_60%] border-b border-[var(--border)] py-5">
-            <dt className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-              {items[0]?.label ?? 'Vacation Links'}
-            </dt>
-            <dd className="pl-8 font-[var(--font-body)] text-[24px] leading-snug">
-              {items[0]?.body ??
-                'Disney also cited tickets, account terms and guest registration.'}
-            </dd>
-          </div>
-
-          <div className="grid grid-cols-[40%_60%] border-b border-[var(--border)] py-5">
-            <dt className="border-r border-[var(--border)] pr-8 font-[var(--font-headline)] text-[28px] font-semibold leading-tight text-[var(--accent)]">
-              {items[0]?.label ?? 'Contested Reach'}
-            </dt>
-            <dd className="pl-8 font-[var(--font-body)] text-[24px] leading-snug">
-              {items[0]?.body ??
-                'Piccolo disputed that his clicks could bind his wife’s estate.'}
-            </dd>
-          </div>
-        </dl>
-
-        <footer className="flex items-center justify-between pt-6 font-[var(--font-mono)] text-[20px]">
-          <div className="flex items-center gap-3">
-            <Bookmark
-              className="h-5 w-5 text-[var(--accent)]"
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
-            <span>thefineprint.pub</span>
-          </div>
-          <span className="tabular-nums">
-            <span className="text-[var(--accent)]">04</span>
-            <span className="mx-3 opacity-50">/</span>
-            {String(totalSlides).padStart(2, '0')}
+      <div className="shrink-0 border-t border-[var(--border)] pt-4">
+        <article className="grid grid-cols-[56px_250px_minmax(0,1fr)] items-start gap-x-5 pb-5">
+          <span className="pt-1 font-[var(--font-mono)] text-[22px] text-[var(--accent)]">
+            01
           </span>
-        </footer>
+          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+            {items[0]?.label ?? 'Website bridge'}
+          </h2>
+          <p className="font-[var(--font-body)] text-[24px] leading-snug">
+            {items[0]?.body ??
+              'Disney linked the claim to alleged reliance on its website.'}
+          </p>
+        </article>
+
+        <article className="grid grid-cols-[56px_250px_minmax(0,1fr)] items-start gap-x-5 border-t border-[var(--border)] pt-5">
+          <ArrowDownRight
+            aria-hidden="true"
+            className="mt-1 h-7 w-7 text-[var(--accent)]"
+            strokeWidth={1.5}
+          />
+          <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+            {items[1]?.label ?? 'Ticket terms'}
+          </h2>
+          <p className="font-[var(--font-body)] text-[24px] leading-snug">
+            {items[1]?.body ??
+              'Disney said later ticket terms reinforced agreement to arbitrate.'}
+          </p>
+        </article>
       </div>
     </section>
   );

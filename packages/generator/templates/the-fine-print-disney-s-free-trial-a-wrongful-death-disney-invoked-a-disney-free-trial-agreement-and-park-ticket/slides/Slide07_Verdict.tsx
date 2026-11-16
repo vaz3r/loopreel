@@ -1,190 +1,198 @@
 import React from 'react';
 import type { SlideComponentProps } from '../../../src/skeleton/types';
 import {
-  ArrowDownToLine,
-  Bookmark,
-  Check,
   FileText,
-  Scale,
+  Gavel,
+  ShieldCheck,
+  CheckCircle2,
+  Bookmark,
 } from 'lucide-react';
 
-export default function Slide07({
-  slide,
-  brand,
-  totalSlides,
-}: SlideComponentProps) {
+export default function Slide07({ slide, brand, totalSlides }: SlideComponentProps) {
   const items = slide.items ?? [];
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col justify-between py-8 px-2 text-[var(--ink)]">
-      <header className="shrink-0">
-        <div className="mb-5 flex items-center justify-between border-b border-[var(--border)] pb-4">
-          <p className="font-[var(--font-mono)] text-[20px] font-medium uppercase tracking-[0.14em] text-[var(--accent)]">
-            THE CONSUMER PLAYBOOK
+    <section className="flex h-full min-h-0 w-full flex-col justify-between px-1 py-5 text-[var(--ink)]">
+      <header className="mb-3 shrink-0">
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="h-3 w-3 bg-[var(--accent)]"
+          />
+          <p className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.18em]">
+            YOUR DEFENSE
           </p>
-          <span className="font-[var(--font-mono)] text-[20px] tabular-nums">
-            07 / {String(totalSlides).padStart(2, '0')}
-          </span>
         </div>
 
         <h1 className="max-w-[880px] font-[var(--font-headline)] text-[58px] font-bold leading-[1.04] tracking-tight">
-          Save the Click.
-          <br />
-          Question Its Reach.
+          A Demand Is Not a Ruling
         </h1>
 
         <p className="mt-5 max-w-[820px] font-[var(--font-body)] text-[26px] leading-snug">
-          Scrutinize the route to accountability, not just possible damages.
+          Spot when account terms reach beyond the service you bought.
         </p>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+      <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 952 420"
           preserveAspectRatio="xMidYMid meet"
-          className="h-full max-h-[420px] w-full"
-          fill="none"
           role="img"
-          aria-label="A preserved agreement leads to scrutiny of the legal process, represented by balanced scales."
+          aria-label="An account document and a court gavel separated by a protective shield."
+          className="h-full max-h-[460px] w-full"
+          fill="none"
         >
-          {/* A folded agreement, with a retained copy underneath. */}
-          <g transform="rotate(-6 245 175)">
-            <path
-              d="M143 74H312L355 117V300H143Z"
-              className="stroke-[var(--border)]"
-              strokeWidth="2"
-            />
-            <path
-              d="M159 57H323L368 102V284H159Z"
-              className="fill-[var(--surface)] stroke-[var(--ink)]"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M323 57V102H368"
-              className="stroke-[var(--ink)]"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
+          {/* Registration marks frame the illustration, not the slide. */}
+          <path
+            d="M48 85V65H68 M884 65H904V85 M48 285V305H68 M884 305H904V285"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
 
+          {/* Account document: a physical sheet with a folded corner. */}
+          <g transform="rotate(-7 207 178)">
+            <path
+              d="M132 66H237L281 110V283H132Z"
+              fill="var(--surface)"
+              stroke="var(--ink)"
+              strokeOpacity="0.65"
+              strokeWidth="2"
+            />
+            <path
+              d="M237 66V110H281"
+              stroke="var(--ink)"
+              strokeOpacity="0.65"
+              strokeWidth="2"
+            />
             <FileText
-              x={185}
-              y={83}
-              width={48}
-              height={48}
+              x={151}
+              y={88}
+              width={39}
+              height={39}
+              color="var(--accent)"
               strokeWidth={1.5}
-              className="text-[var(--ink)]"
             />
-
             <path
-              d="M185 157H338M185 181H323M185 229H306M185 253H278"
-              className="stroke-[var(--border)]"
-              strokeWidth="3"
+              d="M156 155H253 M156 178H240 M156 201H252 M156 247H222"
+              stroke="var(--ink)"
+              strokeOpacity="0.4"
+              strokeWidth="2"
               strokeLinecap="round"
             />
             <path
-              d="M182 205H329"
-              className="stroke-[var(--accent)]"
-              strokeWidth="13"
-              opacity="0.2"
-            />
-            <path
-              d="M185 205H326"
-              className="stroke-[var(--accent)]"
-              strokeWidth="2"
+              d="M151 211C184 207 221 207 257 210"
+              stroke="var(--accent)"
+              strokeWidth="4"
               strokeLinecap="round"
             />
           </g>
 
-          {/* The evidence is retained; its legal reach is questioned. */}
-          <ArrowDownToLine
-            x={308}
-            y={249}
-            width={54}
-            height={54}
-            strokeWidth={1.5}
-            className="text-[var(--accent)]"
-          />
-
+          {/* The asserted reach stops at the shield. */}
           <path
-            d="M410 173C464 140 508 140 558 173"
-            className="stroke-[var(--accent)]"
+            d="M300 183C338 183 355 183 388 183"
+            stroke="var(--accent)"
             strokeWidth="2"
-            strokeLinecap="round"
+            strokeDasharray="6 8"
           />
           <path
-            d="M544 156L559 174L537 179"
-            className="stroke-[var(--accent)]"
+            d="M379 174L388 183L379 192"
+            stroke="var(--accent)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
 
-          <Scale
-            x={612}
-            y={76}
-            width={190}
-            height={190}
-            strokeWidth={1.15}
-            className="text-[var(--ink)]"
-          />
           <path
-            d="M611 287H803"
-            className="stroke-[var(--border)]"
+            d="M476 69L550 96V164C550 224 519 263 476 288C433 263 402 224 402 164V96Z"
+            fill="var(--surface)"
+            stroke="var(--accent)"
             strokeWidth="2"
           />
-          <path
-            d="M679 287H735"
-            className="stroke-[var(--accent)]"
-            strokeWidth="3"
+          <ShieldCheck
+            x={430}
+            y={124}
+            width={92}
+            height={92}
+            color="var(--ink)"
+            strokeWidth={1.25}
           />
+
+          {/* A separate court instrument, never joined to the demand. */}
+          <Gavel
+            x={683}
+            y={94}
+            width={132}
+            height={132}
+            color="var(--ink)"
+            strokeWidth={1.2}
+          />
+          <path
+            d="M686 251H818 M699 242H805"
+            stroke="var(--ink)"
+            strokeOpacity="0.6"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+
+          <g
+            fill="var(--ink)"
+            fontSize="20"
+            fontFamily="var(--font-mono)"
+            letterSpacing="3"
+            textAnchor="middle"
+          >
+            <text x="207" y="336">TERMS</text>
+            <text x="752" y="336">COURT</text>
+          </g>
         </svg>
 
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <div className="rotate-[-2deg] whitespace-nowrap border-2 border-[var(--accent)] bg-[var(--paper,#0B0E14)] px-5 py-2 font-[var(--font-mono)] text-[24px] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
-            Question the reach
-          </div>
+          <p className="rotate-[-2deg] whitespace-nowrap border-2 border-[var(--accent)] bg-[var(--surface)] px-5 py-2 font-[var(--font-mono)] text-[24px] font-bold uppercase tracking-[0.1em] text-[var(--accent)]">
+            [NOT A RULING]
+          </p>
         </div>
       </div>
 
-      <footer className="shrink-0">
-        <div className="border-t border-[var(--border)]">
-          {items.map((item, index) => (
-            <div
-              key={`${index}-${item.label}`}
-              className="grid grid-cols-[36px_210px_minmax(0,1fr)] items-start gap-x-5 border-b border-[var(--border)] py-5"
-            >
-              <Check
-                aria-hidden="true"
-                className="mt-1 h-7 w-7 text-[var(--accent)]"
-                strokeWidth={1.75}
-              />
-              <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
-                {item.label}
-              </h2>
-              <p className="font-[var(--font-body)] text-[24px] leading-snug">
-                {item.body}
-              </p>
-            </div>
-          ))}
+      <div className="shrink-0 border-t border-[var(--border)] pt-4">
+        <div className="flex items-start gap-5 pb-5">
+          <CheckCircle2
+            aria-hidden="true"
+            className="mt-1 h-7 w-7 shrink-0 text-[var(--accent)]"
+            strokeWidth={1.6}
+          />
+          <div className="min-w-0">
+            <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+              {items[0]?.label ?? 'Save the record'}
+            </h2>
+            <p className="mt-2 font-[var(--font-body)] text-[24px] leading-snug">
+              {items[0]?.body ??
+                'Keep terms and signup screens; inspect linked agreements.'}
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-5 pt-5">
-          <div className="flex items-center gap-3">
-            <Bookmark
-              aria-hidden="true"
-              className="h-6 w-6 shrink-0 text-[var(--accent)]"
-              strokeWidth={1.75}
-            />
-            <span className="font-[var(--font-mono)] text-[20px] uppercase tracking-[0.06em]">
-              Save this playbook
-            </span>
+        <div className="flex items-start gap-5 border-t border-[var(--border)] pt-5">
+          <CheckCircle2
+            aria-hidden="true"
+            className="mt-1 h-7 w-7 shrink-0 text-[var(--accent)]"
+            strokeWidth={1.6}
+          />
+          <div className="min-w-0">
+            <h2 className="font-[var(--font-headline)] text-[28px] font-semibold leading-tight">
+              {items[1]?.label ?? 'Check the reach'}
+            </h2>
+            <p className="mt-2 font-[var(--font-body)] text-[24px] leading-snug">
+              {items[1]?.body ??
+                'Check affiliate language; get legal advice before conceding.'}
+            </p>
           </div>
-          <span className="font-[var(--font-mono)] text-[20px]">
-            thefineprint.pub
-          </span>
         </div>
-      </footer>
+
+        <p className="mt-6 flex items-center gap-3 font-[var(--font-mono)] text-[20px] uppercase tracking-[0.08em] text-[var(--accent)]">
+          <Bookmark aria-hidden="true" className="h-5 w-5 shrink-0" />
+          Bookmark this checklist
+        </p>
+      </div>
     </section>
   );
 }

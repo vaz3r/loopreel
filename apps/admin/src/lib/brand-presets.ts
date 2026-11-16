@@ -7,12 +7,12 @@ export const CURATED_BRAND_PRESETS: BespokeBrand[] = [
     vibe: 'Investigative Corporate Autopsies, Fine Print Tricks & Receipts',
     domain: 'thefineprint.pub',
     palette: {
-      paper: '#0B0E14',
-      ink: '#F8FAFC',
-      accent: '#F43F5E',
-      surface: '#141923',
-      border: '#222B3D',
-      subtle: '#94A3B8',
+      paper: '#0A0A0C',
+      ink: '#F5F5F7',
+      accent: '#FF2A2A',
+      surface: '#141418',
+      border: '#26262E',
+      subtle: '#858592',
     },
     typography: {
       headlineFont: 'Playfair Display',

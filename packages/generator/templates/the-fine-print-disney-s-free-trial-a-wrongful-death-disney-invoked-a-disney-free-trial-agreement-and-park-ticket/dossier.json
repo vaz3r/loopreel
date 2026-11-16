@@ -9,47 +9,52 @@
   "systemMechanisms": [
     {
       "step": 1,
-      "mechanism": "Capture agreement during an ordinary streaming signup.",
-      "operation": "Disney said account creation required clicking “Agree & Continue” beside a hyperlink to the Subscriber Agreement. That agreement also referred users to the broader Disney Terms of Use.​",
-      "plainEnglish": "A click made to access entertainment became evidence Disney later offered in a dispute about a fatal restaurant visit.",
-      "disputedPoint": "Piccolo’s lawyers argued that the broader Terms of Use were linked inside another linked document, rather than conspicuously presented on the registration screen."
+      "mechanism": "Capture assent during an ordinary streaming signup.",
+      "operation": "Disney said Piccolo selected Agree & Continue during Disney+ registration, accepting a linked Subscriber Agreement that incorporated broader Disney Terms of Use.",
+      "plainEnglish": "Disney treated the streaming-account signup as an agreement with consequences beyond watching television.",
+      "status": "Disney’s account of contract formation, contested by the plaintiff.​"
     },
     {
       "step": 2,
-      "mechanism": "Connect the streaming account to other Disney businesses.",
-      "operation": "Section 7 of the broader Terms of Use addressed disputes involving The Walt Disney Company or its affiliates and defined covered disputes by reference to Disney Services or the agreement, including claims in contract, tort, warranty, statute, regulation or another legal or equitable basis.​",
-      "plainEnglish": "Disney sought to make the account’s legal terms travel across its corporate family.",
-      "scopeCaution": "The clause was broad but not literally unlimited: its text retained a connection to Disney Services or the agreement. Disney argued that the complaint’s reliance on its website supplied that connection."
+      "mechanism": "Extend the agreement through affiliates and a broad service definition.",
+      "operation": "Disney relied on Terms of Use covering related disputes involving The Walt Disney Company or its affiliates, and defining Disney Services to include websites, software, applications, content, products and services.",
+      "plainEnglish": "The parks company sought to use terms encountered through another part of the Disney business. It connected the restaurant claim to those terms through the plaintiff’s alleged reliance on Disney’s website.",
+      "status": "An asserted contractual bridge, not a judicially established rule that every Disney-related injury falls under a streaming agreement."
     },
     {
       "step": 3,
-      "mechanism": "Add the park-ticket transaction as another contractual connection.",
-      "operation": "Disney cited Piccolo’s acceptance of My Disney Experience terms, his ticket purchase and his registration of Tangsuan as a guest. The quoted terms purported to cover the account holder and people for whom the holder secured or managed benefits, and stated that they applied in addition to the Disney Terms of Use.",
-      "plainEnglish": "Disney did not rely solely on a streaming trial. It also used the family’s vacation-planning transactions to argue that the broader terms governed."
+      "mechanism": "Add the park-ticket transaction as another basis for assent.",
+      "operation": "Disney said Piccolo accepted My Disney Experience terms, purchased park tickets and registered Tangsuan as his guest. Those terms purported to apply to people for whom the account holder secured benefits and incorporated Disney’s general Terms of Use.",
+      "plainEnglish": "Disney argued that the later travel transaction reinforced its ability to demand arbitration.",
+      "status": "The plaintiff disputed this interpretation and emphasized that the My Disney Experience terms themselves contained a court-forum provision rather than a standalone arbitration clause.​"
     },
     {
       "step": 4,
-      "mechanism": "Apply the account holder’s agreement to an estate’s wrongful-death action.",
-      "operation": "Disney asked to compel Piccolo, acting as personal representative, to arbitrate all claims against Disney. The opposition distinguished Piccolo personally from the estate and invoked Fla. Stat. § 768.20, arguing that his individual agreements could not bind his wife’s estate.​",
-      "plainEnglish": "The contested leap was from a husband’s personal clicks to the legal rights asserted after his wife’s death."
+      "mechanism": "Move the dispute into an individual proceeding.",
+      "operation": "Section 7 required individual proceedings and restricted class, private-attorney-general and other representative proceedings. It prohibited combining proceedings without all parties’ prior written consent.",
+      "plainEnglish": "The immediate objective was to replace a courtroom proceeding against Disney with individual arbitration. This wrongful-death lawsuit was not itself a class action.",
+      "status": "Contract language Disney invoked, with its applicability disputed."
     },
     {
       "step": 5,
-      "mechanism": "Ask an arbitrator to decide whether arbitration applies.",
-      "operation": "Disney relied on a delegation clause giving an arbitrator exclusive authority over interpretation, applicability, enforceability and arbitrability. The plaintiff argued that the court first had to determine whether the relevant agreement existed at all.​",
-      "plainEnglish": "Disney wanted even much of the argument about the proper forum decided inside arbitration."
+      "mechanism": "Give the arbitrator authority over the reach of the clause.",
+      "operation": "Disney relied on a delegation provision granting the arbitrator exclusive authority over interpretation, applicability and enforceability, including arbitrability.",
+      "plainEnglish": "Disney argued that the arbitrator—not the court—should decide important questions about whether the arbitration clause covered the dispute.",
+      "status": "Disney’s motion still acknowledged that the court first had to determine whether a valid arbitration agreement existed."
     },
     {
       "step": 6,
-      "mechanism": "Replace courtroom adjudication with individual arbitration.",
-      "operation": "The court-filed terms required attempted informal resolution for sixty (60) days before commencing arbitration, preserved eligible small-claims proceedings, excluded disputes over ownership or enforcement of intellectual-property rights, and otherwise specified individual JAMS arbitration under its Streamlined Arbitration Rules and Procedures. They waived class proceedings and described only limited appeal rights.",
-      "plainEnglish": "The central change was the decision-maker and procedure: an arbitrator instead of a judge or jury deciding the merits. The terms expressly permitted individual damages and declaratory or injunctive relief; arbitration was not automatic immunity."
+      "mechanism": "Pause court proceedings while arbitration proceeds.",
+      "operation": "Disney invoked the Federal Arbitration Act, 9 U.S.C. §§ 1-16, and specifically 9 U.S.C. § 3 to seek a stay. It also asked the court to stay the claims against the restaurant because the factual and legal issues overlapped.",
+      "plainEnglish": "The requested order could have paused the family’s court case against both defendants, even though Disney’s central request was to arbitrate claims against Disney.",
+      "status": "Relief requested in the motion—not an order shown to have been granted."
     },
     {
       "step": 7,
-      "mechanism": "Pause the lawsuit while arbitration proceeds.",
-      "operation": "Disney invoked 9 U.S.C. § 3 to request a stay of the claims against it. It also sought a discretionary stay of the restaurant claims, arguing that overlapping facts could produce inconsistent decisions.",
-      "plainEnglish": "Success could have redirected the Disney claims and delayed the related court case against the restaurant. That was requested relief, not an outcome Disney obtained."
+      "mechanism": "Preserve potential compensation while changing the decision-maker.",
+      "operation": "The filed Terms of Use permitted an arbitrator to award individual damages and declaratory or injunctive relief. They prescribed sixty (60) days of attempted informal negotiation before arbitration, preserved qualifying small-claims litigation and excluded disputes over intellectual-property ownership or enforcement.",
+      "plainEnglish": "The clause did not say Disney could never owe damages. It attempted to control where and how a claim would be decided.",
+      "status": "Express contractual provisions; they directly contradict an immunity-from-liability characterization."
     }
   ],
   "comparisons": [],
