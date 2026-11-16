@@ -47,6 +47,7 @@ export function AutoFit({
       content.style.width = '100%';
       content.style.height = 'auto';
       content.style.minHeight = 'auto';
+      content.style.display = 'block';
       content.style.position = 'relative';
 
       const containerH = container.clientHeight;
@@ -74,6 +75,7 @@ export function AutoFit({
         content.style.width = `${100 / targetScale}%`;
         content.style.height = 'auto';
         content.style.minHeight = 'auto';
+        content.style.display = 'block';
 
         // Measure reflowed height after width compensation to get true optical height
         const reflowedH = content.scrollHeight;
@@ -95,6 +97,8 @@ export function AutoFit({
         content.style.width = '100%';
         content.style.height = '100%';
         content.style.minHeight = '100%';
+        content.style.display = 'flex';
+        content.style.flexDirection = 'column';
         content.style.transform = 'none';
         container.setAttribute('data-autofit-scaled', '1.000');
         container.removeAttribute('data-autofit-overflow');
@@ -121,7 +125,7 @@ export function AutoFit({
     >
       <div
         ref={contentRef}
-        className="loop-autofit-content w-full transition-transform duration-75 ease-out"
+        className="loop-autofit-content w-full h-full flex flex-col transition-transform duration-75 ease-out"
       >
         {children}
       </div>

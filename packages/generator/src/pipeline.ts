@@ -7,13 +7,13 @@ import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
 import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
   type TemplateBrief,
-  type NarrativePreset,
-  type NarrativeDossier,
-  type SlideDesignBlueprint,
-  type NarrativeIntelligence,
   type StoryStrategy,
-  buildNarrativeIntelligenceSystemPrompt,
-  buildNarrativeIntelligenceUserPrompt,
+  type GroundTruthDossier,
+  type SlideDesignBlueprint,
+  buildFactExtractionSystemPrompt,
+  buildFactExtractionUserPrompt,
+  buildTopicResearchSystemPrompt,
+  buildTopicResearchUserPrompt,
   buildBrandSystemPrompt,
   buildBrandUserPrompt,
   buildArticleBrandUserPrompt,
@@ -23,6 +23,9 @@ import {
   buildStoryDeckUserPrompt,
   buildVisualBlueprintSystemPrompt,
   buildVisualBlueprintUserPrompt,
+  buildDeckSystemPrompt,
+  buildDeckBatch1Prompt,
+  buildDeckBatch2Prompt,
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
@@ -49,7 +52,7 @@ function extractJson<T>(raw: string): T {
   return JSON.parse(cleaned) as T;
 }
 
-export function extractTsx(raw: string): string {
+function extractTsx(raw: string): string {
   let cleaned = raw.trim();
   const tsxMatch = cleaned.match(/```(?:tsx|typescript|jsx|javascript)?\s*([\s\S]*?)\s*```/);
   if (tsxMatch && tsxMatch[1]) {
@@ -58,51 +61,10 @@ export function extractTsx(raw: string): string {
   return cleaned;
 }
 
-function extractDesignThought(raw: string): string {
-  const match = raw.match(/<design_thought>([\s\S]*?)<\/design_thought>/i);
-  return match && match[1] ? match[1].trim() : '';
-}
-
-// ============================================================================
-// PUBLICATION WORDMARK SANITIZER
-// Guarantees clean, authoritative editorial mastheads (zero AI caveats/disclaimers)
-// ============================================================================
-
-export function sanitizePublicationWordmark(raw?: string, fallback = 'THE FINE PRINT'): { name: string; wordmark: string } {
-  if (!raw) return { name: fallback, wordmark: fallback };
-  let cleaned = raw
-    .replace(/independent editorial brief prepared for/gi, '')
-    .replace(/not a verified publication/gi, '')
-    .replace(/ai-assisted research/gi, '')
-    .replace(/research brief/gi, '')
-    .replace(/unpublished brief/gi, '')
-    .replace(/[;\,\.\:\/\-]+/g, ' ')
-    .trim();
-
-  if (cleaned.length === 0 || cleaned.length > 32) {
-    const domainMatch = raw.match(/([a-z0-9\-]+)\.(co|com|org|io|pub)/i);
-    if (domainMatch && domainMatch[1] && domainMatch[1].length <= 25) {
-      cleaned = domainMatch[1].replace(/-/g, ' ');
-    } else {
-      cleaned = fallback;
-    }
-  }
-
-  const titleCase = cleaned
-    .split(/\s+/)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join(' ');
-
-  return {
-    name: titleCase,
-    wordmark: titleCase.toUpperCase(),
-  };
-}
-
 export function sanitizeTsxCode(rawCode: string): string {
   let code = rawCode;
 
-  // 1. Fix broken chained optional access: slide.items?.?.property -> slide.items?.[N]?.property
+  // Fix broken chained optional access: slide.items?.?.property -> slide.items?.[N]?.property
   let titleIndex = 0;
   code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.title/g, (_m, prop) => {
     return `slide.${prop}?.[${titleIndex++}]?.title`;
@@ -113,215 +75,73 @@ export function sanitizeTsxCode(rawCode: string): string {
   });
   code = code.replace(/slide\.([a-zA-Z0-9_]+)\?\.\?\.([a-zA-Z0-9_]+)/g, 'slide.$1?.[0]?.$2');
 
-  // 2. Fix dangling optional chaining: any variable or property followed by ?. and punctuation/newline/operator
-  let danglingIdx = 0;
-  code = code.replace(/([a-zA-Z0-9_$]+(?:\.[a-zA-Z0-9_$]+)*)\?\.\s*(?=[;,)\n}\?])/g, (_m, expr) => {
-    return `${expr}?.[${danglingIdx++}]`;
-  });
-
-  // 3. Fix sequential unpacking of array variables without index:
-  // e.g. const openingUS = cards; const openingIsrael = cards; -> cards[0], cards[1]
-  // or const first = milestones; const second = milestones; -> milestones[0], milestones[1]
-  const collectionNames = new Set([
-    'cards',
-    'metrics',
-    'items',
-    'telemetry',
-    'stages',
-    'steps',
-    'columns',
-    'milestones',
-    'events',
-    'points',
-    'phases',
-    'quotes',
-    'takeaways',
-  ]);
-
-  // First pass: detect ANY identifier assigned to multiple distinct variables
-  const assignRegex = /(?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*([a-zA-Z0-9_$]+)\s*;/g;
-  const rhsCounts: Record<string, number> = {};
-  let matchAssign: RegExpExecArray | null;
-  while ((matchAssign = assignRegex.exec(code)) !== null) {
-    const lhs = matchAssign[1];
-    const rhs = matchAssign[2];
-    if (lhs && rhs && lhs !== rhs && !collectionNames.has(lhs)) {
-      rhsCounts[rhs] = (rhsCounts[rhs] || 0) + 1;
-    }
-  }
-
-  const universalRhsIndex: Record<string, number> = {};
-  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)([a-zA-Z0-9_$]+)(\s*;)/g, (full, prefix, lhs, rhs, suffix) => {
-    if (lhs && rhs && lhs !== rhs && !collectionNames.has(lhs) && rhsCounts[rhs] && rhsCounts[rhs] >= 2) {
-      const idx = universalRhsIndex[rhs] ?? 0;
-      universalRhsIndex[rhs] = idx + 1;
-      return `${prefix}${rhs}[${idx}]${suffix}`;
-    }
-    return full;
-  });
-
-  const arrayCounts: Record<string, number> = {};
-  code = code.replace(/((?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*)(cards|metrics|items|telemetry|stages|steps|columns|milestones|events|points|phases|quotes|takeaways)(\s*;)/g, (match, prefix, varName, arr, suffix) => {
-    if (collectionNames.has(varName)) return match; // keep array aliases intact
-    const idx = arrayCounts[arr] ?? 0;
-    arrayCounts[arr] = idx + 1;
-    return `${prefix}${arr}[${idx}]${suffix}`;
-  });
-
-  // 3b. Fix unindexed assignment from .split(...) or .match(...) array variables:
-  // e.g. const ancientBadge = str.split(' '); const ancientMetric = ancientBadge; -> const ancientMetric = ancientBadge[0];
-  const splitVars = new Set<string>();
-  const splitRegex = /(?:const|let)\s+([a-zA-Z0-9_$]+)\s*=\s*[^;]+?\.(?:split|match)\s*\([^;]+?\)\s*;/g;
-  let sm: RegExpExecArray | null;
-  while ((sm = splitRegex.exec(code)) !== null) {
-    if (sm[1]) splitVars.add(sm[1]);
-  }
-  if (splitVars.size > 0) {
-    const list = Array.from(splitVars).join('|');
-    code = code.replace(
-      new RegExp(`((?:const|let)\\s+([a-zA-Z0-9_$]+)\\s*=\\s*)(${list})(\\s*;)`, 'g'),
-      (full, prefix, lhs, rhs, suffix) => {
-        if (lhs !== rhs && !/words|parts|tokens|array|list/i.test(lhs)) {
-          return `${prefix}${rhs}[0]${suffix}`;
-        }
-        return full;
-      }
-    );
-  }
-
-  // 4. Fix unindexed numbered variable declaration: e.g. const item0 = items; -> const item0 = items[0];
-  code = code.replace(/const\s+([a-zA-Z0-9_$]*?(?:item|card|col|metric|entry|stage|step|milestone))([0-9])\s*=\s*([a-zA-Z0-9_$.]+?)\s*;/g, (match, prefix, num, rhs) => {
-    if (rhs.includes('[')) return match;
-    return `const ${prefix}${num} = ${rhs}[${num}];`;
-  });
-
-  // 4. Fix array helper objects with repeated unindexed collection properties:
-  // e.g. { card: cards, metric: telemetry }, { card: cards, inventory: telemetry } inside an array literal
-  const propCounters: Record<string, number> = {};
-  code = code.replace(/(\b[a-zA-Z0-9_$]+\s*:\s*)(cards|items|telemetry|metrics|stages|steps|milestones|columns|points|specs|callouts|entries|inventory)\b(?!\s*\[)/g, (_m, prefix, arr) => {
-    const key = prefix.trim();
-    const count = propCounters[key] || 0;
-    propCounters[key] = count + 1;
-    return `${prefix}${arr}[${count}]`;
-  });
-
-  // 4b. Fix array literals with unindexed repeated identifiers:
-  // e.g. [guardrails, guardrails] -> [guardrails[0], guardrails[1]]
-  // e.g. [items, items, items] -> [items[0], items[1], items[2]]
-  code = code.replace(/\[\s*([a-zA-Z0-9_$]+)\s*(?:,\s*\1\s*)+(?:,\s*)?\]/g, (fullMatch, ident) => {
-    if (/^(?:number|string|boolean|any|unknown|never|void|undefined|null|object|symbol|bigint)$/.test(ident)) {
-      return fullMatch;
-    }
-    let count = 0;
-    return fullMatch.replace(new RegExp(`\\b${ident}\\b(?!\\s*\\[)`, 'g'), () => {
-      return `${ident}[${count++}]`;
-    });
-  });
-
-  // 4c. Fix repeated unindexed array variables rendered in JSX:
-  // e.g. <span className="block">{headlineLines}</span>
-  //      <span className="block">{headlineLines}</span>
-  //      <span className="block">{headlineLines}</span>
-  // -> {headlineLines[0]}, {headlineLines[1]}, {headlineLines[2]}
-  const jsxArrayCounts: Record<string, number> = {};
-  code = code.replace(/\{([a-zA-Z0-9_$]*(?:Lines|Parts|Words|Items|Cards|List|Array))\}\s*(?=<\/(?:span|p|h[1-6]|div)>)/g, (_m, ident) => {
-    const idx = jsxArrayCounts[ident] ?? 0;
-    jsxArrayCounts[ident] = idx + 1;
-    return `{${ident}[${idx}]}`;
-  });
-
-  // 5. Fix unindexed items/cards/telemetry/metrics/inventory/specs/badges property access when variable is an array
-  const unindexedPropCounts: Record<string, number> = {};
+  // Fix dangling optional chaining on any variable/property access before delimiters:
+  // e.g. content.cards?.; or data.cards?. ?? fallback or match?. ?? ''
+  const danglingCounts: Record<string, number> = {};
   code = code.replace(
-    /(\b(?:cards|items|telemetry|metrics|inventory|specs|badges|stats|callouts|points))\??\.(title|label|body|metric|badge|value|val)(?!\s*\[)/g,
-    (_m, varName, prop) => {
-      const key = `${varName}.${prop}`;
-      const count = unindexedPropCounts[key] ?? 0;
-      unindexedPropCounts[key] = count + 1;
-      return `${varName}?.[${count}]?.${prop}`;
+    /([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)\?\.(?=\s*(?:[;,)\n}\]:]|\?\?|\|\||&&))/g,
+    (_match, prop) => {
+      const startIdx = prop.endsWith('match') ? 1 : 0;
+      const current = danglingCounts[prop] !== undefined ? danglingCounts[prop] + 1 : startIdx;
+      danglingCounts[prop] = current;
+      return `${prop}?.[${current}]`;
     }
   );
-  // Protect subsequent chained property access on metric (e.g. items?.[0]?.metric.badge -> items?.[0]?.metric?.badge)
-  code = code.replace(/(\?\.\[\d+\]\?\.metric)\.([a-zA-Z]+)/g, '$1?.$2');
 
-  // 6. Strip meta-attributions: eliminate robotic phrases like "The article states that", "The text notes", etc.
-  code = code.replace(/\b(?:The|This)\s+(?:article|piece|report|text|source|account)\s+(?:states|says|reports|claims|notes|explains|observes|contrasts|describes)\s+(?:that\s+)?/gi, '');
-  code = code.replace(/\bAccording\s+to\s+(?:the\s+)?(?:article|piece|report|text|source|account),\s*/gi, '');
-
-  // 7. Auto-protect and promote main H1 headline to canonical editorial text-[64px] (except deliberate half-width headlines at 44px-48px)
-  code = code.replace(/(<h1\b[^>]*\bclassName="[^"]*?)\btext-\[(?:2[0-9]|3[0-6])px\]/g, '$1text-[64px]');
-
-  // 8. Fix unindexed array assignment to metric variables:
-  // e.g. const metric = hasQualifier ? remainingWords : firstWord;
-  // -> const metric = hasQualifier ? (remainingWords[0] ?? '') : firstWord;
-  code = code.replace(/(\bmetric\s*=\s*[^;]*?\bremainingWords\b)(?!\s*\[)(?!\s*\.join)/g, '$1[0]');
-  code = code.replace(/const\s+metric\s*=\s*remainingWords\s*;/g, 'const metric = remainingWords[0] ?? "";');
-
-  // 9. Web UI trope sanitizer: enforce editorial print standards (zero drop shadows, zero pill badges on cards/kickers, zero progress bars)
-  code = code.replace(/\bshadow-(?:lg|md|xl|2xl|sm)\b/g, '');
-  code = code.replace(/\bborder-l-\[(?:4|6|8)px\]\b/g, 'border border-[var(--border)]');
-  code = code.replace(/\bborder-l-[468]\b/g, 'border border-[var(--border)]');
-  code = code.replace(/\brounded-(?:lg|xl|2xl|3xl)\b/g, 'rounded-none');
-
-  // 10. Strip fake text skeleton wireframe paths inside SVGs (e.g. M106 529H276 M106 542H245)
-  code = code.replace(/<path\b[^>]*\bd="M[0-9]+\s+[0-9]+H[0-9]+(?:\s+M[0-9]+\s+[0-9]+H[0-9]+)+[^"]*"[^>]*\/?>/gi, '');
-
-  // 12. Fix dangling or double optional chaining:
-  // e.g. .split('/')?.?.trim() -> .split('/')?.[0]?.trim()
-  // e.g. telemetry?.; -> telemetry;
-  code = code.replace(/\?\.[\s]*\?\.+/g, '?.[0]?.');
-  code = code.replace(/\?\.[\s]*\?\.\[/g, '?.[');
-  code = code.replace(/\?\.[\s]*;/g, ';');
-  code = code.replace(/\?\.[\s]*\)/g, ')');
-  code = code.replace(/\?\.[\s]*,/g, ',');
-
-  // 13. Telemetry double-indexing repair: prevent blank metric glitches where LLM writes
-  // const telemetry = slide.telemetry?.[0]; ... telemetry?.[0]?.badge
-  code = code.replace(/(\btelemetry\b)\?\.\[0\]\?\.\[0\]/g, '$1?.[0]');
-  code = code.replace(/(\btelemetry\b)\?\.\[(\d+)\]\?\.\[(\d+)\]/g, '$1?.[$2]');
-  code = code.replace(/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[(\d+)\];([\s\S]*?)\b\1\?\.\[\d+\]\?\.badge/g, 'const $1 = slide.telemetry?.[$2];$3$1?.badge');
-  if (/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[\d+\]/i.test(code)) {
-    const match = code.match(/const\s+(\w+)\s*=\s*(?:slide\.)?telemetry\?\.\[\d+\]/i);
-    if (match) {
-      const varName = match[1];
-      const reg = new RegExp(`\\b${varName}\\?\\.\\[\\d+\\]\\?\\.(badge|label|value|qualifier|unit)`, 'g');
-      code = code.replace(reg, `${varName}?.$1`);
-    }
-  }
-
-  // 14. SVG height constraint when paired with bottom cards: prevent vertical overflow
-  if (/<(?:article|div)\b[^>]*\b(?:grid-cols|divide-y|border-t|gap-)\b/.test(code)) {
-    code = code.replace(
-      /(<svg\b[^>]*\bviewBox="0 0 952 (?:5[0-9]{2}|6[0-9]{2}|7[0-9]{2})"[^>]*\bclassName=")([^"]*?)(")/g,
-      (_m, prefix, cls, suffix) => {
-        if (cls.includes('max-h-') || cls.includes('h-[')) return `${prefix}${cls}${suffix}`;
-        return `${prefix}${cls} max-h-[380px]${suffix}`;
+  // Fix array fallback for single item: e.g. data.cards?.[0] ?? lockedCards -> data.cards?.[0] ?? lockedCards[0]
+  const fallbackCounts: Record<string, number> = {};
+  code = code.replace(
+    /\?\?\s*([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)(?=\s*[;,)\n}])/g,
+    (match, arrName) => {
+      const commonArrays = ['lockedCards', 'defaultCards', 'fallbackCards', 'cards', 'items', 'points', 'metrics', 'timeline', 'rows', 'steps', 'quotes', 'findings', 'terms'];
+      const baseName = arrName.split('.').pop() || '';
+      if (commonArrays.includes(baseName)) {
+        const idx = fallbackCounts[arrName] || 0;
+        fallbackCounts[arrName] = idx + 1;
+        return `?? ${arrName}[${idx}]`;
       }
-    );
-  }
+      return match;
+    }
+  );
 
-  // 15. Fix unindexed string methods called on array variables created by split or ending with Parts/Words/Lines/Tokens
-  code = code.replace(/(\b[a-zA-Z0-9_$]*(?:Parts|Words|Lines|Tokens|List|Segments))\??\.(toLowerCase|toUpperCase|trim|slice|replace|startsWith|endsWith)\b/g, '$1[0]?.$2');
-  const partAssignCounts: Record<string, number> = {};
-  code = code.replace(/(const\s+[a-zA-Z0-9_$]+\s*=\s*)([a-zA-Z0-9_$]*(?:Parts|Words|Lines|Tokens|Segments))\s*;/g, (_m, prefix, arr) => {
-    const idx = partAssignCounts[arr] ?? 0;
-    partAssignCounts[arr] = idx + 1;
-    return `${prefix}${arr}[${idx}] ?? '';`;
+  // Fix array .trim() calls on regex match/split arrays: e.g. sentences?.trim() -> sentences[0]?.trim()
+  code = code.replace(/(\b[a-zA-Z0-9_]+)\?\.trim\(\)/g, (match, varName) => {
+    const arrayDeclRegex = new RegExp(`const\\s+${varName}\\s*=\\s*[^;]*(?:match|split|\\[)`);
+    if (arrayDeclRegex.test(code)) {
+      return `${varName}[0]?.trim()`;
+    }
+    return match;
   });
-  // Protect split calls against undefined
-  code = code.replace(/(\b[a-zA-Z0-9_$.?\[\]]+\??\.(?:label|title|body|headline|badge|kicker|text))\??\.split\(/g, '($1 ?? "").split(');
 
-  // 16. Ensure space between metric and unit spans in parseMetricBadge renders
-  code = code.replace(/(<span\b[^>]*\btabular-nums[^>]*>[^<]+<\/span>)\s*(\{unit &&)/g, "$1{' '}$2");
+  // Fix single item variable assignment from array: const opening = cards!; -> const opening = cards[0]!;
+  code = code.replace(
+    /const\s+([a-zA-Z0-9_]+)\s*=\s*([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)!?;/g,
+    (match, varName, arrName) => {
+      const commonArrays = ['cards', 'items', 'points', 'metrics', 'timeline', 'rows', 'steps', 'quotes', 'findings', 'terms'];
+      const baseName = arrName.split('.').pop() || '';
+      if (commonArrays.includes(baseName)) {
+        return `const ${varName} = ${arrName}[0]!;`;
+      }
+      return match;
+    }
+  );
 
-  // 17. Clean up bloated card padding: replace p-7, p-8, p-9 with compact editorial p-5
-  code = code.replace(/(<article\b[^>]*\bclassName="[^"]*?)\bp-[789]\b/g, '$1p-5');
-
-  // 18. Strip redundant AI disclaimers hallucinated into slide footers or paragraphs
-  code = code.replace(/<p\b[^>]*>[^<]*(?:not a verified publication|independent editorial brief prepared for)[^<]*<\/p>/gi, '');
-
-  // 19. Prevent margin collision with SlideFrame: soften my-6/my-8 on inner top-level wrappers
-  code = code.replace(/(<section\b[^>]*>[\s\S]*?<div\b[^>]*\bclassName="[^"]*?)\bmy-[68]\b/g, '$1gap-4');
+  // Fix passing entire array to a single item prop: e.g. <Turn card={cards!} /> -> <Turn card={cards[N]!} />
+  const propCountMap: Record<string, number> = {};
+  code = code.replace(
+    /<([A-Z][a-zA-Z0-9]*)\s+([a-zA-Z0-9_]+)=\{([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)\s*!?\s*\}\s*\/?>/g,
+    (match, compName, propName, arrName) => {
+      const commonArrays = ['cards', 'items', 'points', 'metrics', 'timeline', 'rows', 'steps', 'quotes', 'findings', 'terms'];
+      const baseName = arrName.split('.').pop() || '';
+      if (commonArrays.includes(baseName)) {
+        const key = `${compName}_${propName}_${arrName}`;
+        const idx = propCountMap[key] || 0;
+        propCountMap[key] = idx + 1;
+        return `<${compName} ${propName}={${arrName}[${idx}]!} />`;
+      }
+      return match;
+    }
+  );
 
   return code;
 }
@@ -387,9 +207,6 @@ export function validateTemplateTypeScript(templateDir: string): { valid: boolea
 
 export interface PipelineOptions {
   brief?: TemplateBrief;
-  preset?: string;
-  narrativePreset?: NarrativePreset;
-  targetSlideCount?: number;
   url?: string;
   provider?: string;
   platform?: string;
@@ -441,46 +258,89 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   let article: ArticleIntel | undefined;
   if (articleUrl) {
     console.log(`[Pipeline] Ingesting real news story from: ${articleUrl}...`);
-    options.onProgress?.('Ingesting Article Content', 0, 4);
+    options.onProgress?.('Ingesting Article Content', 0, 15);
     article = await ingestArticle(articleUrl);
   }
 
   // ==========================================================================
-  // PASS 1: INVESTIGATIVE FACT-CHECKER & CONTENT DOSSIER (ZERO HALLUCINATION)
+  // PASS 1: INVESTIGATIVE FACT-CHECKER (ZERO HALLUCINATION DOSSIER)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 1/7: Analyzing Content & Formulating Ground Truth Dossier...');
-  options.onProgress?.('Extracting Ground Truth & Content Intelligence', 1, 7);
+  let dossier: GroundTruthDossier;
+  if (article) {
+    console.log('[Pipeline] >>> Pass 1: Investigative Fact-Checker Extracting Verified GroundTruthDossier...');
+    options.onProgress?.('Extracting Verified Facts', 1, 15);
 
-  const narrativeResponse = await llm.generateJSON(
-    buildNarrativeIntelligenceSystemPrompt(),
-    buildNarrativeIntelligenceUserPrompt({
-      article,
-      brief,
-      promptText: brief.name || options.brief?.name,
-    }),
-    0.2 // Low temperature for high factual precision & journalistic punch
-  );
-  const narrative = extractJson<NarrativeIntelligence>(narrativeResponse.text);
+    const factResponse = await llm.generateJSON(
+      buildFactExtractionSystemPrompt(),
+      buildFactExtractionUserPrompt(article),
+      0.2 // Low temperature for high factual precision
+    );
+    const rawDossier = extractJson<any>(factResponse.text);
+    dossier = {
+      articleTitle: rawDossier.articleTitle || article.title,
+      publisher: rawDossier.publisher || article.publisher,
+      byline: rawDossier.byline || article.byline || 'Staff Bureau',
+      summary: rawDossier.summary || article.summary,
+      entities: rawDossier.entities || [],
+      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
+      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
+      hardwareSpecs: rawDossier.hardwareSpecs || {
+        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
+      },
+      coreControversy: rawDossier.coreControversy || {
+        corporateClaim: '',
+        criticismOrAlarm: '',
+        regulatoryOrHistoricalPrecedent: '',
+      },
+      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
+      editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
+    };
+    console.log(
+      `[Pipeline] Dossier Extracted: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
+    );
+  } else {
+    console.log('[Pipeline] >>> Pass 1: Lead AI Research Analyst Compiling GroundTruthDossier from Brief...');
+    options.onProgress?.('Compiling Verified Topic Dossier', 1, 15);
 
-  console.log(`[Pipeline] Pass 1 Complete:`);
-  console.log(`[Pipeline]   Hook:    "${narrative.hookHeadline}"`);
-  console.log(`[Pipeline]   Promise: "${narrative.valuePromise}"`);
-  console.log(`[Pipeline]   Metaphor: "${narrative.visualMetaphor || narrative.editorialTheme}"`);
-
-  // Unified research dossier for disk persistence
-  const dossier: NarrativeDossier = narrative;
+    const factResponse = await llm.generateJSON(
+      buildTopicResearchSystemPrompt(),
+      buildTopicResearchUserPrompt(brief),
+      0.2
+    );
+    const rawDossier = extractJson<any>(factResponse.text);
+    dossier = {
+      articleTitle: rawDossier.articleTitle || brief.name || 'AI Frontier & Open Weights',
+      publisher: rawDossier.publisher || brief.name || 'The Compute Review',
+      byline: rawDossier.byline || 'Staff Intelligence Bureau',
+      summary: rawDossier.summary || brief.vibe || 'Curated editorial exploration',
+      entities: rawDossier.entities || [],
+      verifiedMetrics: rawDossier.verifiedMetrics || rawDossier.metrics || [],
+      verifiedQuotes: rawDossier.verifiedQuotes || rawDossier.quotes || [],
+      hardwareSpecs: rawDossier.hardwareSpecs || {
+        deviceA: { name: 'Standard', specs: [], price: 'N/A', availability: 'N/A' },
+      },
+      coreControversy: rawDossier.coreControversy || {
+        corporateClaim: '',
+        criticismOrAlarm: '',
+        regulatoryOrHistoricalPrecedent: '',
+      },
+      hiddenCatchesAndLimits: rawDossier.hiddenCatchesAndLimits || rawDossier.catches || [],
+      editorialVerdict: rawDossier.editorialVerdict || { avoidAdvice: [], fitAdvice: [] },
+    };
+    console.log(
+      `[Pipeline] Topic Dossier Compiled: ${dossier.verifiedMetrics.length} metrics, ${dossier.verifiedQuotes.length} quotes.`
+    );
+  }
 
   // ==========================================================================
   // PASS 2: CREATIVE DIRECTOR ART DIRECTION & BRAND IDENTITY
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 2/7: Establishing Bespoke Brand Identity & Publication Masthead...');
-  options.onProgress?.('Establishing Editorial Masthead & Design System', 2, 7);
+  console.log('[Pipeline] >>> Pass 2: Creative Director Art Direction & Brand Identity...');
+  options.onProgress?.('Generating Brand Identity', 2, 15);
 
-  const defaultSlug = (narrative.articleTitle || article?.title || brief.name || 'story')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .slice(0, 32)
-    .replace(/(^-|-$)/g, '');
+  const defaultSlug = article
+    ? (article.title || 'story').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 32).replace(/(^-|-$)/g, '')
+    : (brief.name || 'custom').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   let brand: BrandTokens;
 
@@ -510,10 +370,8 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
       googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
     }
 
-    const sanitized = sanitizePublicationWordmark(b.name || b.wordmark || narrative.publisher || 'The Fine Print');
-    const name = b.name && b.name.length <= 32 && !/not a verified|independent editorial/i.test(b.name) ? b.name : sanitized.name;
-    const wordmark = b.wordmark && b.wordmark.length <= 32 && !/not a verified|independent editorial/i.test(b.wordmark) ? b.wordmark : sanitized.wordmark;
-    const slug = options.preset || defaultSlug;
+    const name = b.name || b.wordmark || 'Custom Brand';
+    const slug = b.slug || defaultSlug;
 
     brand = {
       name,
@@ -534,22 +392,16 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
         monoFont,
         googleFontsUrl,
       },
-      wordmark,
+      wordmark: b.wordmark || name.toUpperCase(),
       wordmarkStyle: (b.wordmarkStyle as any) || 'sans',
       handle: b.handle || `@${slug.replace(/[^a-zA-Z0-9]/g, '')}`,
       texture: (b.texture as any) || 'grid',
       motif: (b.motif as any) || 'crosshair',
-      aestheticPreset: (b.aestheticPreset as any) || 'sculptural-monolith',
     };
   } else {
     const brandPrompt = article
       ? buildArticleBrandUserPrompt(article, brief)
-      : buildBrandUserPrompt({
-          ...brief,
-          name: narrative.publisher || brief.name,
-          domain: brief.domain || `${defaultSlug}.pub`,
-          vibe: `${narrative.visualMetaphor || narrative.editorialTheme} - ${narrative.kicker}`,
-        });
+      : buildBrandUserPrompt(brief);
 
     const brandResponse = await llm.generateJSON(
       buildBrandSystemPrompt(),
@@ -558,98 +410,85 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     );
 
     brand = extractJson<BrandTokens>(brandResponse.text);
-    const sanitized = sanitizePublicationWordmark(brand.wordmark || brand.name || narrative.publisher || 'The Fine Print');
-    if (!brand.wordmark || brand.wordmark.length > 32 || /not a verified|independent editorial/i.test(brand.wordmark)) {
-      brand.wordmark = sanitized.wordmark;
-      brand.name = sanitized.name;
-    }
-    brand.slug = options.preset || brand.slug || defaultSlug;
-    brand.aestheticPreset = brand.aestheticPreset || 'sculptural-monolith';
+    brand.slug = brand.slug || defaultSlug;
   }
 
   brand.platform = options.platform || 'instagram-feed';
-  const slug = options.preset || brand.slug || defaultSlug;
-  brand.slug = slug;
-  console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}, style: ${brand.aestheticPreset || 'default'}).`);
-
-  const rawBrandKit = (options.brandKit as any) || {};
-  const narrativePreset: NarrativePreset =
-    options.narrativePreset ||
-    rawBrandKit.narrativePreset ||
-    'storytelling';
-
-    const targetSlideCount: number =
-    typeof options.targetSlideCount === 'number'
-      ? options.targetSlideCount
-      : typeof rawBrandKit.targetSlideCount === 'number'
-      ? rawBrandKit.targetSlideCount
-      : 7;
+  const slug = brand.slug;
+  console.log(`[Pipeline] Pass 2 complete: Brand established for "${brand.name}" (${brand.slug}).`);
 
   // ==========================================================================
   // PASS 3: EDITORIAL STRATEGIST (HOOK & TENSION FORMULA)
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 3/7: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
-  options.onProgress?.('Formulating Narrative Strategy & Tension Formula', 3, 7);
+  console.log('[Pipeline] >>> Pass 3: Editorial Strategist Extracting Scroll-Stopping Hook & Core Conflict...');
+  options.onProgress?.('Extracting Story Strategy', 3, 15);
 
   let strategy: StoryStrategy;
-  try {
+  if (article) {
     const strategyResponse = await llm.generateJSON(
-      buildStoryStrategySystemPrompt(narrativePreset),
+      buildStoryStrategySystemPrompt(),
       buildStoryStrategyUserPrompt(dossier, article),
-      0.5
+      0.7
     );
     strategy = extractJson<StoryStrategy>(strategyResponse.text);
-    console.log(`[Pipeline] Pass 3 complete: Hook "${strategy.hookHeadline}", Promise "${strategy.valuePromise}".`);
-  } catch (err: any) {
-    console.warn(`[Pipeline] Pass 3 note: ${err.message}, using dossier defaults.`);
+  } else {
     strategy = {
-      hookHeadline: narrative.hookHeadline || 'The Investigation',
-      valuePromise: narrative.valuePromise || 'Essential systemic findings',
-      kicker: narrative.kicker || 'SPECIAL REPORT',
-      coreConflict: narrative.coreConflict ? `${narrative.coreConflict.claim} vs ${narrative.coreConflict.reality}` : 'Underlying corporate trade-offs',
-      hiddenCatch: (narrative.hiddenCatches || []).join('; ') || 'Critical regulatory loopholes',
-      verdict: narrative.verdict || 'The permanent shift in the landscape',
-      keyMetrics: (narrative.verifiedMetrics || []).map((m) => ({ value: m.value, label: m.label, context: m.context || '' })),
-      keyQuotes: (narrative.verifiedQuotes || []).map((q) => ({ quote: q.quote, speaker: q.speaker, role: q.role || '' })),
+      hookHeadline: brief.name || 'The Investigation',
+      valuePromise: brief.vibe || 'Essential insights',
+      kicker: 'ANALYSIS / IN FOCUS',
+      coreConflict: 'Understanding emerging market dynamics',
+      hiddenCatch: 'Critical parameters to watch',
+      verdict: 'The essential takeaway',
+      keyMetrics: [],
+      keyQuotes: [],
     };
   }
+  console.log(`[Pipeline] Hook Formulated: "${strategy.hookHeadline}"`);
+  console.log(`[Pipeline] Value Promise:  "${strategy.valuePromise}"`);
 
   // ==========================================================================
-  // PASS 4: SENIOR COPY EDITOR (DYNAMIC STORYBOARD WITH CONTENT-DRIVEN TOPOLOGY)
+  // PASS 4: SENIOR COPY EDITOR (10-SLIDE STORYBOARD WITH HARD WORD BUDGETS)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 4/7: Senior Copy Editor Authoring ${targetSlideCount}-Slide Storyboard...`);
-  options.onProgress?.('Authoring Storyboard & Editorial Copy', 4, 7);
+  console.log('[Pipeline] >>> Pass 4: Senior Copy Editor Authoring 10-Slide High-Signal Storyboard...');
+  options.onProgress?.('Authoring Storyboard', 4, 15);
 
-  const deckResponse = await llm.generateJSON(
-    buildStoryDeckSystemPrompt(narrativePreset, targetSlideCount),
-    buildStoryDeckUserPrompt(dossier, brand, targetSlideCount, strategy),
-    0.6
-  );
-  let allSlides = extractJson<SlideData[]>(deckResponse.text);
-  if (!Array.isArray(allSlides) || allSlides.length === 0) {
-    console.warn('[Pipeline] Storyboard JSON was not an array, attempting object extraction...');
-    allSlides = (allSlides as any)?.slides || [];
+  let allSlides: SlideData[] = [];
+
+  if (article) {
+    const deckResponse = await llm.generateJSON(
+      buildStoryDeckSystemPrompt(),
+      buildStoryDeckUserPrompt(strategy, dossier, brand),
+      0.6
+    );
+    allSlides = extractJson<SlideData[]>(deckResponse.text);
+  } else {
+    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 1: Slides 1–9)...');
+    const batch1Response = await llm.generateJSON(
+      buildDeckSystemPrompt(),
+      buildDeckBatch1Prompt(brief, brand),
+      0.7
+    );
+    const batch1Slides = extractJson<SlideData[]>(batch1Response.text);
+
+    console.log('[Pipeline] >>> Pass 4: Authoring Master Deck (Batch 2: Slides 10–17)...');
+    const batch2Response = await llm.generateJSON(
+      buildDeckSystemPrompt(),
+      buildDeckBatch2Prompt(brief, brand),
+      0.7
+    );
+    const batch2Slides = extractJson<SlideData[]>(batch2Response.text);
+    allSlides = [...batch1Slides, ...batch2Slides];
   }
 
-  // Normalize slide schema and ensure unique IDs, indexes, and archetypes
+  // Normalize slide schema ensuring id, index, and type are guaranteed
   const activePlatform = options.platform || 'instagram-feed';
-
-  allSlides = allSlides.map((s, idx) => {
-    const chosenTopology = s.layoutTopology || s.visualStyle || (idx === 0 ? 'monumental-editorial-cover' : 'asymmetric-editorial-cards');
-    const chosenStyle = s.visualStyle || chosenTopology;
-    const archetype = s.archetype || chosenTopology;
-
-    return {
-      ...s,
-      id: s.id || `slide-${idx + 1}`,
-      index: typeof s.index === 'number' ? s.index : idx,
-      type: s.type || (s as any).archetype || (idx === 0 ? 'cover' : 'editorial'),
-      archetype,
-      layoutTopology: chosenTopology,
-      visualStyle: chosenStyle,
-      platform: activePlatform,
-    };
-  });
+  allSlides = allSlides.map((s, idx) => ({
+    ...s,
+    id: s.id || `slide-${idx + 1}`,
+    index: typeof s.index === 'number' ? s.index : idx,
+    type: s.type || (s as any).archetype || 'editorial',
+    platform: activePlatform,
+  }));
 
   const deck: DeckData = {
     templateName: brand.name,
@@ -663,14 +502,6 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   // Create isolated template folder in apps/generator/templates/<slug>/
   const templateDir = path.join(TEMPLATES_ROOT, slug);
   const slidesDir = path.join(templateDir, 'slides');
-  if (fs.existsSync(slidesDir)) {
-    const existing = fs.readdirSync(slidesDir);
-    for (const f of existing) {
-      if (f.endsWith('.tsx') || f.endsWith('.ts')) {
-        fs.unlinkSync(path.join(slidesDir, f));
-      }
-    }
-  }
   fs.mkdirSync(slidesDir, { recursive: true });
 
   fs.writeFileSync(path.join(templateDir, 'brand.json'), JSON.stringify(brand, null, 2), 'utf-8');
@@ -678,94 +509,44 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   fs.writeFileSync(path.join(templateDir, 'dossier.json'), JSON.stringify(dossier, null, 2), 'utf-8');
 
   // ==========================================================================
-  // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (BESPOKE SVG & SPATIAL BLUEPRINTS)
+  // PASS 5: VISUAL ART DIRECTOR & LAYOUT ARCHITECT (SVG & SPATIAL BLUEPRINT)
   // ==========================================================================
-  console.log(`[Pipeline] >>> Pass 5/7: Visual Art Director Designing Bespoke Base Styles & Blueprints...`);
-  options.onProgress?.('Designing Bespoke Layout & SVG Infographic Blueprints', 5, 7);
+  console.log('[Pipeline] >>> Pass 5: Visual Art Director Designing Bespoke Slide Layout & SVG Blueprints...');
+  options.onProgress?.('Designing Visual Blueprints', 5, 15);
 
   let blueprints: SlideDesignBlueprint[] = [];
-  let baseCss = `/* Bespoke styles for ${brand.name} */\n`;
-  try {
-    const blueprintResponse = await llm.generateJSON(
-      buildVisualBlueprintSystemPrompt(deck.slides.length),
-      buildVisualBlueprintUserPrompt(deck.slides, brand, dossier, strategy),
-      0.5
-    );
-    const parsedData = extractJson<any>(blueprintResponse.text);
-    if (parsedData && typeof parsedData === 'object') {
-      if (typeof parsedData.baseCss === 'string' && parsedData.baseCss.trim().length > 0) {
-        baseCss = parsedData.baseCss.trim();
-      }
-      if (Array.isArray(parsedData.blueprints)) {
-        blueprints = parsedData.blueprints;
-      } else if (Array.isArray(parsedData)) {
-        blueprints = parsedData;
-      }
-    } else if (Array.isArray(parsedData)) {
-      blueprints = parsedData;
-    }
-    console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} bespoke blueprints and ${baseCss.length} bytes of base CSS generated.`);
-  } catch (err: any) {
-    console.warn(`[Pipeline] Pass 5 blueprint generation note: ${err.message}`);
-  }
-
-  // Persist bespoke styles.css
-  fs.writeFileSync(path.join(templateDir, 'styles.css'), baseCss, 'utf-8');
-
-  blueprints = deck.slides.map((s, idx) => {
-    const found = blueprints.find((b) => b.slideId === s.id || b.slideId === `slide-${idx + 1}`);
-    const layout = found?.layoutStructure || s.layoutTopology || s.archetype || 'asymmetric-editorial-cards';
-    const isSvgFreeArchetype = ['claim-vs-reality-diptych', 'hero-metric-placard', 'three-row-verification-ledger'].includes(layout);
-
-    let svgConcept = found?.svgConcept;
-    if (isSvgFreeArchetype || found?.svgConcept?.type === 'none' || found?.svgConcept?.description === 'none') {
-      svgConcept = {
-        description: 'none',
-        type: 'none',
-        elements: [],
-      };
-    } else if (!svgConcept) {
-      svgConcept = {
-        description: s.svgBlueprint || 'Bespoke editorial vector infographic matching slide thesis',
-        type: 'schematic',
-        elements: [],
-      };
-    }
-
-    return {
+  if (deck.slides.some((s) => s.svgBlueprint || s.layoutTopology)) {
+    console.log('[Pipeline] Pass 5: Using per-slide visual styles and SVG blueprints determined from content.');
+    blueprints = deck.slides.map((s) => ({
       slideId: s.id,
       type: s.type,
-      layoutStructure: layout,
-      svgConcept,
-      typographyScale: found?.typographyScale,
-      accentPlacement: found?.accentPlacement,
-      spatialBalanceGuidance: found?.spatialBalanceGuidance,
-    };
-  });
-
-  // Attach blueprint svg descriptions and layout structure to deck slides
-  deck.slides = deck.slides.map((s, idx) => {
-    const bp = blueprints[idx];
-    const isNone = bp?.svgConcept?.type === 'none' || bp?.svgConcept?.description === 'none';
-    return {
-      ...s,
-      svgBlueprint: isNone ? undefined : (bp?.svgConcept?.description || s.svgBlueprint),
-      layoutTopology: bp?.layoutStructure || s.layoutTopology,
-    };
-  });
-
-  // Persist updated deck.json and blueprints.json
-  fs.writeFileSync(path.join(templateDir, 'deck.json'), JSON.stringify(deck, null, 2), 'utf-8');
-  fs.writeFileSync(path.join(templateDir, 'blueprints.json'), JSON.stringify(blueprints, null, 2), 'utf-8');
+      layoutStructure: s.layoutTopology || s.visualStyle || 'hero-diagram-with-callouts',
+      svgConcept: {
+        description: s.svgBlueprint || 'Inline bespoke SVG vector diagram matching content',
+        type: 'schematic',
+      },
+    }));
+  } else {
+    try {
+      const blueprintResponse = await llm.generateJSON(
+        buildVisualBlueprintSystemPrompt(),
+        buildVisualBlueprintUserPrompt(deck.slides, brand, dossier),
+        0.7
+      );
+      blueprints = extractJson<SlideDesignBlueprint[]>(blueprintResponse.text);
+      console.log(`[Pipeline] Pass 5 complete: ${blueprints.length} slide visual blueprints generated.`);
+    } catch (err: any) {
+      console.warn(`[Pipeline] Visual blueprint generation fallback: ${err.message}`);
+    }
+  }
 
   // ==========================================================================
-  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION WITH CoT)
+  // PASS 6: PRINCIPAL REACT ENGINEER (PARALLEL BESPOKE CODE GENERATION)
   // ==========================================================================
   const concurrency = options.concurrency || 3;
   console.log(
-    `[Pipeline] >>> Pass 6/7: Synthesizing Slides Final Form with CoT (Concurrency: ${concurrency})...`
+    `[Pipeline] >>> Pass 6: Principal React Engineer Synthesizing Slides in Parallel (Concurrency: ${concurrency})...`
   );
-  options.onProgress?.('Synthesizing Slide React Components', 6, 7);
 
   const slideTasks = deck.slides.map((slideData, i) => async () => {
     const slideNumber = i + 1;
@@ -777,59 +558,26 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
     const filename = `${componentName}.tsx`;
     const filePath = path.join(slidesDir, filename);
 
-    // Cumulative deck memory
-    const precedingSlides = deck.slides.slice(0, i).map((s, idx) => ({
-      slideNumber: idx + 1,
-      type: s.type || 'slide',
-      headline: s.headline || '',
-      layoutStructure: blueprints[idx]?.layoutStructure,
-    }));
-    const upcomingSlides = deck.slides.slice(i + 1).map((s, idx) => ({
-      slideNumber: i + 2 + idx,
-      type: s.type || 'slide',
-      headline: s.headline || '',
-    }));
-
     console.log(`[Pipeline]   ⚡ [${slideNumber}/${deck.slides.length}] Synthesizing ${filename} (${slideData.type})...`);
-    options.onProgress?.(`Pass 6/7: Synthesizing Slide ${slideNumber}: ${slideData.type}`, slideNumber, deck.slides.length);
+    options.onProgress?.(`Synthesizing Slide ${slideNumber}: ${slideData.type}`, 5 + slideNumber, 15);
 
     const startTime = Date.now();
     const slideResponse = await llm.generateJSON(
       buildSingleSlideSystemPrompt(activePlatform),
-      buildSingleSlideUserPrompt({
-        slideNumber,
-        totalSlides: deck.slides.length,
-        slideData,
-        blueprint,
-        precedingSlides,
-        upcomingSlides,
-        baseCss,
-        brand,
-      }),
+      buildSingleSlideUserPrompt(slideNumber, slideData, blueprint, brand),
       0.6
     );
-
-    const designThought = extractDesignThought(slideResponse.text);
-    if (designThought) {
-      console.log(`[Pipeline]   💭 Design CoT [Slide ${slideNumber}]:\n${designThought.split('\n').map((l) => `      ${l}`).join('\n')}`);
-    }
 
     let code = sanitizeTsxCode(extractTsx(slideResponse.text));
 
     // Fix imports if necessary
     if (!code.includes("from '../../../src/skeleton/types'")) {
       code = code.replace(
-        /import (?:type )?\{([^}]+)\}\s*from\s*['"][^'"]+['"];?/,
-        "import {$1} from '../../../src/skeleton/types';"
+        /import type \{ SlideComponentProps \} from ['"][^'"]+['"];?/,
+        "import type { SlideComponentProps } from '../../../src/skeleton/types';"
       );
     }
-    if (code.includes('parseMetricBadge') && !code.includes('parseMetricBadge,')) {
-      code = code.replace(
-        /import\s*\{(?:\s*type\s+)?SlideComponentProps\s*\}\s*from\s*['"][^'"]+['"];?/,
-        "import { parseMetricBadge, type SlideComponentProps } from '../../../src/skeleton/types';"
-      );
-    }
-    if (!code.includes('SlideComponentProps')) {
+    if (!code.includes('import type { SlideComponentProps }')) {
       code = `import type { SlideComponentProps } from '../../../src/skeleton/types';\n${code}`;
     }
 
@@ -866,10 +614,9 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
   const slideExports = await runConcurrentPool(slideTasks, concurrency, (task) => task());
 
   // ==========================================================================
-  // PASS 7: TEMPLATE ENTRYPOINT ASSEMBLY & TYPESCRIPT COMPILER VERIFICATION
+  // PASS 7: TEMPLATE INDEX ASSEMBLY & TYPESCRIPT COMPILER VERIFICATION
   // ==========================================================================
-  console.log('[Pipeline] >>> Pass 7/7: Assembling template package entry point (index.ts) and verifying TypeScript integrity...');
-  options.onProgress?.('Assembling Template Entry Point', 7, 7);
+  console.log('[Pipeline] >>> Pass 7: Assembling template package entry point (index.ts)...');
   const indexImports = slideExports
     .map((s) => `import ${s.componentName} from './slides/${s.filename.replace('.tsx', '')}';`)
     .join('\n');
@@ -880,7 +627,6 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 import type { TemplatePackage } from '../../src/skeleton/types';
 import brandData from './brand.json';
 import deckData from './deck.json';
-import './styles.css';
 
 ${indexImports}
 
@@ -897,10 +643,8 @@ export default pkg;
 
   fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
 
-  fs.writeFileSync(path.join(templateDir, 'index.ts'), indexContent, 'utf-8');
-
-  console.log(`[Pipeline] >>> Pass 7/7: Verifying TypeScript compiler integrity for template ${slug}...`);
-  options.onProgress?.('Verifying Template Integrity & TypeScript Verification', 7, 7);
+  console.log(`[Pipeline] >>> Verifying TypeScript integrity for template ${slug}...`);
+  options.onProgress?.('Verifying TypeScript Integrity', 14, 15);
 
   const initialCheck = validateTemplateTypeScript(templateDir);
   if (initialCheck.valid) {
@@ -940,7 +684,7 @@ export default pkg;
     }
   }
 
-  options.onProgress?.('Complete', 7, 7);
+  options.onProgress?.('Complete', 15, 15);
   return {
     templateSlug: slug,
     templateDir,

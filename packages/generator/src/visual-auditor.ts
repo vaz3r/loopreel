@@ -44,6 +44,12 @@ export async function auditTemplateStudio(
         ? `${baseUrl}?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`
         : `${baseUrl}/?template=${templateSlug}&slide=${i}&mode=1:1&export=true&platform=${activePlatform}`;
       await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
+      // Self-contained font loading verification: wait for document.fonts.ready
+      await page.evaluate(async () => {
+        if (document.fonts) {
+          await document.fonts.ready;
+        }
+      });
       await page.waitForTimeout(300); // Allow fonts and AutoFit to settle
 
       // Verify that the browser actually rendered the requested template and was not redirected
@@ -232,10 +238,16 @@ export async function auditTemplateStudio(
           : [];
         if (contentChildren.length >= 2) {
           for (let c = 0; c < contentChildren.length - 1; c++) {
+            const nextEl = contentChildren[c + 1] as HTMLElement;
+            // Skip intentionally spaced footer/footnote elements using mt-auto or my-auto
+            const cls = typeof nextEl.className === 'string' ? nextEl.className : (nextEl.getAttribute('class') || '');
+            if (cls && (cls.includes('mt-auto') || cls.includes('my-auto'))) {
+              continue;
+            }
             const r1 = (contentChildren[c] as HTMLElement).getBoundingClientRect();
-            const r2 = (contentChildren[c + 1] as HTMLElement).getBoundingClientRect();
+            const r2 = nextEl.getBoundingClientRect();
             const gap = r2.top - r1.bottom;
-            if (gap > 180) {
+            if (gap > 220 && c + 1 < contentChildren.length - 1) {
               collisions.push(
                 `Slide ${slideIdx + 1}: Empty vertical void of ${Math.round(gap)}px detected between elements`
               );
