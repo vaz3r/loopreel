@@ -5,7 +5,7 @@ export const CURATED_BRAND_PRESETS: BespokeBrand[] = [
     name: 'The Fine Print',
     slug: 'the-fine-print',
     vibe: 'Investigative Corporate Autopsies, Fine Print Tricks & Receipts',
-    domain: 'thefineprint.co',
+    domain: 'thefineprint.pub',
     palette: {
       paper: '#0A0A0C',
       ink: '#F5F5F7',
@@ -23,7 +23,7 @@ export const CURATED_BRAND_PRESETS: BespokeBrand[] = [
     },
     wordmark: 'THE FINE PRINT',
     wordmarkStyle: 'small-caps',
-    handle: '@thefineprint.co',
+    handle: '@thefineprint.pub',
     texture: 'grid',
     motif: 'bracket',
   },

@@ -84,7 +84,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
       jobLogger.info({ prompt: promptText }, 'Synthesizing editorial publication directly from prompt/topic...');
       generatorOptions.brief = {
         name: promptText.slice(0, 100),
-        domain: rawBrandKit.domain || 'thefineprint.co',
+        domain: rawBrandKit.domain || 'thefineprint.pub',
         vibe: promptText,
         inspiration: rawBrandKit.vibe || 'Investigative corporate autopsies, fine print tricks and receipts',
       };
