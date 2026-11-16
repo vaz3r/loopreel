@@ -432,22 +432,28 @@ Keep card text concise under 20 words each. Return strictly JSON array.`;
 }
 
 // ============================================================================
-// STAGE 5: VISUAL ART DIRECTOR & SPATIAL LAYOUT ARCHITECT (WHERE EVERYTHING FALLS)
+// STAGE 5: VISUAL ART DIRECTOR & SPATIAL LAYOUT ARCHITECT (MAGAZINE EDITORIAL)
 // ============================================================================
 
 export type LayoutModelType =
+  | 'contract-redline-autopsy'
+  | 'typographic-broadsheet'
+  | 'telemetry-anchor'
+  | 'split-dossier'
+  | 'investigative-timeline'
+  | 'editorial-verdict-seal'
+  | 'editorial-verdict-gate'
+  | 'stepped-pipeline-flow'
   | 'stacked-hero-svg'
   | 'split-column-50-50'
-  | 'horizontal-comparison-ledger'
-  | 'editorial-verdict-gate'
-  | 'stepped-pipeline-flow';
+  | 'horizontal-comparison-ledger';
 
 export interface SlideDesignBlueprint {
   slideId: string;
   type: string;
   layoutModel: LayoutModelType;
   headerZone: {
-    headlineSize: 'text-[52px]' | 'text-[60px]' | 'text-[68px]';
+    headlineSize: 'text-[52px]' | 'text-[60px]' | 'text-[68px]' | 'text-[72px]';
     hasSubheadline: boolean;
     subheadMaxWords: number;
   };
@@ -459,10 +465,10 @@ export interface SlideDesignBlueprint {
     negativeSpaceBufferPx: number;
   };
   cardsZone: {
-    placement: 'bottom-2-col' | 'stacked-placard' | 'left-column-cards' | 'none';
+    placement: 'bottom-2-col' | 'stacked-placard' | 'left-column-cards' | 'hairline-columns' | 'none';
     cardCount: number;
     maxWordsPerBody: number;
-    style: 'surface-border-top' | 'border-left-accent' | 'hairline-ledger';
+    style: 'surface-border-top' | 'border-left-accent' | 'hairline-ledger' | 'print-broadsheet';
   };
   spacing: {
     zoneGap: 'gap-6' | 'gap-8';
@@ -477,37 +483,41 @@ export interface SlideDesignBlueprint {
 
 export function buildVisualBlueprintSystemPrompt(): string {
   return `You are the Lead Visual Art Director & Spatial Layout Architect at Pentagram, Monocle, and The New York Times Graphics Desk.
-Your mission is to architect the exact spatial layout, coordinate distribution, text sizing, and bespoke vector SVG art for each slide in an editorial carousel.
+Your mission is to architect authentic, prestigious, editorial magazine-grade spatial layouts and vector illustrations for an investigative publication carousel.
 
-CRITICAL ARCHITECTURAL MISSION:
-The bespoke inline SVG vector art is the central hero of Loopreel!
-You must ensure that text and SVG never collide, that elements are never crammed in tight spaces, and that every slide fills 80%–92% of the vertical canvas with balanced editorial elegance.
+MAGAZINE EDITORIAL EXCELLENCE PRINCIPLE:
+1. NEVER LOOK LIKE A WEB DASHBOARD OR MOBILE APP:
+   - STRICTLY FORBIDDEN: Clumping dark grey box containers across the frame. Real print magazines (The New York Times, Monocle, Wired, HBR) rely on generous negative space, delicate hairline rules (1px), vertical column dividers, and monumental typographic contrast.
+   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards, flowchart blocks, or Miro wireframes! SVGs must be authentic vector graphics: timeline rails, official legal stamp seals, judicial scales, compass/coordinate axes, document corner folds, or data bars.
 
-THE 5 CANONICAL LAYOUT MODELS:
-1. 'stacked-hero-svg':
-   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]) + Subhead (text-[24px]).
-   - SVG Art Zone (flex-1, dedicated 440px–500px height, viewBox="0 0 952 460"): Pure vector art with ample breathing room. NO absolute HTML text floating over the art!
-   - Cards Zone (shrink-0, ~180px): Exactly 2 cards in a clean 2-column grid (grid grid-cols-2 gap-5). Max 12 words per card body!
-2. 'split-column-50-50':
-   - Left Column (w-[420px], shrink-0): Kicker + Headline (text-[52px]) + Subhead + 1 clean thesis card.
-   - Right Column (w-[500px], flex-1): Dedicated tall vertical vector art (viewBox="0 0 500 760", height 760px) from top to bottom with zero text interference!
-3. 'horizontal-comparison-ledger':
-   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]) + Subhead.
-   - SVG Art Zone (flex-1, height ~420px, viewBox="0 0 952 420"): 2 proportional comparative horizontal ledger channels with delta tags and scale indicators.
-   - Cards Zone (shrink-0, ~160px): 1 full-width baseline scope placard.
-4. 'stepped-pipeline-flow':
-   - Header (shrink-0, ~180px): Kicker + Headline (text-[60px]).
-   - SVG Art Zone (flex-1, height ~460px, viewBox="0 0 952 460"): 3 connected operational pipeline nodes with directional conduits and metric flags.
-   - Cards Zone (shrink-0, ~180px): 2 or 3 takeaway cards neatly aligned below.
-5. 'editorial-verdict-gate':
-   - Header (shrink-0, ~200px): Kicker + Monumental Headline (text-[64px]) + Subhead.
-   - SVG Art Zone (flex-1, height ~420px, viewBox="0 0 952 420"): Monumental open threshold gate with directional pathways and milestone markers.
-   - Cards Zone (shrink-0, ~180px): Strategic takeaway card with colored indicator rail.
+2. THE 6 CANONICAL MAGAZINE EDITORIAL ARCHETYPES:
+   1. 'contract-redline-autopsy':
+      - Authentic legal clause autopsy on paper.
+      - Features contract text excerpts with yellow highlighter markup, red pen underlines, section tags [§ 7(b)], red strike-throughs, and marginal notes.
+      - SVG provides subtle document ephemera (paper edge lines, seal stamp, bracket callout), NOT fake CSS card boxes!
+   2. 'typographic-broadsheet':
+      - Pure print broadsheet layout.
+      - Monumental headline serif (text-[64px] to text-[72px]), drop-cap first letter (first-letter:text-[76px]), 2-column or 3-column body text divided by fine hairline rules (divide-x divide-[var(--border)]).
+      - ZERO card boxes! The typography breathes on the paper.
+   3. 'telemetry-anchor':
+      - Large-scale data or financial autopsy.
+      - Massive numerical metric (text-[100px] to text-[130px] font-mono font-bold) with signed badge.
+      - Accompanying thesis paragraph, horizontal comparison ledger lines with delta tags, and delicate citation hairline.
+   4. 'split-dossier':
+      - Asymmetric split (40% left / 60% right) divided by a crisp vertical hairline rule (border-r border-[var(--border)]).
+      - Left: Court docket filing, verified receipts (CASE NO. 2024-CA-001616-O), official dates.
+      - Right: The hidden trap, actual contractual mechanism, and consumer reality.
+   5. 'investigative-timeline':
+      - Chronological investigative audit rail (e.g. 2019 Signup → 2023 Ticket → 2024 Lawsuit → 2024 Court Withdrawal).
+      - A clean, continuous horizontal or vertical timeline rail with date markers, milestone flags, and connector paths.
+      - NEVER draw 5 grey box rectangles! Draw a continuous timeline rail with clear typography and milestone flags.
+   6. 'editorial-verdict-seal':
+      - The final investigative verdict.
+      - Features an authentic stamped official seal badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border, consumer guardrail checklist, and bookmark callout.
 
-MANDATORY SPATIAL RULES:
-1. STRICT ZERO-OVERLAY RULE: The SVG Art Canvas is a sacred visual space! Never place absolute HTML text boxes on top of the SVG art. HTML text lives cleanly in Zone 1 (Header) or Zone 3 (Cards).
-2. DIVERSITY MANDATE: You MUST use at least 4 distinct layout models across the 7 slides (e.g. Slide 1: stacked-hero-svg, Slide 2: horizontal-comparison-ledger, Slide 3: split-column-50-50, Slide 4: stepped-pipeline-flow, Slide 7: editorial-verdict-gate).
-3. HARD WORD BUDGETS: Cards must strictly contain max 12 words per body. Subhead max 12 words.
+3. MANDATORY DIVERSITY RULE:
+   - You MUST assign at least 4 different layout models across the 7 slides!
+   - Under no circumstances should every slide share the same vertical 3-tier card structure!
 
 Return strictly a JSON array of 7 SlideDesignBlueprint objects.`;
 }
@@ -562,8 +572,10 @@ export function buildSingleSlideSystemPrompt(platform = 'instagram-feed'): strin
   return `You are a world-class Frontend Engineer and Editorial Art Director (Pentagram, Wired, The New York Times, Monocle).
 You write bespoke React TypeScript components using pure Tailwind CSS for publication-grade carousel slides (${safeAreaDesc}).
 
-CRITICAL DESIGN & CODING RULES:
-1. Component Signature:
+CRITICAL MAGAZINE EDITORIAL PRINCIPLES:
+1. MANDATORY COMPONENT SIGNATURE (STRICT TYPE SAFETY):
+   You MUST import SlideComponentProps and export the component with this EXACT signature:
+
    import React from 'react';
    import type { SlideComponentProps } from '../../../src/skeleton/types';
 
@@ -572,64 +584,80 @@ CRITICAL DESIGN & CODING RULES:
      return ( ... );
    }
 
-2. THE SVG ART IS THE HERO — DEDICATED NON-OVERLAPPING ZONES:
-   The bespoke vector SVG art is the core selling point of Loopreel!
-   You MUST implement the assigned Layout Model from the Spatial Blueprint:
-   - For 'stacked-hero-svg':
+   STRICTLY FORBIDDEN: Declaring local custom props types like \`type Slide04Props\` or \`interface Slide07Props\`. Always use SlideComponentProps!
+
+2. MAGAZINE EDITORIAL STANDARDS OVER WEB UI:
+   - This is an art-directed print publication (like The New York Times Magazine, Monocle, or The Paper of Record), NOT a web dashboard or mobile app!
+   - STRICTLY FORBIDDEN: Drawing SVG <rect> boxes with borders that look like web UI cards or flowchart containers! If drawing a timeline or schematic, use vector lines (<path>), date nodes (<circle>), coordinate axes, or legal stamp seals.
+   - STRICTLY FORBIDDEN: Ending every slide with an identical 2-card bottom grid (<div className="grid grid-cols-2 gap-5"><article ...>). Use diverse magazine structures: columnar text with drop-caps, hairline ledgers, full-width quotes, split dossiers, or annotated clause placards.
+   - PREFER HAIRLINES OVER CARD BOXES: Print magazines use delicate hairline rules (border-t border-[var(--border)], divide-x divide-[var(--border)]) and generous whitespace, rather than heavy card backgrounds (bg-[var(--surface)]) on every element.
+
+3. IMPLEMENT THE ASSIGNED MAGAZINE ARCHETYPE:
+   - For 'contract-redline-autopsy':
+     * Simulate an authentic legal document/contract clause on paper.
+     * Render the legal clause excerpt in an authentic document inset with yellow highlighter markup (<mark className="bg-[#FEF08A] text-[#121212] px-1 py-0.5 font-mono">), red pen underlines (<span className="underline decoration-[var(--accent)] decoration-2">), section tags [§ 7(b)], and red strike-throughs.
+     * Accompany with marginal investigative analysis and receipt notes.
+   - For 'typographic-broadsheet':
+     * Classical editorial broadsheet layout with monumental headline serif (text-[64px] to text-[72px]).
+     * Drop-cap lede: className="first-letter:text-[76px] first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:leading-none font-[var(--font-headline)] text-[var(--accent)]"
+     * 2-column or 3-column body text divided by fine hairline rules (divide-x divide-[var(--border)]). ZERO card boxes!
+   - For 'telemetry-anchor':
+     * Massive numerical metric (text-[100px] to text-[120px] font-mono font-bold text-[var(--ink)]) with signed badge or unit.
+     * Accompanying thesis paragraph, horizontal comparison ledger lines with delta tags, and delicate citation hairline.
+   - For 'split-dossier':
+     * Asymmetric 40/60 vertical split with a vertical hairline dividing rule (border-r border-[var(--border)] pr-8).
+     * Left: Court docket filing, verified receipts (CASE NO. 2024-CA-001616-O), official dates.
+     * Right: The hidden trap, actual fine-print mechanism, and consumer reality.
+   - For 'investigative-timeline':
+     * A clean, continuous horizontal or vertical timeline rail connecting chronological milestones.
+     * Use clean SVG lines and circle nodes for the rail, and HTML text for the date tags and milestone descriptions.
+     * NEVER draw 5 grey box rectangles!
+   - For 'editorial-verdict-seal':
+     * Concluding verdict slide with an authentic stamped official badge ([UNCONSCIONABLE], [ARBITRATION SHIELD], [CLASS ACTION WAIVER]) with an angled stamp border (border-2 border-[var(--accent)] rotate-[-2deg] px-3 py-1 font-mono uppercase text-[var(--accent)]).
+     * Prominent consumer guardrail placard and bookmark CTA.
+   - For 'stacked-hero-svg' or 'horizontal-comparison-ledger':
      * Zone 1 Header (shrink-0): Kicker + Headline + Subheadline.
      * Zone 2 SVG Art Canvas (flex-1 min-h-0 relative flex items-center justify-center): Dedicated vector canvas taking 440px–500px height.
-     * Zone 3 Cards (shrink-0): Clean bottom 2-column grid (grid grid-cols-2 gap-5).
-   - For 'split-column-50-50':
-     * Outer container: flex flex-row h-full min-h-0 w-full gap-8.
-     * Left Column (w-[420px] shrink-0): Kicker, headline, subhead, and 1 thesis card.
-     * Right Column (flex-1 min-h-0 relative): Dedicated vertical vector SVG art taking the entire height.
-   - For 'horizontal-comparison-ledger':
-     * Zone 1 Header (shrink-0).
-     * Zone 2 SVG Comparative Ledger (flex-1 min-h-0): Proportional horizontal channel bars with delta flags and metric callouts.
-     * Zone 3 Scope Placard (shrink-0): Full-width footnote card.
-   - For 'editorial-verdict-gate':
-     * Zone 1 Header (shrink-0).
-     * Zone 2 Monumental Gate (flex-1 min-h-0): SVG architectural threshold gate with directional pathways.
-     * Zone 3 Strategic Takeaway (shrink-0): Takeaway card with colored indicator rail.
+     * Zone 3 Takeaway (shrink-0): Full-width hairline ledger or single placard.
 
-   STRICT PROHIBITION ON OVERLAYS:
+3. STRICT PROHIBITION ON OVERLAYS:
    NEVER place floating absolute HTML text boxes (e.g. <div className="absolute top-0 right-0">) over the SVG canvas!
-   HTML text belongs exclusively in Zone 1 (Header) or Zone 3 (Cards). The SVG canvas is dedicated solely to vector art!
+   HTML text belongs cleanly in its dedicated structural flow.
 
-3. STRICT THEME & TYPOGRAPHY INHERITANCE:
+4. STRICT THEME & TYPOGRAPHY INHERITANCE:
    - DO NOT declare a local 'const tokens = { ... }' or 'const theme = { ... }' object!
    - The outer <SlideFrame> ALREADY injects the authentic brand typography and colors into CSS variables.
    - STRICTLY FORBIDDEN: Writing 'Arial', 'Helvetica', or 'Courier New' in the component.
    - Use inherited Tailwind classes:
-     * font-[var(--font-headline)] for titles, kickers, and headlines
-     * font-[var(--font-body)] for body copy and descriptions
-     * font-[var(--font-mono)] for metrics, tags, and numbers
+     * font-[var(--font-headline)] for titles, kickers, and headlines (e.g. Playfair Display)
+     * font-[var(--font-body)] for body copy and descriptions (e.g. Source Serif 4)
+     * font-[var(--font-mono)] for metrics, tags, and numbers (e.g. JetBrains Mono)
      * text-[var(--ink)] for primary text
      * text-[var(--accent)] or bg-[var(--accent)] for focal accents and highlights
-     * bg-[var(--surface)] for card backgrounds
+     * bg-[var(--surface)] for document insets
      * border-[var(--border)] for hairlines and borders
 
-4. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
-   - Headline: text-[52px] to text-[64px] (font-bold leading-[1.02] tracking-tight).
-   - Subheadline: text-[24px] to text-[26px] (leading-snug line-clamp-2).
-   - Card Titles: text-[26px] to text-[30px] (font-semibold leading-tight).
-   - Card Body: text-[22px] to text-[24px] (leading-snug line-clamp-2 or line-clamp-3).
-   - Hero Numbers / Telemetry: text-[80px] to text-[100px] (font-mono font-bold).
-   - TEXT UNDER 22px IS STRICTLY BANNED for readable content.
+5. TYPOGRAPHY SCALE FLOOR & ANTI-CRAMMING:
+   - Headline: text-[52px] to text-[68px] (font-bold leading-[1.02] tracking-tight).
+   - Subheadline: text-[24px] to text-[28px] (leading-snug line-clamp-2).
+   - Section / Item Titles: text-[26px] to text-[30px] (font-semibold leading-tight).
+   - Body Copy: text-[22px] to text-[24px] (leading-snug line-clamp-2 or line-clamp-3).
+   - Hero Numbers / Telemetry: text-[80px] to text-[120px] (font-mono font-bold).
+   - TEXT UNDER 20px IS STRICTLY BANNED for readable content.
 
-5. ARRAY INDEXING TYPE-SAFETY:
+6. ARRAY INDEXING TYPE-SAFETY & SAFE STRING RENDERING:
    - slide.items is an ARRAY. When accessing items:
      const item0 = items[0];
      const item1 = items[1];
    - STRICTLY BANNED: Writing 'items?.label' or 'items?.body' (this produces undefined). Always use array indexing or items.map((it: any, idx: number) => ...).
+   - If rendering arrays of lines, NEVER render {node.lines} directly (which joins without spaces); render line by line.
 
-6. SPACE BALANCE MANDATE:
+7. SPACE BALANCE MANDATE:
    - The outer section must fill 80% to 92% of the safe vertical height organically without overflow.
    - className="flex flex-col h-full min-h-0 w-full justify-between text-[var(--ink)]"
-   - Make the SVG canvas expand with flex-1.
    - NEVER put 'overflow-hidden' on the top-level <section>.
 
-7. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind and inline SVG only.`;
+8. Output ONLY self-contained React TypeScript JSX in a \`\`\`tsx code block. Pure Tailwind and inline SVG only.`;
 }
 
 export function buildSingleSlideUserPrompt(
@@ -671,6 +699,11 @@ Remember:
 1. NO floating absolute HTML text boxes over the SVG canvas.
 2. NO local font overrides (Arial/Courier are banned; inherit from SlideFrame).
 3. Access items via items[0]?.label and items[1]?.label or map.
+4. BANNED: Drawing SVG <rect> elements that look like UI cards or flowcharts.
+5. BANNED: Ending every slide with an identical 2-card bottom grid. Implement the assigned magazine archetype!
+6. If layoutModel is 'contract-redline-autopsy', render a highlighted contract excerpt (<mark className="bg-[#FEF08A] text-[#121212] px-1 py-0.5 font-mono">) with section tags and editorial margins.
+7. If layoutModel is 'typographic-broadsheet', render a 2-column broadsheet with drop cap and hairline dividers.
+8. If layoutModel is 'investigative-timeline', render a continuous vector line rail with milestone nodes, NOT 5 grey boxes.
 
 Write the complete Slide${String(slideNumber).padStart(2, '0')}.tsx component.`;
 }

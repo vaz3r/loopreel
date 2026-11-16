@@ -31,20 +31,27 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
           narrativePreset: { type: 'string' },
           targetSlideCount: { type: 'integer', minimum: 4, maximum: 14, default: 7 },
           brandKit: {
-            type: 'object',
-            properties: {
-              bg: { type: 'string' },
-              text: { type: 'string' },
-              accent: { type: 'string' },
-              surface: { type: 'string' },
-              fontSerif: { type: 'string' },
-              fontSans: { type: 'string' },
-              fontMono: { type: 'string' },
-              wordmark: { type: 'string' },
-              handle: { type: 'string' },
-              wordmarkStyle: { type: 'string' },
-              logoUrl: { type: 'string' },
-            },
+            anyOf: [
+              { type: 'string' },
+              {
+                type: 'object',
+                properties: {
+                  slug: { type: 'string' },
+                  bg: { type: 'string' },
+                  text: { type: 'string' },
+                  accent: { type: 'string' },
+                  surface: { type: 'string' },
+                  fontSerif: { type: 'string' },
+                  fontSans: { type: 'string' },
+                  fontMono: { type: 'string' },
+                  wordmark: { type: 'string' },
+                  handle: { type: 'string' },
+                  wordmarkStyle: { type: 'string' },
+                  logoUrl: { type: 'string' },
+                },
+                additionalProperties: true,
+              },
+            ],
           },
           generateText: { type: 'boolean', default: false },
         },
@@ -67,12 +74,13 @@ export const createJobRoute: FastifyPluginAsync = async (app) => {
       ? (templateId === 'auto' ? 'bespoke' : templateId)
       : (templateId === 'bespoke' ? 'auto' : (templateId ?? 'auto'));
 
+    const brandKitObj = typeof brandKit === 'string' ? { slug: brandKit } : (brandKit ?? {});
     const effectiveBrandKit = {
-      ...(brandKit ?? {}),
+      ...brandKitObj,
       engine,
       editorialDirective: prompt?.trim() || undefined,
-      narrativePreset: narrativePreset || (brandKit as any)?.narrativePreset || 'storytelling',
-      targetSlideCount: targetSlideCount || (brandKit as any)?.targetSlideCount || 7,
+      narrativePreset: narrativePreset || (brandKitObj as any)?.narrativePreset || 'storytelling',
+      targetSlideCount: targetSlideCount || (brandKitObj as any)?.targetSlideCount || 7,
     };
 
     const jobId = await JobRepository.create({

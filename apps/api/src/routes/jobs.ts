@@ -40,20 +40,27 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
           engine: { type: 'string', enum: ['bespoke', 'classic'], default: 'bespoke' },
           templateId: { type: 'string', default: 'bespoke' },
           brandKit: {
-            type: 'object',
-            properties: {
-              bg: { type: 'string' },
-              text: { type: 'string' },
-              accent: { type: 'string' },
-              surface: { type: 'string' },
-              fontSerif: { type: 'string' },
-              fontSans: { type: 'string' },
-              fontMono: { type: 'string' },
-              wordmark: { type: 'string' },
-              handle: { type: 'string' },
-              wordmarkStyle: { type: 'string' },
-              logoUrl: { type: 'string' },
-            },
+            anyOf: [
+              { type: 'string' },
+              {
+                type: 'object',
+                properties: {
+                  slug: { type: 'string' },
+                  bg: { type: 'string' },
+                  text: { type: 'string' },
+                  accent: { type: 'string' },
+                  surface: { type: 'string' },
+                  fontSerif: { type: 'string' },
+                  fontSans: { type: 'string' },
+                  fontMono: { type: 'string' },
+                  wordmark: { type: 'string' },
+                  handle: { type: 'string' },
+                  wordmarkStyle: { type: 'string' },
+                  logoUrl: { type: 'string' },
+                },
+                additionalProperties: true,
+              },
+            ],
           },
           generateText: { type: 'boolean', default: false },
         },
@@ -70,12 +77,13 @@ export const jobsRoute: FastifyPluginAsync = async (app) => {
     const effectiveSourceUrl = isPromptMode ? `prompt:${prompt!.trim()}` : (sourceUrl ? sourceUrl.trim() : '');
     const sourceType = isPromptMode ? 'prompt' : determineSourceType(effectiveSourceUrl);
 
+    const brandKitObj = typeof brandKit === 'string' ? { slug: brandKit } : (brandKit ?? {});
     const jobId = await JobRepository.create({
       sourceUrl: effectiveSourceUrl,
       sourceType,
       templateId: templateId ?? 'auto',
       platform: platform ?? 'instagram-feed',
-      brandKit: brandKit ?? {},
+      brandKit: brandKitObj,
       generateText: generateText ?? false,
     });
 

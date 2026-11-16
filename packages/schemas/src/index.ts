@@ -109,7 +109,7 @@ export const JobCreateSchema = z.object({
   platform: PlatformEnum.default('instagram-feed'),
   engine: EngineEnum.default('bespoke'),
   templateId: z.string().default('bespoke'),
-  brandKit: BrandKitSchema.optional(),
+  brandKit: z.union([BrandKitSchema, z.string()]).optional(),
   narrativePreset: NarrativePresetEnum.default('storytelling'),
   targetSlideCount: z.number().int().min(4).max(14).default(7),
   generateText: z.boolean().default(false),

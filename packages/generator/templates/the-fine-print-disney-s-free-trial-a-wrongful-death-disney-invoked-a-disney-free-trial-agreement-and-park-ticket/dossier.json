@@ -1,0 +1,99 @@
+{
+  "articleTitle": "Disney’s Free Trial, a Wrongful Death: Disney invoked a Disney+ free-trial agreement and park-ticket",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "Disney’s Free Trial, a Wrongful Death: Disney invoked a Disney+ free-trial agreement and park-ticket terms to push a wrongful-death claim into individual arbitration rather than court. The mechanism concerned access to a courtroom, not immunity from liability; Disney subsequently abandoned arbitration, and the plaintiff later voluntarily dismissed the lawsuit. Receipts: The court-filed Disney Terms of Use required that “any dispute between you and us, except for small claims, is subject to a class action waiver and must be resolved by individual binding arbitration.”",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "name": "Capture consent during a low-friction transaction",
+      "operation": "The customer creates a streaming account using an Agree & Continue control next to a linked Subscriber Agreement. Disney later retrieves enrollment records to establish the date and asserted assent.​",
+      "valueTransferred": "The relevant asset is evidence of contractual acceptance, not a demonstrated payment for the free trial."
+    },
+    {
+      "step": 2,
+      "name": "Incorporate broader terms",
+      "operation": "The Subscriber Agreement incorporates Disney Terms of Use governing other Disney services. Those broader terms define disputes to include specified controversies involving Disney services or the agreement, including related disputes involving Disney affiliates.",
+      "contestedBoundary": "Piccolo argued that the broader terms were linked inside another linked document and that accepting streaming terms did not establish informed assent to the claimed cross-service reach."
+    },
+    {
+      "step": 3,
+      "name": "Carry the account into a parks transaction",
+      "operation": "Disney relied additionally on My Disney Experience acceptance and park-ticket purchasing. Its motion cited language purporting to cover the account holder and people for whom benefits were purchased or managed.",
+      "contestedBoundary": "Piccolo argued that his individual transactions could not bind his wife’s subsequently created estate and that the parks terms expressly contemplated Orange County litigation."
+    },
+    {
+      "step": 4,
+      "name": "Connect the tort allegations to a digital service",
+      "operation": "The complaint alleged reliance on Disney’s online allergy-related representations. Disney argued that this connection to its website brought the negligence and agency claims within the contractual definition of a dispute.",
+      "editorialSignificance": "The website was both part of the plaintiff’s asserted basis for liability and part of Disney’s proposed route to arbitration."
+    },
+    {
+      "step": 5,
+      "name": "Move the dispute over scope toward the arbitrator",
+      "operation": "Disney invoked a delegation clause giving an arbitrator authority over interpretation, applicability and enforceability. Piccolo answered that the court first had to decide whether a valid agreement bound the relevant parties.​"
+    },
+    {
+      "step": 6,
+      "name": "Replace the requested jury forum with individual arbitration",
+      "operation": "Disney requested arbitration of claims against it and a stay of the court action, including a discretionary stay of the related restaurant claims. The terms also prohibited class or combined proceedings absent specified consent.​",
+      "intendedCorporateBenefit": "Control over dispute procedure and forum. The documents do not quantify a financial saving or establish that arbitration would have eliminated liability.",
+      "importantDistinction": "The estate’s wrongful-death action was not a proposed class action. The class waiver and arbitration requirement were separate contractual features."
+    },
+    {
+      "step": 7,
+      "name": "Preserve potential remedies despite the forum change",
+      "operation": "The court-filed terms expressly allowed an arbitrator to award individual damages and declaratory or injunctive relief. JAMS consumer standards also require preservation of otherwise available legal remedies or access to court for unavailable remedies.​",
+      "importantDistinction": "Arbitration is not synonymous with a liability release."
+    },
+    {
+      "step": 8,
+      "name": "Abandon arbitration, then resolve the litigation",
+      "operation": "Following public backlash, Disney announced its arbitration waiver on August 19, 2024. Litigation continued before Piccolo’s February 27, 2026, voluntary dismissal with prejudice. The retrieved reporting does not establish the financial terms, if any, of the resolution.​​"
+    }
+  ],
+  "comparisons": [
+    {
+      "subject": "Disney’s broader Terms of Use",
+      "benchmark": "Disney’s My Disney Experience Terms and Conditions",
+      "comparison": "The broader terms prescribed individual arbitration. The parks terms, as quoted in Piccolo’s opposition, required covered lawsuits to be filed in Orange County, Florida, and stated that their provisions prevailed over conflicting Disney Terms of Use. This was a conflict between documents in the same 3-document contractual chain—not simply an absent arbitration clause.",
+      "qualification": "Piccolo argued the conflict defeated enforcement. His position was advocacy, not a reported ruling."
+    },
+    {
+      "subject": "Disney’s proposed arbitration",
+      "benchmark": "JAMS Consumer Minimum Standards updated May 1, 2024",
+      "comparison": "The baseline requires reciprocal obligations, clear notice and preservation of remedies. A consumer initiating a covered arbitration owes a $250 arbitration fee; the company bears the other specified arbitration costs. If the company initiates against the consumer, it bears all arbitration costs.",
+      "qualification": "JAMS is a private arbitration provider, not a government regulator. Its policy does not establish the fee or process actually applied to this estate."
+    },
+    {
+      "subject": "Discovery objection in Piccolo’s case",
+      "benchmark": "The rule language quoted by Piccolo and JAMS consumer safeguards",
+      "comparison": "Piccolo criticized a 14-calendar-day exchange target, but the quoted rule allowed additional exchange based on reasonable need as determined by the arbitrator. JAMS consumer standards independently require discovery or exchange of relevant, non-privileged information.​",
+      "qualification": "Do not describe arbitration here as categorically permitting no discovery."
+    },
+    {
+      "subject": "Disney’s reliance on Piccolo’s individual assent",
+      "benchmark": "Florida nursing-home estate cases cited by Piccolo",
+      "comparison": "The opposition contrasted Laizure v. Avante at Leesburg, Inc. (2013), involving the effect of a decedent’s own agreement on a derivative wrongful-death claim, with Sovereign Healthcare of Tampa, LLC v. Estate of Yarawsky (2014), involving a spouse signing individually without binding the resident’s estate. The disputed distinction was whose consent could bind whose claim.",
+      "qualification": "These precedents are characterized here as presented in the filed opposition; their opinions were not independently reviewed."
+    },
+    {
+      "subject": "The relief requested in Disney’s motion",
+      "benchmark": "The relief requested in the complaint",
+      "comparison": "The complaint sought damages in excess of $50,000.00 and a jury trial. Disney’s arbitration motion sought a change of forum and a stay. Neither request establishes the eventual compensation, and the subsequent dismissal reporting supplies no confirmed settlement amount.​​​"
+    }
+  ],
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

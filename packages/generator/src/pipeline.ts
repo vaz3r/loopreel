@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { createLLMClient } from '@loopreel/llm';
+import { resolveBrandPreset } from './presets.js';
 import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
 import { ingestArticle, type ArticleIntel } from './ingest.js';
 import {
@@ -370,9 +371,10 @@ export async function runTemplatePipeline(options: PipelineOptions): Promise<Pip
 
   let brand: BrandTokens;
 
-  if (options.brandKit && Object.keys(options.brandKit).length > 0) {
+  const resolvedPreset = resolveBrandPreset(options.brandKit);
+  if (resolvedPreset || (options.brandKit && Object.keys(options.brandKit).length > 0)) {
     console.log('[Pipeline] Pass 2: Using User-Selected Brand Kit / Preset override...');
-    const b = options.brandKit;
+    const b = (resolvedPreset || options.brandKit) as any;
     const palette = b.palette || {};
     const typography = b.typography || {};
 
@@ -742,8 +744,8 @@ export default pkg;
     let healed = false;
     for (let attempt = 1; attempt <= 3; attempt++) {
       for (const s of slideExports) {
-        if (currentErrors.some((e) => e.includes(s.filename))) {
-          const fileErrors = currentErrors.filter((e) => e.includes(s.filename)).join('\n');
+        if (currentErrors.some((e) => e.includes(s.filename) || e.includes(s.componentName))) {
+          const fileErrors = currentErrors.filter((e) => e.includes(s.filename) || e.includes(s.componentName)).join('\n');
           console.log(`[Pipeline] Self-healing repair for ${s.filename} (attempt ${attempt}/3)...`);
           const currentCode = fs.readFileSync(path.join(slidesDir, s.filename), 'utf-8');
           const repairResponse = await llm.generateJSON(

@@ -1,0 +1,577 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-fine-print-disney-s-free-trial-a-wrongful-death-disney-invoked-a-disney-free-trial-agreement-and-park-ticket",
+  "domain": "thefineprint.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "CONSENT WITHOUT BORDERS",
+      "headline": "Disney’s Free-Trial Courtroom Weapon",
+      "subheadline": "A streaming signup became an argument for arbitration.",
+      "items": [
+        {
+          "label": "Digital Assent",
+          "body": "Disney cited streaming signup and later park-ticket terms."
+        },
+        {
+          "label": "Forum Control",
+          "body": "Disney sought arbitration, not immunity from liability."
+        }
+      ],
+      "visual_style": "Monumental editorial typography with a forensic contract illustration.",
+      "layout_topology": "Oversized headline above a central hero; two compact footer columns.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            150,
+            936,
+            250
+          ],
+          "subheadline": [
+            72,
+            430,
+            936,
+            100
+          ],
+          "items": [
+            [
+              72,
+              1120,
+              440,
+              150
+            ],
+            [
+              568,
+              1120,
+              440,
+              150
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            570,
+            936,
+            480
+          ],
+          "primitives": [
+            "Draw a white agreement sheet at x=160, y=610, width=300, height=360, with an ink outline.",
+            "Place a red checked square beneath three abstract agreement lines.",
+            "Extend a red dashed arrow from the checkbox toward a courthouse outline at x=650, y=670.",
+            "Construct the courthouse from a triangular pediment, three columns and a baseline.",
+            "Label the dashed arrow REQUESTED; do not depict a completed transfer."
+          ]
+        },
+        "typography": "Heavy condensed sans headline; restrained serif body; monospaced diagram labels.",
+        "constraints": "Use outlined vector icons, no logos, no numerical telemetry, no text outside assigned regions."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "THE CROSS-SERVICE BRIDGE",
+      "headline": "One Account. Two Service Worlds.",
+      "subheadline": "Disney relied on streaming consent and later parks acceptance.",
+      "items": [
+        {
+          "label": "Streaming Entry",
+          "body": "The subscriber agreement incorporated broader Disney terms."
+        },
+        {
+          "label": "Parks Reinforcement",
+          "body": "Disney also cited account acceptance and ticket purchases."
+        }
+      ],
+      "visual_style": "Restrained service-map illustration with architectural connector lines.",
+      "layout_topology": "Asymmetric sidebar copy beside two vertically stacked service panels.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            170,
+            410,
+            280
+          ],
+          "subheadline": [
+            72,
+            490,
+            410,
+            140
+          ],
+          "items": [
+            [
+              72,
+              790,
+              410,
+              170
+            ],
+            [
+              72,
+              1030,
+              410,
+              170
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            540,
+            170,
+            468,
+            1030
+          ],
+          "primitives": [
+            "Draw two white panels at x=620, y=220 and x=620, y=790, each width=340 and height=300.",
+            "Place a screen outline and play triangle in the upper panel; label STREAMING.",
+            "Place a notched ticket outline in the lower panel; label PARKS.",
+            "Connect the panels with a thin ink spine at x=570 and red right-angle branches.",
+            "Place a small account-outline icon on the spine between the panels."
+          ]
+        },
+        "typography": "Bold grotesk headline; compact sans body; monospaced service labels.",
+        "constraints": "The diagram shows contractual connections, not user volume or measured scale."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "comparison",
+      "kicker": "THE DOCUMENT COLLISION",
+      "headline": "Two Documents, Competing Forums",
+      "subheadline": "Piccolo argued conflicting parks terms defeated enforcement.",
+      "items": [
+        {
+          "label": "Broader Terms",
+          "body": "Prescribed individual arbitration."
+        },
+        {
+          "label": "Parks Terms",
+          "body": "Specified Orange County, Florida, courts; claimed priority."
+        }
+      ],
+      "visual_style": "Opposing legal-document facsimiles with red conflict notation.",
+      "layout_topology": "Mirrored split screen with a narrow central collision seam.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            165,
+            936,
+            170
+          ],
+          "subheadline": [
+            72,
+            360,
+            936,
+            110
+          ],
+          "items": [
+            [
+              72,
+              1080,
+              430,
+              180
+            ],
+            [
+              578,
+              1080,
+              430,
+              180
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            530,
+            936,
+            490
+          ],
+          "primitives": [
+            "Draw matching white document rectangles at x=110 and x=610, y=560, width=360, height=420.",
+            "Use abstract ink lines with one red underlined clause on each document.",
+            "Label the left document ARBITRATION and the right document COURT.",
+            "Draw inward-facing red arrows that stop before a broken vertical seam at x=540.",
+            "Place CONTESTED above the seam; do not add a winner badge."
+          ]
+        },
+        "typography": "Editorial serif headline; sans body; monospaced conflict annotation.",
+        "constraints": "Present the priority argument as Piccolo’s position, not a judicial ruling."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanics",
+      "kicker": "THE CONTRACTUAL PIPELINE",
+      "headline": "Build The Chain. Request Arbitration.",
+      "subheadline": "Disney sought arbitration and a stay of the court action.",
+      "items": [
+        {
+          "label": "Build Connection",
+          "body": "Capture assent → incorporate terms → reinforce through parks."
+        },
+        {
+          "label": "Shift Forum",
+          "body": "Link website allegations → invoke delegation → seek a stay."
+        }
+      ],
+      "visual_style": "Technical conduit schematic with deliberate gaps at disputed transitions.",
+      "layout_topology": "Two horizontal process lanes beneath a compact title block.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            165,
+            936,
+            180
+          ],
+          "subheadline": [
+            72,
+            380,
+            936,
+            100
+          ],
+          "items": [
+            [
+              72,
+              540,
+              936,
+              110
+            ],
+            [
+              72,
+              900,
+              936,
+              110
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            680,
+            936,
+            540
+          ],
+          "primitives": [
+            "Create an upper conduit at y=760 connecting a checkbox, linked sheets and a ticket outline.",
+            "Create a lower conduit at y=1120 connecting a browser outline, delegation relay and pause symbol.",
+            "Use icon centers at x=210, x=540 and x=870 in both lanes.",
+            "Connect the upper lane to the lower lane with a right-edge return path.",
+            "Use red dashed arrows for the website-to-delegation and delegation-to-stay connections.",
+            "Keep the two lane descriptions in the assigned item regions; add no extra stage captions."
+          ]
+        },
+        "typography": "Condensed sans headline; monospaced process copy.",
+        "constraints": "The pause symbol means a requested court stay, not a granted stay."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "perimeter",
+      "kicker": "THE DISPUTED LEAP",
+      "headline": "Whose Consent Binds Whose Claim?",
+      "subheadline": "Piccolo challenged extending his acceptance to his wife’s estate.",
+      "items": [
+        {
+          "label": "Individual Assent",
+          "body": "Disney relied on Piccolo’s personal account transactions."
+        },
+        {
+          "label": "Estate Boundary",
+          "body": "Piccolo argued his acceptance could not bind the estate."
+        }
+      ],
+      "visual_style": "Negative-space legal perimeter diagram with an interrupted bridge.",
+      "layout_topology": "Diagonal separation: individual upper-left, estate lower-right.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            165,
+            936,
+            180
+          ],
+          "subheadline": [
+            72,
+            380,
+            936,
+            110
+          ],
+          "items": [
+            [
+              72,
+              1050,
+              430,
+              190
+            ],
+            [
+              578,
+              1050,
+              430,
+              190
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            540,
+            936,
+            460
+          ],
+          "primitives": [
+            "Draw an ink circle centered at x=290, y=690, radius=130; place a person-outline icon inside.",
+            "Draw a white outlined rectangle at x=640, y=760, width=270, height=190; place a legal-file icon inside.",
+            "Label the circle PICCOLO and the rectangle ESTATE.",
+            "Draw a red dashed diagonal connector between them, interrupted by a wide paper-colored gap.",
+            "Place a red question mark in the gap instead of an arrowhead."
+          ]
+        },
+        "typography": "High-contrast serif headline; neutral sans body; small uppercase diagram labels.",
+        "constraints": "The separation represents contested party identity, not a resolved legal boundary."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "evidence",
+      "kicker": "THE SAFEGUARDS",
+      "headline": "Arbitration Is Not Immunity",
+      "subheadline": "JAMS is a private provider, not a government regulator.",
+      "items": [
+        {
+          "label": "Remedies Preserved",
+          "body": "Preserve available remedies; court for unavailable remedies."
+        },
+        {
+          "label": "Information Exchange",
+          "body": "Relevant, non-privileged information must be exchanged."
+        }
+      ],
+      "visual_style": "Consumer-standard audit sheet with restrained red verification marks.",
+      "layout_topology": "One large audit panel containing two generously spaced rows.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            165,
+            936,
+            170
+          ],
+          "subheadline": [
+            72,
+            370,
+            936,
+            110
+          ],
+          "items": [
+            [
+              310,
+              650,
+              610,
+              180
+            ],
+            [
+              310,
+              980,
+              610,
+              180
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            540,
+            936,
+            710
+          ],
+          "primitives": [
+            "Draw a white audit panel at x=72, y=540, width=936, height=710 with a thin ink border.",
+            "Divide the panel once with a horizontal rule at y=895.",
+            "Place a balance-scale outline at x=130, y=665 and overlapping information-sheet outlines at x=130, y=995.",
+            "Add a small red check beside each icon.",
+            "Keep the item copy inside the panel; avoid decorative legal seals."
+          ]
+        },
+        "typography": "Bold sans headline; readable serif body; monospaced item labels.",
+        "constraints": "Checks identify JAMS baseline safeguards, not findings about procedures applied to this estate."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "THE FINE PRINT",
+      "headline": "Audit Consent Before Claiming Control",
+      "subheadline": "Neither outcome validates the theory; no confirmed payout.",
+      "items": [
+        {
+          "label": "Arbitration Waiver",
+          "body": "August 19, 2024: Disney announced its waiver."
+        },
+        {
+          "label": "Voluntary Dismissal",
+          "body": "February 27, 2026: Piccolo dismissed with prejudice."
+        }
+      ],
+      "visual_style": "Architectural inspection gate paired with a sparse legal timeline.",
+      "layout_topology": "Centered strategic headline, monumental gate, two-event footer.",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#F7F7F5",
+          "ink": "#121212",
+          "accent": "#CC0000",
+          "surface": "#FFFFFF"
+        },
+        "text_regions": {
+          "kicker": [
+            72,
+            72,
+            936,
+            40
+          ],
+          "headline": [
+            72,
+            165,
+            936,
+            210
+          ],
+          "subheadline": [
+            72,
+            410,
+            936,
+            110
+          ],
+          "items": [
+            [
+              72,
+              1080,
+              440,
+              170
+            ],
+            [
+              568,
+              1080,
+              440,
+              170
+            ]
+          ]
+        },
+        "hero": {
+          "bounds": [
+            72,
+            570,
+            936,
+            430
+          ],
+          "primitives": [
+            "Draw an architectural gate from two ink uprights at x=250 and x=830 with a lintel at y=620.",
+            "Place an outlined contract sheet beneath the gate.",
+            "Run a red inspection beam horizontally across the sheet at y=800.",
+            "Place the compact audit caption SCOPE / CONFLICTS / IDENTITY beneath the beam.",
+            "Draw a separate thin footer timeline with two equal circular event markers aligned to the items.",
+            "Space timeline markers editorially, not proportionally to elapsed time."
+          ]
+        },
+        "typography": "Heavy condensed headline; neutral sans body; monospaced audit caption.",
+        "constraints": "Do not depict a judicial endorsement, settlement amount or causal link between the two outcomes."
+      },
+      "platform": "instagram-feed"
+    }
+  ]
+}
