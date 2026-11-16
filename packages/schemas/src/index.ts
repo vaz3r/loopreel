@@ -25,8 +25,23 @@ export const FormatTypeEnum = z.enum([
   'carousel_slide',
   'linkedin_post',
   'twitter_thread',
+  'instagram_caption',
 ]);
 export type FormatType = z.infer<typeof FormatTypeEnum>;
+
+// Newsroom Status enum (matches PostgreSQL newsroom_status enum)
+export const NewsroomStatusEnum = z.enum([
+  'discovered',
+  'pitched',
+  'approved',
+  'generating',
+  'completed',
+  'scheduled',
+  'published',
+  'rejected',
+  'failed',
+]);
+export type NewsroomStatus = z.infer<typeof NewsroomStatusEnum>;
 
 // Platform enum
 export const PlatformEnum = z.enum([

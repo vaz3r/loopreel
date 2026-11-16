@@ -1,0 +1,89 @@
+{
+  "articleTitle": "Disney's Streaming Terms Reached Beyond the Screen: Disney sought to move Jeffrey Piccolo's wrongful",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "Disney's Streaming Terms Reached Beyond the Screen: Disney sought to move Jeffrey Piccolo's wrongful-death lawsuit into arbitration by invoking terms accepted for a Disney+ trial and a subsequent ticket-purchasing account. The trap was cross-product consent: a streaming agreement allegedly governing a restaurant-death claim, not a judicially established release from liability. Receipts: Disney invoked Piccolo's one-month Disney+ trial subscription in 2019 and arbitration terms accepted when creating a website-and-app account to purchase tickets; AP reported its withdrawal of that argument on August 20, 2024.",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "stage": "Capture streaming-account consent",
+      "operation": "Disney said Piccolo created an account in November 2019 by supplying registration information and selecting Agree & Continue beside a hyperlink to the Subscriber Agreement.",
+      "contestedPoint": "Piccolo’s lawyers disputed adequate notice of the separate Disney Terms of Use, arguing that their link was nested inside the linked Subscriber Agreement rather than directly presented at registration."
+    },
+    {
+      "step": 2,
+      "stage": "Extend the agreement beyond the streaming service",
+      "operation": "Disney relied on incorporation of its broader Terms of Use, which addressed Disney services and related disputes involving the company or its affiliates. Those terms supplied the asserted bridge from a streaming signup to the parks subsidiary.",
+      "contestedPoint": "The plaintiff argued that the Subscriber Agreement itself concerned Disney+ and ESPN+ services, not restaurant injuries involving another Disney entity."
+    },
+    {
+      "step": 3,
+      "stage": "Reuse the account for a different product",
+      "operation": "Disney said Piccolo accepted My Disney Experience terms in September 2023 and subsequently purchased park tickets while registering Tangsuan as his guest. It relied on language purporting to cover people for whom the purchaser secured benefits.",
+      "contestedPoint": "The plaintiff identified September 15, 2023, as the alleged acceptance date and October 1, 2023, as the ticket-purchase date. His lawyers said the later interface relied on the earlier, disputed Terms-of-Use acceptance."
+    },
+    {
+      "step": 4,
+      "stage": "Connect website representations to the injury claim",
+      "operation": "The complaint alleged reliance on Disney’s allergy-related restaurant representations. Disney argued that this website connection brought the negligence and agency claims within its broadly defined services disputes.",
+      "contestedPoint": "The alleged injury arose from a restaurant meal, not failure of the streaming service; the estate also disputed whether Piccolo’s personal assent could bind it."
+    },
+    {
+      "step": 5,
+      "stage": "Seek a different decision-maker",
+      "operation": "Disney invoked the Federal Arbitration Act and a delegation provision giving the arbitrator authority over interpretation, applicability, and enforceability. It sought arbitration of all claims against Disney and a stay extending to the restaurant litigation.",
+      "valueTransfer": "The sought advantage was procedural: replacing court adjudication of the Disney claims with arbitration and pausing related proceedings. It was not a demonstrated cancellation of compensation rights.​"
+    },
+    {
+      "step": 6,
+      "stage": "Apply individual dispute procedures",
+      "operation": "The reproduced terms required individual proceedings, restricted consolidation without written consent, and provided for a neutral arbitrator and limited appeal. They expressly allowed individual damages and appropriate declaratory or injunctive relief.",
+      "qualification": "The class-action provision supplies contractual context; Piccolo’s complaint was a wrongful-death action, not a proposed consumer class action."
+    },
+    {
+      "step": 7,
+      "stage": "Withdraw after public backlash",
+      "operation": "AP reported that Disney filed its withdrawal notice on August 20, 2024, following public criticism. Josh D’Amaro attributed the decision to the case’s unique circumstances and the family’s loss.",
+      "outcome": "The dispute could proceed in court. Withdrawal did not establish negligence or resolve the competing interpretations of the account agreements.​"
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "Disney versus General Mills: digital engagement as a litigation gateway",
+      "disney": "Disney invoked a one-month streaming trial from 2019 and later ticket-account terms in an existing wrongful-death case, then withdrew its motion on August 20, 2024.",
+      "generalMills": "On April 20, 2014, MPR reported that General Mills restored its previous website terms after criticism of arbitration provisions connected to activities such as website use, email subscriptions, and digital-coupon downloads.",
+      "distinction": "General Mills reversed its website-policy change; Disney withdrew a motion in a particular lawsuit. General Mills also disputed claims that merely buying a product in a store or liking a Facebook page triggered the restriction.​"
+    },
+    {
+      "comparison": "Disney’s broad account terms versus its product-specific terms",
+      "broadTerms": "The Disney Terms of Use contained arbitration, an affiliate-related dispute provision, and a sixty (60)-day informal-resolution period.",
+      "productSpecificTerms": "The My Disney Experience language quoted by the plaintiff directed covered lawsuits to courts in Orange County, Florida, and stated that its terms prevailed over directly conflicting Disney Terms of Use.",
+      "distinction": "The plaintiff argued that these provisions conflicted and defeated arbitration. That was a litigant’s interpretation, not an adjudicated holding."
+    },
+    {
+      "comparison": "Arbitration versus release from liability",
+      "arbitration": "The reproduced agreement permitted an arbitrator to award individual damages as a court could, while substituting arbitration for litigation before a judge or jury.",
+      "requestedRelief": "Disney’s motion requested an order compelling arbitration and staying the action.",
+      "distinction": "The accurate comparison is between adjudication procedures—not between compensation and automatic corporate immunity."
+    },
+    {
+      "comparison": "Global platform scale versus enforceable consent",
+      "businessScale": "Disney reported 118.3 million Disney+ Core paid subscribers and 35.5 million Disney+ Hotstar paid subscribers as of June 29, 2024.",
+      "litigationClaim": "AP described the plaintiff’s criticism in terms of more than 150 million subscribers supposedly surrendering litigation rights indefinitely.",
+      "distinction": "The subscriber figures establish platform scale. They do not establish that every subscriber accepted identical terms or lost the right to bring an unrelated injury claim."
+    }
+  ],
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

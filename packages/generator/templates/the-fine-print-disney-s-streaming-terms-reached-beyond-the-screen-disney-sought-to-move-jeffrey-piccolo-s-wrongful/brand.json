@@ -1,0 +1,26 @@
+{
+  "name": "The Fine Print",
+  "slug": "the-fine-print-disney-s-streaming-terms-reached-beyond-the-screen-disney-sought-to-move-jeffrey-piccolo-s-wrongful",
+  "vibe": "Investigative Corporate Autopsies, Fine Print Tricks & Receipts",
+  "domain": "thefineprint.pub",
+  "palette": {
+    "paper": "#0A0A0C",
+    "ink": "#F5F5F7",
+    "accent": "#FF2A2A",
+    "surface": "#121216",
+    "border": "#24242C",
+    "subtle": "#8E8E98"
+  },
+  "typography": {
+    "headlineFont": "Space Grotesk",
+    "bodyFont": "Space Grotesk",
+    "monoFont": "JetBrains Mono",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+  },
+  "wordmark": "THE FINE PRINT",
+  "wordmarkStyle": "small-caps",
+  "handle": "@thefineprint.pub",
+  "texture": "grid",
+  "motif": "bracket",
+  "platform": "instagram-feed"
+}

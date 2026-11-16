@@ -1,6 +1,6 @@
 import { runTemplatePipeline, type PipelineOptions } from './pipeline.js';
 import { auditTemplateStudio, type VisualAuditResult } from './visual-auditor.js';
-import type { TemplateBrief } from './prompt.js';
+import type { TemplateBrief, InstagramCaptionData } from './prompt.js';
 import type { BrandTokens, DeckData } from './skeleton/types.js';
 
 export interface GenerationResult {
@@ -10,6 +10,7 @@ export interface GenerationResult {
   deck: DeckData;
   slideCount: number;
   audit?: VisualAuditResult;
+  caption?: InstagramCaptionData;
 }
 
 export async function generateTemplateReference(

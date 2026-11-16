@@ -27,6 +27,9 @@ import {
   buildSingleSlideSystemPrompt,
   buildSingleSlideUserPrompt,
   buildSelfHealingPrompt,
+  type InstagramCaptionData,
+  buildInstagramCaptionSystemPrompt,
+  buildInstagramCaptionUserPrompt,
 } from './prompt.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -219,6 +222,7 @@ export interface PipelineResult {
   brand: BrandTokens;
   deck: DeckData;
   slideCount: number;
+  caption?: InstagramCaptionData;
 }
 
 async function runConcurrentPool<T, R>(
@@ -766,6 +770,24 @@ export default pkg;
     }
   }
 
+  // ==========================================================================
+  // PASS 8: JOURNALISTIC INSTAGRAM CAPTION SYNTHESIS
+  // ==========================================================================
+  console.log('[Pipeline] >>> Pass 8: Synthesizing Investigative Instagram Caption & Conversion Copy...');
+  let caption: InstagramCaptionData | undefined;
+  try {
+    const captionResponse = await llm.generateJSON(
+      buildInstagramCaptionSystemPrompt(),
+      buildInstagramCaptionUserPrompt(brand, dossier, deck),
+      0.3
+    );
+    caption = extractJson<InstagramCaptionData>(captionResponse.text);
+    fs.writeFileSync(path.join(templateDir, 'caption.json'), JSON.stringify(caption, null, 2), 'utf-8');
+    console.log(`[Pipeline] Caption synthesized successfully (${caption.hashtags?.length ?? 0} hashtags).`);
+  } catch (err: any) {
+    console.warn(`[Pipeline] Caption generation failed or skipped: ${err.message}`);
+  }
+
   options.onProgress?.('Complete', 15, 15);
   return {
     templateSlug: slug,
@@ -773,5 +795,6 @@ export default pkg;
     brand,
     deck,
     slideCount: deck.slides.length,
+    caption,
   };
 }

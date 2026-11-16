@@ -1,0 +1,248 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-fine-print-disney-s-streaming-terms-reached-beyond-the-screen-disney-sought-to-move-jeffrey-piccolo-s-wrongful",
+  "domain": "thefineprint.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "publication": "The Fine Print",
+      "domain": "thefineprint.pub",
+      "kicker": "CONSENT WITHOUT BORDERS",
+      "headline": "Streaming Consent After a Death",
+      "subheadline": "Disney invoked account terms to seek wrongful-death arbitration.",
+      "items": [
+        {
+          "label": "Streaming origin",
+          "body": "Disney cited Piccolo’s one-month Disney+ trial in 2019."
+        },
+        {
+          "label": "Attempted reach",
+          "body": "The claims arose from his wife’s restaurant death."
+        }
+      ],
+      "visual_style": "Forensic editorial minimalism",
+      "layout_topology": "Monumental headline above a split-domain hero",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Place two oversized outlined chambers beneath the headline: a streaming-screen silhouette on the left and a legal-document silhouette on the right. A dashed red bridge crosses their dividing boundary, stopping at an open gate.",
+        "text_binding": "Bind the first item to the streaming chamber and the second to the legal chamber. The dashed bridge represents Disney’s asserted connection, not established enforceability.",
+        "typography": "Headline 88px, maximum three lines; subheadline 30px; item labels 24px; bodies 28px, maximum three lines.",
+        "safe_area": "72px outer margins. Reserve the bottom 90px for publication, domain, and pagination. Do not add diagram captions."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "PLATFORM SCALE",
+      "headline": "Scale Does Not Establish Consent",
+      "subheadline": "Paid subscribers as of June 29, 2024—not proof of enforceability.",
+      "items": [
+        {
+          "label": "Disney+ Core",
+          "body": "118.3 million paid subscribers."
+        },
+        {
+          "label": "Disney+ Hotstar",
+          "body": "35.5 million paid subscribers."
+        }
+      ],
+      "visual_style": "Precision financial telemetry",
+      "layout_topology": "Two stacked horizontal measurement lanes",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Draw two surface-colored horizontal lanes at y=490 and y=830. Give Core an ink bar 900px wide and Hotstar an ink bar with width calculated as 900×35.5÷118.3. Add a thin red terminal stroke to each bar.",
+        "text_binding": "Place each item label above its bar. Render its exact numerical subscriber count prominently within the lane, with the remaining body text immediately beneath. Do not combine the subscriber populations or portray them as bound claimants.",
+        "typography": "Headline 68px, maximum three lines; subheadline 28px; numerical counts 104px; labels and supporting text 28px.",
+        "safe_area": "72px outer margins. Keep all typography outside bar endpoints. No extra statistics, ticks, or legends."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "comparison",
+      "kicker": "THE CRITICAL DISTINCTION",
+      "headline": "Arbitration Is Not Automatic Immunity",
+      "subheadline": "Disney sought arbitration and a stay, not automatic immunity.",
+      "items": [
+        {
+          "label": "Court",
+          "body": "Adjudication before a judge or jury."
+        },
+        {
+          "label": "Arbitration",
+          "body": "A neutral arbitrator could still award individual damages."
+        }
+      ],
+      "visual_style": "Legal comparison plate",
+      "layout_topology": "Mirrored vertical panels with a central procedural switch",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Create two equal panels from y=490 to y=1110. Draw an abstract judicial bench in the left panel and a single decision-maker’s desk in the right. Between them, place a dashed red directional switch pointing right.",
+        "text_binding": "Place the Court item beneath the bench and the Arbitration item beneath the desk. Equal panel sizes indicate alternative procedures, not equivalent procedural protections. The dashed switch represents the requested move.",
+        "typography": "Headline 70px, maximum three lines; subheadline 30px; labels 32px; bodies 30px, maximum four short lines.",
+        "safe_area": "72px outer margins and a 48px center gutter. Keep the switch separate from both text blocks."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanics",
+      "kicker": "THE ASSERTED PIPELINE",
+      "headline": "How Disney Tried To Connect Products",
+      "subheadline": "Its asserted pathway connected account assent to injury claims.",
+      "items": [
+        {
+          "label": "Account bridge",
+          "body": "Streaming signup → affiliate terms → ticket-account reuse."
+        },
+        {
+          "label": "Claim bridge",
+          "body": "Website allegations → arbitration request and stay."
+        }
+      ],
+      "visual_style": "Technical conduit schematic",
+      "layout_topology": "Two broad serpentine pipeline bands",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Draw two large rounded conduit bands at y=490 and y=810. Connect their right edges with a single descending elbow. Run a dashed red path through both bands, with open couplings at the transition and final endpoint.",
+        "text_binding": "Each band contains exactly one item. Set the body across three manually wrapped lines, preserving its sequence. Do not break the pipeline into additional cards or introduce additional factual labels.",
+        "typography": "Headline 66px, maximum three lines; subheadline 28px; labels 26px; pipeline bodies 32px.",
+        "safe_area": "72px outer margins. Keep the connecting elbow within a dedicated 100px right-side channel. Dashed connections denote assertions."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "perimeter",
+      "kicker": "THE HIDDEN CATCH",
+      "headline": "Who Decides The Consent Boundary?",
+      "subheadline": "Disney also sought arbitrator authority over contractual reach.",
+      "items": [
+        {
+          "label": "Requested delegation",
+          "body": "Interpretation, applicability, enforceability: arbitrator."
+        },
+        {
+          "label": "Estate objection",
+          "body": "Lawyers disputed whether personal assent bound the estate."
+        }
+      ],
+      "visual_style": "Jurisdictional boundary map",
+      "layout_topology": "Offset nested perimeters with an external estate island",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Draw a large open circular perimeter centered at x=400, y=760. Inside it, place a smaller decision chamber. Position a detached rectangular estate island at x=690, y=880. A dashed red connector approaches the island but ends before its boundary.",
+        "text_binding": "Place Requested delegation in the decision chamber and Estate objection on the detached island. Use the complete item bodies beside their respective forms. Neither shape should suggest that the estate was conclusively bound.",
+        "typography": "Headline 70px, maximum three lines; subheadline 28px; labels 25px; bodies 28px, maximum four lines.",
+        "safe_area": "72px outer margins. Use leader lines outside text blocks. Keep the perimeter open and the estate visibly separate."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "evidence",
+      "kicker": "THE CONTRACT AUDIT",
+      "headline": "The Consent Chain Was Contested",
+      "subheadline": "These were litigant arguments, not judicial findings.",
+      "items": [
+        {
+          "label": "Nested notice",
+          "body": "Lawyers challenged terms linked inside another agreement."
+        },
+        {
+          "label": "Conflicting venue",
+          "body": "Product terms named Orange County, Florida, courts."
+        }
+      ],
+      "visual_style": "Annotated contract evidence board",
+      "layout_topology": "Two staggered document exhibits",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Place one tall document panel at x=72, y=470 and a second at x=560, y=650. In the first, depict a hyperlink frame nested inside another frame. In the second, depict two intersecting document edges with a red conflict bracket.",
+        "text_binding": "Bind Nested notice to the first exhibit and Conflicting venue to the second. Use only supplied item text; abstract rules may suggest documents but must not imitate quotations or fabricated contract language.",
+        "typography": "Headline 70px, maximum three lines; subheadline 30px; labels 28px; bodies 30px, maximum four lines.",
+        "safe_area": "72px outer margins. Maintain a 40px separation between exhibits. No approval stamps, verdict seals, or adjudicated-status icons."
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "THE FINE PRINT",
+      "headline": "Audit Consent Across Product Boundaries",
+      "subheadline": "A shared account is not uncontested cross-product permission.",
+      "items": [
+        {
+          "label": "Motion withdrawn",
+          "body": "August 20, 2024: the dispute could proceed in court."
+        },
+        {
+          "label": "Still unresolved",
+          "body": "No negligence finding; no settled contract interpretation."
+        }
+      ],
+      "visual_style": "Architectural gate with editorial closure",
+      "layout_topology": "Central open gateway above two horizontal verdict rows",
+      "svg_blueprint": {
+        "viewBox": "0 0 1080 1350",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#121216"
+        },
+        "geometry": "Draw a monumental rectangular gateway centered above y=850. Show its red gate leaf swung open and a solid ink path continuing through it. Below, place two wide surface-colored rows separated by a thin ink rule.",
+        "text_binding": "Place Motion withdrawn in the first row and Still unresolved in the second. The open gateway denotes the ability to proceed in court, not a liability determination or litigation victory.",
+        "typography": "Headline 68px, maximum three lines; subheadline 28px; labels 25px; bodies 29px, maximum two lines per row.",
+        "safe_area": "72px outer margins. End the gateway before the verdict rows begin. Reserve the footer for thefineprint.pub and pagination."
+      },
+      "platform": "instagram-feed"
+    }
+  ]
+}

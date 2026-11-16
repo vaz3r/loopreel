@@ -5,3 +5,5 @@ export { AssetRepository } from './repositories/AssetRepository.js';
 export type { AssetRow, InsertAssetParams } from './repositories/AssetRepository.js';
 export { OutboxRepository } from './repositories/OutboxRepository.js';
 export type { OutboxEventRow, InsertOutboxParams } from './repositories/OutboxRepository.js';
+export { NewsroomRepository } from './repositories/NewsroomRepository.js';
+export type { NewsroomStoryRow, CreateDiscoveredParams, UpdatePitchParams, RecordScheduledParams } from './repositories/NewsroomRepository.js';

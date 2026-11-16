@@ -1,0 +1,28 @@
+{
+  "name": "@loopreel/newsroom",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --import tsx src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "scan": "node --import tsx src/index.ts --action=scan",
+    "pitch": "node --import tsx src/index.ts --action=pitch",
+    "run-once": "node --import tsx src/index.ts --action=run-once",
+    "daemon": "node --import tsx src/index.ts --action=daemon"
+  },
+  "dependencies": {
+    "@loopreel/db": "workspace:*",
+    "@loopreel/llm": "workspace:*",
+    "@loopreel/schemas": "workspace:*",
+    "@loopreel/storage": "workspace:*",
+    "dotenv": "^17.4.2",
+    "fast-xml-parser": "^4.5.1",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

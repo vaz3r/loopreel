@@ -1,4 +1,4 @@
-import type { BrandTokens, SlideData } from './skeleton/types.js';
+import type { BrandTokens, DeckData, SlideData } from './skeleton/types.js';
 import type { ArticleIntel } from './ingest.js';
 
 export interface TemplateBrief {
@@ -695,4 +695,99 @@ ${code}
 \`\`\`
 
 Fix the syntax or type errors completely. Return ONLY the corrected code in a \`\`\`tsx code block.`;
+}
+
+// ============================================================================
+// STAGE 8: JOURNALISTIC INSTAGRAM CAPTION ENGINE
+// ============================================================================
+
+export interface InstagramCaptionData {
+  hook: string;
+  body: string;
+  receipts: string;
+  guardrail: string;
+  cta: string;
+  hashtags: string[];
+  fullText: string;
+}
+
+export function buildInstagramCaptionSystemPrompt(): string {
+  return `You are a veteran investigative staff writer and copy chief at "The Fine Print" (in the tradition of ProPublica, The Wall Street Journal, and NYT DealBook).
+Your task is to write a compelling, publication-grade Instagram caption for an editorial carousel investigation.
+
+ABSOLUTE NEGATIVE CONSTRAINTS (STRICTLY BANNED):
+1. ZERO RHETORICAL QUESTIONS as opening sentences ("Have you ever wondered...?", "Did you know that...?", "Are you tired of...?"). BANNED.
+2. ZERO TECH-HYPE OR AI CLICHES ("In today's fast-paced digital world...", "Let's dive in", "Buckle up", "Here's the scoop", "Game changer", "At the end of the day", "Mind-blowing", "Game-changing", "Unpack"). BANNED.
+3. ZERO EMOJI SPAM. Never use rocket ships (🚀), fire (🔥), brains (🧠), lightbulbs (💡), party poppers (🎉), or eyes (👀). At most 1 or 2 clean typographic markers (such as ▪ or →) for functional lists.
+4. ZERO MORALIZING or generic cheerleading ("Remember to stay vigilant!", "Knowledge is power!"). Stick to cold facts, regulatory clauses, dollar figures, and legal mechanisms.
+
+EDITORIAL CONVERSION ARCHITECTURE:
+- Line 1 (The Hook): A sharp, declarative factual statement naming the company, specific dollar figure or statutory clause, and the real-world consequence.
+- Paragraph 2 (The Mechanism): 2 to 3 concise, analytical sentences explaining exactly how the contractual asymmetry or loophole operates against consumers or competitors.
+- Paragraph 3 (The Receipts): Exact citations from SEC 10-K filings, court dockets, arbitration clauses, or FTC/CFPB enforcement actions.
+- Paragraph 4 (The Guardrail): The practical takeaway—what readers need to check in their own terms, opt-out timeframes (e.g., 30-day arbitration reject notices), or billing statements.
+- Paragraph 5 (Conversion Sign-off):
+  - Mention: "Full breakdown across the carousel above."
+  - Save prompt: "Bookmark this receipt for your records."
+  - Follow prompt: "Follow @thefineprint.pub for weekly investigative autopsies into corporate fine print."
+  - Discussion prompt: A specific, provocative debate question on the policy or legal precedent to generate high-signal comment engagement.
+- Hashtags: 4 to 6 focused, relevant editorial hashtags (e.g. #TheFinePrint #ConsumerRights #CorporateAccountability #Investigation).
+
+Return strictly valid JSON matching the InstagramCaptionData schema.`;
+}
+
+export function buildInstagramCaptionUserPrompt(
+  brand: BrandTokens,
+  dossier: GroundTruthDossier,
+  deck: DeckData
+): string {
+  const slidesSummary = deck.slides
+    .map((s: SlideData, i: number) => `Slide ${i + 1} (${s.kicker || s.type}): ${s.headline}${s.subheadline ? ` — ${s.subheadline}` : ''}`)
+    .join('\n');
+
+  const metricsSummary = (dossier.verifiedMetrics || [])
+    .map((m) => `  * ${m.label}: ${m.value} (${m.context})`)
+    .join('\n');
+
+  const quotesSummary = (dossier.verifiedQuotes || [])
+    .map((q) => `  * "${q.quote}" — ${q.speaker}, ${q.role}`)
+    .join('\n');
+
+  const catchesSummary = (dossier.hiddenCatchesAndLimits || [])
+    .map((c) => `  * ${c}`)
+    .join('\n');
+
+  return `Write an investigative, high-converting Instagram caption for this editorial investigation:
+
+Publication: "${brand.name}" (${brand.handle})
+Investigation Title: "${deck.templateName}"
+Narrative Arc: "${deck.domain}"
+
+GROUND TRUTH DOSSIER (Use exact facts, dates, dollar figures):
+- Article Title: "${dossier.articleTitle}"
+- Executive Summary: "${dossier.summary}"
+- Core Controversy:
+  * Corporate Claim: "${dossier.coreControversy?.corporateClaim || ''}"
+  * Reality / Alarm: "${dossier.coreControversy?.criticismOrAlarm || ''}"
+  * Legal Precedent: "${dossier.coreControversy?.regulatoryOrHistoricalPrecedent || ''}"
+- Verified Metrics:
+${metricsSummary || '  * None listed'}
+- Verified Quotes & Attributions:
+${quotesSummary || '  * None listed'}
+- Hidden Clauses & Traps:
+${catchesSummary || '  * None listed'}
+
+SLIDE BREAKDOWN:
+${slidesSummary}
+
+Format your output as JSON:
+{
+  "hook": "Single declarative factual opener without questions or hype",
+  "body": "2-3 sentences explaining the mechanism",
+  "receipts": "Specific docket, terms section, or SEC citation",
+  "guardrail": "Concrete action or check for consumers",
+  "cta": "Save and follow prompt + provocative discussion question",
+  "hashtags": ["#TheFinePrint", "#ConsumerRights", "#CorporateAccountability"],
+  "fullText": "The complete, ready-to-publish Instagram caption with clean paragraph breaks (no emoji spam)."
+}`;
 }

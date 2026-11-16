@@ -140,6 +140,14 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
     }
 
     // Generate companion social posts if enabled
+    if (result.caption) {
+      assets.push({
+        jobId,
+        formatType: 'instagram_caption',
+        contentText: result.caption.fullText,
+      });
+    }
+
     if (existing.generate_text && result.deck?.slides) {
       const linkedinText = result.deck.slides
         .map((s: { headline?: string; body?: string }) => `${s.headline ?? ''}\n${s.body ?? ''}`.trim())
@@ -161,6 +169,7 @@ const worker = createWorker<StructurePayload>('structure', async (job) => {
         brand: result.brand,
         deck: result.deck,
         audit: result.audit,
+        caption: result.caption,
       },
       slideCount: result.slideCount,
     });
