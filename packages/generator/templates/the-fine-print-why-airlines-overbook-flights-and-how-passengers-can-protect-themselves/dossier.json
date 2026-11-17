@@ -1,0 +1,57 @@
+{
+  "articleTitle": "Why Airlines Overbook Flights and How Passengers Can Protect Themselves",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "Why Airlines Overbook Flights and How Passengers Can Protect Themselves",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "mechanism": "Sell against expected attendance rather than physical seats.",
+      "plainEnglish": "The airline accepts more reservations than seats because it expects some passengers not to appear. If too many arrive, the airline has promised transportation it cannot provide on that departure."
+    },
+    {
+      "step": 2,
+      "mechanism": "Seek volunteers before selecting passengers involuntarily.",
+      "plainEnglish": "The airline must first request volunteers. A genuine volunteer willingly trades confirmed space for an agreed benefit; the federal involuntary-compensation formula does not set the volunteer's negotiated price. There is no federal ceiling on what the airline may offer.​"
+    },
+    {
+      "step": 3,
+      "mechanism": "Turn the seat shortage into a negotiated transaction.",
+      "plainEnglish": "A voucher can have administrative fees, advance-purchase or capacity restrictions, and blackout dates. Material restrictions must be disclosed before acceptance. A replacement seat and expenses should be negotiated explicitly rather than assumed.​"
+    },
+    {
+      "step": 4,
+      "mechanism": "Apply the carrier's boarding priorities if volunteers are insufficient.",
+      "plainEnglish": "Permitted factors include check-in time, an advance seat assignment, fare paid, frequent-flyer status, disability and unaccompanied-minor status. Rules must be understandable and cannot impose unjust or unreasonable disadvantage. These factors do not establish a universal right to bump the cheapest-ticket passenger first."
+    },
+    {
+      "step": 5,
+      "mechanism": "Classify the displacement and determine eligibility.",
+      "plainEnglish": "An oversale, a qualifying smaller-aircraft substitution and a cancellation are not interchangeable legal categories. The reason for losing the seat can determine whether federal denied-boarding compensation applies."
+    },
+    {
+      "step": 6,
+      "mechanism": "Calculate compensation using fare and the offered replacement schedule.",
+      "plainEnglish": "The regulation uses the replacement transportation's planned arrival when arrangements are made—not simply the eventual time the passenger arrives. The relevant destination is the first stopover or, if none, the final destination."
+    },
+    {
+      "step": 7,
+      "mechanism": "Provide notice and payment without waiting for a demand.",
+      "plainEnglish": "Carriers must proactively offer compensation and give involuntarily bumped passengers a written explanation of their rights and boarding priorities. Eligible involuntary passengers can reject travel credit and insist on the cash/check compensation required by the rule."
+    }
+  ],
+  "comparisons": [],
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

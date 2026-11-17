@@ -1,0 +1,185 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-fine-print-why-airlines-overbook-flights-and-how-passengers-can-protect-themselves",
+  "domain": "thefineprint.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "OVERBOOKING AUTOPSY",
+      "headline": "Your Confirmed Flight Can Leave Without You",
+      "subheadline": "Know when to negotiate—and when the airline owes you cash.",
+      "items": [
+        {
+          "label": "Their bet",
+          "body": "Airlines sell beyond seat counts, expecting passengers not to show."
+        },
+        {
+          "label": "Your risk",
+          "body": "Your confirmed reservation can still leave you at the gate."
+        }
+      ],
+      "visual": {
+        "style": "Monumental transport poster; oversized condensed typography and stark negative space.",
+        "layoutTopology": "Headline crown, central boarding-pass rupture, two-column footer.",
+        "palette": {
+          "paper": "#0A0A0C",
+          "ink": "#F5F5F7",
+          "accent": "#FF2A2A",
+          "surface": "#141418"
+        },
+        "publication": "The Fine Print",
+        "footer": "thefineprint.pub",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='A boarding pass split from an aircraft seat'><rect x='55' y='105' width='490' height='270' rx='18' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M360 105l-24 45 39 42-39 44 39 44-39 45 24 50' fill='none' stroke='#FF2A2A' stroke-width='7'/><path d='M125 165v110q0 25 25 25h95v-40h-65v-95zM145 300v40m85-40v40' fill='none' stroke='#F5F5F7' stroke-width='12'/><path d='M400 240h135m-42-35 42 35-42 35' fill='none' stroke='#FF2A2A' stroke-width='9'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "AT THE GATE",
+      "headline": "You arrive. Your seat disappears.",
+      "subheadline": "When too many passengers show up, confirmed bookings outnumber seats.",
+      "items": [
+        {
+          "label": "Volunteers first",
+          "body": "The airline must ask for volunteers before bumping anyone."
+        },
+        {
+          "label": "Not enough?",
+          "body": "The airline then applies its boarding priorities."
+        }
+      ],
+      "visual": {
+        "style": "Human-scale editorial silhouette; an isolated traveler faces a closed gate.",
+        "layoutTopology": "Narrow left copy column; oversized right illustration; staggered item blocks.",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='A traveler with luggage stands behind a gate barrier'><path d='M65 415h480' stroke='#F5F5F7' stroke-width='3'/><rect x='345' y='55' width='190' height='360' fill='#141418'/><path d='M345 415V55h190v360' fill='none' stroke='#F5F5F7' stroke-width='4'/><circle cx='175' cy='175' r='27' fill='#F5F5F7'/><path d='M175 215v110m-40-75 40-35 45 60m-45 50-30 90m30-90 30 90' fill='none' stroke='#F5F5F7' stroke-width='16' stroke-linecap='round'/><rect x='230' y='315' width='52' height='82' rx='7' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M245 315v-35h22v35M310 245h245' fill='none' stroke='#FF2A2A' stroke-width='8'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "comparison",
+      "kicker": "THE VOLUNTEER SWITCH",
+      "headline": "Volunteer? Name your terms.",
+      "subheadline": "You're negotiating a deal—not claiming automatic bumping compensation.",
+      "items": [
+        {
+          "label": "No federal ceiling",
+          "body": "Volunteer offers have no federal maximum."
+        },
+        {
+          "label": "Before accepting",
+          "body": "Confirm your next flight, meals, hotel, transfers, voucher limits."
+        }
+      ],
+      "visual": {
+        "style": "Split-screen contract collage; an intact seat becomes a negotiated exchange.",
+        "layoutTopology": "Equal facing panels, central exchange symbol, one item beneath each panel.",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='A confirmed seat exchanged for a negotiated agreement'><rect x='35' y='75' width='225' height='330' rx='14' fill='#141418'/><rect x='340' y='75' width='225' height='330' rx='14' fill='#141418'/><path d='M100 145v130h105v-45h-60v-85M115 275v55m75-55v55' fill='none' stroke='#F5F5F7' stroke-width='10'/><path d='M395 140h100v175H395zM415 175h60m-60 30h60m-60 30h40' fill='none' stroke='#F5F5F7' stroke-width='4'/><path d='M240 215h120m-25-20 25 20-25 20M360 265H240m25-20-25 20 25 20' fill='none' stroke='#FF2A2A' stroke-width='7'/><path d='m415 280 15 15 40-45' fill='none' stroke='#FF2A2A' stroke-width='6'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanics",
+      "kicker": "THE PAYMENT CLOCK",
+      "headline": "The schedule sets the calculation",
+      "subheadline": "Eligible compensation uses your fare and the replacement's planned arrival.",
+      "items": [
+        {
+          "label": "Which schedule?",
+          "body": "Planned arrival when arrangements are made—not your actual arrival."
+        },
+        {
+          "label": "Which destination?",
+          "body": "First stopover—or final destination if there is no stopover."
+        }
+      ],
+      "visual": {
+        "style": "Precision timetable diagram; a frozen clock anchors a branching route.",
+        "layoutTopology": "Horizontal headline band; diagonal route illustration; offset explanatory captions.",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='A scheduled-arrival clock connected to a route with a possible stopover'><circle cx='165' cy='155' r='95' fill='#141418' stroke='#F5F5F7' stroke-width='4'/><path d='M165 95v60l45 25' fill='none' stroke='#FF2A2A' stroke-width='8' stroke-linecap='round'/><path d='M165 65v15m90 75h-15m-75 90v-15m-90-75h15' stroke='#F5F5F7' stroke-width='4'/><path d='M80 355h245l180-135M325 355h180' fill='none' stroke='#F5F5F7' stroke-width='5'/><circle cx='80' cy='355' r='12' fill='#F5F5F7'/><circle cx='325' cy='355' r='16' fill='#FF2A2A'/><circle cx='505' cy='220' r='16' fill='#FF2A2A'/><circle cx='505' cy='355' r='12' fill='#F5F5F7'/><path d='M165 270v55' stroke='#FF2A2A' stroke-width='3' stroke-dasharray='7 7'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "perimeter",
+      "kicker": "THE COVERAGE BOUNDARY",
+      "headline": "Same disruption. Different rights.",
+      "subheadline": "Losing your seat doesn't always trigger denied-boarding compensation.",
+      "items": [
+        {
+          "label": "Canceled flight",
+          "body": "Cancellation doesn't trigger this same compensation entitlement."
+        },
+        {
+          "label": "Smaller aircraft",
+          "body": "Safety or operational swaps don't trigger this entitlement."
+        }
+      ],
+      "visual": {
+        "style": "High-contrast boundary map; interrupted paths distinguish separate causes.",
+        "layoutTopology": "Central dividing spine; two wide exception panels stacked vertically.",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='Separate paths for cancellation and a smaller-aircraft substitution'><rect x='55' y='55' width='490' height='160' rx='12' fill='#141418'/><rect x='55' y='265' width='490' height='160' rx='12' fill='#141418'/><path d='M310 35v410' stroke='#FF2A2A' stroke-width='3' stroke-dasharray='8 9'/><path d='M95 135h145m105 0h145' stroke='#F5F5F7' stroke-width='5'/><path d='m260 110 50 50m0-50-50 50' stroke='#FF2A2A' stroke-width='7'/><path d='M100 310h125v70H100zM385 325h75v40h-75z' fill='none' stroke='#F5F5F7' stroke-width='4'/><path d='M245 345h110m-25-20 25 20-25 20' fill='none' stroke='#FF2A2A' stroke-width='6'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "evidence",
+      "kicker": "THE REQUIRED RECEIPTS",
+      "headline": "Written rights. Cash or check.",
+      "subheadline": "These are enforceable duties—not favors you must beg airlines to grant.",
+      "items": [
+        {
+          "label": "Immediate notice",
+          "body": "If bumped involuntarily, receive written rights and boarding rules."
+        },
+        {
+          "label": "Eligible payment",
+          "body": "Airlines must offer payment; you can insist on cash or check."
+        }
+      ],
+      "visual": {
+        "style": "Documentary evidence close-up; abstract rights notice paired with a payment slip.",
+        "layoutTopology": "Overlapping document hero; headline upper left; two compact margin annotations.",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='A written rights notice beside a payment slip'><path d='M110 45h270l55 55v325H110z' fill='#141418' stroke='#F5F5F7' stroke-width='3'/><path d='M380 45v55h55M150 140h235m-235 35h235m-235 35h185m-185 70h140m-140 35h165' fill='none' stroke='#F5F5F7' stroke-width='5'/><path d='M145 225h195' stroke='#FF2A2A' stroke-width='8'/><rect x='280' y='285' width='265' height='130' rx='6' fill='#0A0A0C' stroke='#FF2A2A' stroke-width='4'/><path d='M310 320h100m-100 30h195m-195 30h85' stroke='#F5F5F7' stroke-width='4'/><path d='m455 320 15 15 30-35' fill='none' stroke='#FF2A2A' stroke-width='6'/></svg>"
+      },
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "YOUR GATE-SIDE PLAYBOOK",
+      "headline": "Don't surrender. Negotiate.",
+      "subheadline": "Identify the deal before you trade away your confirmed seat.",
+      "items": [
+        {
+          "label": "Protect eligibility",
+          "body": "Meet check-in and gate deadlines. Ask why you're displaced."
+        },
+        {
+          "label": "Before accepting",
+          "body": "Check fees, advance-booking rules, seat limits and blackout dates."
+        }
+      ],
+      "visual": {
+        "style": "Pocket field-guide graphic; bold checkmarks replace passive acceptance.",
+        "layoutTopology": "Oversized closing headline; two full-width checklist rails; compact publication signature.",
+        "footer": "The Fine Print · thefineprint.pub",
+        "svgBlueprint": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 480' role='img' aria-label='Two deliberate checks before accepting a seat-change offer'><rect x='55' y='75' width='490' height='145' rx='15' fill='#141418'/><rect x='55' y='260' width='490' height='145' rx='15' fill='#141418'/><rect x='90' y='115' width='65' height='65' rx='8' fill='none' stroke='#F5F5F7' stroke-width='3'/><rect x='90' y='300' width='65' height='65' rx='8' fill='none' stroke='#F5F5F7' stroke-width='3'/><path d='m103 145 15 16 34-40m-49 209 15 16 34-40' fill='none' stroke='#FF2A2A' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><path d='M195 135h295m-295 30h215M195 320h295m-295 30h245' stroke='#F5F5F7' stroke-width='5'/></svg>"
+      },
+      "platform": "instagram-feed"
+    }
+  ]
+}
