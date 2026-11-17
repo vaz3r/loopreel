@@ -1,0 +1,204 @@
+{
+  "templateName": "The Fine Print",
+  "templateSlug": "the-fine-print-how-major-fitness-apps-use-hidden-recurring-billing-clauses-and-dark-pattern-cancellation-flows-to-b",
+  "domain": "thefineprint.pub",
+  "platform": "instagram-feed",
+  "slides": [
+    {
+      "id": "slide-1",
+      "index": 0,
+      "type": "cover",
+      "kicker": "THE CANCELLATION TRAP",
+      "headline": "You Canceled. The Fitness App Kept Charging.",
+      "subheadline": "A cancellation confirmation is evidence—not the end of checking.",
+      "items": [
+        {
+          "label": "Genesis Tech",
+          "body": "Charges or attempted charges continued after cancellation, FTC alleged."
+        },
+        {
+          "label": "Its Apps",
+          "body": "Offerings included MadMuscles, Harna and Unimeal."
+        }
+      ],
+      "visualStyle": "Monumental investigative cover; oversized typography and a broken payment loop.",
+      "layout": {
+        "topology": "Asymmetric poster",
+        "headline": "Upper third, stacked across three lines.",
+        "hero": "Center-right, occupying half the canvas.",
+        "items": "Two compact captions stacked at lower left.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual illustration: cancellation interrupts access but a payment loop continues\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><rect x=\"180\" y=\"70\" width=\"240\" height=\"330\" rx=\"30\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M255 190l32 32 65-70\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"12\"/><path d=\"M440 135C555 180 545 350 435 380M165 380C55 350 45 180 160 135\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"12\"/><path d=\"M430 345l5 35 35-5M125 140l35-5-5 35\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"12\"/><path d=\"M215 290h170M215 320h120\" stroke=\"#F5F5F7\" stroke-width=\"5\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-2",
+      "index": 1,
+      "type": "context",
+      "kicker": "THE TRIAL EXPERIENCE",
+      "headline": "The Trial Became A Bigger Bill",
+      "subheadline": "Noom customers challenged trial messaging, automatic enrollment and difficult exits.",
+      "items": [
+        {
+          "label": "Upfront Charge",
+          "body": "Complaint coverage described up to $199.99 for six months, non-refundable."
+        },
+        {
+          "label": "Unused Service",
+          "body": "The complaint alleged conversion even without accessing or downloading."
+        }
+      ],
+      "visualStyle": "Documentary still life; a quiet phone beside an outsized billing receipt.",
+      "layout": {
+        "topology": "Wide scene with caption rail",
+        "headline": "Top-left, spanning the canvas.",
+        "hero": "Wide central illustration with generous negative space.",
+        "items": "Two equal columns beneath the illustration.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual illustration: an unused phone beside a long subscription receipt\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><ellipse cx=\"300\" cy=\"403\" rx=\"245\" ry=\"24\" fill=\"#121216\"/><rect x=\"75\" y=\"145\" width=\"155\" height=\"245\" rx=\"22\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M125 170h55M135 365h35\" stroke=\"#F5F5F7\" stroke-width=\"4\"/><path d=\"M300 60h205v345l-20-12-20 12-20-12-20 12-20-12-20 12-20-12-20 12-25-12z\" fill=\"#F5F5F7\"/><path d=\"M330 105h145M330 135h105M330 205h145M330 235h145M330 265h90\" stroke=\"#0A0A0C\" stroke-width=\"8\"/><rect x=\"320\" y=\"305\" width=\"165\" height=\"45\" fill=\"#FF2A2A\"/><path d=\"M250 260h30\" stroke=\"#FF2A2A\" stroke-width=\"4\" stroke-dasharray=\"5 5\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-3",
+      "index": 2,
+      "type": "comparison",
+      "kicker": "THE HIDDEN COMMITMENT",
+      "headline": "One-Time Offer. Recurring Payments.",
+      "subheadline": "The FTC alleged Genesis Tech buried the continuing payment commitment.",
+      "items": [
+        {
+          "label": "Prominent Promise",
+          "body": "Free or low, one-time-cost offers drew customers in."
+        },
+        {
+          "label": "Smallest Print",
+          "body": "Recurring-payment terms appeared in the smallest print, the FTC alleged."
+        }
+      ],
+      "visualStyle": "Typographic contrast study; loud offer shapes versus nearly invisible billing lines.",
+      "layout": {
+        "topology": "Unequal split comparison",
+        "headline": "Across the top.",
+        "hero": "Two vertical panels, divided 60/40.",
+        "items": "One caption directly beneath each corresponding panel.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual comparison: a prominent offer beside tiny recurring-payment terms\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><rect x=\"30\" y=\"65\" width=\"310\" height=\"345\" fill=\"#F5F5F7\"/><rect x=\"360\" y=\"65\" width=\"210\" height=\"345\" fill=\"#121216\"/><path d=\"M65 120h235v60H65zM65 205h190v60H65z\" fill=\"#0A0A0C\"/><path d=\"M65 315h210M65 332h170\" stroke=\"#0A0A0C\" stroke-width=\"4\"/><path d=\"M385 300h150M385 308h140M385 316h150M385 324h115\" stroke=\"#F5F5F7\" stroke-width=\"2\"/><circle cx=\"470\" cy=\"310\" r=\"70\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"6\"/><path d=\"M520 360l45 45\" stroke=\"#FF2A2A\" stroke-width=\"12\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-4",
+      "index": 3,
+      "type": "mechanics",
+      "kicker": "THE OBSTRUCTED EXIT",
+      "headline": "Easy In. Hard Out.",
+      "subheadline": "The FTC alleged Genesis Tech put obstacles between customers and cancellation.",
+      "items": [
+        {
+          "label": "Missing Controls",
+          "body": "Cancellation controls were missing, the FTC alleged."
+        },
+        {
+          "label": "Required Explanations",
+          "body": "Customers had to explain why they wanted to cancel."
+        }
+      ],
+      "visualStyle": "Technical escape diagram; a direct entrance feeds an obstructed return path.",
+      "layout": {
+        "topology": "Diagonal process map",
+        "headline": "Upper-left corner.",
+        "hero": "Large diagonal path running from upper right to lower left.",
+        "items": "Two callouts anchored beside the exit obstacles.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual diagram: a simple signup path and an obstructed cancellation route\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><path d=\"M60 100h420\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"10\"/><path d=\"M455 75l25 25-25 25\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"8\"/><rect x=\"480\" y=\"65\" width=\"70\" height=\"70\" rx=\"12\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M515 135v95H350v110H150v65H65\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"10\"/><rect x=\"405\" y=\"205\" width=\"55\" height=\"50\" fill=\"#0A0A0C\" stroke=\"#F5F5F7\" stroke-width=\"3\" stroke-dasharray=\"5 6\"/><rect x=\"220\" y=\"310\" width=\"75\" height=\"60\" rx=\"7\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M235 330h45M235 345h30\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M65 380v50M85 380v50\" stroke=\"#FF2A2A\" stroke-width=\"7\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-5",
+      "index": 4,
+      "type": "perimeter",
+      "kicker": "THE RECURRING-PAYMENT RISK",
+      "headline": "Small Purchases Can Become Long Commitments",
+      "subheadline": "Beachbody’s permanent court order required safeguards around joining and leaving.",
+      "items": [
+        {
+          "label": "Before Billing",
+          "body": "Clear renewal terms, separate consent, and a post-payment summary."
+        },
+        {
+          "label": "After Joining",
+          "body": "Easy online/phone exits; reminders for plans 6 months or longer."
+        }
+      ],
+      "visualStyle": "Architectural boundary diagram; explicit gates around a recurring-payment loop.",
+      "layout": {
+        "topology": "Central ring with opposing captions",
+        "headline": "Top band, broken into two lines.",
+        "hero": "Centered circular diagram with two visibly open gates.",
+        "items": "One caption above-left, one below-right of the ring.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual illustration: consent and cancellation gates around recurring payments\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><circle cx=\"300\" cy=\"240\" r=\"115\" fill=\"#121216\"/><path d=\"M175 115a177 177 0 0 1 250 0M425 365a177 177 0 0 1-250 0\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"4\"/><path d=\"M150 150v180M450 150v180\" stroke=\"#FF2A2A\" stroke-width=\"9\"/><path d=\"M80 240h110M410 240h110\" stroke=\"#F5F5F7\" stroke-width=\"7\"/><path d=\"M170 220l20 20-20 20M500 220l20 20-20 20\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"7\"/><path d=\"M250 200a65 65 0 0 1 105 45M350 280a65 65 0 0 1-105-45\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"7\"/><path d=\"M335 235l20 10 10-20M265 245l-20-10-10 20\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"7\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-6",
+      "index": 5,
+      "type": "evidence",
+      "kicker": "THE DOCUMENTED RESPONSE",
+      "headline": "Two Cases. Two Different Outcomes.",
+      "subheadline": "The FTC’s Genesis Tech allegations remained for the court to decide.",
+      "items": [
+        {
+          "label": "Noom Settlement",
+          "body": "$62 million settlement in July 2022."
+        },
+        {
+          "label": "Genesis Tech",
+          "body": "FTC announced a temporary court halt on June 17, 2026."
+        }
+      ],
+      "visualStyle": "Evidence desk; separate document folders prevent conflating the two cases.",
+      "layout": {
+        "topology": "Staggered evidence cards",
+        "headline": "Upper-left across the full width.",
+        "hero": "Two offset document illustrations, separated by negative space.",
+        "items": "Each caption sits inside its own case card.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual illustration: separate records for the Noom settlement and Genesis Tech temporary halt\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><path d=\"M40 75h90l25 25h120v265H40z\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><rect x=\"65\" y=\"130\" width=\"185\" height=\"210\" fill=\"#F5F5F7\"/><path d=\"M90 165h130M90 190h110M90 215h130\" stroke=\"#0A0A0C\" stroke-width=\"6\"/><path d=\"M110 280l25 25 50-55\" fill=\"none\" stroke=\"#FF2A2A\" stroke-width=\"10\"/><path d=\"M325 130h90l25 25h120v265H325z\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><rect x=\"350\" y=\"185\" width=\"185\" height=\"210\" fill=\"#F5F5F7\"/><path d=\"M375 220h130M375 245h110M375 270h130\" stroke=\"#0A0A0C\" stroke-width=\"6\"/><path d=\"M425 310v55M460 310v55\" stroke=\"#FF2A2A\" stroke-width=\"14\"/></svg>",
+      "platform": "instagram-feed"
+    },
+    {
+      "id": "slide-7",
+      "index": 6,
+      "type": "verdict",
+      "kicker": "YOUR EXIT PLAYBOOK",
+      "headline": "Cancel. Save Proof. Check Again.",
+      "subheadline": "Follow exit instructions. Save requests and chats. Check statements.",
+      "items": [
+        {
+          "label": "Dispute Charges",
+          "body": "Contact your card issuer online or by phone; follow up in writing."
+        },
+        {
+          "label": "Report Subscriptions",
+          "body": "Report: ReportFraud.ftc.gov or your state attorney general."
+        }
+      ],
+      "visualStyle": "Consumer field guide; a saved confirmation paired with a statement-inspection lens.",
+      "layout": {
+        "topology": "Oversized icon with action rail",
+        "headline": "Upper half, stacked with strong line breaks.",
+        "hero": "Lower-left illustration occupying slightly over half the width.",
+        "items": "Two stacked action blocks along the lower-right edge.",
+        "footer": "The Fine Print · thefineprint.pub"
+      },
+      "svgBlueprint": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 480\" role=\"img\" aria-label=\"Conceptual illustration: preserve cancellation evidence and inspect later account statements\"><rect width=\"600\" height=\"480\" fill=\"#0A0A0C\"/><path d=\"M85 60h250l65 65v280H85z\" fill=\"#121216\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M335 60v65h65\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"3\"/><path d=\"M130 155l25 25 50-55\" fill=\"none\" stroke=\"#F5F5F7\" stroke-width=\"9\"/><path d=\"M130 230h215M130 265h215M130 300h165M130 335h110\" stroke=\"#F5F5F7\" stroke-width=\"5\"/><circle cx=\"385\" cy=\"310\" r=\"92\" fill=\"#0A0A0C\" stroke=\"#FF2A2A\" stroke-width=\"9\"/><path d=\"M450 375l85 70\" stroke=\"#FF2A2A\" stroke-width=\"20\"/><path d=\"M330 285h110M330 310h110M330 335h75\" stroke=\"#F5F5F7\" stroke-width=\"5\"/></svg>",
+      "platform": "instagram-feed"
+    }
+  ]
+}

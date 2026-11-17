@@ -35,6 +35,8 @@ export const NewsroomStatusEnum = z.enum([
   'pitched',
   'approved',
   'generating',
+  'pending_review',
+  'publishing',
   'completed',
   'scheduled',
   'published',

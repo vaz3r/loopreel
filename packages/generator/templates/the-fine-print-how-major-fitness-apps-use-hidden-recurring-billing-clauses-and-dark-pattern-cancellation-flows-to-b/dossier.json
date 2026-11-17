@@ -1,0 +1,71 @@
+{
+  "articleTitle": "How major fitness apps use hidden recurring billing clauses and dark pattern cancellation flows to b",
+  "publisher": "The Financial Bureau",
+  "byline": "Staff Intelligence Bureau",
+  "summary": "How major fitness apps use hidden recurring billing clauses and dark pattern cancellation flows to bill former members for years.",
+  "entities": [],
+  "verifiedMetrics": [],
+  "verifiedQuotes": [],
+  "systemMechanisms": [
+    {
+      "step": 1,
+      "mechanism": "Sell a limited commitment",
+      "plainEnglish": "The consumer believes they are testing a service or making a small purchase, not authorizing an open-ended payment relationship.",
+      "evidence": "Noom’s complaint challenged risk-free trial messaging; the FTC challenged free or low, one-time-cost messaging in the Genesis Tech enterprise.​"
+    },
+    {
+      "step": 2,
+      "mechanism": "Separate the prominent promise from the billing terms",
+      "plainEnglish": "The attractive offer receives attention while the recurring obligation is harder to notice.",
+      "evidence": "The FTC alleged renewal references appeared in the smallest print. Beachbody’s injunction required separate renewal consent rather than consent bundled with other terms.​"
+    },
+    {
+      "step": 3,
+      "mechanism": "Convert the trial without a fresh purchase decision",
+      "plainEnglish": "The deadline passes and the payment system proceeds unless the customer has completed cancellation.",
+      "evidence": "The Noom complaint alleged automatic conversion even for consumers who never accessed the service or downloaded the app."
+    },
+    {
+      "step": 4,
+      "mechanism": "Collect several months in advance",
+      "plainEnglish": "Missing the cancellation window can produce a substantial immediate charge rather than a small monthly payment.",
+      "evidence": "The original Noom complaint coverage described a non-refundable advance charge of as much as $199.99 for six months."
+    },
+    {
+      "step": 5,
+      "mechanism": "Make the exit harder than the entrance",
+      "plainEnglish": "Joining on a website does not necessarily provide an equally straightforward website exit.",
+      "evidence": "The historical Noom complaint described a smartphone-and-coach cancellation route. The FTC alleged missing cancellation controls and mandatory explanations in the Genesis Tech enterprise.​"
+    },
+    {
+      "step": 6,
+      "mechanism": "Keep inactivity separate from billing",
+      "plainEnglish": "A customer can stop exercising, logging in, or engaging while the payment relationship continues.",
+      "evidence": "Noom’s settlement specifically required disabling autorenewal for class users inactive throughout the first twelve (12) months after their trial.",
+      "qualification": "That remedy does not establish that every inactive user was charged for years."
+    },
+    {
+      "step": 7,
+      "mechanism": "Fail to honor a completed exit",
+      "plainEnglish": "The most serious alleged version is not confusion about how to cancel: the company confirms cancellation but still charges or attempts to charge.",
+      "evidence": "The FTC expressly alleged this conduct against the Genesis Tech enterprise."
+    },
+    {
+      "step": 8,
+      "mechanism": "Complicate payment-system enforcement",
+      "plainEnglish": "Changing corporate identities and merchant accounts can make it harder for fraud controls to connect recurring problems to the same operator.",
+      "evidence": "The FTC alleged repeated creation of companies and merchant accounts to evade fraud monitoring. This allegation should not be transferred to Noom or Beachbody."
+    }
+  ],
+  "comparisons": [],
+  "coreControversy": {
+    "corporateClaim": "Customer convenience and loyalty incentives",
+    "criticismOrAlarm": "Unregulated shadow banking float without FDIC protection",
+    "regulatoryOrHistoricalPrecedent": "Exempt from reserve ratios and Dodd-Frank requirements"
+  },
+  "hiddenCatchesAndLimits": [],
+  "editorialVerdict": {
+    "avoidAdvice": [],
+    "fitAdvice": []
+  }
+}

@@ -134,6 +134,29 @@ export class NewsroomRepository {
     );
   }
 
+  static async claimForPublishing(id: string): Promise<NewsroomStoryRow | null> {
+    const { rows } = await pool.query<NewsroomStoryRow>(
+      `UPDATE newsroom_stories
+       SET status = 'publishing',
+           updated_at = NOW()
+       WHERE id = $1 AND status = 'pending_review'
+       RETURNING *`,
+      [id],
+    );
+    return rows[0] ?? null;
+  }
+
+  static async revertPublishing(id: string, errorMessage?: string): Promise<void> {
+    await pool.query(
+      `UPDATE newsroom_stories
+       SET status = 'pending_review',
+           metadata = metadata || jsonb_build_object('lastPublishError', $2::text, 'publishFailedAt', NOW()::text),
+           updated_at = NOW()
+       WHERE id = $1 AND status = 'publishing'`,
+      [id, errorMessage ?? 'Unknown publishing failure'],
+    );
+  }
+
   static async recordScheduled(id: string, params: RecordScheduledParams): Promise<void> {
     await pool.query(
       `UPDATE newsroom_stories

@@ -22,6 +22,7 @@ export const CONFIG = {
   bufferOrgId: process.env.BUFFER_ORGANIZATION_ID || '5aa437d48f0f393b18cc8b85',
   minEditorialScore: parseFloat(process.env.NEWSROOM_MIN_SCORE || '7.5'),
   dryRun: process.env.NEWSROOM_DRY_RUN === 'true',
+  autoPublish: process.env.NEWSROOM_AUTO_PUBLISH === 'true',
   scanIntervalMinutes: parseInt(process.env.NEWSROOM_INTERVAL_MINUTES || '240', 10), // Default: every 4 hours
 
   // Targeted Google News RSS queries for "The Fine Print" investigative beat

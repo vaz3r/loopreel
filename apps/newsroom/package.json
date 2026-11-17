@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "scan": "node --import tsx src/index.ts --action=scan",
     "pitch": "node --import tsx src/index.ts --action=pitch",
+    "publish": "node --import tsx src/index.ts --action=publish",
     "run-once": "node --import tsx src/index.ts --action=run-once",
     "daemon": "node --import tsx src/index.ts --action=daemon"
   },

@@ -67,16 +67,18 @@ export class LoopreelClient {
       story.working_title ||
       '';
 
-    await NewsroomRepository.updateStatus(story.id, 'completed', {
+    await NewsroomRepository.updateStatus(story.id, 'pending_review', {
       loopreelOutput: {
         jobId,
         templateSlug: jobResult.templateId,
         slideCount: slideUrls.length,
         captionSnippet: captionText.slice(0, 100),
+        slideUrls,
+        captionText,
       },
     });
 
-    console.log(`[LoopreelClient] Job ${jobId} complete! Ready for Buffer scheduling with ${slideUrls.length} slides.`);
+    console.log(`[LoopreelClient] Job ${jobId} complete! Story ${story.id} placed in 'pending_review' with ${slideUrls.length} slides.`);
     return {
       jobId,
       templateSlug: jobResult.templateId,
